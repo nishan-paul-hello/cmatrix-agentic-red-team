@@ -1,6 +1,8 @@
 import os
 import re
+import json
 import requests
+import difflib
 from typing import TypedDict, Sequence, Literal
 from langchain_core.messages import BaseMessage, HumanMessage, AIMessage, SystemMessage
 from langgraph.graph import StateGraph, END
@@ -691,127 +693,26 @@ def create_agent():
 # Create agent instance
 agent_executor = create_agent()
 
-# Demo prompts and their animated step-by-step demonstrations
-DEMO_PROMPTS = {
-    "Can you perform a security scan on my web server at 192.168.1.100 to check for any vulnerabilities?": {
-        "final_answer": "Security scan completed for 192.168.1.100. Found 3 medium-risk vulnerabilities: outdated dependencies, missing CORS headers, weak password policy.",
-        "animation_steps": [
-            {"step": 1, "title": "Initializing Security Scanner", "description": "Connecting to target system...", "duration": 1500, "icon": "🔗"},
-            {"step": 2, "title": "Scanning Dependencies", "description": "Analyzing package versions and known vulnerabilities...", "duration": 2000, "icon": "📦"},
-            {"step": 3, "title": "Checking CORS Configuration", "description": "Validating cross-origin resource sharing settings...", "duration": 1500, "icon": "🌐"},
-            {"step": 4, "title": "Password Policy Analysis", "description": "Reviewing authentication strength requirements...", "duration": 1500, "icon": "🔐"},
-            {"step": 5, "title": "Generating Report", "description": "Compiling findings and recommendations...", "duration": 1000, "icon": "📊"}
-        ]
-    },
-    "What's the current status of the nginx service on my server?": {
-        "final_answer": "Service 'nginx' is running. CPU: 45%, Memory: 2.3GB, Uptime: 7 days.",
-        "animation_steps": [
-            {"step": 1, "title": "Connecting to Server", "description": "Establishing secure connection to target host...", "duration": 1200, "icon": "🔗"},
-            {"step": 2, "title": "Service Discovery", "description": "Locating nginx service in process list...", "duration": 1000, "icon": "🔍"},
-            {"step": 3, "title": "Performance Metrics", "description": "Collecting CPU, memory, and uptime statistics...", "duration": 1500, "icon": "📈"},
-            {"step": 4, "title": "Health Check", "description": "Verifying service responsiveness and configuration...", "duration": 1000, "icon": "❤️"}
-        ]
-    },
-    "Please analyze the nginx access logs for any errors or unusual activity in the last 24 hours.": {
-        "final_answer": "Analyzed logs from nginx. Found 12 errors in the last hour, mostly connection timeouts to external API.",
-        "animation_steps": [
-            {"step": 1, "title": "Log File Access", "description": "Locating and opening nginx access log files...", "duration": 1000, "icon": "📁"},
-            {"step": 2, "title": "Time Range Filtering", "description": "Filtering entries for the last 24 hours...", "duration": 1500, "icon": "⏰"},
-            {"step": 3, "title": "Pattern Analysis", "description": "Scanning for error codes, timeouts, and suspicious patterns...", "duration": 2000, "icon": "🔍"},
-            {"step": 4, "title": "Anomaly Detection", "description": "Identifying unusual request patterns and potential attacks...", "duration": 1500, "icon": "🚨"},
-            {"step": 5, "title": "Report Generation", "description": "Summarizing findings and recommendations...", "duration": 1000, "icon": "📋"}
-        ]
-    },
-    "Deploy the updated firewall configuration to the production environment.": {
-        "final_answer": "Configuration 'firewall' successfully deployed to production environment. Rollback available if needed.",
-        "animation_steps": [
-            {"step": 1, "title": "Configuration Validation", "description": "Validating firewall rules syntax and logic...", "duration": 1500, "icon": "✅"},
-            {"step": 2, "title": "Backup Creation", "description": "Creating backup of current firewall configuration...", "duration": 1200, "icon": "💾"},
-            {"step": 3, "title": "Staging Deployment", "description": "Applying changes to staging environment for testing...", "duration": 2000, "icon": "🧪"},
-            {"step": 4, "title": "Production Rollout", "description": "Deploying configuration to production servers...", "duration": 1800, "icon": "🚀"},
-            {"step": 5, "title": "Verification", "description": "Confirming deployment success and service continuity...", "duration": 1000, "icon": "🎯"}
-        ]
-    },
-    "Scan ports 1-1000 on the target IP 10.0.0.5 to see what's open.": {
-        "final_answer": "Port scan results for 10.0.0.5:\nPort 22: open (ssh)\nPort 80: open (http)\nPort 443: open (https)",
-        "animation_steps": [
-            {"step": 1, "title": "Network Reconnaissance", "description": "Resolving target IP and preparing scan parameters...", "duration": 1000, "icon": "🌐"},
-            {"step": 2, "title": "Port Range Setup", "description": "Configuring scan for ports 1-1000 with optimized timing...", "duration": 800, "icon": "⚙️"},
-            {"step": 3, "title": "TCP SYN Scanning", "description": "Sending SYN packets and analyzing responses...", "duration": 3000, "icon": "📡"},
-            {"step": 4, "title": "Service Detection", "description": "Identifying running services on open ports...", "duration": 1500, "icon": "🔍"},
-            {"step": 5, "title": "Results Compilation", "description": "Organizing findings by port number and service...", "duration": 1000, "icon": "📋"}
-        ]
-    },
-    "Run a vulnerability assessment on my local machine at 127.0.0.1 to identify potential security issues.": {
-        "final_answer": "Basic Vulnerability Assessment for 127.0.0.1:\n\n⚠️  WARNING: FTP service detected on port 21 - consider using SFTP (secure)\n⚠️  WARNING: SMB service detected - check for known vulnerabilities\n\nOpen ports found: 3\n  - Port 21: ftp\n  - Port 22: ssh\n  - Port 445: microsoft-ds\n\nGeneral Recommendations:\n• Ensure all services are up-to-date\n• Use strong authentication mechanisms\n• Implement proper firewall rules\n• Regularly scan for vulnerabilities",
-        "animation_steps": [
-            {"step": 1, "title": "Target Analysis", "description": "Analyzing localhost configuration and network setup...", "duration": 1000, "icon": "🏠"},
-            {"step": 2, "title": "Port Discovery", "description": "Scanning all ports to identify running services...", "duration": 2500, "icon": "🔍"},
-            {"step": 3, "title": "Service Classification", "description": "Categorizing detected services by security risk level...", "duration": 1500, "icon": "🏷️"},
-            {"step": 4, "title": "Vulnerability Matching", "description": "Cross-referencing services with known vulnerability databases...", "duration": 2000, "icon": "⚠️"},
-            {"step": 5, "title": "Recommendations", "description": "Generating security hardening suggestions...", "duration": 1200, "icon": "💡"}
-        ]
-    },
-    "Test the security of my website at https://example.com for common vulnerabilities and check security headers.": {
-        "final_answer": "Web Application Security Test for https://example.com\nStatus Code: 200\nServer: nginx/1.18.0\nContent-Type: text/html\n\nSecurity Headers Check:\n❌ Missing X-Frame-Options header (Clickjacking vulnerability)\n❌ Missing X-Content-Type-Options header (MIME sniffing vulnerability)\n❌ Missing X-XSS-Protection header (XSS vulnerability)\n❌ Missing Strict-Transport-Security header (No HTTPS enforcement)\n❌ Missing Content-Security-Policy header (XSS/injection vulnerabilities)\n\nCommon Vulnerability Checks:\n⚠️  Potential admin panel found at /admin (status: 200)\n⚠️  Potentially outdated Nginx version",
-        "animation_steps": [
-            {"step": 1, "title": "HTTP Request Setup", "description": "Preparing secure connection to target website...", "duration": 1000, "icon": "🔗"},
-            {"step": 2, "title": "Header Analysis", "description": "Examining HTTP response headers for security configurations...", "duration": 1500, "icon": "📋"},
-            {"step": 3, "title": "Vulnerability Scanning", "description": "Testing for common web application vulnerabilities...", "duration": 2000, "icon": "🔍"},
-            {"step": 4, "title": "Admin Panel Detection", "description": "Checking for exposed administrative interfaces...", "duration": 1500, "icon": "🚪"},
-            {"step": 5, "title": "Software Version Check", "description": "Analyzing server software versions for known issues...", "duration": 1200, "icon": "📊"}
-        ]
-    },
-    "Check if my website at example.com properly enforces HTTPS and has HSTS enabled.": {
-        "final_answer": "✅ HTTP redirects to HTTPS\n✅ HTTPS is accessible\n❌ HSTS not enabled",
-        "animation_steps": [
-            {"step": 1, "title": "HTTP Request Test", "description": "Testing HTTP connection to check for automatic redirects...", "duration": 1000, "icon": "🌐"},
-            {"step": 2, "title": "Redirect Analysis", "description": "Verifying HTTP to HTTPS redirection behavior...", "duration": 1200, "icon": "🔄"},
-            {"step": 3, "title": "HTTPS Validation", "description": "Confirming HTTPS certificate and connection security...", "duration": 1500, "icon": "🔒"},
-            {"step": 4, "title": "HSTS Header Check", "description": "Examining Strict-Transport-Security header presence...", "duration": 1000, "icon": "🛡️"}
-        ]
-    },
-    "Analyze the login form on my website https://mysite.com/login for security best practices.": {
-        "final_answer": "Login Form Analysis for https://mysite.com/login\nFound 1 potential login form(s)\n\nForm 1 Analysis:\n✅ Form uses POST method\n✅ Form action uses HTTPS\nUsername fields: 1\nPassword fields: 1\n✅ Potential CSRF protection detected",
-        "animation_steps": [
-            {"step": 1, "title": "Page Retrieval", "description": "Fetching login page HTML content...", "duration": 1200, "icon": "📄"},
-            {"step": 2, "title": "Form Detection", "description": "Scanning HTML for form elements and input fields...", "duration": 1500, "icon": "🔍"},
-            {"step": 3, "title": "Method Verification", "description": "Checking form submission method (GET/POST)...", "duration": 1000, "icon": "📝"},
-            {"step": 4, "title": "Security Analysis", "description": "Evaluating HTTPS usage, CSRF tokens, and input validation...", "duration": 1800, "icon": "🔐"},
-            {"step": 5, "title": "Compliance Check", "description": "Comparing against security best practices...", "duration": 1200, "icon": "✅"}
-        ]
-    },
-    "Check the session security and cookie configuration on https://secureapp.com.": {
-        "final_answer": "Session Security Check for https://secureapp.com\nInitial request cookies: 2\nSecond request cookies: 2\n\nSession-related cookies found: 1\n✅ session_id: Secure, HttpOnly, SameSite=Strict\n⚠️  Same cookies returned in both requests",
-        "animation_steps": [
-            {"step": 1, "title": "Session Initiation", "description": "Making initial request to establish session...", "duration": 1200, "icon": "🍪"},
-            {"step": 2, "title": "Cookie Collection", "description": "Capturing and analyzing all received cookies...", "duration": 1500, "icon": "📦"},
-            {"step": 3, "title": "Security Flag Analysis", "description": "Checking Secure, HttpOnly, and SameSite attributes...", "duration": 1800, "icon": "🛡️"},
-            {"step": 4, "title": "Session Persistence", "description": "Testing cookie behavior across multiple requests...", "duration": 1500, "icon": "🔄"},
-            {"step": 5, "title": "Risk Assessment", "description": "Evaluating session security posture...", "duration": 1000, "icon": "⚠️"}
-        ]
-    },
-    "Test if the login endpoint at https://myapp.com/api/auth/login has proper rate limiting to prevent brute force attacks.": {
-        "final_answer": "Rate Limiting Test for https://myapp.com/api/auth/login\nTotal requests: 10\nStatus codes: [200, 200, 200, 200, 200, 429, 429, 429, 429, 429]\n✅ Rate limiting detected (HTTP 429)\nAverage response time: 0.15s\nMax response time: 0.23s",
-        "animation_steps": [
-            {"step": 1, "title": "Endpoint Configuration", "description": "Setting up test parameters for rate limiting assessment...", "duration": 1000, "icon": "⚙️"},
-            {"step": 2, "title": "Initial Requests", "description": "Sending first batch of authentication attempts...", "duration": 2000, "icon": "📤"},
-            {"step": 3, "title": "Rate Limiting Trigger", "description": "Continuing requests to activate rate limiting mechanisms...", "duration": 2500, "icon": "🚦"},
-            {"step": 4, "title": "Response Analysis", "description": "Monitoring HTTP status codes and response times...", "duration": 1500, "icon": "📊"},
-            {"step": 5, "title": "Protection Verification", "description": "Confirming brute force protection effectiveness...", "duration": 1000, "icon": "🛡️"}
-        ]
-    },
-    "Review the password policy and security features on the registration page at https://account.example.com/register.": {
-        "final_answer": "Password Policy Check for https://account.example.com/register\n✅ Password input fields found\nℹ️  Password policy indicators found: password, must contain, at least, characters, uppercase, lowercase, number\n\nSecurity Features:\n❌ Password strength meter\n❌ Password visibility toggle\n❌ Password generator",
-        "animation_steps": [
-            {"step": 1, "title": "Registration Page Load", "description": "Accessing and parsing registration form...", "duration": 1200, "icon": "📝"},
-            {"step": 2, "title": "Input Field Analysis", "description": "Identifying password and related input elements...", "duration": 1500, "icon": "🔍"},
-            {"step": 3, "title": "Policy Text Extraction", "description": "Scanning for password requirement descriptions...", "duration": 1800, "icon": "📖"},
-            {"step": 4, "title": "Feature Detection", "description": "Checking for password strength meters and security tools...", "duration": 1500, "icon": "🔧"},
-            {"step": 5, "title": "Compliance Evaluation", "description": "Assessing password policy against security standards...", "duration": 1200, "icon": "✅"}
-        ]
-    }
-}
+# Load demo prompts from JSON file
+def load_demo_prompts():
+    """Load demo prompts from demos.json file."""
+    try:
+        # Get the directory of the current script and construct path to demos.json
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        demos_path = os.path.join(script_dir, 'demos.json')
+        with open(demos_path, 'r') as f:
+            data = json.load(f)
+            demo_prompts = data.get('demo_prompts', {})
+            print(f"✅ Loaded {len(demo_prompts)} demo prompts from {demos_path}")
+            return demo_prompts
+    except FileNotFoundError:
+        print("⚠️  demos.json file not found, using empty demo prompts")
+        return {}
+    except json.JSONDecodeError as e:
+        print(f"❌ Error parsing demos.json: {e}")
+        return {}
+
+DEMO_PROMPTS = load_demo_prompts()
 
 def clean_response(content: str) -> str:
     """Clean up the response by removing tool call syntax and extra whitespace."""
@@ -845,18 +746,52 @@ def clean_response(content: str) -> str:
     
     return result
 
+def find_best_matching_demo(message: str, threshold: float = 0.8) -> tuple:
+    """Find the best matching demo prompt using fuzzy string matching.
+
+    Args:
+        message: The user input message
+        threshold: Minimum similarity ratio (0.0 to 1.0) to consider a match
+
+    Returns:
+        Tuple of (best_match_key, similarity_ratio) or (None, 0.0) if no match
+    """
+    best_match = None
+    best_ratio = 0.0
+
+    # Normalize the input message for better matching
+    normalized_message = message.lower().strip()
+
+    for demo_prompt in DEMO_PROMPTS.keys():
+        # Calculate similarity ratio using normalized strings
+        ratio = difflib.SequenceMatcher(None, normalized_message, demo_prompt.lower()).ratio()
+        if ratio > best_ratio:
+            best_ratio = ratio
+            best_match = demo_prompt
+
+    # Only return match if it exceeds threshold
+    if best_ratio >= threshold:
+        return best_match, best_ratio
+    else:
+        return None, 0.0
+
 def run_agent(message: str, history: list = None):
     """Run the agent with a message and optional history."""
-    # Check if the message matches any demo prompt
-    if message in DEMO_PROMPTS:
-        demo_data = DEMO_PROMPTS[message]
-        print('✅ Demo response with animation:', demo_data["final_answer"][:200] + '...' if len(demo_data["final_answer"]) > 200 else demo_data["final_answer"])
-        # Return both the animation steps and final answer
+    # Check if the message matches any demo prompt using fuzzy matching
+    best_match, similarity = find_best_matching_demo(message)
+    if best_match:
+        demo_data = DEMO_PROMPTS[best_match]
+        print(f'✅ DEMO MATCH FOUND (similarity: {similarity:.2f}) - Using default answer, NOT calling LLM')
+        print(f'Demo prompt: {best_match[:100]}...')
+        print(f'Final answer: {demo_data["final_answer"][:100]}...')
+        # Return both the animation steps and final answer - LLM is NEVER called for demo matches
         return {
             "animation_steps": demo_data["animation_steps"],
             "final_answer": demo_data["final_answer"]
         }
 
+    # No demo match found - proceed with LLM processing
+    print('🤖 No demo match found - calling LLM for response')
     messages = []
 
     # Add history

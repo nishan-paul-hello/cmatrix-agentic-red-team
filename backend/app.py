@@ -98,7 +98,7 @@ async def chat_stream(request: ChatRequest):
                     animation_steps = response["animation_steps"]
                     final_answer = response["final_answer"]
 
-                    print(f'📤 Streaming animated response with {len(animation_steps)} steps')
+                    print(f'📤 Streaming DEMO response with {len(animation_steps)} steps')
 
                     # First, send animation steps
                     for step in animation_steps:

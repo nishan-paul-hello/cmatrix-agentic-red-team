@@ -40,11 +40,11 @@ export function ChatMessage({ role, content, isLoading, animationSteps = [], cur
             !isUser && (isLoading || isAnimating) && "scan-line"
           )}
         >
-          {(isAnimating && animationSteps.length > 0) || (content && animationSteps.length > 0) ? (
+          {animationSteps.length > 0 ? (
             <div className="space-y-3">
               <div className="flex items-center gap-2 terminal-text mb-3">
                 <Activity className="w-4 h-4 animate-pulse text-blue-400" />
-                <span className="text-muted-foreground">[AGENT WORKING...]</span>
+                <span className="text-muted-foreground">[DEMO MODE - AGENT WORKING...]</span>
               </div>
               <div className="space-y-2">
                 {animationSteps.map((step, index) => {

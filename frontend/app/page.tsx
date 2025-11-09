@@ -29,13 +29,13 @@ import { Send, Loader2, Shield, Zap } from "lucide-react"
 import { ChatMessage } from "@/components/chat-message"
 
 export default function ChatPage() {
-  const [messages, setMessages] = useState<Array<{ role: "user" | "assistant"; content: string }>>([])
-  const [input, setInput] = useState("")
-  const [isLoading, setIsLoading] = useState(false)
-  const [animationSteps, setAnimationSteps] = useState<Array<any>>([])
-  const [currentAnimationStep, setCurrentAnimationStep] = useState(0)
-  const [isAnimating, setIsAnimating] = useState(false)
-  const messagesEndRef = useRef<HTMLDivElement>(null)
+   const [messages, setMessages] = useState<Array<{ role: "user" | "assistant"; content: string; animationSteps?: any[] }>>([])
+   const [input, setInput] = useState("")
+   const [isLoading, setIsLoading] = useState(false)
+   const [animationSteps, setAnimationSteps] = useState<Array<any>>([])
+   const [currentAnimationStep, setCurrentAnimationStep] = useState(0)
+   const [isAnimating, setIsAnimating] = useState(false)
+   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -53,6 +53,7 @@ export default function ChatPage() {
     setInput("")
     setMessages((prev) => [...prev, { role: "user", content: userMessage }])
     setIsLoading(true)
+    // Reset animation state for new message
     setAnimationSteps([])
     setCurrentAnimationStep(0)
     setIsAnimating(false)
@@ -78,7 +79,7 @@ export default function ChatPage() {
       let receivedAnimationSteps: any[] = []
 
       // Add empty assistant message
-      setMessages((prev) => [...prev, { role: "assistant", content: "" }])
+      setMessages((prev) => [...prev, { role: "assistant", content: "", animationSteps: [] }])
 
       if (!reader) {
         throw new Error("No response body")
@@ -99,10 +100,22 @@ export default function ChatPage() {
             try {
               const parsed = JSON.parse(data)
               if (parsed.animation_step) {
-                // Handle animation step
+                // Handle animation step - this indicates demo mode
+                console.log("[v0] Received animation step:", parsed.animation_step.step)
                 receivedAnimationSteps.push(parsed.animation_step)
                 setAnimationSteps([...receivedAnimationSteps])
                 setIsAnimating(true)
+                setIsLoading(false) // Turn off loading when animation starts
+
+                // Store animation steps in the message for persistence
+                setMessages((prev) => {
+                  const updated = [...prev]
+                  const lastMsg = updated[updated.length - 1]
+                  if (lastMsg.role === "assistant") {
+                    lastMsg.animationSteps = [...receivedAnimationSteps]
+                  }
+                  return updated
+                })
 
                 // Auto-advance through animation steps
                 setTimeout(() => {
@@ -116,7 +129,7 @@ export default function ChatPage() {
                 setMessages((prev) => {
                   const updated = [...prev]
                   updated[updated.length - 1] = {
-                    role: "assistant",
+                    ...updated[updated.length - 1],
                     content: assistantMessage
                   }
                   return updated
@@ -227,7 +240,7 @@ export default function ChatPage() {
                   key={index}
                   role={message.role}
                   content={message.content}
-                  animationSteps={message.role === "assistant" ? animationSteps : []}
+                  animationSteps={message.role === "assistant" ? (message.animationSteps || animationSteps) : []}
                   currentAnimationStep={currentAnimationStep}
                   isAnimating={isAnimating && index === messages.length - 1 && message.role === "assistant"}
                 />
