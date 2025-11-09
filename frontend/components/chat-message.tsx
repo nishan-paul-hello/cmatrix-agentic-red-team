@@ -59,6 +59,7 @@ export function ChatMessage({ role, content, isLoading, animationSteps = [], cur
                         isActive && "bg-blue-500/10 border border-blue-500/20",
                         isCompleted && "bg-green-500/10 border border-green-500/20"
                       )}
+                      style={{ backgroundColor: step.bgColor + '30' }}
                     >
                       <div className="flex-shrink-0 mt-0.5">
                         {isCompleted ? (
