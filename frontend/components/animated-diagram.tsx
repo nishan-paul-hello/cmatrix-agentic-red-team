@@ -1,14 +1,17 @@
 "use client"
 
-import React, { useState, useEffect } from "react"
+import React, { useEffect, useRef } from "react"
+import { DataSet, DataView } from "vis-data/peer"
+import { Network } from "vis-network/peer"
+import type { Node, Edge, Options } from "vis-network/peer"
+import "vis-network/styles/vis-network.css"
 import { cn } from "@/lib/utils"
+import "./vis-styles.css"
 
 interface DiagramNode {
   id: string
   label: string
-  x: number
-  y: number
-  type: 'user' | 'ai' | 'tool' | 'result'
+  type: "user" | "ai" | "tool" | "result"
   active?: boolean
   completed?: boolean
 }
@@ -28,187 +31,269 @@ interface AnimatedDiagramProps {
   className?: string
 }
 
-export function AnimatedDiagram({ nodes, edges, currentStep = 0, isAnimating = false, className }: AnimatedDiagramProps) {
-  const [animatedNodes, setAnimatedNodes] = useState(nodes)
-  const [animatedEdges, setAnimatedEdges] = useState(edges)
+export function AnimatedDiagram({
+  nodes: initialNodes,
+  edges: initialEdges,
+  currentStep = 0,
+  isAnimating = false,
+  className,
+}: AnimatedDiagramProps) {
+  const visJsRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (!isAnimating) return
+    if (!visJsRef.current) return
 
-    // Update node and edge states based on current step
-    const updatedNodes = nodes.map((node, index) => ({
-      ...node,
-      active: index === currentStep,
-      completed: index < currentStep
-    }))
-
-    const updatedEdges = edges.map((edge, index) => ({
-      ...edge,
-      active: index === currentStep - 1,
-      completed: index < currentStep - 1
-    }))
-
-    setAnimatedNodes(updatedNodes)
-    setAnimatedEdges(updatedEdges)
-  }, [currentStep, isAnimating, nodes, edges])
-
-  const getNodeColor = (node: DiagramNode) => {
-    if (node.completed) return { border: "border-white/80", gradient: "url(#gradient-gray)" };
-    if (node.active) return { border: "border-white", gradient: "url(#gradient-gray)" };
-    return { border: "border-white/30", gradient: "url(#gradient-gray)" };
-  };
-
-  const getNodeIcon = (type: string) => {
-    switch (type) {
-      case 'user': return '👤'
-      case 'ai': return '🤖'
-      case 'tool': return '🔧'
-      case 'result': return '📊'
-      default: return '●'
+    const getIcon = (type: string) => {
+      switch (type) {
+        case 'user': return '👤'
+        case 'ai': return '🤖'
+        case 'tool': return '🔧'
+        case 'result': return '📊'
+        default: return '●'
+      }
     }
-  }
 
-  const getEdgeColor = (edge: DiagramEdge) => {
-    if (edge.completed) return "stroke-white/80"
-    if (edge.active) return "stroke-white animate-pulse"
-    return "stroke-white/30"
-  }
+    const nodes = new DataSet<Node>(
+      initialNodes.map((node, index) => {
+        const isActive = index === currentStep
+        const isCompleted = index < currentStep
+
+        return {
+          id: node.id,
+          label: `${getIcon(node.type)}\n${node.label}`,
+          shape: "box",
+          font: {
+            color: isCompleted ? "#94a3b8" : "#ffffff",
+            size: 12,
+            multi: true,
+          },
+          borderWidth: isActive ? 2 : 1,
+          color: {
+            border: isActive ? "#ffffff" : isCompleted ? "#475569" : "#334155",
+            background: "#2d3748",
+          },
+          margin: {
+            top: 10,
+            right: 10,
+            bottom: 10,
+            left: 10,
+          },
+          shapeProperties: {
+            borderRadius: 6,
+          },
+          shadow: isActive
+            ? { enabled: true, color: "rgba(255,255,255,0.5)", size: 20 }
+            : { enabled: false },
+        }
+      })
+    )
+
+    const edges = new DataSet<Edge>(
+      initialEdges.map((edge, index) => {
+        const isActive = index === currentStep - 1
+        const isCompleted = index < currentStep - 1
+        return {
+          from: edge.from,
+          to: edge.to,
+          arrows: {
+            to: {
+              enabled: true,
+              scaleFactor: 0.5,
+            },
+          },
+          color: {
+            color: isActive ? "#ffffff" : isCompleted ? "#475569" : "#334155",
+            highlight: "#ffffff",
+          },
+          width: isActive ? 2 : 1,
+          smooth: {
+            enabled: true,
+            type: "curvedCW",
+            roundness: 0.2,
+          },
+        }
+      })
+    )
+
+    const data = {
+      nodes: nodes as DataSet<Node, "id"> | DataView<Node, "id">,
+      edges: edges as DataSet<Edge, "id"> | DataView<Edge, "id">,
+    }
+
+    const options: Options = {
+      autoResize: true,
+      physics: {
+        enabled: true,
+        solver: "forceAtlas2Based",
+        forceAtlas2Based: {
+          gravitationalConstant: -50,
+          centralGravity: 0.01,
+          springLength: 100,
+          springConstant: 0.08,
+          damping: 0.4,
+          avoidOverlap: 0.5,
+        },
+        stabilization: {
+          iterations: 150,
+        },
+      },
+      interaction: {
+        dragNodes: true,
+        dragView: true,
+        zoomView: true,
+        hover: true,
+      },
+      layout: {
+        hierarchical: false,
+      },
+    }
+
+    const network = new Network(visJsRef.current, data, options)
+
+    // Add a background grid
+    const canvas = visJsRef.current.getElementsByTagName("canvas")[0]
+    const ctx = canvas.getContext("2d")
+
+    function drawGrid() {
+      if (!ctx) return
+      const gridSize = 20
+      const width = canvas.width
+      const height = canvas.height
+
+      ctx.save()
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.1)"
+      ctx.lineWidth = 0.5
+
+      for (let x = 0; x <= width; x += gridSize) {
+        ctx.beginPath()
+        ctx.moveTo(x, 0)
+        ctx.lineTo(x, height)
+        ctx.stroke()
+      }
+
+      for (let y = 0; y <= height; y += gridSize) {
+        ctx.beginPath()
+        ctx.moveTo(0, y)
+        ctx.lineTo(width, y)
+        ctx.stroke()
+      }
+      ctx.restore()
+    }
+
+    network.on("beforeDrawing", (ctx) => {
+      // Get the canvas dimensions
+      const canvasWidth = canvas.width
+      const canvasHeight = canvas.height
+
+      // Clear the entire canvas
+      ctx.clearRect(0, 0, canvasWidth, canvasHeight)
+
+      // Save the current transformation matrix
+      ctx.save()
+
+      // Reset transformation to draw grid in canvas coordinates
+      ctx.setTransform(1, 0, 0, 1, 0, 0)
+
+      // Draw grid covering the entire canvas
+      const gridSize = 20
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.1)"
+      ctx.lineWidth = 0.5
+
+      for (let x = 0; x <= canvasWidth; x += gridSize) {
+        ctx.beginPath()
+        ctx.moveTo(x, 0)
+        ctx.lineTo(x, canvasHeight)
+        ctx.stroke()
+      }
+
+      for (let y = 0; y <= canvasHeight; y += gridSize) {
+        ctx.beginPath()
+        ctx.moveTo(0, y)
+        ctx.lineTo(canvasWidth, y)
+        ctx.stroke()
+      }
+
+      // Restore the transformation matrix
+      ctx.restore()
+    })
+
+    network.on("stabilizationIterationsDone", () => {
+      // The physics simulation is intentionally kept enabled for a more dynamic feel.
+    });
+
+    let animationFrameId: number;
+
+    if (isAnimating) {
+      const activeEdge = initialEdges.find((edge, index) => index === currentStep - 1);
+      if (activeEdge) {
+        const fromNodeId = activeEdge.from;
+        const toNodeId = activeEdge.to;
+
+        const particleId = "flow-particle";
+        if (!nodes.get(particleId)) {
+          nodes.add({
+            id: particleId,
+            shape: "dot",
+            size: 3,
+            color: "#ffffff",
+            physics: false,
+          });
+        }
+
+        const animate = () => {
+          const fromNode = network.getPositions([fromNodeId])[fromNodeId];
+          const toNode = network.getPositions([toNodeId])[toNodeId];
+
+          if (fromNode && toNode) {
+            const distance = Math.sqrt(Math.pow(toNode.x - fromNode.x, 2) + Math.pow(toNode.y - fromNode.y, 2));
+            const duration = distance / 100; // Adjust speed
+            const startTime = Date.now();
+
+            const step = () => {
+              const now = Date.now();
+              const time = (now - startTime) / 1000;
+              const progress = Math.min(time / duration, 1);
+
+              const x = fromNode.x + (toNode.x - fromNode.x) * progress;
+              const y = fromNode.y + (toNode.y - fromNode.y) * progress;
+
+              nodes.update({ id: particleId, x, y });
+
+              if (progress < 1) {
+                animationFrameId = requestAnimationFrame(step);
+              } else {
+                if (nodes.get(particleId)) {
+                  nodes.remove(particleId);
+                }
+              }
+            };
+            step();
+          }
+        };
+        animate();
+      }
+    }
+
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+      if (nodes.get("flow-particle")) {
+        nodes.remove("flow-particle");
+      }
+      network.destroy();
+    };
+  }, [initialNodes, initialEdges, currentStep, isAnimating])
 
   return (
-    <div className={cn("relative w-full h-64 bg-card rounded-lg border border-border p-4 overflow-hidden", className)}>
-      {/* Background grid */}
-      <div className="absolute inset-0 opacity-10">
-        <svg width="100%" height="100%" className="text-muted-foreground">
-          <defs>
-            <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
-              <path d="M 20 0 L 0 0 0 20" fill="none" stroke="currentColor" strokeWidth="0.5"/>
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#grid)" />
-        </svg>
-      </div>
-
-      {/* SVG Diagram */}
-      <svg width="100%" height="100%" viewBox="-20 0 900 180" className="absolute inset-0">
-        {/* Edges */}
-        {animatedEdges.map((edge, index) => {
-          const fromNode = animatedNodes.find(n => n.id === edge.from)
-          const toNode = animatedNodes.find(n => n.id === edge.to)
-          if (!fromNode || !toNode) return null
-
-          const x1 = fromNode.x + 40 // center of node
-          const y1 = fromNode.y + 40
-          const x2 = toNode.x + 40
-          const y2 = toNode.y + 40
-
-          return (
-            <g key={`edge-${index}`}>
-              {/* Arrow line */}
-              <line
-                x1={x1}
-                y1={y1}
-                x2={x2}
-                y2={y2}
-                className={cn("stroke-2 transition-all duration-500", getEdgeColor(edge))}
-                markerEnd="url(#arrowhead)"
-              />
-              {/* Animated flow indicator */}
-              {edge.active && (
-                <circle
-                  r="3"
-                  fill="white"
-                  className="animate-ping"
-                >
-                  <animateMotion
-                    dur="1.5s"
-                    repeatCount="indefinite"
-                    path={`M${x1},${y1} L${x2},${y2}`}
-                  />
-                </circle>
-              )}
-            </g>
-          )
-        })}
-
-        {/* Arrow marker definition */}
-        <defs>
-          <linearGradient id="gradient-gray" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#4A5568" />
-            <stop offset="100%" stopColor="#2D3748" />
-          </linearGradient>
-          <marker
-            id="arrowhead"
-            markerWidth="10"
-            markerHeight="7"
-            refX="9"
-            refY="3.5"
-            orient="auto"
-          >
-            <polygon
-              points="0 0, 10 3.5, 0 7"
-              fill="currentColor"
-            />
-          </marker>
-        </defs>
-
-        {/* Nodes */}
-        {animatedNodes.map((node) => (
-          <g key={node.id} transform={`translate(${node.x}, ${node.y})`}>
-            {/* Node container */}
-            <rect
-              x="5"
-              y="5"
-              width="70"
-              height="70"
-              rx="10"
-              ry="10"
-              className={cn(
-                "stroke-2 transition-all duration-500",
-                getNodeColor(node).border
-              )}
-              fill={getNodeColor(node).gradient}
-            />
-
-            {/* Node icon */}
-            <text
-              x="40"
-              y="40"
-              textAnchor="middle"
-              className="text-2xl font-bold fill-white"
-            >
-              {getNodeIcon(node.type)}
-            </text>
-
-            {/* Node label */}
-            <text
-              x="40"
-              y="65"
-              textAnchor="middle"
-              className="text-xs font-medium fill-current text-white max-w-20"
-            >
-              {node.label}
-            </text>
-
-            {/* Active glow effect */}
-            {node.active && (
-              <rect
-                x="0"
-                y="0"
-                width="80"
-                height="80"
-                rx="15"
-                ry="15"
-                className="stroke-white stroke-2 fill-none animate-ping opacity-75"
-              />
-            )}
-          </g>
-        ))}
-      </svg>
-
-      {/* Status indicator */}
-      <div className="absolute bottom-2 left-2 text-xs text-muted-foreground terminal-text">
-        {isAnimating ? (
-          <span className="flex items-center gap-1">
+    <div
+      className={cn(
+        "relative w-full h-64 bg-card rounded-lg border border-border overflow-hidden",
+        className
+        )}
+      >
+        <div ref={visJsRef} className="w-full h-full" key={initialNodes.length} />
+        <div className="absolute bottom-2 left-2 text-xs text-muted-foreground terminal-text">
+          {isAnimating ? (
+            <span className="flex items-center gap-1">
             <div className="w-1.5 h-1.5 bg-blue-400 rounded-full animate-pulse"></div>
             PROCESSING STEP {currentStep + 1}
           </span>

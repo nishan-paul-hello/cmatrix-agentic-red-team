@@ -1,0 +1,16 @@
+.vis-network {
+  border: none !important;
+  outline: none !important;
+}
+
+.vis-network:focus {
+  outline: none !important;
+}
+
+.vis-button {
+  display: none !important;
+}
+
+.vis-close {
+  display: none !important;
+}
