@@ -35,9 +35,9 @@
         "nodes": [
           {"id": "user", "label": "User Query", "x": 50, "y": 50, "type": "user"},
           {"id": "ai", "label": "AI Agent", "x": 200, "y": 50, "type": "ai"},
-          {"id": "connect", "label": "Server Connect", "x": 350, "y": 30, "type": "tool"},
-          {"id": "check", "label": "Service Check", "x": 350, "y": 70, "type": "tool"},
-          {"id": "metrics", "label": "Metrics", "x": 500, "y": 50, "type": "result"}
+          {"id": "connect", "label": "Server Connect", "x": 350, "y": 20, "type": "tool"},
+          {"id": "check", "label": "Service Check", "x": 350, "y": 80, "type": "tool"},
+          {"id": "metrics", "label": "Metrics", "x": 480, "y": 50, "type": "result"}
         ],
         "edges": [
           {"from": "user", "to": "ai"},

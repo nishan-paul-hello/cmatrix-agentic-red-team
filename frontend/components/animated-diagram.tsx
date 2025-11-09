@@ -53,10 +53,10 @@ export function AnimatedDiagram({ nodes, edges, currentStep = 0, isAnimating = f
   }, [currentStep, isAnimating, nodes, edges])
 
   const getNodeColor = (node: DiagramNode) => {
-    if (node.completed) return "bg-green-500 border-green-400"
-    if (node.active) return "bg-blue-500 border-blue-400 animate-pulse"
-    return "bg-muted border-muted-foreground"
-  }
+    if (node.completed) return { border: "border-white/80", gradient: "url(#gradient-gray)" };
+    if (node.active) return { border: "border-white", gradient: "url(#gradient-gray)" };
+    return { border: "border-white/30", gradient: "url(#gradient-gray)" };
+  };
 
   const getNodeIcon = (type: string) => {
     switch (type) {
@@ -69,9 +69,9 @@ export function AnimatedDiagram({ nodes, edges, currentStep = 0, isAnimating = f
   }
 
   const getEdgeColor = (edge: DiagramEdge) => {
-    if (edge.completed) return "stroke-green-400"
-    if (edge.active) return "stroke-blue-400 animate-pulse"
-    return "stroke-muted-foreground"
+    if (edge.completed) return "stroke-white/80"
+    if (edge.active) return "stroke-white animate-pulse"
+    return "stroke-white/30"
   }
 
   return (
@@ -116,7 +116,7 @@ export function AnimatedDiagram({ nodes, edges, currentStep = 0, isAnimating = f
               {edge.active && (
                 <circle
                   r="3"
-                  fill="#3b82f6"
+                  fill="white"
                   className="animate-ping"
                 >
                   <animateMotion
@@ -132,6 +132,10 @@ export function AnimatedDiagram({ nodes, edges, currentStep = 0, isAnimating = f
 
         {/* Arrow marker definition */}
         <defs>
+          <linearGradient id="gradient-gray" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#4A5568" />
+            <stop offset="100%" stopColor="#2D3748" />
+          </linearGradient>
           <marker
             id="arrowhead"
             markerWidth="10"
@@ -150,23 +154,27 @@ export function AnimatedDiagram({ nodes, edges, currentStep = 0, isAnimating = f
         {/* Nodes */}
         {animatedNodes.map((node) => (
           <g key={node.id} transform={`translate(${node.x}, ${node.y})`}>
-            {/* Node circle */}
-            <circle
-              cx="40"
-              cy="40"
-              r="35"
+            {/* Node container */}
+            <rect
+              x="5"
+              y="5"
+              width="70"
+              height="70"
+              rx="10"
+              ry="10"
               className={cn(
-                "stroke-2 fill-current transition-all duration-500",
-                getNodeColor(node)
+                "stroke-2 transition-all duration-500",
+                getNodeColor(node).border
               )}
+              fill={getNodeColor(node).gradient}
             />
 
             {/* Node icon */}
             <text
               x="40"
-              y="45"
+              y="40"
               textAnchor="middle"
-              className="text-lg font-bold fill-white"
+              className="text-2xl font-bold fill-white"
             >
               {getNodeIcon(node.type)}
             </text>
@@ -174,20 +182,23 @@ export function AnimatedDiagram({ nodes, edges, currentStep = 0, isAnimating = f
             {/* Node label */}
             <text
               x="40"
-              y="75"
+              y="65"
               textAnchor="middle"
-              className="text-xs font-medium fill-current text-muted-foreground max-w-20"
+              className="text-xs font-medium fill-current text-white max-w-20"
             >
               {node.label}
             </text>
 
             {/* Active glow effect */}
             {node.active && (
-              <circle
-                cx="40"
-                cy="40"
-                r="45"
-                className="stroke-blue-400 stroke-2 fill-none animate-ping opacity-50"
+              <rect
+                x="0"
+                y="0"
+                width="80"
+                height="80"
+                rx="15"
+                ry="15"
+                className="stroke-white stroke-2 fill-none animate-ping opacity-75"
               />
             )}
           </g>
