@@ -26,3 +26,19 @@ COMMAND_EXECUTED | User: system | Target: None | Action: command_completed | Res
 COMMAND_EXECUTION | User: system | Target: None | Action: execute_command | Result: None
 {"timestamp": "2025-11-19T01:06:09.574271", "event_type": "COMMAND_EXECUTED", "user_id": "system", "target": null, "action": "command_completed", "result": "success", "severity": "INFO", "details": {"command": "nmap -p 1-1000 -T4 --open localhost", "returncode": 0, "output_length": 127}}
 COMMAND_EXECUTED | User: system | Target: None | Action: command_completed | Result: success
+{"timestamp": "2025-11-19T02:08:12.026319", "event_type": "COMMAND_EXECUTION", "user_id": "system", "target": null, "action": "execute_command", "result": null, "severity": "INFO", "details": {"command": "nmap -p 80 -T4 --open 192.168.1.1"}}
+COMMAND_EXECUTION | User: system | Target: None | Action: execute_command | Result: None
+{"timestamp": "2025-11-19T02:08:14.209039", "event_type": "COMMAND_EXECUTED", "user_id": "system", "target": null, "action": "command_completed", "result": "success", "severity": "INFO", "details": {"command": "nmap -p 80 -T4 --open 192.168.1.1", "returncode": 0, "output_length": 209}}
+COMMAND_EXECUTED | User: system | Target: None | Action: command_completed | Result: success
+{"timestamp": "2025-11-19T02:08:29.514872", "event_type": "COMMAND_EXECUTION", "user_id": "system", "target": null, "action": "execute_command", "result": null, "severity": "INFO", "details": {"command": "systemctl status nginx"}}
+COMMAND_EXECUTION | User: system | Target: None | Action: execute_command | Result: None
+{"timestamp": "2025-11-19T02:08:29.538884", "event_type": "COMMAND_EXECUTED", "user_id": "system", "target": null, "action": "command_completed", "result": "success", "severity": "INFO", "details": {"command": "systemctl status nginx", "returncode": 4, "output_length": 0}}
+COMMAND_EXECUTED | User: system | Target: None | Action: command_completed | Result: success
+{"timestamp": "2025-11-19T02:24:56.828682", "event_type": "COMMAND_EXECUTION", "user_id": "system", "target": null, "action": "execute_command", "result": null, "severity": "INFO", "details": {"command": "nmap -p 1-65535 -T4 --open localhost"}}
+COMMAND_EXECUTION | User: system | Target: None | Action: execute_command | Result: None
+{"timestamp": "2025-11-19T02:25:05.772285", "event_type": "COMMAND_EXECUTED", "user_id": "system", "target": null, "action": "command_completed", "result": "success", "severity": "INFO", "details": {"command": "nmap -p 1-65535 -T4 --open localhost", "returncode": 0, "output_length": 729}}
+COMMAND_EXECUTED | User: system | Target: None | Action: command_completed | Result: success
+{"timestamp": "2025-11-19T02:25:05.773675", "event_type": "COMMAND_EXECUTION", "user_id": "system", "target": null, "action": "execute_command", "result": null, "severity": "INFO", "details": {"command": "nmap -p 1-65535 -T4 --open localhost"}}
+COMMAND_EXECUTION | User: system | Target: None | Action: execute_command | Result: None
+{"timestamp": "2025-11-19T02:25:14.949774", "event_type": "COMMAND_EXECUTED", "user_id": "system", "target": null, "action": "command_completed", "result": "success", "severity": "INFO", "details": {"command": "nmap -p 1-65535 -T4 --open localhost", "returncode": 0, "output_length": 729}}
+COMMAND_EXECUTED | User: system | Target: None | Action: command_completed | Result: success

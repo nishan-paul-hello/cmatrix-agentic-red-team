@@ -26,8 +26,8 @@ def parse_tool_calls(text: str) -> list:
     # We'll check against common tool names
     tool_calls = []
     
-    # Pattern 1: TOOL_CALL: tool_name(params)
-    pattern1 = r'TOOL_CALL:\s*(\w+)\((.*?)\)'
+    # Pattern 1: TOOL: tool_name(params) or TOOL_CALL: tool_name(params)
+    pattern1 = r'TOOL(?:_CALL)?:\s*(\w+)\((.*?)\)'
     matches1 = re.findall(pattern1, text, re.IGNORECASE)
     
     for tool_name, params_str in matches1:

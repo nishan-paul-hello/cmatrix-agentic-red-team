@@ -4,13 +4,24 @@ from command_executor import command_executor
 def port_scan(target, ports="1-1024"):
     """Perform a port scan on a target using nmap."""
     try:
-        # Build nmap command
-        command = f"nmap -p {ports} -T4 --open {target}"
+        # Handle special cases for port ranges
+        if ports in ["all", "-", "1-65535", "*"]:
+            # Comprehensive scan of all ports (TCP only for speed)
+            command = f"nmap -p- -T4 --open {target}"
+            timeout = 180  # 3 minutes for full scan
+        elif target in ["localhost", "127.0.0.1", "::1"]:
+            # For localhost, use faster scan without sudo requirement
+            command = f"nmap -p {ports} -T4 --open {target}"
+            timeout = 60
+        else:
+            # Standard scan
+            command = f"nmap -p {ports} -T4 --open {target}"
+            timeout = 60
         
         print(f"🔍 Executing: {command}")
         
         # Execute using command executor
-        result = command_executor.execute(command, timeout=60)
+        result = command_executor.execute(command, timeout=timeout)
         
         if not result["success"]:
             return f"Port scan failed: {result['stderr']}"
@@ -22,16 +33,21 @@ def port_scan(target, ports="1-1024"):
         open_ports = []
         
         for line in lines:
-            # Look for lines like "22/tcp open  ssh"
-            if '/tcp' in line and 'open' in line:
+            # Look for lines like "22/tcp open  ssh" or "53/udp open  domain"
+            if ('/tcp' in line or '/udp' in line) and 'open' in line:
                 parts = line.split()
                 if len(parts) >= 3:
-                    port = parts[0].split('/')[0]
+                    port_proto = parts[0]  # e.g., "22/tcp"
+                    port = port_proto.split('/')[0]
+                    protocol = port_proto.split('/')[1] if '/' in port_proto else 'tcp'
                     service = parts[2] if len(parts) > 2 else 'unknown'
-                    open_ports.append(f"Port {port}: open ({service})")
+                    open_ports.append(f"{port}/{protocol} open {service}")
         
         if open_ports:
-            return f"Port scan results for {target}:\n" + "\n".join(open_ports)
+            result_text = f"Port scan results for {target}:\n"
+            result_text += f"Found {len(open_ports)} open port(s):\n\n"
+            result_text += "\n".join(open_ports)
+            return result_text
         else:
             return f"No open ports found on {target} in range {ports}"
     

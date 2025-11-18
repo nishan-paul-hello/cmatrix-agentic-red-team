@@ -3,13 +3,13 @@ from langchain_core.tools import tool
 from network_tools import port_scan, vulnerability_assessment
 
 @tool
-def scan_network(target: str, ports: str = "1-10000") -> str:
+def scan_network(target: str, ports: str = "1-65535") -> str:
     """
     Scan a network target for open ports using nmap.
     
     Args:
         target: Target IP address or hostname (e.g., "localhost", "192.168.1.1")
-        ports: Port range to scan (e.g., "1-10000", "80,443", "1-65535")
+        ports: Port range to scan (e.g., "1-65535", "80,443", "all" for all ports, "1-1024" for common ports)
     """
     return port_scan(target, ports)
 
