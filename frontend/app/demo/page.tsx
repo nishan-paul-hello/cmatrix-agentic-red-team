@@ -3,33 +3,13 @@
 import type React from "react"
 
 import { useState, useRef, useEffect } from "react"
-
-function TypewriterText({ text, speed = 100 }: { text: string; speed?: number }) {
-  const [displayText, setDisplayText] = useState("")
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const [isComplete, setIsComplete] = useState(false)
-
-  useEffect(() => {
-    if (currentIndex < text.length) {
-      const timer = setTimeout(() => {
-        setDisplayText((prev) => prev + text[currentIndex])
-        setCurrentIndex((prev) => prev + 1)
-      }, speed)
-      return () => clearTimeout(timer)
-    } else {
-      setIsComplete(true)
-    }
-  }, [currentIndex, text, speed])
-
-  return <span>{displayText}{!isComplete && <span className="animate-pulse">|</span>}</span>
-}
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
-import { Send, Loader2, Shield, Zap } from "lucide-react"
+import { ArrowLeft, Shield, Send, Loader2, Zap } from "lucide-react"
 import { ChatMessage } from "@/components/chat-message"
 import Link from "next/link"
 
-export default function ChatPage() {
+export default function DemoPage() {
    const [messages, setMessages] = useState<Array<{ role: "user" | "assistant"; content: string; animationSteps?: any[]; diagram?: { nodes: any[]; edges: any[] } }>>([])
    const [input, setInput] = useState("")
    const [isLoading, setIsLoading] = useState(false)
@@ -54,7 +34,6 @@ export default function ChatPage() {
     setInput("")
     setMessages((prev) => [...prev, { role: "user", content: userMessage }])
     setIsLoading(true)
-    // Reset animation state for new message
     setAnimationSteps([])
     setCurrentAnimationStep(0)
     setIsAnimating(false)
@@ -65,7 +44,7 @@ export default function ChatPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           message: userMessage,
-          history: messages.slice(-10), // Send last 10 messages for context
+          history: messages.slice(-10),
         }),
       })
 
@@ -102,14 +81,12 @@ export default function ChatPage() {
             try {
               const parsed = JSON.parse(data)
               if (parsed.animation_step) {
-                // Handle animation step - this indicates demo mode
-                console.log("[v0] Received animation step:", parsed.animation_step.step)
+                console.log("[DEMO] Received animation step:", parsed.animation_step.step)
                 receivedAnimationSteps.push(parsed.animation_step)
                 setAnimationSteps([...receivedAnimationSteps])
                 setIsAnimating(true)
-                setIsLoading(false) // Turn off loading when animation starts
+                setIsLoading(false)
 
-                // Store animation steps and diagram in the message for persistence
                 setMessages((prev) => {
                   const updated = [...prev]
                   const lastMsg = updated[updated.length - 1]
@@ -122,14 +99,12 @@ export default function ChatPage() {
                   return updated
                 })
 
-                // Auto-advance through animation steps
                 setTimeout(() => {
                   setCurrentAnimationStep(prev => Math.min(prev + 1, receivedAnimationSteps.length))
                 }, parsed.animation_step.duration)
 
               } else if (parsed.diagram) {
-                // Handle diagram data
-                console.log("[v0] Received diagram data")
+                console.log("[DEMO] Received diagram data")
                 receivedDiagram = parsed.diagram
                 setMessages((prev) => {
                   const updated = [...prev]
@@ -141,9 +116,7 @@ export default function ChatPage() {
                 })
 
               } else if (parsed.token) {
-                // Handle regular token streaming
                 assistantMessage += parsed.token
-                // Keep animation visible and update the last message with accumulated content
                 setMessages((prev) => {
                   const updated = [...prev]
                   updated[updated.length - 1] = {
@@ -153,19 +126,19 @@ export default function ChatPage() {
                   return updated
                 })
               } else if (parsed.error) {
-                console.error("[v0] Stream error:", parsed.error)
+                console.error("[DEMO] Stream error:", parsed.error)
                 throw new Error(parsed.error)
               }
             } catch (e) {
               if (e instanceof Error && e.message !== "Unexpected end of JSON input") {
-                console.error("[v0] Parse error:", e)
+                console.error("[DEMO] Parse error:", e)
               }
             }
           }
         }
       }
     } catch (error) {
-      console.error("[v0] Error:", error)
+      console.error("[DEMO] Error:", error)
       setMessages((prev) => [
         ...prev,
         {
@@ -186,6 +159,23 @@ export default function ChatPage() {
     }
   }
 
+  const resetDemo = () => {
+    setMessages([])
+    setInput("")
+    setAnimationSteps([])
+    setCurrentAnimationStep(0)
+    setIsAnimating(false)
+  }
+
+  // Demo prompt suggestions
+  const demoPrompts = [
+    "Can you perform a security scan on my web server at 192.168.1.100 to check for any vulnerabilities?",
+    "What's the current status of the nginx service on my server?",
+    "Please analyze the nginx access logs for any errors or unusual activity in the last 24 hours.",
+    "Deploy the updated firewall configuration to the production environment.",
+    "Scan ports 1-1000 on the target IP 10.0.0.5 to see what's open.",
+  ]
+
   return (
     <div className="flex flex-col h-screen bg-background">
       <div className="matrix-rain"></div>
@@ -193,22 +183,32 @@ export default function ChatPage() {
       <header className="border-b border-border bg-card cyber-border scan-line">
         <div className="container flex items-center justify-between h-14 px-4 mx-auto">
           <div className="flex items-center gap-3">
+            <Link href="/" className="cursor-pointer">
+              <Button variant="ghost" size="icon" className="cyber-border cursor-pointer">
+                <ArrowLeft className="w-5 h-5" />
+              </Button>
+            </Link>
             <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-secondary cyber-border">
               <Shield className="w-5 h-5 text-secondary-foreground" />
             </div>
             <div>
-              <h1 className="text-lg font-semibold terminal-text">CMatrix</h1>
-              <div className="text-xs text-muted-foreground">Neural Interface Active</div>
+              <h1 className="text-lg font-semibold terminal-text">CMatrix Demo</h1>
+              <div className="text-xs text-muted-foreground">Interactive Demonstration</div>
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <Link href="/demo" className="cursor-pointer">
-              <Button variant="outline" size="sm" className="cyber-border terminal-text cursor-pointer">
-                View Demo
+            {messages.length > 0 && (
+              <Button 
+                onClick={resetDemo}
+                variant="outline"
+                size="sm"
+                className="cyber-border terminal-text"
+              >
+                Reset Demo
               </Button>
-            </Link>
+            )}
             <div className="w-2 h-2 bg-chart-1 rounded-full animate-pulse"></div>
-            <div className="text-xs text-muted-foreground terminal-text">AGENT ONLINE</div>
+            <div className="text-xs text-muted-foreground terminal-text">DEMO MODE</div>
           </div>
         </div>
       </header>
@@ -224,36 +224,28 @@ export default function ChatPage() {
                 </div>
                 <div className="text-left">
                   <h2 className="text-4xl font-bold text-balance terminal-text glow-primary">
-                    <TypewriterText text="CMatrix" speed={150} />
+                    Demo Mode
                   </h2>
                   <div className="text-sm text-muted-foreground terminal-text mt-2">
-                    Neural Interface
+                    Try a demo prompt below
                   </div>
                 </div>
               </div>
               <div className="text-center space-y-4">
                 <p className="text-muted-foreground text-pretty max-w-md terminal-text">
-                  Agent capabilities: security scanning, system monitoring, log analysis, configuration deployment.
+                  Enter one of the demo prompts to see animated visualizations and workflow diagrams.
                 </p>
-                <div className="text-xs text-muted-foreground terminal-text">
-                  [SYSTEM STATUS: OPERATIONAL] [AGENT: CMATRIX-CORE-V1]
-                </div>
               </div>
-              <div className="grid gap-3 mt-4 sm:grid-cols-2">
-                <button
-                  onClick={() => setInput("Scan my web application for vulnerabilities")}
-                  className="px-4 py-3 text-sm text-left transition-colors border rounded-lg border-border hover:bg-accent hover:text-accent-foreground cyber-border cursor-pointer"
-                >
-                  <div className="font-medium terminal-text">Security Scan</div>
-                  <div className="text-xs text-muted-foreground">Analyze system vulnerabilities</div>
-                </button>
-                <button
-                  onClick={() => setInput("Check the status of critical services")}
-                  className="px-4 py-3 text-sm text-left transition-colors border rounded-lg border-border hover:bg-accent hover:text-accent-foreground cyber-border cursor-pointer"
-                >
-                  <div className="font-medium terminal-text">System Status</div>
-                  <div className="text-xs text-muted-foreground">Monitor infrastructure health</div>
-                </button>
+              <div className="grid gap-3 mt-4 sm:grid-cols-2 w-full max-w-2xl">
+                {demoPrompts.slice(0, 4).map((prompt, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setInput(prompt)}
+                    className="px-4 py-3 text-sm text-left transition-colors border rounded-lg border-border hover:bg-accent hover:text-accent-foreground cyber-border cursor-pointer"
+                  >
+                    <div className="font-medium terminal-text line-clamp-2">{prompt}</div>
+                  </button>
+                ))}
               </div>
             </div>
           ) : (
@@ -286,7 +278,7 @@ export default function ChatPage() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="Enter command or query..."
+              placeholder="Enter a demo prompt..."
               className="pr-12 resize-none min-h-[60px] max-h-[200px] cyber-border bg-black text-white placeholder:text-gray-400"
               disabled={isLoading}
             />
@@ -300,7 +292,7 @@ export default function ChatPage() {
             </Button>
           </form>
           <p className="mt-2 text-xs text-center text-muted-foreground terminal-text">
-            [SECURITY NOTICE] Neural responses may contain classified information. Handle with care.
+            [DEMO MODE] Enter prompts from demos.json to see animated visualizations
           </p>
         </div>
       </div>
