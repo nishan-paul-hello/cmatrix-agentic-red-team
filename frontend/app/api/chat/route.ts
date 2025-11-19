@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
     console.log("[Frontend] Routing request to Python backend:", PYTHON_BACKEND_URL)
 
     // Call Python backend
-    const response = await fetch(`${PYTHON_BACKEND_URL}/chat/stream`, {
+    const response = await fetch(`${PYTHON_BACKEND_URL}/api/v1/chat/stream`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

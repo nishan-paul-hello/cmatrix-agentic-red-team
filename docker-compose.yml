@@ -14,17 +14,17 @@ services:
       - HUGGINGFACE_API_KEY=${HUGGINGFACE_API_KEY}
       - HUGGINGFACE_MODEL=${HUGGINGFACE_MODEL:-DeepHat/DeepHat-V1-7B}
     volumes:
-      # Mount audit logs for persistence
-      - ./backend/audit_logs:/app/audit_logs
-      # Mount auth config for persistence
-      - ./backend/auth_config.json:/app/auth_config.json
+      # Mount logs for persistence
+      - ./backend/logs:/app/logs
+      # Mount data files for persistence
+      - ./backend/data:/app/data
       # Mount backend code for development (comment out for production)
       - ./backend:/app
     networks:
       - cmatrix-network
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health"]
       interval: 30s
       timeout: 10s
       retries: 3
