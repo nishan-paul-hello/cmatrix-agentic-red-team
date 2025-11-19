@@ -468,7 +468,44 @@ Proper configuration is essential for both security and functionality. CMatrix u
 
 ### Backend (.env)
 ```env
-HUGGINGFACE_API_KEY=your_key_here
+# LLM Configuration (Multi-Provider Support)
+DEFAULT_LLM_PROVIDER=huggingface  # Choose: huggingface, ollama, openrouter, kilocode, gemini, cerebras
+
+# HuggingFace (Legacy - kept for backward compatibility)
+HUGGINGFACE_API_KEY=your_huggingface_api_key_here
+HUGGINGFACE_MODEL=DeepHat/DeepHat-V1-7B
+ENABLE_HUGGINGFACE=true
+
+# Ollama (Local Models)
+OLLAMA_BASE_URL=http://localhost:11434
+OLLAMA_MODEL=gemma3:4b
+ENABLE_OLLAMA=false
+
+# OpenRouter
+OPENROUTER_API_KEY=your_openrouter_api_key_here
+OPENROUTER_MODEL=x-ai/grok-4-fast:free
+ENABLE_OPENROUTER=false
+
+# Kilo Code
+KILOCODE_TOKEN=your_kilocode_jwt_token_here
+KILOCODE_MODEL=x-ai/grok-code-fast-1
+ENABLE_KILOCODE=false
+
+# Gemini (Google) - Multiple API keys for different instances
+GEMINI_API_KEY_1=your_gemini_api_key_1_here
+GEMINI_API_KEY_2=your_gemini_api_key_2_here
+GEMINI_API_KEY_3=your_gemini_api_key_3_here
+GEMINI_MODEL=gemini-2.5-pro
+ENABLE_GEMINI=false
+
+# Cerebras - Multiple API keys for different instances
+CEREBRAS_API_KEY_1=your_cerebras_api_key_1_here
+CEREBRAS_API_KEY_2=your_cerebras_api_key_2_here
+CEREBRAS_API_KEY_3=your_cerebras_api_key_3_here
+CEREBRAS_MODEL=gpt-oss-120b
+ENABLE_CEREBRAS=false
+
+# Server Configuration
 PORT=8000
 DATABASE_URL=postgresql+asyncpg://cmatrix:cmatrix@postgres:5432/cmatrix
 SECRET_KEY=your_secret_key_here
@@ -479,16 +516,95 @@ SECRET_KEY=your_secret_key_here
 PYTHON_BACKEND_URL=http://localhost:8000
 ```
 
+### LLM Provider Management
+
+CMatrix now supports multiple LLM providers for enhanced flexibility and reliability:
+
+#### Available Providers
+
+1. **HuggingFace** - Router API (default, backward compatible)
+   - Models: DeepHat/DeepHat-V1-7B, custom models
+   - Best for: Cybersecurity-focused responses
+
+2. **Ollama** - Local model inference
+   - Models: gemma3:4b, llama3, mistral, etc.
+   - Best for: Local deployment, privacy, no API costs
+
+3. **OpenRouter** - Multi-provider API
+   - Models: x-ai/grok-4-fast:free, GPT-4, Claude, etc.
+   - Best for: Access to multiple models through single API
+
+4. **Kilo Code** - Custom xAI Grok Code models
+   - Models: x-ai/grok-code-fast-1
+   - Best for: Code generation and technical tasks
+
+5. **Gemini (Google)** - Google's Gemini models
+   - Models: gemini-2.5-pro, gemini-pro, gemini-pro-vision
+   - Best for: Multimodal tasks, Google's ecosystem
+
+6. **Cerebras** - High-performance inference
+   - Models: gpt-oss-120b, qwen-3-coder-480b, llama3.1-70b
+   - Best for: Fast inference, large context windows
+
+#### Provider Switching
+
+You can switch providers dynamically via API:
+
+```bash
+# Get available providers
+curl -X GET "http://localhost:8000/api/v1/chat/providers" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"
+
+# Switch to a different provider
+curl -X POST "http://localhost:8000/api/v1/chat/providers/switch" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  -d '"ollama"'
+```
+
+#### Configuration Tips
+
+- **Enable only needed providers** to reduce API costs and complexity
+- **Use local Ollama** for development and testing
+- **Multiple API keys** for Gemini/Cerebras provide redundancy
+- **Provider fallbacks** ensure system reliability
+- **Monitor usage** across different providers for cost optimization
+
 ---
 
 ## 📞 API Reference
 
 The RESTful API provides programmatic access to CMatrix's capabilities, enabling integration with other security tools and workflows.
 
+### Core Endpoints
 - `GET /health` - Health check
-- `POST /chat` - Non-streaming chat
-- `POST /chat/stream` - Streaming chat (SSE)
-- `GET /docs` - Interactive API documentation
+- `POST /api/v1/chat` - Non-streaming chat
+- `POST /api/v1/chat/stream` - Streaming chat (SSE)
+
+### LLM Provider Management
+- `GET /api/v1/chat/providers` - List available LLM providers
+- `POST /api/v1/chat/providers/switch` - Switch default LLM provider
+- `GET /api/v1/chat/providers/{provider_name}` - Get provider details
+
+- `GET /docs` - Interactive API documentation (Swagger UI)
+
+### Provider Management Examples
+
+```bash
+# List all available providers
+curl -X GET "http://localhost:8000/api/v1/chat/providers" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"
+
+# Switch to Ollama provider
+curl -X POST "http://localhost:8000/api/v1/chat/providers/switch" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  -d '"ollama"'
+
+# Get Gemini provider info
+curl -X GET "http://localhost:8000/api/v1/chat/providers/gemini" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"
+```
 
 ---
 

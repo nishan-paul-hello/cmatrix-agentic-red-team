@@ -5,7 +5,8 @@ from langchain_core.messages import BaseMessage, HumanMessage, AIMessage, System
 from langgraph.graph import StateGraph, END
 from loguru import logger
 
-from app.services.llm import get_llm
+from app.services.llm.factory import get_llm_provider
+from app.services.llm.providers import Message
 from app.tools.execution import parse_tool_calls
 from app.tools.registry import get_tool_registry
 from app.utils.helpers import clean_response, find_demo_match, load_demo_prompts
@@ -48,7 +49,7 @@ class OrchestratorService:
     
     def __init__(self):
         """Initialize the orchestrator service."""
-        self.llm = get_llm()
+        self.llm = get_llm_provider()  # Use new provider system
         self.tool_registry = get_tool_registry()
         self.demo_prompts = load_demo_prompts()
         self.workflow = self._create_workflow()
@@ -105,9 +106,21 @@ class OrchestratorService:
         else:
             prompt_messages = messages
 
-        # Convert to string prompt for HuggingFace
-        prompt_text = "\n".join([f"{m.type}: {m.content}" for m in prompt_messages])
-        response = self.llm.invoke(prompt_text)
+        # Convert LangChain BaseMessage objects to provider Message objects
+        provider_messages = []
+        for msg in prompt_messages:
+            if isinstance(msg, SystemMessage):
+                provider_messages.append(Message(role="system", content=msg.content))
+            elif isinstance(msg, HumanMessage):
+                provider_messages.append(Message(role="user", content=msg.content))
+            elif isinstance(msg, AIMessage):
+                provider_messages.append(Message(role="assistant", content=msg.content))
+            else:
+                # Fallback for unknown message types
+                provider_messages.append(Message(role="user", content=str(msg.content)))
+
+        # Use new provider interface with Message objects
+        response = self.llm.invoke(provider_messages)
 
         # Validate response is not empty
         if not response or not response.strip():
