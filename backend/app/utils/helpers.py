@@ -65,36 +65,44 @@ def clean_response(content: str) -> str:
 
     return result
 
-def find_best_matching_demo(message: str, demo_prompts: Optional[Dict] = None, threshold: float = 0.8) -> Tuple[Optional[str], float]:
-    """
-    Find the best matching demo prompt using fuzzy string matching.
+import string
 
+def normalize_text(text: str) -> str:
+    """
+    Normalize text by removing whitespace, punctuation and converting to lowercase.
+    
+    Args:
+        text: Input text
+        
+    Returns:
+        Normalized text
+    """
+    # Convert to lowercase
+    text = text.lower()
+    # Remove punctuation
+    text = text.translate(str.maketrans('', '', string.punctuation))
+    # Remove all whitespace
+    text = "".join(text.split())
+    return text
+
+def find_demo_match(message: str, demo_prompts: Optional[Dict] = None) -> Optional[str]:
+    """
+    Find a matching demo prompt using strict normalization.
+    
     Args:
         message: The user input message
         demo_prompts: Dictionary of demo prompts (optional, will load if not provided)
-        threshold: Minimum similarity ratio (0.0 to 1.0) to consider a match
-
+        
     Returns:
-        Tuple of (best_match_key, similarity_ratio) or (None, 0.0) if no match
+        The matching demo prompt key or None
     """
     if demo_prompts is None:
         demo_prompts = load_demo_prompts()
     
-    best_match = None
-    best_ratio = 0.0
-
-    # Normalize the input message for better matching
-    normalized_message = message.lower().strip()
-
+    normalized_message = normalize_text(message)
+    
     for demo_prompt in demo_prompts.keys():
-        # Calculate similarity ratio using normalized strings
-        ratio = difflib.SequenceMatcher(None, normalized_message, demo_prompt.lower()).ratio()
-        if ratio > best_ratio:
-            best_ratio = ratio
-            best_match = demo_prompt
-
-    # Only return match if it exceeds threshold
-    if best_ratio >= threshold:
-        return best_match, best_ratio
-    else:
-        return None, 0.0
+        if normalize_text(demo_prompt) == normalized_message:
+            return demo_prompt
+            
+    return None

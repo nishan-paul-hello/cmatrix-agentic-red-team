@@ -18,7 +18,7 @@ interface UseChatStreamReturn {
 /**
  * Hook for handling chat streaming functionality
  */
-export function useChatStream(): UseChatStreamReturn {
+export function useChatStream(options?: { isDemoPage?: boolean }): UseChatStreamReturn {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -42,6 +42,7 @@ export function useChatStream(): UseChatStreamReturn {
           body: JSON.stringify({
             message: userMessage,
             history: messages.slice(-10), // Last 10 messages for context
+            is_demo_page: options?.isDemoPage || false,
           }),
         });
 

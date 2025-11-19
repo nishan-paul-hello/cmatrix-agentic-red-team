@@ -8,7 +8,7 @@ from loguru import logger
 from app.services.llm import get_llm
 from app.tools.execution import parse_tool_calls
 from app.tools.registry import get_tool_registry
-from app.utils.helpers import clean_response, find_best_matching_demo, load_demo_prompts
+from app.utils.helpers import clean_response, find_demo_match, load_demo_prompts
 from app.core.config import settings
 
 
@@ -234,27 +234,29 @@ class OrchestratorService:
 
         return workflow.compile()
     
-    def run(self, message: str, history: Optional[list] = None) -> Union[str, Dict[str, Any]]:
+    def run(self, message: str, history: Optional[list] = None, is_demo_page: bool = False) -> Union[str, Dict[str, Any]]:
         """
         Run the orchestrator with a message and optional history.
         
         Args:
             message: User message
             history: Optional conversation history
+            is_demo_page: Whether the request is from the demo page
             
         Returns:
             Response string or dict with animation data
         """
         # Check if the message matches any demo prompt using fuzzy matching
-        best_match, similarity = find_best_matching_demo(message, self.demo_prompts)
-        if best_match:
-            demo_data = self.demo_prompts[best_match]
-            logger.info(f'DEMO MATCH FOUND (similarity: {similarity:.2f}) - Using default answer, NOT calling LLM')
-            return {
-                "animation_steps": demo_data["animation_steps"],
-                "diagram": demo_data.get("diagram"),
-                "final_answer": demo_data["final_answer"]
-            }
+        if is_demo_page:
+            best_match = find_demo_match(message, self.demo_prompts)
+            if best_match:
+                demo_data = self.demo_prompts[best_match]
+                logger.info(f'DEMO MATCH FOUND - Using default answer, NOT calling LLM')
+                return {
+                    "animation_steps": demo_data["animation_steps"],
+                    "diagram": demo_data.get("diagram"),
+                    "final_answer": demo_data["final_answer"]
+                }
 
         # No demo match found - proceed with LLM processing
         logger.info('No demo match found - calling LLM for response')
@@ -357,7 +359,7 @@ def get_orchestrator_service() -> OrchestratorService:
     return _orchestrator_service
 
 
-def run_orchestrator(message: str, history: Optional[list] = None) -> Union[str, Dict[str, Any]]:
+def run_orchestrator(message: str, history: Optional[list] = None, is_demo_page: bool = False) -> Union[str, Dict[str, Any]]:
     """
     Run the orchestrator with a message and optional history.
     
@@ -366,9 +368,10 @@ def run_orchestrator(message: str, history: Optional[list] = None) -> Union[str,
     Args:
         message: User message
         history: Optional conversation history
+        is_demo_page: Whether the request is from the demo page
         
     Returns:
         Response string or dict with animation data
     """
     orchestrator = get_orchestrator_service()
-    return orchestrator.run(message, history)
+    return orchestrator.run(message, history, is_demo_page)

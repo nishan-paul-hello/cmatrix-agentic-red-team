@@ -22,7 +22,7 @@ export default function DemoPage() {
     sendMessage,
     setInput,
     input,
-  } = useChatStream();
+  } = useChatStream({ isDemoPage: true });
 
   const { ref: messagesEndRef } = useScrollToBottom([messages]);
 

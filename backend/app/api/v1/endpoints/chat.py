@@ -40,7 +40,7 @@ async def chat(
     try:
         logger.info(f"Received chat request: {request.message[:50]}...")
         
-        response = orchestrator.run(request.message, request.history)
+        response = orchestrator.run(request.message, request.history, request.is_demo_page)
         
         logger.info(f"Generated response: {len(response)} characters")
         return ChatResponse(response=response)
@@ -79,7 +79,7 @@ async def chat_stream(
         async def generate():
             """Generate streaming response."""
             try:
-                response = orchestrator.run(request.message, request.history)
+                response = orchestrator.run(request.message, request.history, request.is_demo_page)
 
                 if not response:
                     yield f"data: {json.dumps({'error': 'Empty response from agent'})}\n\n"

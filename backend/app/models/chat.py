@@ -12,6 +12,10 @@ class ChatRequest(BaseModel):
         default_factory=list,
         description="Conversation history"
     )
+    is_demo_page: bool = Field(
+        default=False,
+        description="Whether the request is from the demo page"
+    )
     
     @validator("message")
     def message_not_empty(cls, v):
