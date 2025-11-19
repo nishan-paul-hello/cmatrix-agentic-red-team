@@ -1,15 +1,18 @@
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
+import { siteConfig } from '@/config/site.config'
 import './globals.css'
 
 const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'CMatrix',
-  description: 'AI-Powered Security Orchestration',
-  generator: 'CMatrix',
+  title: siteConfig.metadata.title,
+  description: siteConfig.metadata.description,
+  generator: siteConfig.metadata.generator,
+  keywords: [...siteConfig.metadata.keywords],
+  authors: [{ name: siteConfig.metadata.author }],
   icons: {
     icon: [
       {

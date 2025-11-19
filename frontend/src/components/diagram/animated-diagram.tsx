@@ -11,9 +11,10 @@ import "./vis-styles.css"
 interface DiagramNode {
   id: string
   label: string
-  type: "user" | "ai" | "tool" | "result"
+  type?: "user" | "ai" | "tool" | "result"
   active?: boolean
   completed?: boolean
+  [key: string]: any  // Allow additional properties from backend
 }
 
 interface DiagramEdge {
@@ -43,7 +44,7 @@ export function AnimatedDiagram({
   useEffect(() => {
     if (!visJsRef.current) return
 
-    const getIcon = (type: string) => {
+    const getIcon = (type?: string) => {
       switch (type) {
         case 'user': return '👤'
         case 'ai': return '🤖'
@@ -60,7 +61,7 @@ export function AnimatedDiagram({
 
         return {
           id: node.id,
-          label: `${getIcon(node.type)}\n\n${node.label}`,
+          label: `${getIcon(node.type || undefined)}\n\n${node.label}`,
           shape: "box",
           font: {
             color: isCompleted ? "#94a3b8" : "#ffffff",

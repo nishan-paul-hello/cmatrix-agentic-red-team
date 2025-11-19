@@ -1,276 +1,73 @@
-"use client"
+"use client";
 
-import type React from "react"
+import { ChatHeader } from "@/components/chat/chat-header";
+import { ChatMessage } from "@/components/chat/chat-message";
+import { ChatInput } from "@/components/chat/chat-input";
+import { WelcomeScreen } from "@/components/chat/welcome-screen";
+import { useScrollToBottom } from "@/lib/hooks";
+import { useChatStream } from "@/features/chat/hooks/use-chat-stream";
 
-import { useState, useRef, useEffect } from "react"
-
-function TypewriterText({ text, speed = 100 }: { text: string; speed?: number }) {
-  const [displayText, setDisplayText] = useState("")
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const [isComplete, setIsComplete] = useState(false)
-
-  useEffect(() => {
-    if (currentIndex < text.length) {
-      const timer = setTimeout(() => {
-        setDisplayText((prev) => prev + text[currentIndex])
-        setCurrentIndex((prev) => prev + 1)
-      }, speed)
-      return () => clearTimeout(timer)
-    } else {
-      setIsComplete(true)
-    }
-  }, [currentIndex, text, speed])
-
-  return <span>{displayText}{!isComplete && <span className="animate-pulse">|</span>}</span>
-}
-import { Button } from "@/components/ui/button"
-import { Textarea } from "@/components/ui/textarea"
-import { Send, Loader2, Shield, Zap } from "lucide-react"
-import { ChatMessage } from "@/components/chat-message"
-import Link from "next/link"
-
+/**
+ * Main chat page
+ * Handles the chat interface with streaming responses
+ */
 export default function ChatPage() {
-   const [messages, setMessages] = useState<Array<{ role: "user" | "assistant"; content: string; animationSteps?: any[]; diagram?: { nodes: any[]; edges: any[] } }>>([])
-   const [input, setInput] = useState("")
-   const [isLoading, setIsLoading] = useState(false)
-   const [animationSteps, setAnimationSteps] = useState<Array<any>>([])
-   const [currentAnimationStep, setCurrentAnimationStep] = useState(0)
-   const [isAnimating, setIsAnimating] = useState(false)
-   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const {
+    messages,
+    isLoading,
+    isAnimating,
+    currentAnimationStep,
+    sendMessage,
+    setInput,
+    input,
+  } = useChatStream();
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
-  }
-
-  useEffect(() => {
-    scrollToBottom()
-  }, [messages])
+  const { ref: messagesEndRef } = useScrollToBottom([messages]);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!input.trim() || isLoading) return
+    e.preventDefault();
+    if (!input.trim() || isLoading) return;
 
-    const userMessage = input.trim()
-    setInput("")
-    setMessages((prev) => [...prev, { role: "user", content: userMessage }])
-    setIsLoading(true)
-    // Reset animation state for new message
-    setAnimationSteps([])
-    setCurrentAnimationStep(0)
-    setIsAnimating(false)
+    const userMessage = input.trim();
+    setInput("");
+    await sendMessage(userMessage);
+  };
 
-    try {
-      const response = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          message: userMessage,
-          history: messages.slice(-10), // Send last 10 messages for context
-        }),
-      })
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({ error: "Unknown error" }))
-        throw new Error(errorData.error || "Failed to fetch")
-      }
-
-      const reader = response.body?.getReader()
-      const decoder = new TextDecoder()
-      let assistantMessage = ""
-      let receivedAnimationSteps: any[] = []
-      let receivedDiagram: any = null
-
-      // Add empty assistant message
-      setMessages((prev) => [...prev, { role: "assistant", content: "", animationSteps: [] }])
-
-      if (!reader) {
-        throw new Error("No response body")
-      }
-
-      while (true) {
-        const { done, value } = await reader.read()
-        if (done) break
-
-        const chunk = decoder.decode(value, { stream: true })
-        const lines = chunk.split("\n").filter(line => line.trim() !== "")
-
-        for (const line of lines) {
-          if (line.startsWith("data: ")) {
-            const data = line.slice(6).trim()
-            if (data === "[DONE]") continue
-
-            try {
-              const parsed = JSON.parse(data)
-              if (parsed.animation_step) {
-                // Handle animation step - this indicates demo mode
-                console.log("[v0] Received animation step:", parsed.animation_step.step)
-                receivedAnimationSteps.push(parsed.animation_step)
-                setAnimationSteps([...receivedAnimationSteps])
-                setIsAnimating(true)
-                setIsLoading(false) // Turn off loading when animation starts
-
-                // Store animation steps and diagram in the message for persistence
-                setMessages((prev) => {
-                  const updated = [...prev]
-                  const lastMsg = updated[updated.length - 1]
-                  if (lastMsg.role === "assistant") {
-                    lastMsg.animationSteps = [...receivedAnimationSteps]
-                    if (receivedDiagram) {
-                      lastMsg.diagram = receivedDiagram
-                    }
-                  }
-                  return updated
-                })
-
-                // Auto-advance through animation steps
-                setTimeout(() => {
-                  setCurrentAnimationStep(prev => Math.min(prev + 1, receivedAnimationSteps.length))
-                }, parsed.animation_step.duration)
-
-              } else if (parsed.diagram) {
-                // Handle diagram data
-                console.log("[v0] Received diagram data")
-                receivedDiagram = parsed.diagram
-                setMessages((prev) => {
-                  const updated = [...prev]
-                  const lastMsg = updated[updated.length - 1]
-                  if (lastMsg.role === "assistant") {
-                    lastMsg.diagram = receivedDiagram
-                  }
-                  return updated
-                })
-
-              } else if (parsed.token) {
-                // Handle regular token streaming
-                assistantMessage += parsed.token
-                // Keep animation visible and update the last message with accumulated content
-                setMessages((prev) => {
-                  const updated = [...prev]
-                  updated[updated.length - 1] = {
-                    ...updated[updated.length - 1],
-                    content: assistantMessage
-                  }
-                  return updated
-                })
-              } else if (parsed.error) {
-                console.error("[v0] Stream error:", parsed.error)
-                throw new Error(parsed.error)
-              }
-            } catch (e) {
-              if (e instanceof Error && e.message !== "Unexpected end of JSON input") {
-                console.error("[v0] Parse error:", e)
-              }
-            }
-          }
-        }
-      }
-    } catch (error) {
-      console.error("[v0] Error:", error)
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: "assistant",
-          content: `Sorry, I encountered an error: ${error instanceof Error ? error.message : "Unknown error"}. Please try again.`,
-        },
-      ])
-    } finally {
-      setIsLoading(false)
-      setIsAnimating(false)
-    }
-  }
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault()
-      handleSubmit(e)
-    }
-  }
+  const handleSuggestionClick = (prompt: string) => {
+    setInput(prompt);
+  };
 
   return (
     <div className="flex flex-col h-screen bg-background">
       <div className="matrix-rain"></div>
+
       {/* Header */}
-      <header className="border-b border-border bg-card cyber-border scan-line">
-        <div className="container flex items-center justify-between h-14 px-4 mx-auto">
-          <div className="flex items-center gap-3">
-            <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-secondary cyber-border">
-              <Shield className="w-5 h-5 text-secondary-foreground" />
-            </div>
-            <div>
-              <h1 className="text-lg font-semibold terminal-text">CMatrix</h1>
-              <div className="text-xs text-muted-foreground">Neural Interface Active</div>
-            </div>
-          </div>
-          <div className="flex items-center gap-2">
-            <Link href="/demo" className="cursor-pointer">
-              <Button variant="outline" size="sm" className="cyber-border terminal-text cursor-pointer">
-                View Demo
-              </Button>
-            </Link>
-            <div className="w-2 h-2 bg-chart-1 rounded-full animate-pulse"></div>
-            <div className="text-xs text-muted-foreground terminal-text">AGENT ONLINE</div>
-          </div>
-        </div>
-      </header>
+      <ChatHeader />
 
       {/* Messages */}
       <div className="flex-1 overflow-y-auto">
         <div className="container max-w-4xl px-4 py-8 mx-auto">
           {messages.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-full gap-8 py-12">
-              <div className="flex items-center justify-center gap-6">
-                <div className="flex items-center justify-center w-20 h-20 rounded-2xl bg-secondary cyber-border">
-                  <Zap className="w-10 h-10 text-secondary-foreground" />
-                </div>
-                <div className="text-left">
-                  <h2 className="text-4xl font-bold text-balance terminal-text glow-primary">
-                    <TypewriterText text="CMatrix" speed={150} />
-                  </h2>
-                  <div className="text-sm text-muted-foreground terminal-text mt-2">
-                    Neural Interface
-                  </div>
-                </div>
-              </div>
-              <div className="text-center space-y-4">
-                <p className="text-muted-foreground text-pretty max-w-md terminal-text">
-                  Agent capabilities: security scanning, system monitoring, log analysis, configuration deployment.
-                </p>
-                <div className="text-xs text-muted-foreground terminal-text">
-                  [SYSTEM STATUS: OPERATIONAL] [AGENT: CMATRIX-CORE-V1]
-                </div>
-              </div>
-              <div className="grid gap-3 mt-4 sm:grid-cols-2">
-                <button
-                  onClick={() => setInput("Scan my web application for vulnerabilities")}
-                  className="px-4 py-3 text-sm text-left transition-colors border rounded-lg border-border hover:bg-accent hover:text-accent-foreground cyber-border cursor-pointer"
-                >
-                  <div className="font-medium terminal-text">Security Scan</div>
-                  <div className="text-xs text-muted-foreground">Analyze system vulnerabilities</div>
-                </button>
-                <button
-                  onClick={() => setInput("Check the status of critical services")}
-                  className="px-4 py-3 text-sm text-left transition-colors border rounded-lg border-border hover:bg-accent hover:text-accent-foreground cyber-border cursor-pointer"
-                >
-                  <div className="font-medium terminal-text">System Status</div>
-                  <div className="text-xs text-muted-foreground">Monitor infrastructure health</div>
-                </button>
-              </div>
-            </div>
+            <WelcomeScreen onSuggestionClick={handleSuggestionClick} />
           ) : (
             <div className="space-y-6">
               {messages.map((message, index) => (
                 <ChatMessage
                   key={index}
-                  role={message.role}
-                  content={message.content}
-                  animationSteps={message.role === "assistant" ? (message.animationSteps || animationSteps) : []}
+                  message={message}
                   currentAnimationStep={currentAnimationStep}
-                  isAnimating={isAnimating && index === messages.length - 1 && message.role === "assistant"}
-                  diagram={message.role === "assistant" ? message.diagram : undefined}
+                  isAnimating={
+                    isAnimating &&
+                    index === messages.length - 1 &&
+                    message.role === "assistant"
+                  }
                 />
               ))}
               {isLoading && messages[messages.length - 1]?.role === "user" && (
-                <ChatMessage role="assistant" content="" isLoading />
+                <ChatMessage
+                  message={{ role: "assistant", content: "" }}
+                  isLoading
+                />
               )}
               <div ref={messagesEndRef} />
             </div>
@@ -279,31 +76,12 @@ export default function ChatPage() {
       </div>
 
       {/* Input */}
-      <div className="border-t border-border bg-card cyber-border">
-        <div className="container max-w-4xl px-4 py-4 mx-auto">
-          <form onSubmit={handleSubmit} className="relative">
-            <Textarea
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={handleKeyDown}
-              placeholder="Enter command or query..."
-              className="pr-12 resize-none min-h-[60px] max-h-[200px] cyber-border bg-black text-white placeholder:text-gray-400"
-              disabled={isLoading}
-            />
-            <Button
-              type="submit"
-              size="icon"
-              disabled={!input.trim() || isLoading}
-              className="absolute bottom-2 right-2 rounded-lg bg-black text-white hover:bg-gray-800"
-            >
-              {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
-            </Button>
-          </form>
-          <p className="mt-2 text-xs text-center text-muted-foreground terminal-text">
-            [SECURITY NOTICE] Neural responses may contain classified information. Handle with care.
-          </p>
-        </div>
-      </div>
+      <ChatInput
+        value={input}
+        onChange={setInput}
+        onSubmit={handleSubmit}
+        isLoading={isLoading}
+      />
     </div>
-  )
+  );
 }

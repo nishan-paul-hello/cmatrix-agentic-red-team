@@ -1,23 +1,31 @@
-import { cn } from "@/lib/utils"
-import { User, Shield, Loader2, Activity, CheckCircle, AlertTriangle } from "lucide-react"
-import ReactMarkdown from "react-markdown"
-import { AnimatedDiagram } from "./animated-diagram"
+"use client";
+
+import { cn } from "@/lib/utils";
+import { User, Shield, Loader2, Activity, CheckCircle } from "lucide-react";
+import ReactMarkdown from "react-markdown";
+import { AnimatedDiagram } from "../diagram/animated-diagram";
+import { MESSAGES } from "@/constants/messages";
+import type { ChatMessage as ChatMessageType } from "@/types/chat.types";
 
 interface ChatMessageProps {
-  role: "user" | "assistant"
-  content: string
-  isLoading?: boolean
-  animationSteps?: any[]
-  currentAnimationStep?: number
-  isAnimating?: boolean
-  diagram?: {
-    nodes: any[]
-    edges: any[]
-  }
+  message: ChatMessageType;
+  isLoading?: boolean;
+  currentAnimationStep?: number;
+  isAnimating?: boolean;
 }
 
-export function ChatMessage({ role, content, isLoading, animationSteps = [], currentAnimationStep = 0, isAnimating = false, diagram }: ChatMessageProps) {
-  const isUser = role === "user"
+/**
+ * Chat message component
+ * Displays user or assistant messages with optional animations and diagrams
+ */
+export function ChatMessage({
+  message,
+  isLoading = false,
+  currentAnimationStep = 0,
+  isAnimating = false,
+}: ChatMessageProps) {
+  const isUser = message.role === "user";
+  const { content, animationSteps = [], diagram } = message;
 
   return (
     <div className={cn("flex gap-4 group", isUser ? "justify-end" : "justify-start")}>
@@ -33,9 +41,10 @@ export function ChatMessage({ role, content, isLoading, animationSteps = [], cur
         {!isUser && (
           <div className="text-xs text-muted-foreground terminal-text flex items-center gap-2">
             <div className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></div>
-            CMATRIX AGENT
+            {MESSAGES.LABELS.AGENT}
           </div>
         )}
+
         <div
           className={cn(
             "rounded-lg px-4 py-3 text-sm leading-relaxed cyber-border",
@@ -49,7 +58,7 @@ export function ChatMessage({ role, content, isLoading, animationSteps = [], cur
             <div className="space-y-4">
               <div className="flex items-center gap-2 terminal-text mb-3">
                 <Activity className="w-4 h-4 animate-pulse text-blue-400" />
-                <span className="text-muted-foreground">[DEMO MODE - AGENT WORKING...]</span>
+                <span className="text-muted-foreground">{MESSAGES.SYSTEM.DEMO_MODE}</span>
               </div>
 
               {/* Animated Diagram */}
@@ -64,10 +73,12 @@ export function ChatMessage({ role, content, isLoading, animationSteps = [], cur
                   />
                 </div>
               )}
+
+              {/* Animation Steps */}
               <div className="space-y-2">
                 {animationSteps.map((step, index) => {
-                  const isActive = index === currentAnimationStep - 1 && isAnimating
-                  const isCompleted = index < currentAnimationStep - 1 || (!isAnimating && content)
+                  const isActive = index === currentAnimationStep - 1 && isAnimating;
+                  const isCompleted = index < currentAnimationStep - 1 || (!isAnimating && content);
 
                   return (
                     <div
@@ -77,7 +88,7 @@ export function ChatMessage({ role, content, isLoading, animationSteps = [], cur
                         isActive && "bg-blue-500/10 border border-blue-500/20",
                         isCompleted && "bg-green-500/10 border border-green-500/20"
                       )}
-                      style={{ backgroundColor: step.bgColor + '30' }}
+                      style={{ backgroundColor: step.bgColor + "30" }}
                     >
                       <div className="flex-shrink-0 mt-0.5">
                         {isCompleted ? (
@@ -95,9 +106,18 @@ export function ChatMessage({ role, content, isLoading, animationSteps = [], cur
                           </span>
                           {isActive && (
                             <div className="flex gap-1">
-                              <div className="w-1 h-1 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                              <div className="w-1 h-1 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                              <div className="w-1 h-1 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                              <div
+                                className="w-1 h-1 bg-blue-400 rounded-full animate-bounce"
+                                style={{ animationDelay: "0ms" }}
+                              />
+                              <div
+                                className="w-1 h-1 bg-blue-400 rounded-full animate-bounce"
+                                style={{ animationDelay: "150ms" }}
+                              />
+                              <div
+                                className="w-1 h-1 bg-blue-400 rounded-full animate-bounce"
+                                style={{ animationDelay: "300ms" }}
+                              />
                             </div>
                           )}
                         </div>
@@ -106,9 +126,10 @@ export function ChatMessage({ role, content, isLoading, animationSteps = [], cur
                         </p>
                       </div>
                     </div>
-                  )
+                  );
                 })}
               </div>
+
               {content && (
                 <div className="mt-4 pt-4 border-t border-border">
                   <div className="prose prose-sm dark:prose-invert max-w-none">
@@ -120,7 +141,7 @@ export function ChatMessage({ role, content, isLoading, animationSteps = [], cur
           ) : isLoading ? (
             <div className="flex items-center gap-2 terminal-text">
               <Loader2 className="w-4 h-4 animate-spin text-green-400" />
-              <span className="text-muted-foreground">[PROCESSING QUERY...]</span>
+              <span className="text-muted-foreground">{MESSAGES.SYSTEM.PROCESSING}</span>
             </div>
           ) : (
             <div className="prose prose-sm dark:prose-invert max-w-none">
@@ -132,10 +153,11 @@ export function ChatMessage({ role, content, isLoading, animationSteps = [], cur
             </div>
           )}
         </div>
+
         {isUser && (
           <div className="text-xs text-muted-foreground terminal-text flex items-center gap-2">
             <div className="w-1.5 h-1.5 bg-blue-400 rounded-full"></div>
-            HUMAN OPERATOR
+            {MESSAGES.LABELS.USER}
           </div>
         )}
       </div>
@@ -148,5 +170,5 @@ export function ChatMessage({ role, content, isLoading, animationSteps = [], cur
         </div>
       )}
     </div>
-  )
+  );
 }
