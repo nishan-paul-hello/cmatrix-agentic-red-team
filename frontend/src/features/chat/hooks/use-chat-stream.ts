@@ -153,15 +153,29 @@ export function useChatStream(options?: { isDemoPage?: boolean }): UseChatStream
         }
       } catch (error) {
         console.error("[Chat Stream] Error:", error);
-        setMessages((prev) => [
-          ...prev,
-          {
-            role: "assistant",
-            content: `${MESSAGES.ERRORS.GENERIC}: ${
-              error instanceof Error ? error.message : MESSAGES.ERRORS.GENERIC
-            }. Please try again.`,
-          },
-        ]);
+        setMessages((prev) => {
+          const updated = [...prev];
+          const lastMsg = updated[updated.length - 1];
+          const errorMessage = error instanceof Error ? error.message : MESSAGES.ERRORS.GENERIC;
+
+          if (lastMsg && lastMsg.role === "assistant") {
+            updated[updated.length - 1] = {
+              ...lastMsg,
+              content: lastMsg.content 
+                ? `${lastMsg.content}\n\n[Error: ${errorMessage}]`
+                : errorMessage,
+            };
+            return updated;
+          }
+
+          return [
+            ...prev,
+            {
+              role: "assistant",
+              content: errorMessage,
+            },
+          ];
+        });
       } finally {
         setIsLoading(false);
         setIsAnimating(false);

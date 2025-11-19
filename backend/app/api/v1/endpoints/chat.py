@@ -158,6 +158,8 @@ async def chat_stream(
                     user_msg = "Request timed out. Please try again."
                 elif "401" in error_msg or "403" in error_msg:
                     user_msg = "Authentication error. Please check your API key."
+                elif "402" in error_msg or "Payment Required" in error_msg:
+                    user_msg = "API Quota Exceeded. The free tier limit for the AI model has been reached. Please try again later or upgrade your plan."
                 else:
                     user_msg = f"An error occurred: {error_msg}"
                 
