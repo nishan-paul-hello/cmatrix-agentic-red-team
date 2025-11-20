@@ -31,9 +31,6 @@ services:
       - DATABASE_URL=postgresql+asyncpg://cmatrix:cmatrix@postgres:5432/cmatrix
       # You should change this secret key in production!
       - SECRET_KEY=change-this-in-production-make-it-very-long-and-random
-      # Add your HuggingFace API key here if needed, or use a .env file
-      - HUGGINGFACE_API_KEY=${HUGGINGFACE_API_KEY}
-      - HUGGINGFACE_MODEL=${HUGGINGFACE_MODEL:-DeepHat/DeepHat-V1-7B}
     networks:
       - cmatrix-network
     depends_on:

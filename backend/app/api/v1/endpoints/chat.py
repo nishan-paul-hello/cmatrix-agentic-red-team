@@ -30,7 +30,8 @@ router = APIRouter()
 async def chat(
     request: ChatRequest,
     orchestrator=Depends(get_orchestrator),
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
 ) -> ChatResponse:
     """
     Non-streaming chat endpoint.
@@ -38,6 +39,8 @@ async def chat(
     Args:
         request: Chat request with message and history
         orchestrator: Orchestrator service (injected)
+        current_user: Authenticated user
+        db: Database session
         
     Returns:
         ChatResponse with agent's response
@@ -48,7 +51,13 @@ async def chat(
     try:
         logger.info(f"Received chat request: {request.message[:50]}...")
         
-        response = orchestrator.run(request.message, request.history, request.is_demo_page)
+        response = await orchestrator.run(
+            request.message,
+            current_user.id,
+            db,
+            request.history,
+            request.is_demo_page
+        )
         
         logger.info(f"Generated response: {len(response)} characters")
         return ChatResponse(response=response)
@@ -119,7 +128,13 @@ async def chat_stream(
             full_response = ""  # Track full response for saving to DB
             
             try:
-                response = orchestrator.run(request.message, request.history, request.is_demo_page)
+                response = await orchestrator.run(
+                    request.message,
+                    current_user.id,
+                    db,
+                    request.history,
+                    request.is_demo_page
+                )
 
                 if not response:
                     yield f"data: {json.dumps({'error': 'Empty response from agent'})}\n\n"

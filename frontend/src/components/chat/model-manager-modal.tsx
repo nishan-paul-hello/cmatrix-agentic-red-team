@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Trash2, Plus, Save, X } from "lucide-react";
+import { Save, Eye, EyeOff, CheckCircle2, Key, Upload } from "lucide-react";
 import { llmService, LLMModel } from "@/lib/api/llm";
+import { ConfigImportModal } from "./config-import-modal";
 
 interface ModelManagerModalProps {
   isOpen: boolean;
@@ -13,8 +14,11 @@ interface ModelManagerModalProps {
 
 export function ModelManagerModal({ isOpen, onClose, onModelChange }: ModelManagerModalProps) {
   const [models, setModels] = useState<LLMModel[]>([]);
-  const [editingModel, setEditingModel] = useState<Partial<LLMModel> | null>(null);
+  const [editingModelId, setEditingModelId] = useState<number | null>(null);
+  const [apiKey, setApiKey] = useState("");
+  const [showApiKey, setShowApiKey] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [showImportModal, setShowImportModal] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
@@ -24,7 +28,7 @@ export function ModelManagerModal({ isOpen, onClose, onModelChange }: ModelManag
 
   const fetchModels = async () => {
     try {
-      const data = await llmService.getConfig();
+      const data = await llmService.getModels();
       setModels(data);
     } catch (error) {
       console.error("Failed to fetch models", error);
@@ -32,164 +36,175 @@ export function ModelManagerModal({ isOpen, onClose, onModelChange }: ModelManag
   };
 
   const handleSave = async () => {
-    if (!editingModel || !editingModel.id || !editingModel.provider) return;
+    if (!editingModelId || !apiKey) return;
 
     setIsLoading(true);
     try {
-      await llmService.saveConfig(editingModel as LLMModel);
+      await llmService.updateApiKey(editingModelId, apiKey);
       await fetchModels();
-      setEditingModel(null);
+      setEditingModelId(null);
+      setApiKey("");
+      setShowApiKey(false);
       onModelChange();
     } catch (error) {
-      console.error("Failed to save model", error);
+      console.error("Failed to save API key", error);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this model?")) return;
-    
+  const handleActivate = async (modelId: number) => {
     setIsLoading(true);
     try {
-      await llmService.deleteModel(id);
+      await llmService.activateModel(modelId);
       await fetchModels();
       onModelChange();
     } catch (error) {
-      console.error("Failed to delete model", error);
+      console.error("Failed to activate model", error);
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleEdit = (model: LLMModel) => {
+    setEditingModelId(model.id);
+    setApiKey("");
+    setShowApiKey(false);
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-3xl bg-card cyber-border">
-        <DialogHeader>
-          <DialogTitle className="terminal-text text-xl">Manage LLM Models</DialogTitle>
-        </DialogHeader>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 h-[400px]">
-          {/* Model List */}
-          <div className="border-r border-border pr-4 overflow-y-auto">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="font-semibold">Models</h3>
-              <Button 
-                size="sm" 
-                variant="outline" 
-                onClick={() => setEditingModel({ is_active: true, provider: "gemini" })}
+    <>
+      <Dialog open={isOpen} onOpenChange={onClose}>
+        <DialogContent className="max-w-3xl bg-card cyber-border">
+          <DialogHeader>
+            <div className="flex items-center justify-between">
+              <DialogTitle className="terminal-text text-xl">Manage LLM API Keys</DialogTitle>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowImportModal(true)}
               >
-                <Plus className="w-4 h-4" />
+                <Upload className="w-4 h-4 mr-2" />
+                Import Config
               </Button>
             </div>
-            <div className="space-y-2">
-              {models.map((model) => (
-                <div 
-                  key={model.id} 
-                  className={`p-2 rounded border cursor-pointer flex justify-between items-center ${editingModel?.id === model.id ? 'bg-secondary border-primary' : 'border-border hover:bg-secondary/50'}`}
-                  onClick={() => setEditingModel(model)}
-                >
-                  <div className="truncate">
-                    <div className="font-medium text-sm">{model.name}</div>
-                    <div className="text-xs text-muted-foreground">{model.provider}</div>
+          </DialogHeader>
+
+        <div className="space-y-4 max-h-[500px] overflow-y-auto">
+          {models.map((model) => (
+            <div 
+              key={model.id} 
+              className={`p-4 rounded border ${editingModelId === model.id ? 'bg-secondary border-primary' : 'border-border hover:bg-secondary/50'}`}
+            >
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-1">
+                    <h3 className="font-semibold">{model.name}</h3>
+                    {model.is_active && <CheckCircle2 className="w-4 h-4 text-green-500" />}
+                    {model.has_api_key && <Key className="w-4 h-4 text-green-500" />}
                   </div>
-                  <Button 
-                    variant="ghost" 
-                    size="icon" 
-                    className="h-6 w-6 text-destructive hover:text-destructive"
-                    onClick={(e) => { e.stopPropagation(); handleDelete(model.id); }}
-                  >
-                    <Trash2 className="w-3 h-3" />
-                  </Button>
+                  <p className="text-sm text-muted-foreground mb-2">{model.description || model.provider}</p>
+                  
+                  {editingModelId === model.id ? (
+                    <div className="space-y-3 mt-3">
+                      <div className="flex gap-2">
+                        <div className="relative flex-1">
+                          <Input 
+                            type={showApiKey ? "text" : "password"}
+                            value={apiKey} 
+                            onChange={(e) => setApiKey(e.target.value)}
+                            placeholder="Enter API key..."
+                            className="pr-10"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowApiKey(!showApiKey)}
+                            className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                          >
+                            {showApiKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                          </button>
+                        </div>
+                      </div>
+                      <div className="flex gap-2">
+                        <Button 
+                          size="sm" 
+                          onClick={handleSave} 
+                          disabled={isLoading || !apiKey}
+                        >
+                          <Save className="w-4 h-4 mr-2" />
+                          Save API Key
+                        </Button>
+                        <Button 
+                          size="sm" 
+                          variant="outline" 
+                          onClick={() => {
+                            setEditingModelId(null);
+                            setApiKey("");
+                            setShowApiKey(false);
+                          }}
+                        >
+                          Cancel
+                        </Button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-2 mt-2">
+                      {model.has_api_key && (
+                        <span className="text-xs text-muted-foreground">
+                          API Key: {model.api_key_masked}
+                        </span>
+                      )}
+                    </div>
+                  )}
                 </div>
-              ))}
+
+                <div className="flex flex-col gap-2">
+                  {editingModelId !== model.id && (
+                    <>
+                      <Button 
+                        size="sm" 
+                        variant="outline"
+                        onClick={() => handleEdit(model)}
+                      >
+                        {model.has_api_key ? "Update Key" : "Add Key"}
+                      </Button>
+                      {model.has_api_key && !model.is_active && (
+                        <Button 
+                          size="sm" 
+                          onClick={() => handleActivate(model.id)}
+                          disabled={isLoading}
+                        >
+                          Activate
+                        </Button>
+                      )}
+                      {model.is_active && (
+                        <span className="text-xs text-green-500 text-center">Active</span>
+                      )}
+                    </>
+                  )}
+                </div>
+              </div>
             </div>
-          </div>
+          ))}
+        </div>
 
-          {/* Edit Form */}
-          <div className="md:col-span-2 pl-4 overflow-y-auto">
-            {editingModel ? (
-              <div className="space-y-4">
-                <div className="flex justify-between items-center">
-                  <h3 className="font-semibold">{editingModel.id ? 'Edit Model' : 'New Model'}</h3>
-                  <Button variant="ghost" size="sm" onClick={() => setEditingModel(null)}>
-                    <X className="w-4 h-4" />
-                  </Button>
-                </div>
-
-                <div className="grid gap-2">
-                  <label className="text-sm font-medium">Model ID (Unique)</label>
-                  <Input 
-                    value={editingModel.id || ''} 
-                    onChange={(e) => setEditingModel({ ...editingModel, id: e.target.value })}
-                    placeholder="e.g., gemini-pro-custom"
-                    disabled={!!models.find(m => m.id === editingModel.id && m.id !== '')} // Disable ID edit for existing
-                  />
-                </div>
-
-                <div className="grid gap-2">
-                  <label className="text-sm font-medium">Display Name</label>
-                  <Input 
-                    value={editingModel.name || ''} 
-                    onChange={(e) => setEditingModel({ ...editingModel, name: e.target.value })}
-                    placeholder="e.g., Gemini Pro Custom"
-                  />
-                </div>
-
-                <div className="grid gap-2">
-                  <label className="text-sm font-medium">Provider</label>
-                  <select 
-                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                    value={editingModel.provider || 'gemini'}
-                    onChange={(e) => setEditingModel({ ...editingModel, provider: e.target.value })}
-                  >
-                    <option value="gemini">Gemini</option>
-                    <option value="openai">OpenAI</option>
-                    <option value="anthropic">Anthropic</option>
-                    <option value="ollama">Ollama</option>
-                    <option value="openrouter">OpenRouter</option>
-                    <option value="cerebras">Cerebras</option>
-                    <option value="kilocode">KiloCode</option>
-                    <option value="huggingface">HuggingFace</option>
-                  </select>
-                </div>
-
-                <div className="grid gap-2">
-                  <label className="text-sm font-medium">API Key</label>
-                  <Input 
-                    type="password"
-                    value={editingModel.api_key || ''} 
-                    onChange={(e) => setEditingModel({ ...editingModel, api_key: e.target.value })}
-                    placeholder="sk-..."
-                  />
-                  <p className="text-xs text-muted-foreground">Stored locally in llm_config.json</p>
-                </div>
-
-                <div className="grid gap-2">
-                  <label className="text-sm font-medium">Base URL (Optional)</label>
-                  <Input 
-                    value={editingModel.base_url || ''} 
-                    onChange={(e) => setEditingModel({ ...editingModel, base_url: e.target.value })}
-                    placeholder="https://api.example.com/v1"
-                  />
-                </div>
-
-                <div className="flex justify-end gap-2 mt-4">
-                  <Button variant="outline" onClick={() => setEditingModel(null)}>Cancel</Button>
-                  <Button onClick={handleSave} disabled={isLoading}>
-                    <Save className="w-4 h-4 mr-2" />
-                    Save Model
-                  </Button>
-                </div>
-              </div>
-            ) : (
-              <div className="flex flex-col items-center justify-center h-full text-muted-foreground">
-                <p>Select a model to edit or create a new one.</p>
-              </div>
-            )}
-          </div>
+        <div className="text-sm text-muted-foreground mt-4">
+          <p>• Configure API keys for the models you want to use</p>
+          <p>• Only one model can be active at a time</p>
+          <p>• API keys are stored securely in the database</p>
         </div>
       </DialogContent>
     </Dialog>
+
+    <ConfigImportModal
+      isOpen={showImportModal}
+      onClose={() => setShowImportModal(false)}
+      onImportSuccess={() => {
+        setShowImportModal(false);
+        fetchModels();
+        onModelChange();
+      }}
+    />
+    </>
   );
 }

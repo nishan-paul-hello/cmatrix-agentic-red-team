@@ -11,8 +11,6 @@ services:
       - "8000:8000"
     environment:
       - PORT=8000
-      - HUGGINGFACE_API_KEY=${HUGGINGFACE_API_KEY}
-      - HUGGINGFACE_MODEL=${HUGGINGFACE_MODEL:-DeepHat/DeepHat-V1-7B}
     volumes:
       # Mount entire backend for hot reload
       - ./backend:/app
