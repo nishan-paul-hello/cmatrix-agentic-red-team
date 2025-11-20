@@ -1,9 +1,11 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import type { ChatMessage, StreamChunk, AnimationStep, NetworkDiagram } from "@/types/chat.types";
+import type { ConversationWithHistory } from "@/types/conversation.types";
 import { apiConfig } from "@/config/api.config";
 import { MESSAGES } from "@/constants/messages";
+import { useConversations } from "@/contexts/conversation-context";
 
 interface UseChatStreamReturn {
   messages: ChatMessage[];
@@ -19,15 +21,51 @@ interface UseChatStreamReturn {
  * Hook for handling chat streaming functionality
  */
 export function useChatStream(options?: { isDemoPage?: boolean }): UseChatStreamReturn {
+  const { activeConversation, loadConversationHistory, createConversation } = useConversations();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const [currentAnimationStep, setCurrentAnimationStep] = useState(0);
 
+  // Load conversation history when active conversation changes
+  useEffect(() => {
+    const loadMessages = async () => {
+      if (activeConversation) {
+        try {
+          const conversationData = await loadConversationHistory(activeConversation.id);
+          const chatMessages: ChatMessage[] = conversationData.history.map(h => ({
+            role: h.role as "user" | "assistant",
+            content: h.content,
+          }));
+          setMessages(chatMessages);
+        } catch (error) {
+          console.error('Failed to load conversation history:', error);
+          setMessages([]);
+        }
+      } else {
+        setMessages([]);
+      }
+    };
+
+    loadMessages();
+  }, [activeConversation, loadConversationHistory]);
+
   const sendMessage = useCallback(
     async (userMessage: string) => {
       if (!userMessage.trim() || isLoading) return;
+
+      // Ensure we have an active conversation
+      let conversationId = activeConversation?.id;
+      if (!conversationId) {
+        try {
+          const newConversation = await createConversation();
+          conversationId = newConversation.id;
+        } catch (error) {
+          console.error('Failed to create conversation:', error);
+          return;
+        }
+      }
 
       // Add user message
       setMessages((prev) => [...prev, { role: "user", content: userMessage }]);
@@ -42,7 +80,7 @@ export function useChatStream(options?: { isDemoPage?: boolean }): UseChatStream
           throw new Error('Not authenticated. Please log in.');
         }
 
-        const response = await fetch(apiConfig.endpoints.chat, {
+        const response = await fetch(`${apiConfig.baseUrl}${apiConfig.endpoints.chatStream}`, {
           method: "POST",
           headers: {
             ...apiConfig.headers,
@@ -50,6 +88,7 @@ export function useChatStream(options?: { isDemoPage?: boolean }): UseChatStream
           },
           body: JSON.stringify({
             message: userMessage,
+            conversation_id: conversationId,
             history: messages.slice(-10), // Last 10 messages for context
             is_demo_page: options?.isDemoPage || false,
           }),
@@ -181,7 +220,7 @@ export function useChatStream(options?: { isDemoPage?: boolean }): UseChatStream
         setIsAnimating(false);
       }
     },
-    [messages, isLoading]
+    [messages, isLoading, activeConversation, createConversation, loadConversationHistory]
   );
 
   return {

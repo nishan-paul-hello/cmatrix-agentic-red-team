@@ -2,14 +2,19 @@
 
 import json
 import asyncio
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 from fastapi import APIRouter, HTTPException, Depends
 from fastapi.responses import StreamingResponse
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select
 from loguru import logger
 
 from app.models.chat import ChatRequest, ChatResponse
 from app.api.deps import get_orchestrator, get_current_user
 from app.models.user import User
+from app.models.conversation import Conversation, ConversationHistory
+from app.core.database import get_db
+from app.services.llm import get_available_providers, switch_provider, get_provider_info
 from app.services.llm import get_available_providers, switch_provider, get_provider_info
 
 router = APIRouter()
@@ -62,7 +67,8 @@ async def chat(
 async def chat_stream(
     request: ChatRequest,
     orchestrator=Depends(get_orchestrator),
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
 ):
     """
     Streaming chat endpoint using Server-Sent Events (SSE).
@@ -70,6 +76,8 @@ async def chat_stream(
     Args:
         request: Chat request with message and history
         orchestrator: Orchestrator service (injected)
+        current_user: Authenticated user
+        db: Database session
         
     Returns:
         StreamingResponse with SSE events
@@ -80,8 +88,36 @@ async def chat_stream(
     try:
         logger.info(f"Received streaming chat request: {request.message[:50]}...")
         
+        # Verify conversation belongs to user if conversation_id is provided
+        conversation_id = request.conversation_id
+        if conversation_id:
+            query = select(Conversation).where(
+                Conversation.id == conversation_id,
+                Conversation.user_id == current_user.id
+            )
+            result = await db.execute(query)
+            conversation = result.scalar_one_or_none()
+            
+            if not conversation:
+                raise HTTPException(
+                    status_code=404,
+                    detail="Conversation not found or unauthorized"
+                )
+        
+        # Save user message to conversation history
+        if conversation_id:
+            user_message = ConversationHistory(
+                conversation_id=conversation_id,
+                role="user",
+                content=request.message
+            )
+            db.add(user_message)
+            await db.commit()
+        
         async def generate():
             """Generate streaming response."""
+            full_response = ""  # Track full response for saving to DB
+            
             try:
                 response = orchestrator.run(request.message, request.history, request.is_demo_page)
 
@@ -94,6 +130,8 @@ async def chat_stream(
                     animation_steps = response["animation_steps"]
                     final_answer = response["final_answer"]
                     diagram_data = response.get("diagram")
+                    
+                    full_response = final_answer  # Save final answer
 
                     logger.info(f'Streaming DEMO response with {len(animation_steps)} steps')
 
@@ -126,6 +164,7 @@ async def chat_stream(
 
                 else:
                     # Regular streaming for non-demo responses
+                    full_response = response  # Save full response
                     logger.info(f'Streaming regular response ({len(response)} chars)')
 
                     # Stream by words for better readability
@@ -145,6 +184,17 @@ async def chat_stream(
                             yield f"data: {json.dumps({'token': chunk})}\n\n"
 
                         await asyncio.sleep(0.03)  # Slightly faster streaming
+
+                # Save assistant response to conversation history
+                if conversation_id and full_response:
+                    assistant_message = ConversationHistory(
+                        conversation_id=conversation_id,
+                        role="assistant",
+                        content=full_response
+                    )
+                    db.add(assistant_message)
+                    await db.commit()
+                    logger.info(f"Saved assistant response to conversation {conversation_id}")
 
                 yield "data: [DONE]\n\n"
             

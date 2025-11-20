@@ -3,22 +3,18 @@
  */
 
 const getBaseUrl = (): string => {
-  // For client-side, use relative URLs
-  if (typeof window !== "undefined") {
-    return "";
-  }
-  
-  // For server-side, use environment variable or default
-  return process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+  // For both client and server-side, use the environment variable
+  return process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
 };
 
 export const apiConfig = {
   baseUrl: getBaseUrl(),
   
   endpoints: {
-    chat: "/api/chat",
-    chatStream: "/api/v1/chat/stream",
-    health: "/api/health",
+    chat: "/chat",
+    chatStream: "/chat/stream",
+    health: "/health",
+    conversations: "/conversations",
   },
 
   timeout: 30000, // 30 seconds

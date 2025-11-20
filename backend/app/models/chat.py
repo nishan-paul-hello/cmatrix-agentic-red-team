@@ -16,6 +16,10 @@ class ChatRequest(BaseModel):
         default=False,
         description="Whether the request is from the demo page"
     )
+    conversation_id: Optional[int] = Field(
+        default=None,
+        description="ID of the conversation to add this message to"
+    )
     
     @validator("message")
     def message_not_empty(cls, v):
@@ -29,6 +33,7 @@ class ChatRequest(BaseModel):
         json_schema_extra = {
             "example": {
                 "message": "Scan example.com for open ports",
+                "conversation_id": 1,
                 "history": [
                     {"role": "user", "content": "Hello"},
                     {"role": "assistant", "content": "Hi! How can I help you?"}
