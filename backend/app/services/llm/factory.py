@@ -9,6 +9,7 @@ from .providers import (
     HuggingFaceProvider, OllamaProvider, OpenRouterProvider,
     KiloCodeProvider, GeminiProvider, CerebrasProvider
 )
+from .config_manager import llm_config_manager
 
 
 class LLMProviderFactory:
@@ -22,10 +23,12 @@ class LLMProviderFactory:
         logger.info(f"🤖 LLM Provider Factory initialized with default provider: {self._default_provider}")
 
     def _load_provider_configs(self) -> Dict[str, ProviderConfig]:
-        """Load provider configurations from settings."""
+        """Load provider configurations from settings and JSON config."""
         configs = {}
 
-        # HuggingFace (legacy + new)
+        # 1. Load from Environment Variables (Legacy/System defaults)
+        
+        # HuggingFace
         if settings.ENABLE_HUGGINGFACE and settings.HUGGINGFACE_API_KEY:
             configs["huggingface"] = ProviderConfig(
                 api_key=settings.HUGGINGFACE_API_KEY,
@@ -61,7 +64,7 @@ class LLMProviderFactory:
                 max_tokens=512
             )
 
-        # Gemini (use first available API key)
+        # Gemini
         gemini_key = settings.GEMINI_API_KEY_1 or settings.GEMINI_API_KEY_2 or settings.GEMINI_API_KEY_3
         if settings.ENABLE_GEMINI and gemini_key:
             configs["gemini"] = ProviderConfig(
@@ -71,7 +74,7 @@ class LLMProviderFactory:
                 max_tokens=64000
             )
 
-        # Cerebras (use first available API key)
+        # Cerebras
         cerebras_key = settings.CEREBRAS_API_KEY_1 or settings.CEREBRAS_API_KEY_2 or settings.CEREBRAS_API_KEY_3
         if settings.ENABLE_CEREBRAS and cerebras_key:
             configs["cerebras"] = ProviderConfig(
@@ -80,6 +83,41 @@ class LLMProviderFactory:
                 temperature=0.4,
                 max_tokens=512
             )
+
+        # 2. Load from JSON Config (User defined - Overrides Env if same ID)
+        json_models = llm_config_manager.get_models()
+        for model in json_models:
+            if not model.get("is_active", True):
+                continue
+                
+            provider_type = model.get("provider")
+            # We use the model ID as the key in the configs dictionary
+            # This allows us to select specific configurations
+            config_key = model.get("id") 
+            
+            # Map JSON config to ProviderConfig
+            # Note: We might need to adjust this if we want to support multiple models per provider type
+            # For now, we'll treat the 'id' as the provider key if we want to select this specific config
+            
+            # However, the current factory logic uses 'provider_name' (like 'gemini', 'ollama') to look up config.
+            # To support multiple configurations for the same provider type (e.g. 'gemini-pro' and 'gemini-flash'),
+            # we need to change how we key these configs.
+            
+            # BUT, the user wants to select a "Model" from the dropdown.
+            # So we should probably key these by their ID (e.g. 'gemini-2.5-pro').
+            
+            configs[config_key] = ProviderConfig(
+                api_key=model.get("api_key"),
+                model=model.get("name") if provider_type == "ollama" else model.get("id"), # Ollama needs model name, others might use ID as model name
+                base_url=model.get("base_url"),
+                temperature=0.4, # Default
+                max_tokens=4096  # Default
+            )
+            
+            # Also update the base provider config if it matches the default provider
+            # This ensures that if we request 'gemini', we get the latest configured gemini model
+            if provider_type in ["gemini", "ollama", "openrouter", "cerebras", "kilocode", "huggingface"]:
+                 configs[provider_type] = configs[config_key]
 
         return configs
 

@@ -1,0 +1,69 @@
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: cmatrix-postgres
+    environment:
+      - POSTGRES_USER=cmatrix
+      - POSTGRES_PASSWORD=cmatrix
+      - POSTGRES_DB=cmatrix
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - cmatrix-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cmatrix"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "5432:5432"
+
+  # Backend Service
+  backend:
+    image: hello1996007/cmatrix-backend:latest
+    container_name: cmatrix-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+      - DATABASE_URL=postgresql+asyncpg://cmatrix:cmatrix@postgres:5432/cmatrix
+      # You should change this secret key in production!
+      - SECRET_KEY=change-this-in-production-make-it-very-long-and-random
+      # Add your HuggingFace API key here if needed, or use a .env file
+      - HUGGINGFACE_API_KEY=${HUGGINGFACE_API_KEY}
+      - HUGGINGFACE_MODEL=${HUGGINGFACE_MODEL:-DeepHat/DeepHat-V1-7B}
+    volumes:
+      - ./cmatrix_data/logs:/app/logs
+      - ./cmatrix_data/data:/app/data
+    networks:
+      - cmatrix-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # Frontend Service
+  frontend:
+    image: hello1996007/cmatrix-frontend:latest
+    container_name: cmatrix-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PYTHON_BACKEND_URL=http://backend:8000
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - cmatrix-network
+    restart: unless-stopped
+
+networks:
+  cmatrix-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local

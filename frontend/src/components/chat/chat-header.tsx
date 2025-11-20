@@ -7,6 +7,7 @@ import { MESSAGES } from "@/constants/messages";
 import { ROUTES } from "@/constants/routes";
 import { siteConfig } from "@/config/site.config";
 import { useAuth } from "@/contexts/auth-context";
+import { ModelSelector } from "./model-selector";
 
 /**
  * Chat header component
@@ -29,6 +30,7 @@ export function ChatHeader() {
         </div>
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
+            <ModelSelector />
             <Button variant="ghost" size="sm" asChild>
               <a href="/dashboard">Dashboard</a>
             </Button>

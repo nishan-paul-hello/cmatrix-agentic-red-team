@@ -15,7 +15,7 @@ from app.models.user import User
 from app.models.conversation import Conversation, ConversationHistory
 from app.core.database import get_db
 from app.services.llm import get_available_providers, switch_provider, get_provider_info
-from app.services.llm import get_available_providers, switch_provider, get_provider_info
+
 
 router = APIRouter()
 
