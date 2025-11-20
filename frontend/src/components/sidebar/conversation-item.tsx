@@ -36,7 +36,8 @@ export function ConversationItem({ conversation, isActive, onClick }: Conversati
   const [isUpdating, setIsUpdating] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const handleEdit = () => {
+  const handleEdit = (e: React.MouseEvent) => {
+    e.stopPropagation();
     setIsEditing(true);
     setEditName(conversation.name);
   };
@@ -77,9 +78,9 @@ export function ConversationItem({ conversation, isActive, onClick }: Conversati
     }
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      handleSaveEdit();
+      e.currentTarget.blur();
     } else if (e.key === 'Escape') {
       handleCancelEdit();
     }
@@ -106,6 +107,7 @@ export function ConversationItem({ conversation, isActive, onClick }: Conversati
               className="h-6 px-1 py-0 text-sm"
               disabled={isUpdating}
               autoFocus
+              onClick={(e) => e.stopPropagation()}
             />
           ) : (
             <div className="truncate text-sm font-medium">
@@ -144,7 +146,10 @@ export function ConversationItem({ conversation, isActive, onClick }: Conversati
                 Rename
               </DropdownMenuItem>
               <DropdownMenuItem
-                onClick={() => setShowDeleteDialog(true)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowDeleteDialog(true);
+                }}
                 className="text-destructive"
               >
                 <Trash2 className="h-4 w-4 mr-2" />
