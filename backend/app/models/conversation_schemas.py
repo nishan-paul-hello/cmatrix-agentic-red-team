@@ -34,6 +34,20 @@ class ConversationHistoryDetail(ConversationHistoryResponse):
         from_attributes = True
 
 
+class ConversationExchange(BaseModel):
+    """Schema for a conversation exchange (prompt and response)."""
+    conversation_id: int
+    conversation_name: str
+    prompt: str
+    prompt_id: int
+    response: Optional[str]
+    response_id: Optional[int]
+    created_at: datetime
+    
+    class Config:
+        from_attributes = True
+
+
 class ConversationBase(BaseModel):
     """Base schema for conversation."""
     name: str = Field(..., min_length=1, max_length=255, description="Conversation name")

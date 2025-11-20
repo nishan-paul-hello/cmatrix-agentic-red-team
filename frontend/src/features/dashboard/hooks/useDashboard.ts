@@ -1,17 +1,18 @@
 import { useState, useEffect, useCallback } from "react";
 import { apiConfig } from "@/config/api.config";
 
-export interface HistoryItem {
-  id: number;
+export interface ConversationExchange {
   conversation_id: number;
-  role: "user" | "assistant";
-  content: string;
-  created_at: string;
   conversation_name: string;
+  prompt: string;
+  prompt_id: number;
+  response: string | null;
+  response_id: number | null;
+  created_at: string;
 }
 
 export function useDashboard() {
-  const [history, setHistory] = useState<HistoryItem[]>([]);
+  const [history, setHistory] = useState<ConversationExchange[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
@@ -59,10 +60,10 @@ export function useDashboard() {
     return () => clearTimeout(timeoutId);
   }, [fetchHistory]);
 
-  const deleteHistoryItem = async (id: number) => {
+  const deleteExchange = async (promptId: number) => {
     try {
       const token = localStorage.getItem('auth_token');
-      const response = await fetch(`${apiConfig.baseUrl}/conversations/history/${id}`, {
+      const response = await fetch(`${apiConfig.baseUrl}/conversations/history/${promptId}`, {
         method: 'DELETE',
         headers: {
           ...apiConfig.headers,
@@ -71,7 +72,7 @@ export function useDashboard() {
       });
 
       if (response.ok) {
-        setHistory((prev) => prev.filter((item) => item.id !== id));
+        setHistory((prev) => prev.filter((item) => item.prompt_id !== promptId));
       }
     } catch (error) {
       console.error("Failed to delete item:", error);
@@ -104,7 +105,7 @@ export function useDashboard() {
     setSearch,
     page,
     setPage,
-    deleteHistoryItem,
+    deleteExchange,
     clearConversationHistory,
   };
 }

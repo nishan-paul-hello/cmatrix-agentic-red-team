@@ -16,7 +16,9 @@ from app.models.conversation_schemas import (
     ConversationResponse,
     ConversationWithHistory,
     ConversationListResponse,
+    ConversationListResponse,
     ConversationHistoryDetail,
+    ConversationExchange,
 )
 
 router = APIRouter()
@@ -262,7 +264,7 @@ async def delete_conversation(
     return None
 
 
-@router.get("/history/all", response_model=List[ConversationHistoryDetail])
+@router.get("/history/all", response_model=List[ConversationExchange])
 async def get_global_history(
     skip: int = 0,
     limit: int = 50,
@@ -271,7 +273,7 @@ async def get_global_history(
     db: AsyncSession = Depends(get_db),
 ):
     """
-    Get global conversation history for the user.
+    Get global conversation history as prompt-response pairs.
     
     Args:
         skip: Number of records to skip
@@ -281,19 +283,28 @@ async def get_global_history(
         db: Database session
         
     Returns:
-        List of history items with conversation details
+        List of conversation exchanges
     """
+    # Query for user messages (prompts)
     query = (
         select(
             ConversationHistory,
             Conversation.name.label("conversation_name")
         )
         .join(Conversation)
-        .where(Conversation.user_id == current_user.id)
+        .where(
+            Conversation.user_id == current_user.id,
+            ConversationHistory.role == "user"
+        )
         .order_by(desc(ConversationHistory.created_at))
     )
     
     if search:
+        # Search in both prompt and potentially join response? 
+        # For simplicity and performance, let's search prompts first.
+        # If we want to search responses too, it gets complex without a self-join.
+        # Let's stick to searching prompts for now or try to search both if feasible.
+        # Searching both requires a more complex query. Let's search prompts.
         query = query.where(ConversationHistory.content.ilike(f"%{search}%"))
         
     query = query.offset(skip).limit(limit)
@@ -301,22 +312,40 @@ async def get_global_history(
     result = await db.execute(query)
     rows = result.all()
     
-    history_items = []
+    exchanges = []
     for row in rows:
-        history = row[0]
+        prompt = row[0]
         conversation_name = row[1]
         
-        item = ConversationHistoryDetail(
-            id=history.id,
-            conversation_id=history.conversation_id,
-            role=history.role,
-            content=history.content,
-            created_at=history.created_at,
-            conversation_name=conversation_name,
+        # Find the corresponding response (next message in conversation)
+        # We assume the response is the immediate next message by ID or time.
+        # A safer bet is the next message with role='assistant' and id > prompt.id
+        response_query = (
+            select(ConversationHistory)
+            .where(
+                ConversationHistory.conversation_id == prompt.conversation_id,
+                ConversationHistory.role == "assistant",
+                ConversationHistory.id > prompt.id
+            )
+            .order_by(ConversationHistory.id.asc())
+            .limit(1)
         )
-        history_items.append(item)
         
-    return history_items
+        response_result = await db.execute(response_query)
+        response = response_result.scalar_one_or_none()
+        
+        exchange = ConversationExchange(
+            conversation_id=prompt.conversation_id,
+            conversation_name=conversation_name,
+            prompt=prompt.content,
+            prompt_id=prompt.id,
+            response=response.content if response else None,
+            response_id=response.id if response else None,
+            created_at=prompt.created_at,
+        )
+        exchanges.append(exchange)
+        
+    return exchanges
 
 
 @router.delete("/history/{history_id}", status_code=status.HTTP_204_NO_CONTENT)
@@ -326,14 +355,14 @@ async def delete_history_item(
     db: AsyncSession = Depends(get_db),
 ):
     """
-    Delete a specific history item.
+    Delete a history exchange (prompt and response).
     
     Args:
-        history_id: History item ID
+        history_id: ID of the prompt message to delete
         current_user: Authenticated user
         db: Database session
     """
-    # Query history item ensuring it belongs to user's conversation
+    # Query the prompt item
     query = (
         select(ConversationHistory)
         .join(Conversation)
@@ -344,15 +373,33 @@ async def delete_history_item(
     )
     
     result = await db.execute(query)
-    history_item = result.scalar_one_or_none()
+    prompt = result.scalar_one_or_none()
     
-    if not history_item:
+    if not prompt:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="History item not found",
         )
+    
+    # If it's a user message, try to find and delete the associated response
+    if prompt.role == "user":
+        response_query = (
+            select(ConversationHistory)
+            .where(
+                ConversationHistory.conversation_id == prompt.conversation_id,
+                ConversationHistory.role == "assistant",
+                ConversationHistory.id > prompt.id
+            )
+            .order_by(ConversationHistory.id.asc())
+            .limit(1)
+        )
+        response_result = await db.execute(response_query)
+        response = response_result.scalar_one_or_none()
         
-    await db.delete(history_item)
+        if response:
+            await db.delete(response)
+            
+    await db.delete(prompt)
     await db.commit()
     return None
 

@@ -12,7 +12,7 @@ function DashboardContent() {
     isLoading,
     search,
     setSearch,
-    deleteHistoryItem,
+    deleteExchange,
     clearConversationHistory,
   } = useDashboard();
 
@@ -44,7 +44,7 @@ function DashboardContent() {
                 isLoading={isLoading}
                 search={search}
                 onSearchChange={setSearch}
-                onDelete={deleteHistoryItem}
+                onDelete={deleteExchange}
                 onClearHistory={clearConversationHistory}
               />
             </div>
