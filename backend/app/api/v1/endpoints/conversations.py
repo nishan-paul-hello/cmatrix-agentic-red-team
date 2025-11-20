@@ -16,6 +16,7 @@ from app.models.conversation_schemas import (
     ConversationResponse,
     ConversationWithHistory,
     ConversationListResponse,
+    ConversationHistoryDetail,
 )
 
 router = APIRouter()
@@ -258,4 +259,143 @@ async def delete_conversation(
     await db.delete(conversation)
     await db.commit()
     
+    return None
+
+
+@router.get("/history/all", response_model=List[ConversationHistoryDetail])
+async def get_global_history(
+    skip: int = 0,
+    limit: int = 50,
+    search: str = None,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """
+    Get global conversation history for the user.
+    
+    Args:
+        skip: Number of records to skip
+        limit: Number of records to return
+        search: Optional search term for content
+        current_user: Authenticated user
+        db: Database session
+        
+    Returns:
+        List of history items with conversation details
+    """
+    query = (
+        select(
+            ConversationHistory,
+            Conversation.name.label("conversation_name")
+        )
+        .join(Conversation)
+        .where(Conversation.user_id == current_user.id)
+        .order_by(desc(ConversationHistory.created_at))
+    )
+    
+    if search:
+        query = query.where(ConversationHistory.content.ilike(f"%{search}%"))
+        
+    query = query.offset(skip).limit(limit)
+    
+    result = await db.execute(query)
+    rows = result.all()
+    
+    history_items = []
+    for row in rows:
+        history = row[0]
+        conversation_name = row[1]
+        
+        item = ConversationHistoryDetail(
+            id=history.id,
+            conversation_id=history.conversation_id,
+            role=history.role,
+            content=history.content,
+            created_at=history.created_at,
+            conversation_name=conversation_name,
+        )
+        history_items.append(item)
+        
+    return history_items
+
+
+@router.delete("/history/{history_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_history_item(
+    history_id: int,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """
+    Delete a specific history item.
+    
+    Args:
+        history_id: History item ID
+        current_user: Authenticated user
+        db: Database session
+    """
+    # Query history item ensuring it belongs to user's conversation
+    query = (
+        select(ConversationHistory)
+        .join(Conversation)
+        .where(
+            ConversationHistory.id == history_id,
+            Conversation.user_id == current_user.id
+        )
+    )
+    
+    result = await db.execute(query)
+    history_item = result.scalar_one_or_none()
+    
+    if not history_item:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="History item not found",
+        )
+        
+    await db.delete(history_item)
+    await db.commit()
+    return None
+
+
+@router.delete("/{conversation_id}/history", status_code=status.HTTP_204_NO_CONTENT)
+async def clear_conversation_history(
+    conversation_id: int,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """
+    Clear all history for a specific conversation.
+    
+    Args:
+        conversation_id: Conversation ID
+        current_user: Authenticated user
+        db: Database session
+    """
+    # Verify conversation ownership
+    query = select(Conversation).where(
+        Conversation.id == conversation_id,
+        Conversation.user_id == current_user.id
+    )
+    
+    result = await db.execute(query)
+    conversation = result.scalar_one_or_none()
+    
+    if not conversation:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Conversation not found",
+        )
+        
+    # Delete all history for this conversation
+    delete_query = (
+        select(ConversationHistory)
+        .where(ConversationHistory.conversation_id == conversation_id)
+    )
+    result = await db.execute(delete_query)
+    history_items = result.scalars().all()
+    
+    for item in history_items:
+        await db.delete(item)
+        
+    await db.commit()
     return None

@@ -26,6 +26,14 @@ class ConversationHistoryResponse(ConversationHistoryBase):
         from_attributes = True
 
 
+class ConversationHistoryDetail(ConversationHistoryResponse):
+    """Schema for conversation history with conversation details."""
+    conversation_name: str
+    
+    class Config:
+        from_attributes = True
+
+
 class ConversationBase(BaseModel):
     """Base schema for conversation."""
     name: str = Field(..., min_length=1, max_length=255, description="Conversation name")

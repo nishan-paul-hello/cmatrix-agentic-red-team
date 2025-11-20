@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Shield, LogOut, User } from "lucide-react";
+import { Shield, LogOut, User, Settings } from "lucide-react";
 import { MESSAGES } from "@/constants/messages";
 import { ROUTES } from "@/constants/routes";
 import { siteConfig } from "@/config/site.config";
@@ -28,6 +28,14 @@ export function ChatHeader() {
           </div>
         </div>
         <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            <Button variant="ghost" size="sm" asChild>
+              <a href="/dashboard">Dashboard</a>
+            </Button>
+            <Button variant="ghost" size="icon">
+              <Settings className="w-5 h-5" />
+            </Button>
+          </div>
           <Link href={ROUTES.DEMO} className="cursor-pointer">
             <Button
               variant="outline"
