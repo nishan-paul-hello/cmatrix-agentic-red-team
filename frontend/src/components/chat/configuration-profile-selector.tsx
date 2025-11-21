@@ -8,7 +8,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { SettingsSidebar } from "./settings-sidebar";
+import { SettingsSidebar } from "@/components/chat/settings-sidebar";
 
 interface ConfigurationProfileSelectorProps {
   onProfileChange?: () => void;
