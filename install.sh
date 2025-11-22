@@ -26,7 +26,7 @@ INSTALL_DIR="cmatrix-app"
 if [ -d "$INSTALL_DIR" ]; then
     echo -e "${BLUE}ℹ️  Directory $INSTALL_DIR already exists. Updating...${NC}"
 else
-    echo -e "${BLUE}xB6  Creating installation directory...${NC}"
+    echo -e "${BLUE}📁  Creating installation directory...${NC}"
     mkdir "$INSTALL_DIR"
 fi
 cd "$INSTALL_DIR"
@@ -45,21 +45,14 @@ if ! curl -fsSL "$COMPOSE_URL" -o docker-compose.yml; then
     exit 1
 fi
 
-# 4. Configure Environment
-if [ ! -f .env ]; then
-    echo -e "${GREEN}⚙️  First-time setup detected.${NC}"
-    echo "We need to configure a few settings."
-    
-    read -p "Enter your HuggingFace API Key (Press Enter to skip if not needed): " HF_KEY
-    
-    # Generate a random secret key
-    SECRET_KEY=$(openssl rand -hex 32 2>/dev/null || echo "somerandomsecretkey12345")
-    
-    cat > .env <<EOF
-HUGGINGFACE_API_KEY=$HF_KEY
-SECRET_KEY=$SECRET_KEY
-EOF
-    echo -e "${GREEN}✅ Configuration saved to .env${NC}"
+# 4. Download Sample LLM Configuration
+CONFIG_SAMPLE_URL="https://raw.githubusercontent.com/Sajid576/cmatrix/api-key/llm_config_sample.json"
+
+echo -e "${BLUE}⬇️  Downloading sample LLM configuration...${NC}"
+if curl -fsSL "$CONFIG_SAMPLE_URL" -o llm_config_sample.json 2>/dev/null; then
+    echo -e "${GREEN}✅ Sample configuration downloaded${NC}"
+else
+    echo -e "${BLUE}ℹ️  Could not download sample config (optional)${NC}"
 fi
 
 # 5. Launch
@@ -75,5 +68,18 @@ docker compose up -d
 
 echo "--------------------------------"
 echo -e "${GREEN}✅ CMatrix is running!${NC}"
+echo ""
 echo -e "👉 Access it here: ${BLUE}http://localhost:3000${NC}"
-echo "To stop it, run: cd $INSTALL_DIR && docker compose down"
+echo ""
+echo -e "${GREEN}📝 Next Steps:${NC}"
+echo "1. Open http://localhost:3000 in your browser"
+echo "2. Create your admin account (first-time setup)"
+echo "3. Navigate to Settings → LLM Configuration"
+echo "4. Import the sample config file: llm_config_sample.json"
+echo "5. Edit the profiles to add your API keys"
+echo "6. Activate a profile to start using CMatrix"
+echo ""
+echo -e "${BLUE}ℹ️  Sample config location:${NC} $PWD/llm_config_sample.json"
+echo ""
+echo "To stop CMatrix, run: cd $INSTALL_DIR && docker compose down"
+
