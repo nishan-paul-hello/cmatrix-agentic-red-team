@@ -32,7 +32,7 @@ services:
       # You should change this secret key in production!
       - SECRET_KEY=change-this-in-production-make-it-very-long-and-random
     volumes:
-      - ./cmatrix_data/logs:/app/logs
+
       - ./cmatrix_data/data:/app/data
     networks:
       - cmatrix-network
