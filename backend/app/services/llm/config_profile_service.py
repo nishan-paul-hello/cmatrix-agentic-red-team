@@ -114,7 +114,16 @@ class ConfigProfileService:
         if not profile:
             raise ValueError(f"Profile {profile_id} not found or not owned by user")
         
-        # Trigger will handle deactivating others
+        # Deactivate all other profiles for this user
+        # We do this manually to ensure consistency regardless of DB triggers
+        from sqlalchemy import update
+        await db.execute(
+            update(ConfigurationProfile)
+            .where(ConfigurationProfile.user_id == user_id)
+            .values(is_active=False)
+        )
+        
+        # Activate the selected profile
         profile.is_active = True
         await db.commit()
         await db.refresh(profile)

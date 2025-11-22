@@ -12,10 +12,12 @@ import { SettingsSidebar } from "@/components/chat/settings-sidebar";
 
 interface ConfigurationProfileSelectorProps {
   onProfileChange?: () => void;
+  onActiveProfileChange?: (profile: ConfigurationProfile | null) => void;
 }
 
 export function ConfigurationProfileSelector({
   onProfileChange,
+  onActiveProfileChange,
 }: ConfigurationProfileSelectorProps) {
   const [profiles, setProfiles] = useState<ConfigurationProfile[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -47,13 +49,25 @@ export function ConfigurationProfileSelector({
 
   const activeProfile = profiles.find((p) => p.is_active);
 
+  useEffect(() => {
+    if (activeProfile && onActiveProfileChange) {
+      onActiveProfileChange(activeProfile);
+    } else if (!activeProfile && onActiveProfileChange) {
+        // Handle case where no profile is active
+        onActiveProfileChange(null);
+    }
+  }, [activeProfile?.id, onActiveProfileChange]); // Only trigger if ID changes
+
   return (
     <>
       <Button
         variant="outline"
         size="sm"
         className="gap-2 cyber-border terminal-text min-w-[180px] justify-between"
-        onClick={() => setIsModalOpen(true)}
+        onClick={() => {
+            setIsModalOpen(true);
+            fetchProfiles();
+        }}
       >
         <span className="truncate">
           {activeProfile?.name || "Select Profile"}
@@ -81,11 +95,13 @@ export function ConfigurationProfileSelector({
           </DialogHeader>
 
           <div className="space-y-2 mt-4">
-            {profiles.map((profile) => (
+            {profiles.map((profile) => {
+                const isActive = activeProfile?.id === profile.id;
+                return (
               <div
                 key={profile.id}
                 className={`p-3 rounded-lg border cursor-pointer hover:bg-secondary/50 transition-colors ${
-                  profile.is_active
+                  isActive
                     ? "border-primary bg-primary/10"
                     : "border-border"
                 }`}
@@ -98,12 +114,12 @@ export function ConfigurationProfileSelector({
                       {profile.api_provider} • {profile.selected_model_name || "No model"}
                     </div>
                   </div>
-                  {profile.is_active && (
+                  {isActive && (
                     <CheckCircle2 className="w-5 h-5 text-primary" />
                   )}
                 </div>
               </div>
-            ))}
+            )})}
 
             {profiles.length === 0 && (
               <div className="text-center text-muted-foreground py-8">

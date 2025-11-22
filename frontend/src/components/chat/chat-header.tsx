@@ -14,8 +14,13 @@ import { ModelDropdown } from "./model-dropdown";
  * Chat header component
  * Displays app branding, status, and navigation
  */
+import { useState } from "react";
+import { ConfigurationProfile } from "@/lib/api/llm";
+// ... imports
+
 export function ChatHeader() {
   const { user, logout } = useAuth();
+  const [activeProfile, setActiveProfile] = useState<ConfigurationProfile | null>(null);
 
   return (
     <header className="border-b border-border bg-card cyber-border scan-line">
@@ -31,8 +36,10 @@ export function ChatHeader() {
         </div>
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
-            <ConfigurationProfileSelector />
-            <ModelDropdown />
+            <ConfigurationProfileSelector 
+              onActiveProfileChange={setActiveProfile}
+            />
+            <ModelDropdown activeProfile={activeProfile} />
             <Button variant="ghost" size="sm" asChild>
               <a href="/dashboard">Dashboard</a>
             </Button>

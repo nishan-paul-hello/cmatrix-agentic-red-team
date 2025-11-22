@@ -194,6 +194,41 @@ async def fetch_models(
         raise HTTPException(status_code=500, detail=f"Failed to fetch models: {str(e)}")
 
 
+@router.get("/profiles/{profile_id}/models", response_model=FetchModelsResponse)
+async def fetch_profile_models(
+    profile_id: int,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    """Fetch available models for a specific configuration profile."""
+    try:
+        # Get profile to retrieve API key
+        result = await db.execute(
+            select(ConfigurationProfile).where(
+                ConfigurationProfile.id == profile_id,
+                ConfigurationProfile.user_id == current_user.id
+            )
+        )
+        profile = result.scalar_one_or_none()
+        
+        if not profile:
+            raise HTTPException(status_code=404, detail="Profile not found")
+            
+        models = await api_provider_service.fetch_models(
+            profile.api_provider, profile.api_key
+        )
+        
+        return FetchModelsResponse(
+            provider=profile.api_provider,
+            models=models
+        )
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to fetch models for profile {profile_id}: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 @router.post("/config/import")
 async def import_config(
     file: UploadFile = File(...),

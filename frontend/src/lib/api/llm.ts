@@ -140,6 +140,19 @@ export const llmService = {
     return response.json();
   },
 
+  fetchProfileModels: async (profileId: number): Promise<FetchModelsResponse> => {
+    const response = await fetch(
+      `${apiConfig.baseUrl}/llm/profiles/${profileId}/models`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
+        },
+      }
+    );
+    if (!response.ok) throw new Error("Failed to fetch profile models");
+    return response.json();
+  },
+
   // Import/Export
   importConfig: async (file: File): Promise<any> => {
     const formData = new FormData();

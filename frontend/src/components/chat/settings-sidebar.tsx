@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { X, Upload, Download, Plus, Trash2, Save, Loader2 } from "lucide-react";
+import { X, Upload, Download, Plus, Trash2, Save, Loader2, CheckCircle2, Settings } from "lucide-react";
 import { llmService, ConfigurationProfile, Provider, AvailableModel } from "@/lib/api/llm";
 import {
   Select,
@@ -125,6 +125,16 @@ export function SettingsSidebar({
     setSelectedModelName(profile.selected_model_name || "");
     setIsCreating(true);
     // Note: We can't pre-fill API key since it's masked
+  };
+
+  const handleActivateProfile = async (profileId: number) => {
+    try {
+      await llmService.activateProfile(profileId);
+      await fetchProfiles();
+      onProfilesChange();
+    } catch (error) {
+      console.error("Failed to activate profile", error);
+    }
   };
 
   const handleDeleteProfile = async (profileId: number) => {
@@ -322,11 +332,29 @@ export function SettingsSidebar({
                 <div className="flex items-center justify-between">
                   <div>
                     <h4 className="font-medium">{profile.name}</h4>
-                    {profile.is_active && (
-                      <span className="text-xs text-primary">Active</span>
+                    {profile.is_active ? (
+                      <span className="text-xs text-primary flex items-center gap-1">
+                        <CheckCircle2 className="w-3 h-3" /> Active
+                      </span>
+                    ) : (
+                      <Button
+                        variant="link"
+                        size="sm"
+                        className="h-auto p-0 text-xs text-muted-foreground hover:text-primary"
+                        onClick={() => handleActivateProfile(profile.id)}
+                      >
+                        Set Active
+                      </Button>
                     )}
                   </div>
                   <div className="flex gap-2">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleEditProfile(profile)}
+                    >
+                      <Settings className="w-4 h-4" />
+                    </Button>
                     <Button
                       variant="ghost"
                       size="icon"
