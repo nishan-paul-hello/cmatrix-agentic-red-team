@@ -6,7 +6,7 @@ const PYTHON_BACKEND_URL = process.env.PYTHON_BACKEND_URL || "http://localhost:8
 
 export async function POST(req: NextRequest) {
   try {
-    const { message, history = [] } = await req.json()
+    const { message, history = [], is_demo_page = false } = await req.json()
 
     if (!message) {
       return new Response("Message is required", { status: 400 })
@@ -14,15 +14,20 @@ export async function POST(req: NextRequest) {
 
     console.log("[Frontend] Routing request to Python backend:", PYTHON_BACKEND_URL)
 
+    // Get auth token from request headers
+    const authHeader = req.headers.get("authorization")
+
     // Call Python backend
-    const response = await fetch(`${PYTHON_BACKEND_URL}/chat/stream`, {
+    const response = await fetch(`${PYTHON_BACKEND_URL}/api/v1/chat/stream`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        ...(authHeader ? { "Authorization": authHeader } : {}),
       },
       body: JSON.stringify({
         message,
         history,
+        is_demo_page,
       }),
     })
 

@@ -1,0 +1,61 @@
+
+
+services:
+  # Backend Service (Development Mode)
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: cmatrix-backend-dev
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+      - DATABASE_URL=postgresql+asyncpg://cmatrix:cmatrix@postgres:5432/cmatrix
+      - SECRET_KEY=${SECRET_KEY:-your-secret-key-change-this-in-production-make-it-very-long-and-random}
+    volumes:
+      # Mount entire backend for hot reload
+      - ./backend:/app
+      - backend-venv:/app/venv  # Exclude venv from mount
+    networks:
+      - cmatrix-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+  # Frontend Service (Development Mode)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    container_name: cmatrix-frontend-dev
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - PYTHON_BACKEND_URL=http://backend:8000
+    volumes:
+      # Mount entire frontend for hot reload
+      - ./frontend:/app
+      - frontend-node-modules:/app/node_modules  # Exclude node_modules from mount
+      - frontend-next:/app/.next  # Use named volume for .next to avoid permission issues
+    depends_on:
+      - backend
+    networks:
+      - cmatrix-network
+    restart: unless-stopped
+    command: pnpm dev
+
+networks:
+  cmatrix-network:
+    driver: bridge
+
+volumes:
+  backend-venv:
+    driver: local
+  frontend-node-modules:
+    driver: local
+  frontend-next:
+    driver: local
