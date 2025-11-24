@@ -4,20 +4,17 @@
 
 export const MESSAGES = {
   SYSTEM: {
-
     OPERATIONAL: "[SYSTEM STATUS: OPERATIONAL] [AGENT: CMATRIX-CORE-V1]",
     PROCESSING: "[PROCESSING QUERY...]",
-
-    SECURITY_NOTICE: "[SECURITY NOTICE] Neural responses may contain classified information. Handle with care.",
+    SECURITY_NOTICE: "CMatrix can make mistakes. Check important info.",
   },
 
   LABELS: {
-
-    NEURAL_INTERFACE: "Neural Interface Active",
+    NEURAL_INTERFACE: "AI-Powered VAPT Tool",
   },
 
   PLACEHOLDERS: {
-    INPUT: "Enter command or query...",
+    INPUT: "How can I help you today?",
   },
 
   ERRORS: {
@@ -28,7 +25,7 @@ export const MESSAGES = {
 
   WELCOME: {
     TITLE: "CMatrix",
-    SUBTITLE: "Neural Interface",
+    SUBTITLE: "AI-Powered VAPT Tool",
     DESCRIPTION: "Agent capabilities: security scanning, system monitoring, log analysis, configuration deployment.",
   },
 
