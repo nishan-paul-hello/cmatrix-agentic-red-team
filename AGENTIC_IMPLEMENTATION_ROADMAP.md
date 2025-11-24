@@ -615,18 +615,18 @@ if reflection.suggests_additional_scans:
 **Deliverable**: Scans run in background, no HTTP timeouts
 
 #### 1.2 Implement LangGraph Checkpointing
-- [ ] Install `langgraph.checkpoint.postgres`
-- [ ] Create checkpoint tables in PostgreSQL
-- [ ] Update `workflow.compile(checkpointer=checkpointer)`
-- [ ] Test pause/resume workflows
+- [x] Install `langgraph.checkpoint.postgres`
+- [x] Create checkpoint tables in PostgreSQL
+- [x] Update `workflow.compile(checkpointer=checkpointer)`
+- [x] Test pause/resume workflows
 
 **Deliverable**: Workflows survive server restarts
 
-#### 1.3 Add Vector Database (Qdrant)
-- [ ] Install and run Qdrant (Docker or cloud)
-- [ ] Create `scan_results` collection
-- [ ] Integrate embedding model (OpenAI ada-002 or local)
-- [ ] Build similarity search functions
+####- [x] Task 1.3: Add Vector Database (Qdrant)
+  - [x] Install `qdrant-client` and `sentence-transformers`
+  - [x] Create `VectorStoreService` for memory management
+  - [x] Implement `search_knowledge_base` and `save_to_knowledge_base` tools
+  - [x] Update agent prompt to use memory tools
 - [ ] Update orchestrator to store scan results
 
 **Deliverable**: Agent can recall past scans

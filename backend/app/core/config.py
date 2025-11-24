@@ -58,6 +58,16 @@ class Settings(BaseSettings):
         default="redis://localhost:6379/1",
         env="CELERY_RESULT_BACKEND"
     )
+
+    # Vector Database (Qdrant)
+    QDRANT_HOST: str = Field(default="localhost", env="QDRANT_HOST")
+    QDRANT_PORT: int = Field(default=6333, env="QDRANT_PORT")
+    QDRANT_URL: str = Field(default="http://localhost:6333", env="QDRANT_URL")
+    QDRANT_COLLECTION_NAME: str = Field(default="cmatrix_memory", env="QDRANT_COLLECTION_NAME")
+    
+    # Embeddings
+    EMBEDDING_MODEL: str = Field(default="all-MiniLM-L6-v2", env="EMBEDDING_MODEL")
+    EMBEDDING_DEVICE: str = Field(default="cpu", env="EMBEDDING_DEVICE")
     
 
     # Command Execution

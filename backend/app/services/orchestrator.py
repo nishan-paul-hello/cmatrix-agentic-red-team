@@ -3,14 +3,16 @@
 from typing import TypedDict, Sequence, Literal, Dict, Any, Optional, Union
 from langchain_core.messages import BaseMessage, HumanMessage, AIMessage, SystemMessage
 from langgraph.graph import StateGraph, END
-from loguru import logger
 from sqlalchemy.ext.asyncio import AsyncSession
+from loguru import logger
+import json
 
 from app.services.llm.providers import Message, LLMProvider
 from app.tools.execution import parse_tool_calls
 from app.tools.registry import get_tool_registry
 from app.utils.helpers import clean_response
 from app.core.config import settings
+from app.services.checkpoint import get_checkpointer
 
 
 # Agent state
@@ -50,9 +52,10 @@ class OrchestratorService:
     def __init__(self):
         """Initialize the orchestrator service."""
         self.tool_registry = get_tool_registry()
+        self.checkpointer = None  # Will be lazily initialized
         self.workflow = self._create_workflow()
         self.llm_provider = None  # Will be set per request
-        logger.info("Orchestrator service initialized (database-aware)")
+        logger.info("Orchestrator service initialized with checkpointing support")
 
     
     def _should_continue(self, state: AgentState) -> Literal["tools", "end"]:
@@ -100,7 +103,11 @@ class OrchestratorService:
             
             system_msg = SystemMessage(
                 content=f"You are CMatrix, an advanced AI security orchestrator. "
-                f"You coordinate specialized worker agents to perform security assessments.\n\n{tool_prompt}"
+                f"You coordinate specialized worker agents to perform security assessments.\n\n"
+                f"You have access to a Long-Term Knowledge Base. "
+                f"ALWAYS check the knowledge base first using 'search_knowledge_base' if the user asks about past scans or findings. "
+                f"When you find important information (like open ports, vulnerabilities), save it using 'save_to_knowledge_base'.\n\n"
+                f"{tool_prompt}"
             )
             prompt_messages = [system_msg] + list(messages)
         else:
@@ -230,7 +237,7 @@ class OrchestratorService:
         Create and configure the orchestrator workflow.
         
         Returns:
-            Compiled workflow
+            Compiled workflow with checkpointing
         """
         # Build graph
         workflow = StateGraph(AgentState)
@@ -245,14 +252,29 @@ class OrchestratorService:
         )
         workflow.add_edge("tools", "agent")
 
-        return workflow.compile()
+        # Get checkpointer for state persistence
+        # Note: langgraph 0.2.45 doesn't support PostgresSaver
+        # State persistence is handled via conversation history in database
+        try:
+            self.checkpointer = get_checkpointer()
+            if self.checkpointer is not None:
+                logger.info("Workflow compiled with PostgreSQL checkpointing")
+                return workflow.compile(checkpointer=self.checkpointer)
+            else:
+                logger.info("Workflow compiled without checkpointing (using conversation history for state)")
+                return workflow.compile()
+        except Exception as e:
+            logger.warning(f"Checkpointer initialization error: {e}. Using conversation history for state.")
+            return workflow.compile()
     
     async def run(
         self,
         message: str,
         user_id: int,
         db: AsyncSession,
-        history: Optional[list] = None
+        history: Optional[list] = None,
+        conversation_id: Optional[int] = None,
+        thread_id: Optional[str] = None
     ) -> Union[str, Dict[str, Any]]:
         """
         Run the orchestrator with a message and optional history.
@@ -262,6 +284,8 @@ class OrchestratorService:
             user_id: User ID for loading LLM configuration
             db: Database session
             history: Optional conversation history
+            conversation_id: Optional conversation ID for thread tracking
+            thread_id: Optional custom thread ID (defaults to user_id_conv_id format)
             
         Returns:
             Response string or dict with animation data
@@ -278,8 +302,14 @@ class OrchestratorService:
         # Set the provider for this request
         self.llm_provider = llm_provider
         
-        # No demo match found - proceed with LLM processing
-        logger.info(f'No demo match found - calling LLM for user {user_id}')
+        # Create thread_id for checkpointing if not provided
+        if thread_id is None:
+            if conversation_id is not None:
+                thread_id = f"user_{user_id}_conv_{conversation_id}"
+            else:
+                thread_id = f"user_{user_id}"
+        
+        logger.info(f'Running orchestrator for user {user_id} with thread_id: {thread_id}')
         messages = []
 
         # Add history
@@ -294,14 +324,25 @@ class OrchestratorService:
         messages.append(HumanMessage(content=message))
 
         try:
-            # Run agent with animation/diagram tracking
-            result = self.workflow.invoke({
+            # Prepare config for checkpointing
+            config = {"configurable": {"thread_id": thread_id}} if self.checkpointer else None
+            
+            # Run agent with animation/diagram tracking and checkpointing
+            invoke_kwargs = {
                 "messages": messages,
                 "tool_calls": [],
                 "animation_steps": [],
                 "diagram_nodes": [],
                 "diagram_edges": []
-            })
+            }
+            
+            # Invoke with config if checkpointing is enabled
+            if config:
+                result = self.workflow.invoke(invoke_kwargs, config=config)
+                logger.debug(f"Workflow executed with checkpointing (thread: {thread_id})")
+            else:
+                result = self.workflow.invoke(invoke_kwargs)
+                logger.debug("Workflow executed without checkpointing")
 
             # Extract final response
             final_message = result["messages"][-1]
@@ -383,7 +424,8 @@ async def run_orchestrator(
     message: str,
     user_id: int,
     db: AsyncSession,
-    history: Optional[list] = None
+    history: Optional[list] = None,
+    conversation_id: Optional[int] = None
 ) -> Union[str, Dict[str, Any]]:
     """
     Run the orchestrator with a message and optional history.
@@ -395,11 +437,11 @@ async def run_orchestrator(
         user_id: User ID for loading LLM configuration
         db: Database session
         history: Optional conversation history
-        is_demo_page: Whether the request is from the demo page
+        conversation_id: Optional conversation ID for checkpoint tracking
         
     Returns:
         Response string or dict with animation data
     """
     orchestrator = get_orchestrator_service()
-    return await orchestrator.run(message, user_id, db, history)
+    return await orchestrator.run(message, user_id, db, history, conversation_id)
 

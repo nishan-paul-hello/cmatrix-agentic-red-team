@@ -11,6 +11,7 @@ from app.models.user import User
 from app.tasks import run_scan_task
 from app.worker import celery_app
 from loguru import logger
+from app.models.conversation import Conversation, ConversationHistory
 
 
 router = APIRouter()
@@ -61,6 +62,16 @@ async def create_scan_job(
     """
     try:
         logger.info(f"Creating scan job for user {current_user.id}, conversation {request.conversation_id}")
+        
+        # Save user message to history
+        user_message = ConversationHistory(
+            conversation_id=request.conversation_id,
+            role="user",
+            content=request.message,
+            is_visible_in_dashboard=True
+        )
+        db.add(user_message)
+        await db.commit()
         
         # Create the background task
         task = run_scan_task.delay(

@@ -27,6 +27,9 @@ export function ConversationProvider({ children }: { children: React.ReactNode }
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Track initialization
+  const initializedRef = React.useRef(false);
+
   // Load conversations on mount
   const loadConversations = useCallback(async () => {
     try {
@@ -35,9 +38,17 @@ export function ConversationProvider({ children }: { children: React.ReactNode }
       const response = await conversationApi.getConversations();
       setConversations(response.conversations);
 
-      // If no active conversation and we have conversations, select the first one
-      if (!activeConversation && response.conversations.length > 0) {
-        setActiveConversation(response.conversations[0]);
+      // If not initialized and we have conversations, select the first one
+      // We use a functional update to check if there's already an active conversation
+      // to avoid adding activeConversation to the dependency array
+      if (!initializedRef.current && response.conversations.length > 0) {
+        setActiveConversation(current => {
+          if (!current) {
+            return response.conversations[0];
+          }
+          return current;
+        });
+        initializedRef.current = true;
       }
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to load conversations';
@@ -46,7 +57,7 @@ export function ConversationProvider({ children }: { children: React.ReactNode }
     } finally {
       setIsLoading(false);
     }
-  }, [activeConversation]);
+  }, []);
 
   // Create new conversation
   const createConversation = useCallback(async (name?: string): Promise<Conversation> => {

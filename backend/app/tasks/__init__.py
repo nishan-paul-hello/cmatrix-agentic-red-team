@@ -9,6 +9,7 @@ from sqlalchemy.orm import sessionmaker
 from app.worker import celery_app
 from app.core.config import settings
 from app.services.orchestrator import run_orchestrator
+from app.models.conversation import ConversationHistory
 from loguru import logger
 
 
@@ -82,13 +83,30 @@ async def run_scan_task(
         
         # Create database session
         async with AsyncSessionLocal() as db:
-            # Run the orchestrator
+            # Run the orchestrator with conversation_id for checkpointing
             result = await run_orchestrator(
                 message=message,
                 user_id=user_id,
                 db=db,
-                history=history or []
+                history=history or [],
+                conversation_id=conversation_id
             )
+            
+            # Save assistant response to history
+            final_answer = ""
+            if isinstance(result, dict):
+                final_answer = result.get("final_answer", "")
+            else:
+                final_answer = str(result)
+                
+            assistant_message = ConversationHistory(
+                conversation_id=conversation_id,
+                role="assistant",
+                content=final_answer,
+                is_visible_in_dashboard=True
+            )
+            db.add(assistant_message)
+            await db.commit()
             
             logger.info(f"Scan task completed for user {user_id}")
             

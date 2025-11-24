@@ -12,6 +12,8 @@ from app.agents import (
 )
 
 
+from app.tools.memory import search_knowledge_base, save_to_knowledge_base
+
 class ToolRegistry:
     """Central registry for all available tools."""
     
@@ -30,6 +32,7 @@ class ToolRegistry:
             VULN_INTEL_TOOLS,
             API_SECURITY_TOOLS,
             COMMAND_TOOLS,
+            [search_knowledge_base, save_to_knowledge_base],  # Add memory tools
         ]
         
         for tool_list in all_tool_lists:
