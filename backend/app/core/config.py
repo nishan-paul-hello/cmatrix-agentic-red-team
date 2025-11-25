@@ -66,7 +66,7 @@ class Settings(BaseSettings):
     QDRANT_COLLECTION_NAME: str = Field(default="cmatrix_memory", env="QDRANT_COLLECTION_NAME")
     
     # Embeddings
-    EMBEDDING_MODEL: str = Field(default="all-MiniLM-L6-v2", env="EMBEDDING_MODEL")
+    EMBEDDING_MODEL: str = Field(default="BAAI/bge-base-en-v1.5", env="EMBEDDING_MODEL")
     EMBEDDING_DEVICE: str = Field(default="cpu", env="EMBEDDING_DEVICE")
     
 

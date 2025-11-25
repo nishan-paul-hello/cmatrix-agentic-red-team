@@ -622,12 +622,12 @@ if reflection.suggests_additional_scans:
 
 **Deliverable**: Workflows survive server restarts
 
-####- [x] Task 1.3: Add Vector Database (Qdrant)
+#### 1.3 Add Vector Database (Qdrant)
   - [x] Install `qdrant-client` and `sentence-transformers`
   - [x] Create `VectorStoreService` for memory management
   - [x] Implement `search_knowledge_base` and `save_to_knowledge_base` tools
   - [x] Update agent prompt to use memory tools
-- [ ] Update orchestrator to store scan results
+  - [x] Update orchestrator to store scan results
 
 **Deliverable**: Agent can recall past scans
 

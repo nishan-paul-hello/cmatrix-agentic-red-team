@@ -109,6 +109,7 @@ All tools execute real commands (nmap, curl, etc.) with full audit logging.
 ### Key Features
 - ✅ Real command execution in terminal
 - ✅ Multi-agent orchestration
+- ✅ Long-term knowledge base (Qdrant vector store)
 - ✅ Authorization & audit logging
 - ✅ Web-based interface
 - ✅ CVE database integration
@@ -408,6 +409,60 @@ CMatrix features a robust single-user authentication system designed for secure,
 1. **First Access**: Redirects to `/setup`. Create your username and password.
 2. **Login**: Subsequent access redirects to `/login`. Use your created credentials.
 3. **Logout**: Use the logout button in the header to end your session.
+
+---
+
+## 🧠 Knowledge Base (Long-Term Memory)
+
+CMatrix features a persistent knowledge base powered by Qdrant vector database, enabling the AI agent to remember and retrieve information across sessions.
+
+### Features
+- **💾 Persistent Storage**: Scan results, findings, and decisions are stored permanently
+- **🔍 Semantic Search**: Find relevant past information using natural language queries
+- **🎯 Context-Aware**: Agent provides better responses based on historical knowledge
+- **👤 User Isolation**: Each user's knowledge base is private and secure
+
+### Usage
+
+#### Saving Information
+Ask the agent to save important findings:
+```
+"Scan ports on 192.168.1.100 and save the results"
+"Save this finding to the knowledge base"
+```
+
+#### Searching Past Information
+Retrieve previous discoveries:
+```
+"What ports did we find on 192.168.1.100?"
+"Show me past SSL vulnerabilities"
+"What have we discovered about the target network?"
+```
+
+### Technical Details
+- **Vector Database**: Qdrant (http://localhost:6333)
+- **Embedding Model**: all-MiniLM-L6-v2 (384 dimensions)
+- **Collection**: `cmatrix_memory`
+- **Dashboard**: http://localhost:6333/dashboard
+
+### Management
+
+**Health Check**:
+```bash
+./health_check.sh
+```
+
+**Test Knowledge Base**:
+```bash
+./test_knowledge_base.sh
+```
+
+**View Stored Memories**:
+```bash
+curl http://localhost:6333/collections/cmatrix_memory | jq '.result.points_count'
+```
+
+For detailed documentation, see [docs/KNOWLEDGE_BASE.md](docs/KNOWLEDGE_BASE.md)
 
 ---
 

@@ -55,6 +55,8 @@ class OrchestratorService:
         self.checkpointer = None  # Will be lazily initialized
         self.workflow = self._create_workflow()
         self.llm_provider = None  # Will be set per request
+        self.current_user_id = None  # Store current user_id for tool injection
+        self.current_conversation_id = None  # Store current conversation_id for tool injection
         logger.info("Orchestrator service initialized with checkpointing support")
 
     
@@ -94,19 +96,19 @@ class OrchestratorService:
             
             tool_prompt = f"You have access to the following tools:\n{tool_definitions}"
             tool_prompt += "\n\n⚠️ CRITICAL INSTRUCTIONS:"
-            tool_prompt += "\n1. You MUST use tools to perform actual security scans - NEVER make up or hallucinate results"
-            tool_prompt += "\n2. For port scanning, network analysis, or any technical task, you MUST call the appropriate tool"
+            tool_prompt += "\n1. You MUST use tools to perform actual technical tasks - NEVER make up or hallucinate results"
+            tool_prompt += "\n2. For any technical task (scanning, analysis, execution), you MUST call the appropriate tool"
             tool_prompt += "\n3. To use a tool, respond ONLY with: TOOL: tool_name(param1=value1, param2=value2)"
-            tool_prompt += "\n4. Do NOT provide an answer without calling tools first"
+            tool_prompt += "\n4. Do NOT provide an answer for technical queries without calling tools first"
             tool_prompt += "\n5. Example: For 'scan ports on localhost', respond with: TOOL: scan_network(target=localhost, ports=1-65535)"
-            tool_prompt += "\n\nIf you provide results without calling tools, you are HALLUCINATING and providing FALSE information."
+            tool_prompt += "\n\nIf you provide technical results without calling tools, you are HALLUCINATING and providing FALSE information."
             
             system_msg = SystemMessage(
-                content=f"You are CMatrix, an advanced AI security orchestrator. "
-                f"You coordinate specialized worker agents to perform security assessments.\n\n"
+                content=f"You are CMatrix, an advanced AI intelligent orchestrator. "
+                f"You coordinate specialized worker agents to perform complex tasks.\n\n"
                 f"You have access to a Long-Term Knowledge Base. "
-                f"ALWAYS check the knowledge base first using 'search_knowledge_base' if the user asks about past scans or findings. "
-                f"When you find important information (like open ports, vulnerabilities), save it using 'save_to_knowledge_base'.\n\n"
+                f"ALWAYS check the knowledge base first using 'search_knowledge_base' if the user asks about past conversations, saved facts, or findings. "
+                f"When you find important information (like user preferences, personal details, or technical findings), save it using 'save_to_knowledge_base'.\n\n"
                 f"{tool_prompt}"
             )
             prompt_messages = [system_msg] + list(messages)
@@ -202,6 +204,15 @@ class OrchestratorService:
                     try:
                         tool_info = self.tool_registry.get_tool(tool_name)
                         func = tool_info["function"]
+                        
+                        # Auto-inject user_id and conversation_id for memory tools
+                        if tool_name in ["search_knowledge_base", "save_to_knowledge_base"]:
+                            if self.current_user_id is not None:
+                                tool_args["user_id"] = self.current_user_id
+                            if self.current_conversation_id is not None and tool_name == "save_to_knowledge_base":
+                                tool_args["conversation_id"] = self.current_conversation_id
+                            logger.debug(f"Auto-injected context for {tool_name}: user_id={self.current_user_id}, conversation_id={self.current_conversation_id}")
+                        
                         if hasattr(func, "invoke"):
                             result = func.invoke(tool_args)
                         else:
@@ -231,6 +242,88 @@ class OrchestratorService:
             "diagram_nodes": diagram_nodes,
             "diagram_edges": diagram_edges
         }
+    
+    def _detect_scan_type(self, tool_name: str) -> str:
+        """Detect scan type from tool name."""
+        tool_lower = tool_name.lower()
+        if "port" in tool_lower or "network" in tool_lower or "scan_network" in tool_lower:
+            return "port_scan"
+        elif "web" in tool_lower or "http" in tool_lower or "header" in tool_lower:
+            return "web_scan"
+        elif "cve" in tool_lower or "vuln" in tool_lower or "vulnerability" in tool_lower:
+            return "cve_search"
+        elif "auth" in tool_lower or "login" in tool_lower or "session" in tool_lower:
+            return "auth_scan"
+        elif "api" in tool_lower:
+            return "api_scan"
+        else:
+            return "general"
+    
+    def _extract_target(self, tool_args: dict) -> str:
+        """Extract target from tool arguments."""
+        # Common parameter names for targets
+        for key in ["target", "url", "host", "ip", "domain", "endpoint"]:
+            if key in tool_args:
+                return str(tool_args[key])
+        return "N/A"
+    
+    def _assess_severity(self, result: str) -> str:
+        """Assess severity from result content."""
+        result_lower = result.lower()
+        
+        # High severity indicators
+        if any(word in result_lower for word in [
+            "critical", "high", "exploit", "vulnerable", "exposed", 
+            "backdoor", "malware", "breach", "compromised"
+        ]):
+            return "high"
+        
+        # Medium severity indicators
+        elif any(word in result_lower for word in [
+            "medium", "warning", "misconfiguration", "weak", 
+            "deprecated", "outdated", "insecure"
+        ]):
+            return "medium"
+        
+        # Default to low
+        else:
+            return "low"
+    
+    def _extract_tags(self, result: str, tool_name: str) -> list:
+        """Extract relevant tags from result and tool name."""
+        tags = []
+        result_lower = result.lower()
+        
+        # Common security tags
+        tag_keywords = {
+            "ssh": ["ssh", "port 22", "openssh"],
+            "http": ["http", "port 80", "apache", "nginx"],
+            "https": ["https", "port 443", "ssl", "tls"],
+            "mysql": ["mysql", "port 3306", "mariadb"],
+            "postgresql": ["postgres", "port 5432"],
+            "redis": ["redis", "port 6379"],
+            "mongodb": ["mongo", "port 27017"],
+            "ftp": ["ftp", "port 21"],
+            "smtp": ["smtp", "port 25", "port 587"],
+            "dns": ["dns", "port 53"],
+            "open-ports": ["open port", "listening", "accessible"],
+            "vulnerability": ["cve-", "vulnerability", "exploit", "vulnerable"],
+            "misconfiguration": ["misconfigured", "weak", "insecure"],
+            "authentication": ["auth", "login", "password", "session"],
+            "encryption": ["ssl", "tls", "https", "encrypted"]
+        }
+        
+        for tag, keywords in tag_keywords.items():
+            if any(kw in result_lower for kw in keywords):
+                tags.append(tag)
+        
+        # Add tool-based tag
+        if "scan" in tool_name:
+            tags.append("scan")
+        if "check" in tool_name:
+            tags.append("check")
+        
+        return tags[:5]  # Limit to 5 tags
     
     def _create_workflow(self):
         """
@@ -301,6 +394,10 @@ class OrchestratorService:
         
         # Set the provider for this request
         self.llm_provider = llm_provider
+        
+        # Store user_id and conversation_id for auto-injection into memory tools
+        self.current_user_id = user_id
+        self.current_conversation_id = conversation_id
         
         # Create thread_id for checkpointing if not provided
         if thread_id is None:
