@@ -50,11 +50,16 @@ COPY --from=dependencies /usr/local/bin /usr/local/bin
 COPY app/ ./app/
 COPY data/ ./data/
 COPY scripts/ ./scripts/
+COPY warmup_models.py .
 COPY .env.example .env.example
 
-# Create necessary directories
+# Create necessary directories and warmup models
 RUN mkdir -p logs/audit_logs && \
     chown -R appuser:appuser /app
+
+# Pre-load ML models to cache them (run as root before switching to appuser)
+# This ensures fast startup and no slow first requests
+RUN python warmup_models.py || echo "⚠️  Model warmup failed, models will load on first request"
 
 # Switch to non-root user
 USER appuser
