@@ -21,6 +21,7 @@ class User(Base):
     # Relationships
     conversations = relationship("Conversation", back_populates="user", cascade="all, delete-orphan")
     background_jobs = relationship("BackgroundJob", back_populates="user", cascade="all, delete-orphan")
+    approval_logs = relationship("ApprovalLog", back_populates="user", cascade="all, delete-orphan")
 
     
     def __repr__(self):

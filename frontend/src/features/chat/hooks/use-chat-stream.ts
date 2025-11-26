@@ -6,6 +6,7 @@ import type { ConversationWithHistory } from "@/types/conversation.types";
 import { apiConfig } from "@/config/api.config";
 import { MESSAGES } from "@/constants/messages";
 import { useConversations } from "@/contexts/conversation-context";
+import { useAuth } from "@/contexts/auth-context";
 
 interface UseChatStreamReturn {
   messages: ChatMessage[];
@@ -15,6 +16,7 @@ interface UseChatStreamReturn {
   sendMessage: (message: string) => Promise<void>;
   setInput: (input: string) => void;
   input: string;
+  refreshMessages: () => Promise<void>;
 }
 
 /**
@@ -22,6 +24,7 @@ interface UseChatStreamReturn {
  */
 export function useChatStream(): UseChatStreamReturn {
   const { activeConversation, loadConversationHistory, createConversation } = useConversations();
+  const { user } = useAuth();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -213,6 +216,30 @@ export function useChatStream(): UseChatStreamReturn {
         let receivedAnimationSteps: AnimationStep[] = [];
         let receivedDiagram: NetworkDiagram | null = null;
 
+        // Check for Pending Approval
+        if (typeof jobResult === 'object' && jobResult.pending_approval) {
+             const threadId = `user_${user?.id}_conv_${conversationId}`;
+             // Extract content from messages list if available
+             let content = "Approval Required";
+             if (jobResult.messages && Array.isArray(jobResult.messages) && jobResult.messages.length > 0) {
+                 content = jobResult.messages[0].content || content;
+             }
+             
+             setMessages(prev => {
+                const updated = [...prev];
+                updated[updated.length - 1] = {
+                    role: "assistant",
+                    content: content,
+                    pending_approval: jobResult.pending_approval,
+                    thread_id: threadId,
+                    animationSteps: []
+                };
+                return updated;
+             });
+             setIsLoading(false);
+             return;
+        }
+
         // Check if result is complex object or string
         if (typeof jobResult === 'object' && jobResult.animation_steps) {
             // Complex result with animations
@@ -324,6 +351,49 @@ export function useChatStream(): UseChatStreamReturn {
     [messages, isLoading, activeConversation, createConversation, loadConversationHistory]
   );
 
+  const refreshMessages = useCallback(async () => {
+    if (activeConversation) {
+      try {
+        const conversationData = await loadConversationHistory(activeConversation.id);
+        const chatMessages: ChatMessage[] = conversationData.history.map(h => ({
+          role: h.role as "user" | "assistant",
+          content: h.content,
+        }));
+        setMessages(chatMessages);
+      } catch (error) {
+        console.error('Failed to refresh conversation history:', error);
+      }
+    }
+  }, [activeConversation, loadConversationHistory]);
+
+  const startPolling = useCallback(async () => {
+    // Optimistic update: Remove pending_approval immediately
+    setMessages(prev => {
+      const updated = [...prev];
+      const lastMsgIndex = updated.findIndex(m => m.pending_approval);
+      if (lastMsgIndex !== -1) {
+        updated[lastMsgIndex] = {
+          ...updated[lastMsgIndex],
+          pending_approval: undefined,
+          content: "Processing approval..."
+        };
+      }
+      return updated;
+    });
+
+    const POLL_DURATION = 30000; // 30 seconds
+    const POLL_INTERVAL = 2000; // 2 seconds
+    const startTime = Date.now();
+
+    const poll = async () => {
+      if (Date.now() - startTime > POLL_DURATION) return;
+      await refreshMessages();
+      setTimeout(poll, POLL_INTERVAL);
+    };
+
+    poll();
+  }, [refreshMessages]);
+
   return {
     messages,
     isLoading,
@@ -332,5 +402,6 @@ export function useChatStream(): UseChatStreamReturn {
     sendMessage,
     setInput,
     input,
+    refreshMessages: startPolling, // Expose startPolling as refreshMessages
   };
 }

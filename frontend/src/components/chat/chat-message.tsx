@@ -6,12 +6,14 @@ import ReactMarkdown from "react-markdown";
 import { AnimatedDiagram } from "../diagram/animated-diagram";
 import { MESSAGES } from "@/constants/messages";
 import type { ChatMessage as ChatMessageType } from "@/types/chat.types";
+import { ApprovalMessage } from "./approval-message";
 
 interface ChatMessageProps {
   message: ChatMessageType;
   isLoading?: boolean;
   currentAnimationStep?: number;
   isAnimating?: boolean;
+  onRefresh?: () => void;
 }
 
 /**
@@ -23,9 +25,10 @@ export function ChatMessage({
   isLoading = false,
   currentAnimationStep = 0,
   isAnimating = false,
+  onRefresh,
 }: ChatMessageProps) {
   const isUser = message.role === "user";
-  const { content, animationSteps = [], diagram } = message;
+  const { content, animationSteps = [], diagram, pending_approval, thread_id } = message;
 
   return (
     <div className={cn("flex gap-4 group", isUser ? "justify-end" : "justify-start")}>
@@ -38,7 +41,17 @@ export function ChatMessage({
       )}
 
       <div className={cn("flex flex-col gap-2 max-w-[80%] sm:max-w-[70%]", isUser && "items-end")}>
-
+        
+        {/* Render Approval Card if pending approval exists */}
+        {pending_approval && thread_id && (
+          <div className="mb-4 w-full">
+            <ApprovalMessage 
+              threadId={thread_id}
+              pendingApproval={pending_approval}
+              onActionComplete={onRefresh}
+            />
+          </div>
+        )}
 
         <div
           className={cn(
@@ -49,10 +62,10 @@ export function ChatMessage({
             !isUser && (isLoading || isAnimating) && "scan-line"
           )}
         >
+          {/* ... existing content rendering ... */}
           {animationSteps.length > 0 ? (
             <div className="space-y-4">
-
-
+              {/* ... existing animation steps ... */}
               {/* Animated Diagram */}
               {diagram && (
                 <div className="mb-4">

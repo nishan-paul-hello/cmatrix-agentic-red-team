@@ -4,10 +4,11 @@ from app.models.chat import ChatRequest, ChatResponse
 from app.models.responses import HealthResponse, ErrorResponse
 
 # Import database models to register SQLAlchemy mappers
-# These must be imported in dependency order: User -> Conversation/BackgroundJob -> ConversationHistory
+# These must be imported in dependency order: User -> Conversation/BackgroundJob/ApprovalLog -> ConversationHistory
 from app.models.user import User  # noqa: F401 - Register with SQLAlchemy
 from app.models.conversation import Conversation, ConversationHistory
 from app.models.background_job import BackgroundJob
+from app.models.approval_log import ApprovalLog
 
 from app.models.conversation_schemas import (
     ConversationCreate,
@@ -27,6 +28,7 @@ __all__ = [
     "Conversation",
     "ConversationHistory",
     "BackgroundJob",
+    "ApprovalLog",
     "ConversationCreate",
     "ConversationUpdate",
     "ConversationResponse",

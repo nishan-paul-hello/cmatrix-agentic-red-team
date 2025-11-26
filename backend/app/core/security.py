@@ -68,8 +68,8 @@ class AuthorizationManager:
     
     def is_target_authorized(self, target: str) -> bool:
         """Check if a target is authorized for scanning."""
-        # Allow localhost and local IPs by default
-        if target in ["localhost", "127.0.0.1", "::1"]:
+        # Allow localhost, local, and local IPs by default
+        if target in ["localhost", "local", "127.0.0.1", "::1"]:
             return True
         
         for auth_target in self.config["authorized_targets"]:

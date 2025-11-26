@@ -1,5 +1,4 @@
 
-
 services:
   # Backend Service (Development Mode)
   backend:
@@ -7,21 +6,23 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     container_name: cmatrix-backend-dev
-    ports:
-      - "8000:8000"
     environment:
       - PORT=8000
-      - DATABASE_URL=postgresql+asyncpg://cmatrix:cmatrix@postgres:5432/cmatrix
-      - QDRANT_URL=http://qdrant:6333
-      - QDRANT_HOST=qdrant
+      - DATABASE_URL=postgresql+asyncpg://cmatrix:cmatrix@localhost:5432/cmatrix
+      - CELERY_BROKER_URL=redis://localhost:6379/0
+      - CELERY_RESULT_BACKEND=redis://localhost:6379/1
+      - QDRANT_URL=http://localhost:6333
+      - QDRANT_HOST=localhost
       - QDRANT_PORT=6333
       - SECRET_KEY=${SECRET_KEY:-your-secret-key-change-this-in-production-make-it-very-long-and-random}
     volumes:
       # Mount entire backend for hot reload
       - ./backend:/app
       - backend-venv:/app/venv  # Exclude venv from mount
-    networks:
-      - cmatrix-network
+      # Cache HuggingFace models to avoid re-downloading
+      - huggingface_cache:/root/.cache/huggingface
+    # Note: network_mode: "host" is inherited from docker-compose.yml
+    # Cannot use 'networks' with network_mode: "host"
     depends_on:
       postgres:
         condition: service_healthy
@@ -61,4 +62,6 @@ volumes:
   frontend-node-modules:
     driver: local
   frontend-next:
+    driver: local
+  huggingface_cache:
     driver: local

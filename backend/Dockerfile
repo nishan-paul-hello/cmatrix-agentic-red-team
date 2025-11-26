@@ -8,11 +8,15 @@ ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     PIP_DISABLE_PIP_VERSION_CHECK=1
 
-# Install system dependencies
+# Install system dependencies and common security/monitoring tools
 RUN apt-get update && apt-get install -y \
     gcc \
+    libpq-dev \
     nmap \
     curl \
+    procps \
+    iproute2 \
+    net-tools \
     && rm -rf /var/lib/apt/lists/*
 
 # Create app user
@@ -59,7 +63,9 @@ RUN mkdir -p logs/audit_logs && \
 
 # Pre-load ML models to cache them (run as root before switching to appuser)
 # This ensures fast startup and no slow first requests
-RUN python warmup_models.py || echo "⚠️  Model warmup failed, models will load on first request"
+# Use cache mount to persist models between builds
+RUN --mount=type=cache,target=/root/.cache/huggingface \
+    python warmup_models.py || echo "⚠️  Model warmup failed, models will load on first request"
 
 # Switch to non-root user
 USER appuser

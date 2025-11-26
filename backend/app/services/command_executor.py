@@ -80,21 +80,60 @@ class CommandExecutor:
             }
         
         try:
-            # Execute the command
+            # Translate paths to use the mounted host filesystem at /host
+            # This avoids permission issues with chroot/nsenter while still
+            # providing access to the actual host filesystem
+            
+            # Translate common path patterns to /host equivalents
+            import os
+            import re
+            
+            # Get the host user's home directory from environment or default
+            # Since we're in a container, we need to infer the host user
+            # We'll use the first non-root user's home from /host/home
+            host_home = "/host/home/nishan"  # Default, can be made configurable
+            
+            # Translate ~ to host home directory
+            translated_cmd = command.replace("~/", f"{host_home}/")
+            translated_cmd = re.sub(r'\s~/', f' {host_home}/', translated_cmd)
+            translated_cmd = re.sub(r'^~/', f'{host_home}/', translated_cmd)
+            
+            # Translate absolute paths that should reference host
+            # Only translate if not already prefixed with /host
+            if not translated_cmd.startswith("/host"):
+                # Common directories that should reference host
+                for host_dir in ["/etc", "/var", "/usr", "/opt", "/tmp"]:
+                    translated_cmd = re.sub(
+                        rf'\s{host_dir}/',
+                        f' /host{host_dir}/',
+                        translated_cmd
+                    )
+                    if translated_cmd.startswith(f"{host_dir}/"):
+                        translated_cmd = f"/host{translated_cmd}"
+            
+            # Set up environment to use host filesystem paths
+            # Keep container's binaries but access host filesystem
+            env = os.environ.copy()
+            # Add host paths for accessing host-specific files/directories
+            # But use container's own binaries (ps, ip, etc.) which are now installed
+            
+            # Execute the translated command
             if shell:
                 result = subprocess.run(
-                    command,
+                    translated_cmd,
                     shell=True,
                     capture_output=capture_output,
                     text=True,
-                    timeout=timeout
+                    timeout=timeout,
+                    env=env
                 )
             else:
                 result = subprocess.run(
-                    shlex.split(command),
+                    shlex.split(translated_cmd),
                     capture_output=capture_output,
                     text=True,
-                    timeout=timeout
+                    timeout=timeout,
+                    env=env
                 )
             
             # Log successful execution

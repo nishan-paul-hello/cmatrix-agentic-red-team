@@ -632,11 +632,11 @@ if reflection.suggests_additional_scans:
 **Deliverable**: Agent can recall past scans
 
 #### 1.4 Implement HITL Approval Gates
-- [ ] Define `DANGEROUS_TOOLS` list
-- [ ] Add approval node to workflow
-- [ ] Create `/api/approve/{workflow_id}` endpoint
-- [ ] Build frontend approval UI component
-- [ ] Test approval flow
+- [x] Define `DANGEROUS_TOOLS` list
+- [x] Add approval node to workflow
+- [x] Create `/api/approve/{workflow_id}` endpoint
+- [x] Build frontend approval UI component
+- [x] Test approval flow
 
 **Deliverable**: Dangerous commands require user approval
 

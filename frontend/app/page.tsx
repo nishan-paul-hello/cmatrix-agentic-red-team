@@ -22,6 +22,7 @@ function ChatContent() {
     sendMessage,
     setInput,
     input,
+    refreshMessages,
   } = useChatStream();
 
   const { ref: messagesEndRef } = useScrollToBottom([messages]);
@@ -68,6 +69,7 @@ function ChatContent() {
                       index === messages.length - 1 &&
                       message.role === "assistant"
                     }
+                    onRefresh={refreshMessages}
                   />
                 ))}
                 {isLoading && messages[messages.length - 1]?.role === "user" && (

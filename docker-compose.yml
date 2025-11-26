@@ -62,27 +62,34 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     container_name: cmatrix-backend
-    ports:
-      - "8000:8000"
+    # Enable privileged mode for full host access (required for cybersecurity tool)
+    privileged: true
+    # Use host network for full network visibility (see all host interfaces)
+    network_mode: "host"
+    # Share host PID namespace for full process visibility
+    pid: "host"
     environment:
       - PORT=8000
-      - DATABASE_URL=postgresql+asyncpg://cmatrix:cmatrix@postgres:5432/cmatrix
-      - CELERY_BROKER_URL=redis://redis:6379/0
-      - CELERY_RESULT_BACKEND=redis://redis:6379/1
-      - QDRANT_URL=http://qdrant:6333
-      - QDRANT_HOST=qdrant
+      - DATABASE_URL=postgresql+asyncpg://cmatrix:cmatrix@localhost:5432/cmatrix
+      - CELERY_BROKER_URL=redis://localhost:6379/0
+      - CELERY_RESULT_BACKEND=redis://localhost:6379/1
+      - QDRANT_URL=http://localhost:6333
+      - QDRANT_HOST=localhost
       - QDRANT_PORT=6333
       - SECRET_KEY=${SECRET_KEY:-your-secret-key-change-this-in-production-make-it-very-long-and-random}
+      - HOST_ROOT=/host  # Path to mounted host filesystem
 
     volumes:
+      # Mount entire host filesystem for full access
+      - /:/host
       # Mount logs for persistence
       - ./backend/logs:/app/logs
       # Mount data files for persistence
       - ./backend/data:/app/data
       # Mount backend code for development (comment out for production)
       - ./backend:/app
-    networks:
-      - cmatrix-network
+      # Cache HuggingFace models to avoid re-downloading on every build
+      - huggingface_cache:/root/.cache/huggingface
     depends_on:
       redis:
         condition: service_healthy
@@ -118,6 +125,8 @@ services:
       - ./backend/logs:/app/logs
       - ./backend/data:/app/data
       - ./backend:/app
+      # Cache HuggingFace models to avoid re-downloading
+      - huggingface_cache:/root/.cache/huggingface
     networks:
       - cmatrix-network
     depends_on:
@@ -172,6 +181,8 @@ volumes:
   qdrant_data:
     driver: local
   audit_logs:
+    driver: local
+  huggingface_cache:
     driver: local
 
 

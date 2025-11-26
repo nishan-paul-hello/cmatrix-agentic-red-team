@@ -17,12 +17,16 @@ from app.services.checkpoint import get_checkpointer
 
 # Agent state
 class AgentState(TypedDict):
-    """State for the agent workflow."""
+    """State for the agent workflow with HITL approval support."""
     messages: Sequence[BaseMessage]
     tool_calls: list
     animation_steps: list  # Track animation steps for visualization
     diagram_nodes: list    # Track nodes for diagram
     diagram_edges: list    # Track edges for diagram
+    pending_approval: dict  # Pending approval data for HITL gates
+    approval_status: str    # Current approval status: "pending", "approved", "rejected"
+    auto_rejected: dict     # Auto-rejection data if tool was auto-rejected
+    skip_llm: bool  # Flag to skip LLM after approved tool execution
 
 
 class OrchestratorService:
@@ -60,21 +64,60 @@ class OrchestratorService:
         logger.info("Orchestrator service initialized with checkpointing support")
 
     
-    def _should_continue(self, state: AgentState) -> Literal["tools", "end"]:
+    def _should_continue(self, state: AgentState) -> Literal["tools", "approval_gate", "end"]:
         """
-        Decide whether to use tools or end.
+        Decide whether to use tools, request approval, or end.
+        
+        This method implements HITL (Human-in-the-Loop) approval gates.
+        Dangerous tools are routed through an approval gate before execution.
         
         Args:
             state: Current agent state
             
         Returns:
-            Next step: "tools" or "end"
+            Next step: "tools", "approval_gate", or "end"
         """
+        from app.core.approval_config import requires_approval, check_auto_reject, get_tool_risk_info
+        from datetime import datetime
+        
         last_message = state["messages"][-1]
         if isinstance(last_message, AIMessage):
             tool_calls = parse_tool_calls(last_message.content)
             if tool_calls:
+                # Check if any tool requires approval
+                for tool_name, tool_args in tool_calls:
+                    # First check for auto-reject patterns
+                    auto_reject_reason = check_auto_reject(tool_name, tool_args)
+                    if auto_reject_reason:
+                        # Store auto-rejection info
+                        state["auto_rejected"] = {
+                            "tool_name": tool_name,
+                            "tool_args": tool_args,
+                            "reason": auto_reject_reason,
+                            "timestamp": datetime.now().isoformat()
+                        }
+                        logger.warning(f"Tool '{tool_name}' auto-rejected: {auto_reject_reason}")
+                        return "end"  # Skip to end with rejection message
+                    
+                    # Check if approval is required
+                    if requires_approval(tool_name, tool_args):
+                        risk_info = get_tool_risk_info(tool_name)
+                        
+                        # Store pending approval in state
+                        state["pending_approval"] = {
+                            "tool_name": tool_name,
+                            "tool_args": tool_args,
+                            "risk_info": risk_info.to_dict(),
+                            "timestamp": datetime.now().isoformat(),
+                            "all_tool_calls": tool_calls  # Store all calls for later execution
+                        }
+                        
+                        logger.info(f"⏸️ Tool '{tool_name}' requires approval - routing to approval gate")
+                        return "approval_gate"  # Pause for approval
+                
+                # No approval needed, proceed with execution
                 return "tools"
+        
         return "end"
     
     def _call_model(self, state: AgentState) -> Dict[str, Any]:
@@ -154,8 +197,20 @@ class OrchestratorService:
         Returns:
             Updated state with tool results
         """
-        last_message = state["messages"][-1]
-        tool_calls = parse_tool_calls(last_message.content)
+        # Check if we're resuming from an approval
+        approval_status = state.get("approval_status", "")
+        pending_approval = state.get("pending_approval", {})
+        is_approved_execution = False
+        
+        # If approved, get tool calls from pending_approval
+        if approval_status == "approved" and pending_approval:
+            tool_calls = pending_approval.get("all_tool_calls", [])
+            is_approved_execution = True
+            logger.info(f"Resuming approved tool execution: {len(tool_calls)} tool(s)")
+        else:
+            # Normal flow: get tool calls from last message
+            last_message = state["messages"][-1]
+            tool_calls = parse_tool_calls(last_message.content)
 
         # Get existing animation steps and diagram data
         animation_steps = state.get("animation_steps", [])
@@ -229,12 +284,28 @@ class OrchestratorService:
                     logger.warning(error_msg)
             
             results_str = "\n\n".join(results)
-            return {
-                "messages": [HumanMessage(content=f"TOOL_RESULTS:\n{results_str}\n\nNow provide your final answer based on these results.")],
-                "animation_steps": animation_steps,
-                "diagram_nodes": diagram_nodes,
-                "diagram_edges": diagram_edges
-            }
+        
+            # If this was an approved execution, skip the LLM and return raw results
+            if is_approved_execution:
+                return {
+                    "messages": [AIMessage(content=results_str)],
+                    "animation_steps": animation_steps,
+                    "diagram_nodes": diagram_nodes,
+                    "diagram_edges": diagram_edges,
+                    "approval_status": "",  # Clear approval status after execution
+                    "pending_approval": {},  # Clear pending approval
+                    "skip_llm": True  # Flag to skip LLM and go to END
+                }
+            else:
+                # Normal flow: send results back to LLM for interpretation
+                return {
+                    "messages": [HumanMessage(content=f"TOOL_RESULTS:\n{results_str}\n\nNow provide your final answer based on these results.")],
+                    "animation_steps": animation_steps,
+                    "diagram_nodes": diagram_nodes,
+                    "diagram_edges": diagram_edges,
+                    "approval_status": "",  # Clear approval status after execution
+                    "pending_approval": {}  # Clear pending approval
+                }
 
         return {
             "messages": [],
@@ -325,39 +396,156 @@ class OrchestratorService:
         
         return tags[:5]  # Limit to 5 tags
     
+    def _approval_gate(self, state: AgentState) -> Dict[str, Any]:
+        """
+        Approval gate node - pauses execution until user approval.
+        
+        This node implements HITL (Human-in-the-Loop) approval gates.
+        When a dangerous tool is detected, the workflow pauses here and
+        waits for user approval via the API.
+        
+        The workflow state is persisted via checkpointing, allowing the
+        workflow to resume after approval/rejection.
+        
+        Args:
+            state: Current agent state with pending_approval data
+            
+        Returns:
+            Updated state with approval status
+        """
+        from app.core.approval_config import requires_approval, get_tool_risk_info
+        from datetime import datetime
+        
+        # Re-calculate pending approval data since conditional edges can't modify state
+        pending = {}
+        messages = state.get("messages", [])
+        if not messages:
+            logger.warning("No messages found in state at approval gate")
+            return {
+                "messages": [AIMessage(content="Error: No messages found for approval context")],
+                "approval_status": "error"
+            }
+            
+        last_message = messages[-1]
+        
+        if isinstance(last_message, AIMessage):
+            tool_calls = parse_tool_calls(last_message.content)
+            if tool_calls:
+                for tool_name, tool_args in tool_calls:
+                    if requires_approval(tool_name, tool_args):
+                        risk_info = get_tool_risk_info(tool_name)
+                        pending = {
+                            "tool_name": tool_name,
+                            "tool_args": tool_args,
+                            "risk_info": risk_info.to_dict(),
+                            "timestamp": datetime.now().isoformat(),
+                            "all_tool_calls": tool_calls
+                        }
+                        break
+        
+        tool_name = pending.get("tool_name", "unknown")
+        risk_info = pending.get("risk_info", {})
+        
+        logger.info(f"⏸️ Workflow paused at approval gate for tool: {tool_name}")
+        logger.info(f"   Risk level: {risk_info.get('risk_level', 'UNKNOWN')}")
+        logger.info(f"   Reason: {risk_info.get('reason', 'N/A')}")
+        
+        # Create approval message for user
+        approval_message = (
+            f"⏸️ **Approval Required**\n\n"
+            f"**Tool**: `{tool_name}`\n"
+            f"**Risk Level**: {risk_info.get('risk_level', 'UNKNOWN')}\n"
+            f"**Reason**: {risk_info.get('reason', 'N/A')}\n\n"
+        )
+        
+        if risk_info.get('warning'):
+            approval_message += f"{risk_info['warning']}\n\n"
+        
+        approval_message += (
+            f"This operation requires your approval before execution. "
+            f"Please review the details and approve or reject this action."
+        )
+        
+        # Return state with approval message AND the pending_approval data
+        # This ensures the data is persisted in the checkpoint
+        return {
+            "messages": [AIMessage(content=approval_message)],
+            "approval_status": "pending",
+            "pending_approval": pending,  # Persist the calculated data
+            "animation_steps": state.get("animation_steps", []),
+            "diagram_nodes": state.get("diagram_nodes", []),
+            "diagram_edges": state.get("diagram_edges", [])
+        }
+    
+    def _check_approval(self, state: AgentState) -> Literal["approved", "rejected"]:
+        """Check approval status to determine next step."""
+        status = state.get("approval_status", "pending")
+        if status == "approved":
+            return "approved"
+        return "rejected"
+
     def _create_workflow(self):
         """
-        Create and configure the orchestrator workflow.
+        Create and configure the orchestrator workflow with approval gates.
         
         Returns:
-            Compiled workflow with checkpointing
+            Compiled workflow with checkpointing and approval support
         """
         # Build graph
         workflow = StateGraph(AgentState)
         workflow.add_node("agent", self._call_model)
         workflow.add_node("tools", self._call_tools)
+        workflow.add_node("approval_gate", self._approval_gate)
 
         workflow.set_entry_point("agent")
+        
+        # Add conditional edges with approval gate support
         workflow.add_conditional_edges(
             "agent",
             self._should_continue,
-            {"tools": "tools", "end": END}
+            {
+                "tools": "tools",
+                "approval_gate": "approval_gate",
+                "end": END
+            }
         )
-        workflow.add_edge("tools", "agent")
+        
+        # Add conditional edges from approval gate
+        workflow.add_conditional_edges(
+            "approval_gate",
+            self._check_approval,
+            {
+                "approved": "tools",
+                "rejected": END
+            }
+        )
+        
+        # After tools execute, conditionally go back to agent or end
+        # If skip_llm is True (approved tool execution), go to END
+        # Otherwise, go back to agent for interpretation
+        workflow.add_conditional_edges(
+            "tools",
+            lambda state: "end" if state.get("skip_llm", False) else "agent",
+            {
+                "agent": "agent",
+                "end": END
+            }
+        )
 
         # Get checkpointer for state persistence
-        # Note: langgraph 0.2.45 doesn't support PostgresSaver
-        # State persistence is handled via conversation history in database
+        # Checkpointing is REQUIRED for approval gates to work
         try:
             self.checkpointer = get_checkpointer()
             if self.checkpointer is not None:
-                logger.info("Workflow compiled with PostgreSQL checkpointing")
-                return workflow.compile(checkpointer=self.checkpointer)
+                logger.info("Workflow compiled with PostgreSQL checkpointing (required for approval gates)")
+                return workflow.compile(checkpointer=self.checkpointer, interrupt_after=["approval_gate"])
             else:
-                logger.info("Workflow compiled without checkpointing (using conversation history for state)")
+                logger.warning("⚠️ No checkpointer available - approval gates will not work properly!")
+                logger.warning("   Approval gates require checkpointing for state persistence")
                 return workflow.compile()
         except Exception as e:
-            logger.warning(f"Checkpointer initialization error: {e}. Using conversation history for state.")
+            logger.error(f"Checkpointer initialization error: {e}")
+            logger.error("⚠️ Approval gates will not work without checkpointing!")
             return workflow.compile()
     
     async def run(
@@ -490,6 +678,20 @@ class OrchestratorService:
                     "animation_steps": animation_steps,
                     "diagram": {"nodes": all_nodes, "edges": all_edges},
                     "final_answer": cleaned_content
+                }
+            
+            # Check if workflow is paused at approval gate
+            if result.get("approval_status") == "pending" and result.get("pending_approval"):
+                logger.info("Workflow paused at approval gate, returning approval request")
+                # Extract the approval message content
+                approval_message = result["messages"][-1]
+                content = approval_message.content if hasattr(approval_message, 'content') else str(approval_message)
+                
+                return {
+                    "pending_approval": result["pending_approval"],
+                    "approval_status": "pending",
+                    "messages": [{"content": content}],  # Format for frontend
+                    "final_answer": content
                 }
             
             # No tools were executed, return regular response

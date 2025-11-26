@@ -1,24 +1,15 @@
-"""LangGraph checkpoint service for persistent workflow state.
+"""LangGraph checkpoint service for persistent workflow state."""
 
-Note: For langgraph 0.2.45, we use a simpler checkpointing approach.
-The checkpoint functionality exists but with a different API.
-"""
-
-from typing import Optional, Dict, Any
+from typing import Optional
 from loguru import logger
 from app.core.config import settings
 
 
 class CheckpointService:
-    """Service for managing workflow state persistence.
-    
-    For langgraph 0.2.45, we implement a lightweight checkpointing mechanism
-    that stores state in the database. Full LangGraph checkpoint integration
-    requires langgraph >= 1.0, which has dependency conflicts with langchain 0.3.7.
-    """
+    """Service for managing workflow state persistence."""
     
     _instance: Optional['CheckpointService'] = None
-    _enabled: bool = False
+    _enabled: bool = True  # Enable checkpointing
     
     def __new__(cls):
         """Singleton pattern to ensure one service instance."""
@@ -30,15 +21,13 @@ class CheckpointService:
         """Initialize checkpoint service."""
         if not hasattr(self, '_initialized'):
             self._initialized = True
-            logger.info("Checkpoint service initialized (lightweight mode for langgraph 0.2.45)")
-            logger.info("Note: Full PostgreSQL checkpointing requires langgraph >= 1.0")
-            logger.info("Current implementation: State persisted via conversation history in database")
+            logger.info("Checkpoint service initialized with PostgreSQL backend")
     
     def is_enabled(self) -> bool:
         """Check if checkpointing is enabled.
         
         Returns:
-            False for langgraph 0.2.45 (uses conversation history instead)
+            True if checkpointing is enabled
         """
         return self._enabled
     
@@ -74,16 +63,58 @@ def get_checkpoint_service() -> CheckpointService:
     return _checkpoint_service
 
 
+# Global checkpointer instance
+_checkpointer_instance = None
+
 def get_checkpointer():
     """
-    Get checkpointer instance.
-    
-    For langgraph 0.2.45, this returns None as the built-in PostgresSaver
-    is not available. State persistence is handled through conversation history.
+    Get PostgreSQL checkpointer instance for LangGraph.
     
     Returns:
-        None (checkpointing handled via conversation history)
+        PostgresSaver instance for state persistence
     """
-    logger.debug("Checkpointer requested but not available in langgraph 0.2.45")
-    logger.debug("State persistence handled via conversation history in database")
-    return None
+    global _checkpointer_instance
+    
+    if _checkpointer_instance is not None:
+        return _checkpointer_instance
+
+    try:
+        from langgraph.checkpoint.postgres import PostgresSaver
+        from psycopg_pool import ConnectionPool
+        
+        # Extract connection string from DATABASE_URL
+        # Convert asyncpg URL to psycopg format
+        db_url = str(settings.DATABASE_URL)
+        
+        # Replace asyncpg with postgresql for psycopg
+        if 'asyncpg' in db_url:
+            db_url = db_url.replace('postgresql+asyncpg://', 'postgresql://')
+        
+        # Create connection pool
+        pool = ConnectionPool(
+            conninfo=db_url,
+            max_size=10,
+            kwargs={
+                "autocommit": True,
+                "prepare_threshold": 0,
+            }
+        )
+        
+        # Create and return PostgresSaver
+        checkpointer = PostgresSaver(pool)
+        
+        # Setup tables if needed
+        checkpointer.setup()
+        
+        logger.info("✅ PostgreSQL checkpointer initialized successfully")
+        _checkpointer_instance = checkpointer
+        return checkpointer
+        
+    except ImportError as e:
+        logger.error(f"Failed to import checkpointing dependencies: {e}")
+        logger.error("Install with: pip install langgraph-checkpoint-postgres psycopg[pool]")
+        return None
+    except Exception as e:
+        logger.error(f"Failed to initialize PostgreSQL checkpointer: {e}")
+        logger.warning("Checkpointing disabled - approval gates will not work")
+        return None

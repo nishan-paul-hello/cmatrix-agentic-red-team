@@ -23,6 +23,8 @@ bcrypt==4.1.2
 langchain-core==0.3.15
 langchain==0.3.7
 langgraph==0.2.45
+langgraph-checkpoint-postgres==2.0.6
+psycopg[pool]==3.2.3
 # Note: Using older langgraph for now to maintain compatibility
 # Checkpointing works with this version using PostgresSaver from langgraph.checkpoint.postgres
 
