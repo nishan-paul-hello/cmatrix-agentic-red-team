@@ -9,7 +9,10 @@ from sqlalchemy.orm import sessionmaker
 from app.worker import celery_app
 from app.core.config import settings
 from app.services.orchestrator import run_orchestrator
-from app.models.conversation import ConversationHistory
+from app.models.conversation import Conversation, ConversationHistory
+from app.services.llm.db_factory import get_db_provider_factory
+from app.services.llm.providers import Message
+from sqlalchemy import select
 from loguru import logger
 
 
@@ -109,6 +112,41 @@ async def run_scan_task(
             await db.commit()
             
             logger.info(f"Scan task completed for user {user_id}")
+            
+            # Generate title if needed
+            try:
+                # Check if conversation still has default name
+                query = select(Conversation).where(Conversation.id == conversation_id)
+                result_conv = await db.execute(query)
+                conversation = result_conv.scalar_one_or_none()
+                
+                if conversation and conversation.name == "New Conversation":
+                    # Get LLM provider
+                    factory = get_db_provider_factory()
+                    provider = await factory.get_active_provider(db, user_id)
+                    
+                    if provider:
+                        prompt = (
+                            f"User: {message}\n"
+                            f"Assistant: {final_answer}\n\n"
+                            f"Generate a short, concise title (max 6 words) for this conversation based on the above exchange. "
+                            f"Do not use quotes or prefixes like 'Title:'. Just the title."
+                        )
+                        messages = [
+                            Message(role="system", content="You are a helpful assistant that generates conversation titles."),
+                            Message(role="user", content=prompt)
+                        ]
+                        
+                        # Generate title
+                        title = await asyncio.to_thread(provider.invoke, messages)
+                        title = title.strip().strip('"').strip("'")
+                        
+                        if title:
+                            conversation.name = title
+                            await db.commit()
+                            logger.info(f"Updated conversation {conversation_id} title to: {title}")
+            except Exception as e:
+                logger.error(f"Failed to generate title in task: {e}")
             
             # Return the orchestrator result directly
             # This is either a string or a dict with animation_steps/diagram/final_answer

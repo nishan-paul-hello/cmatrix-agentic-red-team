@@ -23,7 +23,7 @@ interface UseChatStreamReturn {
  * Hook for handling chat streaming functionality
  */
 export function useChatStream(): UseChatStreamReturn {
-  const { activeConversation, loadConversationHistory, createConversation } = useConversations();
+  const { activeConversation, loadConversationHistory, createConversation, loadConversations } = useConversations();
   const { user } = useAuth();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
@@ -317,6 +317,9 @@ export function useChatStream(): UseChatStreamReturn {
                 await new Promise(resolve => setTimeout(resolve, 30));
             }
         }
+
+        // Refresh conversations list to update title if generated
+        loadConversations();
 
       } catch (error) {
         console.error("[Chat Job] Error:", error);

@@ -13,10 +13,20 @@ from app.models.chat import ChatRequest, ChatResponse
 from app.api.deps import get_orchestrator, get_current_user
 from app.models.user import User
 from app.models.conversation import Conversation, ConversationHistory
-from app.core.database import get_db
+
+from app.core.database import get_db, AsyncSessionLocal
+from app.services.llm.db_factory import get_db_provider_factory
+from app.services.llm.providers import Message
+from starlette.concurrency import run_in_threadpool
 
 
 router = APIRouter()
+
+
+async def handle_chat_exception(e: Exception, endpoint_name: str):
+    """Centralized exception handler for chat endpoints."""
+    logger.error(f"Error in {endpoint_name}: {str(e)}")
+    raise HTTPException(status_code=500, detail=str(e))
 
 
 @router.post(
@@ -61,9 +71,53 @@ async def chat(
         return ChatResponse(response=response)
     
     except Exception as e:
-        logger.error(f"Error in /chat: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+        await handle_chat_exception(e, "/chat")
 
+
+async def generate_conversation_title(conversation_id: int, user_message: str, assistant_response: str, user_id: int):
+    """Generate and update conversation title based on the first exchange."""
+    async with AsyncSessionLocal() as db:
+        try:
+            # Check if conversation still has default name
+            query = select(Conversation).where(Conversation.id == conversation_id)
+            result = await db.execute(query)
+            conversation = result.scalar_one_or_none()
+            
+            if not conversation or conversation.name != "New Conversation":
+                return
+
+            # Get LLM provider
+            factory = get_db_provider_factory()
+            provider = await factory.get_active_provider(db, user_id)
+            
+            if not provider:
+                return
+
+            # Construct prompt
+            prompt = (
+                f"User: {user_message}\n"
+                f"Assistant: {assistant_response}\n\n"
+                f"Generate a short, concise title (max 6 words) for this conversation based on the above exchange. "
+                f"Do not use quotes or prefixes like 'Title:'. Just the title."
+            )
+            
+            messages = [
+                Message(role="system", content="You are a helpful assistant that generates conversation titles."),
+                Message(role="user", content=prompt)
+            ]
+            
+            # Generate title
+            title = await run_in_threadpool(provider.invoke, messages)
+            title = title.strip().strip('"').strip("'")
+            
+            if title:
+                # Update conversation
+                conversation.name = title
+                await db.commit()
+                logger.info(f"Updated conversation {conversation_id} title to: {title}")
+                
+        except Exception as e:
+            logger.error(f"Failed to generate conversation title: {e}")
 
 @router.post(
     "/chat/stream",
@@ -207,6 +261,14 @@ async def chat_stream(
                     db.add(assistant_message)
                     await db.commit()
                     logger.info(f"Saved assistant response to conversation {conversation_id}")
+
+                    # Trigger title generation
+                    asyncio.create_task(generate_conversation_title(
+                        conversation_id, 
+                        request.message, 
+                        full_response, 
+                        current_user.id
+                    ))
 
                 yield "data: [DONE]\n\n"
             
