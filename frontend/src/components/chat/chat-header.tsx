@@ -1,10 +1,11 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Shield, LogOut, User, Settings } from "lucide-react";
+import { LogOut, User, Settings } from "lucide-react";
 import { MESSAGES } from "@/constants/messages";
 import { siteConfig } from "@/config/site.config";
 import { useAuth } from "@/contexts/auth-context";
+import { BrandLogo } from "@/components/brand-logo";
 import { ConfigurationProfileSelector } from "./configuration-profile-selector";
 import { ModelDropdown } from "./model-dropdown";
 
@@ -24,8 +25,8 @@ export function ChatHeader() {
     <header className="border-b border-border bg-card cyber-border">
       <div className="container flex items-center justify-between h-14 px-4 mx-auto">
         <div className="flex items-center gap-3">
-          <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-secondary cyber-border">
-            <Shield className="w-5 h-5 text-secondary-foreground" />
+          <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-secondary/10 cyber-border overflow-hidden">
+            <BrandLogo size={24} />
           </div>
           <div>
             <h1 className="text-lg font-semibold terminal-text">{siteConfig.name}</h1>
