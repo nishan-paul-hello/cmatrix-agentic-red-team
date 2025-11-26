@@ -6,6 +6,7 @@ from langgraph.graph import StateGraph, END
 from sqlalchemy.ext.asyncio import AsyncSession
 from loguru import logger
 import json
+import asyncio
 
 from app.services.llm.providers import Message, LLMProvider
 from app.tools.execution import parse_tool_calls
@@ -13,11 +14,12 @@ from app.tools.registry import get_tool_registry
 from app.utils.helpers import clean_response
 from app.core.config import settings
 from app.services.checkpoint import get_checkpointer
+from app.services.supervisor import get_supervisor_service, DelegationStrategy
 
 
 # Agent state
 class AgentState(TypedDict):
-    """State for the agent workflow with HITL approval support."""
+    """State for the agent workflow with HITL approval support and agent delegation."""
     messages: Sequence[BaseMessage]
     tool_calls: list
     animation_steps: list  # Track animation steps for visualization
@@ -27,6 +29,8 @@ class AgentState(TypedDict):
     approval_status: str    # Current approval status: "pending", "approved", "rejected"
     auto_rejected: dict     # Auto-rejection data if tool was auto-rejected
     skip_llm: bool  # Flag to skip LLM after approved tool execution
+    agent_delegation: dict  # Agent delegation results from supervisor
+    use_agents: bool  # Flag to use specialized agents instead of tools
 
 
 class OrchestratorService:
@@ -56,26 +60,30 @@ class OrchestratorService:
     def __init__(self):
         """Initialize the orchestrator service."""
         self.tool_registry = get_tool_registry()
+        self.supervisor = get_supervisor_service()
         self.checkpointer = None  # Will be lazily initialized
         self.workflow = self._create_workflow()
         self.llm_provider = None  # Will be set per request
         self.current_user_id = None  # Store current user_id for tool injection
         self.current_conversation_id = None  # Store current conversation_id for tool injection
-        logger.info("Orchestrator service initialized with checkpointing support")
+        logger.info("Orchestrator service initialized with multi-agent supervision and checkpointing")
 
     
-    def _should_continue(self, state: AgentState) -> Literal["tools", "approval_gate", "end"]:
+    def _should_continue(self, state: AgentState) -> Literal["delegate", "tools", "approval_gate", "end"]:
         """
-        Decide whether to use tools, request approval, or end.
+        Decide whether to delegate to agents, use tools, request approval, or end.
         
-        This method implements HITL (Human-in-the-Loop) approval gates.
-        Dangerous tools are routed through an approval gate before execution.
+        This method implements intelligent routing:
+        1. Check if specialized agents should handle the task (agent delegation)
+        2. Check if tools need approval (HITL approval gates)
+        3. Execute tools directly
+        4. End if no action needed
         
         Args:
             state: Current agent state
             
         Returns:
-            Next step: "tools", "approval_gate", or "end"
+            Next step: "delegate", "tools", "approval_gate", or "end"
         """
         from app.core.approval_config import requires_approval, check_auto_reject, get_tool_risk_info
         from datetime import datetime
@@ -117,6 +125,21 @@ class OrchestratorService:
                 
                 # No approval needed, proceed with execution
                 return "tools"
+        
+        # No tool calls - check if we should delegate to specialized agents
+        # This happens when the LLM doesn't call tools but the task matches agent expertise
+        messages = state.get("messages", [])
+        if messages:
+            # Get the original user message
+            for msg in messages:
+                if isinstance(msg, HumanMessage):
+                    user_message = msg.content
+                    # Quick check if agents should handle this
+                    analysis = self.supervisor.analyze_task(user_message)
+                    if analysis["primary_agent"] and analysis["confidence"] >= 0.4:
+                        logger.info(f"🎯 No tools called, but delegating to agents (confidence: {analysis['confidence']:.2f})")
+                        return "delegate"
+                    break
         
         return "end"
     
@@ -483,27 +506,204 @@ class OrchestratorService:
         if status == "approved":
             return "approved"
         return "rejected"
+    
+    def _should_delegate_to_agents(self, state: AgentState) -> Literal["delegate", "tools"]:
+        """
+        Decide whether to delegate to specialized agents or use tools directly.
+        
+        This method analyzes the user's message to determine if specialized
+        agents should handle the task instead of the general tool execution.
+        
+        Args:
+            state: Current agent state
+            
+        Returns:
+            Next step: "delegate" or "tools"
+        """
+        messages = state.get("messages", [])
+        if not messages:
+            return "tools"
+        
+        # Get the original user message (first HumanMessage)
+        user_message = None
+        for msg in messages:
+            if isinstance(msg, HumanMessage):
+                user_message = msg.content
+                break
+        
+        if not user_message:
+            return "tools"
+        
+        # Quick analysis to see if agents should handle this
+        analysis = self.supervisor.analyze_task(user_message)
+        
+        # If confidence is high enough and we have a primary agent, delegate
+        if analysis["primary_agent"] and analysis["confidence"] >= 0.3:
+            logger.info(f"🎯 Delegating to specialized agents (confidence: {analysis['confidence']:.2f})")
+            return "delegate"
+        
+        # Otherwise use tools
+        logger.info("Using general tool execution (no strong agent match)")
+        return "tools"
+    
+    async def _delegate_to_agents(self, state: AgentState) -> Dict[str, Any]:
+        """
+        Delegate task to specialized agent subgraphs via supervisor.
+        
+        This node uses the supervisor service to intelligently route tasks
+        to the most appropriate specialized agents, aggregate their results,
+        and return a synthesized response.
+        
+        Args:
+            state: Current agent state
+            
+        Returns:
+            Updated state with agent delegation results
+        """
+        messages = state.get("messages", [])
+        
+        # Extract user message
+        user_message = None
+        for msg in messages:
+            if isinstance(msg, HumanMessage):
+                user_message = msg.content
+                break
+        
+        if not user_message:
+            return {
+                "messages": [AIMessage(content="Error: No user message found for delegation")],
+                "animation_steps": state.get("animation_steps", []),
+                "diagram_nodes": state.get("diagram_nodes", []),
+                "diagram_edges": state.get("diagram_edges", [])
+            }
+        
+        logger.info(f"🤖 Delegating to specialized agents: {user_message[:100]}...")
+        
+        # Build context from conversation history
+        context = {
+            "conversation_history": [
+                {"role": "user" if isinstance(m, HumanMessage) else "assistant", "content": m.content}
+                for m in messages[:-1]  # Exclude current message
+            ]
+        }
+        
+        try:
+            # Delegate to supervisor (this is async)
+            delegation_result = await self.supervisor.supervise(
+                task=user_message,
+                context=context,
+                llm_provider=self.llm_provider
+            )
+            
+            # Check if delegation occurred
+            if delegation_result.get("status") == "no_delegation":
+                # No agents matched - fall back to tools
+                logger.info("No agent delegation - falling back to tool execution")
+                return {
+                    "messages": [],  # Empty to continue to tools
+                    "use_agents": False,
+                    "animation_steps": state.get("animation_steps", []),
+                    "diagram_nodes": state.get("diagram_nodes", []),
+                    "diagram_edges": state.get("diagram_edges", [])
+                }
+            
+            # Extract final answer from delegation
+            final_answer = delegation_result.get("final_answer", "")
+            execution_summary = delegation_result.get("execution_summary", {})
+            
+            # Create animation steps for agent execution
+            animation_steps = state.get("animation_steps", []).copy()
+            diagram_nodes = state.get("diagram_nodes", []).copy()
+            diagram_edges = state.get("diagram_edges", []).copy()
+            
+            agents_used = execution_summary.get("agents_used", [])
+            for idx, agent_type in enumerate(agents_used):
+                agent_name = agent_type.replace("_", " ").title()
+                icon = "🤖"
+                bg_color = self.BG_COLORS[idx % len(self.BG_COLORS)]
+                
+                animation_step = {
+                    "step": len(animation_steps) + 1,
+                    "title": f"Consulting {agent_name}",
+                    "description": f"Specialized {agent_name} analyzing the task",
+                    "duration": 2000,
+                    "icon": icon,
+                    "bgColor": bg_color
+                }
+                animation_steps.append(animation_step)
+                
+                # Add node to diagram
+                node_id = f"agent_{agent_type}"
+                diagram_nodes.append({
+                    "id": node_id,
+                    "label": agent_name,
+                    "x": 350 + (idx * 150),
+                    "y": 50 + (idx % 2) * 40,
+                    "type": "agent"
+                })
+                
+                # Add edge
+                if idx == 0:
+                    prev_node_id = "ai"
+                else:
+                    prev_node_id = f"agent_{agents_used[idx-1]}"
+                
+                diagram_edges.append({
+                    "from": prev_node_id,
+                    "to": node_id
+                })
+            
+            logger.info(f"✓ Agent delegation complete: {delegation_result['status']}")
+            
+            return {
+                "messages": [AIMessage(content=final_answer)],
+                "agent_delegation": delegation_result,
+                "use_agents": True,
+                "animation_steps": animation_steps,
+                "diagram_nodes": diagram_nodes,
+                "diagram_edges": diagram_edges
+            }
+            
+        except Exception as e:
+            logger.error(f"Error during agent delegation: {str(e)}", exc_info=True)
+            # Fall back to tool execution on error
+            return {
+                "messages": [AIMessage(content=f"Agent delegation failed: {str(e)}. Falling back to tool execution.")],
+                "use_agents": False,
+                "animation_steps": state.get("animation_steps", []),
+                "diagram_nodes": state.get("diagram_nodes", []),
+                "diagram_edges": state.get("diagram_edges", [])
+            }
 
     def _create_workflow(self):
         """
-        Create and configure the orchestrator workflow with approval gates.
+        Create and configure the orchestrator workflow with multi-agent supervision.
+        
+        Workflow:
+            1. User message -> agent (LLM decides)
+            2. Agent -> Check if should delegate to specialized agents
+            3a. If yes -> delegate (supervisor routes to specialized agents)
+            3b. If no -> tools (execute tools directly)
+            4. Results -> back to agent for final synthesis
         
         Returns:
-            Compiled workflow with checkpointing and approval support
+            Compiled workflow with checkpointing, approval gates, and agent delegation
         """
         # Build graph
         workflow = StateGraph(AgentState)
         workflow.add_node("agent", self._call_model)
+        workflow.add_node("delegate", self._delegate_to_agents)
         workflow.add_node("tools", self._call_tools)
         workflow.add_node("approval_gate", self._approval_gate)
 
         workflow.set_entry_point("agent")
         
-        # Add conditional edges with approval gate support
+        # Add conditional edges with approval gate and delegation support
         workflow.add_conditional_edges(
             "agent",
             self._should_continue,
             {
+                "delegate": "delegate",
                 "tools": "tools",
                 "approval_gate": "approval_gate",
                 "end": END
@@ -520,24 +720,39 @@ class OrchestratorService:
             }
         )
         
-        # After tools execute, conditionally go back to agent or end
-        # If skip_llm is True (approved tool execution), go to END
-        # Otherwise, go back to agent for interpretation
+        # After tools execute, check if we should delegate to agents or continue
+        def _after_tools_routing(state: AgentState) -> Literal["delegate", "agent", "end"]:
+            """Route after tool execution."""
+            # If skip_llm is True (approved tool execution), go to END
+            if state.get("skip_llm", False):
+                return "end"
+            
+            # Check if we should try agent delegation
+            if state.get("use_agents", False):
+                return "end"  # Agents already handled it
+            
+            # Normal flow: back to agent for interpretation
+            return "agent"
+        
         workflow.add_conditional_edges(
             "tools",
-            lambda state: "end" if state.get("skip_llm", False) else "agent",
+            _after_tools_routing,
             {
+                "delegate": "delegate",
                 "agent": "agent",
                 "end": END
             }
         )
+        
+        # After agent delegation, go to END (agents provide final answer)
+        workflow.add_edge("delegate", END)
 
         # Get checkpointer for state persistence
         # Checkpointing is REQUIRED for approval gates to work
         try:
             self.checkpointer = get_checkpointer()
             if self.checkpointer is not None:
-                logger.info("Workflow compiled with PostgreSQL checkpointing (required for approval gates)")
+                logger.info("Workflow compiled with multi-agent supervision, PostgreSQL checkpointing, and approval gates")
                 return workflow.compile(checkpointer=self.checkpointer, interrupt_after=["approval_gate"])
             else:
                 logger.warning("⚠️ No checkpointer available - approval gates will not work properly!")
