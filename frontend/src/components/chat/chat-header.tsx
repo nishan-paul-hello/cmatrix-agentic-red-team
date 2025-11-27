@@ -3,7 +3,14 @@
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
-import { LogOut, User, Settings } from "lucide-react";
+import { LogOut, User, Settings, ChevronDown, Shield } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { MESSAGES } from "@/constants/messages";
 import { siteConfig } from "@/config/site.config";
 import { useAuth } from "@/contexts/auth-context";
@@ -35,29 +42,53 @@ export function ChatHeader() {
               onActiveProfileChange={setActiveProfile}
             />
             <ModelDropdown activeProfile={activeProfile} />
-            <Button variant="ghost" size="sm" asChild>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              asChild
+              className="cursor-pointer cyber-border terminal-text hover:bg-secondary/50 transition-colors"
+            >
               <a href="/dashboard">Dashboard</a>
+            </Button>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              asChild
+              className="cursor-pointer cyber-border terminal-text hover:bg-secondary/50 transition-colors"
+            >
+              <a href="/tools/cve" className="flex items-center gap-2">
+                <Shield className="w-4 h-4" />
+                CVE Search
+              </a>
             </Button>
           </div>
 
           
           {user && (
-            <div className="flex items-center gap-2 px-3 py-1 bg-secondary/20 rounded-md border border-primary/20">
-              <User className="w-4 h-4 text-primary" />
-              <span className="text-xs text-foreground">{user.username}</span>
-            </div>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="flex items-center gap-2 px-3 py-1 hover:bg-secondary/50 transition-colors cursor-pointer"
+                >
+                  <User className="w-4 h-4 text-primary" />
+                  <span className="text-sm text-foreground">{user.username}</span>
+                  <ChevronDown className="w-3 h-3 opacity-50" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48 bg-card cyber-border">
+                <DropdownMenuItem
+                  onClick={logout}
+                  className="cursor-pointer flex items-center gap-2"
+                >
+                  <LogOut className="w-4 h-4" />
+                  <span>Logout</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           )}
           
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={logout}
-            className="cyber-border terminal-text cursor-pointer"
-          >
-            <LogOut className="w-4 h-4 mr-1" />
-            Logout
-          </Button>
-
         </div>
       </div>
     </header>

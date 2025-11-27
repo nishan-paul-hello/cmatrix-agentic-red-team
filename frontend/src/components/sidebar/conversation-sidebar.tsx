@@ -118,12 +118,6 @@ export function ConversationSidebar({ className, isOpen = true, onToggle }: Conv
           onClick={() => {}} // TODO: Implement search focus or modal
         />
 
-        <SidebarItem 
-          icon={Shield} 
-          label="CVE Search" 
-          onClick={() => router.push('/tools/cve')} 
-        />
-
         {/* Placeholder items from design */}
         {/* <SidebarItem icon={Library} label="Library" /> */}
         {/* <SidebarItem icon={FolderKanban} label="Projects" /> */}
