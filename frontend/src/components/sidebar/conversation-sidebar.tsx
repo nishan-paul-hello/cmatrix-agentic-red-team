@@ -33,8 +33,7 @@ export function ConversationSidebar({ className, isOpen = true, onToggle }: Conv
     if (!searchQuery.trim()) return conversations;
 
     return conversations.filter(conversation =>
-      conversation.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (conversation.last_message && conversation.last_message.toLowerCase().includes(searchQuery.toLowerCase()))
+      conversation.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
   }, [conversations, searchQuery]);
 

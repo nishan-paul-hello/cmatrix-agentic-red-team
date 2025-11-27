@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { MoreVertical, Edit2, Trash2, MessageSquare } from 'lucide-react';
+import { MoreVertical, Edit2, Trash2 } from 'lucide-react';
 import type { Conversation } from '@/types/conversation.types';
 import { useConversations } from '@/contexts/conversation-context';
 import { Button } from '@/components/ui/button';
@@ -95,8 +95,6 @@ export function ConversationItem({ conversation, isActive, onClick }: Conversati
         )}
         onClick={onClick}
       >
-        <MessageSquare className="h-4 w-4 text-muted-foreground" />
-
         <div className="flex-1 min-w-0">
           {isEditing ? (
             <Input
@@ -114,50 +112,36 @@ export function ConversationItem({ conversation, isActive, onClick }: Conversati
               {conversation.name}
             </div>
           )}
-
-          {conversation.last_message && (
-            <div className="truncate text-xs text-muted-foreground">
-              {conversation.last_message}
-            </div>
-          )}
         </div>
 
-        <div className="flex items-center gap-1">
-          {(conversation.message_count ?? 0) > 0 && (
-            <span className="text-xs text-muted-foreground">
-              {conversation.message_count}
-            </span>
-          )}
-
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <MoreVertical className="h-3 w-3" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={handleEdit}>
-                <Edit2 className="h-4 w-4 mr-2" />
-                Rename
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setShowDeleteDialog(true);
-                }}
-                className="text-destructive"
-              >
-                <Trash2 className="h-4 w-4 mr-2" />
-                Delete
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <MoreVertical className="h-3 w-3" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem onClick={handleEdit}>
+              <Edit2 className="h-4 w-4 mr-2" />
+              Rename
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowDeleteDialog(true);
+              }}
+              className="text-destructive"
+            >
+              <Trash2 className="h-4 w-4 mr-2" />
+              Delete
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
       <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>

@@ -51,15 +51,13 @@ async def create_conversation(
     await db.commit()
     await db.refresh(conversation)
     
-    # Return response with message count
+    # Return response
     return ConversationResponse(
         id=conversation.id,
         name=conversation.name,
         user_id=conversation.user_id,
         created_at=conversation.created_at,
         updated_at=conversation.updated_at,
-        message_count=0,
-        last_message=None,
     )
 
 
@@ -96,37 +94,16 @@ async def list_conversations(
     conversations_db = result.scalars().all() # Renamed to avoid conflict with list 'conversations'
     
     # Build response
-    conversations = []
-    for conv in conversations_db:
-        # Get message count for each conversation (ALL messages, regardless of dashboard visibility)
-        count_query = select(func.count(ConversationHistory.id)).where(
-            ConversationHistory.conversation_id == conv.id
+    conversations = [
+        ConversationResponse(
+            id=conv.id,
+            name=conv.name,
+            user_id=conv.user_id,
+            created_at=conv.created_at,
+            updated_at=conv.updated_at,
         )
-        count_result = await db.execute(count_query)
-        message_count = count_result.scalar_one()
-
-        # Get last message for each conversation (ALL messages)
-        last_message_query = select(ConversationHistory.content).where(
-            ConversationHistory.conversation_id == conv.id
-        ).order_by(desc(ConversationHistory.created_at)).limit(1)
-        last_message_result = await db.execute(last_message_query)
-        last_message = last_message_result.scalar_one_or_none()
-        
-        # Truncate last message for preview
-        if last_message and len(last_message) > 100:
-            last_message = last_message[:100] + "..."
-        
-        conversations.append(
-            ConversationResponse(
-                id=conv.id,
-                name=conv.name,
-                user_id=conv.user_id,
-                created_at=conv.created_at,
-                updated_at=conv.updated_at,
-                message_count=message_count,
-                last_message=last_message,
-            )
-        )
+        for conv in conversations_db
+    ]
     
     # Get total count for pagination metadata
     total_query = select(func.count(Conversation.id)).where(
@@ -227,26 +204,6 @@ async def update_conversation(
     conversation.name = conversation_data.name
     await db.commit()
     await db.refresh(conversation)
-    
-    # Get message count
-    count_query = select(func.count(ConversationHistory.id)).where(
-        ConversationHistory.conversation_id == conversation.id,
-        ConversationHistory.is_visible_in_dashboard == True # Only count visible messages
-    )
-    count_result = await db.execute(count_query)
-    message_count = count_result.scalar()
-    
-    # Get last message
-    last_message_query = select(ConversationHistory.content).where(
-        ConversationHistory.conversation_id == conversation.id,
-        ConversationHistory.is_visible_in_dashboard == True
-    ).order_by(desc(ConversationHistory.created_at)).limit(1)
-    last_message_result = await db.execute(last_message_query)
-    last_message = last_message_result.scalar_one_or_none()
-
-    # Truncate last message for preview
-    if last_message and len(last_message) > 100:
-        last_message = last_message[:100] + "..."
 
     return ConversationResponse(
         id=conversation.id,
@@ -254,8 +211,6 @@ async def update_conversation(
         user_id=conversation.user_id,
         created_at=conversation.created_at,
         updated_at=conversation.updated_at,
-        message_count=message_count,
-        last_message=last_message,
     )
 
 

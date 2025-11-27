@@ -84,8 +84,6 @@ class ConversationResponse(BaseModel):
     user_id: int
     created_at: datetime
     updated_at: datetime
-    message_count: Optional[int] = Field(default=0, description="Number of messages in conversation")
-    last_message: Optional[str] = Field(default=None, description="Preview of last message")
     
     class Config:
         from_attributes = True
@@ -113,9 +111,7 @@ class ConversationListResponse(BaseModel):
                         "name": "Security Scan Discussion",
                         "user_id": 1,
                         "created_at": "2025-11-20T00:00:00",
-                        "updated_at": "2025-11-20T01:00:00",
-                        "message_count": 5,
-                        "last_message": "The scan completed successfully..."
+                        "updated_at": "2025-11-20T01:00:00"
                     }
                 ],
                 "total": 1
