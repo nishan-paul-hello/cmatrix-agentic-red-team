@@ -30,7 +30,5 @@ def setup_logging(log_level: Optional[str] = None) -> None:
         colorize=True,
     )
     
+    # File handler
     logger.info(f"Logging configured with level: {level}")
-
-
-

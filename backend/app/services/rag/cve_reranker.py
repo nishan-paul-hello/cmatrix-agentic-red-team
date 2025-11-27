@@ -149,7 +149,7 @@ class CVEReranker:
     """
     
     # Model configuration
-    DEFAULT_MODEL = "BAAI/bge-reranker-large"  # State-of-the-art cross-encoder
+    DEFAULT_MODEL = "cross-encoder/ms-marco-MiniLM-L-6-v2"  # Faster, lighter model
     BATCH_SIZE = 32  # Optimal batch size for inference
     MAX_CANDIDATES = 100  # Maximum candidates to rerank
     
@@ -243,6 +243,16 @@ class CVEReranker:
             RerankingResult with ranked CVEs and explanations
         """
         start_time = datetime.now()
+        
+        # Normalize candidates (handle NVD structure where data is in 'cve' key)
+        if candidates:
+            normalized_candidates = []
+            for cand in candidates:
+                if "cve" in cand:
+                    normalized_candidates.append(cand["cve"])
+                else:
+                    normalized_candidates.append(cand)
+            candidates = normalized_candidates
         
         # Check cache
         if self.enable_cache and self._cache:
@@ -359,7 +369,11 @@ class CVEReranker:
             List of normalized scores (0.0-1.0)
         """
         # Load model if needed
-        self._load_model()
+        try:
+            self._load_model()
+        except Exception as e:
+            logger.error(f"Model loading failed: {e}, using fallback")
+            return self._fallback_semantic_scores(query, candidates)
         
         # Prepare query-document pairs
         pairs = []
@@ -425,7 +439,17 @@ class CVEReranker:
             
             # Check references for exploit indicators
             references = candidate.get("references", [])
-            ref_text = " ".join([ref.get("url", "") + " " + ref.get("tags", []) for ref in references])
+            ref_parts = []
+            for ref in references:
+                url = ref.get("url", "")
+                tags = ref.get("tags", [])
+                if isinstance(tags, list):
+                    tags_str = " ".join(tags)
+                else:
+                    tags_str = str(tags)
+                ref_parts.append(f"{url} {tags_str}")
+            
+            ref_text = " ".join(ref_parts)
             ref_text_lower = ref_text.lower()
             
             if "exploit" in ref_text_lower:

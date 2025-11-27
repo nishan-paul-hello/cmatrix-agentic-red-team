@@ -39,7 +39,9 @@ services:
       - "3000:3000"
     environment:
       - NODE_ENV=development
-      - PYTHON_BACKEND_URL=http://backend:8000
+      - PYTHON_BACKEND_URL=http://host.docker.internal:8000
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     volumes:
       # Mount entire frontend for hot reload
       - ./frontend:/app

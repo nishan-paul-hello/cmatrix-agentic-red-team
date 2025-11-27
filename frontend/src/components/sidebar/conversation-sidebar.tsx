@@ -1,13 +1,14 @@
 "use client";
 
 import React from 'react';
-import { Plus, Search, MessageSquare, PanelLeft, SquarePen, Library, FolderKanban } from 'lucide-react';
+import { Plus, Search, MessageSquare, PanelLeft, SquarePen, Library, FolderKanban, Shield } from 'lucide-react';
 import { useConversations } from '@/contexts/conversation-context';
 import { ConversationItem } from './conversation-item';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { useRouter } from 'next/navigation';
 
 interface ConversationSidebarProps {
   className?: string;
@@ -16,6 +17,7 @@ interface ConversationSidebarProps {
 }
 
 export function ConversationSidebar({ className, isOpen = true, onToggle }: ConversationSidebarProps) {
+  const router = useRouter();
   const {
     conversations,
     activeConversation,
@@ -114,6 +116,12 @@ export function ConversationSidebar({ className, isOpen = true, onToggle }: Conv
           icon={Search} 
           label="Search chats" 
           onClick={() => {}} // TODO: Implement search focus or modal
+        />
+
+        <SidebarItem 
+          icon={Shield} 
+          label="CVE Search" 
+          onClick={() => router.push('/tools/cve')} 
         />
 
         {/* Placeholder items from design */}

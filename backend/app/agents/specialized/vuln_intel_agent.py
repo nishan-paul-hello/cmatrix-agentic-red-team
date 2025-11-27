@@ -15,12 +15,16 @@ from datetime import datetime, timedelta
 from app.agents.base.subgraph import BaseAgentSubgraph
 from app.services.llm.providers import LLMProvider
 from app.services.rag import CVEGraphTraversal
+from app.services.rag.cve_reranker import get_cve_reranker, RankingStrategy
+from app.services.rag.self_correction import get_self_correction_service, CorrectionAction
+from app.services.nvd import fetch_cves_from_nvd
+from app.services.rag.cve_search import get_smart_cve_search_service
 import asyncio
 import json
+from functools import partial
 
 
 # Tool implementations (keeping existing logic)
-
 
 @tool
 def search_cve(keyword: str, limit: int = 5) -> str:
@@ -44,54 +48,39 @@ def search_cve(keyword: str, limit: int = 5) -> str:
         # Clamp limit between 1 and 10
         limit = max(1, min(limit, 10))
         
-        # Use NVD API (requires no authentication for basic queries)
-        url = "https://services.nvd.nist.gov/rest/json/cves/2.0"
-        params = {
-            "keywordSearch": keyword,
-            "resultsPerPage": limit
-        }
+        vulnerabilities = fetch_cves_from_nvd(keyword, limit)
         
-        response = requests.get(url, params=params, timeout=10)
+        if not vulnerabilities:
+            return f"No CVEs found for keyword: {keyword}"
         
-        if response.status_code == 200:
-            data = response.json()
-            vulnerabilities = data.get("vulnerabilities", [])
+        results = [f"CVE Search Results for '{keyword}' (Top {len(vulnerabilities)} results):"]
+        results.append("")
+        
+        for vuln in vulnerabilities:
+            cve = vuln.get("cve", {})
+            cve_id = cve.get("id", "Unknown")
+            descriptions = cve.get("descriptions", [])
+            description = descriptions[0].get("value", "No description") if descriptions else "No description"
             
-            if not vulnerabilities:
-                return f"No CVEs found for keyword: {keyword}"
+            # Get severity if available
+            metrics = cve.get("metrics", {})
+            cvss_v3 = metrics.get("cvssMetricV31", [])
+            severity = "Unknown"
+            score = "N/A"
             
-            results = [f"CVE Search Results for '{keyword}' (Top {len(vulnerabilities)} results):"]
+            if cvss_v3:
+                cvss_data = cvss_v3[0].get("cvssData", {})
+                severity = cvss_data.get("baseSeverity", "Unknown")
+                score = cvss_data.get("baseScore", "N/A")
+            
+            results.append(f"🔴 {cve_id}")
+            results.append(f"   Severity: {severity} (Score: {score})")
+            results.append(f"   Description: {description[:200]}...")
             results.append("")
+        
+        results.append(f"Source: NVD (National Vulnerability Database)")
+        return "\n".join(results)
             
-            for vuln in vulnerabilities:
-                cve = vuln.get("cve", {})
-                cve_id = cve.get("id", "Unknown")
-                descriptions = cve.get("descriptions", [])
-                description = descriptions[0].get("value", "No description") if descriptions else "No description"
-                
-                # Get severity if available
-                metrics = cve.get("metrics", {})
-                cvss_v3 = metrics.get("cvssMetricV31", [])
-                severity = "Unknown"
-                score = "N/A"
-                
-                if cvss_v3:
-                    cvss_data = cvss_v3[0].get("cvssData", {})
-                    severity = cvss_data.get("baseSeverity", "Unknown")
-                    score = cvss_data.get("baseScore", "N/A")
-                
-                results.append(f"🔴 {cve_id}")
-                results.append(f"   Severity: {severity} (Score: {score})")
-                results.append(f"   Description: {description[:200]}...")
-                results.append("")
-            
-            results.append(f"Source: NVD (National Vulnerability Database)")
-            return "\n".join(results)
-        else:
-            return f"CVE search failed: HTTP {response.status_code}"
-            
-    except requests.Timeout:
-        return "CVE search timed out. The NVD API may be slow."
     except Exception as e:
         return f"CVE search failed: {str(e)}"
 
@@ -328,6 +317,73 @@ def explore_cve_relationships(cve_id: str, depth: int = 2) -> str:
         return f"Graph traversal failed: {str(e)}"
 
 
+def smart_cve_search(
+    keyword: str, 
+    limit: int = 10, 
+    strategy: str = "balanced",
+    llm_provider: LLMProvider = None
+) -> str:
+    """
+    Smart CVE search with semantic reranking and self-correction.
+    
+    Args:
+        keyword: Search query
+        limit: Max results
+        strategy: Ranking strategy (balanced, security_first, recency_first, semantic_only)
+        llm_provider: Injected LLM provider
+    """
+    try:
+        # Run async logic in sync wrapper
+        async def _run_smart_search():
+            service = get_smart_cve_search_service(llm_provider)
+            data = await service.search(keyword, limit, strategy)
+            
+            result = data.get("results")
+            current_query = data.get("query")
+            is_corrected = data.get("is_corrected")
+            feedback = data.get("feedback")
+            
+            # Format output
+            output = [f"Smart CVE Search Results for '{current_query}' (Strategy: {strategy}):"]
+            if is_corrected:
+                output.append(f"(Corrected from original query: '{keyword}')")
+            output.append("")
+            
+            if not result or not result.ranked_cves:
+                output.append("No relevant CVEs found.")
+                if feedback:
+                    output.append(f"Feedback: {feedback}")
+                return "\n".join(output)
+                
+            for cve in result.ranked_cves:
+                output.append(f"🔴 {cve.cve_id} (Score: {cve.final_score:.2f})")
+                output.append(f"   {cve.explanation}")
+                
+                # Extract description from raw data
+                desc = "No description"
+                if cve.raw_data and "descriptions" in cve.raw_data:
+                    desc = cve.raw_data["descriptions"][0].get("value", "No description")
+                output.append(f"   Description: {desc[:150]}...")
+                output.append("")
+                
+            return "\n".join(output)
+
+        # Run the async function
+        try:
+            loop = asyncio.get_event_loop()
+        except RuntimeError:
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            
+        if loop.is_running():
+            return asyncio.run(_run_smart_search())
+        else:
+            return loop.run_until_complete(_run_smart_search())
+            
+    except Exception as e:
+        return f"Smart search failed: {str(e)}"
+
+
 
 # Legacy tool list for backward compatibility
 VULN_INTEL_TOOLS = [search_cve, get_recent_cves, check_vulnerability_by_product]
@@ -419,6 +475,20 @@ class VulnIntelAgentSubgraph(BaseAgentSubgraph):
                     "cve_id": "The starting CVE ID (e.g., 'CVE-2021-44228')",
                     "depth": "How many hops to traverse (default: 2, max: 3)"
                 }
+            },
+            {
+                "name": "smart_cve_search",
+                "function": partial(smart_cve_search, llm_provider=self.llm_provider),
+                "description": (
+                    "Advanced CVE search with semantic reranking and self-correction. "
+                    "Use this for complex queries or when standard search fails. "
+                    "It automatically improves the query if results are poor."
+                ),
+                "parameters": {
+                    "keyword": "Search query",
+                    "limit": "Max results (default: 10)",
+                    "strategy": "Ranking strategy: 'balanced', 'security_first', 'recency_first', 'semantic_only'"
+                }
             }
         ]
     
@@ -437,6 +507,12 @@ Your core responsibilities:
 3. **Vulnerability Correlation**: Connect CVEs to affected products and versions
 4. **Impact Analysis**: Assess the business impact and exploitability of vulnerabilities
 5. **Patch Prioritization**: Help prioritize remediation based on risk and criticality
+
+You have access to a **Smart CVE Search** tool that uses semantic reranking and self-correction.
+Use `smart_cve_search` for:
+- Vague or complex queries (e.g., "critical apache bugs last year")
+- When you need high-relevance results
+- When standard search returns too many or irrelevant results
 
 Your expertise includes:
 - CVE database navigation and research (NVD, MITRE)
