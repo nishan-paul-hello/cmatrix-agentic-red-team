@@ -1,15 +1,13 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Settings, ChevronDown, CheckCircle2 } from "lucide-react";
+import { ChevronDown, CheckCircle2 } from "lucide-react";
 import { llmService, ConfigurationProfile } from "@/lib/api/llm";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { SettingsSidebar } from "@/components/chat/settings-sidebar";
 
 interface ConfigurationProfileSelectorProps {
   onProfileChange?: () => void;
@@ -22,7 +20,6 @@ export function ConfigurationProfileSelector({
 }: ConfigurationProfileSelectorProps) {
   const [profiles, setProfiles] = useState<ConfigurationProfile[]>([]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const fetchProfiles = async () => {
     try {
@@ -60,79 +57,55 @@ export function ConfigurationProfileSelector({
   }, [activeProfile?.id, onActiveProfileChange]); // Only trigger if ID changes
 
   return (
-    <>
-      <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
-        <DropdownMenuTrigger asChild>
-          <Button
-            variant="outline"
-            size="sm"
-            className="gap-2 cyber-border terminal-text min-w-[180px] justify-between cursor-pointer"
-            onClick={() => {
-              fetchProfiles();
-            }}
-          >
-            <span className="truncate">
-              {activeProfile?.name || "Select Profile"}
-            </span>
-            <ChevronDown className="w-4 h-4 opacity-50" />
-          </Button>
-        </DropdownMenuTrigger>
-        
-        <DropdownMenuContent align="start" className="w-[320px] bg-card cyber-border max-h-[400px] overflow-y-auto custom-scrollbar">
-          {profiles.length === 0 ? (
-            <div className="text-center text-muted-foreground py-8 px-4 text-sm">
-              No profiles configured. Click Settings to create one.
-            </div>
-          ) : (
-            profiles.map((profile) => {
-              const isActive = activeProfile?.id === profile.id;
-              return (
-                <DropdownMenuItem
-                  key={profile.id}
-                  className={`p-3 cursor-pointer focus:bg-secondary/50 ${
-                    isActive ? "bg-primary/10" : ""
-                  }`}
-                  onClick={() => handleActivateProfile(profile.id)}
-                >
-                  <div className="flex items-center justify-between w-full">
-                    <div className="flex-1 min-w-0">
-                      <div className="font-medium truncate">{profile.name}</div>
-                      <div className="text-xs text-muted-foreground truncate">
-                        {profile.api_provider} • {profile.selected_model_name || "No model"}
-                      </div>
+    <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
+      <DropdownMenuTrigger asChild>
+        <Button
+          variant="outline"
+          size="sm"
+          className="gap-2 cyber-border terminal-text min-w-[180px] justify-between cursor-pointer"
+          onClick={() => {
+            fetchProfiles();
+          }}
+        >
+          <span className="truncate">
+            {activeProfile?.name || "Select Profile"}
+          </span>
+          <ChevronDown className="w-4 h-4 opacity-50" />
+        </Button>
+      </DropdownMenuTrigger>
+      
+      <DropdownMenuContent align="start" className="w-[320px] bg-card cyber-border max-h-[400px] overflow-y-auto custom-scrollbar">
+        {profiles.length === 0 ? (
+          <div className="text-center text-muted-foreground py-8 px-4 text-sm">
+            No profiles configured. Click Settings to create one.
+          </div>
+        ) : (
+          profiles.map((profile) => {
+            const isActive = activeProfile?.id === profile.id;
+            return (
+              <DropdownMenuItem
+                key={profile.id}
+                className={`p-3 cursor-pointer focus:bg-secondary/50 ${
+                  isActive ? "bg-primary/10" : ""
+                }`}
+                onClick={() => handleActivateProfile(profile.id)}
+              >
+                <div className="flex items-center justify-between w-full">
+                  <div className="flex-1 min-w-0">
+                    <div className="font-medium truncate">{profile.name}</div>
+                    <div className="text-xs text-muted-foreground truncate">
+                      {profile.api_provider} • {profile.selected_model_name || "No model"}
                     </div>
-                    {isActive && (
-                      <CheckCircle2 className="w-5 h-5 text-primary ml-2 flex-shrink-0" />
-                    )}
                   </div>
-                </DropdownMenuItem>
-              );
-            })
-          )}
-          
-          <DropdownMenuSeparator />
-          
-          <DropdownMenuItem
-            className="cursor-pointer focus:bg-secondary/50"
-            onClick={() => {
-              setIsDropdownOpen(false);
-              setIsSidebarOpen(true);
-            }}
-          >
-            <Settings className="w-4 h-4 mr-2" />
-            <span>Settings</span>
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-
-      <SettingsSidebar
-        isOpen={isSidebarOpen}
-        onClose={() => setIsSidebarOpen(false)}
-        onProfilesChange={() => {
-          fetchProfiles();
-          onProfileChange?.();
-        }}
-      />
-    </>
+                  {isActive && (
+                    <CheckCircle2 className="w-5 h-5 text-primary ml-2 flex-shrink-0" />
+                  )}
+                </div>
+              </DropdownMenuItem>
+            );
+          })
+        )}
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

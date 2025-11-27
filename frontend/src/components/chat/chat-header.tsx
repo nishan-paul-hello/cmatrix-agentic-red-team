@@ -17,12 +17,14 @@ import { useAuth } from "@/contexts/auth-context";
 import { BrandLogo } from "@/components/brand-logo";
 import { ConfigurationProfileSelector } from "./configuration-profile-selector";
 import { ModelDropdown } from "./model-dropdown";
+import { SettingsSidebar } from "./settings-sidebar";
 import { useState } from "react";
 import { ConfigurationProfile } from "@/lib/api/llm";
 
 export function ChatHeader() {
   const { user, logout } = useAuth();
   const [activeProfile, setActiveProfile] = useState<ConfigurationProfile | null>(null);
+  const [isSettingsSidebarOpen, setIsSettingsSidebarOpen] = useState(false);
 
   return (
     <header className="border-b border-border bg-card cyber-border">
@@ -40,6 +42,9 @@ export function ChatHeader() {
           <div className="flex items-center gap-2">
             <ConfigurationProfileSelector 
               onActiveProfileChange={setActiveProfile}
+              onProfileChange={() => {
+                // Refresh profiles when changed
+              }}
             />
             <ModelDropdown activeProfile={activeProfile} />
             <Button 
@@ -60,6 +65,14 @@ export function ChatHeader() {
                 <Shield className="w-4 h-4" />
                 CVE Search
               </a>
+            </Button>
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={() => setIsSettingsSidebarOpen(true)}
+              className="cursor-pointer cyber-border terminal-text hover:bg-secondary/50 transition-colors"
+            >
+              <Settings className="w-4 h-4" />
             </Button>
           </div>
 
@@ -91,6 +104,14 @@ export function ChatHeader() {
           
         </div>
       </div>
+
+      <SettingsSidebar
+        isOpen={isSettingsSidebarOpen}
+        onClose={() => setIsSettingsSidebarOpen(false)}
+        onProfilesChange={() => {
+          // Profiles will be refreshed automatically by the selector
+        }}
+      />
     </header>
   );
 }
