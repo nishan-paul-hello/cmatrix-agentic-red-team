@@ -32,6 +32,10 @@ psycopg[pool]==3.2.3
 qdrant-client==1.12.1
 sentence-transformers==3.3.1
 
+# Scientific Computing (required by sentence-transformers and A/B testing)
+scipy==1.11.4
+numpy==1.26.2
+
 # HTTP clients
 requests==2.32.3
 httpx==0.27.2
