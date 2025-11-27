@@ -26,14 +26,26 @@ def search_cve(keyword: str, limit: int = 5) -> str:
     
     Args:
         keyword: Search keyword (e.g., "apache", "nginx", "openssl")
-        limit: Maximum number of results to return
+        limit: Maximum number of results to return (default: 5, max: 10)
     """
     try:
+        # Ensure keyword is a string
+        keyword = str(keyword).strip()
+        
+        # Ensure limit is an integer (handle string inputs from LLM)
+        try:
+            limit = int(limit)
+        except (ValueError, TypeError):
+            limit = 5  # Default fallback
+        
+        # Clamp limit between 1 and 10
+        limit = max(1, min(limit, 10))
+        
         # Use NVD API (requires no authentication for basic queries)
         url = "https://services.nvd.nist.gov/rest/json/cves/2.0"
         params = {
             "keywordSearch": keyword,
-            "resultsPerPage": min(limit, 10)
+            "resultsPerPage": limit
         }
         
         response = requests.get(url, params=params, timeout=10)
@@ -90,6 +102,20 @@ def get_recent_cves(days: int = 7, severity: str = "HIGH") -> str:
         severity: Minimum severity level (LOW, MEDIUM, HIGH, CRITICAL)
     """
     try:
+        # Ensure days is an integer
+        try:
+            days = int(days)
+        except (ValueError, TypeError):
+            days = 7  # Default fallback
+        
+        # Clamp days between 1 and 365
+        days = max(1, min(days, 365))
+        
+        # Ensure severity is a string and uppercase
+        severity = str(severity).strip().upper()
+        if severity not in ["LOW", "MEDIUM", "HIGH", "CRITICAL"]:
+            severity = "HIGH"  # Default fallback
+        
         # Calculate date range
         end_date = datetime.now()
         start_date = end_date - timedelta(days=days)
@@ -157,6 +183,10 @@ def check_vulnerability_by_product(product: str, version: str = "") -> str:
         version: Optional version number
     """
     try:
+        # Ensure product and version are strings
+        product = str(product).strip()
+        version = str(version).strip() if version else ""
+        
         search_term = f"{product} {version}".strip()
         
         url = "https://services.nvd.nist.gov/rest/json/cves/2.0"
