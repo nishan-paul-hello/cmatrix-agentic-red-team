@@ -101,6 +101,7 @@ async def run_sync_task(full: bool, days: int, api_key: Optional[str]):
         logger.exception(f"Background NVD sync failed: {e}")
 
 from app.core.config import settings
+from app.api.v1.endpoints.settings import get_nvd_api_key_from_db
 
 @router.post("/sync", response_model=SyncResponse)
 async def sync_cves(
@@ -108,7 +109,8 @@ async def sync_cves(
     full: bool = False,
     days: int = 7,
     api_key: Optional[str] = None,
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
 ):
     """
     Trigger NVD CVE synchronization.
@@ -117,7 +119,9 @@ async def sync_cves(
     - **days**: Number of days to look back for incremental sync (default: 7).
     - **api_key**: Optional NVD API key for higher rate limits.
     """
-    # Use configured API key if not provided
+    # Priority: 1. Provided api_key, 2. Database, 3. Config file
+    if not api_key:
+        api_key = await get_nvd_api_key_from_db(db)
     if not api_key:
         api_key = settings.NVD_API_KEY
         
