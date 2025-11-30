@@ -5,6 +5,9 @@ from typing import Dict, Any, Optional, List
 from dataclasses import dataclass
 import time
 from loguru import logger
+from langchain_core.language_models import BaseChatModel
+from langchain_core.messages import BaseMessage, AIMessage, HumanMessage, SystemMessage
+from langchain_core.outputs import ChatResult, ChatGeneration
 
 
 @dataclass
@@ -183,3 +186,47 @@ class ToolCallingProviderMixin:
             Response with tool calls if any
         """
         raise NotImplementedError("Tool calling not implemented for this provider")
+
+
+class LangChainAdapter(BaseChatModel):
+    """Adapter to make LLMProvider compatible with LangChain BaseChatModel."""
+    
+    provider: Any = None  # Type hint as Any to avoid Pydantic validation issues with abstract base classes
+    
+    def __init__(self, provider: LLMProvider):
+        """Initialize the adapter."""
+        super().__init__()
+        self.provider = provider
+        
+    def _generate(
+        self,
+        messages: List[BaseMessage],
+        stop: Optional[List[str]] = None,
+        run_manager: Optional[Any] = None,
+        **kwargs: Any,
+    ) -> ChatResult:
+        """Generate a response from the model."""
+        # Convert LangChain messages to Provider messages
+        provider_messages = []
+        for msg in messages:
+            if isinstance(msg, SystemMessage):
+                provider_messages.append(Message(role="system", content=msg.content))
+            elif isinstance(msg, HumanMessage):
+                provider_messages.append(Message(role="user", content=msg.content))
+            elif isinstance(msg, AIMessage):
+                provider_messages.append(Message(role="assistant", content=msg.content))
+            else:
+                provider_messages.append(Message(role="user", content=str(msg.content)))
+                
+        # Invoke provider
+        response_text = self.provider.invoke(provider_messages)
+        
+        # Create ChatResult
+        message = AIMessage(content=response_text)
+        generation = ChatGeneration(message=message)
+        return ChatResult(generations=[generation])
+        
+    @property
+    def _llm_type(self) -> str:
+        """Return type of llm."""
+        return "cmatrix_adapter"

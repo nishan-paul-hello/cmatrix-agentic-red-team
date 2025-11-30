@@ -19,6 +19,16 @@
         "web",
         "auth"
       ]
+    },
+    {
+      "target": "45.33.32.156",
+      "authorized_by": "cli_user",
+      "authorized_at": "2025-11-30T13:29:46.258574",
+      "scope": [
+        "network",
+        "web",
+        "auth"
+      ]
     }
   ]
 }

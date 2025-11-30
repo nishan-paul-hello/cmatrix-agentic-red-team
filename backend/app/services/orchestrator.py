@@ -15,6 +15,9 @@ from app.utils.helpers import clean_response
 from app.core.config import settings
 from app.services.checkpoint import get_checkpointer
 from app.services.supervisor import get_supervisor_service, DelegationStrategy
+from app.services.reasoning.reflection import get_self_reflection, ReflectionTrigger
+from app.services.reasoning.rewoo import get_rewoo_planner
+from app.services.reasoning.tree_of_thoughts import get_tree_of_thoughts
 
 
 # Agent state
@@ -31,6 +34,15 @@ class AgentState(TypedDict):
     skip_llm: bool  # Flag to skip LLM after approved tool execution
     agent_delegation: dict  # Agent delegation results from supervisor
     use_agents: bool  # Flag to use specialized agents instead of tools
+    reflection_count: int  # Track number of reflection loops
+    reflection_results: list  # Store reflection history
+    # Advanced Reasoning Patterns (Phase 3.2)
+    selected_strategy: dict  # Tree of Thoughts selected strategy
+    strategy_evaluation: dict  # Strategy evaluation results
+    execution_plan: dict  # ReWOO execution plan
+    plan_steps: list  # Individual plan steps
+    user_preferences: dict  # User preferences for strategy selection
+    reasoning_metrics: dict  # Performance telemetry
 
 
 class OrchestratorService:
@@ -61,12 +73,15 @@ class OrchestratorService:
         """Initialize the orchestrator service."""
         self.tool_registry = get_tool_registry()
         self.supervisor = get_supervisor_service()
+        self.reflection = None  # Will be initialized with LLM
+        self.rewoo = None  # Will be initialized with LLM
+        self.tot = None  # Will be initialized with LLM (Tree of Thoughts)
         self.checkpointer = None  # Will be lazily initialized
         self.workflow = self._create_workflow()
         self.llm_provider = None  # Will be set per request
         self.current_user_id = None  # Store current user_id for tool injection
         self.current_conversation_id = None  # Store current conversation_id for tool injection
-        logger.info("Orchestrator service initialized with multi-agent supervision and checkpointing")
+        logger.info("Orchestrator service initialized with multi-agent supervision, advanced reasoning, and checkpointing")
 
     
     def _should_continue(self, state: AgentState) -> Literal["delegate", "tools", "approval_gate", "end"]:
@@ -675,6 +690,314 @@ class OrchestratorService:
                 "diagram_edges": state.get("diagram_edges", [])
             }
 
+    def _strategy_selection_node(self, state: AgentState) -> Dict[str, Any]:
+        """
+        Tree of Thoughts - Evaluate multiple strategies and select the best one.
+        
+        This node generates 3-5 candidate strategies, evaluates each against
+        task requirements, and selects the optimal approach based on user
+        preferences and task characteristics.
+        
+        Args:
+            state: Current agent state
+            
+        Returns:
+            Updated state with selected strategy
+        """
+        logger.info("🔵 Strategy selection node called")
+        
+        if not self.tot:
+            logger.info("⏭️ ToT not initialized yet, skipping strategy selection (will use default strategy)")
+            # Return state unchanged to continue workflow
+            return {
+                "animation_steps": state.get("animation_steps", []),
+                "diagram_nodes": state.get("diagram_nodes", []),
+                "diagram_edges": state.get("diagram_edges", [])
+            }
+        
+        # Extract user task
+        user_task = None
+        for msg in state.get("messages", []):
+            if isinstance(msg, HumanMessage):
+                user_task = msg.content
+                break
+        
+        if not user_task:
+            logger.debug("No user task found for strategy selection")
+            return {
+                "animation_steps": state.get("animation_steps", []),
+                "diagram_nodes": state.get("diagram_nodes", []),
+                "diagram_edges": state.get("diagram_edges", [])
+            }
+        
+        # Get user preferences from state (if any)
+        user_preferences = state.get("user_preferences", {})
+        
+        try:
+            logger.info(f"🌳 Starting strategy evaluation for task: {user_task[:100]}...")
+            
+            # Evaluate strategies
+            evaluation = self.tot.evaluate_strategies(
+                task=user_task,
+                num_strategies=3,
+                user_preferences=user_preferences,
+                context={"conversation_history": state.get("messages", [])}
+            )
+            
+            selected = evaluation.selected_strategy
+            
+            logger.info(
+                f"🌳 Strategy selected: {selected.name} "
+                f"(score: {selected.overall_score:.2f}, type: {selected.strategy_type.value})"
+            )
+            
+            # Create animation step
+            animation_steps = state.get("animation_steps", []).copy()
+            animation_steps.append({
+                "step": len(animation_steps) + 1,
+                "title": "Strategy Selection",
+                "description": f"Selected: {selected.name} - {selected.description}",
+                "duration": 1500,
+                "icon": "🌳",
+                "bgColor": "#e8f5e8"
+            })
+            
+            # Convert dataclass to dict for state storage
+            from dataclasses import asdict
+            
+            return {
+                "selected_strategy": asdict(selected),
+                "strategy_evaluation": asdict(evaluation),
+                "animation_steps": animation_steps,
+                "diagram_nodes": state.get("diagram_nodes", []),
+                "diagram_edges": state.get("diagram_edges", [])
+            }
+            
+        except Exception as e:
+            logger.error(f"❌ Strategy selection failed: {e}", exc_info=True)
+            # Return state unchanged to continue workflow
+            return {
+                "animation_steps": state.get("animation_steps", []),
+                "diagram_nodes": state.get("diagram_nodes", []),
+                "diagram_edges": state.get("diagram_edges", [])
+            }
+    
+    def _planning_node(self, state: AgentState) -> Dict[str, Any]:
+        """
+        ReWOO - Generate execution plan upfront.
+        
+        This node creates a complete execution plan before tool execution,
+        reducing the need for iterative LLM calls during execution.
+        
+        Args:
+            state: Current agent state
+            
+        Returns:
+            Updated state with execution plan
+        """
+        logger.info("🔵 Planning node called")
+        
+        if not self.rewoo:
+            logger.info("⏭️ ReWOO not initialized yet, skipping planning (will use reactive execution)")
+            # Return state unchanged to continue workflow
+            return {
+                "animation_steps": state.get("animation_steps", []),
+                "diagram_nodes": state.get("diagram_nodes", []),
+                "diagram_edges": state.get("diagram_edges", [])
+            }
+        
+        # Extract user task
+        user_task = None
+        for msg in state.get("messages", []):
+            if isinstance(msg, HumanMessage):
+                user_task = msg.content
+                break
+        
+        if not user_task:
+            logger.debug("No user task found for planning")
+            return {
+                "animation_steps": state.get("animation_steps", []),
+                "diagram_nodes": state.get("diagram_nodes", []),
+                "diagram_edges": state.get("diagram_edges", [])
+            }
+        
+        # Build context from selected strategy (if available)
+        context = {}
+        selected_strategy = state.get("selected_strategy")
+        if selected_strategy:
+            context["strategy"] = selected_strategy.get("strategy_type")
+            context["estimated_duration"] = selected_strategy.get("estimated_duration")
+            logger.debug(f"Using strategy context: {context}")
+        
+        try:
+            logger.info(f"📋 Starting plan generation for task: {user_task[:100]}...")
+            
+            # Generate plan
+            plan = self.rewoo.generate_plan(
+                task=user_task,
+                context=context,
+                max_steps=10
+            )
+            
+            logger.info(
+                f"📋 Plan generated: {len(plan.steps)} steps "
+                f"(confidence: {plan.confidence:.2f}, cached: {plan.cached})"
+            )
+            
+            # Create animation step
+            animation_steps = state.get("animation_steps", []).copy()
+            animation_steps.append({
+                "step": len(animation_steps) + 1,
+                "title": "Execution Planning",
+                "description": f"Generated {len(plan.steps)}-step plan with {plan.confidence:.0%} confidence",
+                "duration": 1500,
+                "icon": "📋",
+                "bgColor": "#e3f2fd"
+            })
+            
+            # Convert plan to dict for state storage
+            from dataclasses import asdict
+            
+            return {
+                "execution_plan": asdict(plan),
+                "plan_steps": [asdict(step) for step in plan.steps],
+                "animation_steps": animation_steps,
+                "diagram_nodes": state.get("diagram_nodes", []),
+                "diagram_edges": state.get("diagram_edges", [])
+            }
+            
+        except Exception as e:
+            logger.error(f"❌ Planning failed: {e}", exc_info=True)
+            # Return state unchanged to continue workflow
+            return {
+                "animation_steps": state.get("animation_steps", []),
+                "diagram_nodes": state.get("diagram_nodes", []),
+                "diagram_edges": state.get("diagram_edges", [])
+            }
+
+    def _reflection_node(self, state: AgentState) -> Dict[str, Any]:
+        """
+        Self-Reflection node - critiques and improves execution.
+        
+        This node analyzes the results of tool execution using the Self-Reflection
+        module. If gaps are detected (e.g., missed ports, incomplete data),
+        it generates new tool calls to fix them automatically.
+        
+        Args:
+            state: Current agent state
+            
+        Returns:
+            Updated state with critique and potential new tool calls
+        """
+        # Initialize reflection service if needed
+        if not self.reflection and self.llm_provider:
+            # We need a LangChain-compatible LLM for the service
+            # For now, we'll assume the provider has a .llm property or similar
+            # If not, we might need an adapter. 
+            # The current LLMProvider wraps the call, so we pass the provider itself
+            # and let the service handle it, or we pass a wrapper.
+            # NOTE: The reasoning modules expect a LangChain BaseChatModel.
+            # We will use the provider's underlying model if available, or a wrapper.
+            # For this implementation, we'll assume the provider IS compatible or we wrap it.
+            # Since LLMProvider is custom, we'll use a simple adapter.
+            from langchain_core.language_models import FakeListChatModel
+            # Temporary: Use the provider directly if it supports invoke
+            self.reflection = get_self_reflection(self.llm_provider)
+
+        if not self.reflection:
+            logger.warning("Reflection service not available (no LLM)")
+            return {"reflection_count": state.get("reflection_count", 0)}
+
+        # Get context
+        messages = state.get("messages", [])
+        tool_calls = state.get("tool_calls", [])
+        
+        # Extract user task
+        user_task = "Unknown task"
+        for msg in messages:
+            if isinstance(msg, HumanMessage):
+                user_task = msg.content
+                break
+                
+        # Extract execution results (last tool output)
+        last_message = messages[-1] if messages else None
+        execution_results = {}
+        
+        if isinstance(last_message, HumanMessage) and "TOOL_RESULTS" in str(last_message.content):
+            execution_results = {"output": last_message.content}
+        elif isinstance(last_message, AIMessage):
+            execution_results = {"output": last_message.content}
+            
+        # Perform reflection
+        try:
+            result = self.reflection.reflect(
+                task=user_task,
+                execution_results=execution_results,
+                trigger=ReflectionTrigger.TASK_COMPLETION
+            )
+            
+            logger.info(f"🔍 Reflection complete: Score={result.quality_score:.2f}, Gaps={len(result.gaps)}")
+            
+            # Update state with results
+            reflection_results = state.get("reflection_results", [])
+            reflection_results.append(result)
+            
+            # If quality is low and we haven't looped too many times, auto-correct
+            current_count = state.get("reflection_count", 0)
+            MAX_REFLECTIONS = 2
+            
+            if result.quality_score < 0.8 and current_count < MAX_REFLECTIONS:
+                # Generate improvements
+                improvements = result.get_high_priority_actions()
+                if improvements:
+                    logger.info(f"🛠️ Auto-correcting with {len(improvements)} actions")
+                    
+                    # Convert improvements to tool calls
+                    new_tool_calls = []
+                    critique_text = f"🔍 **Self-Correction Triggered**\n\nI detected some gaps in the previous execution:\n"
+                    
+                    for gap in result.gaps:
+                        critique_text += f"- {gap.description}\n"
+                    
+                    critique_text += "\nI am automatically running the following fixes:\n"
+                    
+                    for imp in improvements:
+                        critique_text += f"- {imp.description} (using `{imp.tool_name}`)\n"
+                        new_tool_calls.append((imp.tool_name, imp.parameters))
+                    
+                    # Create a message to inform the user (and LLM)
+                    critique_msg = AIMessage(content=critique_text)
+                    
+                    # We need to construct a message that LOOKS like it has tool calls
+                    # so the 'tools' node picks it up.
+                    # The 'tools' node parses tool calls from the last message.
+                    # We'll format the critique message to include the tool calls in the expected format.
+                    # Or better, we manually inject the tool calls into the state for the next step.
+                    # But 'tools' node reads from message content.
+                    
+                    # Let's format the tool calls into the message content
+                    tool_call_text = ""
+                    for name, args in new_tool_calls:
+                        tool_call_text += f"TOOL: {name}({', '.join(f'{k}={v}' for k, v in args.items())})\n"
+                    
+                    final_msg = AIMessage(content=f"{critique_text}\n\n{tool_call_text}")
+                    
+                    return {
+                        "messages": [final_msg],
+                        "reflection_count": current_count + 1,
+                        "reflection_results": reflection_results
+                    }
+            
+            # If good enough or max retries reached
+            return {
+                "reflection_count": current_count,
+                "reflection_results": reflection_results
+            }
+            
+        except Exception as e:
+            logger.error(f"Reflection failed: {e}")
+            return {"reflection_count": state.get("reflection_count", 0)}
+
     def _create_workflow(self):
         """
         Create and configure the orchestrator workflow with multi-agent supervision.
@@ -689,14 +1012,26 @@ class OrchestratorService:
         Returns:
             Compiled workflow with checkpointing, approval gates, and agent delegation
         """
-        # Build graph
+        # Build graph with Advanced Reasoning Patterns
         workflow = StateGraph(AgentState)
+        
+        # Add all nodes
+        workflow.add_node("strategy_selection", self._strategy_selection_node)
+        workflow.add_node("planning", self._planning_node)
         workflow.add_node("agent", self._call_model)
         workflow.add_node("delegate", self._delegate_to_agents)
         workflow.add_node("tools", self._call_tools)
         workflow.add_node("approval_gate", self._approval_gate)
+        workflow.add_node("reflection", self._reflection_node)
 
-        workflow.set_entry_point("agent")
+        # Set entry point to strategy selection (Phase 3.2)
+        workflow.set_entry_point("strategy_selection")
+        
+        # Strategy Selection → Planning
+        workflow.add_edge("strategy_selection", "planning")
+        
+        # Planning → Agent
+        workflow.add_edge("planning", "agent")
         
         # Add conditional edges with approval gate and delegation support
         workflow.add_conditional_edges(
@@ -720,25 +1055,27 @@ class OrchestratorService:
             }
         )
         
-        # After tools execute, check if we should delegate to agents or continue
-        def _after_tools_routing(state: AgentState) -> Literal["delegate", "agent", "end"]:
-            """Route after tool execution."""
-            # If skip_llm is True (approved tool execution), go to END
-            if state.get("skip_llm", False):
-                return "end"
-            
-            # Check if we should try agent delegation
-            if state.get("use_agents", False):
-                return "end"  # Agents already handled it
-            
-            # Normal flow: back to agent for interpretation
-            return "agent"
+        # After tools execute, route to reflection
+        workflow.add_edge("tools", "reflection")
         
+        # After reflection, check if we need to loop back to tools or go to agent
+        def _after_reflection_routing(state: AgentState) -> Literal["tools", "agent", "end"]:
+            """Route after reflection."""
+            messages = state.get("messages", [])
+            last_msg = messages[-1]
+            
+            # If the last message contains TOOL calls (injected by reflection), go to tools
+            if isinstance(last_msg, AIMessage) and "TOOL:" in last_msg.content:
+                return "tools"
+            
+            # Otherwise, go back to agent for final synthesis
+            return "agent"
+
         workflow.add_conditional_edges(
-            "tools",
-            _after_tools_routing,
+            "reflection",
+            _after_reflection_routing,
             {
-                "delegate": "delegate",
+                "tools": "tools",
                 "agent": "agent",
                 "end": END
             }
@@ -752,7 +1089,7 @@ class OrchestratorService:
         try:
             self.checkpointer = get_checkpointer()
             if self.checkpointer is not None:
-                logger.info("Workflow compiled with multi-agent supervision, PostgreSQL checkpointing, and approval gates")
+                logger.info("✅ Workflow compiled with Advanced Reasoning (ToT+ReWOO+Reflection), multi-agent supervision, PostgreSQL checkpointing, and approval gates")
                 return workflow.compile(checkpointer=self.checkpointer, interrupt_after=["approval_gate"])
             else:
                 logger.warning("⚠️ No checkpointer available - approval gates will not work properly!")
@@ -798,6 +1135,15 @@ class OrchestratorService:
         # Set the provider for this request
         self.llm_provider = llm_provider
         
+        # Initialize reasoning services with the provider
+        # We wrap the provider to match the LangChain interface expected by reasoning modules
+        from app.services.llm.providers.base import LangChainAdapter
+        langchain_llm = LangChainAdapter(llm_provider)
+        
+        self.reflection = get_self_reflection(langchain_llm)
+        self.rewoo = get_rewoo_planner(langchain_llm, self.tool_registry.get_all_tools())
+        self.tot = get_tree_of_thoughts(langchain_llm)
+        
         # Store user_id and conversation_id for auto-injection into memory tools
         self.current_user_id = user_id
         self.current_conversation_id = conversation_id
@@ -833,7 +1179,14 @@ class OrchestratorService:
                 "tool_calls": [],
                 "animation_steps": [],
                 "diagram_nodes": [],
-                "diagram_edges": []
+                "diagram_edges": [],
+                # Advanced Reasoning Patterns (Phase 3.2)
+                "selected_strategy": {},
+                "strategy_evaluation": {},
+                "execution_plan": {},
+                "plan_steps": [],
+                "user_preferences": {},  # Can be populated from user settings
+                "reasoning_metrics": {}
             }
             
             # Invoke with config if checkpointing is enabled
@@ -921,6 +1274,13 @@ class OrchestratorService:
 _orchestrator_service: Optional[OrchestratorService] = None
 
 
+def reset_orchestrator_service():
+    """Reset the global orchestrator service instance (for testing/reload)."""
+    global _orchestrator_service
+    _orchestrator_service = None
+    logger.info("🔄 Orchestrator service reset - will recreate on next request")
+
+
 def get_orchestrator_service() -> OrchestratorService:
     """
     Get or create global orchestrator service instance.
@@ -929,7 +1289,10 @@ def get_orchestrator_service() -> OrchestratorService:
         OrchestratorService instance
     """
     global _orchestrator_service
+    # TEMPORARY: Always recreate to pick up new workflow
+    # TODO: Remove this after Phase 3.2 is stable
     if _orchestrator_service is None:
+        logger.info("🆕 Creating new orchestrator service instance")
         _orchestrator_service = OrchestratorService()
     return _orchestrator_service
 

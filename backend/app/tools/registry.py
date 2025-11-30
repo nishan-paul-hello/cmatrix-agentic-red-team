@@ -40,7 +40,7 @@ class ToolRegistry:
             for tool in tool_list:
                 self._tools[tool.name] = {
                     "description": tool.description,
-                    "parameters": list(tool.args.keys()),
+                    "parameters": tool.args,  # Store full schema dict
                     "function": tool.func if hasattr(tool, "func") else tool
                 }
     
@@ -89,7 +89,13 @@ class ToolRegistry:
         """
         definitions = []
         for name, tool_info in self._tools.items():
-            params = ", ".join(tool_info["parameters"])
+            # Handle both dict (schema) and list (legacy) for backward compatibility
+            params_data = tool_info["parameters"]
+            if isinstance(params_data, dict):
+                params = ", ".join(params_data.keys())
+            else:
+                params = ", ".join(params_data)
+                
             definitions.append(f"- {name}({params}): {tool_info['description']}")
         return "\n".join(definitions)
 
