@@ -1,9 +1,7 @@
 "use client";
 
-import { Zap } from "lucide-react";
-import { TypewriterText } from "@/components/shared/typewriter-text";
+import Image from "next/image";
 import { MESSAGES } from "@/constants/messages";
-import { siteConfig } from "@/config/site.config";
 
 interface WelcomeScreenProps {
   onSuggestionClick: (prompt: string) => void;
@@ -18,14 +16,17 @@ export function WelcomeScreen({ onSuggestionClick }: WelcomeScreenProps) {
     <div className="flex flex-col items-center justify-center h-full gap-8 py-12">
       <div className="flex items-center justify-center gap-6">
         <div className="flex items-center justify-center w-20 h-20 rounded-2xl bg-secondary cyber-border">
-          <Zap className="w-10 h-10 text-secondary-foreground" />
+          <Image 
+            src="/icon.svg" 
+            alt="CMatrix Logo" 
+            width={40} 
+            height={40}
+            className="object-contain"
+          />
         </div>
         <div className="text-left">
-          <h2 className="text-4xl font-bold text-balance terminal-text glow-primary">
-            <TypewriterText
-              text={MESSAGES.WELCOME.TITLE}
-              speed={siteConfig.ui.animations.typewriterSpeed}
-            />
+          <h2 className="text-4xl font-bold text-balance terminal-text">
+            {MESSAGES.WELCOME.TITLE}
           </h2>
           <div className="text-sm text-muted-foreground terminal-text mt-2">
             {MESSAGES.WELCOME.SUBTITLE}
@@ -37,9 +38,6 @@ export function WelcomeScreen({ onSuggestionClick }: WelcomeScreenProps) {
         <p className="text-muted-foreground text-pretty max-w-md terminal-text">
           {MESSAGES.WELCOME.DESCRIPTION}
         </p>
-        <div className="text-xs text-muted-foreground terminal-text">
-          {MESSAGES.SYSTEM.OPERATIONAL}
-        </div>
       </div>
 
       <div className="grid gap-3 mt-4 sm:grid-cols-2">

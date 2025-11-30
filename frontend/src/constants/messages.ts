@@ -4,13 +4,12 @@
 
 export const MESSAGES = {
   SYSTEM: {
-    OPERATIONAL: "[SYSTEM STATUS: OPERATIONAL] [AGENT: CMATRIX-CORE-V1]",
     PROCESSING: "[PROCESSING QUERY...]",
     SECURITY_NOTICE: "CMatrix can make mistakes. Check important info.",
   },
 
   LABELS: {
-    NEURAL_INTERFACE: "AI-Powered VAPT Tool",
+    NEURAL_INTERFACE: "Agentic AI for Security",
   },
 
   PLACEHOLDERS: {
@@ -25,8 +24,8 @@ export const MESSAGES = {
 
   WELCOME: {
     TITLE: "CMatrix",
-    SUBTITLE: "AI-Powered VAPT Tool",
-    DESCRIPTION: "Agent capabilities: security scanning, system monitoring, log analysis, configuration deployment.",
+    SUBTITLE: "Agentic AI for Security",
+    DESCRIPTION: "AI-powered platform that unifies Red, Blue, and Purple teaming into one autonomous system for continuous attack simulation, defense, and security validation.",
   },
 
   SUGGESTIONS: {
