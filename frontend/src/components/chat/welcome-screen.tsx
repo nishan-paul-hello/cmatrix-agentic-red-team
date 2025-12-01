@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { BrandLogo } from "@/components/brand-logo";
 import { MESSAGES } from "@/constants/messages";
 
 interface WelcomeScreenProps {
@@ -16,13 +16,7 @@ export function WelcomeScreen({ onSuggestionClick }: WelcomeScreenProps) {
     <div className="flex flex-col items-center justify-center h-full gap-8 py-12">
       <div className="flex items-center justify-center gap-6">
         <div className="flex items-center justify-center w-20 h-20 rounded-2xl bg-secondary cyber-border">
-          <Image 
-            src="/icon.svg" 
-            alt="CMatrix Logo" 
-            width={40} 
-            height={40}
-            className="object-contain"
-          />
+          <BrandLogo size={48} />
         </div>
         <div className="text-left">
           <h2 className="text-4xl font-bold text-balance terminal-text">
