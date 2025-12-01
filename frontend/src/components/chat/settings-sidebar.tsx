@@ -1,7 +1,21 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { X, Upload, Download, Plus, Trash2, Save, Loader2, CheckCircle2, Settings } from "lucide-react";
+import { 
+  X, 
+  Upload, 
+  Download, 
+  Plus, 
+  Trash2, 
+  Save, 
+  Loader2, 
+  CheckCircle2, 
+  Edit2,
+  Key,
+  Sparkles,
+  Filter,
+  ChevronDown
+} from "lucide-react";
 import { llmService, ConfigurationProfile, Provider, AvailableModel } from "@/lib/api/llm";
 import {
   Select,
@@ -26,6 +40,7 @@ export function SettingsSidebar({
   const [providers, setProviders] = useState<Provider[]>([]);
   const [isCreating, setIsCreating] = useState(false);
   const [editingProfileId, setEditingProfileId] = useState<number | null>(null);
+  const [selectedProviderFilter, setSelectedProviderFilter] = useState<string>("all");
 
   // Form state
   const [profileName, setProfileName] = useState("");
@@ -86,13 +101,12 @@ export function SettingsSidebar({
 
   const handleSaveProfile = async () => {
     if (!profileName || !selectedProvider || !apiKey) {
-      alert("Please fill all fields (Model selection is optional)");
+      alert("Please fill all required fields");
       return;
     }
 
     try {
       if (editingProfileId) {
-        // Update existing profile
         await llmService.updateProfile(editingProfileId, {
           name: profileName,
           api_provider: selectedProvider,
@@ -100,7 +114,6 @@ export function SettingsSidebar({
           selected_model_name: selectedModelName,
         });
       } else {
-        // Create new profile
         await llmService.createProfile({
           name: profileName,
           api_provider: selectedProvider,
@@ -124,7 +137,6 @@ export function SettingsSidebar({
     setSelectedProvider(profile.api_provider);
     setSelectedModelName(profile.selected_model_name || "");
     setIsCreating(true);
-    // Note: We can't pre-fill API key since it's masked
   };
 
   const handleActivateProfile = async (profileId: number) => {
@@ -180,198 +192,441 @@ export function SettingsSidebar({
     }
   };
 
+  // Filter profiles by provider
+  const filteredProfiles = selectedProviderFilter === "all" 
+    ? profiles 
+    : profiles.filter(p => p.api_provider === selectedProviderFilter);
+
+  // Group profiles by provider for display
+  const profilesByProvider = profiles.reduce((acc, profile) => {
+    if (!acc[profile.api_provider]) {
+      acc[profile.api_provider] = [];
+    }
+    acc[profile.api_provider].push(profile);
+    return acc;
+  }, {} as Record<string, ConfigurationProfile[]>);
+
+  // Get provider name from ID
+  const getProviderName = (providerId: string) => {
+    const name = providers.find(p => p.id === providerId)?.name || providerId;
+    return name === "Kilo AI" ? "Kilo Code" : name;
+  };
+
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/50" onClick={onClose}>
+    <div 
+      className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm transition-opacity duration-300" 
+      onClick={onClose}
+    >
       <div
-        className="fixed right-0 top-0 h-full w-full max-w-2xl bg-card border-l border-border overflow-y-auto"
+        className="fixed right-0 top-0 h-full w-full max-w-xl bg-gradient-to-br from-card via-card to-card/95 border-l border-border/50 shadow-2xl overflow-hidden flex flex-col animate-in slide-in-from-right duration-300"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="p-6">
-          {/* Header */}
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold">Configuration Settings</h2>
-            <Button variant="ghost" size="icon" onClick={onClose}>
+        {/* Header */}
+        <div className="flex-shrink-0 px-5 py-4 border-b border-border/50 bg-muted/20">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2.5">
+              <div className="p-1.5 rounded-lg bg-secondary">
+                <Sparkles className="w-4 h-4 text-primary/80" />
+              </div>
+              <div>
+                <h2 className="text-xl font-bold tracking-tight">LLM Configuration</h2>
+                <p className="text-xs text-muted-foreground mt-0.5">Manage AI profiles</p>
+              </div>
+            </div>
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              onClick={onClose}
+              className="hover:bg-destructive/10 hover:text-destructive transition-colors cursor-pointer"
+            >
               <X className="w-5 h-5" />
             </Button>
           </div>
+        </div>
 
-          {/* Import/Export */}
-          <div className="flex gap-2 mb-6">
-            <Button variant="outline" size="sm" onClick={handleExport}>
-              <Download className="w-4 h-4 mr-2" />
-              Export Config
-            </Button>
-            <label>
-              <Button variant="outline" size="sm" asChild>
-                <span>
-                  <Upload className="w-4 h-4 mr-2" />
-                  Import Config
-                </span>
-              </Button>
-              <input
-                type="file"
-                accept=".json"
-                className="hidden"
-                onChange={handleImport}
-              />
-            </label>
+        {/* Scrollable Content */}
+        <div className="flex-1 overflow-y-auto px-5 py-5">
+          {/* Import/Export Section */}
+          <div className="mb-6">
+            <div className="flex items-center gap-2 p-3 rounded-lg bg-secondary/30 border border-border/50">
+              <div className="flex gap-2 flex-1">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={handleExport}
+                  className="hover:bg-primary/10 hover:text-primary hover:border-primary/50 transition-all cursor-pointer"
+                >
+                  <Download className="w-4 h-4 mr-2" />
+                  Export
+                </Button>
+                <label>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    asChild
+                    className="hover:bg-primary/10 hover:text-primary hover:border-primary/50 transition-all cursor-pointer"
+                  >
+                    <span>
+                      <Upload className="w-4 h-4 mr-2" />
+                      Import
+                    </span>
+                  </Button>
+                  <input
+                    type="file"
+                    accept=".json"
+                    className="hidden"
+                    onChange={handleImport}
+                  />
+                </label>
+              </div>
+              <div className="text-[10px] text-muted-foreground">
+                Backup & restore configurations
+              </div>
+            </div>
           </div>
 
-          {/* Profiles List */}
+          {/* Profiles Section */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="text-lg font-semibold">Configuration Profiles</h3>
+              <div>
+                <h3 className="text-base font-semibold">Your Profiles</h3>
+              </div>
               <Button
-                variant="outline"
+                onClick={() => {
+                  resetForm();
+                  setIsCreating(true);
+                }}
                 size="sm"
-                onClick={() => setIsCreating(true)}
+                className="h-7 rounded-full px-3 text-xs font-medium bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground border border-primary/10 hover:border-primary transition-all duration-300 shadow-sm hover:shadow-primary/25 active:scale-95 cursor-pointer"
               >
-                <Plus className="w-4 h-4 mr-2" />
-                Add Profile
+                <Plus className="w-3.5 h-3.5" />
+                New
               </Button>
             </div>
 
-            {/* Create/Edit Profile Form */}
-            {isCreating && (
-              <div className="p-4 border border-border rounded-lg bg-secondary/20 space-y-3">
-                <h4 className="font-medium">
-                  {editingProfileId ? "Edit Profile" : "New Profile"}
-                </h4>
-                
-                <Input
-                  placeholder="Profile name"
-                  value={profileName}
-                  onChange={(e) => setProfileName(e.target.value)}
-                />
-
+            {/* Provider Filter */}
+            {profiles.length > 0 && (
+              <div className="flex items-center gap-2 p-2.5 rounded-lg bg-secondary/20 border border-border/30">
+                <Filter className="w-3.5 h-3.5 text-muted-foreground" />
                 <Select
-                  value={selectedProvider}
-                  onValueChange={setSelectedProvider}
+                  value={selectedProviderFilter}
+                  onValueChange={setSelectedProviderFilter}
                 >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select API Provider" />
+                  <SelectTrigger className="h-7 w-[160px] bg-background/50 border-border/50 text-xs cursor-pointer">
+                    <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {providers.map((provider) => (
-                      <SelectItem key={provider.id} value={provider.id}>
-                        {provider.name}
+                    <SelectItem value="all" className="cursor-pointer">All Providers ({profiles.length})</SelectItem>
+                    {Object.keys(profilesByProvider).map((providerId) => (
+                      <SelectItem key={providerId} value={providerId} className="cursor-pointer">
+                        {getProviderName(providerId)} ({profilesByProvider[providerId].length})
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
+              </div>
+            )}
 
-                <Input
-                  type="password"
-                  placeholder="API Key"
-                  value={apiKey}
-                  onChange={(e) => setApiKey(e.target.value)}
-                />
-
-                <Button
-                  size="sm"
-                  onClick={handleFetchModels}
-                  disabled={!selectedProvider || !apiKey || isFetchingModels}
-                  className="w-full"
-                >
-                  {isFetchingModels ? (
-                    <>
-                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                      Fetching Models...
-                    </>
-                  ) : (
-                    "Fetch Available Models"
-                  )}
-                </Button>
-
-                {availableModels.length > 0 && (
-                  <Select
-                    value={selectedModelName}
-                    onValueChange={setSelectedModelName}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select Model" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {availableModels.map((model) => (
-                        <SelectItem key={model.id} value={model.id}>
-                          {model.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                )}
-
-                <div className="flex gap-2">
+            {/* New Profile Form (Inline) */}
+            {isCreating && !editingProfileId && (
+              <div className="p-4 border border-border rounded-lg bg-muted/30 shadow-sm space-y-3 animate-in fade-in slide-in-from-top-4 duration-200">
+                <div className="flex items-center justify-between mb-1">
+                  <h4 className="text-sm font-semibold flex items-center gap-1.5">
+                    <Plus className="w-3.5 h-3.5 text-primary" />
+                    New Profile
+                  </h4>
                   <Button
+                    variant="ghost"
                     size="sm"
-                    onClick={handleSaveProfile}
-                    disabled={!profileName || !selectedProvider || !apiKey}
-                  >
-                    <Save className="w-4 h-4 mr-2" />
-                    Save
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="outline"
                     onClick={resetForm}
+                    className="h-7 text-xs text-muted-foreground hover:text-foreground cursor-pointer"
                   >
                     Cancel
                   </Button>
                 </div>
+                
+                <div className="space-y-2.5">
+                  <Input
+                    placeholder="Profile name *"
+                    value={profileName}
+                    onChange={(e) => setProfileName(e.target.value)}
+                    className="bg-background/50 h-9 text-sm"
+                  />
+
+                  <Select value={selectedProvider} onValueChange={setSelectedProvider}>
+                    <SelectTrigger className="bg-background/50 h-9 text-sm cursor-pointer">
+                      <SelectValue placeholder="Choose provider *" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {providers.map((provider) => (
+                        <SelectItem key={provider.id} value={provider.id} className="cursor-pointer">
+                          {provider.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+
+                  <Input
+                    type="password"
+                    placeholder="API Key *"
+                    value={apiKey}
+                    onChange={(e) => setApiKey(e.target.value)}
+                    className="bg-background/50 font-mono text-xs h-9"
+                  />
+
+                  <Button
+                    size="sm"
+                    onClick={handleFetchModels}
+                    disabled={!selectedProvider || !apiKey || isFetchingModels}
+                    className="w-full h-9 cursor-pointer"
+                    variant="secondary"
+                  >
+                    {isFetchingModels ? (
+                      <>
+                        <Loader2 className="w-3.5 h-3.5 mr-2 animate-spin" />
+                        Loading Models...
+                      </>
+                    ) : (
+                      <>
+                        <ChevronDown className="w-3.5 h-3.5 mr-2" />
+                        Load Models
+                      </>
+                    )}
+                  </Button>
+
+                  {availableModels.length > 0 && (
+                    <Select value={selectedModelName} onValueChange={setSelectedModelName}>
+                      <SelectTrigger className="bg-background/50 h-9 text-sm cursor-pointer">
+                        <SelectValue placeholder="Select model (optional)" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {availableModels.map((model) => (
+                          <SelectItem key={model.id} value={model.id} className="cursor-pointer">
+                            {model.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
+                </div>
+
+                <Button
+                  onClick={handleSaveProfile}
+                  disabled={!profileName || !selectedProvider || !apiKey}
+                  className="w-full h-9 cursor-pointer"
+                  size="sm"
+                >
+                  <Save className="w-3.5 h-3.5 mr-2" />
+                  Create Profile
+                </Button>
               </div>
             )}
 
-            {/* Existing Profiles */}
-            {profiles.map((profile) => (
-              <div
-                key={profile.id}
-                className="p-4 border border-border rounded-lg space-y-2"
-              >
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h4 className="font-medium">{profile.name}</h4>
-                    {profile.is_active ? (
-                      <span className="text-xs text-primary flex items-center gap-1">
-                        <CheckCircle2 className="w-3 h-3" /> Active
-                      </span>
-                    ) : (
-                      <Button
-                        variant="link"
-                        size="sm"
-                        className="h-auto p-0 text-xs text-muted-foreground hover:text-primary"
-                        onClick={() => handleActivateProfile(profile.id)}
-                      >
-                        Set Active
-                      </Button>
-                    )}
-                  </div>
-                  <div className="flex gap-2">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => handleEditProfile(profile)}
-                    >
-                      <Settings className="w-4 h-4" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => handleDeleteProfile(profile.id)}
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
-                  </div>
+            {/* Profiles List */}
+            {filteredProfiles.length === 0 && !isCreating ? (
+              <div className="text-center py-12 px-4">
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-secondary/50 mb-4">
+                  <Sparkles className="w-8 h-8 text-muted-foreground" />
                 </div>
-
-                <div className="text-sm text-muted-foreground space-y-1">
-                  <div>Provider: {profile.api_provider}</div>
-                  <div>API Key: {profile.api_key_masked}</div>
-                  <div>Model: {profile.selected_model_name || "Not selected"}</div>
-                </div>
+                <h4 className="text-lg font-medium mb-2">No profiles yet</h4>
+                <p className="text-sm text-muted-foreground mb-6">
+                  Create your first LLM configuration profile to get started
+                </p>
+                <Button onClick={() => setIsCreating(true)} className="cursor-pointer">
+                  <Plus className="w-4 h-4 mr-2" />
+                  Create Profile
+                </Button>
               </div>
-            ))}
+            ) : (
+              <div className="space-y-2.5">
+                {filteredProfiles.map((profile) => {
+                  const isEditing = editingProfileId === profile.id;
+                  
+                  return (
+                    <div
+                      key={profile.id}
+                      className={`group relative rounded-xl border transition-all duration-200 ${
+                        isEditing
+                          ? 'border-primary/30 bg-muted/30 shadow-md'
+                          : profile.is_active
+                          ? 'border-primary/30 bg-primary/5 shadow-sm hover:shadow-md'
+                          : 'border-border/40 bg-card hover:border-border/60 hover:bg-secondary/20 hover:shadow-sm'
+                      }`}
+                    >
+                      {isEditing ? (
+                        // Inline Edit Form
+                        <div className="p-4 space-y-3 animate-in fade-in duration-200">
+                          <div className="flex items-center justify-between mb-1">
+                            <h4 className="text-sm font-semibold flex items-center gap-1.5">
+                              <Edit2 className="w-3.5 h-3.5 text-primary" />
+                              Edit Profile
+                            </h4>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={resetForm}
+                              className="h-7 text-xs text-muted-foreground hover:text-foreground cursor-pointer"
+                            >
+                              Cancel
+                            </Button>
+                          </div>
+                          
+                          <div className="space-y-2.5">
+                            <Input
+                              placeholder="Profile name *"
+                              value={profileName}
+                              onChange={(e) => setProfileName(e.target.value)}
+                              className="bg-background/50 h-9 text-sm"
+                            />
+
+                            <Select value={selectedProvider} onValueChange={setSelectedProvider}>
+                              <SelectTrigger className="bg-background/50 h-9 text-sm cursor-pointer">
+                                <SelectValue placeholder="Choose provider *" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {providers.map((provider) => (
+                                  <SelectItem key={provider.id} value={provider.id} className="cursor-pointer">
+                                    {provider.name}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+
+                            <Input
+                              type="password"
+                              placeholder="API Key * (leave empty to keep current)"
+                              value={apiKey}
+                              onChange={(e) => setApiKey(e.target.value)}
+                              className="bg-background/50 font-mono text-xs h-9"
+                            />
+
+                            <Button
+                              size="sm"
+                              onClick={handleFetchModels}
+                              disabled={!selectedProvider || !apiKey || isFetchingModels}
+                              className="w-full h-9 cursor-pointer"
+                              variant="secondary"
+                            >
+                              {isFetchingModels ? (
+                                <>
+                                  <Loader2 className="w-3.5 h-3.5 mr-2 animate-spin" />
+                                  Loading Models...
+                                </>
+                              ) : (
+                                <>
+                                  <ChevronDown className="w-3.5 h-3.5 mr-2" />
+                                  Load Models
+                                </>
+                              )}
+                            </Button>
+
+                            {availableModels.length > 0 && (
+                              <Select value={selectedModelName} onValueChange={setSelectedModelName}>
+                                <SelectTrigger className="bg-background/50 h-9 text-sm cursor-pointer">
+                                  <SelectValue placeholder="Select model (optional)" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {availableModels.map((model) => (
+                                    <SelectItem key={model.id} value={model.id} className="cursor-pointer">
+                                      {model.name}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            )}
+                          </div>
+
+                          <Button
+                            onClick={handleSaveProfile}
+                            disabled={!profileName || !selectedProvider}
+                            className="w-full h-9 cursor-pointer"
+                            size="sm"
+                          >
+                            <Save className="w-3.5 h-3.5 mr-2" />
+                            Update Profile
+                          </Button>
+                        </div>
+                      ) : (
+                        // Profile Display
+                        <div className="px-3.5 py-3">
+                          <div className="flex items-center gap-3">
+                            {/* Status Indicator & Icon */}
+                            <div className="relative flex-shrink-0">
+                              <div className={`p-2 rounded-lg transition-colors ${
+                                profile.is_active ? 'bg-primary/10' : 'bg-secondary'
+                              }`}>
+                                <Key className={`w-4 h-4 ${
+                                  profile.is_active ? 'text-primary' : 'text-muted-foreground'
+                                }`} />
+                              </div>
+                              {profile.is_active && (
+                                <div className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-primary rounded-full border-2 border-card" />
+                              )}
+                            </div>
+
+                            {/* Profile Info */}
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2 mb-1">
+                                <h4 className="font-semibold text-sm truncate">{profile.name}</h4>
+                              </div>
+                              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                                <span className="font-medium text-foreground/70">
+                                  {getProviderName(profile.api_provider)}
+                                </span>
+                                {profile.selected_model_name && (
+                                  <>
+                                    <span className="text-border">•</span>
+                                    <span className="truncate">{profile.selected_model_name}</span>
+                                  </>
+                                )}
+                              </div>
+                            </div>
+
+                            {/* Actions */}
+                            <div className="flex items-center gap-2 flex-shrink-0">
+                              {profile.is_active ? (
+                                <div className="h-7 px-3 flex items-center justify-center text-xs font-medium bg-primary/10 text-primary rounded-md border border-primary/20 select-none">
+                                  Active
+                                </div>
+                              ) : (
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() => handleActivateProfile(profile.id)}
+                                  className="h-7 px-3 text-xs border-primary/30 hover:bg-primary/10 hover:text-primary hover:border-primary/50 transition-all cursor-pointer"
+                                >
+                                  Active
+                                </Button>
+                              )}
+                              <div className="flex items-center gap-0.5">
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  onClick={() => handleEditProfile(profile)}
+                                  className="h-8 w-8 text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors cursor-pointer"
+                                >
+                                  <Edit2 className="w-3.5 h-3.5" />
+                                </Button>
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  onClick={() => handleDeleteProfile(profile.id)}
+                                  className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors cursor-pointer"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                </Button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
         </div>
       </div>
