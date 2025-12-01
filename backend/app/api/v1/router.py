@@ -1,7 +1,7 @@
 """API v1 router configuration."""
 
 from fastapi import APIRouter
-from app.api.v1.endpoints import chat, health, auth, conversations, llm, jobs, approvals, cve, settings
+from app.api.v1.endpoints import chat, health, auth, conversations, llm, jobs, approvals, cve, settings, optimization
 
 api_router = APIRouter()
 
@@ -15,6 +15,7 @@ api_router.include_router(jobs.router, tags=["Jobs"])
 api_router.include_router(approvals.router, tags=["Approvals"])
 api_router.include_router(cve.router, prefix="/cve", tags=["CVE"])
 api_router.include_router(settings.router, prefix="/settings", tags=["Settings"])
+api_router.include_router(optimization.router, tags=["Optimization"])
 
 
 

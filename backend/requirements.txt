@@ -68,3 +68,7 @@ mypy==1.13.0
 # Agentic RAG (Phase 3)
 networkx==3.2.1
 cpe==1.2.1
+
+# Optimization (Phase 4.2)
+tiktoken==0.5.2  # Accurate token counting for LLMs
+locust==2.20.0  # Load testing framework
