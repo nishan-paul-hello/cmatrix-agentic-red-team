@@ -85,34 +85,83 @@ export function SettingsSidebar({
     setEditingProfileId(null);
   };
 
-  const handleFetchModels = async () => {
-    if (!selectedProvider || !apiKey) return;
-    setIsFetchingModels(true);
-    try {
-      const response = await llmService.fetchModels(selectedProvider, apiKey);
-      setAvailableModels(response.models);
-    } catch (error) {
-      console.error("Failed to fetch models", error);
-      alert("Failed to fetch models. Please check your API key.");
-    } finally {
-      setIsFetchingModels(false);
+  useEffect(() => {
+    const fetchModels = async () => {
+      if (!selectedProvider) return;
+
+      // Case 1: User provided a new API key
+      if (apiKey) {
+        setIsFetchingModels(true);
+        try {
+          const response = await llmService.fetchModels(selectedProvider, apiKey);
+          setAvailableModels(response.models);
+        } catch (error) {
+          console.error("Failed to fetch models", error);
+          setAvailableModels([]);
+        } finally {
+          setIsFetchingModels(false);
+        }
+      } 
+      // Case 2: Editing existing profile (using stored key)
+      else if (editingProfileId) {
+        const profile = profiles.find(p => p.id === editingProfileId);
+        // Only fetch if the selected provider matches the profile's provider
+        if (profile && profile.api_provider === selectedProvider) {
+          setIsFetchingModels(true);
+          try {
+            const response = await llmService.fetchProfileModels(editingProfileId);
+            setAvailableModels(response.models);
+          } catch (error) {
+            console.error("Failed to fetch stored models", error);
+          } finally {
+            setIsFetchingModels(false);
+          }
+        }
+      }
+    };
+
+    // Debounce only if typing API key
+    if (apiKey) {
+      const timer = setTimeout(fetchModels, 800);
+      return () => clearTimeout(timer);
+    } else {
+      fetchModels();
     }
-  };
+  }, [selectedProvider, apiKey, editingProfileId, profiles]);
 
   const handleSaveProfile = async () => {
-    if (!profileName || !selectedProvider || !apiKey) {
+    // Validation logic
+    const isEditing = !!editingProfileId;
+    const profile = profiles.find(p => p.id === editingProfileId);
+    const isProviderChanged = isEditing && profile?.api_provider !== selectedProvider;
+
+    // Require API key if:
+    // 1. Creating a new profile
+    // 2. Editing and provider changed
+    // 3. Editing and user explicitly cleared/changed key (handled by apiKey state being non-empty if typed, but here we check if it's required)
+    // Actually, if apiKey is empty string, it means user didn't type anything.
+    
+    const isApiKeyRequired = !isEditing || isProviderChanged;
+
+    if (!profileName || !selectedProvider || (isApiKeyRequired && !apiKey)) {
       alert("Please fill all required fields");
       return;
     }
 
     try {
       if (editingProfileId) {
-        await llmService.updateProfile(editingProfileId, {
+        const updateData: any = {
           name: profileName,
           api_provider: selectedProvider,
-          api_key: apiKey,
           selected_model_name: selectedModelName,
-        });
+        };
+        
+        // Only include API key if user entered one
+        if (apiKey) {
+          updateData.api_key = apiKey;
+        }
+
+        await llmService.updateProfile(editingProfileId, updateData);
       } else {
         await llmService.createProfile({
           name: profileName,
@@ -281,7 +330,7 @@ export function SettingsSidebar({
                   />
                 </label>
               </div>
-              <div className="text-[10px] text-muted-foreground">
+              <div className="text-xs font-medium text-foreground/80">
                 Backup & restore configurations
               </div>
             </div>
@@ -348,25 +397,27 @@ export function SettingsSidebar({
                 </div>
                 
                 <div className="space-y-2.5">
-                  <Input
-                    placeholder="Profile name *"
-                    value={profileName}
-                    onChange={(e) => setProfileName(e.target.value)}
-                    className="bg-background/50 h-9 text-sm"
-                  />
+                  <div className="grid grid-cols-2 gap-3">
+                    <Input
+                      placeholder="Profile name *"
+                      value={profileName}
+                      onChange={(e) => setProfileName(e.target.value)}
+                      className="bg-background/50 h-9 text-sm"
+                    />
 
-                  <Select value={selectedProvider} onValueChange={setSelectedProvider}>
-                    <SelectTrigger className="bg-background/50 h-9 text-sm cursor-pointer">
-                      <SelectValue placeholder="Choose provider *" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {providers.map((provider) => (
-                        <SelectItem key={provider.id} value={provider.id} className="cursor-pointer">
-                          {provider.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                    <Select value={selectedProvider} onValueChange={setSelectedProvider}>
+                      <SelectTrigger className="bg-background/50 h-9 text-sm cursor-pointer">
+                        <SelectValue placeholder="Provider *" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {providers.map((provider) => (
+                          <SelectItem key={provider.id} value={provider.id} className="cursor-pointer">
+                            {provider.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
 
                   <Input
                     type="password"
@@ -376,40 +427,37 @@ export function SettingsSidebar({
                     className="bg-background/50 font-mono text-xs h-9"
                   />
 
-                  <Button
-                    size="sm"
-                    onClick={handleFetchModels}
-                    disabled={!selectedProvider || !apiKey || isFetchingModels}
-                    className="w-full h-9 cursor-pointer"
-                    variant="secondary"
-                  >
-                    {isFetchingModels ? (
-                      <>
-                        <Loader2 className="w-3.5 h-3.5 mr-2 animate-spin" />
-                        Loading Models...
-                      </>
-                    ) : (
-                      <>
-                        <ChevronDown className="w-3.5 h-3.5 mr-2" />
-                        Load Models
-                      </>
-                    )}
-                  </Button>
-
-                  {availableModels.length > 0 && (
-                    <Select value={selectedModelName} onValueChange={setSelectedModelName}>
-                      <SelectTrigger className="bg-background/50 h-9 text-sm cursor-pointer">
+                  <Select value={selectedModelName} onValueChange={setSelectedModelName} disabled={isFetchingModels}>
+                    <SelectTrigger className="bg-background/50 h-9 text-sm cursor-pointer">
+                      {isFetchingModels ? (
+                        <div className="flex items-center text-muted-foreground">
+                          <Loader2 className="w-3.5 h-3.5 mr-2 animate-spin" />
+                          Loading models...
+                        </div>
+                      ) : (
                         <SelectValue placeholder="Select model (optional)" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {availableModels.map((model) => (
+                      )}
+                    </SelectTrigger>
+                    <SelectContent>
+                      {!selectedProvider ? (
+                        <div className="flex flex-col items-center justify-center py-3 px-2 text-center">
+                          <span className="text-xs text-muted-foreground">Please select a provider first</span>
+                        </div>
+                      ) : availableModels.length === 0 ? (
+                        <div className="flex flex-col items-center justify-center py-3 px-2 text-center">
+                          <span className="text-xs text-muted-foreground">
+                            {isFetchingModels ? "Loading models..." : "No models available"}
+                          </span>
+                        </div>
+                      ) : (
+                        availableModels.map((model) => (
                           <SelectItem key={model.id} value={model.id} className="cursor-pointer">
                             {model.name}
                           </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  )}
+                        ))
+                      )}
+                    </SelectContent>
+                  </Select>
                 </div>
 
                 <Button
@@ -474,25 +522,27 @@ export function SettingsSidebar({
                           </div>
                           
                           <div className="space-y-2.5">
-                            <Input
-                              placeholder="Profile name *"
-                              value={profileName}
-                              onChange={(e) => setProfileName(e.target.value)}
-                              className="bg-background/50 h-9 text-sm"
-                            />
+                            <div className="grid grid-cols-2 gap-3">
+                              <Input
+                                placeholder="Profile name *"
+                                value={profileName}
+                                onChange={(e) => setProfileName(e.target.value)}
+                                className="bg-background/50 h-9 text-sm"
+                              />
 
-                            <Select value={selectedProvider} onValueChange={setSelectedProvider}>
-                              <SelectTrigger className="bg-background/50 h-9 text-sm cursor-pointer">
-                                <SelectValue placeholder="Choose provider *" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {providers.map((provider) => (
-                                  <SelectItem key={provider.id} value={provider.id} className="cursor-pointer">
-                                    {provider.name}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
+                              <Select value={selectedProvider} onValueChange={setSelectedProvider}>
+                                <SelectTrigger className="bg-background/50 h-9 text-sm cursor-pointer">
+                                  <SelectValue placeholder="Provider *" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {providers.map((provider) => (
+                                    <SelectItem key={provider.id} value={provider.id} className="cursor-pointer">
+                                      {provider.name}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </div>
 
                             <Input
                               type="password"
@@ -502,40 +552,37 @@ export function SettingsSidebar({
                               className="bg-background/50 font-mono text-xs h-9"
                             />
 
-                            <Button
-                              size="sm"
-                              onClick={handleFetchModels}
-                              disabled={!selectedProvider || !apiKey || isFetchingModels}
-                              className="w-full h-9 cursor-pointer"
-                              variant="secondary"
-                            >
-                              {isFetchingModels ? (
-                                <>
-                                  <Loader2 className="w-3.5 h-3.5 mr-2 animate-spin" />
-                                  Loading Models...
-                                </>
-                              ) : (
-                                <>
-                                  <ChevronDown className="w-3.5 h-3.5 mr-2" />
-                                  Load Models
-                                </>
-                              )}
-                            </Button>
-
-                            {availableModels.length > 0 && (
-                              <Select value={selectedModelName} onValueChange={setSelectedModelName}>
-                                <SelectTrigger className="bg-background/50 h-9 text-sm cursor-pointer">
+                            <Select value={selectedModelName} onValueChange={setSelectedModelName} disabled={isFetchingModels}>
+                              <SelectTrigger className="bg-background/50 h-9 text-sm cursor-pointer">
+                                {isFetchingModels ? (
+                                  <div className="flex items-center text-muted-foreground">
+                                    <Loader2 className="w-3.5 h-3.5 mr-2 animate-spin" />
+                                    Loading models...
+                                  </div>
+                                ) : (
                                   <SelectValue placeholder="Select model (optional)" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  {availableModels.map((model) => (
+                                )}
+                              </SelectTrigger>
+                              <SelectContent>
+                                {!selectedProvider ? (
+                                  <div className="flex flex-col items-center justify-center py-3 px-2 text-center">
+                                    <span className="text-xs text-muted-foreground">Please select a provider first</span>
+                                  </div>
+                                ) : availableModels.length === 0 ? (
+                                  <div className="flex flex-col items-center justify-center py-3 px-2 text-center">
+                                    <span className="text-xs text-muted-foreground">
+                                      {isFetchingModels ? "Loading models..." : "No models available"}
+                                    </span>
+                                  </div>
+                                ) : (
+                                  availableModels.map((model) => (
                                     <SelectItem key={model.id} value={model.id} className="cursor-pointer">
                                       {model.name}
                                     </SelectItem>
-                                  ))}
-                                </SelectContent>
-                              </Select>
-                            )}
+                                  ))
+                                )}
+                              </SelectContent>
+                            </Select>
                           </div>
 
                           <Button
