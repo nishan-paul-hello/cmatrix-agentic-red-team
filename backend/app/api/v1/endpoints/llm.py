@@ -167,7 +167,6 @@ async def get_providers():
             {"id": "Cerebras", "name": "Cerebras"},
             {"id": "Gemini", "name": "Gemini"},
             {"id": "Hugging Face", "name": "Hugging Face"},
-            {"id": "Kilo Code", "name": "Kilo Code"},
             {"id": "Openrouter", "name": "Openrouter"},
         ]
     }

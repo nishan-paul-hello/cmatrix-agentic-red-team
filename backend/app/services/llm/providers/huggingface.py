@@ -5,6 +5,7 @@ import requests
 from typing import List, Any, Dict
 from loguru import logger
 
+from app.models.llm import AvailableModel
 from .base import LLMProvider, ProviderConfig, Message, StreamingProviderMixin
 
 
@@ -24,12 +25,10 @@ class HuggingFaceProvider(LLMProvider, StreamingProviderMixin):
         if not self.config.api_key:
             raise ValueError("API key must be specified for HuggingFace provider")
 
+        # Model is optional when just fetching available models
         if not self.config.model:
-            raise ValueError("Model must be specified for HuggingFace provider")
-
-        # Add provider suffix for DeepHat model if not present
-        if "DeepHat" in self.config.model and ":featherless-ai" not in self.config.model:
-            self.model = f"{self.config.model}:featherless-ai"
+            logger.warning("No model specified for HuggingFace provider (OK for fetching models)")
+            self.model = None
         else:
             self.model = self.config.model
 
@@ -102,19 +101,41 @@ class HuggingFaceProvider(LLMProvider, StreamingProviderMixin):
             logger.error(f"Error in HuggingFace streaming: {str(e)}")
             raise
 
-    def get_available_models(self) -> List[str]:
+    def get_available_models(self) -> List[AvailableModel]:
         """
-        Get list of available models from HuggingFace.
-
-        Note: This is a placeholder as HuggingFace Router API doesn't provide
-        a models endpoint. We'll return known models.
+        Get list of available models from HuggingFace Router API.
 
         Returns:
-            List of model names
+            List of AvailableModel objects
         """
-        # HuggingFace Router API doesn't have a public models endpoint
-        # Return known models as fallback
-        return ["DeepHat/DeepHat-V1-7B", "microsoft/DialoGPT-medium", "facebook/blenderbot-400M-distill"]
+        try:
+            url = "https://router.huggingface.co/v1/models"
+            headers = {
+                "Authorization": f"Bearer {self.config.api_key}"
+            }
+
+            response = requests.get(url, headers=headers, timeout=10)
+            response.raise_for_status()
+            data = response.json()
+
+            models = []
+            if "data" in data:
+                for model in data["data"]:
+                    if "id" in model:
+                        models.append(AvailableModel(
+                            id=model["id"],
+                            name=model.get("name", model["id"]),
+                            description=model.get("description", f"HuggingFace - {model['id']}"),
+                            context_length=model.get("context_length")
+                        ))
+
+            # Sort models alphabetically by ID
+            models.sort(key=lambda model: model.id.lower())
+            
+            return models
+        except Exception as e:
+            logger.error(f"Failed to get HuggingFace models: {str(e)}")
+            return []
 
     def _prepare_messages(self, messages: List[Message]) -> List[Dict[str, Any]]:
         """
@@ -133,7 +154,7 @@ class HuggingFaceProvider(LLMProvider, StreamingProviderMixin):
         if not has_system:
             prepared_messages.append({
                 "role": "system",
-                "content": "You are DeepHat, created by Kindo.ai. You are a helpful assistant that is an expert in Cybersecurity and DevOps."
+                "content": "You are a helpful AI assistant."
             })
 
         # Add user messages

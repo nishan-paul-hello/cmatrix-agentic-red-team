@@ -4,7 +4,6 @@ from .base import LLMProvider, ProviderConfig, Message, StreamingProviderMixin, 
 from .huggingface import HuggingFaceProvider
 from .ollama import OllamaProvider
 from .openrouter import OpenRouterProvider
-from .kilocode import KiloCodeProvider
 from .gemini import GeminiProvider
 from .cerebras import CerebrasProvider
 
@@ -17,7 +16,6 @@ __all__ = [
     "HuggingFaceProvider",
     "OllamaProvider",
     "OpenRouterProvider",
-    "KiloCodeProvider",
     "GeminiProvider",
     "CerebrasProvider",
 ]

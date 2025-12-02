@@ -255,8 +255,7 @@ export function SettingsSidebar({
 
   // Get provider name from ID
   const getProviderName = (providerId: string) => {
-    const name = providers.find(p => p.id === providerId)?.name || providerId;
-    return name === "Kilo AI" ? "Kilo Code" : name;
+    return providers.find(p => p.id === providerId)?.name || providerId;
   };
 
   if (!isOpen) return null;

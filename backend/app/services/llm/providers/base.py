@@ -80,12 +80,12 @@ class LLMProvider(ABC):
         pass
 
     @abstractmethod
-    def get_available_models(self) -> List[str]:
+    def get_available_models(self) -> List[Any]:
         """
         Get list of available models for this provider.
 
         Returns:
-            List of model names/IDs
+            List of AvailableModel objects
         """
         pass
 

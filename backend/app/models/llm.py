@@ -14,7 +14,6 @@ class APIProvider(str, enum.Enum):
     CEREBRAS = "Cerebras"
     GEMINI = "Gemini"
     HUGGING_FACE = "Hugging Face"
-    KILO_CODE = "Kilo Code"
     OPENROUTER = "Openrouter"
 
 

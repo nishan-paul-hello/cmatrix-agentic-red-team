@@ -5,6 +5,7 @@ import google.generativeai as genai
 from typing import List, Any, Dict
 from loguru import logger
 
+from app.models.llm import AvailableModel
 from .base import LLMProvider, ProviderConfig, Message, StreamingProviderMixin
 
 
@@ -24,12 +25,16 @@ class GeminiProvider(LLMProvider, StreamingProviderMixin):
         if not self.config.api_key:
             raise ValueError("API key must be specified for Gemini provider")
 
+        # Model is optional when just fetching available models
         if not self.config.model:
-            raise ValueError("Model must be specified for Gemini provider")
-
-        # Initialize Gemini client
-        genai.configure(api_key=self.config.api_key)
-        self.client = genai.GenerativeModel(self.config.model)
+            logger.warning("No model specified for Gemini provider (OK for fetching models)")
+            # Initialize without a specific model
+            genai.configure(api_key=self.config.api_key)
+            self.client = None
+        else:
+            # Initialize Gemini client with model
+            genai.configure(api_key=self.config.api_key)
+            self.client = genai.GenerativeModel(self.config.model)
 
         logger.info(f"🤖 Gemini provider initialized with model: {self.config.model}")
 
@@ -102,27 +107,63 @@ class GeminiProvider(LLMProvider, StreamingProviderMixin):
             logger.error(f"Error in Gemini streaming: {str(e)}")
             raise
 
-    def get_available_models(self) -> List[str]:
+    def get_available_models(self) -> List[AvailableModel]:
         """
         Get list of available models from Gemini.
 
         Returns:
-            List of model names
+            List of AvailableModel objects (stable text generation models only)
         """
         try:
             models = genai.list_models()
-            model_names = []
+            available_models = []
 
             for model in models:
-                # Filter for generative models
-                if 'generateContent' in model.supported_generation_methods:
-                    model_names.append(model.name)
+                model_name = model.name.replace("models/", "").lower()
+                
+                # Exclusion patterns for non-text-generation or unstable models
+                exclude_patterns = [
+                    'image',           # Image generation models (e.g., gemini-2.5-flash-image)
+                    'imagen',          # Imagen models
+                    'embedding',       # Embedding models
+                    'vision',          # Vision-only models
+                    '-exp-',           # Experimental models (e.g., gemini-1.5-pro-exp-0801)
+                    '-exp',            # Experimental models (e.g., gemini-2.0-flash-exp)
+                    'preview',         # Preview models
+                    'deprecated',      # Deprecated models
+                    'banana',          # Nano Banana (image generation codename)
+                    'aqa',             # Attributed Question Answering models
+                ]
+                
+                # Check if model name contains any exclusion pattern
+                should_exclude = any(pattern in model_name for pattern in exclude_patterns)
+                
+                # Filter for stable text generation models only
+                # Include models that:
+                # 1. Support 'generateContent' (text generation capability)
+                # 2. Do NOT support 'embedContent' (not embedding models)
+                # 3. Do NOT match any exclusion patterns
+                if ('generateContent' in model.supported_generation_methods and 
+                    'embedContent' not in model.supported_generation_methods and
+                    not should_exclude):
+                    
+                    # Use original model name (with proper casing) for the ID
+                    original_name = model.name.replace("models/", "")
+                    available_models.append(AvailableModel(
+                        id=original_name,
+                        name=model.display_name or original_name,
+                        description=model.description,
+                        context_length=model.input_token_limit
+                    ))
 
-            return model_names
+            # Sort models alphabetically by ID
+            available_models.sort(key=lambda model: model.id.lower())
+            
+            logger.info(f"Found {len(available_models)} stable text generation models for Gemini")
+            return available_models
         except Exception as e:
             logger.error(f"Failed to get Gemini models: {str(e)}")
-            # Return known models as fallback
-            return ["gemini-2.5-pro", "gemini-pro", "gemini-pro-vision"]
+            return []
 
     def _prepare_messages(self, messages: List[Message]) -> str:
         """

@@ -4,6 +4,7 @@ import requests
 from typing import List, Any, Dict
 from loguru import logger
 
+from app.models.llm import AvailableModel
 from .base import LLMProvider, ProviderConfig, Message, StreamingProviderMixin
 
 
@@ -20,9 +21,9 @@ class OllamaProvider(LLMProvider, StreamingProviderMixin):
         super().__init__(config)
         self.base_url = config.base_url or "http://localhost:11434"
 
-        # Validate configuration
+        # Validate configuration - model is optional when just fetching available models
         if not self.config.model:
-            raise ValueError("Model must be specified for Ollama provider")
+            logger.warning("No model specified for Ollama provider (OK for fetching models)")
 
         logger.info(f"🐳 Ollama provider initialized with base_url: {self.base_url}")
 
@@ -122,12 +123,12 @@ class OllamaProvider(LLMProvider, StreamingProviderMixin):
             logger.error(f"Error in Ollama streaming: {str(e)}")
             raise
 
-    def get_available_models(self) -> List[str]:
+    def get_available_models(self) -> List[AvailableModel]:
         """
         Get list of available models from Ollama.
 
         Returns:
-            List of model names
+            List of AvailableModel objects
         """
         try:
             url = f"{self.base_url}/api/tags"
@@ -139,8 +140,16 @@ class OllamaProvider(LLMProvider, StreamingProviderMixin):
             if "models" in data:
                 for model in data["models"]:
                     if "name" in model:
-                        models.append(model["name"])
+                        models.append(AvailableModel(
+                            id=model["name"],
+                            name=model["name"],
+                            description=f"Ollama - {model['name']}",
+                            context_length=None
+                        ))
 
+            # Sort models alphabetically by ID
+            models.sort(key=lambda model: model.id.lower())
+            
             return models
         except Exception as e:
             logger.error(f"Failed to get Ollama models: {str(e)}")

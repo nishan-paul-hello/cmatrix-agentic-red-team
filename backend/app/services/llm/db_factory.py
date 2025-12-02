@@ -8,7 +8,7 @@ from app.core.config import settings
 from .providers import (
     LLMProvider, ProviderConfig,
     HuggingFaceProvider, OllamaProvider, OpenRouterProvider,
-    KiloCodeProvider, GeminiProvider, CerebrasProvider
+    GeminiProvider, CerebrasProvider
 )
 from app.services.llm.config_profile_service import config_profile_service
 
@@ -24,8 +24,6 @@ class DatabaseLLMProviderFactory:
             "ollama": OllamaProvider,
             "openrouter": OpenRouterProvider,
             "Openrouter": OpenRouterProvider,
-            "kilocode": KiloCodeProvider,
-            "Kilo Code": KiloCodeProvider,
             "gemini": GeminiProvider,
             "Gemini": GeminiProvider,
             "cerebras": CerebrasProvider,

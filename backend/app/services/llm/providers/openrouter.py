@@ -4,6 +4,7 @@ import requests
 from typing import List, Any, Dict
 from loguru import logger
 
+from app.models.llm import AvailableModel
 from .base import LLMProvider, ProviderConfig, Message, StreamingProviderMixin
 
 
@@ -24,8 +25,9 @@ class OpenRouterProvider(LLMProvider, StreamingProviderMixin):
         if not self.config.api_key:
             raise ValueError("API key must be specified for OpenRouter provider")
 
+        # Model is optional when just fetching available models
         if not self.config.model:
-            raise ValueError("Model must be specified for OpenRouter provider")
+            logger.warning("No model specified for OpenRouter provider (OK for fetching models)")
 
         logger.info(f"🔄 OpenRouter provider initialized with model: {self.config.model}")
 
@@ -138,12 +140,12 @@ class OpenRouterProvider(LLMProvider, StreamingProviderMixin):
             logger.error(f"Error in OpenRouter streaming: {str(e)}")
             raise
 
-    def get_available_models(self) -> List[str]:
+    def get_available_models(self) -> List[AvailableModel]:
         """
         Get list of available models from OpenRouter.
 
         Returns:
-            List of model names
+            List of AvailableModel objects
         """
         try:
             url = f"{self.base_url}/models"
@@ -159,8 +161,16 @@ class OpenRouterProvider(LLMProvider, StreamingProviderMixin):
             if "data" in data:
                 for model in data["data"]:
                     if "id" in model:
-                        models.append(model["id"])
+                        models.append(AvailableModel(
+                            id=model["id"],
+                            name=model.get("name", model["id"]),
+                            description=model.get("description", ""),
+                            context_length=model.get("context_length")
+                        ))
 
+            # Sort models alphabetically by ID
+            models.sort(key=lambda model: model.id.lower())
+            
             return models
         except Exception as e:
             logger.error(f"Failed to get OpenRouter models: {str(e)}")

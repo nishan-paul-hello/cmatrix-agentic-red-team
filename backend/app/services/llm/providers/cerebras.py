@@ -4,6 +4,7 @@ import requests
 from typing import List, Any, Dict
 from loguru import logger
 
+from app.models.llm import AvailableModel
 from .base import LLMProvider, ProviderConfig, Message, StreamingProviderMixin
 
 
@@ -24,8 +25,9 @@ class CerebrasProvider(LLMProvider, StreamingProviderMixin):
         if not self.config.api_key:
             raise ValueError("API key must be specified for Cerebras provider")
 
+        # Model is optional when just fetching available models
         if not self.config.model:
-            raise ValueError("Model must be specified for Cerebras provider")
+            logger.warning("No model specified for Cerebras provider (OK for fetching models)")
 
         logger.info(f"🧠 Cerebras provider initialized with model: {self.config.model}")
 
@@ -134,12 +136,12 @@ class CerebrasProvider(LLMProvider, StreamingProviderMixin):
             logger.error(f"Error in Cerebras streaming: {str(e)}")
             raise
 
-    def get_available_models(self) -> List[str]:
+    def get_available_models(self) -> List[AvailableModel]:
         """
         Get list of available models from Cerebras.
 
         Returns:
-            List of model names
+            List of AvailableModel objects
         """
         try:
             url = f"{self.base_url}/models"
@@ -155,13 +157,20 @@ class CerebrasProvider(LLMProvider, StreamingProviderMixin):
             if "data" in data:
                 for model in data["data"]:
                     if "id" in model:
-                        models.append(model["id"])
+                        models.append(AvailableModel(
+                            id=model["id"],
+                            name=model["id"],
+                            description=f"Cerebras - {model['id']}",
+                            context_length=model.get("context_length")
+                        ))
 
+            # Sort models alphabetically by ID
+            models.sort(key=lambda model: model.id.lower())
+            
             return models
         except Exception as e:
             logger.error(f"Failed to get Cerebras models: {str(e)}")
-            # Return known models as fallback
-            return ["gpt-oss-120b", "qwen-3-coder-480b", "llama3.1-70b"]
+            return []
 
     def _prepare_messages(self, messages: List[Message]) -> List[Dict[str, Any]]:
         """
