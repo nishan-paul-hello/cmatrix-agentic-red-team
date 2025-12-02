@@ -1,6 +1,26 @@
 
-
 services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: cmatrix-postgres-dev
+    environment:
+      - POSTGRES_USER=cmatrix
+      - POSTGRES_PASSWORD=cmatrix
+      - POSTGRES_DB=cmatrix
+    volumes:
+      - postgres_data_dev:/var/lib/postgresql/data
+    networks:
+      - cmatrix-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cmatrix"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "5432:5432"
+
   # Backend Service (Development Mode)
   backend:
     build:
@@ -39,14 +59,15 @@ services:
     volumes:
       # Mount entire frontend for hot reload
       - ./frontend:/app
-      - frontend-node-modules:/app/node_modules  # Exclude node_modules from mount
-      - frontend-next:/app/.next  # Use named volume for .next to avoid permission issues
+      # Keep node_modules in container to avoid overwriting with local (possibly empty) node_modules
+      - /app/node_modules
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
     networks:
       - cmatrix-network
     restart: unless-stopped
-    command: pnpm dev
+    command: sh -c "pnpm install && pnpm dev"
 
 networks:
   cmatrix-network:
@@ -55,7 +76,5 @@ networks:
 volumes:
   backend-venv:
     driver: local
-  frontend-node-modules:
-    driver: local
-  frontend-next:
+  postgres_data_dev:
     driver: local
