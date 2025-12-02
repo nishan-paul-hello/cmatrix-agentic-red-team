@@ -142,10 +142,12 @@ class OpenRouterProvider(LLMProvider, StreamingProviderMixin):
 
     def get_available_models(self) -> List[AvailableModel]:
         """
-        Get list of available models from OpenRouter.
+        Get list of available FREE models from OpenRouter.
+        
+        Filters for models where pricing.prompt and pricing.completion are "0".
 
         Returns:
-            List of AvailableModel objects
+            List of AvailableModel objects (free models only)
         """
         try:
             url = f"{self.base_url}/models"
@@ -157,20 +159,51 @@ class OpenRouterProvider(LLMProvider, StreamingProviderMixin):
             response.raise_for_status()
             data = response.json()
 
+            # Exclude non-text generation models
+            exclude_patterns = [
+                "diffusion",
+                "flux",
+                "sdxl",
+                "image",
+                "audio",
+                "whisper",
+                "midjourney",
+                "dall-e",
+                "tts",
+            ]
+
             models = []
             if "data" in data:
                 for model in data["data"]:
                     if "id" in model:
-                        models.append(AvailableModel(
-                            id=model["id"],
-                            name=model.get("name", model["id"]),
-                            description=model.get("description", ""),
-                            context_length=model.get("context_length")
-                        ))
+                        model_id = model["id"].lower()
+                        
+                        # Check pricing
+                        pricing = model.get("pricing", {})
+                        prompt_price = pricing.get("prompt", "0")
+                        completion_price = pricing.get("completion", "0")
+                        
+                        # Convert to float to handle "0", "0.0", "0.000000"
+                        try:
+                            is_free = float(prompt_price) == 0.0 and float(completion_price) == 0.0
+                        except (ValueError, TypeError):
+                            is_free = False
+                        
+                        # Check if excluded
+                        is_excluded = any(pattern in model_id for pattern in exclude_patterns)
+                            
+                        if is_free and not is_excluded:
+                            models.append(AvailableModel(
+                                id=model["id"],
+                                name=model.get("name", model["id"]),
+                                description=model.get("description", ""),
+                                context_length=model.get("context_length")
+                            ))
 
             # Sort models alphabetically by ID
             models.sort(key=lambda model: model.id.lower())
             
+            logger.info(f"Found {len(models)} free text generation models for OpenRouter")
             return models
         except Exception as e:
             logger.error(f"Failed to get OpenRouter models: {str(e)}")

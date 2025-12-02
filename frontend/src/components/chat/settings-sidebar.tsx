@@ -278,7 +278,7 @@ export function SettingsSidebar({
               </div>
               <div>
                 <h2 className="text-xl font-bold tracking-tight">LLM Configuration</h2>
-                <p className="text-xs text-muted-foreground mt-0.5">Manage AI profiles</p>
+                <p className="text-xs text-muted-foreground mt-0.5">Provider Configurations</p>
               </div>
             </div>
             <Button 
@@ -337,7 +337,7 @@ export function SettingsSidebar({
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-base font-semibold">Your Profiles</h3>
+                <h3 className="text-base font-semibold">Saved Configurations</h3>
               </div>
               <Button
                 onClick={() => {
@@ -381,7 +381,7 @@ export function SettingsSidebar({
                 <div className="flex items-center justify-between mb-1">
                   <h4 className="text-sm font-semibold flex items-center gap-1.5">
                     <Plus className="w-3.5 h-3.5 text-primary" />
-                    New Profile
+                    New Configuration
                   </h4>
                   <Button
                     variant="ghost"
@@ -474,7 +474,7 @@ export function SettingsSidebar({
                   size="sm"
                 >
                   <Save className="w-3.5 h-3.5 mr-2" />
-                  Create Profile
+                  Create Configuration
                 </Button>
               </div>
             )}
@@ -485,13 +485,13 @@ export function SettingsSidebar({
                 <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-secondary/50 mb-4">
                   <Sparkles className="w-8 h-8 text-muted-foreground" />
                 </div>
-                <h4 className="text-lg font-medium mb-2">No profiles yet</h4>
+                <h4 className="text-lg font-medium mb-2">No configurations found</h4>
                 <p className="text-sm text-muted-foreground mb-6">
-                  Create your first LLM configuration profile to get started
+                  Initialize a new provider setup to enable inference
                 </p>
                 <Button onClick={() => setIsCreating(true)} className="cursor-pointer">
                   <Plus className="w-4 h-4 mr-2" />
-                  Create Profile
+                  New Configuration
                 </Button>
               </div>
             ) : (
@@ -516,7 +516,7 @@ export function SettingsSidebar({
                           <div className="flex items-center justify-between mb-1">
                             <h4 className="text-sm font-semibold flex items-center gap-1.5">
                               <Edit2 className="w-3.5 h-3.5 text-primary" />
-                              Edit Profile
+                              Edit Configuration
                             </h4>
                             <Button
                               variant="ghost"
@@ -609,7 +609,7 @@ export function SettingsSidebar({
                             size="sm"
                           >
                             <Save className="w-3.5 h-3.5 mr-2" />
-                            Update Profile
+                            Update Configuration
                           </Button>
                         </div>
                       ) : (

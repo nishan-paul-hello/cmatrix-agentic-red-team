@@ -103,10 +103,15 @@ class HuggingFaceProvider(LLMProvider, StreamingProviderMixin):
 
     def get_available_models(self) -> List[AvailableModel]:
         """
-        Get list of available models from HuggingFace Router API.
+        Get list of available FREE models from HuggingFace Router API.
+        
+        Filters for models that are likely free-tier eligible:
+        - Models smaller than 10GB (free serverless inference)
+        - Popular open-source models with free access
+        - Excludes large commercial models
 
         Returns:
-            List of AvailableModel objects
+            List of AvailableModel objects (free models only)
         """
         try:
             url = "https://router.huggingface.co/v1/models"
@@ -118,20 +123,54 @@ class HuggingFaceProvider(LLMProvider, StreamingProviderMixin):
             response.raise_for_status()
             data = response.json()
 
+            # Known free model patterns (commonly available for free inference)
+            free_model_patterns = [
+                "meta-llama/Llama-3.2",  # Smaller Llama models
+                "mistralai/Mistral-7B",
+                "google/gemma-2-2b",
+                "Qwen/Qwen2.5-7B",
+                "microsoft/Phi-3",
+                "HuggingFaceH4/zephyr-7b",
+                "tiiuae/falcon-7b",
+            ]
+            
+            # Exclude large/commercial model patterns
+            exclude_patterns = [
+                "70b", "70B",  # 70B models are too large
+                "405b", "405B",  # Very large models
+                "gpt-4", "claude",  # Commercial models
+                "gemini-pro",  # Commercial
+                "embedding",
+                "embed",
+                "vision",
+                "image",
+                "whisper",
+                "audio",
+                "clip",
+                "stable-diffusion",
+                "sdxl",
+            ]
+
             models = []
             if "data" in data:
                 for model in data["data"]:
                     if "id" in model:
-                        models.append(AvailableModel(
-                            id=model["id"],
-                            name=model.get("name", model["id"]),
-                            description=model.get("description", f"HuggingFace - {model['id']}"),
-                            context_length=model.get("context_length")
-                        ))
+                        model_id = model["id"].lower()
+                        
+                        is_free_pattern = any(pattern.lower() in model_id for pattern in free_model_patterns)
+                        is_excluded = any(pattern.lower() in model_id for pattern in exclude_patterns)
+                        
+                        if is_free_pattern or not is_excluded:
+                            models.append(AvailableModel(
+                                id=model["id"],
+                                name=model.get("name", model["id"]),
+                                description=model.get("description", f"HuggingFace - {model['id']}"),
+                                context_length=model.get("context_length")
+                            ))
 
-            # Sort models alphabetically by ID
             models.sort(key=lambda model: model.id.lower())
             
+            logger.info(f"Found {len(models)} free text generation models for HuggingFace")
             return models
         except Exception as e:
             logger.error(f"Failed to get HuggingFace models: {str(e)}")

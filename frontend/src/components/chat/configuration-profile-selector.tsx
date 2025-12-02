@@ -8,6 +8,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface ConfigurationProfileSelectorProps {
   onProfileChange?: () => void;
@@ -56,23 +62,39 @@ export function ConfigurationProfileSelector({
     }
   }, [activeProfile?.id, onActiveProfileChange]); // Only trigger if ID changes
 
+  const hasProfiles = profiles.length > 0;
+
   return (
     <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant="outline"
-          size="sm"
-          className="gap-2 cyber-border terminal-text min-w-[180px] justify-between cursor-pointer"
-          onClick={() => {
-            fetchProfiles();
-          }}
-        >
-          <span className="truncate">
-            {activeProfile?.name || "Select Profile"}
-          </span>
-          <ChevronDown className="w-4 h-4 opacity-50" />
-        </Button>
-      </DropdownMenuTrigger>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <span tabIndex={0} className="inline-block"> {/* Wrapper for disabled button tooltip */}
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="gap-2 cyber-border terminal-text min-w-[180px] justify-between cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                  onClick={() => {
+                    fetchProfiles();
+                  }}
+                  disabled={!hasProfiles}
+                >
+                  <span className="truncate">
+                    {activeProfile?.name || "Load Configuration"}
+                  </span>
+                  <ChevronDown className="w-4 h-4 opacity-50" />
+                </Button>
+              </DropdownMenuTrigger>
+            </span>
+          </TooltipTrigger>
+          {!hasProfiles && (
+            <TooltipContent>
+              <p>Setup Required • Open Settings <span className="text-primary">⚙️</span></p>
+            </TooltipContent>
+          )}
+        </Tooltip>
+      </TooltipProvider>
       
       <DropdownMenuContent align="start" className="w-[320px] bg-card cyber-border max-h-[400px] overflow-y-auto custom-scrollbar">
         {profiles.length === 0 ? (
