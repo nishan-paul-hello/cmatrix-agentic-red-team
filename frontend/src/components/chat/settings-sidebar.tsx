@@ -9,12 +9,10 @@ import {
   Trash2, 
   Save, 
   Loader2, 
-  CheckCircle2, 
   Edit2,
   Key,
   Sparkles,
   Filter,
-  ChevronDown
 } from "lucide-react";
 import { llmService, ConfigurationProfile, Provider, AvailableModel } from "@/lib/api/llm";
 import {
@@ -403,6 +401,7 @@ export function SettingsSidebar({
                       value={profileName}
                       onChange={(e) => setProfileName(e.target.value)}
                       className="bg-background/50 h-9 text-sm"
+                      autoComplete="off"
                     />
 
                     <Select value={selectedProvider} onValueChange={setSelectedProvider}>
@@ -425,6 +424,7 @@ export function SettingsSidebar({
                     value={apiKey}
                     onChange={(e) => setApiKey(e.target.value)}
                     className="bg-background/50 font-mono text-xs h-9"
+                    autoComplete="off"
                   />
 
                   <Select value={selectedModelName} onValueChange={setSelectedModelName} disabled={isFetchingModels}>
@@ -439,9 +439,17 @@ export function SettingsSidebar({
                       )}
                     </SelectTrigger>
                     <SelectContent>
-                      {!selectedProvider ? (
+                      {!selectedProvider && !apiKey ? (
+                        <div className="flex flex-col items-center justify-center py-3 px-2 text-center">
+                          <span className="text-xs text-muted-foreground">Please select a provider and enter an API key</span>
+                        </div>
+                      ) : !selectedProvider ? (
                         <div className="flex flex-col items-center justify-center py-3 px-2 text-center">
                           <span className="text-xs text-muted-foreground">Please select a provider first</span>
+                        </div>
+                      ) : !apiKey ? (
+                        <div className="flex flex-col items-center justify-center py-3 px-2 text-center">
+                          <span className="text-xs text-muted-foreground">Please enter an API key first</span>
                         </div>
                       ) : availableModels.length === 0 ? (
                         <div className="flex flex-col items-center justify-center py-3 px-2 text-center">
@@ -528,6 +536,7 @@ export function SettingsSidebar({
                                 value={profileName}
                                 onChange={(e) => setProfileName(e.target.value)}
                                 className="bg-background/50 h-9 text-sm"
+                                autoComplete="off"
                               />
 
                               <Select value={selectedProvider} onValueChange={setSelectedProvider}>
@@ -550,6 +559,7 @@ export function SettingsSidebar({
                               value={apiKey}
                               onChange={(e) => setApiKey(e.target.value)}
                               className="bg-background/50 font-mono text-xs h-9"
+                              autoComplete="off"
                             />
 
                             <Select value={selectedModelName} onValueChange={setSelectedModelName} disabled={isFetchingModels}>
@@ -564,9 +574,17 @@ export function SettingsSidebar({
                                 )}
                               </SelectTrigger>
                               <SelectContent>
-                                {!selectedProvider ? (
+                                {!selectedProvider && !apiKey ? (
+                                  <div className="flex flex-col items-center justify-center py-3 px-2 text-center">
+                                    <span className="text-xs text-muted-foreground">Please select a provider and enter an API key</span>
+                                  </div>
+                                ) : !selectedProvider ? (
                                   <div className="flex flex-col items-center justify-center py-3 px-2 text-center">
                                     <span className="text-xs text-muted-foreground">Please select a provider first</span>
+                                  </div>
+                                ) : (!apiKey && profiles.find(p => p.id === editingProfileId)?.api_provider !== selectedProvider) ? (
+                                  <div className="flex flex-col items-center justify-center py-3 px-2 text-center">
+                                    <span className="text-xs text-muted-foreground">Please enter an API key first</span>
                                   </div>
                                 ) : availableModels.length === 0 ? (
                                   <div className="flex flex-col items-center justify-center py-3 px-2 text-center">
