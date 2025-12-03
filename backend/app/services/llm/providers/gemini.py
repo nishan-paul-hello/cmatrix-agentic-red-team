@@ -133,6 +133,8 @@ class GeminiProvider(LLMProvider, StreamingProviderMixin):
                     'deprecated',      # Deprecated models
                     'banana',          # Nano Banana (image generation codename)
                     'aqa',             # Attributed Question Answering models
+                    '001',             # Exclude older 001 versions
+                    'lite',            # Exclude lite models
                 ]
                 
                 # Check if model name contains any exclusion pattern
