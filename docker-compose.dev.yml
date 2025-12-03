@@ -46,7 +46,7 @@ services:
       # Mount entire frontend for hot reload
       - ./frontend:/app
       - frontend-node-modules:/app/node_modules  # Exclude node_modules from mount
-      - frontend-next:/app/.next  # Use named volume for .next to avoid permission issues
+      # Note: .next is NOT excluded - it will be created in ./frontend/.next on host
     depends_on:
       - backend
     networks:
@@ -63,7 +63,6 @@ volumes:
     driver: local
   frontend-node-modules:
     driver: local
-  frontend-next:
-    driver: local
   huggingface_cache:
     driver: local
+

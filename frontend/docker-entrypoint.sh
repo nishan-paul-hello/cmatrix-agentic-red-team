@@ -1,9 +1,11 @@
 #!/bin/sh
 set -e
 
-# Fix permissions for .next directory
+# Clean and recreate .next directory with proper permissions
+echo "Setting up .next directory..."
+rm -rf /app/.next
 mkdir -p /app/.next
-chmod -R 777 /app/.next 2>/dev/null || true
+chmod -R 777 /app/.next
 
 # Execute the main command
 exec "$@"
