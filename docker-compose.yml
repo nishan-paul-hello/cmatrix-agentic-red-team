@@ -121,7 +121,6 @@ services:
       - SECRET_KEY=${SECRET_KEY:-your-secret-key-change-this-in-production-make-it-very-long-and-random}
     volumes:
       - ./backend/data:/app/data
-      - ./backend/data:/app/data
       - ./backend:/app
       # Cache HuggingFace models to avoid re-downloading
       - huggingface_cache:/root/.cache/huggingface
