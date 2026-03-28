@@ -149,7 +149,7 @@ workflow.compile(checkpointer=checkpointer)
 #### Why This is a Production Blocker
 Your `orchestrator.py` runs entirely within the HTTP request:
 ```python
-# backend/app/api/v1/endpoints/chat.py
+# app-backend/app/api/v1/endpoints/chat.py
 async def chat_stream(...):
     response = await orchestrator.run(...)  # Blocks until complete
 ```
@@ -350,7 +350,7 @@ if not_relevant(ranked):
 
 **Your Code Says "Multi-Agent"**:
 ```python
-# backend/app/agents/specialized/network_agent.py
+# app-backend/app/agents/specialized/network_agent.py
 NETWORK_TOOLS = [
     StructuredTool.from_function(
         func=scan_network,
@@ -878,7 +878,7 @@ Your CMatrix project has **excellent fundamentals** but is **not production-read
 ### A1: Background Job Implementation
 
 ```python
-# backend/app/worker.py
+# app-backend/app/worker.py
 from celery import Celery
 from app.services.orchestrator import run_orchestrator
 
@@ -891,7 +891,7 @@ def run_scan_task(message: str, user_id: int, conversation_id: int):
     # Store result in database
     return result
 
-# backend/app/api/v1/endpoints/chat.py
+# app-backend/app/api/v1/endpoints/chat.py
 @router.post("/scan/async")
 async def create_scan_job(request: ChatRequest):
     task = run_scan_task.delay(request.message, user_id, conversation_id)
@@ -906,7 +906,7 @@ async def get_scan_status(job_id: str):
 ### A2: LangGraph Checkpointing
 
 ```python
-# backend/app/services/orchestrator.py
+# app-backend/app/services/orchestrator.py
 from langgraph.checkpoint.postgres import PostgresSaver
 
 class OrchestratorService:
@@ -930,7 +930,7 @@ class OrchestratorService:
 ### A3: Vector Memory Search with Qdrant
 
 ```python
-# backend/app/services/memory.py
+# app-backend/app/services/memory.py
 from sentence_transformers import SentenceTransformer
 from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, VectorParams, PointStruct
@@ -993,7 +993,7 @@ class VectorMemory:
 ### A4: HITL Approval Gate
 
 ```python
-# backend/app/services/orchestrator.py
+# app-backend/app/services/orchestrator.py
 DANGEROUS_TOOLS = ["execute_terminal_command", "run_exploit", "modify_config"]
 
 def _should_continue(self, state: AgentState):

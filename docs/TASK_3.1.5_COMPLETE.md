@@ -22,7 +22,7 @@ Successfully implemented a **state-of-the-art CVE Vector Store** using Qdrant fo
 
 ### 1. **CVE Vector Store Service** (`cve_vector_store.py`)
 
-**Location:** `backend/app/services/rag/cve_vector_store.py`
+**Location:** `app-backend/app/services/rag/cve_vector_store.py`
 **Lines of Code:** ~850
 **Complexity:** 9/10
 
@@ -98,7 +98,7 @@ for result in response.results:
 
 ### 2. **NVD Sync Script** (`sync_nvd.py`)
 
-**Location:** `backend/scripts/sync_nvd.py`
+**Location:** `app-backend/scripts/sync_nvd.py`
 **Lines of Code:** ~450
 **Complexity:** 8/10
 
@@ -148,7 +148,7 @@ python scripts/sync_nvd.py --days 30 --api-key YOUR_NVD_API_KEY
 
 ### 3. **Comprehensive Test Suite** (`test_cve_vector_store.py`)
 
-**Location:** `backend/app/tests/test_rag/test_cve_vector_store.py`
+**Location:** `app-backend/app/tests/test_rag/test_cve_vector_store.py`
 **Lines of Code:** ~550
 **Test Coverage:** 90%+
 
@@ -193,7 +193,7 @@ python scripts/sync_nvd.py --days 30 --api-key YOUR_NVD_API_KEY
 
 ### 4. **Demo Script** (`demo_cve_vector_store.py`)
 
-**Location:** `backend/examples/demo_cve_vector_store.py`
+**Location:** `app-backend/examples/demo_cve_vector_store.py`
 **Lines of Code:** ~450
 
 #### Demonstrations:
@@ -348,7 +348,7 @@ class VulnIntelAgent:
 ## Files Created
 
 ```
-backend/
+app-backend/
 ├── app/
 │   ├── services/
 │   │   └── rag/

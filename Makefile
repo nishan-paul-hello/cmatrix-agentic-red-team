@@ -6,123 +6,123 @@ help:
 	@echo "=========================================="
 	@echo ""
 	@echo "🚀 Quick Start:"
-	@echo "  make install        Install all dependencies (frontend + backend)"
-	@echo "  make dev            Start both frontend and backend dev servers"
-	@echo "  make quality        Run all quality checks (frontend + backend)"
+	@echo "  make install        Install all dependencies (app-frontend + app-backend)"
+	@echo "  make dev            Start both app-frontend and app-backend dev servers"
+	@echo "  make quality        Run all quality checks (app-frontend + app-backend)"
 	@echo ""
 	@echo "📦 Setup:"
-	@echo "  make install-frontend   Install frontend dependencies"
-	@echo "  make install-backend    Install backend dependencies"
+	@echo "  make install-app-frontend   Install app-frontend dependencies"
+	@echo "  make install-app-backend    Install app-backend dependencies"
 	@echo "  make pre-commit         Install pre-commit hooks"
 	@echo ""
 	@echo "🔧 Development:"
-	@echo "  make dev-frontend       Start frontend dev server"
-	@echo "  make dev-backend        Start backend dev server"
+	@echo "  make dev-app-frontend       Start app-frontend dev server"
+	@echo "  make dev-app-backend        Start app-backend dev server"
 	@echo ""
 	@echo "✨ Code Quality:"
-	@echo "  make quality-frontend   Run frontend quality checks"
-	@echo "  make quality-backend    Run backend quality checks"
-	@echo "  make lint               Run linters (frontend + backend)"
-	@echo "  make format             Format code (frontend + backend)"
-	@echo "  make typecheck          Run type checkers (frontend + backend)"
+	@echo "  make quality-app-frontend   Run app-frontend quality checks"
+	@echo "  make quality-app-backend    Run app-backend quality checks"
+	@echo "  make lint               Run linters (app-frontend + app-backend)"
+	@echo "  make format             Format code (app-frontend + app-backend)"
+	@echo "  make typecheck          Run type checkers (app-frontend + app-backend)"
 	@echo ""
 	@echo "🏗️  Build:"
-	@echo "  make build-frontend     Build frontend for production"
-	@echo "  make build-backend      Build backend (if applicable)"
+	@echo "  make build-app-frontend     Build app-frontend for production"
+	@echo "  make build-app-backend      Build app-backend (if applicable)"
 	@echo ""
 	@echo "🧹 Cleanup:"
 	@echo "  make clean              Clean all build artifacts and caches"
-	@echo "  make clean-frontend     Clean frontend artifacts"
-	@echo "  make clean-backend      Clean backend artifacts"
+	@echo "  make clean-app-frontend     Clean app-frontend artifacts"
+	@echo "  make clean-app-backend      Clean app-backend artifacts"
 
 # Installation
-install: install-frontend install-backend pre-commit
+install: install-app-frontend install-app-backend pre-commit
 	@echo "✅ All dependencies installed!"
 
-install-frontend:
-	@echo "📦 Installing frontend dependencies..."
-	cd frontend && npm install
+install-app-frontend:
+	@echo "📦 Installing app-frontend dependencies..."
+	cd app-frontend && npm install
 
-install-backend:
-	@echo "📦 Installing backend dependencies..."
-	cd backend && pip install -r requirements.txt
+install-app-backend:
+	@echo "📦 Installing app-backend dependencies..."
+	cd app-backend && pip install -r requirements.txt
 
 # Pre-commit hooks
 pre-commit:
 	@echo "🪝 Installing pre-commit hooks..."
-	cd backend && source venv/bin/activate && pre-commit install
+	cd app-backend && source venv/bin/activate && pre-commit install
 
 # Development servers
 dev:
 	@echo "🚀 Starting development servers..."
-	@echo "Run 'make dev-frontend' and 'make dev-backend' in separate terminals"
+	@echo "Run 'make dev-app-frontend' and 'make dev-app-backend' in separate terminals"
 
-dev-frontend:
-	@echo "🚀 Starting frontend dev server..."
-	cd frontend && npm run dev
+dev-app-frontend:
+	@echo "🚀 Starting app-frontend dev server..."
+	cd app-frontend && npm run dev
 
-dev-backend:
-	@echo "🚀 Starting backend dev server..."
-	cd backend && source venv/bin/activate && uvicorn app.main:app --reload
+dev-app-backend:
+	@echo "🚀 Starting app-backend dev server..."
+	cd app-backend && source venv/bin/activate && uvicorn app.main:app --reload
 
 # Code quality
-quality: quality-frontend quality-backend
+quality: quality-app-frontend quality-app-backend
 	@echo "✅ All quality checks passed!"
 
-quality-frontend:
-	@echo "✨ Running frontend quality checks..."
-	cd frontend && npm run quality
+quality-app-frontend:
+	@echo "✨ Running app-frontend quality checks..."
+	cd app-frontend && npm run quality
 
-quality-backend:
-	@echo "✨ Running backend quality checks..."
-	cd backend && make quality
+quality-app-backend:
+	@echo "✨ Running app-backend quality checks..."
+	cd app-backend && make quality
 
 lint:
 	@echo "🔍 Running linters..."
-	cd frontend && npm run lint:fix
-	cd backend && make lint-fix
+	cd app-frontend && npm run lint:fix
+	cd app-backend && make lint-fix
 
 format:
 	@echo "✨ Formatting code..."
-	cd frontend && npm run format
-	cd backend && make format
+	cd app-frontend && npm run format
+	cd app-backend && make format
 
 typecheck:
 	@echo "🔎 Running type checkers..."
-	cd frontend && npm run typecheck
-	cd backend && make typecheck
+	cd app-frontend && npm run typecheck
+	cd app-backend && make typecheck
 
 # Build
-build: build-frontend
+build: build-app-frontend
 	@echo "✅ Build complete!"
 
-build-frontend:
-	@echo "🏗️  Building frontend..."
-	cd frontend && npm run build
+build-app-frontend:
+	@echo "🏗️  Building app-frontend..."
+	cd app-frontend && npm run build
 
-build-backend:
+build-app-backend:
 	@echo "🏗️  Backend doesn't require build step"
 
 # Cleanup
-clean: clean-frontend clean-backend
+clean: clean-app-frontend clean-app-backend
 	@echo "✅ Cleanup complete!"
 
-clean-frontend:
-	@echo "🧹 Cleaning frontend..."
-	cd frontend && make clean
+clean-app-frontend:
+	@echo "🧹 Cleaning app-frontend..."
+	cd app-frontend && make clean
 
-clean-backend:
-	@echo "🧹 Cleaning backend..."
-	cd backend && make clean
+clean-app-backend:
+	@echo "🧹 Cleaning app-backend..."
+	cd app-backend && make clean
 
 # Testing
 test:
 	@echo "🧪 Running tests..."
-	cd backend && make test
+	cd app-backend && make test
 
-test-frontend:
+test-app-frontend:
 	@echo "🧪 Frontend tests not configured yet"
 
-test-backend:
-	@echo "🧪 Running backend tests..."
-	cd backend && make test
+test-app-backend:
+	@echo "🧪 Running app-backend tests..."
+	cd app-backend && make test

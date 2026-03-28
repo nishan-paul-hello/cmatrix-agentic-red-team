@@ -50,10 +50,10 @@ nano .env            # Add your SECRET_KEY
 
 ```bash
 # 1. Start Backend
-cd backend && ./dev.sh
+cd app-backend && ./dev.sh
 
 # 2. Start Frontend (new terminal)
-cd frontend && pnpm dev
+cd app-frontend && pnpm dev
 
 # 3. Open http://localhost:3000
 ```
@@ -151,12 +151,12 @@ All tools execute real commands (nmap, curl, etc.) with full audit logging.
 ### Key Components
 
 **Frontend (Next.js)**
-- Location: `frontend/`, Port: 3000
-- Key File: `frontend/app/api/chat/route.ts`
+- Location: `app-frontend/`, Port: 3000
+- Key File: `app-frontend/app/api/chat/route.ts`
 
 **Backend (Python)**
-- Location: `backend/`, Port: 8000
-- Key Files: `backend/app.py`, `backend/agent.py`
+- Location: `app-backend/`, Port: 8000
+- Key Files: `app-backend/app.py`, `app-backend/agent.py`
 
 ### Benefits
 ✅ Security: API keys never exposed to frontend
@@ -195,7 +195,7 @@ What are the PCI-DSS requirements?
 - Scope-based permissions
 
 ### Audit Logging
-- All commands logged to `backend/audit_logs/`
+- All commands logged to `app-backend/audit_logs/`
 - JSON format for compliance
 - Daily log rotation
 
@@ -275,10 +275,10 @@ For detailed documentation, see [docs/KNOWLEDGE_BASE.md](docs/KNOWLEDGE_BASE.md)
 
 ```
 cmatrix/
-├── frontend/              # Next.js app
+├── app-frontend/              # Next.js app
 │   ├── app/              # Pages and API routes
 │   └── components/       # React components
-├── backend/              # Python backend
+├── app-backend/              # Python backend
 │   ├── orchestrator.py   # Multi-agent orchestrator
 │   ├── agents/          # 7 worker agents
 │   ├── authorization.py  # Auth system
@@ -368,7 +368,7 @@ curl -X POST "http://localhost:8000/api/v1/chat/providers/switch" \
 
 **Backend won't start:**
 ```bash
-cd backend
+cd app-backend
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt

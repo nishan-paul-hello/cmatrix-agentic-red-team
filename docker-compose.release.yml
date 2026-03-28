@@ -52,7 +52,7 @@ services:
       - "3000:3000"
     environment:
       - NODE_ENV=production
-      - PYTHON_BACKEND_URL=http://backend:8000
+      - PYTHON_BACKEND_URL=http://app-backend:8000
     depends_on:
       backend:
         condition: service_healthy

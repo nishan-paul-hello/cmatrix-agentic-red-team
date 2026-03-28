@@ -59,7 +59,7 @@ services:
   # Backend Service (Python/FastAPI)
   backend:
     build:
-      context: ./backend
+      context: ./app-backend
       dockerfile: Dockerfile
     container_name: cmatrix-backend
     # Enable privileged mode for full host access (required for cybersecurity tool)
@@ -83,9 +83,9 @@ services:
       # Mount entire host filesystem for full access
       - /:/host
       # Mount data files for persistence
-      - ./backend/data:/app/data
+      - ./app-backend/data:/app/data
       # Mount backend code for development (comment out for production)
-      - ./backend:/app
+      - ./app-backend:/app
       # Cache HuggingFace models to avoid re-downloading on every build
       - huggingface_cache:/root/.cache/huggingface
     depends_on:
@@ -107,7 +107,7 @@ services:
   # Celery Worker for background jobs
   worker:
     build:
-      context: ./backend
+      context: ./app-backend
       dockerfile: Dockerfile
     container_name: cmatrix-worker
     command: celery -A app.worker worker --loglevel=info --concurrency=4
@@ -120,8 +120,8 @@ services:
       - QDRANT_PORT=6333
       - SECRET_KEY=${SECRET_KEY:-your-secret-key-change-this-in-production-make-it-very-long-and-random}
     volumes:
-      - ./backend/data:/app/data
-      - ./backend:/app
+      - ./app-backend/data:/app/data
+      - ./app-backend:/app
       # Cache HuggingFace models to avoid re-downloading
       - huggingface_cache:/root/.cache/huggingface
     networks:
@@ -145,14 +145,14 @@ services:
 
   frontend:
     build:
-      context: ./frontend
+      context: ./app-frontend
       dockerfile: Dockerfile
     container_name: cmatrix-frontend
     ports:
       - "3000:3000"
     environment:
       - NODE_ENV=production
-      - PYTHON_BACKEND_URL=http://backend:8000
+      - PYTHON_BACKEND_URL=http://app-backend:8000
     depends_on:
       backend:
         condition: service_healthy

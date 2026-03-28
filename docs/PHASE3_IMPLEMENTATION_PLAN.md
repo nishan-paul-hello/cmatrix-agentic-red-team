@@ -67,7 +67,7 @@ Phase 3 transforms CMatrix from a **tool executor** into an **intelligent securi
 - Implement caching for common query patterns
 
 **Deliverables:**
-- `backend/app/services/rag/query_reformulator.py`
+- `app-backend/app/services/rag/query_reformulator.py`
 - Unit tests with 90%+ coverage
 - Integration with vuln_intel_agent
 
@@ -93,7 +93,7 @@ Phase 3 transforms CMatrix from a **tool executor** into an **intelligent securi
 - Build deduplication and cycle detection
 
 **Deliverables:**
-- `backend/app/services/rag/cve_graph.py`
+- `app-backend/app/services/rag/cve_graph.py`
 - Graph visualization utilities
 - Integration tests with real CVE data
 
@@ -126,8 +126,8 @@ Phase 3 transforms CMatrix from a **tool executor** into an **intelligent securi
 - ✅ Implemented A/B testing framework with statistical analysis
 
 **Deliverables:**
-- ✅ `backend/app/services/rag/cve_reranker.py` (700 lines)
-- ✅ `backend/app/services/rag/ab_testing.py` (500 lines)
+- ✅ `app-backend/app/services/rag/cve_reranker.py` (700 lines)
+- ✅ `app-backend/app/services/rag/ab_testing.py` (500 lines)
 - ✅ Ranking explanation module (built-in)
 - ✅ A/B testing framework (complete)
 - ✅ Comprehensive test suite (25+ tests, 90%+ coverage)
@@ -172,7 +172,7 @@ Phase 3 transforms CMatrix from a **tool executor** into an **intelligent securi
 - Add max retry limit (3 attempts)
 
 **Deliverables:**
-- ✅ `backend/app/services/rag/self_correction.py`
+- ✅ `app-backend/app/services/rag/self_correction.py`
 - Retry strategy decision tree
 - Telemetry for correction patterns
 
@@ -205,7 +205,7 @@ Phase 3 transforms CMatrix from a **tool executor** into an **intelligent securi
 - ✅ Build hybrid search (semantic + metadata filters)
 
 **Deliverables:**
-- ✅ `backend/app/services/rag/cve_vector_store.py` (850 lines)
+- ✅ `app-backend/app/services/rag/cve_vector_store.py` (850 lines)
 - ✅ NVD sync script (`scripts/sync_nvd.py`) (450 lines)
 - ✅ Qdrant collection schema
 - ✅ Comprehensive test suite (25+ tests, 90%+ coverage)
@@ -256,7 +256,7 @@ Phase 3 transforms CMatrix from a **tool executor** into an **intelligent securi
 - Build plan caching for similar requests
 
 **Deliverables:**
-- `backend/app/services/reasoning/rewoo.py`
+- `app-backend/app/services/reasoning/rewoo.py`
 - Plan templates for common scenarios
 - Execution metrics dashboard
 
@@ -297,7 +297,7 @@ Phase 3 transforms CMatrix from a **tool executor** into an **intelligent securi
 - Build reflection history tracking
 
 **Deliverables:**
-- `backend/app/services/reasoning/reflection.py`
+- `app-backend/app/services/reasoning/reflection.py`
 - Reflection templates
 - Quality improvement metrics
 
@@ -347,7 +347,7 @@ Phase 3 transforms CMatrix from a **tool executor** into an **intelligent securi
 - Build strategy visualization
 
 **Deliverables:**
-- `backend/app/services/reasoning/tree_of_thoughts.py`
+- `app-backend/app/services/reasoning/tree_of_thoughts.py`
 - Strategy templates library
 - Decision explanation module
 
@@ -455,7 +455,7 @@ requests-cache==1.1.1         # HTTP caching
 ## File Structure
 
 ```
-backend/app/
+app-backend/app/
 ├── services/
 │   ├── rag/                          # NEW
 │   │   ├── __init__.py

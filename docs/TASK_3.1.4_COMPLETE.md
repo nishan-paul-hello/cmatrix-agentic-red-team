@@ -115,18 +115,18 @@ Created dedicated CVE Search Tool:
 ## Files Created/Modified
 
 ### Backend
-1.  `backend/app/services/rag/self_correction.py` (New)
-2.  `backend/app/services/rag/cve_search.py` (New)
-3.  `backend/app/services/nvd.py` (New)
-4.  `backend/app/agents/specialized/vuln_intel_agent.py` (Modified)
-5.  `backend/app/api/v1/endpoints/cve.py` (New)
-6.  `backend/app/api/v1/router.py` (Modified)
-7.  `backend/app/tests/test_rag/test_self_correction.py` (New)
+1.  `app-backend/app/services/rag/self_correction.py` (New)
+2.  `app-backend/app/services/rag/cve_search.py` (New)
+3.  `app-backend/app/services/nvd.py` (New)
+4.  `app-backend/app/agents/specialized/vuln_intel_agent.py` (Modified)
+5.  `app-backend/app/api/v1/endpoints/cve.py` (New)
+6.  `app-backend/app/api/v1/router.py` (Modified)
+7.  `app-backend/app/tests/test_rag/test_self_correction.py` (New)
 
 ### Frontend
-1.  `frontend/src/components/tools/cve-search-tool.tsx` (New)
-2.  `frontend/app/tools/cve/page.tsx` (New)
-3.  `frontend/src/components/sidebar/conversation-sidebar.tsx` (Modified)
+1.  `app-frontend/src/components/tools/cve-search-tool.tsx` (New)
+2.  `app-frontend/app/tools/cve/page.tsx` (New)
+3.  `app-frontend/src/components/sidebar/conversation-sidebar.tsx` (Modified)
 
 ---
 

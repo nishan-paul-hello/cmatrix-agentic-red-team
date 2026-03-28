@@ -386,7 +386,7 @@ async def search_cves(
 ## Files Created
 
 ```
-backend/
+app-backend/
 ├── app/
 │   ├── services/
 │   │   └── rag/

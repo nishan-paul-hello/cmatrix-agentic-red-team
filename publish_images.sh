@@ -60,7 +60,7 @@ read -p "Press Enter to continue..."
 echo "----------------------------------------------------------------"
 echo "Building Backend Image..."
 echo "----------------------------------------------------------------"
-docker build -t $USERNAME/cmatrix-backend:$VERSION ./backend
+docker build -t $USERNAME/cmatrix-backend:$VERSION ./app-backend
 echo "Pushing Backend Image..."
 if ! docker push $USERNAME/cmatrix-backend:$VERSION; then
     echo "----------------------------------------------------------------"
@@ -75,7 +75,7 @@ fi
 echo "----------------------------------------------------------------"
 echo "Building Frontend Image..."
 echo "----------------------------------------------------------------"
-docker build -t $USERNAME/cmatrix-frontend:$VERSION ./frontend
+docker build -t $USERNAME/cmatrix-frontend:$VERSION ./app-frontend
 echo "Pushing Frontend Image..."
 if ! docker push $USERNAME/cmatrix-frontend:$VERSION; then
     echo "----------------------------------------------------------------"

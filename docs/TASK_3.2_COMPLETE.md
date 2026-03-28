@@ -477,19 +477,19 @@ print(f"Using strategy: {selected.name}")
 ## Files Created
 
 ```
-backend/app/services/reasoning/
+app-backend/app/services/reasoning/
 ├── __init__.py                          # Module exports
 ├── rewoo.py                             # ReWOO planner (850 lines)
 ├── reflection.py                        # Self-reflection (650 lines)
 └── tree_of_thoughts.py                  # Tree of Thoughts (950 lines)
 
-backend/app/tests/test_reasoning/
+app-backend/app/tests/test_reasoning/
 ├── __init__.py                          # Test module init
 ├── test_rewoo.py                        # ReWOO tests (20+ tests)
 ├── test_reflection.py                   # Reflection tests (25+ tests)
 └── test_tree_of_thoughts.py             # ToT tests (30+ tests)
 
-backend/examples/
+app-backend/examples/
 └── demo_advanced_reasoning.py           # Comprehensive demo script
 
 docs/

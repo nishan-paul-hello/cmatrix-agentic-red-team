@@ -1,0 +1,6 @@
+/**
+ * Global styles entry point
+ * Imports all style modules
+ */
+
+@import "../src/styles/globals.css";

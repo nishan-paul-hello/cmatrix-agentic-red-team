@@ -51,7 +51,7 @@ All 4 optimization features have been successfully implemented with **enterprise
 - 💰 Saves API costs (if using paid API)
 - 🎯 Works across different phrasings
 
-**File**: `backend/app/services/optimization/semantic_cache.py` (650 lines)
+**File**: `app-backend/app/services/optimization/semantic_cache.py` (650 lines)
 
 ---
 
@@ -69,7 +69,7 @@ All 4 optimization features have been successfully implemented with **enterprise
 - 📊 Smooth streaming
 - 💾 Lower memory usage
 
-**File**: `backend/app/services/optimization/backpressure.py` (450 lines)
+**File**: `app-backend/app/services/optimization/backpressure.py` (450 lines)
 
 ---
 
@@ -87,7 +87,7 @@ All 4 optimization features have been successfully implemented with **enterprise
 - 💰 Lower API costs (if using paid API)
 - ⚡ Faster processing
 
-**File**: `backend/app/services/optimization/token_optimizer.py` (700 lines)
+**File**: `app-backend/app/services/optimization/token_optimizer.py` (700 lines)
 
 ---
 
@@ -106,7 +106,7 @@ All 4 optimization features have been successfully implemented with **enterprise
 - 🔍 Identify bottlenecks
 - ✅ Validate performance
 
-**File**: `backend/tests/load/locustfile.py` (350 lines)
+**File**: `app-backend/tests/load/locustfile.py` (350 lines)
 
 ---
 
@@ -196,7 +196,7 @@ docker run -d -p 6379:6379 redis:7-alpine
 ### Step 2: Start the Server (1 minute)
 
 ```bash
-cd backend
+cd app-backend
 source venv/bin/activate
 uvicorn app.main:app --reload
 ```
@@ -286,7 +286,7 @@ All endpoints require authentication.
 
 ### Environment Variables
 
-Add to `backend/.env`:
+Add to `app-backend/.env`:
 
 ```bash
 # Semantic Cache
@@ -552,7 +552,7 @@ curl http://localhost:8000/api/v1/optimization/health
 - **Quick Start**: See [Quick Start Guide](#quick-start-guide)
 - **API Docs**: http://localhost:8000/docs
 - **Tests**: `pytest tests/test_optimization_integration.py -v`
-- **Logs**: `backend/logs/app.log`
+- **Logs**: `app-backend/logs/app.log`
 
 ---
 

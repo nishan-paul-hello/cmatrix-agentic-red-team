@@ -15,7 +15,7 @@ Successfully implemented a state-of-the-art **Query Reformulation Engine** that 
 ## What Was Built
 
 ### 1. Core Module: `query_reformulator.py`
-**Location:** `backend/app/services/rag/query_reformulator.py`
+**Location:** `app-backend/app/services/rag/query_reformulator.py`
 **Lines of Code:** ~600
 **Complexity:** 9/10
 
@@ -96,7 +96,7 @@ Successfully implemented a state-of-the-art **Query Reformulation Engine** that 
 ## Test Coverage
 
 ### Test Suite: `test_query_reformulator.py`
-**Location:** `backend/app/tests/test_rag/test_query_reformulator.py`
+**Location:** `app-backend/app/tests/test_rag/test_query_reformulator.py`
 **Tests:** 26 (all passing)
 **Coverage:** ~95%
 
@@ -239,10 +239,10 @@ print(f"Explanation: {result.explanation}")
 ## Files Created/Modified
 
 ### Created
-1. `backend/app/services/rag/__init__.py` - Package initialization
-2. `backend/app/services/rag/query_reformulator.py` - Main implementation
-3. `backend/app/tests/test_rag/__init__.py` - Test package
-4. `backend/app/tests/test_rag/test_query_reformulator.py` - Test suite
+1. `app-backend/app/services/rag/__init__.py` - Package initialization
+2. `app-backend/app/services/rag/query_reformulator.py` - Main implementation
+3. `app-backend/app/tests/test_rag/__init__.py` - Test package
+4. `app-backend/app/tests/test_rag/test_query_reformulator.py` - Test suite
 
 ### Modified
 - None (new feature, no existing code modified)

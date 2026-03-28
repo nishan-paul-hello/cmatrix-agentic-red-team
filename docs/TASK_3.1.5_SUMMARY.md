@@ -92,7 +92,7 @@
 ## 📁 Files Created
 
 ```
-backend/
+app-backend/
 ├── app/
 │   ├── services/
 │   │   └── rag/

@@ -83,12 +83,12 @@ make dev-backend          # Start backend dev server
 make clean                # Clean all build artifacts
 
 # Frontend
-cd frontend && make help  # Show frontend commands
-cd frontend && npm run quality
+cd app-frontend && make help  # Show frontend commands
+cd app-frontend && npm run quality
 
 # Backend
-cd backend && make help   # Show backend commands
-cd backend && make quality
+cd app-backend && make help   # Show backend commands
+cd app-backend && make quality
 ```
 
 ---
@@ -99,7 +99,7 @@ cd backend && make quality
 
 #### **Ruff** - Linting & Formatting
 
-**Configuration**: `backend/pyproject.toml`
+**Configuration**: `app-backend/pyproject.toml`
 
 ```toml
 [tool.ruff]
@@ -138,7 +138,7 @@ ignore = [
 
 #### **mypy** - Type Checking
 
-**Configuration**: `backend/pyproject.toml`
+**Configuration**: `app-backend/pyproject.toml`
 
 ```toml
 [tool.mypy]
@@ -168,7 +168,7 @@ ignore_missing_imports = true
 
 #### **Bandit** - Security Scanning
 
-**Configuration**: `backend/pyproject.toml`
+**Configuration**: `app-backend/pyproject.toml`
 
 ```toml
 [tool.bandit]
@@ -184,7 +184,7 @@ skips = ["B101", "B601"]
 ### Backend Commands
 
 ```bash
-cd backend
+cd app-backend
 
 # Makefile commands
 make quality              # Run all checks + auto-fix
@@ -226,7 +226,7 @@ mypy app/                 # Type check
 
 #### **ESLint** - Linting
 
-**Configuration**: `frontend/.eslintrc.json`
+**Configuration**: `app-frontend/.eslintrc.json`
 
 ```json
 {
@@ -265,7 +265,7 @@ mypy app/                 # Type check
 
 #### **Prettier** - Formatting
 
-**Configuration**: `frontend/.prettierrc.json`
+**Configuration**: `app-frontend/.prettierrc.json`
 
 ```json
 {
@@ -291,7 +291,7 @@ mypy app/                 # Type check
 
 #### **TypeScript** - Type Checking
 
-**Configuration**: `frontend/tsconfig.json`
+**Configuration**: `app-frontend/tsconfig.json`
 
 ```json
 {
@@ -314,7 +314,7 @@ mypy app/                 # Type check
 ### Frontend Commands
 
 ```bash
-cd frontend
+cd app-frontend
 
 # Makefile commands
 make quality              # Run all checks + auto-fix
@@ -356,7 +356,7 @@ Prettier automatically sorts Tailwind CSS classes for consistency:
 
 ### Pre-commit Configuration
 
-**Location**: `backend/.pre-commit-config.yaml` (runs from git root)
+**Location**: `app-backend/.pre-commit-config.yaml` (runs from git root)
 
 The pre-commit configuration checks **both** frontend and backend:
 
@@ -367,25 +367,25 @@ repos:
     rev: v0.8.4
     hooks:
       - id: ruff
-        args: [--fix, --config=backend/pyproject.toml]
-        files: ^backend/
+        args: [--fix, --config=app-backend/pyproject.toml]
+        files: ^app-backend/
       - id: ruff-format
-        files: ^backend/
+        files: ^app-backend/
 
   # Backend - mypy
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: v1.13.0
     hooks:
       - id: mypy
-        args: [--config-file=backend/pyproject.toml]
-        files: ^backend/
+        args: [--config-file=app-backend/pyproject.toml]
+        files: ^app-backend/
 
   # Frontend - ESLint
   - repo: https://github.com/pre-commit/mirrors-eslint
     rev: v9.17.0
     hooks:
       - id: eslint
-        files: ^frontend/.*\.[jt]sx?$
+        files: ^app-frontend/.*\.[jt]sx?$
         args: [--fix, --max-warnings=0]
 
   # Frontend - Prettier
@@ -393,7 +393,7 @@ repos:
     rev: v4.0.0-alpha.8
     hooks:
       - id: prettier
-        files: ^frontend/
+        files: ^app-frontend/
         args: [--write]
 
   # All files - Standard checks
@@ -413,8 +413,8 @@ repos:
     rev: 1.7.10
     hooks:
       - id: bandit
-        args: [-c, backend/pyproject.toml]
-        files: ^backend/
+        args: [-c, app-backend/pyproject.toml]
+        files: ^app-backend/
 ```
 
 ### Root Makefile
@@ -452,13 +452,13 @@ make clean                # Clean all artifacts
 
 When you run `git commit`, the following checks run **automatically**:
 
-#### **Backend Files** (`backend/**/*.py`)
+#### **Backend Files** (`app-backend/**/*.py`)
 1. ✅ **Ruff linting** - Auto-fixes code issues
 2. ✅ **Ruff formatting** - Formats to 100 char line length
 3. ✅ **mypy type checking** - Warns about type issues
 4. ✅ **Bandit security scanning** - Detects vulnerabilities
 
-#### **Frontend Files** (`frontend/**/*.{ts,tsx,js,jsx}`)
+#### **Frontend Files** (`app-frontend/**/*.{ts,tsx,js,jsx}`)
 5. ✅ **ESLint** - Auto-fixes TypeScript/React issues
 6. ✅ **Prettier** - Formats code + sorts Tailwind classes
 
@@ -474,7 +474,7 @@ When you run `git commit`, the following checks run **automatically**:
 
 ```bash
 # From backend directory
-cd backend
+cd app-backend
 source venv/bin/activate
 pre-commit install
 ```
@@ -497,8 +497,8 @@ pre-commit autoupdate
 
 ```bash
 # 1. Make changes
-vim frontend/src/components/chat.tsx
-vim backend/app/api/endpoints/chat.py
+vim app-frontend/src/components/chat.tsx
+vim app-backend/app/api/endpoints/chat.py
 
 # 2. Stage changes
 git add .
@@ -530,7 +530,7 @@ git commit -m "feat: add feature"
 # - hook id: ruff
 # - exit code: 1
 #
-# backend/app/main.py:10:1: F401 Unused import
+# app-backend/app/main.py:10:1: F401 Unused import
 #
 # ❌ Commit blocked!
 ```
@@ -541,7 +541,7 @@ git commit -m "feat: add feature"
 make quality
 
 # Option 2: Fix specific issue
-cd backend && make lint-fix
+cd app-backend && make lint-fix
 
 # Option 3: Run pre-commit again
 pre-commit run --all-files
@@ -583,8 +583,8 @@ git push
 make quality
 
 # Or individually
-cd frontend && make quality
-cd backend && make quality
+cd app-frontend && make quality
+cd app-backend && make quality
 ```
 
 ### Auto-fix Everything
@@ -595,8 +595,8 @@ make lint                 # Auto-fix linting issues
 make format               # Format all code
 
 # Or individually
-cd frontend && make lint-fix && make format
-cd backend && make lint-fix && make format
+cd app-frontend && make lint-fix && make format
+cd app-backend && make lint-fix && make format
 ```
 
 ### Type Checking
@@ -606,8 +606,8 @@ cd backend && make lint-fix && make format
 make typecheck
 
 # Or individually
-cd frontend && npm run typecheck
-cd backend && mypy app/
+cd app-frontend && npm run typecheck
+cd app-backend && mypy app/
 ```
 
 ---
@@ -703,7 +703,7 @@ Create `.vscode/settings.json`:
 
 **Solution**:
 ```bash
-cd backend
+cd app-backend
 source venv/bin/activate
 pre-commit install
 ```
@@ -714,7 +714,7 @@ pre-commit install
 
 **Solution**:
 ```bash
-cd frontend
+cd app-frontend
 npm run lint:fix
 npm run format
 ```
@@ -725,7 +725,7 @@ npm run format
 
 **Solution**:
 ```bash
-cd backend
+cd app-backend
 make lint-fix
 make format
 ```
@@ -737,11 +737,11 @@ make format
 **Solution**:
 ```bash
 # Backend
-cd backend
+cd app-backend
 mypy app/  # Review errors and add type hints
 
 # Frontend
-cd frontend
+cd app-frontend
 npm run typecheck  # Review errors and fix types
 ```
 
@@ -755,8 +755,8 @@ npm run typecheck  # Review errors and fix types
 make install
 
 # Or individually
-cd frontend && npm install
-cd backend && pip install -r requirements.txt
+cd app-frontend && npm install
+cd app-backend && pip install -r requirements.txt
 ```
 
 ### Peer Dependency Conflicts (Frontend)
@@ -765,7 +765,7 @@ cd backend && pip install -r requirements.txt
 
 **Solution**:
 ```bash
-cd frontend
+cd app-frontend
 npm install --legacy-peer-deps
 ```
 
@@ -935,8 +935,8 @@ git commit --amend --no-edit
 
 ### Quick References
 - **Root**: `make help`
-- **Frontend**: `cd frontend && make help`
-- **Backend**: `cd backend && make help`
+- **Frontend**: `cd app-frontend && make help`
+- **Backend**: `cd app-backend && make help`
 
 ---
 
