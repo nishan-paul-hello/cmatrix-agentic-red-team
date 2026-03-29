@@ -25,7 +25,7 @@ Complete all of this **before** the teacher enters the room.
 
 - [ ] CMatrix running on Contabo VPS (`cmatrix.kaiofficial.xyz`)
 - [ ] Frontend open at `https://cmatrix.kaiofficial.xyz`, logged in, clean chat
-- [ ] `lab.kaiofficial.xyz` live and responding (`curl http://lab.kaiofficial.xyz`)
+- [ ] `lab-cmatrix.kaiofficial.xyz` live and responding (`curl http://lab-cmatrix.kaiofficial.xyz`)
 - [ ] LLM provider set to **Cerebras** or **OpenRouter** (fast response times)
 - [ ] Agent sidebar visible — all agents showing as idle (dark dots)
 - [ ] Browser zoom at 110% for readability on projector/screen share
@@ -40,13 +40,13 @@ Complete all of this **before** the teacher enters the room.
 ### Act 1: The Setup (2 minutes)
 **What you say:**
 
-> "This is CMatrix — an autonomous red team platform built on LangGraph, FastAPI, and Next.js. Instead of walking you through features, I'm going to start a real security engagement right now against a deliberately vulnerable target we deployed at `lab.kaiofficial.xyz` on our own VPS. One sentence. That's all I'll give it."
+> "This is CMatrix — an autonomous red team platform built on LangGraph, FastAPI, and Next.js. Instead of walking you through features, I'm going to start a real security engagement right now against a deliberately vulnerable target we deployed at `lab-cmatrix.kaiofficial.xyz` on our own Hetzner VPS. One sentence. That's all I'll give it."
 
 **What you do:**
 
 Type into the CMatrix chat input:
 ```
-Perform a full security audit of http://lab.kaiofficial.xyz
+Perform a full security audit of http://lab-cmatrix.kaiofficial.xyz
 ```
 
 Press Enter. Say nothing. Let the system respond first.
@@ -92,9 +92,9 @@ Click **Approve**.
 **What the UI shows:**
 
 - Network Agent's nmap scan returns: ports 80, 21 (vsftpd 2.3.4), 8080
-- Web Agent simultaneously finds: reflected XSS on `/search`, exposed `.env` at `/config/.env`
+- Web Agent simultaneously finds: open redirect on OAuth callback (`/api/auth/callback?redirect=`), exposed `.env` at `/config/.env`
 - Auth Agent simultaneously finds: SQL injection on login form (`' OR 1=1 --`)
-- API Security Agent finds: IDOR on `/api/user/:id` — no token check
+- API Security Agent finds: IDOR on `/api/users/:id` — no auth guard
 
 The agent sidebar shows multiple green pulsing dots at once.
 
@@ -106,7 +106,7 @@ When the vsftpd banner appears:
 > "Port 21 is interesting — vsftpd 2.3.4. That version has a known backdoor. The Network Agent flagged it and passed that finding to VulnIntel."
 
 When the `.env` appears:
-> "The Config Agent found database credentials exposed at `/config/.env`. That's a P0 finding in any real engagement."
+> "The Web Agent found database credentials, Google OAuth secrets, and AWS keys exposed at `/config/.env` — a NestJS route with zero authentication. That's a P0 finding in any real engagement."
 
 **Why this works:** Parallel execution is visually dramatic — multiple findings arriving at once. The teacher sees the system working, not waiting.
 
@@ -138,8 +138,8 @@ A structured final report renders — findings sorted by CVSS severity, each wit
 | CRITICAL | node-serialize RCE (CVE-2017-5941) | 9.8 |
 | HIGH | SQL Injection on login | 8.8 |
 | HIGH | vsftpd 2.3.4 backdoor | 8.1 |
-| MEDIUM | Reflected XSS on /search | 6.1 |
-| MEDIUM | IDOR on /api/user/:id | 5.4 |
+| MEDIUM | Open redirect — OAuth callback (CWE-601) | 6.1 |
+| MEDIUM | IDOR on /api/users/:id | 5.4 |
 | LOW | Exposed .env credentials | 4.3 |
 
 **What you say:**
@@ -155,7 +155,7 @@ A structured final report renders — findings sorted by CVSS severity, each wit
 Anticipate these questions and have these answers ready:
 
 **"Is this running against a real server?"**
-> Yes — `lab.kaiofficial.xyz` is a deliberately vulnerable Node.js app we deployed on our Hetzner VPS. The scan crossed the public internet. That's a real nmap result.
+> Yes — `lab-cmatrix.kaiofficial.xyz` is a deliberately vulnerable Next.js + NestJS app we deployed on our Hetzner VPS. The scan crossed the public internet. That's a real nmap result.
 
 **"How is this different from running nmap + Metasploit manually?"**
 > The difference is the reasoning layer. CMatrix decides which tools to run, in what order, and why — without us telling it. It also interprets findings in context, connects a library version to a CVE database, and synthesizes a report. It's the analyst, not the toolkit.
