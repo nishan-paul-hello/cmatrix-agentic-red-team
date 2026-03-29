@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![CMatrix Logo](frontend/public/icon.svg)
+![CMatrix Logo](app-frontend/public/icon.svg)
 
 **AI-Powered Multi-Agent Security Orchestration Platform**
 
