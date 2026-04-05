@@ -45,10 +45,10 @@ if ! curl -fsSL "$COMPOSE_URL" -o docker-compose.yml; then
 fi
 
 # 4. Download Sample LLM Configuration
-CONFIG_SAMPLE_URL="https://raw.githubusercontent.com/nishan-paul-2022/cmatrix-agentic-red-team/main/llm_config_sample.json"
+CONFIG_SAMPLE_URL="https://raw.githubusercontent.com/nishan-paul-2022/cmatrix-agentic-red-team/main/llm-config-template.json"
 
 echo -e "${BLUE}⬇️  Downloading sample LLM configuration...${NC}"
-if curl -fsSL "$CONFIG_SAMPLE_URL" -o llm_config_sample.json 2>/dev/null; then
+if curl -fsSL "$CONFIG_SAMPLE_URL" -o llm-config-template.json 2>/dev/null; then
     echo -e "${GREEN}✅ Sample configuration downloaded${NC}"
 else
     echo -e "${BLUE}ℹ️  Could not download sample config (optional)${NC}"
@@ -74,10 +74,10 @@ echo -e "${GREEN}📝 Next Steps:${NC}"
 echo "1. Open http://localhost:3000 in your browser"
 echo "2. Create your admin account (first-time setup)"
 echo "3. Navigate to Settings → LLM Configuration"
-echo "4. Import the sample config file: llm_config_sample.json"
+echo "4. Import the sample config file: llm-config-template.json"
 echo "5. Edit the profiles to add your API keys"
 echo "6. Activate a profile to start using CMatrix"
 echo ""
-echo -e "${BLUE}ℹ️  Sample config location:${NC} $PWD/llm_config_sample.json"
+echo -e "${BLUE}ℹ️  Sample config location:${NC} $PWD/llm-config-template.json"
 echo ""
 echo "To stop CMatrix, run: cd $INSTALL_DIR && docker compose down"
