@@ -47,8 +47,8 @@ jobs:
       - name: Create minimal CI .env for tests
         run: |
           echo "APP_NAME=CMatrix" >> .env
-          echo "BACKEND_PORT=8000" >> .env
-          echo "FRONTEND_PORT=3000" >> .env
+          echo "BACKEND_PORT=3012" >> .env
+          echo "FRONTEND_PORT=3011" >> .env
           echo "SECRET_KEY=ci-test-key-not-for-production" >> .env
           echo "ALGORITHM=HS256" >> .env
           echo "ACCESS_TOKEN_EXPIRE_MINUTES=10080" >> .env
@@ -113,13 +113,13 @@ jobs:
           BACKEND_IMAGE: cmatrix-backend:test
           FRONTEND_IMAGE: cmatrix-frontend:test
 
-      - name: Wait for Backend Health (at port 8000)
+      - name: Wait for Backend Health (at port 3012)
         run: |
-          timeout 120 bash -c 'until curl -fsS http://localhost:8000/api/v1/health; do echo "Waiting for backend..."; sleep 5; done'
+          timeout 120 bash -c 'until curl -fsS http://localhost:3012/api/v1/health; do echo "Waiting for backend..."; sleep 5; done'
 
-      - name: Wait for Frontend Health (at port 3000)
+      - name: Wait for Frontend Health (at port 3011)
         run: |
-          timeout 120 bash -c 'until curl -fsS http://localhost:3000; do echo "Waiting for frontend..."; sleep 5; done'
+          timeout 120 bash -c 'until curl -fsS http://localhost:3011; do echo "Waiting for frontend..."; sleep 5; done'
 
       - name: Stop and Cleanup Verification Containers
         if: always()

@@ -9,7 +9,7 @@ const nextConfig = {
   },
   async rewrites() {
     // Use environment variable for backend URL, fallback to localhost for local dev
-    const backendUrl = process.env.PYTHON_BACKEND_URL || "http://localhost:8000";
+    const backendUrl = process.env.PYTHON_BACKEND_URL || "http://localhost:3012";
     return [
       {
         source: "/api/:path*",

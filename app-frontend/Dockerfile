@@ -50,11 +50,11 @@ RUN chown -R nextjs:nodejs /app
 USER nextjs
 
 # Expose the port
-EXPOSE 3000
+EXPOSE 3011
 
 # Health check (using shell to resolve PORT)
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
-    CMD node -e "require('http').get('http://localhost:' + (process.env.PORT || 3000) + '/api/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
+    CMD node -e "require('http').get('http://localhost:' + (process.env.PORT || 3011) + '/api/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
 
 # Start the application
 CMD ["node", "server.js"]

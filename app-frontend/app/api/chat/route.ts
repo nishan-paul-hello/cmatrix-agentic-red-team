@@ -2,7 +2,7 @@ import type { NextRequest } from "next/server";
 
 export const runtime = "edge";
 
-const PYTHON_BACKEND_URL = process.env.PYTHON_BACKEND_URL || "http://localhost:8000";
+const PYTHON_BACKEND_URL = process.env.PYTHON_BACKEND_URL || "http://localhost:3012";
 
 export async function POST(req: NextRequest) {
   try {

@@ -48,7 +48,7 @@ services:
     environment:
       # Core
       - APP_NAME=CMatrix
-      - BACKEND_PORT=8000
+      - BACKEND_PORT=3012
       - DEBUG=false
       - LOG_LEVEL=INFO
       # Security
@@ -81,10 +81,10 @@ services:
     networks:
       - cmatrix-network-test
     ports:
-      - "8000:8000"
+      - "3012:3012"
     restart: on-failure
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:3012/api/v1/health"]
       interval: 10s
       timeout: 5s
       retries: 10
@@ -95,18 +95,18 @@ services:
     image: ${FRONTEND_IMAGE}
     container_name: cmatrix-app-frontend-test
     environment:
-      - PORT=3000
-      - PYTHON_BACKEND_URL=http://cmatrix-app-backend-test:8000
+      - PORT=3011
+      - PYTHON_BACKEND_URL=http://cmatrix-app-backend-test:3012
     depends_on:
       app-backend:
         condition: service_healthy
     networks:
       - cmatrix-network-test
     ports:
-      - "3000:3000"
+      - "3011:3011"
     restart: on-failure
     healthcheck:
-      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"]
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3011', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"]
       interval: 10s
       timeout: 5s
       retries: 10

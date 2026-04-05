@@ -4,7 +4,7 @@
 
 const getBaseUrl = (): string => {
   // For both client and server-side, use the environment variable
-  return process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
+  return process.env.NEXT_PUBLIC_API_URL || "http://localhost:3012/api/v1";
 };
 
 export const apiConfig = {

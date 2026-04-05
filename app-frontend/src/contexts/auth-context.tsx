@@ -29,7 +29,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
-  const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3012/api/v1";
 
   // Load token from localStorage on mount
   useEffect(() => {

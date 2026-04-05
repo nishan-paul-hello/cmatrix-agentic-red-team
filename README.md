@@ -233,14 +233,14 @@ docker-compose exec backend python init_knowledge_base.py
 
 #### 5. Access the Application
 
-- **Frontend**: http://localhost:3000
-- **Backend API**: http://localhost:8000
-- **API Documentation**: http://localhost:8000/docs
+- **Frontend**: http://localhost:3011
+- **Backend API**: http://localhost:3012
+- **API Documentation**: http://localhost:3012/docs
 - **Qdrant Dashboard**: http://localhost:6333/dashboard
 
 #### 6. Create Your First User
 
-Visit http://localhost:3000 and click "Sign Up" to create an account.
+Visit http://localhost:3011 and click "Sign Up" to create an account.
 
 ---
 
@@ -286,7 +286,7 @@ docker run -p 6333:6333 -p 6334:6334 \
 python init_knowledge_base.py
 
 # Start backend server
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+uvicorn app.main:app --reload --host 0.0.0.0 --port 3012
 
 # In a new terminal, start Celery worker
 celery -A app.worker worker --loglevel=info
@@ -302,13 +302,13 @@ cd frontend
 npm install
 
 # Configure environment
-echo "NEXT_PUBLIC_API_URL=http://localhost:8000" > .env.local
+echo "NEXT_PUBLIC_API_URL=http://localhost:3012" > .env.local
 
 # Start development server
 npm run dev
 ```
 
-Access the application at http://localhost:3000
+Access the application at http://localhost:3011
 
 ---
 
@@ -554,7 +554,7 @@ MY_TOOL = StructuredTool.from_function(
 ./health_check.sh
 
 # Check specific service
-curl http://localhost:8000/api/v1/health
+curl http://localhost:3012/api/v1/health
 ```
 
 ### Test Scripts
@@ -622,7 +622,7 @@ docker-compose up -d --scale backend=3
 
 - **Logs**: `docker-compose logs -f [service]`
 - **Metrics**: Backend logs in `backend/logs/`
-- **Health**: http://localhost:8000/api/v1/health
+- **Health**: http://localhost:3012/api/v1/health
 
 ---
 
@@ -698,7 +698,7 @@ docker-compose up -d
 **Problem**: Port already in use
 ```bash
 # Find process using port
-lsof -i :3000  # or :8000, :6379, etc.
+lsof -i :3011  # or :3012, :6379, etc.
 
 # Kill process or change port in docker-compose.yml
 ```
@@ -742,7 +742,7 @@ docker-compose exec backend python check_redis.py
 ```bash
 # Check NEXT_PUBLIC_API_URL in .env.local
 # Ensure backend is running on correct port
-curl http://localhost:8000/api/v1/health
+curl http://localhost:3012/api/v1/health
 ```
 
 **Problem**: Build errors
@@ -761,7 +761,7 @@ npm run build
 cat backend/llm_config.json
 
 # Verify API key is set in the UI / Database
-# Profiles can be checked at http://localhost:8000/api/v1/profiles
+# Profiles can be checked at http://localhost:3012/api/v1/profiles
 
 # Test LLM setup
 docker-compose exec backend python setup_llm.py
@@ -781,7 +781,7 @@ docker-compose exec backend python setup_llm.py
 ### Documentation
 
 - [Architecture Overview](docs/architecture.md)
-- [API Documentation](http://localhost:8000/docs) (when running)
+- [API Documentation](http://localhost:3012/docs) (when running)
 - [Agentic Implementation Roadmap](AGENTIC_IMPLEMENTATION_ROADMAP.md)
 
 ### Related Projects

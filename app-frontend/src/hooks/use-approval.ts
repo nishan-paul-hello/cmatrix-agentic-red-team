@@ -9,7 +9,7 @@ import { useAuth } from "@/contexts/auth-context";
 import { PendingApprovalResponse, ApprovalRequest, ApprovalResponse } from "@/types/approval.types";
 
 // Get API base URL (already includes /api/v1)
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3012/api/v1";
 
 export const useApproval = (threadId: string) => {
   const { token } = useAuth();

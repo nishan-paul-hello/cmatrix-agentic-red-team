@@ -14,13 +14,13 @@ Test Scenarios:
 
 Usage:
     # Run basic load test
-    locust -f locustfile.py --users 50 --spawn-rate 5 --host http://localhost:8000
+    locust -f locustfile.py --users 50 --spawn-rate 5 --host http://localhost:3012
 
     # Run with web UI
-    locust -f locustfile.py --host http://localhost:8000
+    locust -f locustfile.py --host http://localhost:3012
 
     # Run headless with specific duration
-    locust -f locustfile.py --users 100 --spawn-rate 10 --run-time 5m --headless --host http://localhost:8000
+    locust -f locustfile.py --users 100 --spawn-rate 10 --run-time 5m --headless --host http://localhost:3012
 """
 
 import random

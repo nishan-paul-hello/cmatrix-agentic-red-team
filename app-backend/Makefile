@@ -90,8 +90,8 @@ clean:
 # Development server
 run:
 	@echo "🚀 Starting development server..."
-	uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+	uvicorn app.main:app --host 0.0.0.0 --port 3012 --reload
 
 run-prod:
 	@echo "🚀 Starting production server..."
-	uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers 4
+	uvicorn app.main:app --host 0.0.0.0 --port 3012 --workers 4

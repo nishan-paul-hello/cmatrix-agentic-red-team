@@ -205,7 +205,7 @@ uvicorn app.main:app --reload
 
 ```bash
 # Check health
-curl http://localhost:8000/api/v1/optimization/health
+curl http://localhost:3012/api/v1/optimization/health
 
 # Expected response:
 {
@@ -534,7 +534,7 @@ Optimization Manager
 redis-cli ping
 
 # Check health
-curl http://localhost:8000/api/v1/optimization/health
+curl http://localhost:3012/api/v1/optimization/health
 ```
 
 **Issue**: Poor cache hit rate
@@ -550,7 +550,7 @@ curl http://localhost:8000/api/v1/optimization/health
 ### Resources
 
 - **Quick Start**: See [Quick Start Guide](#quick-start-guide)
-- **API Docs**: http://localhost:8000/docs
+- **API Docs**: http://localhost:3012/docs
 - **Tests**: `pytest tests/test_optimization_integration.py -v`
 - **Logs**: `app-backend/logs/app.log`
 

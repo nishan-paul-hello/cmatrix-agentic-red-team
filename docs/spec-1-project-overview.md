@@ -39,8 +39,8 @@ nano .env            # Add your SECRET_KEY
 ./docker.sh start    # Starts everything in background
 
 # 3. Access
-# App: http://localhost:3000
-# API Docs: http://localhost:8000/docs
+# App: http://localhost:3011
+# API Docs: http://localhost:3012/docs
 ```
 
 **First Run:** Redirected to `/setup` to create admin credentials
@@ -55,7 +55,7 @@ cd app-backend && ./dev.sh
 # 2. Start Frontend (new terminal)
 cd app-frontend && pnpm dev
 
-# 3. Open http://localhost:3000
+# 3. Open http://localhost:3011
 ```
 
 ### Common Docker Commands
@@ -107,7 +107,7 @@ All tools execute real commands (nmap, curl, etc.) with full audit logging.
                              │ HTTP/WebSocket + JWT Token
                              ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                    Next.js Frontend (Port 3000)              │
+│                    Next.js Frontend (Port 3011)              │
 │  - Receives user messages                                    │
 │  - Forwards to Python backend                                │
 │  - Streams responses back to user                            │
@@ -116,7 +116,7 @@ All tools execute real commands (nmap, curl, etc.) with full audit logging.
                              │ Authorization: Bearer <token>
                              ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                  Python Backend (Port 8000)                  │
+│                  Python Backend (Port 3012)                  │
 │  ┌──────────────────────────────────────────────────────┐   │
 │  │  FastAPI Server                                      │   │
 │  │  - Authenticates Request (JWT)                       │   │
@@ -151,11 +151,11 @@ All tools execute real commands (nmap, curl, etc.) with full audit logging.
 ### Key Components
 
 **Frontend (Next.js)**
-- Location: `app-frontend/`, Port: 3000
+- Location: `app-frontend/`, Port: 3011
 - Key File: `app-frontend/app/api/chat/route.ts`
 
 **Backend (Python)**
-- Location: `app-backend/`, Port: 8000
+- Location: `app-backend/`, Port: 3012
 - Key Files: `app-backend/app.py`, `app-backend/agent.py`
 
 ### Benefits
@@ -168,7 +168,7 @@ All tools execute real commands (nmap, curl, etc.) with full audit logging.
 
 ## 🎯 Usage Examples
 
-### Web UI (http://localhost:3000)
+### Web UI (http://localhost:3011)
 
 **Structured Commands:**
 ```
@@ -293,14 +293,14 @@ cmatrix/
 
 ### Backend (.env)
 ```env
-PORT=8000
+PORT=3012
 DATABASE_URL=postgresql+asyncpg://cmatrix:cmatrix@postgres:5432/cmatrix
 SECRET_KEY=your_secret_key_here
 ```
 
 ### Frontend (.env)
 ```env
-PYTHON_BACKEND_URL=http://localhost:8000
+PYTHON_BACKEND_URL=http://localhost:3012
 ```
 
 ### LLM Provider Management
@@ -335,11 +335,11 @@ PYTHON_BACKEND_URL=http://localhost:8000
 
 ```bash
 # Get available providers
-curl -X GET "http://localhost:8000/api/v1/chat/providers" \
+curl -X GET "http://localhost:3012/api/v1/chat/providers" \
   -H "Authorization: Bearer YOUR_JWT_TOKEN"
 
 # Switch to a different provider
-curl -X POST "http://localhost:8000/api/v1/chat/providers/switch" \
+curl -X POST "http://localhost:3012/api/v1/chat/providers/switch" \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer YOUR_JWT_TOKEN" \
   -d '"ollama"'
@@ -376,7 +376,7 @@ pip install -r requirements.txt
 
 **Port already in use:**
 ```bash
-lsof -ti:8000 | xargs kill -9
+lsof -ti:3012 | xargs kill -9
 lsof -ti:3000 | xargs kill -9
 ```
 

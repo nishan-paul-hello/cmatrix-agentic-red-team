@@ -52,7 +52,7 @@ services:
     privileged: true
     pid: "host"
     ports:
-      - "3012:8000"
+      - "3012:3012"
     env_file:
       - .env
     environment:
@@ -73,7 +73,7 @@ services:
         condition: service_started
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:3012/api/v1/health"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -116,7 +116,7 @@ services:
       - NODE_ENV=production
       - PORT=3011
       - NEXT_PUBLIC_API_URL=https://api-cmatrix.kaiofficial.xyz/api/v1
-      - PYTHON_BACKEND_URL=http://cmatrix-app-backend:8000
+      - PYTHON_BACKEND_URL=http://cmatrix-app-backend:3012
     depends_on:
       app-backend:
         condition: service_healthy
