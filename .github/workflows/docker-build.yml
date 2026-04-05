@@ -14,6 +14,7 @@ permissions:
 jobs:
   quality-and-test:
     runs-on: ubuntu-latest
+    if: vars.ENABLE_DEPLOY == 'true'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
