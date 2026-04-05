@@ -35,7 +35,7 @@ jobs:
 
       - name: Install Frontend Dependencies
         working-directory: app-frontend
-        run: npm ci
+        run: npm ci --legacy-peer-deps
 
       - name: Install Backend Dependencies
         working-directory: app-backend
