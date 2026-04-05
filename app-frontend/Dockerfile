@@ -1,18 +1,15 @@
 # Frontend Dockerfile for CMatrix
 FROM node:20-alpine AS base
 
-# Install pnpm
-RUN npm install -g pnpm
-
 # Dependencies stage
 FROM base AS deps
 WORKDIR /app
 
 # Copy package files
-COPY package.json pnpm-lock.yaml ./
+COPY package.json ./
 
 # Install dependencies
-RUN pnpm config set package-import-method copy && pnpm install
+RUN npm install --legacy-peer-deps
 
 # Builder stage
 FROM base AS builder
@@ -28,7 +25,7 @@ COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
 
 # Build the application
-RUN pnpm build
+RUN npm run build
 
 # Runner stage
 FROM base AS runner

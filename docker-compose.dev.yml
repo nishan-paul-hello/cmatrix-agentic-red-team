@@ -63,7 +63,8 @@ services:
     networks:
       - cmatrix-network
     restart: unless-stopped
-    command: sh -c "pnpm install && pnpm dev"
+    user: "root"
+    command: sh -c "npm install --legacy-peer-deps && npm run dev"
 
 networks:
   cmatrix-network:
