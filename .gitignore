@@ -2,3 +2,4 @@
 .vscode/
 .ruff_cache/
 .mypy_cache/
+docs/cmatrix-*.md
