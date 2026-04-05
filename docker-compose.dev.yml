@@ -9,7 +9,7 @@ services:
       - POSTGRES_PASSWORD=cmatrix
       - POSTGRES_DB=cmatrix
     volumes:
-      - postgres_data_dev:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
     networks:
       - cmatrix-network
     restart: unless-stopped
@@ -72,7 +72,11 @@ networks:
 volumes:
   backend-venv:
     driver: local
-  postgres_data_dev:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  qdrant_data:
     driver: local
   huggingface_cache:
     driver: local
