@@ -56,7 +56,6 @@ htmlcov/
 Thumbs.db
 
 # Project specific
-data/auth_config.json
 *.bak
 *.tmp
 
