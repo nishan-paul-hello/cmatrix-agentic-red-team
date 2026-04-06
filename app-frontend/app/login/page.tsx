@@ -44,8 +44,8 @@ export default function LoginPage() {
     try {
       await login(username, password);
       // Redirect happens in the login function
-    } catch (err: any) {
-      setError(err.message || "Invalid username or password");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Invalid username or password");
     } finally {
       setIsLoading(false);
     }

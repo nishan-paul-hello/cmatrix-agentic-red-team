@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useCallback, useEffect } from "react";
-import type { ChatMessage, StreamChunk, AnimationStep, NetworkDiagram } from "@/types/chat.types";
-import type { ConversationWithHistory } from "@/types/conversation.types";
+import type { ChatMessage, AnimationStep, NetworkDiagram } from "@/types/chat.types";
+import type { PendingApproval } from "@/types/approval.types";
 import { apiConfig } from "@/config/api.config";
 import { MESSAGES } from "@/constants/messages";
 import { useConversations } from "@/contexts/conversation-context";
@@ -131,7 +131,7 @@ export function useChatStream(): UseChatStreamReturn {
             } else if (Array.isArray(errorData.detail)) {
               // Handle FastAPI validation errors
               errorMessage = errorData.detail
-                .map((err: any) => `${err.loc?.join(".")} ${err.msg}`)
+                .map((err: { loc?: string[]; msg: string }) => `${err.loc?.join(".")} ${err.msg}`)
                 .join(", ");
             } else if (typeof errorData.detail === "object") {
               errorMessage = JSON.stringify(errorData.detail);
@@ -150,7 +150,7 @@ export function useChatStream(): UseChatStreamReturn {
         ]);
 
         // 2. Poll for Completion
-        let jobResult: any = null;
+        let jobResult: unknown = null;
         let pollCount = 0;
         const MAX_POLLS = 600; // 20 minutes max (2s interval)
 
@@ -242,20 +242,24 @@ export function useChatStream(): UseChatStreamReturn {
         });
 
         let assistantMessage = "";
-        let receivedAnimationSteps: AnimationStep[] = [];
+        const receivedAnimationSteps: AnimationStep[] = [];
         let receivedDiagram: NetworkDiagram | null = null;
 
         // Check for Pending Approval
-        if (typeof jobResult === "object" && jobResult.pending_approval) {
+        if (jobResult && typeof jobResult === "object" && "pending_approval" in jobResult) {
+          const approvalData = jobResult as {
+            pending_approval: PendingApproval;
+            messages?: { content: string }[];
+          };
           const threadId = `user_${user?.id}_conv_${conversationId}`;
           // Extract content from messages list if available
           let content = "Approval Required";
           if (
-            jobResult.messages &&
-            Array.isArray(jobResult.messages) &&
-            jobResult.messages.length > 0
+            approvalData.messages &&
+            Array.isArray(approvalData.messages) &&
+            approvalData.messages.length > 0
           ) {
-            content = jobResult.messages[0].content || content;
+            content = approvalData.messages[0].content || content;
           }
 
           setMessages((prev) => {
@@ -263,7 +267,7 @@ export function useChatStream(): UseChatStreamReturn {
             updated[updated.length - 1] = {
               role: "assistant",
               content: content,
-              pending_approval: jobResult.pending_approval,
+              pending_approval: approvalData.pending_approval,
               thread_id: threadId,
               animationSteps: [],
             };
@@ -274,9 +278,14 @@ export function useChatStream(): UseChatStreamReturn {
         }
 
         // Check if result is complex object or string
-        if (typeof jobResult === "object" && jobResult.animation_steps) {
+        if (jobResult && typeof jobResult === "object" && "animation_steps" in jobResult) {
           // Complex result with animations
-          const { animation_steps, diagram, final_answer } = jobResult;
+          const complexResult = jobResult as {
+            animation_steps: AnimationStep[];
+            diagram?: NetworkDiagram;
+            final_answer?: string;
+          };
+          const { animation_steps, diagram, final_answer } = complexResult;
 
           // Handle Diagram
           if (diagram) {
@@ -383,7 +392,7 @@ export function useChatStream(): UseChatStreamReturn {
         setIsAnimating(false);
       }
     },
-    [messages, isLoading, activeConversation, createConversation, loadConversationHistory]
+    [messages, isLoading, activeConversation, createConversation, loadConversations, user?.id]
   );
 
   const refreshMessages = useCallback(async () => {

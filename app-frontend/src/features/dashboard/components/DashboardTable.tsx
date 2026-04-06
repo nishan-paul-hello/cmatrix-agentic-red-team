@@ -18,7 +18,6 @@ interface DashboardTableProps {
   search: string;
   onSearchChange: (value: string) => void;
   onDelete: (id: number) => void;
-  onClearHistory: (conversationId: number) => void;
 }
 
 export function DashboardTable({
@@ -27,7 +26,6 @@ export function DashboardTable({
   search,
   onSearchChange,
   onDelete,
-  onClearHistory,
 }: DashboardTableProps) {
   return (
     <div className="space-y-4">

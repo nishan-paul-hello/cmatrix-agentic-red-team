@@ -1,25 +1,13 @@
 import { useState, useRef } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Upload, FileText, CheckCircle2, AlertCircle, Key } from "lucide-react";
-import { llmService } from "@/lib/api/llm";
+import { llmService, type ImportResult } from "@/lib/api/llm";
 
 interface ConfigImportModalProps {
   isOpen: boolean;
   onClose: () => void;
   onImportSuccess: () => void;
-}
-
-interface ImportResult {
-  message: string;
-  imported_configs: Array<{
-    provider: string;
-    model: string;
-    has_api_key: boolean;
-    activated: boolean;
-  }>;
-  default_provider_set: boolean;
 }
 
 export function ConfigImportModal({ isOpen, onClose, onImportSuccess }: ConfigImportModalProps) {
@@ -52,9 +40,10 @@ export function ConfigImportModal({ isOpen, onClose, onImportSuccess }: ConfigIm
       const result = await llmService.importConfig(selectedFile);
       setImportResult(result);
       onImportSuccess();
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Import error:", err);
-      setError(err.message || "Failed to import configuration");
+      const message = err instanceof Error ? err.message : "Failed to import configuration";
+      setError(message);
     } finally {
       setIsImporting(false);
     }

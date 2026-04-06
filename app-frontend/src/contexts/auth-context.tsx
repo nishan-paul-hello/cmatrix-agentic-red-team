@@ -1,13 +1,12 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 
 interface User {
   id: number;
   username: string;
-  is_active: boolean;
-  created_at: string;
+  email?: string;
 }
 
 interface AuthContextType {
@@ -16,8 +15,8 @@ interface AuthContextType {
   isAuthenticated: boolean;
   isLoading: boolean;
   login: (username: string, password: string) => Promise<void>;
-  logout: () => void;
   setup: (username: string, password: string) => Promise<void>;
+  logout: () => void;
   checkSetupStatus: () => Promise<boolean>;
 }
 
@@ -31,56 +30,54 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3012/api/v1";
 
+  const fetchCurrentUser = useCallback(
+    async (authToken: string) => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/auth/me`, {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        });
+
+        if (response.ok) {
+          const userData = await response.json();
+          setUser(userData);
+        } else {
+          localStorage.removeItem("auth_token");
+          setToken(null);
+          setUser(null);
+        }
+      } catch (error) {
+        console.warn("Auth check failed:", error);
+        setUser(null);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [API_BASE_URL]
+  );
+
   // Load token from localStorage on mount
   useEffect(() => {
     const storedToken = localStorage.getItem("auth_token");
     if (storedToken) {
       setToken(storedToken);
+
       fetchCurrentUser(storedToken);
     } else {
       setIsLoading(false);
     }
-  }, []);
-
-  const fetchCurrentUser = async (authToken: string) => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/auth/me`, {
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-        },
-      });
-
-      if (response.ok) {
-        const userData = await response.json();
-        setUser(userData);
-      } else {
-        // Token is invalid, clear it
-        localStorage.removeItem("auth_token");
-        setToken(null);
-        setUser(null);
-      }
-    } catch (error) {
-      console.error("Failed to fetch user:", error);
-      localStorage.removeItem("auth_token");
-      setToken(null);
-      setUser(null);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  }, [fetchCurrentUser]);
 
   const checkSetupStatus = async (): Promise<boolean> => {
     try {
-      console.log("Checking setup status from:", `${API_BASE_URL}/auth/setup/status`);
       const response = await fetch(`${API_BASE_URL}/auth/setup/status`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
-      return data.is_setup_complete;
+      return data.is_complete;
     } catch (error) {
-      console.error("Setup check failed:", error);
-      console.error("API_BASE_URL was:", API_BASE_URL);
       console.error("Failed to check setup status:", error);
       return false;
     }
@@ -97,21 +94,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       });
 
       if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.detail || "Setup failed");
+        const errorData = await response.json();
+        throw new Error(errorData.detail || "Setup failed");
       }
 
-      const data = await response.json();
-      const authToken = data.access_token;
+      const { access_token } = await response.json();
+      localStorage.setItem("auth_token", access_token);
+      setToken(access_token);
 
-      localStorage.setItem("auth_token", authToken);
-      setToken(authToken);
-
-      await fetchCurrentUser(authToken);
+      await fetchCurrentUser(access_token);
       router.push("/");
-    } catch (error) {
-      console.error("Setup error:", error);
-      throw error;
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        throw err;
+      }
+      throw new Error("Setup failed");
     }
   };
 
@@ -120,27 +117,30 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const response = await fetch(`${API_BASE_URL}/auth/login`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/x-www-form-urlencoded",
         },
-        body: JSON.stringify({ username, password }),
+        body: new URLSearchParams({
+          username,
+          password,
+        }),
       });
 
       if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.detail || "Login failed");
+        const errorData = await response.json();
+        throw new Error(errorData.detail || "Login failed");
       }
 
-      const data = await response.json();
-      const authToken = data.access_token;
+      const { access_token } = await response.json();
+      localStorage.setItem("auth_token", access_token);
+      setToken(access_token);
 
-      localStorage.setItem("auth_token", authToken);
-      setToken(authToken);
-
-      await fetchCurrentUser(authToken);
+      await fetchCurrentUser(access_token);
       router.push("/");
-    } catch (error) {
-      console.error("Login error:", error);
-      throw error;
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        throw err;
+      }
+      throw new Error("Login failed");
     }
   };
 
@@ -156,11 +156,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       value={{
         user,
         token,
-        isAuthenticated: !!token && !!user,
+        isAuthenticated: !!token,
         isLoading,
         login,
-        logout,
         setup,
+        logout,
         checkSetupStatus,
       }}
     >
@@ -169,10 +169,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
-export function useAuth() {
+export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {
     throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
-}
+};

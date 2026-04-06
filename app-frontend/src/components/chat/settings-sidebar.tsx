@@ -14,7 +14,13 @@ import {
   Sparkles,
   Filter,
 } from "lucide-react";
-import { llmService, ConfigurationProfile, Provider, AvailableModel } from "@/lib/api/llm";
+import {
+  llmService,
+  ConfigurationProfile,
+  Provider,
+  AvailableModel,
+  UpdateProfileRequest,
+} from "@/lib/api/llm";
 import {
   Select,
   SelectContent,
@@ -144,7 +150,7 @@ export function SettingsSidebar({ isOpen, onClose, onProfilesChange }: SettingsS
 
     try {
       if (editingProfileId) {
-        const updateData: any = {
+        const updateData: UpdateProfileRequest = {
           name: profileName,
           api_provider: selectedProvider,
           selected_model_name: selectedModelName,

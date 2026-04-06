@@ -4,6 +4,12 @@ export const runtime = "edge";
 
 const PYTHON_BACKEND_URL = process.env.PYTHON_BACKEND_URL || "http://localhost:3012";
 
+interface FetchError extends Error {
+  cause?: {
+    code?: string;
+  };
+}
+
 export async function POST(req: NextRequest) {
   try {
     const { message, history = [] } = await req.json();
@@ -12,7 +18,7 @@ export async function POST(req: NextRequest) {
       return new Response("Message is required", { status: 400 });
     }
 
-    console.log("[Frontend] Routing request to Python backend:", PYTHON_BACKEND_URL);
+    console.warn("[Frontend] Routing request to Python backend:", PYTHON_BACKEND_URL);
 
     // Get auth token from request headers
     const authHeader = req.headers.get("authorization");
@@ -57,11 +63,13 @@ export async function POST(req: NextRequest) {
         Connection: "keep-alive",
       },
     });
-  } catch (error: any) {
-    console.error("[Frontend] Error in chat route:", error?.message);
+  } catch (err: unknown) {
+    const error =
+      err instanceof Error ? (err as FetchError) : (new Error(String(err)) as FetchError);
+    console.error("[Frontend] Error in chat route:", error.message);
 
     // Check if backend is unreachable
-    if (error?.cause?.code === "ECONNREFUSED" || error?.message?.includes("fetch failed")) {
+    if (error.cause?.code === "ECONNREFUSED" || error.message.includes("fetch failed")) {
       return new Response(
         JSON.stringify({
           error: `Cannot connect to Python backend. Please ensure the backend is running on ${PYTHON_BACKEND_URL.split(

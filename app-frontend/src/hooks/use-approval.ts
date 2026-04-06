@@ -48,7 +48,7 @@ export const useApproval = (threadId: string) => {
   const approveOrReject = useCallback(
     async (
       action: "approve" | "reject",
-      modifiedArgs?: Record<string, any>,
+      modifiedArgs?: Record<string, unknown>,
       reason?: string
     ): Promise<ApprovalResponse | null> => {
       if (!token || !threadId) return null;
@@ -98,7 +98,7 @@ export const useApproval = (threadId: string) => {
   );
 
   const approve = useCallback(
-    async (modifiedArgs?: Record<string, any>, reason?: string) => {
+    async (modifiedArgs?: Record<string, unknown>, reason?: string) => {
       return approveOrReject("approve", modifiedArgs, reason);
     },
     [approveOrReject]

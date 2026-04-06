@@ -64,9 +64,9 @@ export default function SetupPage() {
 
     try {
       await setup(username, password);
-      // Redirect happens in the setup function
-    } catch (err: any) {
-      setError(err.message || "Failed to complete setup");
+      router.push("/");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Setup failed");
     } finally {
       setIsLoading(false);
     }

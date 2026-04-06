@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, Cpu, Loader2, CheckCircle2 } from "lucide-react";
 import { llmService, ConfigurationProfile, AvailableModel } from "@/lib/api/llm";
@@ -22,7 +22,7 @@ export function ModelDropdown({ activeProfile }: ModelDropdownProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
-  const fetchModels = async () => {
+  const fetchModels = React.useCallback(async () => {
     if (!activeProfile) return;
 
     setIsLoading(true);
@@ -30,37 +30,40 @@ export function ModelDropdown({ activeProfile }: ModelDropdownProps) {
       const response = await llmService.fetchProfileModels(activeProfile.id);
       setModels(response.models);
     } catch (error) {
-      console.error("Failed to fetch models", error);
+      console.warn("Failed to fetch models", error);
       toast.error("Failed to fetch available models");
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [activeProfile]);
 
-  const handleSelectModel = async (modelName: string) => {
-    if (!activeProfile) return;
+  const handleSelectModel = useCallback(
+    async (modelName: string) => {
+      if (!activeProfile) return;
 
-    try {
-      await llmService.updateProfile(activeProfile.id, {
-        selected_model_name: modelName,
-      });
+      try {
+        await llmService.updateProfile(activeProfile.id, {
+          selected_model_name: modelName,
+        });
 
-      toast.success(`Model changed to ${modelName}`);
-      setIsOpen(false);
+        toast.success(`Model changed to ${modelName}`);
+        setIsOpen(false);
 
-      // Force reload to update context/UI
-      window.location.reload();
-    } catch (error) {
-      console.error("Failed to update profile model", error);
-      toast.error("Failed to update model selection");
-    }
-  };
+        // Force reload to update context/UI
+        window.location.reload();
+      } catch (error) {
+        console.warn("Failed to update profile model", error);
+        toast.error("Failed to update model selection");
+      }
+    },
+    [activeProfile]
+  );
 
   useEffect(() => {
     if (isOpen && activeProfile) {
       fetchModels();
     }
-  }, [isOpen, activeProfile]);
+  }, [isOpen, activeProfile, fetchModels]);
 
   return (
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>

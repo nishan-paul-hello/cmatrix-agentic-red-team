@@ -46,6 +46,17 @@ export interface Provider {
   name: string;
 }
 
+export interface ImportResult {
+  message: string;
+  imported_configs: Array<{
+    provider: string;
+    model: string;
+    has_api_key: boolean;
+    activated: boolean;
+  }>;
+  default_provider_set: boolean;
+}
+
 export const llmService = {
   // Profile management
   getProfiles: async (): Promise<ConfigurationProfile[]> => {
@@ -139,7 +150,7 @@ export const llmService = {
   },
 
   // Import/Export
-  importConfig: async (file: File): Promise<any> => {
+  importConfig: async (file: File): Promise<ImportResult> => {
     const formData = new FormData();
     formData.append("file", file);
 
@@ -154,7 +165,7 @@ export const llmService = {
     return response.json();
   },
 
-  exportConfig: async (): Promise<any> => {
+  exportConfig: async (): Promise<unknown> => {
     const response = await fetch(`${apiConfig.baseUrl}/llm/config/export`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("auth_token")}`,

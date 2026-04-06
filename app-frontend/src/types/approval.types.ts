@@ -20,15 +20,15 @@ export interface RiskInfo {
 
 export interface PendingApproval {
   tool_name: string;
-  tool_args: Record<string, any>;
+  tool_args: Record<string, unknown>;
   risk_info: RiskInfo;
   timestamp: string;
-  all_tool_calls?: Array<[string, Record<string, any>]>;
+  all_tool_calls?: Array<[string, Record<string, unknown>]>;
 }
 
 export interface ApprovalRequest {
   action: ApprovalAction;
-  modified_args?: Record<string, any>;
+  modified_args?: Record<string, unknown>;
   reason?: string;
 }
 
@@ -47,8 +47,8 @@ export interface PendingApprovalResponse {
 export interface ApprovalCardProps {
   threadId: string;
   toolName: string;
-  toolArgs: Record<string, any>;
+  toolArgs: Record<string, unknown>;
   riskInfo: RiskInfo;
-  onApprove: (modifiedArgs?: Record<string, any>, reason?: string) => void;
+  onApprove: (modifiedArgs?: Record<string, unknown>, reason?: string) => void;
   onReject: (reason?: string) => void;
 }

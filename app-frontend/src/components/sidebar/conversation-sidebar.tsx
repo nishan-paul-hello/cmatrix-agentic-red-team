@@ -1,23 +1,13 @@
 "use client";
 
 import React from "react";
-import {
-  Plus,
-  Search,
-  MessageSquare,
-  PanelLeft,
-  SquarePen,
-  Library,
-  FolderKanban,
-  Shield,
-} from "lucide-react";
+import { Search, PanelLeft, SquarePen } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { useConversations } from "@/contexts/conversation-context";
 import { ConversationItem } from "./conversation-item";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { cn } from "@/lib/utils";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 interface ConversationSidebarProps {
   className?: string;
@@ -30,11 +20,10 @@ export function ConversationSidebar({
   isOpen = true,
   onToggle,
 }: ConversationSidebarProps) {
-  const router = useRouter();
   const { conversations, activeConversation, isLoading, createConversation, selectConversation } =
     useConversations();
 
-  const [searchQuery, setSearchQuery] = React.useState("");
+  const [searchQuery] = React.useState("");
   const [isCreating, setIsCreating] = React.useState(false);
 
   const filteredConversations = React.useMemo(() => {
@@ -58,7 +47,9 @@ export function ConversationSidebar({
     }
   };
 
-  const handleSelectConversation = (conversation: any) => {
+  const handleSelectConversation = (
+    conversation: import("@/types/conversation.types").Conversation
+  ) => {
     selectConversation(conversation);
   };
 
@@ -68,7 +59,7 @@ export function ConversationSidebar({
     onClick,
     active,
   }: {
-    icon: any;
+    icon: LucideIcon;
     label: string;
     onClick?: () => void;
     active?: boolean;

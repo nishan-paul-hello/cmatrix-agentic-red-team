@@ -19,7 +19,7 @@ export function ApprovalMessage({
   const { approve, reject } = useApproval(threadId);
   const [isActionTaken, setIsActionTaken] = React.useState(false);
 
-  const handleApprove = async (modifiedArgs?: Record<string, any>, reason?: string) => {
+  const handleApprove = async (modifiedArgs?: Record<string, unknown>, reason?: string) => {
     const result = await approve(modifiedArgs, reason);
     if (result) {
       setIsActionTaken(true);

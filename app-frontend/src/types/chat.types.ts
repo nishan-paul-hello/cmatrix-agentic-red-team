@@ -24,7 +24,7 @@ export interface NetworkNode {
   group?: string;
   color?: string;
   shape?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export interface NetworkEdge {
@@ -32,7 +32,7 @@ export interface NetworkEdge {
   to: string;
   label?: string;
   color?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export interface ChatMessage {
@@ -42,7 +42,7 @@ export interface ChatMessage {
   diagram?: NetworkDiagram;
   timestamp?: Date;
   id?: string;
-  pending_approval?: any; // Using any for now to avoid circular deps, or import PendingApproval type
+  pending_approval?: import("./approval.types").PendingApproval;
   thread_id?: string;
 }
 

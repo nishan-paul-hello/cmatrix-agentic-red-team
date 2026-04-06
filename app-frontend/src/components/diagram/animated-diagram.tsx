@@ -14,7 +14,7 @@ interface DiagramNode {
   type?: "user" | "ai" | "tool" | "result";
   active?: boolean;
   completed?: boolean;
-  [key: string]: any; // Allow additional properties from backend
+  [key: string]: unknown; // Allow additional properties from backend
 }
 
 interface DiagramEdge {
@@ -161,7 +161,6 @@ export function AnimatedDiagram({
 
     // Add a background grid
     const canvas = visJsRef.current.getElementsByTagName("canvas")[0];
-    const ctx = canvas.getContext("2d");
 
     network.on("beforeDrawing", (ctx) => {
       // Get the canvas dimensions
@@ -233,8 +232,7 @@ export function AnimatedDiagram({
               color: "#60a5fa",
               physics: false,
             });
-          } catch (e) {
-            console.warn("Failed to add particle node:", e);
+          } catch {
             return;
           }
         }
@@ -268,7 +266,7 @@ export function AnimatedDiagram({
 
               try {
                 nodes.update({ id: particleId, x, y });
-              } catch (e) {
+              } catch {
                 // Ignore update errors if node is gone
               }
 
@@ -280,7 +278,7 @@ export function AnimatedDiagram({
                   if (nodes.get(particleId)) {
                     nodes.remove(particleId);
                   }
-                } catch (e) {
+                } catch {
                   // Ignore removal errors
                 }
                 // Continue to next edge after a brief delay
@@ -292,8 +290,8 @@ export function AnimatedDiagram({
             // If nodes not found, continue to next edge
             timeoutId = setTimeout(() => animateFlow(edgeIndex + 1), 200);
           }
-        } catch (e) {
-          console.error("Error in animateFlow:", e);
+        } catch (error) {
+          console.warn("Error in animateFlow:", error);
         }
       };
 
@@ -310,7 +308,7 @@ export function AnimatedDiagram({
         if (nodes.get("flow-particle")) {
           nodes.remove("flow-particle");
         }
-      } catch (e) {
+      } catch {
         // Ignore
       }
 

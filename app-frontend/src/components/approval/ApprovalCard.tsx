@@ -17,7 +17,7 @@ const ApprovalCard: React.FC<ApprovalCardProps> = ({
   onReject,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [modifiedArgs, setModifiedArgs] = useState<Record<string, any>>(toolArgs);
+  const [modifiedArgs, setModifiedArgs] = useState<Record<string, unknown>>(toolArgs);
   const [approvalReason, setApprovalReason] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
 

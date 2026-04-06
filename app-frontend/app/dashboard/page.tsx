@@ -1,14 +1,12 @@
 "use client";
 
 import { ChatHeader } from "@/components/chat/chat-header";
-import { ConversationSidebar } from "@/components/sidebar/conversation-sidebar";
 import { ConversationProvider } from "@/contexts/conversation-context";
 import { DashboardTable } from "@/features/dashboard/components/DashboardTable";
 import { useDashboard } from "@/features/dashboard/hooks/useDashboard";
 
 function DashboardContent() {
-  const { history, isLoading, search, setSearch, deleteExchange, clearConversationHistory } =
-    useDashboard();
+  const { history, isLoading, search, setSearch, deleteExchange } = useDashboard();
 
   return (
     <div className="flex h-screen bg-background">
@@ -34,7 +32,6 @@ function DashboardContent() {
                 search={search}
                 onSearchChange={setSearch}
                 onDelete={deleteExchange}
-                onClearHistory={clearConversationHistory}
               />
             </div>
           </div>
