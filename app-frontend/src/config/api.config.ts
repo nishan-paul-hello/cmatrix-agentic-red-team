@@ -6,9 +6,14 @@ const getBaseUrl = (): string => {
   // Always use the relative path /api/v1 for the client side.
   // This ensures we use the Next.js proxy (configured in next.config.mjs)
   // which works seamlessly on both localhost and VPS/Production.
+  // Bypassing the proxy on client leads to CORS issues or connectivity problems in Docker.
   if (typeof window !== "undefined") {
-    // Check if we have an override from environment variables, otherwise use relative path
-    return process.env.NEXT_PUBLIC_API_URL || "/api/v1";
+    const publicUrl = process.env.NEXT_PUBLIC_API_URL;
+    // Only use the environment variable if it's not pointing to localhost:3012 fallback
+    if (publicUrl && !publicUrl.includes("localhost:3012")) {
+      return publicUrl;
+    }
+    return "/api/v1";
   }
 
   // If we're on the server side (SSR/API Routes)
@@ -18,7 +23,7 @@ const getBaseUrl = (): string => {
   }
 
   // Fallback for SSR/Server components when no internal URL is set
-  return process.env.NEXT_PUBLIC_API_URL || "http://localhost:3012/api/v1";
+  return process.env.NEXT_PUBLIC_API_URL || "http://host.docker.internal:3012/api/v1";
 };
 
 export const apiConfig = {

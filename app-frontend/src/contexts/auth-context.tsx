@@ -77,7 +77,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
-      return data.is_complete;
+      return !!data.is_setup_complete;
     } catch (error) {
       console.error("Failed to check setup status:", error);
       return false;
@@ -96,8 +96,28 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         });
 
         if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.detail || "Setup failed");
+          let errorMessage = "Operation failed";
+          try {
+            const errorData = await response.json();
+            errorMessage = errorData.detail || errorMessage;
+          } catch (e) {
+            console.error("Failed to parse JSON error:", e);
+            // Fallback for non-JSON error responses (like 500 HTML/text)
+          }
+
+          if (errorMessage === "Operation failed") {
+            try {
+              const textError = await response.text();
+              if (textError.includes("Internal Server Error")) {
+                errorMessage = "The server encountered an error. Please check backend logs.";
+              } else {
+                errorMessage = textError.slice(0, 100) || errorMessage;
+              }
+            } catch {
+              errorMessage = "Unknown server error";
+            }
+          }
+          throw new Error(errorMessage);
         }
 
         const { access_token } = await response.json();

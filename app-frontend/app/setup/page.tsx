@@ -66,7 +66,18 @@ export default function SetupPage() {
       await setup(username, password);
       router.push("/");
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Setup failed");
+      const errorMessage = err instanceof Error ? err.message : "Setup failed";
+
+      // If setup is already complete, redirect to login
+      if (
+        errorMessage.toLowerCase().includes("already complete") ||
+        errorMessage.toLowerCase().includes("already exists")
+      ) {
+        router.push("/login");
+        return;
+      }
+
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }
