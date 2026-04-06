@@ -1,4 +1,7 @@
-.PHONY: help install dev build quality clean pre-commit
+.PHONY: help install dev build quality clean pre-commit check
+
+# Global Environment Variables
+VENV ?= ./venv
 
 # Default target
 help:
@@ -75,22 +78,22 @@ quality-app-frontend:
 
 quality-app-backend:
 	@echo "✨ Running app-backend quality checks..."
-	cd app-backend && make quality
+	cd app-backend && $(MAKE) quality VENV=$(VENV)
 
 lint:
 	@echo "🔍 Running linters..."
 	cd app-frontend && npm run lint:fix
-	cd app-backend && make lint-fix
+	cd app-backend && $(MAKE) lint-fix VENV=$(VENV)
 
 format:
 	@echo "✨ Formatting code..."
 	cd app-frontend && npm run format
-	cd app-backend && make format
+	cd app-backend && $(MAKE) format VENV=$(VENV)
 
 typecheck:
 	@echo "🔎 Running type checkers..."
 	cd app-frontend && npm run typecheck
-	cd app-backend && make typecheck
+	cd app-backend && $(MAKE) typecheck VENV=$(VENV)
 
 # Build
 build: build-app-frontend
@@ -118,14 +121,14 @@ clean-app-backend:
 # Testing
 test:
 	@echo "🧪 Running tests..."
-	cd app-backend && make test
+	cd app-backend && $(MAKE) test VENV=$(VENV)
 
 test-app-frontend:
 	@echo "🧪 Frontend tests not configured yet"
 
 test-app-backend:
 	@echo "🧪 Running app-backend tests..."
-	cd app-backend && make test
+	cd app-backend && $(MAKE) test VENV=$(VENV)
 
 # Unified Check (One-Click Verification)
 check: quality test-app-backend

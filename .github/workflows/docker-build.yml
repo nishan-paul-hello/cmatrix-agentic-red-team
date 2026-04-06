@@ -42,7 +42,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run Global Quality Checks (Lint, Format, Typecheck)
-        run: make quality
+        run: make quality VENV=
 
       - name: Create minimal CI .env for tests
         run: |
@@ -63,7 +63,7 @@ jobs:
           echo "LOG_LEVEL=INFO" >> .env
 
       - name: Run Backend Tests
-        run: make test
+        run: make test VENV=
 
   build-and-verify:
     needs: quality-and-test

@@ -1,4 +1,17 @@
-.PHONY: help install dev test lint format typecheck quality clean pre-commit
+.PHONY: help install dev test lint format typecheck quality clean pre-commit check
+
+# Define tool paths
+VENV ?= ./venv
+ifneq ($(VENV),)
+    BIN := $(VENV)/bin/
+else
+    BIN :=
+endif
+
+RUFF := $(BIN)ruff
+MYPY := $(BIN)mypy
+BANDIT := $(BIN)bandit
+PYTEST := $(BIN)pytest
 
 # Default target
 help:
@@ -13,15 +26,11 @@ help:
 	@echo "  make lint           Run linter (ruff check)"
 	@echo "  make format         Format code (ruff format)"
 	@echo "  make typecheck      Run type checker (mypy)"
-	@echo "  make quality        Run all quality checks (lint + format + typecheck)"
+	@echo "  make quality        Run all quality checks (lint + format + typecheck + bandit)"
 	@echo ""
 	@echo "Testing:"
 	@echo "  make test           Run tests"
-	@echo "  make test-cov       Run tests with coverage"
-	@echo ""
-	@echo "Pre-commit:"
-	@echo "  make pre-commit     Install pre-commit hooks"
-	@echo "  make pre-commit-run Run pre-commit on all files"
+	@echo "  make check          Run quality + test"
 	@echo ""
 	@echo "Cleanup:"
 	@echo "  make clean          Remove cache files"
@@ -37,27 +46,27 @@ dev:
 # Code quality
 lint:
 	@echo "🔍 Running Ruff linter..."
-	./venv/bin/ruff check .
+	$(RUFF) check .
 
 lint-fix:
 	@echo "🔧 Running Ruff linter with auto-fix..."
-	./venv/bin/ruff check --fix .
+	$(RUFF) check --fix .
 
 format:
 	@echo "✨ Formatting code with Ruff..."
-	./venv/bin/ruff format .
+	$(RUFF) format .
 
 format-check:
 	@echo "🔍 Checking code formatting..."
-	./venv/bin/ruff format --check .
+	$(RUFF) format --check .
 
 typecheck:
 	@echo "🔎 Running mypy type checker..."
-	./venv/bin/mypy app/
+	$(MYPY) app/
 
 bandit:
 	@echo "🛡️  Running bandit security scan..."
-	./venv/bin/bandit -r app/ -c pyproject.toml
+	$(BANDIT) -r app/ -c pyproject.toml
 
 quality: lint-fix format typecheck bandit
 	@echo "✅ All quality checks passed!"
@@ -68,11 +77,11 @@ check: quality test
 # Testing
 test:
 	@echo "🧪 Running tests..."
-	pytest
+	$(PYTEST)
 
 test-cov:
 	@echo "🧪 Running tests with coverage..."
-	pytest --cov=app tests/ --cov-report=term-missing
+	$(PYTEST) --cov=app tests/ --cov-report=term-missing
 
 # Pre-commit
 pre-commit:
