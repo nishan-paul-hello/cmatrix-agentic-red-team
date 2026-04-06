@@ -75,6 +75,10 @@ jobs:
   quality-backend:
     needs: [changes]
     if: needs.changes.outputs.backend == 'true' || needs.changes.outputs.workflow == 'true'
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
     runs-on: ubuntu-latest
     services:
       redis:
@@ -121,27 +125,49 @@ jobs:
         working-directory: app-backend
         run: uv pip install -r requirements.txt
 
-      - name: Run Parallel Quality Checks (Backend)
+      - name: Run Quality Checks and Core Tests (Shard 1 Only)
+        if: matrix.shard == 1
         working-directory: app-backend
         run: |
-          # Set PYTHONPATH=. so 'app' module is found
           export PYTHONPATH=.
           uv run --no-project ruff check . & P1=$!
           uv run --no-project ruff format --check . & P2=$!
           uv run --no-project ruff check --select TCH app/ & P3=$!
           uv run --no-project mypy app/ & P4=$!
           uv run --no-project bandit -r app/ -c pyproject.toml -s B101,B601 & P5=$!
-          
-          # Wait and ensure all succeeded
           wait $P1 && wait $P2 && wait $P3 && wait $P4 && wait $P5
-        continue-on-error: false
+          
+          # Run Core tests in shard 1
+          uv run --no-project pytest tests app/tests/api/
 
-      - name: Create minimal CI .env for tests
+      - name: Run RAG Tests (Shard 2 Only)
+        if: matrix.shard == 2
+        working-directory: app-backend
+        run: |
+          export PYTHONPATH=.
+          uv run --no-project pytest app/tests/test_rag/
+
+      - name: Run Reasoning Tests (Shard 3 Only)
+        if: matrix.shard == 3
+        working-directory: app-backend
+        run: |
+          export PYTHONPATH=.
+          uv run --no-project pytest app/tests/test_reasoning/
+
+      - name: Run Agent Tests (Shard 4 Only)
+        if: matrix.shard == 4
+        working-directory: app-backend
+        run: |
+          export PYTHONPATH=.
+          uv run --no-project pytest app/tests/agents/ app/tests/test_supervisor.py
+
+      - name: Create minimal CI .env for deployment prep
         run: |
           echo "APP_NAME=CMatrix" >> .env
           echo "BACKEND_PORT=3012" >> .env
           echo "FRONTEND_PORT=3011" >> .env
           echo "SECRET_KEY=ci-test-key-not-for-production" >> .env
+          
           echo "ALGORITHM=HS256" >> .env
           echo "ACCESS_TOKEN_EXPIRE_MINUTES=10080" >> .env
           echo "DATABASE_URL=postgresql+asyncpg://cmatrix:cmatrix@localhost:5432/cmatrix" >> .env
@@ -156,12 +182,6 @@ jobs:
           echo "EMBEDDING_MODEL=BAAI/bge-base-en-v1.5" >> .env
           echo "EMBEDDING_DEVICE=cpu" >> .env
           echo "LOG_LEVEL=INFO" >> .env
-
-      - name: Run Backend Tests
-        working-directory: app-backend
-        run: |
-          export PYTHONPATH=.
-          uv run --no-project pytest tests app/tests
 
   quality-gate:
     needs: [changes, quality-frontend-lint, quality-frontend-build, quality-backend]
