@@ -31,10 +31,35 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const API_BASE_URL = apiConfig.baseUrl;
 
+  /**
+   * Helper for fetch with timeout to prevent infinite loading state
+   */
+  const fetchWithTimeout = useCallback(
+    async (resource: string, options: RequestInit = {}, timeout = 10000) => {
+      const controller = new AbortController();
+      const id = setTimeout(() => controller.abort(), timeout);
+      try {
+        const response = await fetch(resource, {
+          ...options,
+          signal: controller.signal,
+        });
+        return response;
+      } catch (error: Error | unknown) {
+        if (error instanceof Error && error.name === "AbortError") {
+          throw new Error("Request timed out. Please check your connection.");
+        }
+        throw error;
+      } finally {
+        clearTimeout(id);
+      }
+    },
+    []
+  );
+
   const fetchCurrentUser = useCallback(
     async (authToken: string) => {
       try {
-        const response = await fetch(`${API_BASE_URL}/auth/me`, {
+        const response = await fetchWithTimeout(`${API_BASE_URL}/auth/me`, {
           headers: {
             Authorization: `Bearer ${authToken}`,
           },
@@ -55,7 +80,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setIsLoading(false);
       }
     },
-    [API_BASE_URL]
+    [API_BASE_URL, fetchWithTimeout]
   );
 
   // Load token from localStorage on mount
@@ -72,7 +97,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const checkSetupStatus = useCallback(async (): Promise<boolean> => {
     try {
-      const response = await fetch(`${API_BASE_URL}/auth/setup/status`);
+      const response = await fetchWithTimeout(`${API_BASE_URL}/auth/setup/status`, {}, 8000);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -82,12 +107,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       console.error("Failed to check setup status:", error);
       return false;
     }
-  }, [API_BASE_URL]);
+  }, [API_BASE_URL, fetchWithTimeout]);
 
   const setup = useCallback(
     async (username: string, password: string) => {
       try {
-        const response = await fetch(`${API_BASE_URL}/auth/setup`, {
+        const response = await fetchWithTimeout(`${API_BASE_URL}/auth/setup`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -133,13 +158,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         throw new Error("Setup failed");
       }
     },
-    [API_BASE_URL, fetchCurrentUser, router]
+    [API_BASE_URL, fetchCurrentUser, router, fetchWithTimeout]
   );
 
   const login = useCallback(
     async (username: string, password: string) => {
       try {
-        const response = await fetch(`${API_BASE_URL}/auth/login`, {
+        const response = await fetchWithTimeout(`${API_BASE_URL}/auth/login`, {
           method: "POST",
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
@@ -168,7 +193,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         throw new Error("Login failed");
       }
     },
-    [API_BASE_URL, fetchCurrentUser, router]
+    [API_BASE_URL, fetchCurrentUser, router, fetchWithTimeout]
   );
 
   const logout = useCallback(() => {
