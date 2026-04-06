@@ -692,17 +692,28 @@ class CVEVectorStore:
             return models.Filter(must=must_conditions)
         return None
 
-    def _get_highest_cvss_score(self, cve: dict[str, Any]) -> float:
-        """Get the highest CVSS score from all versions."""
+    def _get_highest_cvss_score(self, cve: Any) -> float:
+        """Get the highest CVSS score from all versions, handling both objects and dicts."""
         scores = []
-        if cve.get("cvss_v4"):
-            scores.append(cve["cvss_v4"].get("score", 0.0))
-        if cve.get("cvss_v31"):
-            scores.append(cve["cvss_v31"].get("score", 0.0))
-        if cve.get("cvss_v30"):
-            scores.append(cve["cvss_v30"].get("score", 0.0))
-        if cve.get("cvss_v2"):
-            scores.append(cve["cvss_v2"].get("score", 0.0))
+
+        # Helper to get score from a CVSSScore component (dict or object)
+        def get_score(comp):
+            if not comp:
+                return 0.0
+            if isinstance(comp, dict):
+                return comp.get("base_score", 0.0)
+            return getattr(comp, "base_score", 0.0)
+
+        # Handle Object vs Dict access
+        if isinstance(cve, dict):
+            scores.append(get_score(cve.get("cvss_v2")))
+            scores.append(get_score(cve.get("cvss_v3")))
+            scores.append(get_score(cve.get("cvss_v3_1")))
+        else:
+            scores.append(get_score(getattr(cve, "cvss_v2", None)))
+            scores.append(get_score(getattr(cve, "cvss_v3", None)))
+            scores.append(get_score(getattr(cve, "cvss_v3_1", None)))
+
         return max(scores) if scores else 0.0
 
     def _get_severity(self, cve: CVEMetadata) -> str:
