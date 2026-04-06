@@ -137,7 +137,7 @@ jobs:
       - name: Start services for verification
         run: |
           # Use the dedicated test compose file to verify our built images
-          docker-compose -f docker-compose.test.yml up -d --remove-orphans
+          docker compose -f docker-compose.test.yml up -d --remove-orphans
         env:
           # Point the compose file to our test-tagged images loaded into the daemon
           BACKEND_IMAGE: cmatrix-backend:test
@@ -153,7 +153,7 @@ jobs:
 
       - name: Stop and Cleanup Verification Containers
         if: always()
-        run: docker-compose -f docker-compose.test.yml down -v
+        run: docker compose -f docker-compose.test.yml down -v
 
       # Step 3: Push (Only if verification passes AND on main branch)
       - name: Push verified images to GHCR
