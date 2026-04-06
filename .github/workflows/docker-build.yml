@@ -15,6 +15,33 @@ jobs:
   quality-and-test:
     runs-on: ubuntu-latest
     if: vars.ENABLE_DEPLOY == 'true'
+    services:
+      redis:
+        image: redis:7-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: cmatrix
+          POSTGRES_PASSWORD: cmatrix
+          POSTGRES_DB: cmatrix
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+      qdrant:
+        image: qdrant/qdrant:latest
+        ports:
+          - 6333:6333
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -53,7 +80,10 @@ jobs:
           echo "ALGORITHM=HS256" >> .env
           echo "ACCESS_TOKEN_EXPIRE_MINUTES=10080" >> .env
           echo "DATABASE_URL=postgresql+asyncpg://cmatrix:cmatrix@localhost:5432/cmatrix" >> .env
+          echo "REDIS_HOST=localhost" >> .env
           echo "REDIS_PORT=6379" >> .env
+          echo "CELERY_BROKER_URL=redis://localhost:6379/1" >> .env
+          echo "CELERY_RESULT_BACKEND=redis://localhost:6379/2" >> .env
           echo "QDRANT_HOST=localhost" >> .env
           echo "QDRANT_PORT=6333" >> .env
           echo "QDRANT_URL=http://localhost:6333" >> .env
