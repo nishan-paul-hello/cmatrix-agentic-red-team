@@ -70,7 +70,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, [fetchCurrentUser]);
 
-  const checkSetupStatus = async (): Promise<boolean> => {
+  const checkSetupStatus = useCallback(async (): Promise<boolean> => {
     try {
       const response = await fetch(`${API_BASE_URL}/auth/setup/status`);
       if (!response.ok) {
@@ -82,92 +82,97 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       console.error("Failed to check setup status:", error);
       return false;
     }
-  };
+  }, [API_BASE_URL]);
 
-  const setup = async (username: string, password: string) => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/auth/setup`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, password }),
-      });
+  const setup = useCallback(
+    async (username: string, password: string) => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/auth/setup`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ username, password }),
+        });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.detail || "Setup failed");
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.detail || "Setup failed");
+        }
+
+        const { access_token } = await response.json();
+        localStorage.setItem("auth_token", access_token);
+        setToken(access_token);
+
+        await fetchCurrentUser(access_token);
+        router.push("/");
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          throw err;
+        }
+        throw new Error("Setup failed");
       }
+    },
+    [API_BASE_URL, fetchCurrentUser, router]
+  );
 
-      const { access_token } = await response.json();
-      localStorage.setItem("auth_token", access_token);
-      setToken(access_token);
+  const login = useCallback(
+    async (username: string, password: string) => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/auth/login`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: new URLSearchParams({
+            username,
+            password,
+          }),
+        });
 
-      await fetchCurrentUser(access_token);
-      router.push("/");
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        throw err;
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.detail || "Login failed");
+        }
+
+        const { access_token } = await response.json();
+        localStorage.setItem("auth_token", access_token);
+        setToken(access_token);
+
+        await fetchCurrentUser(access_token);
+        router.push("/");
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          throw err;
+        }
+        throw new Error("Login failed");
       }
-      throw new Error("Setup failed");
-    }
-  };
+    },
+    [API_BASE_URL, fetchCurrentUser, router]
+  );
 
-  const login = async (username: string, password: string) => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/auth/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: new URLSearchParams({
-          username,
-          password,
-        }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.detail || "Login failed");
-      }
-
-      const { access_token } = await response.json();
-      localStorage.setItem("auth_token", access_token);
-      setToken(access_token);
-
-      await fetchCurrentUser(access_token);
-      router.push("/");
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        throw err;
-      }
-      throw new Error("Login failed");
-    }
-  };
-
-  const logout = () => {
+  const logout = useCallback(() => {
     localStorage.removeItem("auth_token");
     setToken(null);
     setUser(null);
     router.push("/login");
-  };
+  }, [router]);
 
-  return (
-    <AuthContext.Provider
-      value={{
-        user,
-        token,
-        isAuthenticated: !!token,
-        isLoading,
-        login,
-        setup,
-        logout,
-        checkSetupStatus,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
+  const contextValue = React.useMemo(
+    () => ({
+      user,
+      token,
+      isAuthenticated: !!token,
+      isLoading,
+      login,
+      setup,
+      logout,
+      checkSetupStatus,
+    }),
+    [user, token, isLoading, login, setup, logout, checkSetupStatus]
   );
+
+  return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;
 }
 
 export const useAuth = () => {
