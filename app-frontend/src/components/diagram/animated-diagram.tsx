@@ -321,15 +321,15 @@ export function AnimatedDiagram({
   return (
     <div
       className={cn(
-        "relative w-full h-64 bg-card rounded-lg border border-border overflow-hidden",
+        "bg-card border-border relative h-64 w-full overflow-hidden rounded-lg border",
         className
       )}
     >
-      <div ref={visJsRef} className="w-full h-full" key={initialNodes.length} />
-      <div className="absolute bottom-2 left-2 text-xs text-muted-foreground terminal-text">
+      <div ref={visJsRef} className="h-full w-full" key={initialNodes.length} />
+      <div className="text-muted-foreground terminal-text absolute bottom-2 left-2 text-xs">
         {isAnimating ? (
           <span className="flex items-center gap-1">
-            <div className="w-1.5 h-1.5 bg-blue-400 rounded-full animate-pulse"></div>
+            <div className="h-1.5 w-1.5 animate-pulse rounded-full bg-blue-400"></div>
             PROCESSING STEP {currentStep + 1}
           </span>
         ) : (

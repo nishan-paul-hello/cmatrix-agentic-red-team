@@ -48,9 +48,9 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
   // Show loading state
   if (isLoading || isCheckingSetup) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-background">
+      <div className="bg-background flex min-h-screen items-center justify-center">
         <div className="matrix-rain"></div>
-        <div className="text-center z-10">
+        <div className="z-10 text-center">
           <div className="loading-spinner mb-4"></div>
           <p className="text-primary">Loading...</p>
         </div>

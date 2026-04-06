@@ -49,8 +49,8 @@ install-app-backend:
 
 # Pre-commit hooks
 pre-commit:
-	@echo "🪝 Installing pre-commit hooks..."
-	cd app-backend && source venv/bin/activate && pre-commit install
+	@echo "🪝 Installing husky pre-commit hooks..."
+	npm run prepare
 
 # Development servers
 dev:

@@ -146,7 +146,11 @@ export function useChatStream(): UseChatStreamReturn {
         // Add empty assistant message with loading state
         setMessages((prev) => [
           ...prev,
-          { role: "assistant", content: "Processing request...", animationSteps: [] },
+          {
+            role: "assistant",
+            content: "Processing request...",
+            animationSteps: [],
+          },
         ]);
 
         // 2. Poll for Completion
@@ -237,7 +241,11 @@ export function useChatStream(): UseChatStreamReturn {
         // Clear the "Processing..." message
         setMessages((prev) => {
           const updated = [...prev];
-          updated[updated.length - 1] = { role: "assistant", content: "", animationSteps: [] };
+          updated[updated.length - 1] = {
+            role: "assistant",
+            content: "",
+            animationSteps: [],
+          };
           return updated;
         });
 

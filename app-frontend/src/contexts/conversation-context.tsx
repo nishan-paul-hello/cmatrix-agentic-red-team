@@ -63,7 +63,9 @@ export function ConversationProvider({ children }: { children: React.ReactNode }
   const createConversation = useCallback(async (name?: string): Promise<Conversation> => {
     try {
       setError(null);
-      const newConversation = await conversationApi.createConversation({ name });
+      const newConversation = await conversationApi.createConversation({
+        name,
+      });
 
       // Add to conversations list
       setConversations((prev) => [newConversation, ...prev]);

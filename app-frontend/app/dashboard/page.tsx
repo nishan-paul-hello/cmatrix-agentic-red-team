@@ -9,15 +9,15 @@ function DashboardContent() {
   const { history, isLoading, search, setSearch, deleteExchange } = useDashboard();
 
   return (
-    <div className="flex h-screen bg-background">
+    <div className="bg-background flex h-screen">
       <div className="matrix-rain"></div>
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0 bg-background">
+      <div className="bg-background flex min-w-0 flex-1 flex-col">
         {/* Header */}
         <ChatHeader />
         <main className="flex-1 overflow-auto p-6">
-          <div className="max-w-5xl mx-auto space-y-6">
+          <div className="mx-auto max-w-5xl space-y-6">
             <div>
               <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
               <p className="text-muted-foreground">
@@ -25,7 +25,7 @@ function DashboardContent() {
               </p>
             </div>
 
-            <div className="bg-card rounded-lg border shadow-sm p-6">
+            <div className="bg-card rounded-lg border p-6 shadow-sm">
               <DashboardTable
                 data={history}
                 isLoading={isLoading}

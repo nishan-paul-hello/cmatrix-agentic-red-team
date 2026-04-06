@@ -26,18 +26,18 @@ export function ChatHeader() {
   const [isSettingsSidebarOpen, setIsSettingsSidebarOpen] = useState(false);
 
   return (
-    <header className="border-b border-border bg-card cyber-border">
-      <div className="container flex items-center justify-between h-14 px-4 mx-auto">
+    <header className="border-border bg-card cyber-border border-b">
+      <div className="container mx-auto flex h-14 items-center justify-between px-4">
         <Link
           href="/"
-          className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity"
+          className="flex cursor-pointer items-center gap-3 transition-opacity hover:opacity-80"
         >
-          <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-secondary/10 cyber-border overflow-hidden">
+          <div className="bg-secondary/10 cyber-border flex h-10 w-10 items-center justify-center overflow-hidden rounded-lg">
             <BrandLogo size={24} />
           </div>
           <div>
-            <h1 className="text-lg font-semibold terminal-text">{siteConfig.name}</h1>
-            <div className="text-xs text-muted-foreground">{MESSAGES.LABELS.NEURAL_INTERFACE}</div>
+            <h1 className="terminal-text text-lg font-semibold">{siteConfig.name}</h1>
+            <div className="text-muted-foreground text-xs">{MESSAGES.LABELS.NEURAL_INTERFACE}</div>
           </div>
         </Link>
         <div className="flex items-center gap-3">
@@ -53,7 +53,7 @@ export function ChatHeader() {
               variant="outline"
               size="sm"
               asChild
-              className="cursor-pointer cyber-border terminal-text hover:bg-secondary/50 transition-colors"
+              className="cyber-border terminal-text hover:bg-secondary/50 cursor-pointer transition-colors"
             >
               <a href="/dashboard">Dashboard</a>
             </Button>
@@ -61,10 +61,10 @@ export function ChatHeader() {
               variant="outline"
               size="sm"
               asChild
-              className="cursor-pointer cyber-border terminal-text hover:bg-secondary/50 transition-colors"
+              className="cyber-border terminal-text hover:bg-secondary/50 cursor-pointer transition-colors"
             >
               <a href="/tools/cve" className="flex items-center gap-2">
-                <Shield className="w-4 h-4" />
+                <Shield className="h-4 w-4" />
                 CVE Search
               </a>
             </Button>
@@ -72,9 +72,9 @@ export function ChatHeader() {
               variant="outline"
               size="sm"
               onClick={() => setIsSettingsSidebarOpen(true)}
-              className="cursor-pointer cyber-border terminal-text hover:bg-secondary/50 transition-colors"
+              className="cyber-border terminal-text hover:bg-secondary/50 cursor-pointer transition-colors"
             >
-              <Settings className="w-4 h-4" />
+              <Settings className="h-4 w-4" />
             </Button>
           </div>
 
@@ -84,19 +84,19 @@ export function ChatHeader() {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="flex items-center gap-2 px-3 py-1 hover:bg-secondary/50 transition-colors cursor-pointer"
+                  className="hover:bg-secondary/50 flex cursor-pointer items-center gap-2 px-3 py-1 transition-colors"
                 >
-                  <User className="w-4 h-4 text-primary" />
-                  <span className="text-sm text-foreground">{user.username}</span>
-                  <ChevronDown className="w-3 h-3 opacity-50" />
+                  <User className="text-primary h-4 w-4" />
+                  <span className="text-foreground text-sm">{user.username}</span>
+                  <ChevronDown className="h-3 w-3 opacity-50" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48 bg-card cyber-border">
+              <DropdownMenuContent align="end" className="bg-card cyber-border w-48">
                 <DropdownMenuItem
                   onClick={logout}
-                  className="cursor-pointer flex items-center gap-2"
+                  className="flex cursor-pointer items-center gap-2"
                 >
-                  <LogOut className="w-4 h-4" />
+                  <LogOut className="h-4 w-4" />
                   <span>Logout</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>

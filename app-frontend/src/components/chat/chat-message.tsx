@@ -31,16 +31,16 @@ export function ChatMessage({
   const { content, animationSteps = [], diagram, pending_approval, thread_id } = message;
 
   return (
-    <div className={cn("flex gap-4 group", isUser ? "justify-end" : "justify-start")}>
+    <div className={cn("group flex gap-4", isUser ? "justify-end" : "justify-start")}>
       {!isUser && (
-        <div className="flex items-start flex-shrink-0">
-          <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-secondary cyber-border">
-            <VenetianMask className="w-5 h-5 text-secondary-foreground" />
+        <div className="flex flex-shrink-0 items-start">
+          <div className="bg-secondary cyber-border flex h-10 w-10 items-center justify-center rounded-lg">
+            <VenetianMask className="text-secondary-foreground h-5 w-5" />
           </div>
         </div>
       )}
 
-      <div className={cn("flex flex-col gap-2 max-w-[80%] sm:max-w-[70%]", isUser && "items-end")}>
+      <div className={cn("flex max-w-[80%] flex-col gap-2 sm:max-w-[70%]", isUser && "items-end")}>
         {/* Render Approval Card if pending approval exists */}
         {pending_approval && thread_id && (
           <div className="mb-4 w-full">
@@ -54,7 +54,7 @@ export function ChatMessage({
 
         <div
           className={cn(
-            "rounded-lg px-4 py-3 text-sm leading-relaxed cyber-border",
+            "cyber-border rounded-lg px-4 py-3 text-sm leading-relaxed",
             isUser ? "bg-black text-white" : "bg-muted text-foreground terminal-text",
             !isUser && (isLoading || isAnimating) && "scan-line"
           )}
@@ -86,44 +86,44 @@ export function ChatMessage({
                     <div
                       key={step.step}
                       className={cn(
-                        "flex items-start gap-3 p-2 rounded transition-all duration-300",
-                        isActive && "bg-blue-500/10 border border-blue-500/20",
-                        isCompleted && "bg-sky-500/10 border border-sky-500/20"
+                        "flex items-start gap-3 rounded p-2 transition-all duration-300",
+                        isActive && "border border-blue-500/20 bg-blue-500/10",
+                        isCompleted && "border border-sky-500/20 bg-sky-500/10"
                       )}
                       style={{ backgroundColor: step.bgColor + "30" }}
                     >
-                      <div className="flex-shrink-0 mt-0.5">
+                      <div className="mt-0.5 flex-shrink-0">
                         {isCompleted ? (
-                          <CheckCircle className="w-4 h-4 text-sky-400" />
+                          <CheckCircle className="h-4 w-4 text-sky-400" />
                         ) : isActive ? (
-                          <Activity className="w-4 h-4 animate-spin text-blue-400" />
+                          <Activity className="h-4 w-4 animate-spin text-blue-400" />
                         ) : (
-                          <div className="w-4 h-4 rounded-full border-2 border-muted-foreground/30" />
+                          <div className="border-muted-foreground/30 h-4 w-4 rounded-full border-2" />
                         )}
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className="text-xs font-medium terminal-text">
+                      <div className="min-w-0 flex-1">
+                        <div className="mb-1 flex items-center gap-2">
+                          <span className="terminal-text text-xs font-medium">
                             {step.icon} {step.title}
                           </span>
                           {isActive && (
                             <div className="flex gap-1">
                               <div
-                                className="w-1 h-1 bg-blue-400 rounded-full animate-bounce"
+                                className="h-1 w-1 animate-bounce rounded-full bg-blue-400"
                                 style={{ animationDelay: "0ms" }}
                               />
                               <div
-                                className="w-1 h-1 bg-blue-400 rounded-full animate-bounce"
+                                className="h-1 w-1 animate-bounce rounded-full bg-blue-400"
                                 style={{ animationDelay: "150ms" }}
                               />
                               <div
-                                className="w-1 h-1 bg-blue-400 rounded-full animate-bounce"
+                                className="h-1 w-1 animate-bounce rounded-full bg-blue-400"
                                 style={{ animationDelay: "300ms" }}
                               />
                             </div>
                           )}
                         </div>
-                        <p className="text-xs text-muted-foreground terminal-text">
+                        <p className="text-muted-foreground terminal-text text-xs">
                           {step.description}
                         </p>
                       </div>
@@ -133,7 +133,7 @@ export function ChatMessage({
               </div>
 
               {content && (
-                <div className="mt-4 pt-4 border-t border-border">
+                <div className="border-border mt-4 border-t pt-4">
                   <div className="prose prose-sm dark:prose-invert max-w-none">
                     <ReactMarkdown>{content}</ReactMarkdown>
                   </div>
@@ -141,8 +141,8 @@ export function ChatMessage({
               )}
             </div>
           ) : isLoading ? (
-            <div className="flex items-center gap-2 terminal-text">
-              <Loader2 className="w-4 h-4 animate-spin text-sky-400" />
+            <div className="terminal-text flex items-center gap-2">
+              <Loader2 className="h-4 w-4 animate-spin text-sky-400" />
               <span className="text-muted-foreground">{MESSAGES.SYSTEM.PROCESSING}</span>
             </div>
           ) : (
@@ -158,9 +158,9 @@ export function ChatMessage({
       </div>
 
       {isUser && (
-        <div className="flex items-start flex-shrink-0">
-          <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-secondary cyber-border">
-            <User className="w-5 h-5 text-secondary-foreground" />
+        <div className="flex flex-shrink-0 items-start">
+          <div className="bg-secondary cyber-border flex h-10 w-10 items-center justify-center rounded-lg">
+            <User className="text-secondary-foreground h-5 w-5" />
           </div>
         </div>
       )}

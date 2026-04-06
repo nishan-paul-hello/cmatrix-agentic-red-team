@@ -13,47 +13,47 @@ interface WelcomeScreenProps {
  */
 export function WelcomeScreen({ onSuggestionClick }: WelcomeScreenProps) {
   return (
-    <div className="flex flex-col items-center justify-center h-full gap-8 py-12">
+    <div className="flex h-full flex-col items-center justify-center gap-8 py-12">
       <div className="flex items-center justify-center gap-6">
-        <div className="flex items-center justify-center w-20 h-20 rounded-2xl bg-secondary cyber-border">
+        <div className="bg-secondary cyber-border flex h-20 w-20 items-center justify-center rounded-2xl">
           <BrandLogo size={48} />
         </div>
         <div className="text-left">
-          <h2 className="text-4xl font-bold text-balance terminal-text">
+          <h2 className="terminal-text text-4xl font-bold text-balance">
             {MESSAGES.WELCOME.TITLE}
           </h2>
-          <div className="text-sm text-muted-foreground terminal-text mt-2">
+          <div className="text-muted-foreground terminal-text mt-2 text-sm">
             {MESSAGES.WELCOME.SUBTITLE}
           </div>
         </div>
       </div>
 
-      <div className="text-center space-y-4">
-        <p className="text-muted-foreground text-pretty max-w-md terminal-text">
+      <div className="space-y-4 text-center">
+        <p className="text-muted-foreground terminal-text max-w-md text-pretty">
           {MESSAGES.WELCOME.DESCRIPTION}
         </p>
       </div>
 
-      <div className="grid gap-3 mt-4 sm:grid-cols-2">
+      <div className="mt-4 grid gap-3 sm:grid-cols-2">
         <button
           onClick={() => onSuggestionClick(MESSAGES.SUGGESTIONS.SECURITY_SCAN.PROMPT)}
-          className="px-4 py-3 text-sm text-left transition-colors border rounded-lg border-border hover:bg-accent hover:text-accent-foreground cyber-border cursor-pointer"
+          className="border-border hover:bg-accent hover:text-accent-foreground cyber-border cursor-pointer rounded-lg border px-4 py-3 text-left text-sm transition-colors"
         >
-          <div className="font-medium terminal-text">
+          <div className="terminal-text font-medium">
             {MESSAGES.SUGGESTIONS.SECURITY_SCAN.TITLE}
           </div>
-          <div className="text-xs text-muted-foreground">
+          <div className="text-muted-foreground text-xs">
             {MESSAGES.SUGGESTIONS.SECURITY_SCAN.DESCRIPTION}
           </div>
         </button>
         <button
           onClick={() => onSuggestionClick(MESSAGES.SUGGESTIONS.SYSTEM_STATUS.PROMPT)}
-          className="px-4 py-3 text-sm text-left transition-colors border rounded-lg border-border hover:bg-accent hover:text-accent-foreground cyber-border cursor-pointer"
+          className="border-border hover:bg-accent hover:text-accent-foreground cyber-border cursor-pointer rounded-lg border px-4 py-3 text-left text-sm transition-colors"
         >
-          <div className="font-medium terminal-text">
+          <div className="terminal-text font-medium">
             {MESSAGES.SUGGESTIONS.SYSTEM_STATUS.TITLE}
           </div>
-          <div className="text-xs text-muted-foreground">
+          <div className="text-muted-foreground text-xs">
             {MESSAGES.SUGGESTIONS.SYSTEM_STATUS.DESCRIPTION}
           </div>
         </button>

@@ -76,22 +76,22 @@ export function ModelManagerModal({ isOpen, onClose, onModelChange }: ModelManag
   return (
     <>
       <Dialog open={isOpen} onOpenChange={onClose}>
-        <DialogContent className="max-w-3xl bg-card cyber-border">
+        <DialogContent className="bg-card cyber-border max-w-3xl">
           <DialogHeader>
             <div className="flex items-center justify-between">
               <DialogTitle className="terminal-text text-xl">Manage LLM API Keys</DialogTitle>
               <Button variant="outline" size="sm" onClick={() => setShowImportModal(true)}>
-                <Upload className="w-4 h-4 mr-2" />
+                <Upload className="mr-2 h-4 w-4" />
                 Import Config
               </Button>
             </div>
           </DialogHeader>
 
-          <div className="space-y-4 max-h-[500px] overflow-y-auto">
+          <div className="max-h-[500px] space-y-4 overflow-y-auto">
             {models.map((model) => (
               <div
                 key={model.id}
-                className={`p-4 rounded border ${
+                className={`rounded border p-4 ${
                   editingModelId === model.id
                     ? "bg-secondary border-primary"
                     : "border-border hover:bg-secondary/50"
@@ -99,17 +99,17 @@ export function ModelManagerModal({ isOpen, onClose, onModelChange }: ModelManag
               >
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
+                    <div className="mb-1 flex items-center gap-2">
                       <h3 className="font-semibold">{model.name}</h3>
-                      {model.is_active && <CheckCircle2 className="w-4 h-4 text-sky-500" />}
-                      {model.has_api_key && <Key className="w-4 h-4 text-sky-500" />}
+                      {model.is_active && <CheckCircle2 className="h-4 w-4 text-sky-500" />}
+                      {model.has_api_key && <Key className="h-4 w-4 text-sky-500" />}
                     </div>
-                    <p className="text-sm text-muted-foreground mb-2">
+                    <p className="text-muted-foreground mb-2 text-sm">
                       {model.description || model.provider}
                     </p>
 
                     {editingModelId === model.id ? (
-                      <div className="space-y-3 mt-3">
+                      <div className="mt-3 space-y-3">
                         <div className="flex gap-2">
                           <div className="relative flex-1">
                             <Input
@@ -122,19 +122,19 @@ export function ModelManagerModal({ isOpen, onClose, onModelChange }: ModelManag
                             <button
                               type="button"
                               onClick={() => setShowApiKey(!showApiKey)}
-                              className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                              className="text-muted-foreground hover:text-foreground absolute top-1/2 right-2 -translate-y-1/2"
                             >
                               {showApiKey ? (
-                                <EyeOff className="w-4 h-4" />
+                                <EyeOff className="h-4 w-4" />
                               ) : (
-                                <Eye className="w-4 h-4" />
+                                <Eye className="h-4 w-4" />
                               )}
                             </button>
                           </div>
                         </div>
                         <div className="flex gap-2">
                           <Button size="sm" onClick={handleSave} disabled={isLoading || !apiKey}>
-                            <Save className="w-4 h-4 mr-2" />
+                            <Save className="mr-2 h-4 w-4" />
                             Save API Key
                           </Button>
                           <Button
@@ -151,9 +151,9 @@ export function ModelManagerModal({ isOpen, onClose, onModelChange }: ModelManag
                         </div>
                       </div>
                     ) : (
-                      <div className="flex items-center gap-2 mt-2">
+                      <div className="mt-2 flex items-center gap-2">
                         {model.has_api_key && (
-                          <span className="text-xs text-muted-foreground">
+                          <span className="text-muted-foreground text-xs">
                             API Key: {model.api_key_masked}
                           </span>
                         )}
@@ -177,7 +177,7 @@ export function ModelManagerModal({ isOpen, onClose, onModelChange }: ModelManag
                           </Button>
                         )}
                         {model.is_active && (
-                          <span className="text-xs text-sky-500 text-center">Active</span>
+                          <span className="text-center text-xs text-sky-500">Active</span>
                         )}
                       </>
                     )}
@@ -187,7 +187,7 @@ export function ModelManagerModal({ isOpen, onClose, onModelChange }: ModelManag
             ))}
           </div>
 
-          <div className="text-sm text-muted-foreground mt-4">
+          <div className="text-muted-foreground mt-4 text-sm">
             <p>• Configure API keys for the models you want to use</p>
             <p>• Only one model can be active at a time</p>
             <p>• API keys are stored securely in the database</p>

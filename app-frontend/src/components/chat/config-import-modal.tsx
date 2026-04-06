@@ -76,7 +76,7 @@ export function ConfigImportModal({ isOpen, onClose, onImportSuccess }: ConfigIm
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="max-w-2xl bg-card cyber-border">
+      <DialogContent className="bg-card cyber-border max-w-2xl">
         <DialogHeader>
           <DialogTitle className="terminal-text text-xl">Import LLM Configuration</DialogTitle>
         </DialogHeader>
@@ -85,7 +85,7 @@ export function ConfigImportModal({ isOpen, onClose, onImportSuccess }: ConfigIm
           {/* File Upload Section */}
           {!importResult && (
             <div
-              className="border-2 border-dashed border-border rounded-lg p-8 text-center hover:border-primary/50 transition-colors cursor-pointer"
+              className="border-border hover:border-primary/50 cursor-pointer rounded-lg border-2 border-dashed p-8 text-center transition-colors"
               onDragOver={handleDragOver}
               onDrop={handleDrop}
               onClick={() => fileInputRef.current?.click()}
@@ -99,16 +99,16 @@ export function ConfigImportModal({ isOpen, onClose, onImportSuccess }: ConfigIm
               />
 
               <div className="flex flex-col items-center gap-4">
-                <Upload className="w-12 h-12 text-muted-foreground" />
+                <Upload className="text-muted-foreground h-12 w-12" />
                 <div>
                   <p className="text-lg font-medium">
                     {selectedFile ? selectedFile.name : "Drop your JSON config file here"}
                   </p>
-                  <p className="text-sm text-muted-foreground mt-1">or click to browse files</p>
+                  <p className="text-muted-foreground mt-1 text-sm">or click to browse files</p>
                 </div>
                 {selectedFile && (
                   <div className="flex items-center gap-2 text-sm text-sky-500">
-                    <FileText className="w-4 h-4" />
+                    <FileText className="h-4 w-4" />
                     <span>
                       {selectedFile.name} ({(selectedFile.size / 1024).toFixed(1)} KB)
                     </span>
@@ -120,8 +120,8 @@ export function ConfigImportModal({ isOpen, onClose, onImportSuccess }: ConfigIm
 
           {/* Error Display */}
           {error && (
-            <div className="flex items-center gap-2 p-3 bg-destructive/10 border border-destructive/20 rounded-lg text-destructive">
-              <AlertCircle className="w-4 h-4" />
+            <div className="bg-destructive/10 border-destructive/20 text-destructive flex items-center gap-2 rounded-lg border p-3">
+              <AlertCircle className="h-4 w-4" />
               <span className="text-sm">{error}</span>
             </div>
           )}
@@ -129,33 +129,33 @@ export function ConfigImportModal({ isOpen, onClose, onImportSuccess }: ConfigIm
           {/* Import Result */}
           {importResult && (
             <div className="space-y-4">
-              <div className="flex items-center gap-2 p-3 bg-sky-500/10 border border-sky-500/20 rounded-lg text-sky-700 dark:text-sky-400">
-                <CheckCircle2 className="w-4 h-4" />
+              <div className="flex items-center gap-2 rounded-lg border border-sky-500/20 bg-sky-500/10 p-3 text-sky-700 dark:text-sky-400">
+                <CheckCircle2 className="h-4 w-4" />
                 <span className="text-sm font-medium">{importResult.message}</span>
               </div>
 
               {importResult.default_provider_set && (
-                <div className="text-sm text-muted-foreground">
+                <div className="text-muted-foreground text-sm">
                   ✓ Default provider has been activated
                 </div>
               )}
 
               <div className="space-y-2">
                 <h4 className="font-medium">Imported Configurations:</h4>
-                <div className="max-h-40 overflow-y-auto space-y-1">
+                <div className="max-h-40 space-y-1 overflow-y-auto">
                   {importResult.imported_configs.map((config, index) => (
                     <div
                       key={index}
-                      className="flex items-center justify-between p-2 bg-secondary/50 rounded text-sm"
+                      className="bg-secondary/50 flex items-center justify-between rounded p-2 text-sm"
                     >
                       <div className="flex items-center gap-2">
                         <span className="font-medium">{config.provider}</span>
                         <span className="text-muted-foreground">({config.model})</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        {config.has_api_key && <Key className="w-3 h-3 text-sky-500" />}
-                        {config.activated && <CheckCircle2 className="w-3 h-3 text-sky-500" />}
-                        <span className="text-xs text-muted-foreground">
+                        {config.has_api_key && <Key className="h-3 w-3 text-sky-500" />}
+                        {config.activated && <CheckCircle2 className="h-3 w-3 text-sky-500" />}
+                        <span className="text-muted-foreground text-xs">
                           {config.has_api_key ? "Key set" : "No key"}
                           {config.activated ? " • Active" : ""}
                         </span>
@@ -184,9 +184,9 @@ export function ConfigImportModal({ isOpen, onClose, onImportSuccess }: ConfigIm
           </div>
 
           {/* Instructions */}
-          <div className="text-sm text-muted-foreground border-t pt-4">
-            <p className="font-medium mb-2">Expected JSON format:</p>
-            <pre className="bg-secondary/50 p-3 rounded text-xs overflow-x-auto">
+          <div className="text-muted-foreground border-t pt-4 text-sm">
+            <p className="mb-2 font-medium">Expected JSON format:</p>
+            <pre className="bg-secondary/50 overflow-x-auto rounded p-3 text-xs">
               {`{
   "default_provider": "gemini",
   "providers": {

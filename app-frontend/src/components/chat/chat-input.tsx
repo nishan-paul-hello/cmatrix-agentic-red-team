@@ -33,31 +33,31 @@ export function ChatInput({
   };
 
   return (
-    <div className="border-t border-border bg-card cyber-border">
-      <div className="container max-w-4xl px-4 py-4 mx-auto">
+    <div className="border-border bg-card cyber-border border-t">
+      <div className="container mx-auto max-w-4xl px-4 py-4">
         <form onSubmit={onSubmit} className="relative">
           <Textarea
             value={value}
             onChange={(e) => onChange(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder={MESSAGES.PLACEHOLDERS.INPUT}
-            className="pr-12 resize-none min-h-[60px] max-h-[200px] cyber-border bg-black text-white placeholder:text-gray-400"
+            className="cyber-border max-h-[200px] min-h-[60px] resize-none bg-black pr-12 text-white placeholder:text-gray-400"
             disabled={isLoading || disabled}
           />
           <Button
             type="submit"
             size="icon"
             disabled={!value.trim() || isLoading || disabled}
-            className="absolute bottom-2 right-2 rounded-lg bg-black text-white hover:bg-gray-800"
+            className="absolute right-2 bottom-2 rounded-lg bg-black text-white hover:bg-gray-800"
           >
             {isLoading ? (
-              <Loader2 className="w-4 h-4 animate-spin" />
+              <Loader2 className="h-4 w-4 animate-spin" />
             ) : (
-              <Send className="w-4 h-4" />
+              <Send className="h-4 w-4" />
             )}
           </Button>
         </form>
-        <p className="mt-2 text-xs text-center text-muted-foreground terminal-text">
+        <p className="text-muted-foreground terminal-text mt-2 text-center text-xs">
           {MESSAGES.SYSTEM.SECURITY_NOTICE}
         </p>
       </div>

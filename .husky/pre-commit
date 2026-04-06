@@ -1,0 +1,46 @@
+#!/usr/bin/env sh
+
+echo "🔍 Running pre-commit checks..."
+
+# ─────────────────────────────────────────────────────────
+# 1. FRONTEND — Prettier + ESLint via lint-staged
+# ─────────────────────────────────────────────────────────
+npx lint-staged
+FRONTEND_STATUS=$?
+
+if [ $FRONTEND_STATUS -ne 0 ]; then
+  echo "❌ Frontend checks failed."
+  exit 1
+fi
+
+# ─────────────────────────────────────────────────────────
+# 2. BACKEND — Formatting, Linting, and Tests
+# ─────────────────────────────────────────────────────────
+STAGED_PY=$(git diff --cached --name-only --diff-filter=ACM | grep "^app-backend/.*\.py$" || true)
+
+if [ -n "$STAGED_PY" ]; then
+  echo "🐍 Processing staged Python files..."
+  
+  RUFF="./app-backend/venv/bin/ruff"
+  
+  if [ -f "$RUFF" ]; then
+    # Format and Lint
+    $RUFF check --fix $STAGED_PY
+    $RUFF format $STAGED_PY
+    git add $STAGED_PY
+    echo "✅ Python formatting/linting passed!"
+  fi
+
+  # Run Backend Tests
+  echo "🧪 Running backend tests..."
+  make test-app-backend
+  if [ $? -ne 0 ]; then
+    echo "❌ Backend tests failed. Fix them before committing."
+    exit 1
+  fi
+  echo "✅ Backend tests passed!"
+else
+  echo "ℹ️  No staged Python files — skipping backend checks."
+fi
+
+echo "🚀 All systems green! Proceeding with commit."

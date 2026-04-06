@@ -48,13 +48,13 @@ function ChatContent() {
   };
 
   return (
-    <div className="flex h-screen bg-background overflow-hidden">
+    <div className="bg-background flex h-screen overflow-hidden">
       <div className="matrix-rain"></div>
 
       {/* Sidebar */}
       <div
         className={cn(
-          "flex-shrink-0 transition-all duration-300 ease-in-out border-r border-border bg-sidebar",
+          "border-border bg-sidebar flex-shrink-0 border-r transition-all duration-300 ease-in-out",
           isSidebarOpen ? "w-[260px]" : "w-[60px]"
         )}
       >
@@ -62,13 +62,13 @@ function ChatContent() {
       </div>
 
       {/* Main Chat Area */}
-      <div className="flex flex-col flex-1 min-w-0">
+      <div className="flex min-w-0 flex-1 flex-col">
         {/* Header */}
         <ChatHeader />
 
         {/* Messages */}
         <div className="flex-1 overflow-y-auto">
-          <div className="container max-w-4xl px-4 py-8 mx-auto">
+          <div className="container mx-auto max-w-4xl px-4 py-8">
             {messages.length === 0 ? (
               <WelcomeScreen onSuggestionClick={handleSuggestionClick} />
             ) : (

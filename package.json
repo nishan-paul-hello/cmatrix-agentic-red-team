@@ -1,0 +1,20 @@
+{
+  "name": "cmatrix-agentic-red-team",
+  "private": true,
+  "scripts": {
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.1"
+  },
+  "lint-staged": {
+    "app-frontend/**/*.{ts,tsx}": [
+      "npx --prefix ./app-frontend prettier --write",
+      "npx --prefix ./app-frontend eslint --config ./app-frontend/eslint.config.mjs --fix"
+    ],
+    "app-frontend/**/*.{css,json,mjs}": [
+      "npx --prefix ./app-frontend prettier --write"
+    ]
+  }
+}

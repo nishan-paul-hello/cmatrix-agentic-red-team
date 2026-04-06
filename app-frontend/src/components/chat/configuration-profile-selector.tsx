@@ -83,14 +83,14 @@ export function ConfigurationProfileSelector({
                 <Button
                   variant="outline"
                   size="sm"
-                  className="gap-2 cyber-border terminal-text min-w-[180px] justify-between cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="cyber-border terminal-text min-w-[180px] cursor-pointer justify-between gap-2 disabled:cursor-not-allowed disabled:opacity-50"
                   onClick={() => {
                     fetchProfiles();
                   }}
                   disabled={!hasProfiles}
                 >
                   <span className="truncate">{activeProfile?.name || "Load Configuration"}</span>
-                  <ChevronDown className="w-4 h-4 opacity-50" />
+                  <ChevronDown className="h-4 w-4 opacity-50" />
                 </Button>
               </DropdownMenuTrigger>
             </span>
@@ -107,10 +107,10 @@ export function ConfigurationProfileSelector({
 
       <DropdownMenuContent
         align="start"
-        className="w-[320px] bg-card cyber-border max-h-[400px] overflow-y-auto custom-scrollbar"
+        className="bg-card cyber-border custom-scrollbar max-h-[400px] w-[320px] overflow-y-auto"
       >
         {profiles.length === 0 ? (
-          <div className="text-center text-muted-foreground py-8 px-4 text-sm">
+          <div className="text-muted-foreground px-4 py-8 text-center text-sm">
             No profiles configured. Click Settings to create one.
           </div>
         ) : (
@@ -119,19 +119,19 @@ export function ConfigurationProfileSelector({
             return (
               <DropdownMenuItem
                 key={profile.id}
-                className={`p-3 cursor-pointer focus:bg-secondary/50 ${
+                className={`focus:bg-secondary/50 cursor-pointer p-3 ${
                   isActive ? "bg-primary/10" : ""
                 }`}
                 onClick={() => handleActivateProfile(profile.id)}
               >
-                <div className="flex items-center justify-between w-full">
-                  <div className="flex-1 min-w-0">
-                    <div className="font-medium truncate">{profile.name}</div>
-                    <div className="text-xs text-muted-foreground truncate">
+                <div className="flex w-full items-center justify-between">
+                  <div className="min-w-0 flex-1">
+                    <div className="truncate font-medium">{profile.name}</div>
+                    <div className="text-muted-foreground truncate text-xs">
                       {profile.api_provider} • {profile.selected_model_name || "No model"}
                     </div>
                   </div>
-                  {isActive && <CheckCircle2 className="w-5 h-5 text-primary ml-2 flex-shrink-0" />}
+                  {isActive && <CheckCircle2 className="text-primary ml-2 h-5 w-5 flex-shrink-0" />}
                 </div>
               </DropdownMenuItem>
             );

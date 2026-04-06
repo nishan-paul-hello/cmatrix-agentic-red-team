@@ -70,7 +70,7 @@ export function ConversationSidebar({
           <Button
             variant="ghost"
             className={cn(
-              "w-full justify-start h-10 px-2 cursor-pointer",
+              "h-10 w-full cursor-pointer justify-start px-2",
               !isOpen && "justify-center px-0",
               active && "bg-secondary/50"
             )}
@@ -88,20 +88,20 @@ export function ConversationSidebar({
   return (
     <div
       className={cn(
-        "flex flex-col h-full bg-sidebar custom-scrollbar overflow-y-auto overflow-x-hidden",
+        "bg-sidebar custom-scrollbar flex h-full flex-col overflow-x-hidden overflow-y-auto",
         className
       )}
     >
       {/* Top Actions */}
-      <div className="p-2 space-y-1 sticky top-0 bg-sidebar z-10">
+      <div className="bg-sidebar sticky top-0 z-10 space-y-1 p-2">
         {/* Toggle & Brand/Logo area if needed */}
         <div
           className={cn(
             "flex items-center",
-            isOpen ? "justify-between px-2 mb-2" : "justify-center mb-1"
+            isOpen ? "mb-2 justify-between px-2" : "mb-1 justify-center"
           )}
         >
-          {isOpen && <span className="font-semibold text-sm">Chats</span>}
+          {isOpen && <span className="text-sm font-semibold">Chats</span>}
           {onToggle && (
             <TooltipProvider delayDuration={0}>
               <Tooltip>
@@ -110,8 +110,8 @@ export function ConversationSidebar({
                     variant="ghost"
                     className={cn(
                       isOpen
-                        ? "h-8 w-8 p-0 cursor-ew-resize"
-                        : "h-10 w-full justify-center cursor-ew-resize"
+                        ? "h-8 w-8 cursor-ew-resize p-0"
+                        : "h-10 w-full cursor-ew-resize justify-center"
                     )}
                     onClick={onToggle}
                   >
@@ -142,18 +142,18 @@ export function ConversationSidebar({
       {/* Conversations List */}
       <div className="flex-1">
         {isOpen && (
-          <div className="px-4 py-2 text-xs font-semibold text-muted-foreground">Your chats</div>
+          <div className="text-muted-foreground px-4 py-2 text-xs font-semibold">Your chats</div>
         )}
 
-        <div className="p-2 space-y-1">
+        <div className="space-y-1 p-2">
           {isLoading ? (
             <div className="flex items-center justify-center py-4">
-              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
+              <div className="border-primary h-4 w-4 animate-spin rounded-full border-b-2"></div>
             </div>
           ) : filteredConversations.length === 0 ? (
             isOpen && (
-              <div className="text-center py-8 px-2">
-                <p className="text-xs text-muted-foreground">No conversations yet</p>
+              <div className="px-2 py-8 text-center">
+                <p className="text-muted-foreground text-xs">No conversations yet</p>
               </div>
             )
           ) : (

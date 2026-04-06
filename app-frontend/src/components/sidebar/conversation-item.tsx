@@ -90,12 +90,12 @@ export function ConversationItem({ conversation, isActive, onClick }: Conversati
     <>
       <div
         className={cn(
-          "group flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors hover:bg-accent cursor-pointer",
+          "group hover:bg-accent flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors",
           isActive && "bg-accent"
         )}
         onClick={onClick}
       >
-        <div className="flex-1 min-w-0">
+        <div className="min-w-0 flex-1">
           {isEditing ? (
             <Input
               value={editName}
@@ -117,7 +117,7 @@ export function ConversationItem({ conversation, isActive, onClick }: Conversati
             <Button
               variant="ghost"
               size="sm"
-              className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+              className="h-6 w-6 p-0 opacity-0 transition-opacity group-hover:opacity-100"
               onClick={(e) => e.stopPropagation()}
             >
               <MoreVertical className="h-3 w-3" />
@@ -125,7 +125,7 @@ export function ConversationItem({ conversation, isActive, onClick }: Conversati
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem onClick={handleEdit}>
-              <Edit2 className="h-4 w-4 mr-2" />
+              <Edit2 className="mr-2 h-4 w-4" />
               Rename
             </DropdownMenuItem>
             <DropdownMenuItem
@@ -135,7 +135,7 @@ export function ConversationItem({ conversation, isActive, onClick }: Conversati
               }}
               className="text-destructive"
             >
-              <Trash2 className="h-4 w-4 mr-2" />
+              <Trash2 className="mr-2 h-4 w-4" />
               Delete
             </DropdownMenuItem>
           </DropdownMenuContent>

@@ -52,18 +52,18 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-background">
+    <div className="bg-background flex min-h-screen items-center justify-center">
       <div className="matrix-rain"></div>
 
-      <div className="w-full max-w-md p-8 space-y-6 bg-card border border-primary/20 rounded-lg shadow-glow z-10">
+      <div className="bg-card border-primary/20 shadow-glow z-10 w-full max-w-md space-y-6 rounded-lg border p-8">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-primary mb-2">CMatrix Login</h1>
+          <h1 className="text-primary mb-2 text-3xl font-bold">CMatrix Login</h1>
           <p className="text-muted-foreground">Enter your credentials to continue</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="username" className="block text-sm font-medium text-foreground mb-2">
+            <label htmlFor="username" className="text-foreground mb-2 block text-sm font-medium">
               Username
             </label>
             <input
@@ -71,7 +71,7 @@ export default function LoginPage() {
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="w-full px-4 py-2 bg-background border border-primary/30 rounded-md text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+              className="bg-background border-primary/30 text-foreground focus:ring-primary/50 w-full rounded-md border px-4 py-2 focus:ring-2 focus:outline-none"
               placeholder="Enter username"
               required
               disabled={isLoading}
@@ -80,7 +80,7 @@ export default function LoginPage() {
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-foreground mb-2">
+            <label htmlFor="password" className="text-foreground mb-2 block text-sm font-medium">
               Password
             </label>
             <input
@@ -88,7 +88,7 @@ export default function LoginPage() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2 bg-background border border-primary/30 rounded-md text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+              className="bg-background border-primary/30 text-foreground focus:ring-primary/50 w-full rounded-md border px-4 py-2 focus:ring-2 focus:outline-none"
               placeholder="Enter password"
               required
               disabled={isLoading}
@@ -97,7 +97,7 @@ export default function LoginPage() {
           </div>
 
           {error && (
-            <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-md">
+            <div className="rounded-md border border-red-500/30 bg-red-500/10 p-3">
               <p className="text-sm text-red-400">{error}</p>
             </div>
           )}
@@ -105,7 +105,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full px-4 py-2 bg-primary text-primary-foreground rounded-md font-medium hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="bg-primary text-primary-foreground hover:bg-primary/90 focus:ring-primary/50 w-full rounded-md px-4 py-2 font-medium transition-colors focus:ring-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isLoading ? "Logging in..." : "Login"}
           </button>

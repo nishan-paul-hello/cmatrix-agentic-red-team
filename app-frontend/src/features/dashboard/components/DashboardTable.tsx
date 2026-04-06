@@ -46,33 +46,33 @@ export function DashboardTable({
               <TableHead className="w-[200px]">Conversation</TableHead>
               <TableHead>Prompt</TableHead>
               <TableHead>Response</TableHead>
-              <TableHead className="text-right w-[100px]">Actions</TableHead>
+              <TableHead className="w-[100px] text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {isLoading ? (
               <TableRow>
-                <TableCell colSpan={5} className="text-center py-8">
+                <TableCell colSpan={5} className="py-8 text-center">
                   Loading history...
                 </TableCell>
               </TableRow>
             ) : data.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={5} className="text-center py-8">
+                <TableCell colSpan={5} className="py-8 text-center">
                   No history found
                 </TableCell>
               </TableRow>
             ) : (
               data.map((item) => (
                 <TableRow key={item.prompt_id}>
-                  <TableCell className="whitespace-nowrap text-muted-foreground">
+                  <TableCell className="text-muted-foreground whitespace-nowrap">
                     {format(new Date(item.created_at), "MMM d, yyyy HH:mm")}
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2">
-                      <MessageSquare className="w-4 h-4 text-muted-foreground" />
+                      <MessageSquare className="text-muted-foreground h-4 w-4" />
                       <span
-                        className="font-medium truncate max-w-[180px]"
+                        className="max-w-[180px] truncate font-medium"
                         title={item.conversation_name}
                       >
                         {item.conversation_name}
@@ -86,7 +86,7 @@ export function DashboardTable({
                   </TableCell>
                   <TableCell className="max-w-xs">
                     <div
-                      className="truncate text-muted-foreground"
+                      className="text-muted-foreground truncate"
                       title={item.response || "No response"}
                     >
                       {item.response || <span className="italic">No response</span>}
@@ -101,7 +101,7 @@ export function DashboardTable({
                         title="Delete this exchange"
                         className="hover:text-destructive hover:bg-destructive/10"
                       >
-                        <Trash2 className="w-4 h-4" />
+                        <Trash2 className="h-4 w-4" />
                       </Button>
                     </div>
                   </TableCell>

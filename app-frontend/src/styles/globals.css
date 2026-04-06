@@ -120,11 +120,8 @@
   body {
     @apply bg-background text-foreground;
     font-family: "Courier New", monospace;
-    background-image: radial-gradient(
-        circle at 25% 25%,
-        rgba(14, 165, 233, 0.01) 0%,
-        transparent 50%
-      ),
+    background-image:
+      radial-gradient(circle at 25% 25%, rgba(14, 165, 233, 0.01) 0%, transparent 50%),
       radial-gradient(circle at 75% 75%, rgba(14, 165, 233, 0.01) 0%, transparent 50%);
     background-attachment: fixed;
   }
@@ -254,11 +251,11 @@
   }
 
   .prose code {
-    @apply bg-muted px-1.5 py-0.5 rounded text-sm;
+    @apply bg-muted rounded px-1.5 py-0.5 text-sm;
   }
 
   .prose pre {
-    @apply bg-muted p-3 rounded-lg overflow-x-auto my-2;
+    @apply bg-muted my-2 overflow-x-auto rounded-lg p-3;
   }
 
   .prose pre code {
