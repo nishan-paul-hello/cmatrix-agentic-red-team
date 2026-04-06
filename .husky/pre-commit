@@ -1,69 +1,16 @@
 #!/usr/bin/env sh
 
-echo "🔍 Running pre-commit checks..."
+echo "🔍 Running high-performance pre-commit checks..."
 
-# ─────────────────────────────────────────────────────────
-# 1. FRONTEND — Prettier + ESLint via lint-staged
-# ─────────────────────────────────────────────────────────
+# Run lint-staged for both frontend and backend
+# These only run on the files changed in the current commit
 npx lint-staged
-FRONTEND_STATUS=$?
+EXIT_CODE=$?
 
-if [ $FRONTEND_STATUS -ne 0 ]; then
-  echo "❌ Frontend checks failed."
+if [ $EXIT_CODE -ne 0 ]; then
+  echo "❌ Pre-commit checks failed. Please fix issues before committing."
   exit 1
 fi
 
-# ─────────────────────────────────────────────────────────
-# 2. BACKEND — Formatting, Linting, and Tests
-# ─────────────────────────────────────────────────────────
-STAGED_PY=$(git diff --cached --name-only --diff-filter=ACM | grep "^app-backend/.*\.py$" || true)
-
-if [ -n "$STAGED_PY" ]; then
-  echo "🐍 Processing staged Python files..."
-  
-  RUFF="./app-backend/venv/bin/ruff"
-  MYPY="./app-backend/venv/bin/mypy"
-  BANDIT="./app-backend/venv/bin/bandit"
-  
-  if [ -f "$RUFF" ]; then
-    echo "✨ Linting and formatting with Ruff..."
-    $RUFF check --fix $STAGED_PY
-    $RUFF format $STAGED_PY
-    git add $STAGED_PY
-    echo "✅ Python formatting/linting passed!"
-  fi
-
-  if [ -f "$MYPY" ]; then
-    echo "🔎 Running mypy type checker..."
-    # Explicitly use backend config to match make quality
-    $MYPY --config-file=app-backend/pyproject.toml app-backend/app
-    if [ $? -ne 0 ]; then
-      echo "❌ Backend type check failed. Fix type errors before committing."
-      exit 1
-    fi
-    echo "✅ Python type check passed!"
-  fi
-
-  if [ -f "$BANDIT" ]; then
-    echo "🛡️  Running bandit security scan..."
-    $BANDIT -r app-backend/app -c app-backend/pyproject.toml -s B101,B601
-    if [ $? -ne 0 ]; then
-      echo "❌ Security scan failed. Check bandit issues before committing."
-      exit 1
-    fi
-    echo "✅ Backend security scan passed!"
-  fi
-
-  # Run Backend Tests
-  echo "🧪 Running backend tests..."
-  make test-app-backend
-  if [ $? -ne 0 ]; then
-    echo "❌ Backend tests failed. Fix them before committing."
-    exit 1
-  fi
-  echo "✅ Backend tests passed!"
-else
-  echo "ℹ️  No staged Python files — skipping backend checks."
-fi
-
-echo "🚀 All systems green! Proceeding with commit."
+echo "🚀 Fast-flight checks green! Backend tests and security scans will run on push in CI."
+echo "✅ Proceeding with commit."
