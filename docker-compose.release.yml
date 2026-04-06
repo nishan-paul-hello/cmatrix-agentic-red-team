@@ -115,8 +115,10 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=3011
-      - NEXT_PUBLIC_API_URL=https://api-cmatrix.kaiofficial.xyz/api/v1
-      - PYTHON_BACKEND_URL=http://cmatrix-app-backend:3012
+      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-https://api-cmatrix.kaiofficial.xyz/api/v1}
+      - PYTHON_BACKEND_URL=http://host.docker.internal:3012
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     depends_on:
       app-backend:
         condition: service_healthy

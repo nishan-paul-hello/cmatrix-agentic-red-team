@@ -149,7 +149,9 @@ services:
       - NODE_ENV=production
       - PORT=${FRONTEND_PORT}
       - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
-      - PYTHON_BACKEND_URL=http://localhost:${BACKEND_PORT:-3012}
+      - PYTHON_BACKEND_URL=http://host.docker.internal:${BACKEND_PORT:-3012}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     depends_on:
       app-backend:
         condition: service_healthy
