@@ -167,6 +167,6 @@ CMatrix architecture treats AI agents as modular functions. Adding new tools inv
 ---
 
 <div align="center">
-  <img src="app-frontend/public/icon.svg" alt="App Logo" width="80" height="80" />
-  <p>Built with ❤️</p>
+  <img src="assets/company-logo.svg" alt="Author Logo" width="80" height="80" />
+  <p>Built with ❤️ by <b><a href="https://kaiofficial.xyz/">KAI</a></b></p>
 </div>
