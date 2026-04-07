@@ -15,7 +15,6 @@ permissions:
 jobs:
   changes:
     runs-on: ubuntu-latest
-    if: vars.ENABLE_DEPLOY == 'true'
     outputs:
       frontend: ${{ steps.filter.outputs.frontend == 'true' || github.event_name == 'workflow_dispatch' }}
       backend: ${{ steps.filter.outputs.backend == 'true' || github.event_name == 'workflow_dispatch' }}
@@ -186,7 +185,7 @@ jobs:
 
   quality-gate:
     needs: [changes, quality-frontend-lint, quality-frontend-build, quality-backend]
-    if: always() && vars.ENABLE_DEPLOY == 'true'
+    if: always()
     runs-on: ubuntu-latest
     steps:
       - name: Check Status
@@ -210,7 +209,7 @@ jobs:
   build-backend:
     needs: [quality-gate, changes]
     runs-on: ubuntu-latest
-    if: vars.ENABLE_DEPLOY == 'true' && (needs.changes.outputs.backend == 'true' || needs.changes.outputs.workflow == 'true')
+    if: (needs.changes.outputs.backend == 'true' || needs.changes.outputs.workflow == 'true')
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -236,7 +235,7 @@ jobs:
   build-frontend:
     needs: [quality-gate, changes]
     runs-on: ubuntu-latest
-    if: vars.ENABLE_DEPLOY == 'true' && (needs.changes.outputs.frontend == 'true' || needs.changes.outputs.workflow == 'true')
+    if: (needs.changes.outputs.frontend == 'true' || needs.changes.outputs.workflow == 'true')
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
