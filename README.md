@@ -3,8 +3,8 @@
   <h1>CMatrix</h1>
   <p>AI-Powered Multi-Agent Security Orchestration & VAPT Platform</p>
 
-  <a href="https://barcody.kaiofficial.xyz" target="_blank">
-    <img src="https://img.shields.io/badge/Live_App-barcody.kaiofficial.xyz-0070f3?style=for-the-badge&logo=next.js&logoColor=white" alt="Live App" />
+  <a href="https://cmatrix.kaiofficial.xyz" target="_blank">
+    <img src="https://img.shields.io/badge/Live_App-cmatrix.kaiofficial.xyz-0070f3?style=for-the-badge&logo=next.js&logoColor=white" alt="Live App" />
   </a>
 
   <div>
