@@ -1,5 +1,9 @@
 name: Quality, Build & Deploy
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 on:
   push:
     branches: [ main ]
@@ -15,6 +19,7 @@ permissions:
 jobs:
   changes:
     runs-on: ubuntu-latest
+    if: vars.ENABLE_DEPLOY == 'true'
     outputs:
       frontend: ${{ steps.filter.outputs.frontend == 'true' || github.event_name == 'workflow_dispatch' }}
       backend: ${{ steps.filter.outputs.backend == 'true' || github.event_name == 'workflow_dispatch' }}
@@ -185,7 +190,7 @@ jobs:
 
   quality-gate:
     needs: [changes, quality-frontend-lint, quality-frontend-build, quality-backend]
-    if: always()
+    if: always() && vars.ENABLE_DEPLOY == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Check Status
@@ -209,7 +214,7 @@ jobs:
   build-backend:
     needs: [quality-gate, changes]
     runs-on: ubuntu-latest
-    if: (needs.changes.outputs.backend == 'true' || needs.changes.outputs.workflow == 'true')
+    if: vars.ENABLE_DEPLOY == 'true' && (needs.changes.outputs.backend == 'true' || needs.changes.outputs.workflow == 'true')
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -235,7 +240,7 @@ jobs:
   build-frontend:
     needs: [quality-gate, changes]
     runs-on: ubuntu-latest
-    if: (needs.changes.outputs.frontend == 'true' || needs.changes.outputs.workflow == 'true')
+    if: vars.ENABLE_DEPLOY == 'true' && (needs.changes.outputs.frontend == 'true' || needs.changes.outputs.workflow == 'true')
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
