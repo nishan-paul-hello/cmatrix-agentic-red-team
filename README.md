@@ -24,6 +24,8 @@ CMatrix is an advanced, AI-powered security orchestration platform utilizing a m
 - 🎨 **Modern Interface**: A stunning Next.js frontend with real-time SSE streaming for live updates.
 - 🔐 **LLM Agnostic**: Seamlessly integrate with Gemini, OpenAI, Claude, or local Ollama models.
 - 🐳 **Docker Ready**: Fully containerized setup for rapid and reliable deployment.
+- 📜 **Academic Tooling**: Integrated LaTeX build system for generating IEEE-formatted research papers.
+
 
 ---
 
@@ -150,6 +152,29 @@ CMatrix architecture treats AI agents as modular functions. Adding new tools inv
 *Code merges trigger Github Actions ensuring full functional and integration tests across container images.*
 
 ---
+
+## 📜 Research & Documentation
+
+CMatrix includes a professional, independent LaTeX build system for documenting research findings and publishing academic papers (specifically formatted for **IEEE S&P**).
+
+### ✍️ Writing the Paper
+The source files for research documentation are located in:
+`build-paper/research-paper/research-paper.tex`
+
+### 🏗️ Building the PDF
+To compile the research paper into a professional 2-column IEEE format:
+
+```bash
+make paper
+```
+
+The generated PDF will be available at:
+`build-paper/paper/research-paper.pdf`
+
+> **Note:** This requires `latexmk` and a standard LaTeX distribution (like TeX Live) installed on your system.
+
+---
+
 
 ## 🌐 Contemporary Works & Inspiration
 
