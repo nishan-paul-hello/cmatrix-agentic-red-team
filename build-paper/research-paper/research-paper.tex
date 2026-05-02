@@ -94,7 +94,7 @@ Large Language Models (LLMs) have shown a remarkable ability to interpret unstru
 Deploying LLM-driven VAPT in production environments introduces three critical challenges. First, \textbf{operational fragility}: dependency on a single LLM provider creates a significant point of failure. Second, \textbf{inference cost}: using flagship models for every sub-task is economically unsustainable. Third, \textbf{safety and control}: autonomous agents may execute destructive commands if not governed by rigorous safety gates and Human-in-the-Loop (HITL) controls.
 
 \subsection{Our Contribution: LLMOrch-VAPT}
-In this paper, we present LLMOrch-VAPT, a resilient orchestration framework designed specifically for autonomous security operations. Our system decouples the security reasoning logic from the underlying LLM provider, enabling seamless switching between providers without altering the agent's behavior. We contribute a unified LLMProvider Protocol \cite{litellm}, a Complexity-Aware Routing Engine \cite{routellm}, and an integrated HITL Safety Gate system.
+This paper presents LLMOrch-VAPT, a resilient orchestration framework designed specifically for autonomous security operations. Our system decouples the security reasoning logic from the underlying LLM provider, enabling seamless switching between providers without altering the agent's behavior. We contribute a unified LLMProvider Protocol \cite{litellm}, a Complexity-Aware Routing Engine \cite{routellm}, and an integrated HITL Safety Gate system.
 
 \section{Background and Related Work}
 \subsection{LLM Orchestration and Routing Strategies}
@@ -106,11 +106,23 @@ Autonomous agents require structured state management for multi-turn reasoning. 
 \section{System Architecture}
 LLMOrch-VAPT is designed as a Master-Worker architecture, where a central Orchestrator manages specialized security agents.
 
+\begin{figure}[htbp]
+\centerline{\includegraphics[width=0.48\textwidth]{../assets/architecture.png}}
+\caption{The LLMOrch-VAPT Multi-Agent Architecture. The Master Orchestrator coordinates specialized worker agents through a unified provider-agnostic interface.}
+\label{fig:arch}
+\end{figure}
+
 \subsection{Multi-Agent Coordination and Supervision}
-The `OrchestratorService` utilizes LangGraph to define a stateful directed acyclic graph (DAG). The `SupervisorService` acts as the brain, analyzing user tasks and delegating them to worker agents (Network, Web, Auth, Config, Intel, and API).
+The `OrchestratorService` utilizes LangGraph to define a stateful directed acyclic graph (DAG). The `SupervisorService` acts as the brain, analyzing user tasks and delegating them to worker agents including Network, Web, Auth, Config, Intel, and API agents.
 
 \subsection{LLMProvider Protocol and Failover}
 Our `LLMProvider` interface abstracts cloud (Gemini, OpenAI, Anthropic) and local (Ollama \cite{ollama}) backends. The `FailoverService` ensures 99.9\% availability by dynamically re-routing requests during provider outages or rate-limiting events.
+
+\begin{figure}[htbp]
+\centerline{\includegraphics[width=0.45\textwidth]{../assets/routing-flow.png}}
+\caption{The complexity-aware routing flow, categorizing tasks into Flash, Pro, and Reasoning tiers based on technical indicators.}
+\label{fig:routing}
+\end{figure}
 
 \section{Complexity-Aware Routing Engine}
 To optimize cost, LLMOrch-VAPT classifies each prompt into one of three complexity tiers: Flash (reconnaissance), Pro (analysis), and Reasoning (exploitation). We formulate this as an optimization problem minimizing cost and latency while maximizing reasoning quality.
@@ -118,32 +130,20 @@ To optimize cost, LLMOrch-VAPT classifies each prompt into one of three complexi
 \section{Safety and Human-in-the-Loop}
 Safety is enforced through a centralized HITL gate. The `approval\_config.py` module defines a risk taxonomy, and the `approvals.py` module manages asynchronous human approvals for high-risk tools. State persistence is handled via a PostgreSQL-backed `PostgresSaver` in LangGraph.
 
-\section{Detailed System Implementation}
-In this section, we provide a technical deep dive into the implementation of LLMOrch-VAPT.
-
-\subsection{The Orchestrator and Supervisor Services}
-The `OrchestratorService` is the primary entry point for all security assessments. It initializes the LangGraph state machine, which maintains a shared memory of the attack surface, identified vulnerabilities, and the current plan. The `SupervisorService` uses a high-capacity LLM (Reasoning tier) to decompose the user objective into atomic sub-tasks. Each sub-task is assigned a priority and routed to the most qualified specialized agent.
-
-\subsection{Specialized Worker Agents}
-Each worker agent (e.g., the Web Agent) is implemented as a semi-autonomous node in the graph. The Web Agent utilizes specialized tools for directory discovery, parameter fuzzing, and payload adaptation. The agent's reasoning loop includes a self-reflection step, where it analyzes the response from the target system and iteratively refines its next action.
-
-\subsection{HITL Persistence and State Management}
-To handle asynchronous human approvals, we use LangGraph's checkpointing capabilities. When a "High Risk" tool is triggered, the entire graph state is serialized and stored in a PostgreSQL database. The `approvals.py` service exposes an API for the CMatrix UI to display the pending request to the human operator. Once approved, the orchestrator deserializes the state and resumes execution from the exact point of suspension.
-
-\section{Reasoning Strategies for Complex Exploit Chains}
-LLMOrch-VAPT integrates three distinct reasoning modules to handle varying task complexities.
-
-\subsection{Tree of Thoughts (ToT) for Strategic Planning}
-The ToT module is utilized during the initial reconnaissance phase. The supervisor generates multiple potential attack paths (thoughts) and evaluates them based on historical success rates retrieved from our vector store. Only the most promising paths are pursued, significantly reducing the search space for the agents.
-
-\subsection{ReWOO for Execution Optimization}
-For repetitive tasks like port scanning or service identification, the ReWOO module generates a batch execution plan. This eliminates the need for multiple LLM calls during the tool execution phase, reducing both latency and inference costs.
-
-\subsection{Self-Reflection for Payload Adaptation}
-The Reflection module is critical for bypassing modern security defenses. After an exploit attempt is blocked by a Web Application Firewall (WAF), the agent analyzes the rejection signal and adapts its payload using evasion techniques (e.g., encoding, chunking, or protocol smuggling).
+\begin{figure}[htbp]
+\centerline{\includegraphics[width=0.48\textwidth]{../assets/safety-gate.png}}
+\caption{The HITL Safety Gate Flowchart: High-risk operations are intercepted and persisted for human review.}
+\label{fig:safety}
+\end{figure}
 
 \section{Experimental Evaluation}
 Our evaluation across 1,500 security reasoning tasks demonstrates that LLMOrch-VAPT maintains a 97.4\% success rate while reducing operational costs by over 80\%.
+
+\begin{figure}[htbp]
+\centerline{\includegraphics[width=0.48\textwidth]{../assets/eval-graph.png}}
+\caption{Comparison of Reasoning Quality vs. Relative Inference Cost: LLMOrch-VAPT matches baseline quality at a fraction of the cost.}
+\label{fig:eval}
+\end{figure}
 
 \begin{table}[htbp]
 \caption{LLM Provider Performance Benchmarking}
@@ -164,8 +164,11 @@ O1-preview \cite{gpt4} & 1800 & 12 & 99.1\% & \$60.00 \\
 \end{center}
 \end{table}
 
+\section{Discussion and Future Work}
+Future research will focus on model distillation, fine-tuning local models (e.g., Llama-3) on reasoning traces from flagship models to enhance privacy and reduce latency.
+
 \section{Conclusion}
-LLMOrch-VAPT provides a resilient, provider-agnostic foundation for autonomous VAPT. By integrating advanced reasoning, intelligent routing, and HITL safety, we enable scalable and safe autonomous red teaming in enterprise environments.
+LLMOrch-VAPT provides a robust, provider-agnostic foundation for autonomous VAPT. By integrating advanced reasoning, intelligent routing, and HITL safety, we enable scalable and safe autonomous red teaming in enterprise environments.
 
 \section*{Acknowledgment}
 This research was supported by Joblio Security Labs.
@@ -174,11 +177,17 @@ This research was supported by Joblio Security Labs.
 \bibliography{references}
 
 \appendix
-\section{Extended Methodology}
-\subsection{Signal Classifier Training}
-The signal classifier is a BERT-based model fine-tuned on a dataset of 50,000 security prompts. It uses features such as CVE relevance, instruction complexity, and tool-risk categorization to predict the optimal reasoning tier for a given task.
+\section{Implementation Details of Specialized Agents}
+\subsection{Web Agent and Injection Analysis}
+The Web Agent utilizes a set of normalized tools for directory brute-forcing and payload generation. Each tool execution is followed by a reflection step to adjust its approach.
 
-\subsection{Vector Memory and RAG Strategy}
-The `VectorStoreService` utilizes Qdrant and BGE-large embeddings to provide long-term memory to all agents. The system stores historical vulnerability findings, tool outputs, and threat intelligence metadata.
+\subsection{Network Agent and Service Discovery}
+The Network Agent automates reconnaissance using tools like Nmap, providing structured output that is consumed by the `SupervisorService` to identify potential attack vectors.
+
+\section{HITL Safety Gate Implementation}
+The HITL gate is implemented as an asynchronous state machine. When a "High Risk" tool is triggered, LangGraph execution is suspended and checkpointed in PostgreSQL.
+
+\section{Vector Store and Memory Management}
+We utilize Qdrant for vector storage and BGE-large for embeddings, allowing agents to correlate findings with historical threat intelligence.
 
 \end{document}
