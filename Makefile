@@ -114,8 +114,8 @@ build-app-backend:
 paper:
 	@echo "🏗️  Building Research Paper..."
 	mkdir -p $(RESEARCH_OUT_DIR)
-	$(LATEXMK) -jobname=research-paper -outdir="." -auxdir="build" $(RESEARCH_PAPER_DIR)/research-paper.tex
-	mv $(RESEARCH_PAPER_DIR)/research-paper.pdf $(RESEARCH_OUT_DIR)/
+	$(LATEXMK) -jobname=main -outdir="." -auxdir="build" $(RESEARCH_PAPER_DIR)/main.tex
+	mv $(RESEARCH_PAPER_DIR)/main.pdf $(RESEARCH_OUT_DIR)/research-paper.pdf
 	rm -rf $(RESEARCH_PAPER_DIR)/build
 
 # Cleanup
