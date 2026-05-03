@@ -116,9 +116,11 @@ Through extensive evaluation on the NYU CTF Bench \cite{nyuctf} and simulated en
 The development of CMatrix is situated at the intersection of autonomous penetration testing, multi-agent orchestration, and LLM safety.
 
 \subsection{Autonomous Penetration Testing Systems}
-The quest to automate the penetration testing lifecycle has been reinvigorated by the reasoning capabilities of Large Language Models. PentestGPT \cite{pentestgpt} was among the first to demonstrate that LLMs could guide a human operator through complex HackTheBox environments, though it remains a "guided" system rather than a fully autonomous executor. HackingBuddyGPT \cite{hackingbuddygpt, hackingbuddy} extended this by allowing an agent to execute shell commands for Linux privilege escalation, showing that GPT-4 can outperform traditional automated scripts. More recently, AutoAttacker \cite{autoattacker} and the work of Fang et al. \cite{fang2024} have demonstrated that agents can autonomously exploit real-world one-day vulnerabilities with success rates exceeding 80\%.
+The quest to automate the penetration testing lifecycle has been reinvigorated by the reasoning capabilities of Large Language Models. PentestGPT \cite{pentestgpt} was among the first to demonstrate that LLMs could guide a human operator through complex environments. HackingBuddyGPT \cite{hackingbuddygpt} demonstrated that GPT-4 can outperform traditional automated scripts in Linux privilege escalation. AutoAttacker \cite{autoattacker} and the work of Fang et al. \cite{fang2024} further showed that agents can autonomously exploit real-world one-day vulnerabilities.
 
-However, as summarized in Table~\ref{tab:comparison}, these systems are primarily offensive prototypes. They lack the formal safety governance required for production environments, possess no longitudinal memory across engagement sessions, and rely on monolithic architectures that struggle with specialized security toolsets. CMatrix is designed to address these three deficiencies systematically.
+The field has seen a "multi-agent revolution" in 2025. Recent frameworks like CHECKMATE \cite{checkmate2025} have pushed success rates to 88\% by integrating classical planning with LLM execution. Similarly, xOffense \cite{xoffense2025} utilizes domain-adapted mid-scale models (Qwen3-32B) to achieve competitive performance in offline environments. CurriculumPT \cite{curriculumpt2025} introduces curriculum-guided scheduling to handle multi-stage vulnerabilities.
+
+However, as summarized in Table~\ref{tab:comparison}, these 2025 high-performance systems focus almost exclusively on maximizing offensive capability. They lack the formal safety governance required for production environments and possess limited longitudinal memory across engagements. CMatrix is designed to bridge this gap by combining 2025-level capability with enterprise-grade safety.
 
 \begin{table*}[t]
 \centering
@@ -129,9 +131,10 @@ However, as summarized in Table~\ref{tab:comparison}, these systems are primaril
 \textbf{System} & \textbf{Safety Gates} & \textbf{Persistence} & \textbf{Multi-Agent} & \textbf{Checkpointing} & \textbf{ToT/ReWOO} & \textbf{Agentic RAG} & \textbf{Reranking} & \textbf{Production-Safe} \\
 \midrule
 PentestGPT \cite{pentestgpt} & \texttimes & \texttimes & \texttimes & \texttimes & \texttimes & \texttimes & \texttimes & \texttimes \\
-HackingBuddy \cite{hackingbuddy} & \texttimes & \texttimes & \texttimes & \texttimes & \texttimes & \texttimes & \texttimes & \texttimes \\
+HackingBuddy \cite{hackingbuddygpt} & \texttimes & \texttimes & \texttimes & \texttimes & \texttimes & \texttimes & \texttimes & \texttimes \\
 AutoAttacker \cite{autoattacker} & \texttimes & \texttimes & \texttimes & \texttimes & Partial & \texttimes & \texttimes & \texttimes \\
-AutoGen \cite{autogen} & Partial & \texttimes & \checkmark & \texttimes & \texttimes & \texttimes & \texttimes & \texttimes \\
+CHECKMATE \cite{checkmate2025} & \texttimes & \texttimes & \checkmark & \texttimes & \checkmark & \texttimes & \texttimes & \texttimes \\
+xOffense \cite{xoffense2025} & \texttimes & \texttimes & \checkmark & \texttimes & \texttimes & \texttimes & \texttimes & \texttimes \\
 \textbf{CMatrix (Ours)} & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
 \bottomrule
 \end{tabular}
