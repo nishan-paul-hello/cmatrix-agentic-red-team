@@ -4,7 +4,7 @@
 
 ---
 
-**Mission:** Transform the early-stage research in `paper-01-red-teaming/` into a full-length, IEEE S&P-standard research paper (12–16 pages) that is publication-ready and world-class in quality.
+**Mission:** Transform the early-stage research in `paper-02-hitl-safety/` into a full-length, IEEE S&P-standard research paper (12–16 pages) that is publication-ready and world-class in quality.
 
 ---
 
