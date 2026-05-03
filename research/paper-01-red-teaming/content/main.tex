@@ -510,6 +510,7 @@ We evaluate the impact of agentic RAG memory (Contribution $C4$) by repeatedly a
 
 As illustrated in Fig.~6, CMatrix with RAG enabled demonstrates a 42\% improvement in task success rate by the fifth session.
 
+\subsection{RQ4 \& RQ5: Reasoning Efficiency and Operational Cost}
 We measure the impact of ReWOO planning ($N6$) and the HITL checkpointing mechanism ($C2$). Our results show that ReWOO planning reduces total token consumption by an average of 18\% per task. We calculate the average operational cost for a successful multi-stage exploit to be approximately \$1.42 (USD) in inference fees (GPT-4o), making CMatrix highly cost-competitive for large-scale enterprise assessments. The checkpoint-suspension mechanism introduces a negligible latency of $<$250ms for state serialization to PostgreSQL, ensuring that the safety framework does not degrade operational performance.
 
 \section{Case Study: Multi-Stage Attack Chain}
