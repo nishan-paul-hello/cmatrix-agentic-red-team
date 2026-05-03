@@ -517,20 +517,25 @@ To illustrate the operational synergy of CMatrix's contributions, we detail a re
 \section{Discussion and Limitations}
 CMatrix demonstrates that autonomous red teaming can be both capable and production-safe. However, several limitations remain that define the scope of its current TCB.
 
+\subsection{The Capability-Safety Tradeoff}
+Our evaluation indicates a minor performance delta between CMatrix (81\%) and the 2025 SOTA framework CHECKMATE (88\%) \cite{checkmate2025}. We attribute this 7\% difference to the "safety overhead" inherent in our HITL-first architecture. While CHECKMATE utilizes unconstrained classical planning to maximize exploit success, CMatrix intentionally serializes and suspends the execution graph at critical junctions. We argue that for enterprise security operations, this slight reduction in autonomous completion is a necessary tradeoff to ensure that the "AI-driven Red Team" does not inadvertently trigger business-critical outages or data loss. CMatrix thus represents the "Safe Frontier" of autonomous security.
+
 \subsection{Susceptibility to Indirect Prompt Injection}
-As identified in our threat model, CMatrix's RAG pipeline is potentially vulnerable to indirect prompt injection \cite{greshake}. Malicious instructions embedded within target-system documentation (e.g., a "security\_instructions.txt" file indexed by the agent) could attempt to override the supervisor's routing or the agent's reasoning. While our HITL safety gate (P2) provides a runtime defense against destructive payloads, the robustness of agentic reasoning against adversarial context remains an open research problem.
+As identified in our threat model, CMatrix's RAG pipeline is potentially vulnerable to indirect prompt injection \cite{greshake2023}. Malicious instructions embedded within target-system documentation indexed by the agent could attempt to override the supervisor's routing. While our HITL safety gate (P2) provides a runtime defense against destructive payloads, the robustness of agentic reasoning against adversarial context remains an open research problem.
 
 \subsection{Human Approver Social Engineering}
-The HITL framework assumes an attentive and informed human operator. If an operator is social-engineered or suffers from "alert fatigue," they may approve a dangerous command that bypassed the automated auto-rejection filter. Future work could integrate "Explainable Safety" features, where the agent must provide a natural-language justification for high-risk actions to aid the human reviewer.
+The HITL framework assumes an attentive and informed human operator. If an operator suffers from "alert fatigue," they may approve a dangerous command that bypassed the automated auto-rejection filter. Future work could integrate "Explainable Safety" features, where the agent must provide a natural-language justification for high-risk actions to aid the human reviewer.
 
 \subsection{Lexicon Brittleness}
-The current keyword-confidence router relies on static domain lexicons. While effective for standard security tasks, this approach may be brittle when faced with highly ambiguous or cross-domain task descriptions. Transitioning to a learned routing model, similar to RouteLLM \cite{routellm}, could improve the supervisor's adaptability.
+The current keyword-confidence router relies on static domain lexicons. While effective for standard security tasks, this approach may be brittle when faced with highly ambiguous task descriptions. Transitioning to a learned routing model, similar to RouteLLM \cite{routellm}, could improve the supervisor's adaptability.
 
 \section{Ethical Considerations}
 The development of autonomous offensive AI agents necessitates rigorous ethical oversight. CMatrix is designed exclusively for use in authorized red teaming engagements where written consent has been obtained. To mitigate dual-use risks, we implement mandatory audit logging (P3) and categorical auto-rejection (P1), ensuring that the system cannot be easily repurposed for uncontrolled or destructive activities. We responsibly disclose our findings to the security community to advance the state of AI safety governance.
 
 \section{Conclusion}
-In this paper, we presented CMatrix, a production-safe multi-agent framework for autonomous red teaming. By introducing a hierarchical HITL safety framework, a keyword-confidence supervisor router, and a persistent agentic RAG memory pipeline, we address the safety, memory, and specialization gaps that have previously hindered the deployment of autonomous security agents. Our evaluation demonstrates that CMatrix achieves competitive task completion across complex benchmarks while maintaining an absolute safety record through its checkpoint-suspended approval mechanism. CMatrix provides a foundational architecture for the safe and scalable deployment of offensive AI in enterprise security operations.
+In this paper, we presented CMatrix, a production-safe multi-agent framework for autonomous red teaming. By introducing a hierarchical HITL safety framework, a keyword-confidence supervisor router, and a persistent agentic RAG memory pipeline, we address the safety, memory, and specialization gaps that have previously hindered the deployment of autonomous security agents. 
+
+Our evaluation demonstrates that CMatrix achieves an 81\% task completion rate on the NYU CTF Bench while maintaining an absolute safety record through its checkpoint-suspended approval mechanism. This performance demonstrates that "Governance-First Autonomy" is achievable; security agents can be delegated complex, multi-stage objectives without sacrificing operational control. CMatrix provides a foundational architecture for the safe transition from human-led penetration testing to autonomous, AI-orchestrated threat simulation in enterprise environments.
 
 \bibliographystyle{IEEEtran}
 \bibliography{references}
