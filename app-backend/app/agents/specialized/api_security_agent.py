@@ -220,6 +220,15 @@ def check_api_rate_limiting(api_url: str, requests_count: int = 10) -> str:
     return "\n".join(results)
 
 
+# Legacy tool list for backward compatibility
+API_SECURITY_TOOLS = [
+    test_api_endpoints,
+    check_api_authentication,
+    test_graphql_introspection,
+    check_api_rate_limiting,
+]
+
+
 from typing import Any
 
 from loguru import logger
