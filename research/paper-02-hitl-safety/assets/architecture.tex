@@ -1,0 +1,80 @@
+\begin{tikzpicture}[
+    node distance=1.2cm and 1.5cm,
+    font=\sffamily\scriptsize,
+    >=stealth',
+    thick,
+    box/.style={rectangle, rounded corners=2pt, draw=black!80, fill=white, minimum width=2.2cm, minimum height=0.8cm, text centered, inner sep=4pt, drop shadow={opacity=0.2, shadow xshift=1pt, shadow yshift=-1pt}},
+    master/.style={box, fill=blue!10, draw=blue!60, minimum width=4.5cm, font=\sffamily\bfseries\footnotesize},
+    agent/.style={box, fill=green!5, draw=green!60},
+    safety/.style={box, fill=orange!10, draw=orange!60},
+    storage/.style={box, fill=gray!10, draw=gray!60},
+    reason/.style={box, fill=purple!5, draw=purple!60},
+    arrow/.style={->, draw=black!70, line width=0.6pt},
+    dashed_arrow/.style={->, draw=black!50, dashed, line width=0.6pt},
+    label_text/.style={font=\sffamily\tiny\itshape, text=black!70}
+]
+
+% --- LAYER 1: USER INTERFACE ---
+\node (user) [box, fill=gray!5] {User / Security Operator};
+
+% --- LAYER 2: MASTER ORCHESTRATOR ---
+\node (orch) [master, below=1.2cm of user] {CMatrix Master Orchestrator (LangGraph)};
+
+% --- LAYER 3: REASONING & SUPERVISION ---
+\node (tot) [reason, below left=1cm and -0.5cm of orch] {Tree of Thoughts \\ (Strategy)};
+\node (rewoo) [reason, right=0.8cm of tot] {ReWOO Planner \\ (Step-by-Step)};
+\node (supervisor) [reason, right=0.8cm of rewoo] {Supervisor Router \\ (Keyword-Confidence)};
+
+% --- LAYER 4: SPECIALIZED AGENTS ---
+\node (net_agent) [agent, below=1.5cm of tot] {Network Agent};
+\node (web_agent) [agent, right=0.3cm of net_agent] {Web Agent};
+\node (auth_agent) [agent, right=0.3cm of web_agent] {Auth Agent};
+\node (intel_agent) [agent, right=0.3cm of auth_agent] {Vuln Intel};
+\node (api_agent) [agent, right=0.3cm of intel_agent] {API Agent};
+
+% --- LAYER 5: SAFETY GATE ---
+\node (safety_gate) [safety, below=1.2cm of orch, xshift=4.5cm] {HITL Safety Gate \\ (Approval/Reject)};
+\node (risk_registry) [safety, above=0.8cm of safety_gate] {Risk Taxonomy \\ (DANGEROUS\_TOOLS)};
+
+% --- LAYER 6: PERSISTENCE & MEMORY ---
+\node (postgres) [storage, below=1cm of safety_gate] {PostgreSQL \\ (Checkpoints)};
+\node (qdrant) [storage, left=2.5cm of postgres] {Qdrant Vector DB \\ (Agentic Memory)};
+
+% --- CONNECTIONS ---
+\draw [arrow] (user) -- node[right, label_text] {Task Ingress} (orch);
+
+% Orchestrator to Reasoning
+\draw [arrow] (orch.south) -- ++(0,-0.4) -| (tot.north);
+\draw [arrow] (orch.south) -- ++(0,-0.4) -| (rewoo.north);
+\draw [arrow] (orch.south) -- ++(0,-0.4) -| (supervisor.north);
+
+% Supervisor to Agents
+\draw [dashed_arrow] (supervisor.south) -- ++(0,-0.3) -| (net_agent.north);
+\draw [dashed_arrow] (supervisor.south) -- ++(0,-0.3) -| (web_agent.north);
+\draw [dashed_arrow] (supervisor.south) -- ++(0,-0.3) -| (auth_agent.north);
+\draw [dashed_arrow] (supervisor.south) -- ++(0,-0.3) -| (intel_agent.north);
+\draw [dashed_arrow] (supervisor.south) -- ++(0,-0.3) -| (api_agent.north);
+
+% Agent to Tool Interaction (Conceptual)
+\node (tools) [box, below=1cm of web_agent, fill=red!5, draw=red!40] {Security Toolset (Nmap, Sqlmap, etc.)};
+\draw [arrow] (web_agent.south) -- (tools.north);
+
+% Safety Gate Interaction
+\draw [arrow] (orch.east) -- node[above, label_text] {Risk Check} (risk_registry.west);
+\draw [arrow] (risk_registry.south) -- (safety_gate.north);
+\draw [arrow] (safety_gate.south) -- node[right, label_text] {interrupt\_after} (postgres.north);
+
+% HITL Loop
+\draw [dashed_arrow] (safety_gate.east) -- ++(0.5,0) |- node[above right, label_text, pos=0.25] {Manual Approval} (user.east);
+
+% Memory Interaction
+\draw [arrow] (orch.west) -- ++(-1.5,0) |- node[left, label_text, pos=0.7] {Context Retrieval} (qdrant.west);
+
+% Bounding Boxes
+\begin{scope}[on background layer]
+    \node [fill=blue!2, draw=blue!10, dashed, rounded corners, fit=(tot) (rewoo) (supervisor), label={[font=\tiny\bfseries, text=blue!60]above:Reasoning \& Coordination}] {};
+    \node [fill=green!2, draw=green!10, dashed, rounded corners, fit=(net_agent) (api_agent), label={[font=\tiny\bfseries, text=green!60]below:Specialized Worker Layer}] {};
+    \node [fill=orange!2, draw=orange!10, dashed, rounded corners, fit=(safety_gate) (risk_registry), label={[font=\tiny\bfseries, text=orange!60]right:Safety Subsystem}] {};
+\end{scope}
+
+\end{tikzpicture}
