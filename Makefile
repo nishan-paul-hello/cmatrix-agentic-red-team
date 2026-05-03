@@ -3,8 +3,6 @@
 # Global Environment Variables
 VENV ?= ./venv
 ROOT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
-RESEARCH_PAPER_DIR := $(ROOT_DIR)/build-paper/research-paper
-RESEARCH_OUT_DIR := $(ROOT_DIR)/build-paper/paper
 LATEXMK := latexmk -f -cd -pdf -pdflatex="pdflatex -interaction=nonstopmode -halt-on-error %O %S"
 
 # Default target
@@ -171,7 +169,6 @@ clean-app-backend:
 clean-paper:
 	@echo "🧹 Cleaning Research Paper artifacts..."
 	rm -rf paper-*/paper paper-*/research-paper/*.pdf paper-*/research-paper/build
-	rm -rf build-paper/paper build-paper/research-paper/*.pdf build-paper/research-paper/build
 
 # Testing
 test:
