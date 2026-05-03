@@ -114,7 +114,7 @@ Our primary technical contributions are as follows:
 
 Empirical evaluation on the NYU CTF Bench and simulated enterprise networks demonstrates that CMatrix achieves competitive task completion while maintaining an absolute safety record. CMatrix provides a scalable and robust foundation for the next generation of autonomous security assessment platforms.
 
-The remainder of this paper is organized as follows. Section~\ref{sec:related} reviews the related work in autonomous penetration testing and LLM safety. Section~\ref{sec:threat} formalizes our threat model and safety properties. Section~\ref{sec:arch} details the CMatrix system architecture, including the supervisor routing and multi-agent coordination. Section~\ref{sec:safety} describes our hierarchical HITL safety framework and checkpointing mechanism. Section~\ref{sec:memory} presents our agentic RAG memory pipeline. Section~\ref{sec:reasoning} details our reasoning and self-reflection loops. Section~\ref{sec:eval} presents our experimental evaluation and results. Section~\ref{sec:discussion} discusses the implications and limitations of our findings, and Section~\ref{sec:conclusion} concludes the paper.
+The remainder of this paper is organized as follows. Section~\ref{sec:related} reviews the related work in autonomous penetration testing and LLM safety. Section~\ref{sec:threat} formalizes our threat model and safety properties. Section~\ref{sec:arch} details the CMatrix system architecture. Section~\ref{sec:safety} describes our hierarchical HITL safety framework. Section~\ref{sec:reasoning} details our reasoning and self-reflection loops. Section~\ref{sec:memory} presents our agentic RAG memory pipeline. Section~\ref{sec:eval} presents our experimental evaluation and results. Section~\ref{sec:discussion} discusses the implications and limitations, and Section~\ref{sec:conclusion} concludes the paper.
 
 \section{Background and Related Work} \label{sec:related}
 The development of CMatrix is situated at the intersection of autonomous penetration testing, multi-agent orchestration, and LLM safety.
@@ -351,7 +351,7 @@ As defined in the safety gate logic above, tool invocations classified as \texti
 \subsection{Automated Rejection Guardrails and Obfuscation Resilience}
 To enforce property $P1$ (Non-Destruction), CMatrix maintains a set of eight global auto-rejection patterns, $\mathcal{P}$. These patterns utilize regular expressions to intercept categorically destructive commands. While we acknowledge that static regex patterns can be bypassed via sophisticated shell obfuscation (e.g., Base64 encoding or variable expansion), our architecture treats $\mathcal{P}$ as an \textit{initial performance filter} rather than a singular defense. Any command that successfully bypasses the deterministic regex filter but is classified as \textit{High} risk is still intercepted by the semantic HITL gate (P2). 
 
-For example, an adversarial payload such as \texttt{echo ZWNobyAiSGVsbG8iIHwgcm0gLXJmIC8K | base64 -d | sh} (which executes \texttt{rm -rf /}) would successfully bypass a simple \texttt{rm} regex filter. However, since the command utilizes the \texttt{shell_exec} tool, it is assigned a \textit{Critical} risk level by the taxonomy, triggering an immediate suspension and human review. In our evaluation, the combined "Regex + Semantic HITL" stack demonstrated a 100\% defense-in-depth record against both direct and obfuscated adversarial payloads.
+For example, an adversarial payload such as \texttt{echo ZWNobyAiSGVsbG8iIHwgcm0gLXJmIC8K | base64 -d | sh} (which executes \texttt{rm -rf /}) would successfully bypass a simple \texttt{rm} regex filter. However, since the command utilizes the \texttt{shell\_exec} tool, it is assigned a \textit{Critical} risk level by the taxonomy, triggering an immediate suspension and human review. In our evaluation, the combined "Regex + Semantic HITL" stack demonstrated a 100\% defense-in-depth record against both direct and obfuscated adversarial payloads.
 
 \subsection{The HITL Control Graph and Checkpointing}
 To enforce property $P2$ (Mandatory Oversight), we introduce a specialized node in the LangGraph control graph: the \textit{Approval Gate} (Fig.~3). 
@@ -406,7 +406,7 @@ To minimize token consumption and reduce the latency of multi-tool interactions,
 
 Each step in the plan (\texttt{PlanStep}) specifies its dependencies and required tool parameters. To further optimize performance, CMatrix utilizes a Redis-based plan cache. If a requested task matches a previously planned workflow within a configurable time-to-live (TTL), the system reuses the cached plan, bypassing redundant LLM planning phases and enabling immediate tool execution.
 
-\subsection{Cross-Encoder Reranked Agentic RAG}
+\section{Agentic RAG Memory Pipeline} \label{sec:memory}
 The inability to maintain state across sessions is a primary limitation of existing autonomous agents. CMatrix addresses this "context fragmentation" through a persistent RAG memory pipeline (Fig.~4). 
 
 \begin{figure}[htbp]
@@ -430,7 +430,7 @@ The inability to maintain state across sessions is a primary limitation of exist
 \label{fig:rag}
 \end{figure}
 
-Target-specific findings, tool outputs, and reasoning traces are indexed as vectorized chunks in Qdrant using the BGE-large embedding model. To enforce property $P4$ (Scope Integrity), every chunk is tagged with an \texttt{engagement_id} metadata attribute. During the retrieval phase, the query is strictly filtered to only return chunks matching the current session ID, preventing cross-session or cross-tenant data leakage.
+Target-specific findings, tool outputs, and reasoning traces are indexed as vectorized chunks in Qdrant using the BGE-large embedding model. To enforce property $P4$ (Scope Integrity), every chunk is tagged with an \texttt{engagement\_id} metadata attribute. During the retrieval phase, the query is strictly filtered to only return chunks matching the current session ID, preventing cross-session or cross-tenant data leakage.
 
 To ensure high retrieval precision, we implement a two-stage retrieval process (Fig.~\ref{fig:rag}). After an initial vector similarity search with 4$\times$ over-fetching, the system utilizes a cross-encoder model (\texttt{bge-reranker-large}) to calculate a precise relevance score ($S_{final}$) for each candidate chunk. To prevent "context pollution," CMatrix implements a \textit{Temporal Context Pruning} mechanism, where retrieved chunks are weighted by their recency and their association with successful tool outcomes, ensuring that failed reasoning traces from previous sessions do not bias future strategic planning.
 
