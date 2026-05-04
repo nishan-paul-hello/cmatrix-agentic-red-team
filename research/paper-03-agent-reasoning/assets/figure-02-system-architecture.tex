@@ -1,0 +1,53 @@
+% ============================================================
+% FIGURE 02: SYSTEM ARCHITECTURE
+% File: figure-02-system-architecture.tex
+% Section: §3.2 System Architecture
+% Description: Technical architecture of the CMatrix execution spine.
+% ============================================================
+
+\begin{figure}[htbp]
+  \centering
+  \begin{tikzpicture}[
+    node distance=1.5cm,
+    font=\footnotesize,
+    box/.style={rectangle, draw, rounded corners, minimum width=2cm, minimum height=0.8cm, align=center},
+    service/.style={box, fill=blue!5},
+    storage/.style={cylinder, draw, shape border rotate=90, minimum width=1.5cm, minimum height=1.2cm, fill=yellow!5},
+    logic/.style={box, fill=orange!10, thick},
+    worker/.style={box, fill=green!5, dashed}
+  ]
+
+    % Frontend/API
+    \node (api) [service] {API Layer \\ (FastAPI)};
+
+    % Orchestrator
+    \node (orch) [logic, below of=api, yshift=-0.5cm] {\textbf{Orchestrator} \\ (LangGraph StateGraph)};
+
+    % Reasoning Services
+    \node (tot) [service, left of=orch, xshift=-2.5cm] {ToT \\ Strategy};
+    \node (rewoo) [service, below of=tot] {ReWOO \\ Planner};
+    \node (refl) [service, below of=rewoo] {Reflexion \\ Engine};
+
+    % State
+    \node (redis) [storage, right of=orch, xshift=2.5cm] {State Cache \\ (Redis)};
+    \node (db) [storage, below of=redis, yshift=-0.5cm] {Audit Log \\ (PostgreSQL)};
+
+    % Workers
+    \node (celery) [box, below of=orch, yshift=-1cm] {Task Queue \\ (Celery)};
+    \node (agents) [worker, below of=celery] {Specialized Agents \\ (Network, Web, API, etc.)};
+
+    % Flows
+    \draw[<->, thick] (api) -- (orch);
+    \draw[->] (orch) -- (tot);
+    \draw[->] (orch) -- (rewoo);
+    \draw[->] (orch) -- (refl);
+    \draw[<->] (orch) -- (redis);
+    \draw[->] (orch) -- (db);
+    \draw[->, thick] (orch) -- (celery);
+    \draw[->, thick] (celery) -- (agents);
+    \draw[->, dashed] (agents.east) .. controls +(2,-1) and +(2,1) .. (orch.east) node[midway, right] {Observations};
+
+  \end{tikzpicture}
+  \caption{CMatrix System Architecture. The Orchestrator manages the state machine, delegating complex reasoning to specialized services and executing long-running security tasks via a background task queue.}
+  \label{fig:system-architecture}
+\end{figure}

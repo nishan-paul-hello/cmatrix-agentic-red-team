@@ -1,0 +1,36 @@
+% ============================================================
+% ALGORITHM 01: COMPOSITE REASONING PIPELINE
+% File: algorithm-01-composite-reasoning.tex
+% Section: §3.3 Composite Reasoning Pipeline
+% Description: Formal flow of the ToT + ReWOO + Reflexion composition.
+% ============================================================
+
+\begin{algorithm}
+\caption{Composite Reasoning Orchestration}
+\label{alg:composite-reasoning}
+\begin{algorithmic}[1]
+\Require{User Objective $O$, Target Context $C$, Risk Policy $P$}
+\Ensure{Attack Report $R$, Audit Logs $L$}
+
+\State $S \gets \text{TreeOfThoughts}(O, C)$ \Comment{Select optimal strategy (Stealth, etc.)}
+\State $B \gets \text{ReWOOPlanner}(O, S, C)$ \Comment{Generate dependency-aware blueprint}
+
+\While{not $B.\text{is\_empty}()$}
+    \State $A \gets B.\text{next\_action}()$
+    \If{$\text{RiskAssessment}(A, P) > \text{Threshold}$}
+        \State $A \gets \text{HumanInTheLoopApproval}(A)$ \Comment{Block if vetoed}
+    \EndIf
+    \State $Obs \gets \text{ExecuteAgentTask}(A)$ \Comment{Delegated to specialized agent}
+    \State $L.\text{log}(A, Obs)$
+\EndWhile
+
+\State $I \gets \text{ReflexionEngine}(L, O)$ \Comment{Identify missed vulnerabilities}
+\If{$I \neq \emptyset$}
+    \State $B' \gets \text{GenerateCorrectivePlan}(I)$
+    \State \textbf{goto} Line 3 with $B = B'$ \Comment{Iterative self-correction}
+\EndIf
+
+\State $R \gets \text{SynthesizeReport}(L)$
+\State \Return $R$
+\end{algorithmic}
+\end{algorithm}
