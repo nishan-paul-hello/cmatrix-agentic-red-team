@@ -8,10 +8,10 @@ To mitigate \textbf{Context Pollution} in long-horizon tasks, we implement a \te
 
 \subsubsection{Formal State Transitions}
 We formalize the orchestration logic as a state-transition system. For each time step $t$, the state update is defined as:
-\input{assets/equations}
+\input{../assets/equations}
 where $A_t$ is the agent's action and $O_t$ is the target system's observation. The optimal LLM backend $p^*$ is selected based on a complexity-aware routing function (Eq.~\ref{eq:routing}) that balances reasoning quality ($Q$), cost ($C$), and latency ($L$).
 
-\input{assets/figure-02-system-architecture}
+\input{../assets/figure-02-system-architecture}
 
 \subsection{Strategic Lookahead via Tree of Thoughts (ToT)}
 To ensure the agent selects the optimal approach for a given objective, we implement a Tree of Thoughts (ToT) search with a branching factor of $N=5$. 
@@ -23,5 +23,5 @@ Based on the selected strategy, the **ReWOO Planner** generates a decoupled blue
 \subsection{Closed-Loop Executable Reflection}
 The final layer is the \textbf{Reflexion Engine}. After executing a blueprint, the engine performs a "Gap Analysis" by comparing the symbolic observations $\mathcal{E}$ against the initial objective. If the success criteria are not met, the engine produces structured \texttt{ImprovementAction} objects that trigger a new corrective planning iteration. This closed-loop logic ensures that the agent autonomously corrects its own reasoning errors without human intervention unless the risk threshold is exceeded (Alg.~\ref{alg:composite-reasoning}).
 
-\input{assets/algorithm-01-composite-reasoning}
-\input{assets/figure-03-reasoning-flow}
+\input{../assets/algorithm-01-composite-reasoning}
+\input{../assets/figure-03-reasoning-flow}

@@ -32,18 +32,18 @@
 
     % Flows
     \draw[->, thick] (user) -- node[right] {Objective} (orch);
-    \draw[->, thick] (orch) -- node[above] {Proposed \\ Actions} (gate);
-    \draw[->, thick] (gate) -- node[left] {Approved \\ Tools} (tools);
+    \draw[->, thick] (orch) -- node[above, align=center] {Proposed \\ Actions} (gate);
+    \draw[->, thick] (gate) -- node[left, align=center] {Approved \\ Tools} (tools);
     \draw[->, thick, red!60] (gate) -- node[above] {Veto} (user);
-    \draw[->, thick] (tools) -- node[above] {Exploitation \\ Probes} (target);
+    \draw[->, thick] (tools) -- node[above, align=center] {Exploitation \\ Probes} (target);
     \draw[->, dashed] (target) -- node[below] {Observations} (orch);
-    \draw[->, dashed] (orch) -- node[above right] {Risk Telemetry} (user);
+    \draw[->, dashed] (orch) -- node[above right, align=center] {Risk Telemetry} (user);
 
     % Legend
     \node[anchor=north west] at (current bounding box.south west) [yshift=-0.5cm] {
       \begin{tabular}{ll}
-        \draw[->, thick] (0,0) -- (0.5,0); & Control Flow \\
-        \draw[->, dashed] (0,0) -- (0.5,0); & Data/Observation Flow \\
+        \tikz \draw[->, thick] (0,0) -- (0.5,0); & Control Flow \\
+        \tikz \draw[->, dashed] (0,0) -- (0.5,0); & Data/Observation Flow \\
       \end{tabular}
     };
 

@@ -11,10 +11,10 @@
 \usepackage{array}
 \usepackage{etoolbox}
 \usepackage{url}
-\usepackage{algorithm}
-\usepackage{algpseudocode}
+\usepackage{url}
 \usepackage{tikz}
 \usepackage{pgfplots}
+\usepackage{enumitem}
 
 \usetikzlibrary{shapes,arrows,positioning,fit,backgrounds,calc}
 \pgfplotsset{compat=1.17}
@@ -51,24 +51,24 @@
 
 \maketitle
 
-\input{sections/abstract}
+\input{abstract}
 
 \begin{IEEEkeywords}
 Agentic Workflows, LLM Orchestration, Multi-Agent Systems, Autonomous VAPT, HITL Safety, Tree of Thoughts, ReWOO.
 \end{IEEEkeywords}
 
-\input{sections/introduction}
-\input{sections/related_work}
-\input{sections/threat_model}
-\input{sections/methodology}
-\input{sections/evaluation}
-\input{sections/discussion}
-\input{sections/conclusion}
+\input{introduction}
+\input{related-work}
+\input{threat-model}
+\input{methodology}
+\input{evaluation}
+\input{discussion}
+\input{conclusion}
 
 \section*{Acknowledgment}
 This research was supported by Joblio Security Labs.
 
 \bibliographystyle{IEEEtran}
-\bibliography{assets/references}
+\bibliography{references}
 
 \end{document}

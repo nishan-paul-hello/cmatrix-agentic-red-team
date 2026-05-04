@@ -27,4 +27,5 @@
 | Index | Filename | Title | Section | Status |
 |-------|----------|-------|---------|--------|
 | EQ | equations.tex | Formal Mathematical Formulation | §IV.1 State Transitions | COMPLETE |
-| BIB | references.bib | IEEE S&P Bibliography | References | COMPLETE |
+| MAIN | main.tex | Master LaTeX Document | Root (contents/) | COMPLETE |
+| BIB | references.bib | IEEE S&P Bibliography | References (contents/) | COMPLETE |

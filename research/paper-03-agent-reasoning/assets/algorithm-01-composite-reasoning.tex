@@ -1,36 +1,43 @@
 % ============================================================
-% ALGORITHM 01: COMPOSITE REASONING PIPELINE
+% ALGORITHM 01: COMPOSITE REASONING PIPELINE (REVISED FOR COMPATIBILITY)
 % File: algorithm-01-composite-reasoning.tex
-% Section: §3.3 Composite Reasoning Pipeline
 % Description: Formal flow of the ToT + ReWOO + Reflexion composition.
 % ============================================================
 
-\begin{algorithm}
-\caption{Composite Reasoning Orchestration}
+\begin{figure}[htbp]
+\centering
+\begin{minipage}{0.48\textwidth}
+\hrule
+\vspace{2pt}
+\textbf{Algorithm 1} Composite Reasoning Orchestration
+\vspace{2pt}
+\hrule
+\vspace{5pt}
+\small
+\begin{enumerate}[label=\arabic*:, leftmargin=2em]
+    \item \textbf{Input:} Objective $O$, Target Context $C$, Risk Policy $P$
+    \item \textbf{Output:} Attack Report $R$, Audit Logs $L$
+    \item $S \gets \text{TreeOfThoughts}(O, C)$ \hfill \textit{// Select optimal strategy}
+    \item $B \gets \text{ReWOOPlanner}(O, S, C)$ \hfill \textit{// Generate blueprint}
+    \item \textbf{while} $B$ is not empty \textbf{do}
+    \item \quad $A \gets B.\text{next\_action}()$
+    \item \quad \textbf{if} $\text{RiskAssessment}(A, P) > \text{Threshold}$ \textbf{then}
+    \item \quad \quad $A \gets \text{HumanInTheLoopApproval}(A)$
+    \item \quad \textbf{end if}
+    \item \quad $Obs \gets \text{ExecuteAgentTask}(A)$
+    \item \quad $L.\text{log}(A, Obs)$
+    \item \textbf{end while}
+    \item $I \gets \text{ReflexionEngine}(L, O)$ \hfill \textit{// Identify gaps}
+    \item \textbf{if} $I \neq \emptyset$ \textbf{then}
+    \item \quad $B' \gets \text{GenerateCorrectivePlan}(I)$
+    \item \quad \textbf{goto} Line 5 with $B = B'$
+    \item \textbf{end if}
+    \item $R \gets \text{SynthesizeReport}(L)$
+    \item \textbf{return} $R$
+\end{enumerate}
+\vspace{2pt}
+\hrule
+\end{minipage}
+\caption{The composite reasoning orchestration pipeline. The process combines proactive planning (ReWOO) with iterative self-correction (Reflexion) and strategic lookahead (ToT).}
 \label{alg:composite-reasoning}
-\begin{algorithmic}[1]
-\Require{User Objective $O$, Target Context $C$, Risk Policy $P$}
-\Ensure{Attack Report $R$, Audit Logs $L$}
-
-\State $S \gets \text{TreeOfThoughts}(O, C)$ \Comment{Select optimal strategy (Stealth, etc.)}
-\State $B \gets \text{ReWOOPlanner}(O, S, C)$ \Comment{Generate dependency-aware blueprint}
-
-\While{not $B.\text{is\_empty}()$}
-    \State $A \gets B.\text{next\_action}()$
-    \If{$\text{RiskAssessment}(A, P) > \text{Threshold}$}
-        \State $A \gets \text{HumanInTheLoopApproval}(A)$ \Comment{Block if vetoed}
-    \EndIf
-    \State $Obs \gets \text{ExecuteAgentTask}(A)$ \Comment{Delegated to specialized agent}
-    \State $L.\text{log}(A, Obs)$
-\EndWhile
-
-\State $I \gets \text{ReflexionEngine}(L, O)$ \Comment{Identify missed vulnerabilities}
-\If{$I \neq \emptyset$}
-    \State $B' \gets \text{GenerateCorrectivePlan}(I)$
-    \State \textbf{goto} Line 3 with $B = B'$ \Comment{Iterative self-correction}
-\EndIf
-
-\State $R \gets \text{SynthesizeReport}(L)$
-\State \Return $R$
-\end{algorithmic}
-\end{algorithm}
+\end{figure}

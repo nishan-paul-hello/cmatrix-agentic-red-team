@@ -133,9 +133,9 @@ paper-02:
 
 paper-03:
 	@echo "🏗️  Building Research Paper: 03-agent-reasoning..."
-	$(LATEXMK) -jobname=main -outdir="." -auxdir="build" $(PAPER_DIR_03)/content/main.tex
-	mv $(PAPER_DIR_03)/content/main.pdf $(PAPER_DIR_03)/paper.pdf
-	rm -rf $(PAPER_DIR_03)/content/build
+	$(LATEXMK) -jobname=main -outdir="." -auxdir="build" $(PAPER_DIR_03)/contents/main.tex
+	mv $(PAPER_DIR_03)/contents/main.pdf $(PAPER_DIR_03)/paper.pdf
+	rm -rf $(PAPER_DIR_03)/contents/build
 
 paper-04:
 	@echo "🏗️  Building Research Paper: 04-vulnerability-intelligence..."
@@ -163,7 +163,7 @@ clean-app-backend:
 
 clean-paper:
 	@echo "🧹 Cleaning Research Paper artifacts..."
-	rm -rf research/paper-*/*.pdf research/paper-*/content/build
+	rm -rf research/paper-*/*.pdf research/paper-*/content/build research/paper-*/contents/build
 
 # Testing
 test:

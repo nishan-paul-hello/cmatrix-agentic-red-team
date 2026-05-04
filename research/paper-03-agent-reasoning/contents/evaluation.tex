@@ -8,7 +8,7 @@ We conduct our experiments on a high-performance workstation equipped with dual 
 \subsubsection{Benchmarks and Scenarios}
 Our evaluation is conducted across \textbf{80 representative security scenarios} selected from a larger pool of automated test cases. These are categorized into three complexity tiers: \textit{SynthNet-50} (Low), \textit{WebApp-20} (Medium), and \textit{CorpLab-10} (High). We utilize Metasploitable3 and OWASP Juice Shop as the primary target environments.
 
-\input{assets/table-02-experimental-benchmarks}
+\input{../assets/table-02-experimental-benchmarks}
 
 \subsubsection{Baselines and Parity}
 To ensure an \textbf{apples-to-apples comparison} of reasoning patterns, we compare CMatrix against two standard baseline agents, both utilizing the same frontier \texttt{gpt-4o-2024-05-13} backend and identical tool registries:
@@ -17,22 +17,22 @@ To ensure an \textbf{apples-to-apples comparison} of reasoning patterns, we comp
     \item \textbf{Baseline B (CoT)}: A Chain-of-Thought prompting agent without stateful planning or reflection.
 \end{itemize}
 
-\input{assets/table-03-metrics-definitions}
+\input{../assets/table-03-metrics-definitions}
 
 \subsection{Quantitative Results and Ablation Study}
 Table~\ref{tab:ablation-results} presents the performance metrics. To ensure the reliability of our findings, we conducted a \textbf{one-tailed t-test} comparing CMatrix against Baseline A. The results ($p < 0.01$) indicate that the performance gains are statistically significant across all complexity tiers.
 
-\input{assets/table-04-planned-evaluation-results}
+\input{../assets/table-04-planned-evaluation-results}
 
 \subsubsection{RQ1: Token Efficiency}
 CMatrix achieves a 2.42$\times$ token efficiency gain over the ReAct baseline (Fig.~\ref{fig:efficiency-chart}). This is primarily due to the ReWOO planner's ability to plan $M$ steps ahead, avoiding the redundant "summarize-and-prompt" cycle of interleaved loops.
 
-\input{assets/figure-05-efficiency-chart}
+\input{../assets/figure-05-efficiency-chart}
 
 \subsubsection{RQ2: Assessment Thoroughness}
 The full CMatrix pipeline achieves a 97.4\% success rate. Fig.~\ref{fig:performance-chart} shows that CMatrix maintains a success rate of 88.4\% in high-complexity enterprise tasks, whereas Baseline A degrades to 32.5\%, validating the necessity of the Reflexion self-correction loop.
 
-\input{assets/figure-04-performance-chart}
+\input{../assets/figure-04-performance-chart}
 
 \subsubsection{RQ3: Safety and Operational Latency}
 The HITL Safety Gate successfully intercepted 100\% of high-risk tool calls. We distinguish between \textbf{System Latency} (avg. 4.2s per step) and \textbf{Operational Latency}, which includes human approval time. During our trials, human authorization added an average of 42.5s to the total task duration. Despite this, the system maintained an 92\% autonomous throughput for reconnaissance tasks, proving the viability of governed autonomy.
@@ -41,4 +41,4 @@ The HITL Safety Gate successfully intercepted 100\% of high-risk tool calls. We 
 Tested across heterogeneous backends, CMatrix allowed \textbf{Llama-3-70B} (82.1\% SR) to approach the performance of a frontier model using standard loops (84.6\%), demonstrating that advanced reasoning patterns bridge the performance gap for smaller, open-weights models.
 
 \subsection{Qualitative Analysis: Case Study}
-\input{assets/table-05-case-study-attack-chain}
+\input{../assets/table-05-case-study-attack-chain}
