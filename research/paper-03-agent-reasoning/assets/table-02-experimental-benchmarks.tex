@@ -1,0 +1,23 @@
+% ============================================================
+% TABLE 02: EXPERIMENTAL BENCHMARKS
+% File: table-02-experimental-benchmarks.tex
+% Section: §4.1 Datasets and Environments
+% Description: List of vulnerable targets and categories for evaluation.
+% ============================================================
+
+\begin{table}[htbp]
+  \centering
+  \caption{Evaluation Benchmarks. The target systems represent a range of complexity from isolated services to interconnected enterprise environments.}
+  \label{tab:benchmarks}
+  \begin{tabular}{llcl}
+    \toprule
+    \textbf{Target System} & \textbf{Category} & \textbf{Complexity} & \textbf{Key Vulnerabilities} \\
+    \midrule
+    \textit{SynthNet-50} & Network Services & Low & Telnet, FTP, RDP misconfigs \\
+    OWASP Juice Shop & Web Application & Medium & SQLi, XSS, Broken Auth \\
+    DVWA & Web Application & Medium & Command Inj., File Inclusion \\
+    \textit{CorpLab-AD} & Enterprise NW & High & Lateral Movement, LLMNR Poisoning \\
+    \textit{Metasploitable3} & Mixed OS & High & Heartbleed, Shellshock, SMB Exploits \\
+    \bottomrule
+  \end{tabular}
+\end{table}

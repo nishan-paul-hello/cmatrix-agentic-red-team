@@ -1,0 +1,23 @@
+% ============================================================
+% TABLE 03: METRICS DEFINITIONS
+% File: table-03-metrics-definitions.tex
+% Section: §4.2 Evaluation Metrics
+% Description: Definitions and formulas for core performance metrics.
+% ============================================================
+
+\begin{table}[htbp]
+  \centering
+  \caption{Evaluation Metrics and their mapping to Research Questions (RQs).}
+  \label{tab:metrics}
+  \begin{tabular}{lp{5cm}c}
+    \toprule
+    \textbf{Metric} & \textbf{Description / Formula} & \textbf{RQ} \\
+    \midrule
+    Success Rate (SR) & Percentage of tasks where the vulnerability is correctly identified and validated. & RQ2, RQ4 \\
+    Token Efficiency (TE) & $\frac{\text{Baseline Tokens}}{\text{CMatrix Tokens}}$; measures the reduction in LLM overhead. & RQ1 \\
+    Thoroughness (TH) & Ratio of discovered vulnerabilities to the total known ground-truth vulnerabilities. & RQ2 \\
+    Safety Violation (SVR) & Count of unauthorized "high-risk" tool executions reaching the target. & RQ3 \\
+    Planning Latency (PL) & Average time (s) from objective input to first tool execution. & RQ1 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
