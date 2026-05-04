@@ -1,0 +1,25 @@
+% ============================================================
+% TABLE 01: RELATED WORK COMPARISON
+% File: table-01-related-work-comparison.tex
+% Section: §2 Related Work
+% Description: Detailed comparison of CMatrix against SOTA LLM-driven security agents.
+% ============================================================
+
+\begin{table}[htbp]
+  \centering
+  \caption{Comparison of CMatrix with state-of-the-art LLM-based autonomous security agents across key architectural and functional dimensions.}
+  \label{tab:related-work-comparison}
+  \begin{tabular}{lcccccc}
+    \toprule
+    \textbf{System} & \textbf{Autonomy} & \textbf{Planning} & \textbf{Reasoning} & \textbf{Safety Gate} & \textbf{VAPT Scope} & \textbf{Repo} \\
+    \midrule
+    PentestGPT \cite{pentestgpt} & High & Static Tree & ReAct & Passive & Web/CTF & Yes \\
+    AutoAttacker \cite{autoattacker} & Moderate & RAG-based & CoT & None & Post-Breach & No \\
+    Genesis \cite{genesis} & High & Genetic & None & None & Web Apps & No \\
+    CheckMate \cite{checkmate} & Moderate & PEP Design & ReAct & None & General & Yes \\
+    HackingBuddy \cite{hackingbuddy} & Low & None & ReAct & None & Linux/OS & Yes \\
+    \midrule
+    \textbf{CMatrix} (Ours) & \textbf{High} & \textbf{ReWOO} & \textbf{ToT+Refl.} & \textbf{HITL Gate} & \textbf{End-to-End} & \textbf{Yes} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
