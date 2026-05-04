@@ -1,0 +1,14 @@
+\section{Background and Related Work}
+
+The emergence of Large Language Models (LLMs) has catalyzed a shift from rule-based security automation to autonomous, reasoning-driven agents. This section situates CMatrix within the context of LLM reasoning patterns, autonomous penetration testing tools, and emerging agentic security frameworks.
+
+\subsection{LLM Reasoning and Planning Patterns}
+Foundational work has explored various patterns to enhance LLM problem-solving. Tree of Thoughts (ToT)~\cite{tot} enables exploration of multiple reasoning paths using heuristic evaluation. ReWOO~\cite{rewoo} decouples reasoning from observation by generating upfront, dependency-aware plans to reduce token consumption. Reflexion~\cite{reflexion} and Self-Refine~\cite{selfrefine} introduce iterative self-feedback loops for error correction. While these patterns have been validated on generic lexical or mathematical tasks, CMatrix is the first to compose them into a unified pipeline for the high-stakes domain of cybersecurity.
+
+\subsection{Autonomous VAPT and Red Teaming Agents}
+Recent tools like PentestGPT~\cite{pentestgpt} and AutoAttacker~\cite{autoattacker} have pioneered the use of LLMs for penetration testing. PentestGPT uses a modular architecture (Reasoning, Generation, Parsing) to maintain context during long-running sessions, while AutoAttacker leverages RAG-based experience management for post-breach exploitation. However, these systems primarily utilize interleaved reasoning (ReAct) or simple Chain-of-Thought, which are prone to reasoning drift and high latency in complex environments. CMatrix advances this field by integrating a composite reasoning suite that proactively plans and strategically evaluates attack vectors.
+
+\subsection{Agentic Security and Defensive Frameworks}
+As autonomous agents are deployed in production, research has shifted to their security and governance. Frameworks like AgentSentinel~\cite{agentsentinel} and "Cloak, Honey, Trap"~\cite{cloak} propose real-time monitoring and deceptive environments to neutralize malicious agents. Unlike these external defensive measures, CMatrix integrates \textbf{internal governance} via a risk-aware HITL safety gate, providing a verifiable trust boundary between the reasoning core and the target infrastructure.
+
+\input{../assets/table-01-related-work-comparison}

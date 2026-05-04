@@ -1,0 +1,26 @@
+\section{Methodology}
+
+The CMatrix framework is designed to transform high-level security objectives into safe, executable, and self-correcting attack chains. This section details our formal threat model, system architecture, and the composite reasoning orchestration algorithm.
+
+\subsection{Threat Model and Security Boundaries}
+We define a formal threat model where the adversary is an AI-augmented red team agent tasked with vulnerability discovery. As illustrated in Fig.~\ref{fig:threat-model}, we establish a \textbf{Trust Boundary} around the Orchestrator and the HITL Safety Gate. We assume the agent has network-level access to the target infrastructure but is constrained by a risk-aware policy $P$ that intercepts any command with a disruption score above a defined threshold.
+
+\input{../assets/figure-01-threat-model}
+
+\subsection{System Architecture}
+The technical architecture of CMatrix follows a "Master-Worker" paradigm implemented using LangGraph's stateful state machine. As shown in Fig.~\ref{fig:system-architecture}, the \textbf{Orchestrator} coordinates specialized reasoning services and delegates operational tasks to a registry of worker agents via a Celery background task queue. State persistence is maintained in Redis for ephemeral reasoning traces and PostgreSQL for permanent audit logs.
+
+\input{../assets/figure-02-system-architecture}
+
+\subsection{Composite Reasoning Pipeline}
+The core of our methodology is the sequential composition of three advanced reasoning patterns, as detailed in Alg.~\ref{alg:composite-reasoning}. 
+
+\input{../assets/algorithm-01-composite-reasoning}
+
+\begin{enumerate}
+    \item \textbf{Strategy Selection (ToT)}: The system first performs a Tree of Thoughts search to evaluate multiple attack strategies (e.g., Stealthy vs. Aggressive) against five domain-specific heuristics.
+    \item \textbf{Blueprint Planning (ReWOO)}: Based on the selected strategy, the ReWOO planner generates a dependency-aware blueprint. This reduces token overhead by batches of tool calls before execution.
+    \item \textbf{Executable Reflection}: After tool execution, the Reflexion engine performs a gap analysis on the observations. Crucially, it converts identified weaknesses into structured \texttt{ImprovementAction} objects that trigger iterative planning updates (Fig.~\ref{fig:reasoning-flow}).
+\end{enumerate}
+
+\input{../assets/figure-03-reasoning-flow}
