@@ -85,68 +85,27 @@ Agentic Workflows, LLM Orchestration, Multi-Agent Systems, Autonomous VAPT, HITL
 
 \input{introduction}
 
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usetikzlibrary{shapes,arrows,positioning,fit,backgrounds,calc}
+\pgfplotsset{compat=1.17}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
 \input{related_work}
 
 \input{methodology}
 
-\section{Experimental Evaluation}
-Our evaluation across 1,500 security reasoning tasks demonstrates a 97.4\% success rate with an 84.2\% reduction in inference costs.
+\input{evaluation}
 
-\begin{figure}[htbp]
-\centerline{\includegraphics[width=0.48\textwidth]{../assets/eval-graph.png}}
-\caption{Comparison of Reasoning Quality vs. Relative Inference Cost: LLMOrch-VAPT matches baseline quality at a fraction of the cost.}
-\label{fig:eval}
-\end{figure}
+\input{discussion}
 
-\begin{table}[htbp]
-\caption{LLM Provider Performance Metrics}
-\begin{center}
-\begin{tabular}{|l|c|c|c|r|}
-\hline
-\textbf{Provider} & \textbf{TFT (ms)} & \textbf{TPS} & \textbf{Quality} & \textbf{Cost/1M} \\
-\hline
-Gemini 1.5 Flash \cite{gemini} & 180 & 140 & 91.2\% & \$0.35 \\
-Gemini 1.5 Pro \cite{gemini} & 240 & 85 & 96.2\% & \$1.25 \\
-Claude 3.5 Sonnet \cite{claude} & 480 & 42 & 98.4\% & \$15.00 \\
-Ollama (Llama-3-8B) \cite{llama2} & 110 & 115 & 82.1\% & \$0.00 \\
-GPT-4o \cite{gpt4} & 450 & 60 & 98.2\% & \$15.00 \\
-O1-preview \cite{gpt4} & 1800 & 12 & 99.1\% & \$60.00 \\
-\hline
-\end{tabular}
-\label{tab:benchmarks}
-\end{center}
-\end{table}
-
-\section{Discussion: Ethical and Operational Resilience}
-The transition to autonomous VAPT necessitates a rigorous discussion on ethics and dual-use risks. LLMOrch-VAPT incorporates "Self-Auditing" capabilities, where every reasoning trace is logged for post-mortem analysis.
-
-\subsection{Dual-Use Mitigation}
-To prevent malicious exploitation, our framework enforces a "Strict-Mode" configuration where tools can only be executed against authorized CIDR ranges. The use of local backends (Ollama) ensures that sensitive corporate data remains within the air-gapped environment.
-
-\subsection{Operational Continuity}
-The `FailoverService` implementation ensures that the system can withstand simultaneous outages of major cloud providers. By maintaining a pool of diverse backends, LLMOrch-VAPT achieves a mean-time-to-recovery (MTTR) of under 2 seconds for reasoning-critical sub-tasks.
-
-\section{Conclusion}
-LLMOrch-VAPT provides a resilient, provider-agnostic foundation for autonomous VAPT. By integrating advanced reasoning, intelligent routing, and HITL safety, we enable scalable and safe autonomous red teaming in enterprise environments.
+\input{conclusion}
 
 \section*{Acknowledgment}
 This research was supported by Joblio Security Labs.
 
 \bibliographystyle{IEEEtran}
 \bibliography{references}
-
-\appendix
-\section{Extended Methodology}
-\subsection{Detailed Agent Message-Passing Protocols}
-Each agent in LLMOrch-VAPT utilizes a standardized JSON-based message format to communicate with the `SupervisorService`. The supervisor maintains a global priority queue for sub-tasks, ensuring that reconnaissance results from the Network Agent are immediately available to the Web Agent for deeper analysis.
-
-\subsection{Risk Classification Taxonomy}
-The `approval\_config.py` module maintains a comprehensive registry of tool-risk mappings. For instance, any tool categorized under `DANGEROUS\_TOOLS` (e.g., `sqlmap` with `--dbs` flag) triggers an immediate checkpoint and approval request.
-
-\section{Vector Store and Memory Management}
-We utilize Qdrant for vector storage and BGE-large for embeddings. This allows agents to correlate current findings with historical data and threat intelligence, improving the precision of their reasoning paths.
-
-\section{Infrastructure Setup}
-All experiments were conducted on a workstation with 2x NVIDIA A100 (80GB) GPUs, 256GB RAM, and 10Gbps dedicated fiber connection to cloud provider endpoints. Local evaluations used the Ollama framework for Llama-3 deployment.
 
 \end{document}
