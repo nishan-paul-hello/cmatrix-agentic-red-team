@@ -1,15 +1,20 @@
 \section{Discussion and Limitations}
 
-The experimental results validate the core hypothesis that the composition of multiple reasoning patterns is superior to monolithic agentic loops for autonomous security operations.
+The experimental results validate our core hypothesis that the deliberate composition of specialized reasoning patterns is superior to monolithic agentic loops for autonomous security operations. In this section, we discuss the broader implications of our findings, acknowledge the system's limitations, and propose future research directions.
 
-\subsection{Insights into Pattern Synergy}
-Our results highlight a critical synergy between planning and reflection. While ReWOO provides the efficient "skeleton" for the attack chain, the Reflexion engine serves as a vital reliability guardrail. The ablation study shows that disabling reflection reduces the success rate by 12.8\%, as the agent fails to recover from unforeseen tool errors or infrastructure nuances. Furthermore, the strategic lookahead provided by Tree of Thoughts (ToT) is essential for navigating the "Stealth vs. Speed" tradeoffs inherent in modern red teaming.
+\subsection{Synergy of Patterns: Reasoning over Routing}
+A primary insight from our ablation study is the non-linear synergy between planning and reflection. While ReWOO provides the necessary efficiency "skeleton" for the attack chain, the Reflexion engine serves as a vital reliability guardrail. As evidenced by the 12.8\% success rate drop in the "No-Refl" configuration, a purely linear planning approach is fundamentally unable to handle the non-deterministic responses of real-world security targets. Furthermore, the strategic strategy selection provided by Tree of Thoughts (ToT) proves essential for navigating the adversarial tradeoffs between stealth and thoroughness—a capability that simple ReAct agents lack.
 
-\subsection{Efficiency Scaling Laws}
-We observe that the efficiency gains of CMatrix scale linearly with the depth of the attack chain. While ReAct agents must re-invoke the LLM after every tool observation, the CMatrix ReWOO planner batches observations, leading to a 2.42$\times$ reduction in token usage. This scaling behavior makes CMatrix uniquely suited for long-horizon enterprise assessments that would otherwise be cost-prohibitive.
+\subsection{Efficiency Scaling and Operational Viability}
+The observed 2.42$\times$ token efficiency gain has profound implications for the operational scaling of autonomous security. Standard interleaved reasoning models face a "cost-cliff" as the length of the attack chain increases, due to the exponential growth in prompt context required for every tool invocation. By decoupled planning into blueprints, CMatrix effectively flattens this cost curve, making multi-stage red teaming economically viable for large-scale enterprise environments where traditional agentic costs would be prohibitive.
 
-\subsection{Governance as an Enabler}
-The HITL safety gate demonstrates that formal governance can be an enabler rather than a bottleneck. By using a risk-aware interceptor, CMatrix maintains high throughput for non-disruptive tasks (92\% autonomy) while ensuring that 100\% of high-risk actions are human-validated. This architectural choice provides the necessary trust for deploying autonomous agents in production environments.
+\subsection{Governed Autonomy: The HITL Enabler}
+Our findings challenge the common perception that human-in-the-loop (HITL) requirements are a bottleneck to autonomous throughput. By integrating a risk-aware interception gate, CMatrix demonstrates a model of "Governed Autonomy," where 100\% of high-risk actions are human-validated without disrupting the autonomous flow of low-risk reconnaissance (92\% throughput). This architectural choice provides the necessary trust boundary for deploying autonomous agents in sensitive production networks.
 
 \subsection{Limitations and Future Work}
-Despite these advancements, CMatrix faces limitations in extremely deep reasoning chains (15+ steps) where state context pollution can lead to increased hallucination. Future work will investigate hierarchical context pruning and the use of dynamic risk policies that adapt to the sensitivity of the target environment.
+Despite the performance gains, several critical limitations remain:
+\begin{itemize}
+    \item \textbf{Reasoning Depth and Context Pollution}: As attack chains exceed 12-15 steps, the state context becomes increasingly "polluted" with voluminous tool outputs, leading to reasoning degradation even with reflection loops. \textit{Future Work}: Investigate hierarchical context pruning and summarization techniques to maintain reasoning clarity in very long-horizon tasks.
+    \item \textbf{Static Risk Policies}: The current HITL gate relies on a static risk taxonomy. \textit{Future Work}: Develop dynamic, environment-aware risk assessment models that can adjust thresholds based on target sensitivity and observed defensive posture.
+    \item \textbf{Exploit Generation Limits}: While CMatrix excels at plan execution and strategy, it is still constrained by the underlying LLM's ability to generate novel binary exploits for undisclosed vulnerabilities. \textit{Future Work}: Integration of symbolic execution and formal verification tools as specialized worker agents to assist in zero-day discovery.
+\end{itemize}
