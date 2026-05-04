@@ -16,8 +16,8 @@ p^* = \arg \max_{p \in P} \left( Q(p, x) - \lambda_C \cdot C(p, x) - \lambda_L \
 S_{t+1} = f(S_t, A_t, O_t)
 \end{equation}
 
-% Equation 3: Strategy Scoring Function
+% Equation 3: Strategy Scoring Function with Min-Max Normalization
 \begin{equation}
 \label{eq:strategy-score}
-V_s = \sum_{h \in H} w_h \cdot v_h(s, o)
+V_s = \sum_{i=1}^{5} w_i \cdot \bar{v}_i(s, o)
 \end{equation}

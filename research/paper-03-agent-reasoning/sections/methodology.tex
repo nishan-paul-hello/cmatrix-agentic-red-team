@@ -6,22 +6,22 @@ The CMatrix framework is engineered to address the operational fragility of stan
 We implement the framework as a stateful directed acyclic graph (DAG) using LangGraph. The \textbf{Master Orchestrator} maintains the global state $S_t$, which includes the original objective, the current strategy, and the execution history. 
 To mitigate \textbf{Context Pollution} in long-horizon tasks, we implement a \textbf{Sliding Window Observation Summarizer}. When the history of observations $O$ exceeds 10,000 tokens, the orchestrator invokes a summarization service to distill the technical findings (e.g., open ports, CVE IDs) while discarding verbose tool output, thus preserving the core reasoning context for subsequent iterations.
 
+\subsubsection{Formal State Transitions}
+We formalize the orchestration logic as a state-transition system. For each time step $t$, the state update is defined as:
+\input{assets/equations}
+where $A_t$ is the agent's action and $O_t$ is the target system's observation. The optimal LLM backend $p^*$ is selected based on a complexity-aware routing function (Eq.~\ref{eq:routing}) that balances reasoning quality ($Q$), cost ($C$), and latency ($L$).
+
 \input{assets/figure-02-system-architecture}
 
 \subsection{Strategic Lookahead via Tree of Thoughts (ToT)}
 To ensure the agent selects the optimal approach for a given objective, we implement a Tree of Thoughts (ToT) search with a branching factor of $N=5$. 
-The system evaluates candidate strategies against five domain-specific heuristics: Speed ($v_1$), Thoroughness ($v_2$), Stealth ($v_3$), Resource Cost ($v_4$), and Probability of Success ($v_5$). The strategy score $V_s$ is formalized as:
-\begin{equation}
-\label{eq:strategy-score}
-V_s = \sum_{i=1}^{5} w_i \cdot \bar{v}_i
-\end{equation}
-where $\bar{v}_i$ represents the \textbf{Min-Max normalized} value of the $i$-th heuristic, and $w_i$ are configurable weights (default: $w_{thorough}=0.4, w_{stealth}=0.3$). This normalization ensures that disparate metrics like latency and success probability are comparable across a unified [0, 1] range.
+The system evaluates candidate strategies against five domain-specific heuristics: Speed ($v_1$), Thoroughness ($v_2$), Stealth ($v_3$), Resource Cost ($v_4$), and Probability of Success ($v_5$). The strategy score $V_s$ (Eq.~\ref{eq:strategy-score}) uses \textbf{Min-Max normalized} values $\bar{v}_i$ to ensure that disparate metrics are comparable across a unified [0, 1] range. Configurable weights $w_i$ allow the user to prioritize specific tactical outcomes (e.g., $w_{thorough}=0.4, w_{stealth}=0.3$).
 
 \subsection{Dependency-Aware Planning via ReWOO}
 Based on the selected strategy, the **ReWOO Planner** generates a decoupled blueprint. We formalize tool observations as symbolic variables $\mathcal{E}_i \in O_t$. For example, a network scan step might be defined as $Step_1: \texttt{nmap}(\#E_{target})$, where $\#E_{target}$ is a variable resolved from the global state. This symbolic representation allows the planner to batch $M$ tool calls ahead of execution, significantly reducing redundant LLM API invocations.
 
 \subsection{Closed-Loop Executable Reflection}
-The final layer is the \textbf{Reflexion Engine}. After executing a blueprint, the engine performs a "Gap Analysis" by comparing the symbolic observations $\mathcal{E}$ against the initial objective. If the success criteria are not met, the engine produces structured \texttt{ImprovementAction} objects that trigger a new corrective planning iteration. This closed-loop logic ensures that the agent autonomously corrects its own reasoning errors without human intervention unless the risk threshold is exceeded.
+The final layer is the \textbf{Reflexion Engine}. After executing a blueprint, the engine performs a "Gap Analysis" by comparing the symbolic observations $\mathcal{E}$ against the initial objective. If the success criteria are not met, the engine produces structured \texttt{ImprovementAction} objects that trigger a new corrective planning iteration. This closed-loop logic ensures that the agent autonomously corrects its own reasoning errors without human intervention unless the risk threshold is exceeded (Alg.~\ref{alg:composite-reasoning}).
 
 \input{assets/algorithm-01-composite-reasoning}
 \input{assets/figure-03-reasoning-flow}
