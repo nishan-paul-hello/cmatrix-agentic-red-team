@@ -1,0 +1,24 @@
+% ============================================================
+% TABLE 05: CASE STUDY - MULTI-STAGE ATTACK CHAIN
+% File: table-05-case-study-attack-chain.tex
+% Section: §5.3 Qualitative Analysis
+% Description: Trace of a complex attack on the CorpLab-AD target.
+% ============================================================
+
+\begin{table}[htbp]
+  \centering
+  \caption{Case Study: Autonomous multi-stage exploitation of an enterprise web portal and lateral movement.}
+  \label{tab:case-study}
+  \begin{tabular}{lllp{6cm}}
+    \toprule
+    \textbf{Phase} & \textbf{Node} & \textbf{Action} & \textbf{Result / Reasoning} \\
+    \midrule
+    Recon & ToT & \texttt{STRATEGY: STEALTH} & Prioritizes low-rate scans to avoid IDS/IPS detection. \\
+    Planning & ReWOO & \texttt{PLAN: \#E1, \#E2} & Batch 1: Scan Port 80, 443; Batch 2: Enumerate \texttt{/api}. \\
+    Execution & Worker & \texttt{nmap -sT -p80,443} & Port 8080 (Apache/2.4.41) found open. \\
+    Refine & ReWOO & \texttt{PLAN: \#E3, \#E4} & Probes for CVE-2021-41773 (Path Traversal). \\
+    Correction & Reflexion & \texttt{GAP: No SQLi Check} & Identifies that \texttt{/login} form was found but not tested for injection. \\
+    Exploit & Worker & \texttt{sqlmap -u ...} & \textbf{SUCCESS}: Database version and user hashes extracted. \\
+    \bottomrule
+  \end{tabular}
+\end{table}
