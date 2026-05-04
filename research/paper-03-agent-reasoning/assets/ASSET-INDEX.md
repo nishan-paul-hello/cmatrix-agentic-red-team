@@ -12,6 +12,7 @@
 | 01 | table-01-related-work-comparison.tex | Related Work Comparison | §2 Related Work | COMPLETE |
 | 02 | table-02-experimental-benchmarks.tex | Experimental Benchmarks | §4.1 Datasets | COMPLETE |
 | 03 | table-03-metrics-definitions.tex | Metrics Definitions | §4.2 Metrics | COMPLETE |
+| 04 | table-04-planned-evaluation-results.tex | Planned Evaluation Results | §5.1 Main Results | COMPLETE |
 
 ## Algorithms
 | Index | Filename | Title | Section | Status |

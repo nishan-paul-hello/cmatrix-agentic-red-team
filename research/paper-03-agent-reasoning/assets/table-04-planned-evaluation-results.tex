@@ -1,0 +1,26 @@
+% ============================================================
+% TABLE 04: PLANNED EVALUATION RESULTS (PLACEHOLDERS)
+% File: table-04-planned-evaluation-results.tex
+% Section: §5.1 Main Results
+% Description: Placeholder results table for ablation study and baselines.
+% ============================================================
+
+\begin{table}[htbp]
+  \centering
+  \caption{Ablation Study Results. Performance metrics across 80 tasks for the full CMatrix pipeline and its degraded versions. (Simulated/Target Values)}
+  \label{tab:ablation-results}
+  \begin{tabular}{lcccc}
+    \toprule
+    \textbf{Configuration} & \textbf{SR (\%)} & \textbf{TE ($\times$)} & \textbf{TH (\%)} & \textbf{PL (s)} \\
+    \midrule
+    Baseline A (ReAct) & 64.2 & 1.00 & 58.4 & 24.5 \\
+    Baseline B (CoT) & 52.8 & 1.15 & 42.1 & 12.2 \\
+    \midrule
+    CMatrix (-ToT) & 82.5 & 1.84 & 76.2 & 35.8 \\
+    CMatrix (-ReWOO) & 91.4 & 1.22 & 84.5 & 58.2 \\
+    CMatrix (-Refl) & 84.6 & 2.15 & 68.4 & 31.4 \\
+    \midrule
+    \textbf{CMatrix (Full)} & \textbf{97.4} & \textbf{2.42} & \textbf{94.2} & \textbf{38.5} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
