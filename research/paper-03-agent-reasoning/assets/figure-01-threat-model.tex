@@ -1,0 +1,53 @@
+% ============================================================
+% FIGURE 01: FORMAL THREAT MODEL
+% File: figure-01-threat-model.tex
+% Section: §3.1 Threat Model
+% Description: Visual representation of the adversary, attack surface,
+%              target system, and HITL safety boundaries.
+% ============================================================
+
+\begin{figure}[htbp]
+  \centering
+  \begin{tikzpicture}[
+    node distance=2cm,
+    font=\small,
+    box/.style={rectangle, draw, rounded corners, minimum width=2.5cm, minimum height=1cm, align=center, fill=gray!5},
+    agent/.style={box, fill=blue!10, thick},
+    gate/.style={diamond, draw, fill=red!10, minimum width=2.5cm, minimum height=1.5cm, align=center},
+    target/.style={box, fill=green!10, thick},
+    boundary/.style={draw, dashed, gray!60, inner sep=0.5cm}
+  ]
+
+    % Nodes
+    \node (user) [box] {Security Operator \\ (Human-in-the-Loop)};
+    \node (orch) [agent, below of=user, yshift=-0.5cm] {\textbf{CMatrix Orchestrator} \\ (Reasoning Suite)};
+    \node (gate) [gate, right of=orch, xshift=2.5cm] {HITL \\ Safety Gate};
+    \node (tools) [box, below of=gate, yshift=-0.5cm] {Security Tool Registry \\ (Nmap, Metasploit, etc.)};
+    \node (target) [target, right of=gate, xshift=2.5cm] {Target Infrastructure \\ (Enterprise Network)};
+
+    % Boundaries
+    \begin{scope}[on background layer]
+      \node [boundary, fit=(user) (orch) (gate) (tools), label=above:{\textbf{Trust Boundary}}] (trust) {};
+    \end{scope}
+
+    % Flows
+    \draw[->, thick] (user) -- node[right] {Objective} (orch);
+    \draw[->, thick] (orch) -- node[above] {Proposed \\ Actions} (gate);
+    \draw[->, thick] (gate) -- node[left] {Approved \\ Tools} (tools);
+    \draw[->, thick, red!60] (gate) -- node[above] {Veto} (user);
+    \draw[->, thick] (tools) -- node[above] {Exploitation \\ Probes} (target);
+    \draw[->, dashed] (target) -- node[below] {Observations} (orch);
+    \draw[->, dashed] (orch) -- node[above right] {Risk Telemetry} (user);
+
+    % Legend
+    \node[anchor=north west] at (current bounding box.south west) [yshift=-0.5cm] {
+      \begin{tabular}{ll}
+        \draw[->, thick] (0,0) -- (0.5,0); & Control Flow \\
+        \draw[->, dashed] (0,0) -- (0.5,0); & Data/Observation Flow \\
+      \end{tabular}
+    };
+
+  \end{tikzpicture}
+  \caption{Formal threat model of CMatrix. The security operator defines objectives for the autonomous orchestrator, while the HITL safety gate provides a hard trust boundary between the reasoning suite and the target infrastructure.}
+  \label{fig:threat-model}
+\end{figure}

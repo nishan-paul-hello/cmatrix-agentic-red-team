@@ -3,7 +3,7 @@
 ## Figures
 | Index | Filename | Title | Section | Status |
 |-------|----------|-------|---------|--------|
-| - | - | - | - | - |
+| 01 | figure-01-threat-model.tex | Formal Threat Model | §3.1 Threat Model | COMPLETE |
 
 ## Tables
 | Index | Filename | Title | Section | Status |
