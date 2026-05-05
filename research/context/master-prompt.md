@@ -241,8 +241,6 @@ Every paper section must be saved as a **separate `.tex` file** in `sections/` i
 
 ## STEP SEQUENCE
 
----
-
 ### STEP 1 — Full Codebase & Paper Audit
 
 ---
@@ -1206,6 +1204,6 @@ Stop immediately and flag if any of the following occur:
 
 ---
 
-**Begin with STEP 1a. Read `artifacts/research-area.md` first. Create `artifacts/step-1a-codebase-read.md`. Run the checklist. Report results.**  
-**Put ✅ at the right side of substep in @research/context/steps-of-prompt.md that u have completed now.**  
-**Stop and await for confirmation.**
+> - Begin with STEP 1a. Read `artifacts/research-area.md` first. Create `artifacts/step-1a-codebase-read.md`. Run the checklist. Report results.  
+> - Put ✅ at the right side of substep in @research/context/steps-of-prompt.md that u have completed now.  
+> - Stop and await for confirmation.  
