@@ -1,0 +1,23 @@
+\section{Discussion and Limitations}
+\label{sec:discussion}
+
+The results presented in Section~\ref{sec:evaluation} demonstrate that \texttt{LLMOrch-VAPT} provides a robust and cost-effective foundation for autonomous security validation. However, the deployment of such systems in enterprise environments raises several operational, ethical, and technical questions that warrant further discussion.
+
+\subsection{Operational Continuity and SOC Integration}
+A primary advantage of the \texttt{LLMOrch-VAPT} architecture is its readiness for integration into existing Security Operations Center (SOC) workflows. By providing a provider-agnostic abstraction layer, organizations can maintain a "Red Team Agent" fleet that is resilient to the volatile landscape of AI service providers. Furthermore, the stateful checkpointing mechanism used for APF (Section~\ref{sec:apf}) enables long-running engagements that can span across shift changes and maintenance windows without losing progress, a critical requirement for industrial VAPT.
+
+\subsection{Ethical Considerations and Dual-Use Mitigation}
+As with any autonomous exploitation framework, \texttt{LLMOrch-VAPT} possesses significant dual-use potential. While its primary mission is to assist defenders in continuous security validation, the same orchestration logic could be utilized by malicious actors to scale automated attacks. 
+
+To mitigate these risks, we have prioritized \textit{safety governance} as a core architectural component. Our 100\% adherence to HITL gates (Section~\ref{sec:evaluation}) demonstrates that autonomous agents can be effectively constrained. We advocate for a "Safety-First" deployment model where destructive capabilities are strictly authenticated and audited. Furthermore, by open-sourcing the platform, we aim to democratize access to high-end defensive automation, helping to balance the asymmetric advantage currently held by well-resourced adversarial groups.
+
+\subsection{Technical Limitations}
+Despite the performance gains, \texttt{LLMOrch-VAPT} is subject to several technical limitations:
+\begin{itemize}
+    \item \textbf{Context Window Bottlenecks}: While the Master-Worker hierarchy reduces the context load on individual agents, extremely large-scale network recons can still exceed the context windows of smaller "Flash" models, potentially leading to reasoning loss.
+    \item \textbf{Business Logic Vulnerabilities}: Current LLM-based agents, including our specialized workers, still struggle with complex business logic vulnerabilities that require deep, domain-specific understanding of application state and user intent.
+    \item \textbf{Adversarial Defenses}: The system's reliance on technical signals for DCAT (Section~\ref{sec:dcat}) makes it potentially susceptible to "signal spoofing" by sophisticated defenders who attempt to bait the orchestrator into using more expensive (and potentially slower) reasoning tiers.
+\end{itemize}
+
+\subsection{Future Work}
+Future research directions include the integration of \textit{experience-based RAG} to allow agents to learn from successful exploit chains over time, and the development of \textit{adversarial prompt protection} to ensure the integrity of the orchestrator's decision-making graph against injection attacks.
