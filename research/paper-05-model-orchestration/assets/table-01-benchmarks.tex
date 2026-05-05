@@ -1,8 +1,4 @@
-\begin{table}[t]
-\centering
-\caption{LLM Provider Performance Benchmarks for Security Reasoning}
-\label{tab:benchmarks}
-\begin{booktabs}{colspec={lccccc}}
+\begin{tabular}{l c c c c c}
 \toprule
 \textbf{Model Backend} & \textbf{Tier} & \textbf{Success (\%)} & \textbf{Latency (s)} & \textbf{Cost (\$)} & \textbf{Availability} \\
 \midrule
@@ -17,7 +13,4 @@ Mixtral-8x7B (Ollama) & Flash & 74.2 & 1.8 & 0.00 & 100\% \\
 \rowcolor{blue!5}
 \textbf{DCAT (Ours)} & \textbf{Dynamic} & \textbf{97.4} & \textbf{2.1} & \textbf{0.19} & \textbf{99.9\%} \\
 \bottomrule
-\end{booktabs}
-\vspace{1mm}
-\footnotesize{Note: Cost is calculated per 1,000 requests using a mix of 80\% Flash / 20\% Pro tasks. Success rate is measured on the 1,500 security reasoning benchmark.}
-\end{table}
+\end{tabular}
