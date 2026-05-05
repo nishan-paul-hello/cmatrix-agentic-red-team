@@ -13,7 +13,7 @@ Here's the complete list of all sub-steps:
 **STEP 3 — Novelty & Contribution Crystallization**
 - 3a — Novelty Identification ✅
 - 3b — Core Contributions ✅
-- 3c — Threat Model & Research Questions
+- 3c — Threat Model & Research Questions ✅
 
 **STEP 4 — Paper Architecture**
 - 4a — Section Structure
@@ -21,8 +21,8 @@ Here's the complete list of all sub-steps:
 - 4c — Equation & Table Plan
 
 **STEP 5 — Figure, Table & Equation Generation**
-- 5a — Figure Generation (Batch 1: Fig 1-3)
-- 5b — Table Generation (Batch 1: Tab 1-3)
+- 5a — Figure Generation
+- 5b — Table Generation
 - 5c — Equation Generation
 
 **STEP 6 — Full Paper Drafting**
