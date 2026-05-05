@@ -14,8 +14,6 @@
 \usepackage{stfloats}
 
 % Final IEEE S&P Formatting Refinements
-\renewcommand{\thesection}{\Roman{section}}
-\renewcommand{\thesubsection}{\Alph{subsection}}
 \renewcommand{\thesubsubsection}{\arabic{subsubsection})}
 \renewcommand{\thetable}{\Roman{table}}
 
@@ -98,7 +96,7 @@ This research was supported by Joblio Security Labs and the Open Source Security
 \bibliographystyle{IEEEtran}
 \bibliography{references}
 
-\appendix
+\appendices
 \section{Extended Infrastructure and Data Management}
 \subsection{Detailed Agent Message-Passing Protocols}
 Each agent in \texttt{LLMOrch-VAPT} utilizes a standardized JSON-based message format to communicate with the Master Supervisor. The supervisor maintains a global priority queue for sub-tasks, ensuring that reconnaissance results from the Network Agent are immediately available to the Web Agent for deeper analysis.
@@ -113,4 +111,3 @@ We utilize Qdrant for vector storage and BGE-large for embeddings. This allows a
 All experiments were conducted on a workstation with 2x NVIDIA A100 (80GB) GPUs, 256GB RAM, and 10Gbps dedicated fiber connection to cloud provider endpoints. Local evaluations used the Ollama framework for Llama-3 deployment.
 
 \end{document}
-}
