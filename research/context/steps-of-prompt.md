@@ -11,7 +11,7 @@ Here's the complete list of all sub-steps:
 - 2c — Related Work Map ✅
 
 **STEP 3 — Novelty & Contribution Crystallization**
-- 3a — Novelty Identification
+- 3a — Novelty Identification ✅
 - 3b — Core Contributions
 - 3c — Threat Model & Research Questions
 
