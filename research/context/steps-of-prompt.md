@@ -16,7 +16,7 @@ Here's the complete list of all sub-steps:
 - 3c — Threat Model & Research Questions ✅
 
 **STEP 4 — Paper Architecture**
-- 4a — Section Structure
+- 4a — Section Structure ✅
 - 4b — Figure Plan
 - 4c — Equation & Table Plan
 
