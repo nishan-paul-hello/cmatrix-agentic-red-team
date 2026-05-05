@@ -9,9 +9,9 @@ We evaluate the framework using a diverse dataset of \textbf{1,500 autonomous se
 \subsection{RQ1: Operational Resilience (APF Performance)}
 To evaluate the resilience of the system, we simulated 100 unplanned provider outages during active multi-agent reasoning chains. As illustrated in the temporal analysis in Figure~\ref{fig:failover_timeline}, the \textbf{APF} engine detected and recovered from outages with high precision.
 
-\begin{figure}[h]
+\begin{figure}[!t]
     \centering
-    \resizebox{\columnwidth}{!}{
+    \resizebox{0.85\columnwidth}{!}{
         \input{../assets/fig-06-failover-timeline.tex}
     }
     \caption{Temporal analysis of the Autonomous Provider Failover (APF) engine response during a simulated primary provider outage (RQ1).}
@@ -25,25 +25,25 @@ The system achieved a Mean Time To Recovery (MTTR), as defined in Equation~\ref{
 \subsection{RQ2: Cost-Reasoning Optimization (DCAT Performance)}
 The primary performance claim of \texttt{LLMOrch-VAPT} is its ability to match flagship model quality while maintaining Flash-tier costs. Figure~\ref{fig:eval_metrics} and Table~\ref{tab:benchmarks} compare the \textbf{DCAT} engine against monolithic deployments.
 
-\begin{figure}[t]
+\begin{figure}[!t]
     \centering
-    \resizebox{\columnwidth}{!}{
+    \resizebox{0.85\columnwidth}{!}{
         \input{../assets/fig-05-eval-metrics.tex}
     }
     \caption{Comparison of Reasoning Success Rate vs. Average Cost per Task across different model deployment strategies (RQ2).}
     \label{fig:eval_metrics}
 \end{figure}
 
-\begin{table}[t]
+\begin{table*}[!t]
     \centering
     \caption{LLM Provider Performance Benchmarks for Security Reasoning}
     \label{tab:benchmarks}
-    \resizebox{\columnwidth}{!}{
+    \resizebox{0.8\textwidth}{!}{
         \input{../assets/table-01-benchmarks.tex}
     }
     \vspace{1mm}
     \footnotesize{Note: Cost is calculated per 1,000 requests using a mix of 80\% Flash / 20\% Pro tasks. Success rate is measured on the 1,500 security reasoning benchmark.}
-\end{table}
+\end{table*}
 
 Our results show that \texttt{LLMOrch-VAPT} maintains a reasoning success rate of \textbf{97.4\%}, nearly identical to the Pro-only (98.1\%) and Reasoning-only (98.4\%) baselines. However, by dynamically tiering 80\% of sub-tasks to Flash models, the framework reduces the average cost per task from \$1.20 to \textbf{\$0.19}, representing an \textbf{84.2\% reduction in operational costs}.
 

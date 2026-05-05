@@ -3,9 +3,11 @@
 \mathcal{J} = \arg \max_{m \in \mathcal{M}} \left\{ \mathbb{E}[Q(m, t)] \cdot \mathcal{P}(m \text{ is avail}) \right\}
 \end{equation}
 subject to:
-\begin{align}
-\text{Cost}(m, t) &\leq \mathcal{B}_{task} \nonumber \\
-\text{Latency}(m, t) &\leq \mathcal{L}_{max} \nonumber \\
-\text{SecurityTier}(m) &\geq C(t) \nonumber
-\end{align}
+\begin{equation*}
+\begin{aligned}
+\text{Cost}(m, t) &\leq \mathcal{B}_{task} \\
+\text{Latency}(m, t) &\leq \mathcal{L}_{max} \\
+\text{SecurityTier}(m) &\geq C(t)
+\end{aligned}
+\end{equation*}
 where $Q(m, t)$ is the predicted reasoning quality of model $m$ on task $t$, and $\mathcal{B}_{task}$ is the allocated token budget.
