@@ -1,4 +1,4 @@
-# CMatrix: AI-Powered Multi-Agent Security Orchestration & VAPT Platform
+# CMatrix: LLM-Orchestrated Multi-Agent Framework for Autonomous VAPT
 
 **Professional Masters in Information and Cyber Security**  
 **CSE-400: Project on Cyber Security**
@@ -23,27 +23,90 @@ University of Dhaka (CSEDU)
 
 ---
 
-## 🛠️ System Architecture: How It Works
-CMatrix utilizes a **Master-Worker** hierarchy powered by **LangGraph** for stateful orchestration.
+## 🛠️ Software Architecture
+CMatrix utilizes a modular **Master-Worker** architecture powered by **LangGraph** for resilient state management.
 
-* **Master Supervisor**: A central brain (State Machine) that decomposes complex goals into sub-tasks.
-* **Worker Agents**: 7 Specialized agents with domain-specific toolsets.
-* **Orchestration Layer**: Manages state, thread persistence, and agent delegation.
-* **Communication**: Real-time event streaming via WebSockets and Server-Sent Events (SSE).
-* **Database Layer**: PostgreSQL for persistent engagement state and Qdrant for semantic memory.
+```mermaid
+graph TD
+    User((User)) <--> FE[Next.js Frontend]
+    FE <--> |SSE/REST| BE[FastAPI Backend]
+    
+    subgraph "Agentic Orchestration (LangGraph)"
+        BE <--> Supervisor[Master Supervisor]
+        Supervisor <--> Workers[Specialized Worker Agents]
+        Workers --- A1[Network Agent]
+        Workers --- A2[Web Agent]
+        Workers --- A3[Auth Agent]
+        Workers --- A4[Vuln Intel Agent]
+        Workers --- A5[API Agent]
+        Workers --- A6[Config Agent]
+        Workers --- A7[Command Agent]
+    end
+    
+    subgraph "Infrastructure & Execution"
+        A7 <--> |Celery/Redis| Execution[Terminal Execution Engine]
+        Execution --- Tools[nmap, curl, dig, ping, etc.]
+    end
+    
+    subgraph "Persistence & Memory"
+        Supervisor <--> |SQL| DB[(PostgreSQL)]
+        Supervisor <--> |Vector| KB[(Qdrant Memory)]
+    end
+```
+
+### Technical Stack Details
+*   **Orchestration Engine**: `LangGraph` implementation in `app-backend/app/agents/`
+*   **API Framework**: `FastAPI` (Python 3.12+) serving real-time events.
+*   **Real-time UI**: `Next.js 14+` with Tailwind CSS and SSE streaming.
+*   **Background Tasks**: `Celery` workers for long-running security scans.
+*   **Memory Tiers**: `PostgreSQL` (Relational State) and `Qdrant` (Semantic Vector Memory).
 
 ---
 
-## 🤖 The Specialist Agent Ecosystem
-Seven specialized agents collaborating through a **Supervisor Pattern**.
+## 🤖 Specialized Worker Agents
+Our system features seven domain-specific agents, each with a curated suite of technical tools.
 
-1.  **Network Agent**: Port scanning, service discovery & topology mapping.
-2.  **Web Agent**: HTTP/HTTPS validation & web vulnerability analysis.
-3.  **Auth Agent**: Login form analysis, session security & brute-force testing.
-4.  **Config Agent**: System hardening & compliance audits (CIS, PCI-DSS).
-5.  **Vuln Intel Agent**: Real-time CVE research & threat intelligence lookup.
-6.  **API Agent**: REST/GraphQL security testing & endpoint fuzzing.
-7.  **Command Agent**: Secure terminal execution with real-time audit logging.
+| Agent | Responsibility | Core Tools |
+| :--- | :--- | :--- |
+| **Network** | Infrastructure Discovery | `nmap`, `dig`, `ping`, `whois` |
+| **Web Security** | Web App Vulnerabilities | `curl`, `wget`, `nikto`, `sslscan` |
+| **Auth** | Identity & Access | `hydra`, `medusa`, `bruteforce` |
+| **Vuln Intel** | Threat Intelligence | `CVE-Search`, `NIST NVD API` |
+| **API Security** | Endpoint Validation | `REST/GraphQL Fuzzers` |
+| **Config** | Compliance & Hardening | `Cloud Config Checkers` |
+| **Command** | Secure Execution | `Whitelisted Bash Environment` |
+
+---
+
+## 🔄 Real-World VAPT Workflow
+The system follows a non-linear, adaptive workflow to ensure thorough security validation.
+
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant S as Supervisor
+    participant W as Worker Agents
+    participant H as HITL Gate
+    participant T as Terminal
+    participant M as Knowledge Base
+
+    U->>S: Natural Language Task (e.g., "Analyze target.com")
+    S->>S: Plan Generation & Decomposition
+    S->>W: Delegate Recon (Network/Web Agents)
+    W->>T: Execute Security Tools
+    T-->>W: Raw Technical Output
+    W->>S: Structured Findings
+    S->>W: Research CVEs (Vuln Intel Agent)
+    W-->>S: Matching Vulnerabilities
+    S->>H: Request Approval for Exploitation
+    Note over H: Safety Check: Human-in-the-Loop
+    H-->>S: Approval Granted
+    S->>W: Execute Command (Command Agent)
+    W->>T: Run Whitelisted Command
+    T-->>W: Command Result
+    S->>M: Store Context in Qdrant Vector DB
+    S->>U: Stream Final Report
+```
 
 ---
 
@@ -51,12 +114,12 @@ Seven specialized agents collaborating through a **Supervisor Pattern**.
 Our framework introduces three key methodologies to solve the "Operational Fragility" of AI agents.
 
 ### 1. Autonomous Provider Failover (APF)
-*   **Mechanism**: Decouples the reasoning graph from specific LLM providers (Gemini, GPT-4, Llama).
+*   **Mechanism**: Decouples the reasoning graph from specific LLM providers (Gemini, GPT-4, DeepHat).
 *   **Resilience**: Mid-workflow checkpointing ensures **zero state loss** during provider outages.
 *   **Metric**: Mean Time To Recovery (**MTTR) < 2 seconds**.
 
 ### 2. Dynamic Complexity-Aware Tiering (DCAT)
-*   **Mechanism**: Extracts "Complexity Signals" from security tasks.
+*   **Mechanism**: Extracts "Complexity Signals" from security tasks using our **Security Reasoning Ontology**.
 *   **Optimization**: Routes simple recon to "Flash" models and complex exploitation to "Reasoning" models.
 *   **Impact**: **84.2% reduction in operational costs**.
 
@@ -85,13 +148,14 @@ Making the system "smarter" over the course of an engagement.
 
 ---
 
-## 🎯 Research Scope & Objectives
-Our research (documented in `LLMOrch-VAPT`) focuses on four primary operational goals.
+## 🎯 Research Scope: LLMOrch-VAPT
+Our research (documented in the `LLMOrch-VAPT` framework) focuses on solving the transition from academic prototypes to industrial-grade security agents.
 
-*   **Goal 1: Operational Resilience**: Validating the effectiveness of APF in maintaining continuity during unplanned LLM provider outages.
-*   **Goal 2: Economic Sustainability**: Evaluating DCAT's ability to reduce costs while maintaining high-fidelity security reasoning.
-*   **Goal 3: Scalability**: Measuring the impact of SSC on performance during large-scale network assessments.
-*   **Goal 4: Safety & Governance**: Proving that stateful graph orchestration can effectively mitigate the risks of autonomous exploitation.
+### Primary Research Objectives:
+1.  **Operational Resilience**: Can provider-agnostic failover (**APF**) maintain state during unplanned outages?
+2.  **Economic Sustainability**: How effectively can **DCAT** optimize the cost-reasoning tradeoff?
+3.  **Scalability**: What is the performance impact of **SSC** on large-scale, redundant network assessments?
+4.  **Safety & Governance**: Proving that stateful graph orchestration with **HITL gates** can effectively mitigate the risk of unintended destructive actions.
 
 ---
 
@@ -105,15 +169,15 @@ Scaling CMatrix for enterprise-grade continuous security.
 
 ---
 
-## ✨ Conclusion
-**CMatrix is a force multiplier for security teams, combining autonomous reasoning with industrial-grade resilience.**
+## ✨ The CMatrix Advantage
+**A force multiplier for security teams, combining autonomous reasoning with industrial-grade resilience.**
 
-*   **Resilient**: Zero-state-loss failover via APF.
-*   **Cost-Effective**: Smart model routing via DCAT.
-*   **Safe**: Governed by Human-in-the-Loop approval gates.
-*   **Intelligent**: Context-aware memory and specialized agents.
+*   🚀 **Resilient**: Never loses state, even if LLM providers fail.
+*   💰 **Cost-Effective**: Smart model routing via DCAT ontology.
+*   🛡️ **Safe**: Controlled by Human-in-the-Loop whitelisted execution.
+*   🧠 **Intelligent**: Powered by the **DeepHat** reasoning engine and persistent vector memory.
 
 ---
 
-**Built with ❤️ by Nishan Paul & Md Rakibur Rahman**
+**Built by Nishan Paul & Md Rakibur Rahman**
 *Project URL: cmatrix.kaiofficial.xyz*
