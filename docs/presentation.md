@@ -23,98 +23,95 @@ University of Dhaka (CSEDU)
 
 ---
 
-## 🛠️ High-Level System Architecture
-CMatrix utilizes a **Master-Worker** hierarchy powered by **LangGraph**.
+## 🛠️ System Architecture: How It Works
+CMatrix utilizes a **Master-Worker** hierarchy powered by **LangGraph** for stateful orchestration.
 
-* **Frontend**: Next.js (Stunning UI, Real-time SSE streaming)
-* **Backend**: FastAPI (Python) + LangGraph (Agentic Orchestration)
-* **Memory**: Qdrant Vector Database (Long-term contextual memory)
-* **Execution**: Celery Task Queue + Redis (Background processing)
-* **Infrastructure**: Fully Dockerized for rapid deployment
+* **Master Supervisor**: A central brain (State Machine) that decomposes complex goals into sub-tasks.
+* **Worker Agents**: 7 Specialized agents with domain-specific toolsets.
+* **Orchestration Layer**: Manages state, thread persistence, and agent delegation.
+* **Communication**: Real-time event streaming via WebSockets and Server-Sent Events (SSE).
+* **Database Layer**: PostgreSQL for persistent engagement state and Qdrant for semantic memory.
 
 ---
 
 ## 🤖 The Specialist Agent Ecosystem
 Seven specialized agents collaborating through a **Supervisor Pattern**.
 
-1.  **Network Agent**: Port scanning & topology discovery.
+1.  **Network Agent**: Port scanning, service discovery & topology mapping.
 2.  **Web Agent**: HTTP/HTTPS validation & web vulnerability analysis.
-3.  **Auth Agent**: Login form analysis & session security.
-4.  **Config Agent**: System hardening & compliance (CIS, PCI-DSS).
-5.  **Vuln Intel Agent**: CVE research & real-time threat intelligence.
-6.  **API Agent**: REST/GraphQL security testing.
-7.  **Command Agent**: Secure terminal execution with audit trails.
+3.  **Auth Agent**: Login form analysis, session security & brute-force testing.
+4.  **Config Agent**: System hardening & compliance audits (CIS, PCI-DSS).
+5.  **Vuln Intel Agent**: Real-time CVE research & threat intelligence lookup.
+6.  **API Agent**: REST/GraphQL security testing & endpoint fuzzing.
+7.  **Command Agent**: Secure terminal execution with real-time audit logging.
 
 ---
 
-## 🧠 Advanced Reasoning & Orchestration
-Beyond simple prompt-response; we implement state-of-the-art reasoning patterns.
+## 🔬 Core Methodology: Technical Innovations
+Our framework introduces three key methodologies to solve the "Operational Fragility" of AI agents.
 
-* **Supervisor Pattern**: Centralized coordination for complex, multi-step goals.
-* **ReWOO (Reasoning Without Observation)**: Decoupled planning from tool execution for efficiency.
-* **Tree-of-Thoughts (ToT)**: Exploring multiple reasoning paths to find the most effective attack chain.
-* **Self-Reflection**: Agents critique their own output to reduce hallucinations and false positives.
+### 1. Autonomous Provider Failover (APF)
+*   **Mechanism**: Decouples the reasoning graph from specific LLM providers (Gemini, GPT-4, Llama).
+*   **Resilience**: Mid-workflow checkpointing ensures **zero state loss** during provider outages.
+*   **Metric**: Mean Time To Recovery (**MTTR) < 2 seconds**.
 
----
-
-## 🛡️ Research Innovations: LLMOrch-VAPT
-Our core research addresses **Operational Fragility** and **Economic Unsustainability**.
-
-| Innovation | Technical Impact | Key Metric |
-| :--- | :--- | :--- |
-| **APF** | Autonomous Provider Failover | **MTTR < 2s** |
-| **DCAT** | Dynamic Complexity-Aware Tiering | **84.2% Cost Savings** |
-| **SSC** | Security-Semantic Caching | **97.4% Success Rate** |
+### 2. Dynamic Complexity-Aware Tiering (DCAT)
+*   **Mechanism**: Extracts "Complexity Signals" from security tasks.
+*   **Optimization**: Routes simple recon to "Flash" models and complex exploitation to "Reasoning" models.
+*   **Impact**: **84.2% reduction in operational costs**.
 
 ---
 
-## 🔐 Safety & Human-in-the-Loop (HITL)
-Security agents must be powerful, yet governed.
+## 🔬 Core Methodology: Technical Innovations (Contd.)
 
-* **Approval Gates**: Critical operations (e.g., exploitation, terminal commands) require human authorization.
-* **Target Whitelisting**: Strict boundaries on execution scope.
-* **Audit Logging**: Comprehensive JSON logs of every command and reasoning step for compliance.
-* **Terminal Isolation**: Whitelisted command execution to prevent accidental system damage.
+### 3. Security-Semantic Caching (SSC)
+*   **Mechanism**: Stores "Reasoning Patterns" in a vector database (Qdrant) rather than raw text.
+*   **Efficiency**: Identifies similar vulnerability patterns across heterogeneous hosts.
+*   **Scalability**: Bypasses redundant LLM calls, improving response speed by **3.5x**.
 
----
-
-## 💾 Persistent Vector Memory
-Making agents smarter with every engagement.
-
-* **Qdrant-Powered Memory**: Long-term storage of scan results, findings, and successful attack paths.
-* **Contextual Awareness**: Agents recall past findings across different sessions to identify lateral movement opportunities.
-* **Semantic Search**: Natural language retrieval of technical data (e.g., "What ports were open on the staging server last week?").
+### 4. Human-in-the-Loop (HITL) Governance
+*   **Mechanism**: Stateful graph-based approval gates.
+*   **Safety**: No destructive security actions (e.g., exploitation) are performed without explicit human authorization.
+*   **Auditability**: Every agent thought and command is recorded in a tamper-proof JSON-B log.
 
 ---
 
-## 📊 Academic Contribution & Evaluation
-Validated through rigorous research and 1,500+ security reasoning tasks.
+## 💾 Persistent Memory & Context
+Making the system "smarter" over the course of an engagement.
 
-* **5 IEEE S&P Standard Papers**:
-    1. Red Teaming Strategies
-    2. HITL & Safety Frameworks
-    3. Agentic Reasoning Patterns
-    4. Vulnerability Intelligence
-    5. Model Orchestration (LLMOrch-VAPT)
-* **Performance**: Outperforms monolithic flagship models in both reliability and cost-efficiency.
+*   **Stateful Checkpointing**: Allows the system to pause/resume engagements without losing reasoning progress.
+*   **Knowledge Base**: Qdrant-powered long-term memory of past scan results and findings.
+*   **Contextual Retrieval**: Agents recall past discoveries (e.g., "Recall the open ports found on 192.168.1.100 earlier") to build complex attack chains.
 
 ---
 
-## 🚀 The Future Roadmap
-Scaling the platform for enterprise-grade continuous security.
+## 🎯 Research Scope & Objectives
+Our research (documented in `LLMOrch-VAPT`) focuses on four primary operational goals.
 
-* **Phase 3**: AI-driven vulnerability prioritization & automated remediation suggestions.
-* **Phase 4**: Multi-tenancy, RBAC, and SOC2/ISO 27001 compliance reporting.
-* **Phase 5**: Cloud-native agent deployment & real-time continuous monitoring.
+*   **Goal 1: Operational Resilience**: Validating the effectiveness of APF in maintaining continuity during unplanned LLM provider outages.
+*   **Goal 2: Economic Sustainability**: Evaluating DCAT's ability to reduce costs while maintaining high-fidelity security reasoning.
+*   **Goal 3: Scalability**: Measuring the impact of SSC on performance during large-scale network assessments.
+*   **Goal 4: Safety & Governance**: Proving that stateful graph orchestration can effectively mitigate the risks of autonomous exploitation.
+
+---
+
+## 🚀 Future Roadmap: Phase 3 & Beyond
+Scaling CMatrix for enterprise-grade continuous security.
+
+*   **Intelligence**: AI-driven vulnerability prioritization and automated remediation scripts.
+*   **Collaboration**: Multi-tenancy and Role-Based Access Control (RBAC) for security teams.
+*   **Compliance**: Automated SOC2, ISO 27001, and HIPAA reporting modules.
+*   **Scale**: Cloud-native agent deployment for massive infrastructure scanning.
 
 ---
 
 ## ✨ Conclusion
-**CMatrix is not just a tool; it's a force multiplier for security teams.**
+**CMatrix is a force multiplier for security teams, combining autonomous reasoning with industrial-grade resilience.**
 
-* **Resilient**: Never loses state, even if LLM providers fail.
-* **Cost-Effective**: Uses the right model for the right task.
-* **Authoritative**: Grounded in real-world security tools and academic research.
+*   **Resilient**: Zero-state-loss failover via APF.
+*   **Cost-Effective**: Smart model routing via DCAT.
+*   **Safe**: Governed by Human-in-the-Loop approval gates.
+*   **Intelligent**: Context-aware memory and specialized agents.
 
 ---
 
