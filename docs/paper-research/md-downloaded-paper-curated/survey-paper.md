@@ -32,7 +32,7 @@
 | 19 | AutoGen: Next-Gen LLM Multi-Agent Conversations | [📄 notes](survey-notes/19-autogen-next-gen-llm-multi-agent-conversations.md) | ✅ Done |
 | 20 | MetaGPT: Meta-Programming for Multi-Agent Frameworks | [📄 notes](survey-notes/20-metagpt-meta-programming-for-multi-agent-frameworks.md) | ✅ Done |
 | 21 | Voyager: An Open-Ended Embodied Agent | [📄 notes](survey-notes/21-voyager-an-open-ended-embodied-agent.md) | ✅ Done |
-| 22 | Reflexion: Language Agents with Verbal RL | — | ⏳ Pending |
+| 22 | Reflexion: Language Agents with Verbal RL | [📄 notes](survey-notes/22-reflexion-language-agents-with-verbal-rl.md) | ✅ Done |
 | 23 | CyBench: A Framework for Evaluating Cybersecurity | — | ⏳ Pending |
 | 24 | PentestEval: Benchmarking LLM-Based Penetration Testing | — | ⏳ Pending |
 | 25 | BountyBench: Dollar Impact of AI Agent Attackers and Defenders | — | ⏳ Pending |
@@ -162,6 +162,11 @@
 | Proxy-Evidence Self-Verification | Validation Agent must verify success via proxy evidence (side-effects), not just direct string match: SQLi success = time delay in timing attack OR error banner revealing DB version OR data in response body; XSS success = DOM mutation OR alert execution OR exfiltration callback; auth bypass = HTTP 200 on protected endpoint OR admin-role token; Validation Agent uses few-shot examples of proxy-evidence reasoning to generalize beyond explicit oracle strings | Papers 03, 05, 21 |
 | Exploit Curriculum from ESS State (Adaptive Attack Surface Ordering) | Team Manager proposes next attack class based on current ESS state + completed attacks + failed attacks, not a fixed OWASP Top-10 scan order; propose_next_attack(ess_state, completed_attacks, failed_attacks) → {vuln_class, target_endpoint, rationale, difficulty_estimate}; ESS-driven ordering: e.g., if admin credentials discovered, next attack = authenticated RCE before trying auth bypass; failed attack history persisted as negative curriculum signal to avoid replanning dead ends | Papers 05, 11, 14, 16, 21 |
 | Skill Index by Vuln-Class not Target URL | Index exploit skills as {vuln_class, tech_stack_hint, technique} NOT {specific_target_url}; enables zero-shot cross-target generalization — same functions work on new targets without modification; Voyager's strongest result: 100% zero-shot task solve in fresh world using only carried skill library; CMatrix corollary: exploit library built on target A should achieve non-zero solve rate on target B with similar tech stack | Papers 01, 02, 18, 21 |
+| Between-Trial Self-Reflection (Verbal RL) | When a Specialist exhausts its 4-round within-trial limit without success, Team Manager invokes Self-Reflection step generating {lesson, failed_approach, alternative_approach, target_observations} JSON in first-person framing; stored in episodic memory (Ω=3 sliding window) and injected into next Specialist's context for same vuln class or same target; eliminates repeated identical failure patterns without any gradient updates | Papers 09, 10, 12, 17, 22 |
+| Episodic Memory (4th Memory Tier) | Add episodic failure memory as a fourth distinct tier alongside Tier-1 Vulnerability Patterns, Tier-2 Strategy, Tier-3 Technical Action (Paper 18): Tier-4 Episodic = sliding window of {lesson, failed_approach, alternative_approach} per-target, per-vuln-class; injected into Specialist context at launch; after N missions synthesize into Tier-1 Vulnerability Pattern failure taxonomy | Papers 01, 18, 21, 22 |
+| Proactive Stuck Detection Heuristic (Reflexion-Enhanced) | Augment Rabbit-Hole Counter to generate verbal self-reflection when it triggers (not just force FSM transition): detect stuck via (1) identical consecutive tool calls ≥3, (2) >30 total calls without new findings, (3) URL diversity of last 5 calls <0.2; when triggered invoke Self-Reflection LLM to generate first-person lesson before transitioning; verbal lesson stored in episodic memory for current and future sessions | Papers 09, 11, 17, 21, 22 |
+| Self-Reflection Model Quality Gate | Before selecting any LLM as Team Manager: run self-reflection quality check — given synthetic failed pentest trace, model must generate specific+actionable+non-generic lesson; if output is generic ("I should try harder") model lacks self-reflection capability and must not be used as Team Manager; emergent capability requiring minimum GPT-3.5-turbo class; weaker models (starchat-beta class) show 0% gain from Reflexion | Papers 04, 05, 15, 17, 22 |
+| Reflexion Scope Boundary: Use Bandit for Exploration, Reflexion for Exploitation | Reflexion fails on tasks requiring high-diversity random exploration (WebShop: 0% improvement); use Thompson Sampling bandit (Paper 07) for exploration-phase tasks (parameter fuzzing, endpoint enumeration, payload space search); use Reflexion for exploitation-phase tasks with clear causal failure structure (wrong injection point, wrong encoding, wrong auth method); never apply Reflexion to tasks where failure cause is inherently random | Papers 07, 08, 22 |
 
 ---
 
@@ -200,6 +205,9 @@
 | MATH Dataset (5000 problems) | Paper 19 | Symbolic math problem solving; AutoGen 69.48% vs GPT-4 vanilla 55.18% (+14.3pp); two-agent AssistantAgent+UserProxyAgent | Code execution oracle (sympy); flag=correct symbolic form |
 | SoftwareDev Benchmark (70 tasks) | Paper 20 | 70 diverse software dev tasks; 7 used in main experiments; tasks: Snake, Flappy Bird, 2048, CRUD, Excel processing | Executability score 1–4; human revision count; MetaGPT 3.9/4.0 avg vs ChatDev 2.1, AutoGPT 1.0 |
 | MineDojo Exploration + Tech Tree + Zero-Shot (Minecraft) | Paper 21 | Open-ended Minecraft world; 160-iteration sessions × 3 trials; 4 tech-tree milestones; 4 zero-shot tasks × 3 trials in fresh world | Unique items collected (exploration); prompting iterations to milestone (tech tree); binary task completion within 50 iters (zero-shot); VOYAGER: 63 items (3.3× best baseline), wooden tool 15.3× faster, 100% zero-shot vs 0% baselines |
+| AlfWorld (134 household tasks) | Paper 22 | 134 text-based environments; 6 task types (find hidden objects, move objects, manipulate with other objects); TextWorld-based | Task completion binary oracle; ReAct+Reflexion: 130/134 (97%) in 12 trials vs ReAct ~75%; +22pp absolute improvement |
+| HotPotQA (100 multi-hop QA) | Paper 22 | 100-question subset of 113k-pair Wikipedia QA dataset; multi-hop reasoning required | Exact match answer grading; ReAct+Reflexion: 51% vs ReAct 39%; CoT(GT)+Reflexion: 80% vs GPT-4 base 68% |
+| LeetcodeHardGym (40 hard problems) | Paper 22 | 40 Leetcode hard-level problems released after Oct 2022 (post-GPT-4 training cutoff); 19 programming languages supported | pass@1 on hidden test suite; Reflexion: 15% vs GPT-4 base 7.5% (2× improvement) |
 | CyBench | Paper 23 | CTF-style cybersecurity tasks | — |
 | PentestEval | Paper 24 | LLM pentest structured eval | — |
 | BountyBench | Paper 25 | Real-world bug bounty dollar impact | — |
@@ -207,4 +215,4 @@
 
 ---
 
-*Last updated after: Paper 21*
+*Last updated after: Paper 22*
