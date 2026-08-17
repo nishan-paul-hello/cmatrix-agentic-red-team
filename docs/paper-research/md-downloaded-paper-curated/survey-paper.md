@@ -23,7 +23,7 @@
 | 10 | PentestGPT: Evaluating and Harnessing LLMs for Automated Pentest | [📄 notes](survey-notes/10-pentestgpt-evaluating-and-harnessing-large-language-models-for-automated-penetration-testing.md) | ✅ Done |
 | 11 | What Makes a Good LLM Agent for Real-World Penetration Testing | [📄 notes](survey-notes/11-what-makes-a-good-llm-agent-for-real-world-penetration.md) | ✅ Done |
 | 12 | VulnBot: Autonomous Penetration Testing for a Multi-Agent System | [📄 notes](survey-notes/12-vulnbot-autonomous-penetration-testing-for-a-multi-agent.md) | ✅ Done |
-| 13 | PentestAgent: Incorporating LLM Agents to Automated Pentesting | — | ⏳ Pending |
+| 13 | PentestAgent: Incorporating LLM Agents to Automated Pentesting | [📄 notes](survey-notes/13-pentestagent-incorporating-llm-agents-to-automated.md) | ✅ Done |
 | 14 | Automated Penetration Testing with LLM Agents and Classical Planning | — | ⏳ Pending |
 | 15 | D-CIPHER: Dynamic Collaborative Intelligent Multi-Agent | — | ⏳ Pending |
 | 16 | InCALMo: Autonomous LLM-Assisted System for Red Teaming | — | ⏳ Pending |
@@ -110,6 +110,12 @@
 | Output Truncation Gate | After every tool execution: if len(output) > 8000 chars → invoke cheap LLM (GPT-4o-mini) to extract key facts before passing to Planner; prevents #1 failure mode (session context loss = 42% of all failures in VulnBot empirical study) | Paper 12 |
 | Two-Stage RAG Retrieval | Stage 1: FAISS cosine similarity top-20, filter score > 0.5; Stage 2: cross-encoder reranker (bce-reranker-base-v1 or ms-marco-MiniLM), select top-3; chunk knowledge docs at 750 words; sources: HackTricks + HackingArticles + per-mission successful task history | Papers 01, 02, 04, 07, 12 |
 | PTG action_type Field | Every PTG task node carries action_type: "auto" | "escalate"; when Validation Agent determines step requires human judgment (captcha, MFA, ambiguous GUI), set action_type=escalate and emit structured human-in-the-loop request; complements TDA-triggered global escalation from Paper 11 | Papers 11, 12 |
+| Two-Tier Knowledge DB | Maintain two separate knowledge stores: Tier 1 Coarse DB {service, version → [{cve_id, vuln_type, version_range, epss_score}]} and Tier 2 Procedure DB {cve_id → [{repo_url, effect, version_req, runtime_deps, confidence}]}; Planner queries Tier 1 first, Execution Agent queries Tier 2 only for confirmed CVEs; never mix attack surface discovery with exploit detail retrieval | Paper 13 |
+| Autonomous Live Search Agent | Before exploitation: Search Agent runs two-round hierarchical web search: Round 1 queries Google+NVD+Snyk for {service} {version} CVE → populates Coarse DB; Round 2 queries GitHub+ExploitDB for {cve_id} exploit → populates Procedure DB; solves LLM training-cutoff problem — always working from current CVE data | Paper 13 |
+| Four-Technique Prompt Discipline | Every specialist prompt must have all four layers in order: (1) Role-play (bypass safety + scope), (2) CoT (explicit step decomposition + stop condition), (3) RAG (knowledge retrieval tool), (4) Structured Output (JSON schema with field spec + example); missing any layer causes pipeline failure | Papers 10, 12, 13 |
+| EPSS-Score CVE Prioritization | When multiple CVEs found for a service, rank by EPSS score (exploitation probability) NOT CVSS severity; formula: priority = epss_score × version_confidence; CVSS impact ignored for planning (relevant only for report severity); PentestAgent benchmark mean EPSS=79.58, median=97.19 confirms EPSS produces realistic targets | Paper 13 |
+| Exploit Fallback Chain | Every CVE in Procedure DB must have ≥2 exploit entries ranked by confidence; if Execution Agent hits same-error-twice stop condition on Exploit 1, automatically advance to Exploit 2; if all exploits for a CVE fail, mark attack surface exhausted in PTG and advance to next CVE — graceful degradation path | Papers 11, 13 |
+| Environmental Info DB | Shared queryable mission-state store accessible by all specialists: {target_ip, open_ports, services{port: version}, credentials, session_state{user, host}, exploit_history}; every specialist queries this DB rather than relying on conversational memory; complementary to PTG (task flow) — two separate linked stores | Papers 12, 13 |
 
 ---
 
@@ -135,6 +141,7 @@
 | HTB Season 8 (13 live machines, 2025) | Paper 11 | Post-2025 machines, no public walkthroughs; Easy+Med+Hard+Insane | Live competition oracle; 10/13 (76.9%); top-100/8,036 participants; strongest real-world validation |
 | AUTOPENBENCH (33 tasks, 210 subtasks) | Paper 12 | 22 in-vitro (AC, WS, NS, CRPT) + 11 real-world CVEs incl. 2024 CVEs; 5 per-phase step limit | Subtask completion oracle; VulnBot-405B 69.05% subtask / 30.3% overall; beats GPT-4o 21.21% using open-source model |
 | AI-Pentest-Benchmark (13 VulnHub machines) | Papers 11, 12 | 6 machines tested in Paper 12 (Victim1, Library2, Sar, WestWild, Symfonos2, Funbox); Easy + Medium difficulty | Subtask completion rate oracle; VulnBot+RAG achieves 1.00 on WestWild (full autonomous) vs GPT-4o+Human 0.57 |
+| PentestAgent Benchmark (67 VulHub + 11 HTB) | Paper 13 | 67 VulHub Docker CVE envs: 32 CWE categories, 8 OWASP Top 10, 50 Easy + 11 Med + 6 Hard; selected by EPSS score (mean 79.58); 11 HackTheBox CTF (9 Easy + 1 Med + 1 Hard); Kali Linux attacker VM | Stage completion oracle (I.G./V.A./E.); GPT-4: 74.2% overall; beats PentestGPT+human 3.1× faster on I.G., 4.8× on E.; V.A. 100% regardless of model (Search Agent dominates) |
 | CyBench | Paper 23 | CTF-style cybersecurity tasks | — |
 | PentestEval | Paper 24 | LLM pentest structured eval | — |
 | BountyBench | Paper 25 | Real-world bug bounty dollar impact | — |
@@ -142,4 +149,4 @@
 
 ---
 
-*Last updated after: Paper 12*
+*Last updated after: Paper 13*
