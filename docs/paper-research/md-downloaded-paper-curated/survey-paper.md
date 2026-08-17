@@ -30,7 +30,7 @@
 | 17 | Can LLMs Hack Enterprise Networks? Autonomous Assumed Breach (cochise/GOAD) | [📄 notes](survey-notes/17-can-llms-hack-enterprise-networks-autonomous-assumed-breach.md) | ✅ Done |
 | 18 | Co-RedTeam: Orchestrated Security Discovery and Exploitation | [📄 notes](survey-notes/18-co-redteam-orchestrated-security-discovery-and-exploitation.md) | ✅ Done |
 | 19 | AutoGen: Next-Gen LLM Multi-Agent Conversations | [📄 notes](survey-notes/19-autogen-next-gen-llm-multi-agent-conversations.md) | ✅ Done |
-| 20 | MetaGPT: Meta-Programming for Multi-Agent Frameworks | — | ⏳ Pending |
+| 20 | MetaGPT: Meta-Programming for Multi-Agent Frameworks | [📄 notes](survey-notes/20-metagpt-meta-programming-for-multi-agent-frameworks.md) | ✅ Done |
 | 21 | Voyager: An Open-Ended Embodied Agent | — | ⏳ Pending |
 | 22 | Reflexion: Language Agents with Verbal RL | — | ⏳ Pending |
 | 23 | CyBench: A Framework for Evaluating Cybersecurity | — | ⏳ Pending |
@@ -193,7 +193,7 @@
 | BountyBench (40 Exploit + 40 Detect tasks) | Paper 18 | Real-world bug bounty tasks on open-source repos; Detect: identify vuln from code; Exploit: generate working PoC script | exit 0 from exploit.sh (exploit); correct vuln identification (detect); CO-REDTEAM: 65.0% exploit / 20.0% detect with Gemini-3-pro |
 | CyberGym (large-scale CVE reproduction) | Paper 18 | Realistic CVE reproduction tasks emphasizing executable PoC generation; large-scale (80+ tasks) | Successful PoC execution exit 0; CO-REDTEAM 37.3% with Gemini-3-pro vs 21.5% best baseline |
 | MATH Dataset (5000 problems) | Paper 19 | Symbolic math problem solving; AutoGen 69.48% vs GPT-4 vanilla 55.18% (+14.3pp); two-agent AssistantAgent+UserProxyAgent | Code execution oracle (sympy); flag=correct symbolic form |
-| ALFWorld (134 tasks) | Paper 19 | Text-world household decision making; 3-agent (+ GroundingAgent) 69% avg vs 2-agent 54% avg (+15pp) | Task completion oracle; best-of-3: 77% vs 63% |
+| SoftwareDev Benchmark (70 tasks) | Paper 20 | 70 diverse software dev tasks; 7 used in main experiments; tasks: Snake, Flappy Bird, 2048, CRUD, Excel processing | Executability score 1–4; human revision count; MetaGPT 3.9/4.0 avg vs ChatDev 2.1, AutoGPT 1.0 |
 | CyBench | Paper 23 | CTF-style cybersecurity tasks | — |
 | PentestEval | Paper 24 | LLM pentest structured eval | — |
 | BountyBench | Paper 25 | Real-world bug bounty dollar impact | — |
@@ -201,4 +201,4 @@
 
 ---
 
-*Last updated after: Paper 19*
+*Last updated after: Paper 20*
