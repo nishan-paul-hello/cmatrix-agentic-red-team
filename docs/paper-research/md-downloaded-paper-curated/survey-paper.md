@@ -37,7 +37,7 @@
 | 24 | PentestEval: Benchmarking LLM-Based Penetration Testing | [📄 notes](survey-notes/24-pentesteval-benchmarking-llm-based-penetration-testing.md) | ✅ Done |
 | 25 | BountyBench: Dollar Impact of AI Agent Attackers and Defenders | [📄 notes](survey-notes/25-bountybench-dollar-impact-of-ai-agent-attackers-and-defenders.md) | ✅ Done |
 | 26 | Forewarned is Forearmed: A Survey on LLM-Based Agents in Security | [📄 notes](survey-notes/26-forewarned-is-forearmed-a-survey-on-llm-based-agents-in.md) | ✅ Done |
-| 27 | A Survey on LLM-Based Autonomous Agents | — | ⏳ Pending |
+| 27 | A Survey on LLM-Based Autonomous Agents | [📄 notes](survey-notes/27-a-survey-on-large-language-model-based-autonomous-agents.md) | ✅ Done |
 | 28 | CVE-Bench: A Benchmark for AI Agents Exploiting Real-World Web Apps | [📄 notes](survey-notes/28-cve-bench-a-benchmark-for-ai-agents-ability-to-exploit-real-world-web-application-vulnerabilities.md) | ✅ Done |
 | 29 | LLM Agents can Autonomously Hack Websites | [📄 notes](survey-notes/29-llm-agents-can-autonomously-hack-websites.md) | ✅ Done |
 
@@ -231,4 +231,4 @@
 
 ---
 
-*Last updated after: Papers 01–29*
+*Last updated after: All 29 papers complete ✅*
