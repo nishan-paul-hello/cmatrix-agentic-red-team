@@ -12,7 +12,7 @@
 | # | Paper | Notes File | Status |
 |---|-------|------------|--------|
 | 01 | LLM Agents can Autonomously Exploit One-Day Vulnerabilities | [📄 notes](survey-notes/01-llm-agents-can-autonomously-exploit-one-day-vulnerabilities.md) | ✅ Done |
-| 02 | Teams of LLM Agents can Exploit Zero-Day Vulnerabilities | — | ⏳ Pending |
+| 02 | Teams of LLM Agents can Exploit Zero-Day Vulnerabilities | [📄 notes](survey-notes/02-teams-of-llm-agents-can-exploit-zero-day-vulnerabilities.md) | ✅ Done |
 | 03 | Multi-Agent Penetration Testing: AI for the Web | — | ⏳ Pending |
 | 04 | AWE: Adaptive Agents for Dynamic Web Penetration Testing | — | ⏳ Pending |
 | 05 | AutoPT: How Far Are We from End2End Automated Web Pentesting | — | ⏳ Pending |
@@ -52,26 +52,30 @@
 |-------|--------|--------|
 | Agent Core | ReAct loop (Reason → Act → Observe) | Paper 01 |
 | Context / RAG | CVE/NVD description retrieval before task launch | Paper 01 |
-| Tool Suite | Browser + Shell + Search + FileIO + CodeExec | Paper 01 |
-| Memory | Stateful action history (100+ steps needed) | Paper 01 |
-| Planning | Explicit planning module — identified as a gap | Paper 01 |
-| Subagents | Per-vulnerability-class specialist agents | Paper 01 |
-| Output Management | Chunked context + summarization for long HTML/logs | Paper 01 |
-| Observability | Pass@1, Pass@5, cost-per-exploit metrics | Paper 01 |
+| Tool Suite | Browser (Playwright/JS-aware) + Shell + Search + FileIO + CodeExec | Papers 01, 02 |
+| Memory | Stateful action history (100+ steps); scoped per specialist | Papers 01, 02 |
+| Orchestration | **3-layer hierarchy: Planner → Team Manager → Specialists** | Paper 02 |
+| Specialists | Per-vuln-class agents (XSS, SQLi, CSRF, SSTI, RCE, Recon, Generic) with domain docs | Paper 02 |
+| Domain Knowledge | 5–6 curated documents injected per specialist at task start | Paper 02 |
+| Output Management | HTML pre-processor (strip image/svg/style tags) + summarization | Papers 01, 02 |
+| Cross-Agent Synthesis | Team Manager synthesizes results across agent runs, refines next dispatch | Paper 02 |
+| Recon Layer | Endpoint fuzzing (gobuster/feroxbuster) before attack agents launch | Paper 02 (gap) |
+| Observability | Pass@1, Pass@5, cost-per-exploit, refusal rate per model | Papers 01, 02 |
 
 ---
 
 ## 📊 Benchmark Candidates
 *(This section will grow as benchmark papers are reviewed)*
 
-| Benchmark | Paper | Scope |
-|-----------|-------|-------|
-| 15 Real-World One-Day CVEs | Paper 01 | Web apps, containers, Python packages |
-| CyBench | Paper 23 | CTF-style cybersecurity tasks |
-| PentestEval | Paper 24 | LLM pentest structured eval |
-| BountyBench | Paper 25 | Real-world bug bounty dollar impact |
-| CVE-Bench | Paper 28 | Real-world web app CVEs |
+| Benchmark | Paper | Scope | Mode |
+|-----------|-------|-------|------|
+| 15 Real-World One-Day CVEs | Paper 01 | Web apps, containers, Python packages | Exploitation with CVE hint |
+| 14 Real-World Zero-Day CVEs | Paper 02 | Web apps only (XSS, SQLi, CSRF, privesc) | Autonomous discovery + exploitation |
+| CyBench | Paper 23 | CTF-style cybersecurity tasks | — |
+| PentestEval | Paper 24 | LLM pentest structured eval | — |
+| BountyBench | Paper 25 | Real-world bug bounty dollar impact | — |
+| CVE-Bench | Paper 28 | Real-world web app CVEs | — |
 
 ---
 
-*Last updated after: Paper 01*
+*Last updated after: Paper 02*
