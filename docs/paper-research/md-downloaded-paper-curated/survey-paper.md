@@ -25,7 +25,7 @@
 | 12 | VulnBot: Autonomous Penetration Testing for a Multi-Agent System | [📄 notes](survey-notes/12-vulnbot-autonomous-penetration-testing-for-a-multi-agent.md) | ✅ Done |
 | 13 | PentestAgent: Incorporating LLM Agents to Automated Pentesting | [📄 notes](survey-notes/13-pentestagent-incorporating-llm-agents-to-automated.md) | ✅ Done |
 | 14 | Automated Penetration Testing with LLM Agents and Classical Planning | [📄 notes](survey-notes/14-automated-penetration-testing-with-llm-agents-and-classical.md) | ✅ Done |
-| 15 | D-CIPHER: Dynamic Collaborative Intelligent Multi-Agent | — | ⏳ Pending |
+| 15 | D-CIPHER: Dynamic Collaborative Intelligent Multi-Agent | [📄 notes](survey-notes/15-d-cipher-dynamic-collaborative-intelligent-multi-agent.md) | ✅ Done |
 | 16 | InCALMo: Autonomous LLM-Assisted System for Red Teaming | — | ⏳ Pending |
 | 17 | Can LLMs Hack Enterprise Networks? Autonomous Assumed Breach | — | ⏳ Pending |
 | 18 | Co-RedTeam: Orchestrated Security Discovery and Exploitation | — | ⏳ Pending |
@@ -123,6 +123,12 @@
 | Dual Perceptor (Rule + LLM) | Route tool output by type: structured output (JSON, XML, nmap oN) → deterministic rule-based parser → predicates; unstructured output (banner text, HTML, error messages) → LLM perceptor → predicates; use LLM only when necessary; deterministic parsing reduces token cost 61% vs LLM-only perceptor | Paper 14 |
 | 11-Milestone Evaluation Framework | Adopt M1(enum)–M7(user-shell)–M9(root-shell)–M11(cred-exfil) milestone chain as primary CMatrix metric; strictly better than sub-task completion (doesn't show impact) or binary success/failure (too coarse); report % of targets reaching each milestone; stability = all-3-runs success rate + Coefficient of Variation on cost and time | Paper 14 |
 | Stability Measurement | Track Coefficient of Variation (CoV) of API cost and execution time across ≥3 repeated runs of same task; CHECKMATE: CoV cost=0.129, time=0.093; Claude Code: CoV cost=0.451, time=0.325; a system with 75% all-runs success rate is unacceptable for production VAPT despite good average performance | Paper 14 |
+| Role-Scoped Tool Whitelist | Team Manager's function-call list must exclude ALL specialist execution tools (run_command, create_file, sqlmap, nuclei, etc.); if Team Manager can execute, it will execute instead of delegating; enforce at API layer via separate tool registries per agent role | Paper 15 |
+| Recon Seeder (Auto-prompter) | Pre-flight agent (max 5 rounds) that runs nmap/WhatWeb/curl/GraphQL-introspect before Team Manager receives target; synthesizes observations into target-specific initial prompt; falls back to static template on failure; grounds Team Manager reasoning in observed attack surface, not training priors | Papers 05, 15 |
+| Fresh-History Specialist Instantiation | Every Specialist launched with empty conversation history; task description + needed context packed into initial_prompt; raw tool output never returned to Team Manager — only structured FinishTask JSON summary; prevents context pollution cascade | Papers 10, 12, 15 |
+| MITRE ATT&CK Capability Coverage Metric | Map every target/vuln-class to applicable ATT&CK technique IDs; report two metrics per benchmark run: (a) % tasks solved and (b) # unique ATT&CK techniques successfully employed; richer signal than success rate alone; technique_map for web targets: T1190, T1059, T1078, T1110, T1212, T1552 | Papers 09, 11, 15 |
+| Strong Executor Requirement | Weak Executor models completely negate Planner quality: strong Planner + weak Executor consistently underperforms strong+strong; LLaMa 405B + LLaMa 70B → 0% solve rate; Executor tasks (script generation, binary analysis, decryption) require frontier-class models; cost optimization via cheap Executors is invalid | Papers 04, 05, 07, 11, 15 |
+| Temperature=1.0 Default | Pentest tasks are creative search problems; T=1.0 outperforms T=0.95 across all CTF categories; use T=1.0 for all LLM reasoning/planning/execution calls; exception: T=0.0 for structured JSON schema output generation where determinism is required | Papers 07, 15 |
 
 ---
 
@@ -150,6 +156,9 @@
 | AI-Pentest-Benchmark (13 VulnHub machines) | Papers 11, 12 | 6 machines tested in Paper 12 (Victim1, Library2, Sar, WestWild, Symfonos2, Funbox); Easy + Medium difficulty | Subtask completion rate oracle; VulnBot+RAG achieves 1.00 on WestWild (full autonomous) vs GPT-4o+Human 0.57 |
 | PentestAgent Benchmark (67 VulHub + 11 HTB) | Paper 13 | 67 VulHub Docker CVE envs: 32 CWE categories, 8 OWASP Top 10, 50 Easy + 11 Med + 6 Hard; selected by EPSS score (mean 79.58); 11 HackTheBox CTF (9 Easy + 1 Med + 1 Hard); Kali Linux attacker VM | Stage completion oracle (I.G./V.A./E.); GPT-4: 74.2% overall; beats PentestGPT+human 3.1× faster on I.G., 4.8× on E.; V.A. 100% regardless of model (Search Agent dominates) |
 | CHECKMATE Vulhub Benchmark (120 targets) | Paper 14 | 120 Vulhub Docker containers randomly sampled; largest pentest benchmark; HTB excluded (data contamination); Docker images anonymized; strict minimal-human-intervention policy | 11-milestone oracle (M1–M11); CHECKMATE: 88% M7 vs Claude Code ~65%; $0.56 vs $1.43 (61% cheaper); 6.9 min vs 11.8 min (42% faster); 100% all-runs stability vs 75% for Claude Code |
+| NYU CTF Bench (200 challenges) | Paper 15 | 6 categories: crypto (53), forensics (15), pwn (38), rev (51), web (19), misc (24); CSAW CTF challenges; 45 unique MITRE ATT&CK techniques mapped to 117/200 CTFs (211 technique instances) | Linux Docker containers; flag{...} oracle; $3 cost limit; Claude 3.5 Sonnet best: 22% (D-CIPHER w/o Auto-prompter) |
+| Cybench (40 challenges) | Papers 06, 15 | 6 categories; unguided mode (no subtask hints); hard prompt (no extra hints) | Docker containers; flag oracle; D-CIPHER Claude Sonnet: 22.5% |
+| HackTheBox CTF Challenges (50 challenges) | Papers 06, 15 | Crypto (30) + Rev (20); D-CIPHER Claude Sonnet: 44% vs. EnIGMA 26% | Docker containers; flag oracle |
 | CyBench | Paper 23 | CTF-style cybersecurity tasks | — |
 | PentestEval | Paper 24 | LLM pentest structured eval | — |
 | BountyBench | Paper 25 | Real-world bug bounty dollar impact | — |
@@ -157,4 +166,4 @@
 
 ---
 
-*Last updated after: Paper 14*
+*Last updated after: Paper 15*
