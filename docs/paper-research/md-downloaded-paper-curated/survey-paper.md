@@ -31,7 +31,7 @@
 | 18 | Co-RedTeam: Orchestrated Security Discovery and Exploitation | [📄 notes](survey-notes/18-co-redteam-orchestrated-security-discovery-and-exploitation.md) | ✅ Done |
 | 19 | AutoGen: Next-Gen LLM Multi-Agent Conversations | [📄 notes](survey-notes/19-autogen-next-gen-llm-multi-agent-conversations.md) | ✅ Done |
 | 20 | MetaGPT: Meta-Programming for Multi-Agent Frameworks | [📄 notes](survey-notes/20-metagpt-meta-programming-for-multi-agent-frameworks.md) | ✅ Done |
-| 21 | Voyager: An Open-Ended Embodied Agent | — | ⏳ Pending |
+| 21 | Voyager: An Open-Ended Embodied Agent | [📄 notes](survey-notes/21-voyager-an-open-ended-embodied-agent.md) | ✅ Done |
 | 22 | Reflexion: Language Agents with Verbal RL | — | ⏳ Pending |
 | 23 | CyBench: A Framework for Evaluating Cybersecurity | — | ⏳ Pending |
 | 24 | PentestEval: Benchmarking LLM-Based Penetration Testing | — | ⏳ Pending |
@@ -157,6 +157,11 @@
 | Domain Knowledge Grounding Agent | Add a Domain Knowledge Agent per vuln class that activates when a Specialist has repeated the same action type 3× without progress; injects authoritative domain constraints (e.g., 'SSRF requires reaching internal endpoint first; confirm with curl http://internal-target'); complement to Rabbit-Hole counter (Papers 09/17): detect → inject knowledge → if still stuck → force FSM transition | Papers 09, 17, 19 |
 | Interactive RAG with Update-Context Signal | When Specialist cannot find relevant procedure in retrieval results, it signals RETRIEVAL_FAILED to trigger a broader search before declaring no exploit available; 19.4% of queries in AutoGen's RAG experiment benefited from this second retrieval round; combine with Two-Stage RAG from Paper 12: two-stage ranking (cosine top-20 → reranker top-3) + interactive update-context loop for insufficient top-3 | Papers 01, 07, 12, 19 |
 | Role-Play Speaker Selection for Dynamic Dispatch | When Team Manager selects next specialist, use role-play framing: 'Given the current pentest state and findings, which specialist role should investigate next: [list with role descriptions]?'; role-play outperforms task-based prompt by 3/12 tasks (11 vs 8) and eliminates termination failures in AutoGen's ablation; CMatrix Team Manager dispatch prompt should frame specialists as red-team roles, not task executors | Papers 02, 15, 19 |
+| Executable Skill Library (Code-as-Indexed-Skill) | Store every successful exploit chain as an executable Python/Bash function; generate a natural-language description of the function using GPT-4o-mini; embed that description (NOT raw code); on new sub-task generate a description of the task and retrieve top-5 skills by cosine similarity; inject top-5 as in-context examples into Specialist prompt; description-to-description matching is semantically richer than code-to-code or output-to-output similarity; skill library is plug-and-play: transferable to new targets without modification | Papers 01, 04, 07, 12, 18, 21 |
+| Three-Type Feedback Loop Inside Specialist Iterations | Every Specialist execution round must capture and inject all three feedback types before next LLM call: (1) Tool Feedback — stdout/stderr from tool execution (sqlmap output, HTTP response body); (2) Execution Errors — Python exceptions, JSON decode errors, tool-not-found, timeout; (3) Validation Agent Critique — structured {reasoning, success: bool, critique} JSON from Validation Agent; ablation: self-verification alone accounts for −73% performance when removed — more impactful than any other single component | Papers 03, 05, 09, 10, 18, 21 |
+| Proxy-Evidence Self-Verification | Validation Agent must verify success via proxy evidence (side-effects), not just direct string match: SQLi success = time delay in timing attack OR error banner revealing DB version OR data in response body; XSS success = DOM mutation OR alert execution OR exfiltration callback; auth bypass = HTTP 200 on protected endpoint OR admin-role token; Validation Agent uses few-shot examples of proxy-evidence reasoning to generalize beyond explicit oracle strings | Papers 03, 05, 21 |
+| Exploit Curriculum from ESS State (Adaptive Attack Surface Ordering) | Team Manager proposes next attack class based on current ESS state + completed attacks + failed attacks, not a fixed OWASP Top-10 scan order; propose_next_attack(ess_state, completed_attacks, failed_attacks) → {vuln_class, target_endpoint, rationale, difficulty_estimate}; ESS-driven ordering: e.g., if admin credentials discovered, next attack = authenticated RCE before trying auth bypass; failed attack history persisted as negative curriculum signal to avoid replanning dead ends | Papers 05, 11, 14, 16, 21 |
+| Skill Index by Vuln-Class not Target URL | Index exploit skills as {vuln_class, tech_stack_hint, technique} NOT {specific_target_url}; enables zero-shot cross-target generalization — same functions work on new targets without modification; Voyager's strongest result: 100% zero-shot task solve in fresh world using only carried skill library; CMatrix corollary: exploit library built on target A should achieve non-zero solve rate on target B with similar tech stack | Papers 01, 02, 18, 21 |
 
 ---
 
@@ -194,6 +199,7 @@
 | CyberGym (large-scale CVE reproduction) | Paper 18 | Realistic CVE reproduction tasks emphasizing executable PoC generation; large-scale (80+ tasks) | Successful PoC execution exit 0; CO-REDTEAM 37.3% with Gemini-3-pro vs 21.5% best baseline |
 | MATH Dataset (5000 problems) | Paper 19 | Symbolic math problem solving; AutoGen 69.48% vs GPT-4 vanilla 55.18% (+14.3pp); two-agent AssistantAgent+UserProxyAgent | Code execution oracle (sympy); flag=correct symbolic form |
 | SoftwareDev Benchmark (70 tasks) | Paper 20 | 70 diverse software dev tasks; 7 used in main experiments; tasks: Snake, Flappy Bird, 2048, CRUD, Excel processing | Executability score 1–4; human revision count; MetaGPT 3.9/4.0 avg vs ChatDev 2.1, AutoGPT 1.0 |
+| MineDojo Exploration + Tech Tree + Zero-Shot (Minecraft) | Paper 21 | Open-ended Minecraft world; 160-iteration sessions × 3 trials; 4 tech-tree milestones; 4 zero-shot tasks × 3 trials in fresh world | Unique items collected (exploration); prompting iterations to milestone (tech tree); binary task completion within 50 iters (zero-shot); VOYAGER: 63 items (3.3× best baseline), wooden tool 15.3× faster, 100% zero-shot vs 0% baselines |
 | CyBench | Paper 23 | CTF-style cybersecurity tasks | — |
 | PentestEval | Paper 24 | LLM pentest structured eval | — |
 | BountyBench | Paper 25 | Real-world bug bounty dollar impact | — |
@@ -201,4 +207,4 @@
 
 ---
 
-*Last updated after: Paper 20*
+*Last updated after: Paper 21*
