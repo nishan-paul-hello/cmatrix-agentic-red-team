@@ -21,7 +21,7 @@
 | 08 | RESTler: Stateful REST API Fuzzing | [📄 notes](survey-notes/08-restler-stateful-rest-api-fuzzing.md) | ✅ Done |
 | 09 | Getting Pwnd by AI: Penetration Testing with LLMs | [📄 notes](survey-notes/09-getting-pwnd-by-ai-penetration-testing-with-large-language.md) | ✅ Done |
 | 10 | PentestGPT: Evaluating and Harnessing LLMs for Automated Pentest | [📄 notes](survey-notes/10-pentestgpt-evaluating-and-harnessing-large-language-models-for-automated-penetration-testing.md) | ✅ Done |
-| 11 | What Makes a Good LLM Agent for Real-World Penetration Testing | — | ⏳ Pending |
+| 11 | What Makes a Good LLM Agent for Real-World Penetration Testing | [📄 notes](survey-notes/11-what-makes-a-good-llm-agent-for-real-world-penetration.md) | ✅ Done |
 | 12 | VulnBot: Autonomous Penetration Testing for a Multi-Agent System | — | ⏳ Pending |
 | 13 | PentestAgent: Incorporating LLM Agents to Automated Pentesting | — | ⏳ Pending |
 | 14 | Automated Penetration Testing with LLM Agents and Classical Planning | — | ⏳ Pending |
@@ -96,6 +96,14 @@
 | Parsing Module: Four Input Categories | Reflection Filter uses category-specific prompts: (1) user intent, (2) security tool output, (3) raw HTTP response, (4) source code; category selected by classifier before compression — generic single-prompt compression is insufficient | Paper 10 |
 | Candidate Task Enumeration before Selection | After each specialist completes, Team Manager enumerates all PTT leaf candidates, scores each (severity × confidence × surface coverage), selects top candidate explicitly — never implicit next-task from LLM continuation | Paper 10 |
 | Jailbreak Prompt Library | Maintain categorized jailbreak variants: (a) verification/audit framing, (b) certified-pentester role context, (c) semantic substitutions; refusal rate tracked as first-class metric; high refusal triggers automatic prompt variant selection | Papers 09, 10 |
+| EGATS Attack Tree | Replace PTT with MCTS-style Evidence-Guided Attack Tree: each node stores (promise_φ, TDI_δ, findings, status); UCB selection: UCB(n)=φ(n)+√2·√(lnN/N_n)-0.5·δ(n); promise backpropagation after every tool call: φ∄0.7φ+0.3·r(outcome); prune TDI>0.8 after 3 attempts | Paper 11 |
+| TDA / Task Difficulty Index | TDI=0.3H+0.3(1-E)+0.2C+0.2(1-S): H=normalized horizon estimate, E=mean evidence confidence (verified=1.0/confirmed=0.8/plausible=0.5/speculative=0.3), C=context fraction consumed, S=Laplace-smoothed branch success rate; TDI>0.6→BFS recon, <0.3→DFS exploit, 0.3-0.6→LLM_DECIDE | Paper 11 |
+| State Store: Five Entity Types | External persistent DB (not in-context): hosts, services, credentials, sessions, vulnerabilities; each entry timestamped + linked to discovery node; credentials auto-propagate to hypothesis nodes with matching preconditions; enables cross-phase credential chains | Paper 11 |
+| Context Load Threshold | Track context tokens per session: 0-40%=full injection, 40-70%=compress sibling summaries, 70%+=aggressive prune older path segments; empirical: 94%→78% accuracy at 60% load, 78%→61% at 80% load; never exceed 70% without summarization | Paper 11 |
+| Typed Tool Interfaces | Each tool: input_schema+output_schema+pre/postconditions+validation; input validation catches malformed calls before execution; structured output eliminates regex parsing; 38 tools across 6 categories (recon, web exploit, network exploit, creds, AD, privesc) | Paper 11 |
+| Skill Compositions | Multi-tool attack patterns encoding expert knowledge: KerberoastingSkill, SQLiExtractionSkill, PrivEscSkill; fallback logic when preferred tool fails; aggregate results from multiple tools into coherent findings | Paper 11 |
+| Human Escalation Protocol | When TDI>0.8 on all remaining branches after k_min=3 attempts → ESCALATE_TO_OPERATOR: report PTT state + pruned branches + TDI history + last 5 tool calls; operator provides hint/cred/manual step; resume EGATS from new operator-added node | Paper 11 |
+| Thinking Mode Discipline | Use extended reasoning (thinking mode) only for Team Manager TDA/UCB decisions; use standard mode for Specialist command generation; 6-10pp gain from thinking mode but architectural gap (30pp) does NOT close — thinking mode complements architecture, does not replace it | Paper 11 |
 
 ---
 
@@ -117,6 +125,8 @@
 | PentestGPT Benchmark (13 machines, 182 sub-tasks) | Paper 10 | 7 Easy + 4 Medium + 2 Hard; HTB + VulnHub; all OWASP Top 10; 18 CWE items; 26 categories | Sub-task completion oracle; 3 certified pentesters wrote walkthroughs; post-2021 machines (training contamination guard) |
 | HackTheBox Active Machines (10 machines) | Paper 10 | 5 Easy + 5 Medium; real-world post-2021 machines; root flag oracle | 5 trials per machine; 17/50 trial successes; $131.5 USD total; $21.9/machine avg |
 | picoMini CTF (21 challenges, 248 teams) | Paper 10 | Web + crypto + binary + reverse + forensics; CMU/redpwn; web-specific: login, caas, notepad | Flag oracle; 9/21 solved; 24th/248 teams; $5.1 USD/attempt avg |
+| GOAD (Game of Active Directory, 5-host) | Paper 11 | Multi-domain Windows AD: Kerberoasting, NTLM relay, lateral movement, domain escalation | Hosts compromised /5; PENTESTGPT v2: 4/5 vs 2/5 baselines; $28.50/full engagement |
+| HTB Season 8 (13 live machines, 2025) | Paper 11 | Post-2025 machines, no public walkthroughs; Easy+Med+Hard+Insane | Live competition oracle; 10/13 (76.9%); top-100/8,036 participants; strongest real-world validation |
 | CyBench | Paper 23 | CTF-style cybersecurity tasks | — |
 | PentestEval | Paper 24 | LLM pentest structured eval | — |
 | BountyBench | Paper 25 | Real-world bug bounty dollar impact | — |
@@ -124,4 +134,4 @@
 
 ---
 
-*Last updated after: Paper 10*
+*Last updated after: Paper 11*
