@@ -26,7 +26,7 @@
 | 13 | PentestAgent: Incorporating LLM Agents to Automated Pentesting | [📄 notes](survey-notes/13-pentestagent-incorporating-llm-agents-to-automated.md) | ✅ Done |
 | 14 | Automated Penetration Testing with LLM Agents and Classical Planning | [📄 notes](survey-notes/14-automated-penetration-testing-with-llm-agents-and-classical.md) | ✅ Done |
 | 15 | D-CIPHER: Dynamic Collaborative Intelligent Multi-Agent | [📄 notes](survey-notes/15-d-cipher-dynamic-collaborative-intelligent-multi-agent.md) | ✅ Done |
-| 16 | InCALMo: Autonomous LLM-Assisted System for Red Teaming | — | ⏳ Pending |
+| 16 | Incalmo: Autonomous LLM-Assisted System for Red Teaming Multi-Host Networks | [📄 notes](survey-notes/16-incalmo-an-autonomous-llm-assisted-system-for-red-teaming.md) | ✅ Done |
 | 17 | Can LLMs Hack Enterprise Networks? Autonomous Assumed Breach | — | ⏳ Pending |
 | 18 | Co-RedTeam: Orchestrated Security Discovery and Exploitation | — | ⏳ Pending |
 | 19 | AutoGen: Next-Gen LLM Multi-Agent Conversations | — | ⏳ Pending |
@@ -129,6 +129,13 @@
 | MITRE ATT&CK Capability Coverage Metric | Map every target/vuln-class to applicable ATT&CK technique IDs; report two metrics per benchmark run: (a) % tasks solved and (b) # unique ATT&CK techniques successfully employed; richer signal than success rate alone; technique_map for web targets: T1190, T1059, T1078, T1110, T1212, T1552 | Papers 09, 11, 15 |
 | Strong Executor Requirement | Weak Executor models completely negate Planner quality: strong Planner + weak Executor consistently underperforms strong+strong; LLaMa 405B + LLaMa 70B → 0% solve rate; Executor tasks (script generation, binary analysis, decryption) require frontier-class models; cost optimization via cheap Executors is invalid | Papers 04, 05, 07, 11, 15 |
 | Temperature=1.0 Default | Pentest tasks are creative search problems; T=1.0 outperforms T=0.95 across all CTF categories; use T=1.0 for all LLM reasoning/planning/execution calls; exception: T=0.0 for structured JSON schema output generation where determinism is required | Papers 07, 15 |
+| Declarative Task API (5-Task Vocabulary) | LLM must NEVER generate shell commands; define a fixed high-level task vocabulary (Scan, LateralMove/TestVuln, EscalatePrivilege/ExploitVuln, FindInformation, ExfiltrateData/ValidateFinding) that LLM selects and parameterizes; execution delegated entirely to deterministic domain-specific agents; ablation: removing this → 0/10 success; keeping it → 9/10 | Papers 14, 16 |
+| Environment State Service (ESS) | External queryable structured state DB (Python objects: endpoints, findings, credentials, sessions, tested_surfaces); LLM queries ESS instead of reading raw tool output; raw command output NEVER enters LLM context; every Specialist writes to ESS on completion; directly solves context bloat failure mode (54K tokens from single file listing → structured query) | Papers 11, 12, 13, 16 |
+| Vulnerability Dependency Graph (VDG/AGS) | Web equivalent of Incalmo's Attack Graph Service: tracks which vulnerabilities unlock others (e.g., auth-bypass → authenticated SQLi); LLM can only dispatch tasks whose preconditions are satisfied in current ESS state; eliminates irrelevant task problem (47–90% of prior-system commands were irrelevant per Incalmo failure analysis) | Papers 11, 16 |
+| Session Persistence Service (C&C Equivalent) | Service-layer abstraction for reliable authenticated HTTP execution: maintains sessions, CSRF tokens, JWTs, cookie jars per domain; all Specialists call exec(endpoint, method, payload, session_id) via service API; equivalent to Incalmo's C&C server abstracting reliable command execution on infected hosts | Papers 06, 16 |
+| Irrelevant Task Relevance Gate | Pre-execution check: before any Specialist runs, map task to VDG node; if no matching node or preconditions unmet, reject and force Team Manager replanning; prevents 47–90% irrelevant command pathology observed in all baseline systems | Papers 09, 16 |
+| LLM-Agent as Extensibility Escape Hatch | Keep Specialists deterministic for known vuln classes; add LLM-based Specialist only for novel vuln classes not covered by library, bounded by max_interactions limit; Incalmo extensibility study: single LLM agent replacement succeeds; full LLM agent replacement fails in all environments | Papers 14, 16 |
+| Multi-Target Stepping-Stone Evaluation | Benchmark must include multi-application scenarios where finding in app A (credential theft) enables exploitation in app B; web equivalent of multi-host stepping-stone attacks; MHBench has 5–104 tasks per environment — CMatrix benchmark should include ≥3 multi-target chains | Paper 16 |
 
 ---
 
@@ -159,6 +166,7 @@
 | NYU CTF Bench (200 challenges) | Paper 15 | 6 categories: crypto (53), forensics (15), pwn (38), rev (51), web (19), misc (24); CSAW CTF challenges; 45 unique MITRE ATT&CK techniques mapped to 117/200 CTFs (211 technique instances) | Linux Docker containers; flag{...} oracle; $3 cost limit; Claude 3.5 Sonnet best: 22% (D-CIPHER w/o Auto-prompter) |
 | Cybench (40 challenges) | Papers 06, 15 | 6 categories; unguided mode (no subtask hints); hard prompt (no extra hints) | Docker containers; flag oracle; D-CIPHER Claude Sonnet: 22.5% |
 | HackTheBox CTF Challenges (50 challenges) | Papers 06, 15 | Crypto (30) + Rev (20); D-CIPHER Claude Sonnet: 44% vs. EnIGMA 26% | Docker containers; flag oracle |
+| MHBench (40 multi-host environments) | Paper 16 | 22–50 hosts per env; 10 data-exfiltration goals + 30 root-access goals; 5–104 tasks per env; 2–48 critical assets; Equifax/Enterprise/Chain/Star/Dumbbell + algorithmically generated topologies; CVE-2017-5638, CVE-2021-3156, plaintext creds | 5 trials per env, 75 min limit; critical asset acquisition oracle; Incalmo: 37/40 Success vs baseline 3/40; 12–54 min per engagement; ≤$15 cost |
 | CyBench | Paper 23 | CTF-style cybersecurity tasks | — |
 | PentestEval | Paper 24 | LLM pentest structured eval | — |
 | BountyBench | Paper 25 | Real-world bug bounty dollar impact | — |
@@ -166,4 +174,4 @@
 
 ---
 
-*Last updated after: Paper 15*
+*Last updated after: Paper 16*
