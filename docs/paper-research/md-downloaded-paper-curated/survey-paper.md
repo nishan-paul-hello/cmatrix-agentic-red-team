@@ -38,7 +38,7 @@
 | 25 | BountyBench: Dollar Impact of AI Agent Attackers and Defenders | [📄 notes](survey-notes/25-bountybench-dollar-impact-of-ai-agent-attackers-and-defenders.md) | ✅ Done |
 | 26 | Forewarned is Forearmed: A Survey on LLM-Based Agents in Security | — | ⏳ Pending |
 | 27 | A Survey on LLM-Based Autonomous Agents | — | ⏳ Pending |
-| 28 | CVE-Bench: A Benchmark for AI Agents Exploiting Real-World Web Apps | — | ⏳ Pending |
+| 28 | CVE-Bench: A Benchmark for AI Agents Exploiting Real-World Web Apps | [📄 notes](survey-notes/28-cve-bench-a-benchmark-for-ai-agents-ability-to-exploit-real-world-web-application-vulnerabilities.md) | ✅ Done |
 | 29 | LLM Agents can Autonomously Hack Websites | [📄 notes](survey-notes/29-llm-agents-can-autonomously-hack-websites.md) | ✅ Done |
 
 ---
@@ -227,8 +227,9 @@
 | PentestEval (12 real-world web app scenarios) | Paper 24 | 12 Docker-containerized scenarios (ThinkPHP, ShowDoc, JimuReport, Struts2, Nexus, ZenTao, Flask/Jinja2, Spring/Fastjson, FastAPI, GoAhead, Jenkins+Redis); 346 tasks across 5 stages (WG, WF, ADM, EG, ER); 9 models evaluated; includes 1 zero-day scenario; expert-annotated ground truth by 5 pentesters; 3000+ stage evaluations + 180 E2E runs | Per-stage metrics: WG/WF Jaccard; ADM Spearman rank correlation; EG syntax % + functional %; ER repair rate; E2E success rate; Best: Qwen-Max overall 0.51; Fully autonomous agents: PentestAgent 3%, VulnBot 6%; SMP 31%; SMP-GT-ADM 67% |
 | BountyBench (25 real open-source systems) | Paper 25 | 25 real production open-source systems (gradio, mlflow, langchain, fastapi, django, curl, vllm, etc.); 40 bug bounties with real dollar awards ($10–$30,485); 120 tasks (Detect×40, Exploit×40, Patch×40); 27 CWEs across 9 OWASP Top 10; 10 agents evaluated; 85% of bounties disclosed 2024–25 (post-cutoff contamination minimized) | Detect % (zero-day hunt), Exploit %, Patch %; dollar value of successfully completed tasks; net $/min; token cost per run; Best Detect: Codex CLI o3-high 12.5% ($3,720); Best Exploit: Claude 3.7 Thinking 67.5%; Best Patch: Codex CLI o3-high and o4-mini 90% ($14K+) |
 | CVE-Bench | Paper 28 | Real-world web app CVEs | — |
+| CVE-Bench (40 Critical CVEs) | Paper 28 | 40 real CVEs (CVSS ≥9.0), published May–Jun 2024; 10 app categories: WordPress (12), AI/ML (7), Business Mgmt (6), Web Infra (3); 8 attack types (DoS, File Access, File Creation, DB Mod, DB Access, Admin Login, PrivEsc, SSRF); Docker isolated with evaluation server oracle (:9091/done) | pass@1 and pass@5 per agent; T-Agent: 13% one-day / 10% zero-day (SOTA); Cy-Agent: 2.5% / 8%; AutoGPT: 5% / 10%; ZAP: 0%; Llama 3.1: 0%; full run cost <$100 |
 | 15-Vulnerability Web Hacking Suite | Paper 29 | LFI, CSRF, XSS, SQLi, Brute Force, SQL Union, SSTI, Webhook XSS, File Upload, AuthBypass, SSRF, JS Attacks, Hard SQLi, Hard SQL Union, XSS+CSRF; sandboxed Docker sites | pass@5 oracle (1/5 successes); GPT-4: 73.3% pass@5 / 42.7% pass@1; all open-source models: 0%; $9.81/successful hack |
 
 ---
 
-*Last updated after: Papers 01–25 + 29*
+*Last updated after: Papers 01–25 + 28 + 29*
