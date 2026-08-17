@@ -16,7 +16,7 @@
 | 03 | Multi-Agent Penetration Testing AI for the Web | [📄 notes](survey-notes/03-multi-agent-penetration-testing-ai-for-the-web.md) | ✅ Done |
 | 04 | AWE: Adaptive Agents for Dynamic Web Penetration Testing | [📄 notes](survey-notes/04-awe-adaptive-agents-for-dynamic-web-penetration-testing.md) | ✅ Done |
 | 05 | AutoPT: How Far Are We from End2End Automated Web Pentesting | [📄 notes](survey-notes/05-autopt-how-far-are-we-from-the-end2end-automated-web.md) | ✅ Done |
-| 06 | HackWorld: Evaluating Computer Use Agents on Exploiting Web | — | ⏳ Pending |
+| 06 | HackWorld: Evaluating Computer Use Agents on Exploiting Web | [📄 notes](survey-notes/06-hackworld-evaluating-computer-use-agents-on-exploiting-web.md) | ✅ Done |
 | 07 | PrediQL: Automated Testing of GraphQL APIs with LLMs | — | ⏳ Pending |
 | 08 | RESTler: Stateful REST API Fuzzing | — | ⏳ Pending |
 | 09 | Getting Pwnd by AI: Penetration Testing with LLMs | — | ⏳ Pending |
@@ -52,11 +52,15 @@
 |-------|--------|--------|
 | Agent Core | ReAct loop (Reason → Act → Observe) | Paper 01 |
 | Context / RAG | CVE/NVD description retrieval before task launch | Paper 01 |
-| Tool Suite | Browser (Playwright) + Shell + Search + FileIO + CodeExec + sqlmap + nmap + ffuf + Xray | Papers 01–05 |
+| Tool Suite | Browser (Playwright) + Shell + Search + FileIO + CodeExec + sqlmap + nmap -p- -sV + ffuf + Xray + Nikto + WhatWeb + Burp Collaborator | Papers 01–06 |
 | Memory | State-partitioned inter-state summaries (no accumulated history) + SQLite per-specialist | Papers 01, 02, 04, 05 |
-| Orchestration | **PSM-inspired FSM**: Recon → Vuln Prioritization (Rule) → Specialist → PoC Assembly → Validation (Rule+Agent) | Papers 02, 03, 05 |
+| Orchestration | PSM-inspired FSM: Recon → Vuln Prioritization (Rule) → Specialist → PoC Assembly → Validation (Rule+Agent) | Papers 02, 03, 05 |
 | Control Flow | Rule States (zero LLM cost) for filtering + Agent States for reasoning — deterministic state transitions | Paper 05 |
 | Loop Prevention | Hard retry threshold: N failures → jump to next vuln candidate; never exhaust budget on one PoC | Paper 05 |
+| Closed Observation Loop | After every tool call, a parsing step extracts relevant findings before next LLM action (no silent tool runs) | Paper 06 |
+| Session Management | Foundation Layer persists auth state across all agents: cookies, CSRF tokens, JWT, session IDs | Paper 06 |
+| Recon Baseline | Always run nmap -p- -sV (full port scan) + WhatWeb before any exploit attempt | Papers 05, 06 |
+| Tool Output Normalization | AX-compliant wrappers normalize all tool output to structured JSON before LLM ingestion | Paper 06 |
 | Specialists | Per-vuln-class agents with deterministic structured pipelines: XSS 5-phase, SQLi timing-oracle, SSTI fingerprinting | Papers 02, 04 |
 | XSS Specialist | 5-phase pipeline: canary injection → context analysis → filter probing → LLM mutation → Playwright verification | Paper 04 |
 | Blind SQLi Specialist | Timing-oracle binary search loop: baseline → SLEEP probes → bit extraction → memory-guided retry | Paper 04 |
@@ -67,11 +71,11 @@
 | Browser Verification | Playwright headless Chromium with DOM mutation + console log confirmation | Papers 02, 04 |
 | Output Management | HTML pre-processor (strip rendering tags) + inter-state summary (not full history) | Papers 01, 02, 05 |
 | Cross-Agent Synthesis | Team Manager synthesizes results across agent runs, refines next dispatch | Paper 02 |
-| Recon Layer | Endpoint fuzzing + form parsing + tech fingerprinting + Xray CVE scanner | Papers 02, 03, 04, 05 |
+| Recon Layer | Endpoint fuzzing + form parsing + tech fingerprinting + Xray CVE scanner + full nmap | Papers 02–06 |
 | Cost Accounting | Per-mission: input/output/cached/reasoning tokens + tool calls + wall-clock time + USD | Paper 03 |
 | Early Stopping | Stop at: 40+ tool calls OR $0.30 cost OR 300s without progress; OR retry threshold exceeded | Papers 03, 05 |
-| Model Selection | Orchestration: GPT-4/GPT-5; Injection Specialists: Claude Sonnet 4; Budget option: GPT-4o mini | Papers 04, 05 |
-| Observability | Pass@1, Pass@5, cost-per-exploit, refusal rate, tokens-per-solve, simple vs complex task split | Papers 01–05 |
+| Model Selection | Do not assume newest model is best; empirically benchmark on actual challenge suite | Papers 04, 05, 06 |
+| Observability | Pass@1, Pass@5, cost-per-exploit, refusal rate, tokens-per-solve, 8-failure-mode QA gate | Papers 01–06 |
 
 ---
 
@@ -85,6 +89,8 @@
 | XBOW 104 CTF Challenges | Papers 03, 04 | 13 vuln categories, 8/10 OWASP Top 10 | Blackbox CTF, flag-based binary oracle |
 | DVWA | Paper 04 | Injection classes (XSS, SQLi) with configurable difficulty | Controlled model ablation, 10 trials per vuln type |
 | AutoPT Benchmark (20 Vulhub CVEs) | Paper 05 | OWASP Top 10 2023, simple vs complex stratification | End-to-end blackbox, verification string oracle |
+| HackWorld (36 Web CTFs) | Paper 06 | 7 languages, 11 frameworks; NYU CTF Bench + Cybench + InterCode | GUI-based CUA evaluation, flag-based oracle |
+| NYU CTF Bench (26 CSAW Challenges) | Paper 06 | CSAW 2013–2023, Quals + Finals | Standalone CTF challenges, web-specific |
 | CyBench | Paper 23 | CTF-style cybersecurity tasks | — |
 | PentestEval | Paper 24 | LLM pentest structured eval | — |
 | BountyBench | Paper 25 | Real-world bug bounty dollar impact | — |
@@ -92,4 +98,4 @@
 
 ---
 
-*Last updated after: Paper 05*
+*Last updated after: Paper 06*
