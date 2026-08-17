@@ -18,7 +18,7 @@
 | 05 | AutoPT: How Far Are We from End2End Automated Web Pentesting | [📄 notes](survey-notes/05-autopt-how-far-are-we-from-the-end2end-automated-web.md) | ✅ Done |
 | 06 | HackWorld: Evaluating Computer Use Agents on Exploiting Web | [📄 notes](survey-notes/06-hackworld-evaluating-computer-use-agents-on-exploiting-web.md) | ✅ Done |
 | 07 | PrediQL: Automated Testing of GraphQL APIs with LLMs | [📄 notes](survey-notes/07-prediql-automated-testing-of-graphql-apis-with-llms.md) | ✅ Done |
-| 08 | RESTler: Stateful REST API Fuzzing | — | ⏳ Pending |
+| 08 | RESTler: Stateful REST API Fuzzing | [📄 notes](survey-notes/08-restler-stateful-rest-api-fuzzing.md) | ✅ Done |
 | 09 | Getting Pwnd by AI: Penetration Testing with LLMs | — | ⏳ Pending |
 | 10 | PentestGPT: Evaluating and Harnessing LLMs for Automated Pentest | — | ⏳ Pending |
 | 11 | What Makes a Good LLM Agent for Real-World Penetration Testing | — | ⏳ Pending |
@@ -67,6 +67,10 @@
 | XSS Specialist | 5-phase pipeline: canary injection → context analysis → filter probing → LLM mutation → Playwright verification | Paper 04 |
 | Blind SQLi Specialist | Timing-oracle binary search loop: baseline → SLEEP probes → bit extraction → memory-guided retry | Paper 04 |
 | GraphQL Specialist | Introspection → dependency graph → depth-abuse + batch-bypass + IDOR chain testing | Paper 07 |
+| REST Specialist | Producer-consumer dependency inference from OpenAPI/Swagger spec; dynamic 2xx feedback pruning; RandomWalk strategy; 500-error oracle | Paper 08 |
+| Garbage Collector | Periodic DELETE of aging test resources to avoid quota exhaustion during long-running missions | Paper 08 |
+| Auth Hook | Periodic token-refresh script execution to handle short-lived OAuth/JWT tokens during fuzzing | Paper 08 |
+| Bug Deduplication | Bucketize findings by shortest suffix match of triggering sequence — avoid duplicate reports | Paper 08 |
 | Domain Knowledge | 5–6 curated documents injected per specialist at task start | Paper 02 |
 | Execution Isolation | Per-mission Docker container (ephemeral, shared by all agents in a mission) | Paper 03 |
 | Context Isolation | Separate LLM context per agent state; shared Docker state | Papers 03, 05 |
@@ -95,6 +99,7 @@
 | HackWorld (36 Web CTFs) | Paper 06 | 7 languages, 11 frameworks; NYU CTF Bench + Cybench + InterCode | GUI-based CUA evaluation, flag-based oracle |
 | NYU CTF Bench (26 CSAW Challenges) | Paper 06 | CSAW 2013–2023, Quals + Finals | Standalone CTF challenges, web-specific |
 | PrediQL GraphQL APIs (6 APIs) | Paper 07 | GraphQL: UserWallet, Countries, Rick&Morty, GraphQLZero, EHRI, TCGDex | Schema coverage + vuln detection, GraphQL-specific |
+| RESTler Benchmark (GitLab + Azure) | Paper 08 | REST APIs: 6 GitLab API groups + 4 Azure/Office365 services | Stateful sequence fuzzing, 500-error oracle; 28+ confirmed bugs |
 | CyBench | Paper 23 | CTF-style cybersecurity tasks | — |
 | PentestEval | Paper 24 | LLM pentest structured eval | — |
 | BountyBench | Paper 25 | Real-world bug bounty dollar impact | — |
@@ -102,4 +107,4 @@
 
 ---
 
-*Last updated after: Paper 07*
+*Last updated after: Paper 08*
