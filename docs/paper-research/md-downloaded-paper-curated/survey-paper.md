@@ -20,7 +20,7 @@
 | 07 | PrediQL: Automated Testing of GraphQL APIs with LLMs | [📄 notes](survey-notes/07-prediql-automated-testing-of-graphql-apis-with-llms.md) | ✅ Done |
 | 08 | RESTler: Stateful REST API Fuzzing | [📄 notes](survey-notes/08-restler-stateful-rest-api-fuzzing.md) | ✅ Done |
 | 09 | Getting Pwnd by AI: Penetration Testing with LLMs | [📄 notes](survey-notes/09-getting-pwnd-by-ai-penetration-testing-with-large-language.md) | ✅ Done |
-| 10 | PentestGPT: Evaluating and Harnessing LLMs for Automated Pentest | — | ⏳ Pending |
+| 10 | PentestGPT: Evaluating and Harnessing LLMs for Automated Pentest | [📄 notes](survey-notes/10-pentestgpt-evaluating-and-harnessing-large-language-models-for-automated-penetration-testing.md) | ✅ Done |
 | 11 | What Makes a Good LLM Agent for Real-World Penetration Testing | — | ⏳ Pending |
 | 12 | VulnBot: Autonomous Penetration Testing for a Multi-Agent System | — | ⏳ Pending |
 | 13 | PentestAgent: Incorporating LLM Agents to Automated Pentesting | — | ⏳ Pending |
@@ -89,6 +89,13 @@
 | Reflection Filter | After every tool call: raw_output → GPT-4o-mini (ReflectionFilter) → structured finding JSON or null; only non-null findings enter inter-state summary — prevents context flooding with shell noise | Paper 09 |
 | MITRE ATT&CK Planner Seed | Inject applicable ATT&CK technique IDs (T1190, T1059, T1078, T1110, T1212 for web targets) into Planner prompt as seed list; Planner reasons over this list to produce Team Manager dispatch priority queue | Paper 09 |
 | Pluggable Model Backend | CMatrix model config supports OpenAI API, Anthropic API, local Ollama backends — allows data-sensitive engagements to run fully local without cloud data exfiltration | Paper 09 |
+| PTT JSON State Object | Pentesting Task Tree stored as structured JSON (target, phases, findings, candidate_next_tasks, status per node); injected as fixed token chunk into every Team Manager prompt — never the rolling conversation history | Paper 10 |
+| Session Isolation: Reason vs Generate | Team Manager (Reasoning) = session A, persistent; Specialist (Generation) = session B, fresh per sub-task; session B receives only PTT context + sub-task; its output feeds back to session A only as structured finding update — never raw conversation | Paper 10 |
+| Two-Step CoT in Generation | Specialist prompt always: Step 1 expand sub-task to numbered step list → Step 2 convert each step to concrete terminal command; never jump directly from sub-task to command — reduces false command generation by forcing explicit reasoning | Paper 10 |
+| Six-Failure-Mode QA Gate | Track per-mission: context_loss_events, false_command_rate, deadlock_events, false_output_parse_rate, exploit_craft_failures, hallucination_events; report in observability dashboard alongside Pass@1 and cost | Paper 10 |
+| Parsing Module: Four Input Categories | Reflection Filter uses category-specific prompts: (1) user intent, (2) security tool output, (3) raw HTTP response, (4) source code; category selected by classifier before compression — generic single-prompt compression is insufficient | Paper 10 |
+| Candidate Task Enumeration before Selection | After each specialist completes, Team Manager enumerates all PTT leaf candidates, scores each (severity × confidence × surface coverage), selects top candidate explicitly — never implicit next-task from LLM continuation | Paper 10 |
+| Jailbreak Prompt Library | Maintain categorized jailbreak variants: (a) verification/audit framing, (b) certified-pentester role context, (c) semantic substitutions; refusal rate tracked as first-class metric; high refusal triggers automatic prompt variant selection | Papers 09, 10 |
 
 ---
 
@@ -107,6 +114,9 @@
 | PrediQL GraphQL APIs (6 APIs) | Paper 07 | GraphQL: UserWallet, Countries, Rick&Morty, GraphQLZero, EHRI, TCGDex | Schema coverage + vuln detection, GraphQL-specific |
 | RESTler Benchmark (GitLab + Azure) | Paper 08 | REST APIs: 6 GitLab API groups + 4 Azure/Office365 services | Stateful sequence fuzzing, 500-error oracle; 28+ confirmed bugs |
 | lin.security VM (VulnHub #244) | Paper 09 | Single Linux VM; priv-esc via sudo GTFObins, shadow passwd, SUID | SSH closed-loop; root shell oracle; manual inspection; single-step success, multi-step failure |
+| PentestGPT Benchmark (13 machines, 182 sub-tasks) | Paper 10 | 7 Easy + 4 Medium + 2 Hard; HTB + VulnHub; all OWASP Top 10; 18 CWE items; 26 categories | Sub-task completion oracle; 3 certified pentesters wrote walkthroughs; post-2021 machines (training contamination guard) |
+| HackTheBox Active Machines (10 machines) | Paper 10 | 5 Easy + 5 Medium; real-world post-2021 machines; root flag oracle | 5 trials per machine; 17/50 trial successes; $131.5 USD total; $21.9/machine avg |
+| picoMini CTF (21 challenges, 248 teams) | Paper 10 | Web + crypto + binary + reverse + forensics; CMU/redpwn; web-specific: login, caas, notepad | Flag oracle; 9/21 solved; 24th/248 teams; $5.1 USD/attempt avg |
 | CyBench | Paper 23 | CTF-style cybersecurity tasks | — |
 | PentestEval | Paper 24 | LLM pentest structured eval | — |
 | BountyBench | Paper 25 | Real-world bug bounty dollar impact | — |
@@ -114,4 +124,4 @@
 
 ---
 
-*Last updated after: Paper 09*
+*Last updated after: Paper 10*
