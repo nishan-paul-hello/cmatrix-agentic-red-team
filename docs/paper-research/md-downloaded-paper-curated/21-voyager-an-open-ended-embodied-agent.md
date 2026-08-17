@@ -43,26 +43,26 @@ We argue that an effective lifelong learning agent should have similar capabilit
 
 ```mermaid
 graph TD
-    subgraph Automatic Curriculum
+    subgraph AC ["Automatic Curriculum"]
         A[Mine Wood Log] --> B[Make Crafting Table]
         B --> C[Combat Zombie]
         C --> D[Mine Diamond]
         D --> A
     end
 
-    subgraph Iterative Prompting Mechanism
-        E[New Task] --> F[Action Agent / GPT-4]
+    subgraph IPM ["Iterative Prompting Mechanism"]
+        E[New Task] --> F["Action Agent / GPT-4"]
         F --> G[Code as Actions]
-        G --> H[Environment / Minecraft]
-        H --> I[Env Feedback & Execution Errors]
+        G --> H["Environment / Minecraft"]
+        H --> I["Env Feedback & Execution Errors"]
         I --> F
         H --> J[Self-Verification]
-        J -- Fail --> K[Refine Program]
+        J -- "Fail" --> K[Refine Program]
         K --> F
-        J -- Success --> L[Add New Skill]
+        J -- "Success" --> L[Add New Skill]
     end
 
-    subgraph Skill Library
+    subgraph SL ["Skill Library"]
         M[Mine Wood Log]
         N[Make Crafting Table]
         O[Craft Stone Sword]
@@ -72,10 +72,10 @@ graph TD
         S[Combat Zombie]
     end
 
-    Automatic Curriculum -->|New Task| Iterative Prompting Mechanism
-    Iterative Prompting Mechanism -->|Skill Retrieval| Skill Library
-    Skill Library -->|Retrieved Skills| Iterative Prompting Mechanism
-    Iterative Prompting Mechanism -->|Update Exploration Progress| Automatic Curriculum
+    AC -->|New Task| IPM
+    IPM -->|Skill Retrieval| SL
+    SL -->|Retrieved Skills| IPM
+    IPM -->|Update Exploration Progress| AC
 ```
 *Figure 2: VOYAGER consists of three key components: an automatic curriculum for open-ended exploration, a skill library for increasingly complex behaviors, and an iterative prompting mechanism that uses code as action space.*
 
