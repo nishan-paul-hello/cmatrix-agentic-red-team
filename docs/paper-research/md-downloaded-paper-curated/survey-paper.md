@@ -14,7 +14,7 @@
 | 01 | LLM Agents can Autonomously Exploit One-Day Vulnerabilities | [📄 notes](survey-notes/01-llm-agents-can-autonomously-exploit-one-day-vulnerabilities.md) | ✅ Done |
 | 02 | Teams of LLM Agents can Exploit Zero-Day Vulnerabilities | [📄 notes](survey-notes/02-teams-of-llm-agents-can-exploit-zero-day-vulnerabilities.md) | ✅ Done |
 | 03 | Multi-Agent Penetration Testing AI for the Web | [📄 notes](survey-notes/03-multi-agent-penetration-testing-ai-for-the-web.md) | ✅ Done |
-| 04 | AWE: Adaptive Agents for Dynamic Web Penetration Testing | — | ⏳ Pending |
+| 04 | AWE: Adaptive Agents for Dynamic Web Penetration Testing | [📄 notes](survey-notes/04-awe-adaptive-agents-for-dynamic-web-penetration-testing.md) | ✅ Done |
 | 05 | AutoPT: How Far Are We from End2End Automated Web Pentesting | — | ⏳ Pending |
 | 06 | HackWorld: Evaluating Computer Use Agents on Exploiting Web | — | ⏳ Pending |
 | 07 | PrediQL: Automated Testing of GraphQL APIs with LLMs | — | ⏳ Pending |
@@ -53,19 +53,23 @@
 | Agent Core | ReAct loop (Reason → Act → Observe) | Paper 01 |
 | Context / RAG | CVE/NVD description retrieval before task launch | Paper 01 |
 | Tool Suite | Browser (Playwright/JS-aware) + Shell + Search + FileIO + CodeExec + sqlmap + nmap + ffuf | Papers 01, 02, 03 |
-| Memory | Stateful action history (100+ steps); scoped per specialist | Papers 01, 02 |
-| Orchestration | 4-layer hierarchy: Planner → Team Manager → Specialists → **Validation Agent** | Papers 02, 03 |
-| Specialists | Per-vuln-class agents (XSS, SQLi, CSRF, SSTI, RCE, Recon, Generic) with domain docs | Paper 02 |
+| Memory | Stateful action history scoped per specialist + **SQLite persistence (short-term filter state + long-term bypass history)** | Papers 01, 02, 04 |
+| Orchestration | 4-layer hierarchy: Planner → Team Manager → Specialists → Validation Agent | Papers 02, 03 |
+| Specialists | Per-vuln-class agents with **deterministic structured pipelines** (not just prompts): XSS 5-phase, SQLi timing-oracle, SSTI fingerprinting | Papers 02, 04 |
+| XSS Specialist | 5-phase pipeline: canary injection → context analysis → filter probing → LLM mutation → Playwright browser verification | Paper 04 |
+| Blind SQLi Specialist | Timing-oracle binary search loop: baseline → SLEEP probes → bit extraction → memory-guided retry | Paper 04 |
 | Domain Knowledge | 5–6 curated documents injected per specialist at task start | Paper 02 |
 | Execution Isolation | Per-mission Docker container (ephemeral, shared by all agents in a mission) | Paper 03 |
 | Context Isolation | Separate LLM context per sandbox agent; shared Docker state | Paper 03 |
 | PoC Validation | Mandatory Validation Agent confirms every finding by concrete execution | Paper 03 |
+| Browser Verification | Playwright headless Chromium with DOM mutation + console log confirmation for XSS | Papers 02, 04 |
 | Output Management | HTML pre-processor (strip image/svg/style tags) + summarization | Papers 01, 02 |
 | Cross-Agent Synthesis | Team Manager synthesizes results across agent runs, refines next dispatch | Paper 02 |
-| Recon Layer | Endpoint fuzzing (gobuster/feroxbuster/ffuf) before attack agents launch | Papers 02, 03 |
+| Recon Layer | Endpoint fuzzing + form parsing + tech fingerprinting before attack agents | Papers 02, 03, 04 |
 | Cost Accounting | Per-mission: input/output/cached/reasoning tokens + tool calls + wall-clock time + USD | Paper 03 |
 | Early Stopping | Stop at: 40+ tool calls OR $0.30 cost OR 300s without progress | Paper 03 |
-| Observability | Pass@1, Pass@5, cost-per-exploit, refusal rate per model | Papers 01, 02, 03 |
+| Model Selection | Orchestration: GPT-4/GPT-5; Injection Specialists: Claude Sonnet 4 | Paper 04 |
+| Observability | Pass@1, Pass@5, cost-per-exploit, refusal rate, tokens-per-solve | Papers 01, 02, 03, 04 |
 
 ---
 
@@ -76,7 +80,8 @@
 |-----------|-------|-------|------|
 | 15 Real-World One-Day CVEs | Paper 01 | Web apps, containers, Python packages | Exploitation with CVE hint |
 | 14 Real-World Zero-Day CVEs | Paper 02 | Web apps only (XSS, SQLi, CSRF, privesc) | Autonomous discovery + exploitation |
-| XBOW 104 CTF Challenges | Paper 03 | 13 vuln categories, 8/10 OWASP Top 10 | Blackbox CTF, flag-based binary oracle |
+| XBOW 104 CTF Challenges | Papers 03, 04 | 13 vuln categories, 8/10 OWASP Top 10 | Blackbox CTF, flag-based binary oracle |
+| DVWA | Paper 04 | Injection classes (XSS, SQLi) with configurable difficulty | Controlled model ablation, 10 trials per vuln type |
 | CyBench | Paper 23 | CTF-style cybersecurity tasks | — |
 | PentestEval | Paper 24 | LLM pentest structured eval | — |
 | BountyBench | Paper 25 | Real-world bug bounty dollar impact | — |
@@ -84,4 +89,4 @@
 
 ---
 
-*Last updated after: Paper 03*
+*Last updated after: Paper 04*
