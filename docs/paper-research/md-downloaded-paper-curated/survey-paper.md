@@ -29,7 +29,7 @@
 | 16 | Incalmo: Autonomous LLM-Assisted System for Red Teaming Multi-Host Networks | [📄 notes](survey-notes/16-incalmo-an-autonomous-llm-assisted-system-for-red-teaming.md) | ✅ Done |
 | 17 | Can LLMs Hack Enterprise Networks? Autonomous Assumed Breach (cochise/GOAD) | [📄 notes](survey-notes/17-can-llms-hack-enterprise-networks-autonomous-assumed-breach.md) | ✅ Done |
 | 18 | Co-RedTeam: Orchestrated Security Discovery and Exploitation | [📄 notes](survey-notes/18-co-redteam-orchestrated-security-discovery-and-exploitation.md) | ✅ Done |
-| 19 | AutoGen: Next-Gen LLM Multi-Agent Conversations | — | ⏳ Pending |
+| 19 | AutoGen: Next-Gen LLM Multi-Agent Conversations | [📄 notes](survey-notes/19-autogen-next-gen-llm-multi-agent-conversations.md) | ✅ Done |
 | 20 | MetaGPT: Meta-Programming for Multi-Agent Frameworks | — | ⏳ Pending |
 | 21 | Voyager: An Open-Ended Embodied Agent | — | ⏳ Pending |
 | 22 | Reflexion: Language Agents with Verbal RL | — | ⏳ Pending |
@@ -152,6 +152,11 @@
 | Warm-Start + Evolving Memory Initialization | Pre-populate all memory tiers with curated CWE/OWASP/HackTricks patterns before mission zero (warm start); enable write-back after every mission (evolving); Warm-Start+Evolving > Cold-Start+Evolving > Static Memory > No Memory; Cold-Start eventually closes gap to Warm-Start, but Warm-Start eliminates early-mission performance deficit critical for production | Papers 04, 07, 18 |
 | Analysis–Critique Loop for Discovery Phase | For source-code-assisted missions: add Critique Agent that reviews each vulnerability proposal for evidence quality (requires file+line), risk level (Critical/High/Medium/Low/Info), and feasibility; NEEDS_REFINEMENT triggers re-analysis; REJECTED dropped; ≤3 refinement rounds; yields ~6× higher precision vs no critique (0.143 vs 0.024 on BountyBench Detect) | Paper 18 |
 | Four Code Analysis Mental Models | When performing source-code-aware scanning, inject 4 structured mental models into Analysis Agent prompt: (1) Taint Analysis — request.args to cursor.execute/eval/subprocess.call; (2) Trust Boundary Mapping — untrusted to trusted crossings without auth check; (3) Config/Dependency Audit — Dockerfile/requirements.txt for DEBUG=True, hardcoded secrets; (4) Business Logic Tracing — IDOR and multi-step workflow bypass | Paper 18 |
+| Unified Agent Interface: send/receive/generate_reply | Every CMatrix agent exposes the same 3-method interface: send(message, recipient), receive(message, sender), generate_reply()→message; this unified interface enables composable, reusable agent topologies without bespoke integration code; Team Manager dispatches to any Specialist via identical API; Specialist result returned as conversation summary — origin: AutoGen ConversableAgent | Papers 02, 12, 15, 19 |
+| 5-Layer System Message for All Agents | Every agent system prompt must include all 5 layers in order: (1) Role Play — persona + capability declaration, (2) Control Flow — when to plan vs. execute, (3) Output Confine — format constraints for machine parsing, (4) Facilitate Automation — generate complete runnable commands not partial ones, (5) Grounding — self-repair on error; GPT-4 follows all 5 significantly better than GPT-3.5-turbo; missing any layer degrades reliability | Papers 10, 13, 17, 19 |
+| Domain Knowledge Grounding Agent | Add a Domain Knowledge Agent per vuln class that activates when a Specialist has repeated the same action type 3× without progress; injects authoritative domain constraints (e.g., 'SSRF requires reaching internal endpoint first; confirm with curl http://internal-target'); complement to Rabbit-Hole counter (Papers 09/17): detect → inject knowledge → if still stuck → force FSM transition | Papers 09, 17, 19 |
+| Interactive RAG with Update-Context Signal | When Specialist cannot find relevant procedure in retrieval results, it signals RETRIEVAL_FAILED to trigger a broader search before declaring no exploit available; 19.4% of queries in AutoGen's RAG experiment benefited from this second retrieval round; combine with Two-Stage RAG from Paper 12: two-stage ranking (cosine top-20 → reranker top-3) + interactive update-context loop for insufficient top-3 | Papers 01, 07, 12, 19 |
+| Role-Play Speaker Selection for Dynamic Dispatch | When Team Manager selects next specialist, use role-play framing: 'Given the current pentest state and findings, which specialist role should investigate next: [list with role descriptions]?'; role-play outperforms task-based prompt by 3/12 tasks (11 vs 8) and eliminates termination failures in AutoGen's ablation; CMatrix Team Manager dispatch prompt should frame specialists as red-team roles, not task executors | Papers 02, 15, 19 |
 
 ---
 
@@ -187,6 +192,8 @@
 | CyBench (33 challenges, CO-REDTEAM eval) | Papers 06, 15, 18 | CTF-style code + execution environment challenges; CO-REDTEAM 63.7% with Gemini-3-pro vs C-Agent best 47.8% | Code execution oracle; flag capture; 20-iteration exploitation loop |
 | BountyBench (40 Exploit + 40 Detect tasks) | Paper 18 | Real-world bug bounty tasks on open-source repos; Detect: identify vuln from code; Exploit: generate working PoC script | exit 0 from exploit.sh (exploit); correct vuln identification (detect); CO-REDTEAM: 65.0% exploit / 20.0% detect with Gemini-3-pro |
 | CyberGym (large-scale CVE reproduction) | Paper 18 | Realistic CVE reproduction tasks emphasizing executable PoC generation; large-scale (80+ tasks) | Successful PoC execution exit 0; CO-REDTEAM 37.3% with Gemini-3-pro vs 21.5% best baseline |
+| MATH Dataset (5000 problems) | Paper 19 | Symbolic math problem solving; AutoGen 69.48% vs GPT-4 vanilla 55.18% (+14.3pp); two-agent AssistantAgent+UserProxyAgent | Code execution oracle (sympy); flag=correct symbolic form |
+| ALFWorld (134 tasks) | Paper 19 | Text-world household decision making; 3-agent (+ GroundingAgent) 69% avg vs 2-agent 54% avg (+15pp) | Task completion oracle; best-of-3: 77% vs 63% |
 | CyBench | Paper 23 | CTF-style cybersecurity tasks | — |
 | PentestEval | Paper 24 | LLM pentest structured eval | — |
 | BountyBench | Paper 25 | Real-world bug bounty dollar impact | — |
@@ -194,4 +201,4 @@
 
 ---
 
-*Last updated after: Paper 18*
+*Last updated after: Paper 19*
