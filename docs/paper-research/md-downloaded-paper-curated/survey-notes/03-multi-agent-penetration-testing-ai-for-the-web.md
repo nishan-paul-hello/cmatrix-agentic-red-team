@@ -1,7 +1,13 @@
 # Multi-Agent Penetration Testing AI for the Web — Deep Survey Notes for CMatrix
 
-> **Citation:** David, I., & Gervais, A. (2025). *Multi-Agent Penetration Testing AI for the Web.* arXiv:2508.20816v1. University College London.
-> **Relevance to CMatrix:** ⭐⭐⭐⭐⭐ — The most production-grade open-source multi-agent pentest system in the survey. Introduces mandatory PoC validation, rigorous cost-performance accounting, and the XBOW benchmark. CMatrix should adopt MAPTA's three-role architecture and early-stopping heuristics directly.
+| Field | Details |
+|-------|---------|
+| **Authors** | Isaac David, Arthur Gervais (University College London) |
+| **Venue** | arXiv:2508.20816v1 |
+| **Published** | 28 August 2025 |
+| **Repository** | https://github.com/arthurgervais/mapta · Fixed XBOW images: https://github.com/arthurgervais/validation-benchmarks |
+| **Relevance** | ⭐⭐⭐⭐⭐ — Most production-grade open-source multi-agent pentest system in the survey. Introduces mandatory PoC validation, rigorous cost-performance accounting, and the XBOW benchmark. |
+| **Key Claim** | MAPTA achieves 76.9% on 104 XBOW challenges at $21.38 total ($0.073 median per success); mandatory Validation Agent eliminates false positives; success strongly anticorrelates with resource use (r = -0.661). |
 
 ---
 
