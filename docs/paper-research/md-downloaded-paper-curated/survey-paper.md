@@ -24,7 +24,7 @@
 | 11 | What Makes a Good LLM Agent for Real-World Penetration Testing | [📄 notes](survey-notes/11-what-makes-a-good-llm-agent-for-real-world-penetration.md) | ✅ Done |
 | 12 | VulnBot: Autonomous Penetration Testing for a Multi-Agent System | [📄 notes](survey-notes/12-vulnbot-autonomous-penetration-testing-for-a-multi-agent.md) | ✅ Done |
 | 13 | PentestAgent: Incorporating LLM Agents to Automated Pentesting | [📄 notes](survey-notes/13-pentestagent-incorporating-llm-agents-to-automated.md) | ✅ Done |
-| 14 | Automated Penetration Testing with LLM Agents and Classical Planning | — | ⏳ Pending |
+| 14 | Automated Penetration Testing with LLM Agents and Classical Planning | [📄 notes](survey-notes/14-automated-penetration-testing-with-llm-agents-and-classical.md) | ✅ Done |
 | 15 | D-CIPHER: Dynamic Collaborative Intelligent Multi-Agent | — | ⏳ Pending |
 | 16 | InCALMo: Autonomous LLM-Assisted System for Red Teaming | — | ⏳ Pending |
 | 17 | Can LLMs Hack Enterprise Networks? Autonomous Assumed Breach | — | ⏳ Pending |
@@ -116,6 +116,13 @@
 | EPSS-Score CVE Prioritization | When multiple CVEs found for a service, rank by EPSS score (exploitation probability) NOT CVSS severity; formula: priority = epss_score × version_confidence; CVSS impact ignored for planning (relevant only for report severity); PentestAgent benchmark mean EPSS=79.58, median=97.19 confirms EPSS produces realistic targets | Paper 13 |
 | Exploit Fallback Chain | Every CVE in Procedure DB must have ≥2 exploit entries ranked by confidence; if Execution Agent hits same-error-twice stop condition on Exploit 1, automatically advance to Exploit 2; if all exploits for a CVE fail, mark attack surface exhausted in PTG and advance to next CVE — graceful degradation path | Papers 11, 13 |
 | Environmental Info DB | Shared queryable mission-state store accessible by all specialists: {target_ip, open_ports, services{port: version}, credentials, session_state{user, host}, exploit_history}; every specialist queries this DB rather than relying on conversational memory; complementary to PTG (task flow) — two separate linked stores | Papers 12, 13 |
+| PEP Paradigm | Decompose every pentest system as Planner (what to do next?), Executor (how to do it?), Perceptor (what did I see?); CMatrix mapping: Layer 2 Team Manager = Planner, Layer 3 Specialists = Executor, Summarizer Bridge = Perceptor; any component trying to be both Planner and Executor is a design flaw | Paper 14 |
+| Classical Planning+ Planner | Replace LLM-only planning with hybrid: Classical Solver enumerates all actions whose preconditions ⊆ current state S, LLM ranks applicable actions, executes best, Perceptor updates S; deterministic effects update S directly; non-deterministic effects resolved by LLM parsing execution output into symbolic predicates; eliminates action drift, repetition, and incoherence | Paper 14 |
+| Predefined Action Library | Define every specialized tool invocation as a YAML/JSON action template: {id, command_template, preconditions[], effect_type: det|nondet}; LLM never generates command flags/structure, only injects {parameter} values from current state predicates; covers 14K+ Metasploit modules, NSE scripts, Nuclei templates; eliminates tool-preference bias and command hallucination | Papers 13, 14 |
+| Anti-Drift Action De-registration | Once an action is executed (regardless of outcome), remove it from applicable action set; never re-execute same action in same session unless LLM explicitly re-adds with fresh justification; eliminates port-scan loops and repeated tool invocations — Claude Code's 26-step vs CHECKMATE's 3-step trace on same target | Paper 14 |
+| Dual Perceptor (Rule + LLM) | Route tool output by type: structured output (JSON, XML, nmap oN) → deterministic rule-based parser → predicates; unstructured output (banner text, HTML, error messages) → LLM perceptor → predicates; use LLM only when necessary; deterministic parsing reduces token cost 61% vs LLM-only perceptor | Paper 14 |
+| 11-Milestone Evaluation Framework | Adopt M1(enum)–M7(user-shell)–M9(root-shell)–M11(cred-exfil) milestone chain as primary CMatrix metric; strictly better than sub-task completion (doesn't show impact) or binary success/failure (too coarse); report % of targets reaching each milestone; stability = all-3-runs success rate + Coefficient of Variation on cost and time | Paper 14 |
+| Stability Measurement | Track Coefficient of Variation (CoV) of API cost and execution time across ≥3 repeated runs of same task; CHECKMATE: CoV cost=0.129, time=0.093; Claude Code: CoV cost=0.451, time=0.325; a system with 75% all-runs success rate is unacceptable for production VAPT despite good average performance | Paper 14 |
 
 ---
 
@@ -142,6 +149,7 @@
 | AUTOPENBENCH (33 tasks, 210 subtasks) | Paper 12 | 22 in-vitro (AC, WS, NS, CRPT) + 11 real-world CVEs incl. 2024 CVEs; 5 per-phase step limit | Subtask completion oracle; VulnBot-405B 69.05% subtask / 30.3% overall; beats GPT-4o 21.21% using open-source model |
 | AI-Pentest-Benchmark (13 VulnHub machines) | Papers 11, 12 | 6 machines tested in Paper 12 (Victim1, Library2, Sar, WestWild, Symfonos2, Funbox); Easy + Medium difficulty | Subtask completion rate oracle; VulnBot+RAG achieves 1.00 on WestWild (full autonomous) vs GPT-4o+Human 0.57 |
 | PentestAgent Benchmark (67 VulHub + 11 HTB) | Paper 13 | 67 VulHub Docker CVE envs: 32 CWE categories, 8 OWASP Top 10, 50 Easy + 11 Med + 6 Hard; selected by EPSS score (mean 79.58); 11 HackTheBox CTF (9 Easy + 1 Med + 1 Hard); Kali Linux attacker VM | Stage completion oracle (I.G./V.A./E.); GPT-4: 74.2% overall; beats PentestGPT+human 3.1× faster on I.G., 4.8× on E.; V.A. 100% regardless of model (Search Agent dominates) |
+| CHECKMATE Vulhub Benchmark (120 targets) | Paper 14 | 120 Vulhub Docker containers randomly sampled; largest pentest benchmark; HTB excluded (data contamination); Docker images anonymized; strict minimal-human-intervention policy | 11-milestone oracle (M1–M11); CHECKMATE: 88% M7 vs Claude Code ~65%; $0.56 vs $1.43 (61% cheaper); 6.9 min vs 11.8 min (42% faster); 100% all-runs stability vs 75% for Claude Code |
 | CyBench | Paper 23 | CTF-style cybersecurity tasks | — |
 | PentestEval | Paper 24 | LLM pentest structured eval | — |
 | BountyBench | Paper 25 | Real-world bug bounty dollar impact | — |
@@ -149,4 +157,4 @@
 
 ---
 
-*Last updated after: Paper 13*
+*Last updated after: Paper 14*
