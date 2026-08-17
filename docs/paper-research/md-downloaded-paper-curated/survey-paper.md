@@ -19,7 +19,7 @@
 | 06 | HackWorld: Evaluating Computer Use Agents on Exploiting Web | [📄 notes](survey-notes/06-hackworld-evaluating-computer-use-agents-on-exploiting-web.md) | ✅ Done |
 | 07 | PrediQL: Automated Testing of GraphQL APIs with LLMs | [📄 notes](survey-notes/07-prediql-automated-testing-of-graphql-apis-with-llms.md) | ✅ Done |
 | 08 | RESTler: Stateful REST API Fuzzing | [📄 notes](survey-notes/08-restler-stateful-rest-api-fuzzing.md) | ✅ Done |
-| 09 | Getting Pwnd by AI: Penetration Testing with LLMs | — | ⏳ Pending |
+| 09 | Getting Pwnd by AI: Penetration Testing with LLMs | [📄 notes](survey-notes/09-getting-pwnd-by-ai-penetration-testing-with-large-language.md) | ✅ Done |
 | 10 | PentestGPT: Evaluating and Harnessing LLMs for Automated Pentest | — | ⏳ Pending |
 | 11 | What Makes a Good LLM Agent for Real-World Penetration Testing | — | ⏳ Pending |
 | 12 | VulnBot: Autonomous Penetration Testing for a Multi-Agent System | — | ⏳ Pending |
@@ -83,6 +83,12 @@
 | Early Stopping | Stop at: 40+ tool calls OR $0.30 cost OR 300s without progress; OR retry threshold exceeded | Papers 03, 05 |
 | Model Selection | Empirically ablate cheap models first; pipeline architecture dominates model size (confirmed in 3 papers) | Papers 04, 05, 06, 07 |
 | Observability | Pass@1, Pass@5, cost-per-exploit, refusal rate, tokens-per-solve, 8-failure-mode QA gate, coverage % | Papers 01–07 |
+| Verification Prompt Framing | Replace all offensive language in prompts with audit/verification framing: "verification payload" not "exploit", "confirmation commands" not "attack"; append "do not ask questions or provide judgments" to all command-gen system prompts | Paper 09 |
+| Protocol Log Anti-Hallucination | Per-mission execution log of (command, stdout, stderr) tuples; Validation Agent receives raw log, not LLM narrative summaries — distinguishes training-data priors from observed-system reasoning | Paper 09 |
+| Rabbit-Hole Counter | Per-specialist command-diversity check: if last K=5 consecutive tool calls target same resource (URL prefix, file path, user), force FSM transition to next candidate — prevents tunnel-vision budget exhaustion | Paper 09 |
+| Reflection Filter | After every tool call: raw_output → GPT-4o-mini (ReflectionFilter) → structured finding JSON or null; only non-null findings enter inter-state summary — prevents context flooding with shell noise | Paper 09 |
+| MITRE ATT&CK Planner Seed | Inject applicable ATT&CK technique IDs (T1190, T1059, T1078, T1110, T1212 for web targets) into Planner prompt as seed list; Planner reasons over this list to produce Team Manager dispatch priority queue | Paper 09 |
+| Pluggable Model Backend | CMatrix model config supports OpenAI API, Anthropic API, local Ollama backends — allows data-sensitive engagements to run fully local without cloud data exfiltration | Paper 09 |
 
 ---
 
@@ -100,6 +106,7 @@
 | NYU CTF Bench (26 CSAW Challenges) | Paper 06 | CSAW 2013–2023, Quals + Finals | Standalone CTF challenges, web-specific |
 | PrediQL GraphQL APIs (6 APIs) | Paper 07 | GraphQL: UserWallet, Countries, Rick&Morty, GraphQLZero, EHRI, TCGDex | Schema coverage + vuln detection, GraphQL-specific |
 | RESTler Benchmark (GitLab + Azure) | Paper 08 | REST APIs: 6 GitLab API groups + 4 Azure/Office365 services | Stateful sequence fuzzing, 500-error oracle; 28+ confirmed bugs |
+| lin.security VM (VulnHub #244) | Paper 09 | Single Linux VM; priv-esc via sudo GTFObins, shadow passwd, SUID | SSH closed-loop; root shell oracle; manual inspection; single-step success, multi-step failure |
 | CyBench | Paper 23 | CTF-style cybersecurity tasks | — |
 | PentestEval | Paper 24 | LLM pentest structured eval | — |
 | BountyBench | Paper 25 | Real-world bug bounty dollar impact | — |
@@ -107,4 +114,4 @@
 
 ---
 
-*Last updated after: Paper 08*
+*Last updated after: Paper 09*
