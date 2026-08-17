@@ -27,7 +27,7 @@
 | 14 | Automated Penetration Testing with LLM Agents and Classical Planning | [📄 notes](survey-notes/14-automated-penetration-testing-with-llm-agents-and-classical.md) | ✅ Done |
 | 15 | D-CIPHER: Dynamic Collaborative Intelligent Multi-Agent | [📄 notes](survey-notes/15-d-cipher-dynamic-collaborative-intelligent-multi-agent.md) | ✅ Done |
 | 16 | Incalmo: Autonomous LLM-Assisted System for Red Teaming Multi-Host Networks | [📄 notes](survey-notes/16-incalmo-an-autonomous-llm-assisted-system-for-red-teaming.md) | ✅ Done |
-| 17 | Can LLMs Hack Enterprise Networks? Autonomous Assumed Breach | — | ⏳ Pending |
+| 17 | Can LLMs Hack Enterprise Networks? Autonomous Assumed Breach (cochise/GOAD) | [📄 notes](survey-notes/17-can-llms-hack-enterprise-networks-autonomous-assumed-breach.md) | ✅ Done |
 | 18 | Co-RedTeam: Orchestrated Security Discovery and Exploitation | — | ⏳ Pending |
 | 19 | AutoGen: Next-Gen LLM Multi-Agent Conversations | — | ⏳ Pending |
 | 20 | MetaGPT: Meta-Programming for Multi-Agent Frameworks | — | ⏳ Pending |
@@ -136,6 +136,14 @@
 | Irrelevant Task Relevance Gate | Pre-execution check: before any Specialist runs, map task to VDG node; if no matching node or preconditions unmet, reject and force Team Manager replanning; prevents 47–90% irrelevant command pathology observed in all baseline systems | Papers 09, 16 |
 | LLM-Agent as Extensibility Escape Hatch | Keep Specialists deterministic for known vuln classes; add LLM-based Specialist only for novel vuln classes not covered by library, bounded by max_interactions limit; Incalmo extensibility study: single LLM agent replacement succeeds; full LLM agent replacement fails in all environments | Papers 14, 16 |
 | Multi-Target Stepping-Stone Evaluation | Benchmark must include multi-application scenarios where finding in app A (credential theft) enables exploitation in app B; web equivalent of multi-host stepping-stone attacks; MHBench has 5–104 tasks per environment — CMatrix benchmark should include ≥3 multi-target chains | Paper 16 |
+| Pentest Task Tree (PTT) as Team Manager State | Maintain a hierarchical numbered Markdown todo-list as the Team Manager's canonical working memory; Executor findings are embedded as sub-nodes (Findings:) under the producing task; failure-recovery cycles documented in-tree (3.2 fails → 3.3 with corrected instructions); credentials/findings propagated as task_context to subsequent tasks; tree grows monotonically — findings never lost | Papers 13, 16, 17 |
+| PTT-Update Quality Gate for LLM Selection | A model that cannot update the PTT cannot pentest, regardless of attack knowledge; Qwen3 knew all attack techniques but failed entirely because it couldn’t integrate Executor results into the tree; run PTT-update quality check before selecting any Team Manager LLM: given PTT + Executor summary, model must produce correctly updated tree with embedded findings and at least one corrective sub-task | Paper 17 |
+| Split Reasoning Budget (Reasoning LLM Planner + Tool-Call LLM Executor) | Use reasoning LLM (o1 / Sonnet 4 extended thinking) for Team Manager’s update-plan and select-next-task calls; use standard LLM (GPT-4o / Haiku) for Specialist tool-call execution; o1+GPT-4o = 1.83 compromised accounts/run vs GPT-4o-alone = 0.33 (5.5× improvement); Gemini-2.5-Flash (integrated reasoning, both roles) = 0.83 at 6× lower cost | Papers 15, 17 |
+| Self-Sufficient Task Context (Executor Memory Compensation) | Executor has no local memory between invocations; Planner must pack all needed information into task_context struct: target endpoint, credentials, discovered IPs, tool hints, constraints; equivalent to cochise’s Planner→Executor context block (discovered usernames, domain IPs, specific tool syntax, rate-limit warnings) | Papers 12, 15, 17 |
+| Executor Two-Tier Self-Repair | Tier 1 (internal): parse error message, generate corrected command, retry within round limit (10 rounds); missing tools auto-installed via apt/pip/git clone; Tier 2 (escalation): if unresolvable, generate failure_summary and return to Team Manager, which creates corrective sub-task with explicit tool hints; error message quality determines repair success — good error messages enable self-correction | Papers 14, 17 |
+| Rabbit-Hole Anti-Pattern Detection | LLMs hyper-focus on single attack vector while ignoring other leads; mitigation: Team Manager’s select-next-task prompt must include lead inventory check before selecting next task; circuit breaker: if current PTT branch has had >3 rounds without progress AND other leads exist, switch to highest-yield alternative lead; hard cap: no single thread pursued >5 rounds | Papers 09, 17 |
+| Reasoning LLM Prompt Hygiene (Anti-Boomer-Prompt) | Reasoning models (o1, Sonnet extended thinking) degrade with few-shot examples, chain-of-thought instructions, or verbose step-by-step guides; provide goals and constraints only in Team Manager prompt; let reasoning model generate procedure internally; applicable only to reasoning model invocations — standard models still benefit from CoT | Paper 17 |
+| Tool-Specific Function Wrapping Gate (>50% Error Rate) | Any pentest tool with >50% semantic error rate should be wrapped as a high-level function call; cochise: hashcat = 94% failure rate (wrong hash format); impacket-GetUserSPNs = 65.9%; john = 60%; solution: crack_hash(hash, wordlist), run_sqli_test(endpoint, param), test_xss(endpoint, param, sink_type) wrapper functions instead of raw CLI | Papers 14, 16, 17 |
 
 ---
 
@@ -167,6 +175,7 @@
 | Cybench (40 challenges) | Papers 06, 15 | 6 categories; unguided mode (no subtask hints); hard prompt (no extra hints) | Docker containers; flag oracle; D-CIPHER Claude Sonnet: 22.5% |
 | HackTheBox CTF Challenges (50 challenges) | Papers 06, 15 | Crypto (30) + Rev (20); D-CIPHER Claude Sonnet: 44% vs. EnIGMA 26% | Docker containers; flag oracle |
 | MHBench (40 multi-host environments) | Paper 16 | 22–50 hosts per env; 10 data-exfiltration goals + 30 root-access goals; 5–104 tasks per env; 2–48 critical assets; Equifax/Enterprise/Chain/Star/Dumbbell + algorithmically generated topologies; CVE-2017-5638, CVE-2021-3156, plaintext creds | 5 trials per env, 75 min limit; critical asset acquisition oracle; Incalmo: 37/40 Success vs baseline 3/40; 12–54 min per engagement; ≤$15 cost |
+| GOAD v3 (Game of Active Directory) | Paper 17 | Live real enterprise AD network; 3 DCs (Win Server 2016/2019) + 2 servers; 30 users + 3 SAs; 28 groups; 3 domains (sevenkingdoms.local, north.sevenkingdoms.local, essos.local); MS Defender on 4/5 VMs; LLMNR background traffic every 5 min; AS-REP Roasting, Kerberoasting, password spray, MSSQL lateral movement, domain trusts | Compromised AD account oracle (plaintext creds extracted or pass-the-hash); 2h time cap, 6 runs per config; o1+GPT-4o: 1.83 accounts/run ($17.56/acct); Gemini-2.5-Flash: 0.83/run ($2.96/acct); DeepSeek-V3: 0.33/run ($0.26/acct); Qwen3: 0/run |
 | CyBench | Paper 23 | CTF-style cybersecurity tasks | — |
 | PentestEval | Paper 24 | LLM pentest structured eval | — |
 | BountyBench | Paper 25 | Real-world bug bounty dollar impact | — |
@@ -174,4 +183,4 @@
 
 ---
 
-*Last updated after: Paper 16*
+*Last updated after: Paper 17*
