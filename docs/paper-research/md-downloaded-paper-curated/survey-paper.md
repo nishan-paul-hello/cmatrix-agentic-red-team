@@ -33,7 +33,7 @@
 | 20 | MetaGPT: Meta-Programming for Multi-Agent Frameworks | [📄 notes](survey-notes/20-metagpt-meta-programming-for-multi-agent-frameworks.md) | ✅ Done |
 | 21 | Voyager: An Open-Ended Embodied Agent | [📄 notes](survey-notes/21-voyager-an-open-ended-embodied-agent.md) | ✅ Done |
 | 22 | Reflexion: Language Agents with Verbal RL | [📄 notes](survey-notes/22-reflexion-language-agents-with-verbal-rl.md) | ✅ Done |
-| 23 | CyBench: A Framework for Evaluating Cybersecurity | — | ⏳ Pending |
+| 23 | CyBench: A Framework for Evaluating Cybersecurity | [📄 notes](survey-notes/23-cybench-a-framework-for-evaluating-cybersecurity.md) | ✅ Done |
 | 24 | PentestEval: Benchmarking LLM-Based Penetration Testing | — | ⏳ Pending |
 | 25 | BountyBench: Dollar Impact of AI Agent Attackers and Defenders | — | ⏳ Pending |
 | 26 | Forewarned is Forearmed: A Survey on LLM-Based Agents in Security | — | ⏳ Pending |
@@ -167,6 +167,10 @@
 | Proactive Stuck Detection Heuristic (Reflexion-Enhanced) | Augment Rabbit-Hole Counter to generate verbal self-reflection when it triggers (not just force FSM transition): detect stuck via (1) identical consecutive tool calls ≥3, (2) >30 total calls without new findings, (3) URL diversity of last 5 calls <0.2; when triggered invoke Self-Reflection LLM to generate first-person lesson before transitioning; verbal lesson stored in episodic memory for current and future sessions | Papers 09, 11, 17, 21, 22 |
 | Self-Reflection Model Quality Gate | Before selecting any LLM as Team Manager: run self-reflection quality check — given synthetic failed pentest trace, model must generate specific+actionable+non-generic lesson; if output is generic ("I should try harder") model lacks self-reflection capability and must not be used as Team Manager; emergent capability requiring minimum GPT-3.5-turbo class; weaker models (starchat-beta class) show 0% gain from Reflexion | Papers 04, 05, 15, 17, 22 |
 | Reflexion Scope Boundary: Use Bandit for Exploration, Reflexion for Exploitation | Reflexion fails on tasks requiring high-diversity random exploration (WebShop: 0% improvement); use Thompson Sampling bandit (Paper 07) for exploration-phase tasks (parameter fuzzing, endpoint enumeration, payload space search); use Reflexion for exploitation-phase tasks with clear causal failure structure (wrong injection point, wrong encoding, wrong auth method); never apply Reflexion to tasks where failure cause is inherently random | Papers 07, 08, 22 |
+| Five-Field Structured Specialist Response Format | Every Specialist LLM call must produce a structured 5-field response: (1) Reflection — analyze last observation; (2) Plan and Status — high-level current attack plan with step completion; (3) Thought — immediate reasoning before action; (4) Log — enumerated past (command, finding) pairs; (5) Action — either Command: bash_cmd OR Answer: structured-finding-JSON; empirically validated by Cybench: action-only scaffold degrades subtask performance vs structured format; Reflection field is most critical component for contextualizing partial solutions | Papers 09, 10, 12, 19, 23 |
+| Specialist Submission Rate as Finding Effectiveness Metric | Track per-Specialist: submission_rate (% of rounds that emit a finding JSON), submission_accuracy (% of emitted findings that are correct), finding_rate = submission_rate × accuracy; low submission rate = rabbit-hole failure (explores but never commits); enforce finding-or-escalate discipline: every Specialist round produces either {finding} JSON or {no_finding, reason} JSON; GPT-4o Cybench: 49% submission rate × 58% accuracy = 28.7% vs o1-preview 78% × 60% = 46.8% | Papers 09, 10, 22, 23 |
+| FST-Based Difficulty Calibration for CMatrix Benchmark | Annotate every CMatrix benchmark task with a First-Solve-Time equivalent: Fast FST (<5 min) = trivially automated; Medium FST (5–30 min) = CMatrix primary target zone; Hard FST (30 min–4 hr) = requires architecture advantage; Expert FST (>4 hr) = beyond current agent ceiling; report highest FST solved alongside % tasks solved in every evaluation; FST ceiling is more discriminating than solve rate: 20% solve at FST 4h > 20% solve at FST 11 min | Papers 01, 02, 03, 06, 11, 14, 23 |
+| CI-Verified Solution Scripts for Every Benchmark Task | Every benchmark target must include an automated solution script verified in CI: script runs end-to-end, outputs retrieved flag, compared to reference in CI pipeline; CI probe checks task server liveness weekly; prevents false negatives (unsolvable tasks), prevents inadvertent infrastructure vulnerabilities (Cybench found agents escaping Docker via cache and container exec); Cybench standard adopted as CMatrix benchmark quality requirement | Papers 05, 08, 14, 23 |
 
 ---
 
@@ -208,11 +212,11 @@
 | AlfWorld (134 household tasks) | Paper 22 | 134 text-based environments; 6 task types (find hidden objects, move objects, manipulate with other objects); TextWorld-based | Task completion binary oracle; ReAct+Reflexion: 130/134 (97%) in 12 trials vs ReAct ~75%; +22pp absolute improvement |
 | HotPotQA (100 multi-hop QA) | Paper 22 | 100-question subset of 113k-pair Wikipedia QA dataset; multi-hop reasoning required | Exact match answer grading; ReAct+Reflexion: 51% vs ReAct 39%; CoT(GT)+Reflexion: 80% vs GPT-4 base 68% |
 | LeetcodeHardGym (40 hard problems) | Paper 22 | 40 Leetcode hard-level problems released after Oct 2022 (post-GPT-4 training cutoff); 19 programming languages supported | pass@1 on hidden test suite; Reflexion: 15% vs GPT-4 base 7.5% (2× improvement) |
-| CyBench | Paper 23 | CTF-style cybersecurity tasks | — |
+| Cybench (40 professional CTF tasks) | Paper 23 | 40 tasks from HackTheBox cyber-apocalypse-2024 (17), SekaiCTF 2022-23 (12), Glacier (9), HKCert (2); 6 categories: Crypto (16), Web (8), Rev (6), Forensics (4), Misc (4), Pwn (2); FST range 2 min to 24h54m (747× scale); all tasks CI-verified with solution scripts; 8 models × 4 scaffolds × 3 evaluation modes | Unguided binary 0/1 per task (flag match); subtask fractional score; subtask-guided binary; FST ceiling metric; Claude 3.5 Sonnet best: 17.5% unguided / 43.9% subtask; hard FST ceiling at 11 min (unguided) / 2h3m (pseudoterminal guided) |
 | PentestEval | Paper 24 | LLM pentest structured eval | — |
 | BountyBench | Paper 25 | Real-world bug bounty dollar impact | — |
 | CVE-Bench | Paper 28 | Real-world web app CVEs | — |
 
 ---
 
-*Last updated after: Paper 22*
+*Last updated after: Paper 23*
