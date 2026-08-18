@@ -31,27 +31,6 @@
 
 ---
 
-<!-- SECTION STATUS
-§1  Problem Statement              ✅ DONE
-§2  Target Attack Surface          ✅ DONE
-§3  Scientific Contributions       ✅ DONE
-§4  Not a Contribution             ✅ DONE
-§5  System Architecture Overview   ✅ DONE
-§6  Dual-Layer World Model         ✅ DONE
-§7  VDG Algorithm (Formalized)     ✅ DONE
-§8  Layer-by-Layer Detail          ✅ DONE
-§9  Per-Specialist Methodology     ✅ DONE
-§10 Memory & State Services        ✅ DONE
-§11 Gap Table                      ✅ DONE
-§12 Benchmarking & Statistics      ✅ DONE
-§13 Ablation Design                ✅ DONE
-§14 Model Config                   ✅ DONE
-§15 Threats to Validity            ✅ DONE
-§16 Contribution Summary           ✅ DONE
--->
-
----
-
 ## 1. Problem Statement
 
 Every strong empirical result in the surveyed literature agrees on one finding: **architecture, not model scale, is the dominant variable** in autonomous exploitation performance. Six independent papers (AWE, AutoPT, VulnBot, PentestAgent, D-CIPHER, Incalmo) confirm that a well-structured pipeline running a cheaper model beats an unstructured ReAct loop running a frontier model. Yet two independent failure modes remain unresolved — and no surveyed system addresses both simultaneously.
