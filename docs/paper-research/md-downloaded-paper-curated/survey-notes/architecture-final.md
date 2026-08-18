@@ -398,23 +398,36 @@ Step 2 — Assess promise and difficulty:
     new_node.phi   = parse_float(response, "promise_score")    # constrain to [0,1]
     new_node.delta = parse_float(response, "difficulty_index")  # constrain to [0,1]
 
-Step 3 — Infer prerequisite edges (pairwise LLM calls):
-    for existing_node in existing_vdg.nodes:
-        prompt = build_prerequisite_prompt(new_node, existing_node, el_snapshot)
-        # Prompt: "Must [existing_node.attack_intent] succeed BEFORE
-        #         [new_node.attack_intent] is technically feasible?
-        #         Answer YES/NO with confidence 0–1 and one-sentence rationale."
-        response = llm_call(prompt, temperature=0.0)  # parsed via constrained JSON schema
-        if parse_bool(response, "is_prerequisite"):
-            confidence = parse_float(response, "confidence")
-            if confidence >= PREREQUISITE_THRESHOLD:   # default: 0.7
-                new_node.prerequisites.append(existing_node.weakness_id)
+Step 3 — Infer prerequisite edges (batched LLM calls):
+    # Batched to avoid O(2M) pairwise calls per new node.
+    # Without batching, 15 VDG nodes would require ~210 frontier-model
+    # calls just for edge inference — exceeding the per-CVE compute budget.
+    # Batching reduces cost to 2 calls per new node regardless of VDG size.
 
-        # Also check if new_node enables existing_node:
-        prompt2 = build_enables_prompt(new_node, existing_node, el_snapshot)
-        response2 = llm_call(prompt2, temperature=0.0)
-        if parse_bool(response2, "new_node_enables_existing"):
-            existing_node.enables.append(new_node.weakness_id)
+    existing_summaries = [
+        {"id": n.weakness_id, "intent": n.attack_intent, "status": n.status}
+        for n in existing_vdg.nodes
+    ]
+
+    # Batch 1: Which existing nodes are prerequisites for new_node?
+    prompt_prereq = build_batched_prerequisite_prompt(
+        new_node, existing_summaries, el_snapshot)
+    # Prompt: "Given these existing attack nodes [list], which ones
+    #         MUST succeed BEFORE [new_node.attack_intent] is technically
+    #         feasible? For each, answer YES/NO with confidence 0–1."
+    response = llm_call(prompt_prereq, temperature=0.0)
+    for edge in parse_edge_list(response, "prerequisites"):
+        if edge.confidence >= PREREQUISITE_THRESHOLD:   # default: 0.7
+            new_node.prerequisites.append(edge.existing_node_id)
+
+    # Batch 2: Which existing nodes does new_node enable?
+    prompt_enables = build_batched_enables_prompt(
+        new_node, existing_summaries, el_snapshot)
+    response2 = llm_call(prompt_enables, temperature=0.0)
+    for edge in parse_edge_list(response2, "enables"):
+        if edge.confidence >= PREREQUISITE_THRESHOLD:
+            existing_vdg.get_node(edge.existing_node_id).enables.append(
+                new_node.weakness_id)
 
 Step 4 — Set initial status:
     if all prerequisite nodes have status EXPLOITED:
@@ -437,7 +450,7 @@ Step 7 — Insert into VDG:
     existing_vdg.add_node(new_node)
 ```
 
-### 7.4 UCB Backpropagation Update Rule
+### 7.4 UCB Update Rule
 
 ```
 Algorithm: VDG_Update(v, outcome, E_ord_new)
@@ -489,7 +502,11 @@ Step 1 — Enumerate feasible paths:
     feasible_paths = enumerate_paths(
         start_nodes=[n for n in VDG.nodes if n.status == ELIGIBLE],
         end_nodes=[n for n in VDG.nodes if n.impact == "high"],
-        max_length=5  # prevent combinatorial explosion
+        max_length=5,   # prevent deep-chain explosion
+        max_paths=100   # beam cap: if enumeration exceeds 100 paths,
+                        # retain top-100 by partial score at each
+                        # length extension. Prevents combinatorial
+                        # explosion in wide, shallow DAGs.
     )
 
 Step 2 — Score each path:
@@ -893,7 +910,7 @@ These are **targets for the hypothesis**, not guaranteed outcomes. If targets ar
 - Report p-values but emphasize effect sizes (percentage-point differences) over p-values
 
 **Compute normalization:**
-- All ablation conditions capped at **50 LLM API calls per CVE** on CVE-Bench — matching the median call count of the HPTSA baseline. This prevents a compute-heavy condition from winning unfairly.
+- All ablation conditions capped at **50 Specialist-facing LLM API calls per CVE** on CVE-Bench — matching the median call count of the HPTSA baseline. This prevents a compute-heavy condition from winning unfairly. **Note:** The 50-call cap counts Specialist dispatch, Evaluation Agent, and Validation Agent calls. VDG management calls (batched edge inference, UCB scoring) are excluded from the cap but reported separately as "orchestration overhead" — this allows fair comparison with flat baselines that have no graph management cost.
 - Both raw and compute-normalized results are reported.
 - Cost-per-exploit normalized by model pricing at time of writing (model, version, and date stated explicitly).
 
@@ -922,8 +939,24 @@ Four nested conditions, all compute-normalized at 50 API calls per CVE:
 |---|---|---|
 | **(a) Flat UCB** | Flat priority list of vulnerability candidates, UCB scoring, no graph structure, no dependency edges |
 | **(b) UCB + Dependency edges** | Full VDG node schema and edge inference, UCB selection, no path-level scoring |
-| **(c) Stacked (UCB filtered by dependency satisfaction)** | Run UCB independently; then apply dependency constraints as a filter wrapper. **This is the key discriminant: if (d) ≈ (c), unification has no value and the contribution downgrades.** |
+| **(c) Stacked (UCB filtered by dependency satisfaction)** | Run UCB independently over all nodes (ignoring prerequisites in the eligible set); then apply dependency constraints as a post-filter. **This is the key discriminant: if (d) ≈ (c), unification has no value and the contribution downgrades.** See pseudocode below. |
 | **(d) Full VDG** | UCB + dependency edges + path-level scoring + failure propagation + early stopping |
+
+**Condition (c) precise specification** (the distinction from (b) is that edges exist for filtering but do NOT constrain the UCB scoring population — N and n_v are computed over all nodes, not just eligible ones):
+```
+# Condition (c): Stacked — UCB scores all nodes, then post-filters
+all_nodes = VDG.all_unattempted_nodes()                    # NO eligibility filter
+scores = {v: UCB_score(v, N=len(all_nodes)) for v in all_nodes}  # N counts ALL nodes
+ranked = sorted(all_nodes, key=lambda v: scores[v], reverse=True)
+filtered = [v for v in ranked if all_prerequisites_satisfied(v)]  # post-filter
+selected = filtered[0]
+
+# vs. Condition (b): edges constrain the eligible set BEFORE scoring
+eligible = [v for v in VDG.nodes if v.status == ELIGIBLE           # pre-filter
+            and all_prerequisites_satisfied(v)]
+scores = {v: UCB_score(v, N=len(eligible)) for v in eligible}     # N counts ELIGIBLE only
+selected = max(eligible, key=lambda v: scores[v])
+```
 
 Benchmarks: CVE-Bench (exploration metric + pass@1 zero-day) and PentestEval (ADM score).
 If (d) > (c): unification claim holds. If (d) ≈ (c): contribution is "dependency-aware UCB filtering."
@@ -1052,6 +1085,10 @@ The UCB formula has 7 tunable parameters (α, β, γ, κ, λ, μ, C_expl). If th
 ### 15.8 Statistical Power on Small Benchmarks
 
 PrediQL has 6 APIs — 5 runs per condition yields only 30 data points. McNemar's test may lack power to detect small effect sizes on this benchmark. GraphQL results should be reported as exploratory findings rather than definitive conclusions.
+
+### 15.9 Edge-Inference Scalability
+
+VDG edge inference (§7.3) uses batched LLM prompts (2 calls per new node) rather than pairwise calls (2×M calls per new node, where M is the existing node count). Without batching, 15 VDG nodes would require ~210 frontier-model calls for edge inference alone — potentially exceeding the entire per-CVE compute budget. Batching reduces this to ~30 calls for 15 nodes. However, batched prompts with large existing-node lists may degrade edge-inference quality if the context window is saturated. If the pilot study (§15.1) reveals quality degradation with batching, a hybrid approach (batch for top-K most relevant existing nodes by vuln_class similarity, skip the rest) should be adopted.
 
 ---
 
