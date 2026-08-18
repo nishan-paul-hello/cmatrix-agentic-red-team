@@ -1,6 +1,6 @@
-I read all three files closely (architecture-1.md in full, architecture-2.md in full, and spot-checked the source papers in combined-papers.md for a few of the more load-bearing numeric claims). Here's a direct assessment, going through your questions in order.
+I read all three files closely (architecture-v2-cmatrix-baseline.md in full, architecture-v1-claude-web-dual-graph.md in full, and spot-checked the source papers in combined-papers.md for a few of the more load-bearing numeric claims). Here's a direct assessment, going through your questions in order.
 
-## 1. Is architecture-1.md good enough on the three criteria you named?
+## 1. Is architecture-v2-cmatrix-baseline.md good enough on the three criteria you named?
 
 **Step-by-step detailing** — Yes, and unusually so. It doesn't just describe a pipeline; it traces almost every design decision back to a specific finding in a specific paper (e.g. the ADM prioritization is justified by walking through PentestEval's *cumulative* ablation numbers and explicitly correcting the "isolated 2× effect" oversimplification most people would use). That kind of self-correction is rare and reads as genuine rigor, not marketing.
 
@@ -16,7 +16,7 @@ This is the clearest actionable gap. Architecture-1 mentions tools only inline a
 
 Architecture-2 does this well: an explicit 11-tool catalogue table, a tool→agent mapping table, and a "Tool Adapter Layer" that normalizes every tool's raw output before it enters the system. This is worth porting — but reframed to match arch-1's benchmark discipline, not copied wholesale (see below).
 
-## 3. What has genuine research value to port from architecture-2.md
+## 3. What has genuine research value to port from architecture-v1-claude-web-dual-graph.md
 
 I'm not recommending anything just because it exists in arch-2. Four things clear the bar of *adding a testable, citable contribution* rather than cosmetic overlap:
 
@@ -49,4 +49,4 @@ Honestly: no one can be certain from an architecture document, and you should be
 - **Novelty is checkable, not guaranteed to survive**: §6's gap table is falsifiable against your 29-paper corpus as of when you built it, but it's not falsifiable against papers published after your survey cutoff. A fast re-check of USENIX/CCS/NDSS/AsiaCCS proceedings and arXiv from the last ~2–3 months, close to submission, is worth doing precisely because your claims are specific enough that a single overlapping recent paper could blunt one of them.
 - **The only real way to know it works is to run Tier 0 and Tier 0b first** (your own cheapest, fastest regression benchmarks) before committing full compute to Tier 2–6. That's not a hedge — it's what your own evaluation plan already recommends, and it's the fastest way to find out whether the VDG+hybrid-planner combination underperforms its individual parts before you've spent the full evaluation budget discovering that.
 
-So: architecture-1.md is closer to publication-shape than the vast majority of pre-implementation architecture docs I'd expect to see for this kind of project — the discipline around cumulative-vs-isolated effects and explicit non-claims is genuinely the thing that gets a systems paper past reviewers who've seen a hundred overclaimed pentest-agent papers. It is not, by itself, sufficient for a top-tier venue — no architecture document is, until it's backed by the numbers from §7's Tier 0–6 suite. The concrete next steps that would move it forward are: (1) close the tool-specificity gap with an explicit adapter/catalogue section, (2) add live CVE-intelligence grounding, (3) formalize the context-compaction and risk-gate mechanisms you're already implicitly doing, and (4) run Tier 0/0b before anything else to get your first real signal.
+So: architecture-v2-cmatrix-baseline.md is closer to publication-shape than the vast majority of pre-implementation architecture docs I'd expect to see for this kind of project — the discipline around cumulative-vs-isolated effects and explicit non-claims is genuinely the thing that gets a systems paper past reviewers who've seen a hundred overclaimed pentest-agent papers. It is not, by itself, sufficient for a top-tier venue — no architecture document is, until it's backed by the numbers from §7's Tier 0–6 suite. The concrete next steps that would move it forward are: (1) close the tool-specificity gap with an explicit adapter/catalogue section, (2) add live CVE-intelligence grounding, (3) formalize the context-compaction and risk-gate mechanisms you're already implicitly doing, and (4) run Tier 0/0b before anything else to get your first real signal.

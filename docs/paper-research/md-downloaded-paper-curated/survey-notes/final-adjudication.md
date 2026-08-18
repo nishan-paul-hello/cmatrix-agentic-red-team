@@ -3,8 +3,8 @@
 **Role:** Final expert adjudicator — pre-architectural-decision analysis only.  
 **Evidence hierarchy applied:**  
 1. `combined-papers.md` (29-paper corpus) — primary evidentiary base  
-2. `architecture-1.md` — primary CMatrix design  
-3. `architecture-2.md` — independent alternative  
+2. `architecture-v2-cmatrix-baseline.md` — primary CMatrix design  
+3. `architecture-v1-claude-web-dual-graph.md` — independent alternative  
 4. Four AI agent architecture+reasoning pairs (evaluated as paired proposals)
 
 **Absolute constraints followed throughout:**  

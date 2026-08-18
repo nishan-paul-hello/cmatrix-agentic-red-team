@@ -1,6 +1,6 @@
 # Architecture-Final Review: Findings and Applied Fixes
 
-**Scope:** Independent review of `architecture-final.md` after the adjudication-based revision was complete. Focused on algorithmic precision, computational feasibility, and ablation rigor.
+**Scope:** Independent review of `architecture-v7-adjudicated-final.md` after the adjudication-based revision was complete. Focused on algorithmic precision, computational feasibility, and ablation rigor.
 
 ---
 

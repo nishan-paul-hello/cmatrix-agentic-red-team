@@ -2,7 +2,7 @@
 
 **Working title for publication:** *CMatrix: Dependency-Aware Attack Graph Exploration for Autonomous Vulnerability Assessment and Penetration Testing*
 
-**Status:** Final architecture — synthesized from architecture-1.md (primary backbone), selective improvements from architecture-2.md, and the four-agent adjudication report. All changes from architecture-1.md are annotated with `[CHANGE]` tags for traceability.
+**Status:** Final architecture — synthesized from architecture-v2-cmatrix-baseline.md (primary backbone), selective improvements from architecture-v1-claude-web-dual-graph.md, and the four-agent adjudication report. All changes from architecture-v2-cmatrix-baseline.md are annotated with `[CHANGE]` tags for traceability.
 
 **Scoping rule applied throughout:** CMatrix targets **only attack surfaces for which a dedicated, reusable, oracle-backed benchmark already exists in the surveyed literature.** Every claimed capability maps to a benchmark in §2.
 
@@ -70,7 +70,7 @@ Every attack surface below is included **only because it has a dedicated, reusab
 
 **Explicitly excluded: general REST API attack surface.** RESTler's evaluation targets (self-hosted GitLab, Microsoft Azure services, Office365) are one-off real-world case studies, not a standardized, reusable target set. There is no "RESTBench" equivalent in the survey. RESTler's core techniques (producer–consumer dependency inference, response-feedback pruning) are methodologically reusable and are adopted internally by the GraphQL Specialist and the dependency-inference logic in the Team Manager (§9.3), but REST API exploitation is **not evaluated and not claimed** — no REST-API-specific pass rates are reported anywhere in this paper.
 
-**Explicitly excluded: Hybrid Classical-Planning + VDG.** Architecture-1 §5.2 proposed combining PDDL planning with the VDG. This is removed from the contribution list and from the architecture. "Recon → surface enumeration → exploit" is a phase ordering, not a PDDL plan. No domain file is specified, no operator library exists, and no planning algorithm is defined. The claim cannot be evaluated. The phase ordering is retained as a fixed initialization skeleton in §8.1 (Orchestrator), but is not claimed as a contribution. *[CHANGE from architecture-1.md §5.2 — removed on adjudication consensus]*
+**Explicitly excluded: Hybrid Classical-Planning + VDG.** Architecture-1 §5.2 proposed combining PDDL planning with the VDG. This is removed from the contribution list and from the architecture. "Recon → surface enumeration → exploit" is a phase ordering, not a PDDL plan. No domain file is specified, no operator library exists, and no planning algorithm is defined. The claim cannot be evaluated. The phase ordering is retained as a fixed initialization skeleton in §8.1 (Orchestrator), but is not claimed as a contribution. *[CHANGE from architecture-v2-cmatrix-baseline.md §5.2 — removed on adjudication consensus]*
 
 ### 2.2 In-Scope Attack Surfaces
 
@@ -87,7 +87,7 @@ Everything CMatrix claims to do is bounded by this table. Binary exploitation, p
 
 ## 3. Scientific Contributions (Three Only)
 
-> **Design principle:** A paper with seven contributions invites a reviewer to conclude "bundle of incremental integrations." CMatrix makes exactly three primary claims, each bounded by a precise experimental test. All other mechanisms are supporting infrastructure. *[CHANGE from architecture-1.md §10 — reduced from seven to three per adjudication consensus]*
+> **Design principle:** A paper with seven contributions invites a reviewer to conclude "bundle of incremental integrations." CMatrix makes exactly three primary claims, each bounded by a precise experimental test. All other mechanisms are supporting infrastructure. *[CHANGE from architecture-v2-cmatrix-baseline.md §10 — reduced from seven to three per adjudication consensus]*
 
 ### C1 — Dependency-Aware Attack Graph Exploration
 
@@ -121,13 +121,13 @@ The first rigorous evaluation of a single autonomous VAPT architecture across CV
 - Standardized, per-surface oracles (CVE-Bench 8-type oracle, PrediQL detection schema, MHBench per-environment criterion)
 - Strictly separated per-surface reporting (not averaged)
 
-> **Honest framing:** This is a methodological contribution to the field's evaluation standards. It is not an algorithmic contribution. No prior paper evaluates all three surfaces with one architecture under these conditions — that is the gap this fills. *[CHANGE from architecture-1.md §5.4 — downgraded from "generalization" to "methodological contribution" per adjudication]*
+> **Honest framing:** This is a methodological contribution to the field's evaluation standards. It is not an algorithmic contribution. No prior paper evaluates all three surfaces with one architecture under these conditions — that is the gap this fills. *[CHANGE from architecture-v2-cmatrix-baseline.md §5.4 — downgraded from "generalization" to "methodological contribution" per adjudication]*
 
 ---
 
 ## 4. What Is Explicitly NOT a Contribution
 
-The following items appear in architecture-1.md or architecture-2.md as claimed contributions but are **not claimed here**. Each is retained as supporting infrastructure but not as a primary novelty claim.
+The following items appear in architecture-v2-cmatrix-baseline.md or architecture-v1-claude-web-dual-graph.md as claimed contributions but are **not claimed here**. Each is retained as supporting infrastructure but not as a primary novelty claim.
 
 | Item | Retained as | Reason for demotion |
 |---|---|---|
@@ -147,11 +147,11 @@ The following items appear in architecture-1.md or architecture-2.md as claimed 
 
 CMatrix uses a **four-layer hierarchy** — the structural pattern every high-performing surveyed system independently converges on (HPTSA, PentestGPT, D-CIPHER, VulnBot, Incalmo, CO-REDTEAM).
 
-**[CHANGE from architecture-1.md §3]** The single-structure VDG is replaced by a **Dual-Layer World Model** (§6): an **Environmental Layer (EL)** containing only confirmed discovered facts (written exclusively by Specialists), and an **Attack Layer (AL / VDG)** containing only UCB-scored attack hypotheses with prerequisite/enables edges (written exclusively by the Team Manager). This eliminates fact/hypothesis conflation and makes discovery quality ablatable independently from planning quality.
+**[CHANGE from architecture-v2-cmatrix-baseline.md §3]** The single-structure VDG is replaced by a **Dual-Layer World Model** (§6): an **Environmental Layer (EL)** containing only confirmed discovered facts (written exclusively by Specialists), and an **Attack Layer (AL / VDG)** containing only UCB-scored attack hypotheses with prerequisite/enables edges (written exclusively by the Team Manager). This eliminates fact/hypothesis conflation and makes discovery quality ablatable independently from planning quality.
 
 **[CHANGE]** A **FullCompact** mechanism (reconstructing Team Manager reasoning context from EL+AL state at 85% context utilization) is added to address long-session Commander context inflation — the documented failure mode in PentestGPT Finding 4. Specialists retain fresh-context-per-invocation (unchanged).
 
-**[CHANGE]** The **Evaluation Agent** now outputs a 4-part structured critique (extended from architecture-1.md's 3-part): `{what_happened, expected_vs_actual, next_step, E_ord}`. The ordinal evidence score `E_ord` replaces raw LLM confidence in the UCB formula.
+**[CHANGE]** The **Evaluation Agent** now outputs a 4-part structured critique (extended from architecture-v2-cmatrix-baseline.md's 3-part): `{what_happened, expected_vs_actual, next_step, E_ord}`. The ordinal evidence score `E_ord` replaces raw LLM confidence in the UCB formula.
 
 **[CHANGE]** The **Validation Agent** now uses a bounded **Diagnosis-Adapt-Cap loop** (from Architecture-2, adopted per GLM and Claude-Agent adjudication): diagnose failure as CORRECTABLE or FUNDAMENTAL, adapt parameters if CORRECTABLE, cap at 3 retries.
 
@@ -224,13 +224,13 @@ flowchart TD
     FC -.->|"at 85% context:\nreconstruct from EL+AL"| L2
 ```
 
-**Dual-termination condition [CHANGE]:** Mission terminates when **(a) no unexplored EL nodes remain** AND **(b) all AL/VDG nodes are in a terminal state** (exploited / infeasible / deprioritized below threshold). Neither condition alone is sufficient. Alternatively: Early Stopping Heuristic fires if no new VDG nodes are added in the last N=5 Specialist invocations AND the VDG frontier is empty — this terminates before the hard time/cost ceiling and directly improves cost-per-exploit. *[CHANGE from architecture-1.md — formal stopping replaces implicit timeout-only termination]*
+**Dual-termination condition [CHANGE]:** Mission terminates when **(a) no unexplored EL nodes remain** AND **(b) all AL/VDG nodes are in a terminal state** (exploited / infeasible / deprioritized below threshold). Neither condition alone is sufficient. Alternatively: Early Stopping Heuristic fires if no new VDG nodes are added in the last N=5 Specialist invocations AND the VDG frontier is empty — this terminates before the hard time/cost ceiling and directly improves cost-per-exploit. *[CHANGE from architecture-v2-cmatrix-baseline.md — formal stopping replaces implicit timeout-only termination]*
 
 ---
 
 ## 6. The Dual-Layer World Model
 
-> **[CHANGE from architecture-1.md — resolves W1 and W6]**
+> **[CHANGE from architecture-v2-cmatrix-baseline.md — resolves W1 and W6]**
 > Architecture-1's single-structure VDG conflated confirmed environmental facts with inferred attack hypotheses. This section replaces it with two strictly-separated layers. The write-ownership principle is adopted from Architecture-2's ASG/APG design, combined with Architecture-1's UCB scoring and dependency-edge mechanisms that Architecture-2 lacks.
 
 ### 6.1 Environmental Layer (EL) — Confirmed Facts Only
@@ -563,7 +563,7 @@ Flagged issues are logged but do not block execution. If violations are common i
 
 - **Scope Intake** accepts: target, rules of engagement, mode flag (*one-day*: CVE hint provided per Fang et al.; *zero-day*: no hint per HPTSA/CVE-Bench zero-day mode), and the attack-surface family (web, GraphQL, multi-host) so the correct benchmark harness and Specialist pool are activated.
 - **Auto-prompter** (D-CIPHER pattern) performs unstructured LLM-grounded initial exploration. AutoPT-style rule extraction converts its findings into the first EL entries and VDG seed nodes — combining D-CIPHER's grounded discovery with AutoPT's deterministic state-machine seeding.
-- **Fixed phase skeleton (not a contribution):** The Orchestrator applies a hard initialization sequence — Recon → Surface Enumeration → Specialist Dispatch — before handing control to the Team Manager's UCB loop. This is a phase ordering, retained for engineering soundness, not claimed as a planning contribution. *[CHANGE from architecture-1.md §5.2: Hybrid Classical-Planning removed; phase ordering is a skeleton only.]*
+- **Fixed phase skeleton (not a contribution):** The Orchestrator applies a hard initialization sequence — Recon → Surface Enumeration → Specialist Dispatch — before handing control to the Team Manager's UCB loop. This is a phase ordering, retained for engineering soundness, not claimed as a planning contribution. *[CHANGE from architecture-v2-cmatrix-baseline.md §5.2: Hybrid Classical-Planning removed; phase ordering is a skeleton only.]*
 - **FullCompact Trigger [CHANGE]:** At 85% of the Team Manager's context window, the Orchestrator snapshots the current EL and AL state and reconstructs the Team Manager's reasoning context from this snapshot. Because all discovered facts live in the EL and all scored hypotheses live in the VDG (AL), nothing is lost — no conversation history is needed, only the structured state. This addresses long-session context inflation (PentestGPT Finding 4), which Architecture-1 left unresolved for the orchestration layer.
 
 ### 8.2 Layer 2 — Team Manager
@@ -597,7 +597,7 @@ The Specialist pool activated per mission:
 ### 8.4 Layer 4 — Execution and Validation
 
 - **Execution Agent:** Strict separation of command generation (LLM) from command execution (deterministic wrapper) — the AutoGen `AssistantAgent`/`UserProxyAgent` split, generalized. The executor never reasons; the LLM never executes directly.
-- **Evaluation Agent [CHANGE]:** Produces a **4-part** structured output (extended from architecture-1.md's 3-part critique): `{what_happened, expected_vs_actual, next_step, E_ord}`. The `E_ord` ordinal evidence score (§7.7) replaces raw LLM confidence in the UCB formula. This makes the Evaluation Agent's output a first-class input to the VDG update rule. The `E_ord` value is parsed deterministically from constrained JSON — not inferred from free-form text.
+- **Evaluation Agent [CHANGE]:** Produces a **4-part** structured output (extended from architecture-v2-cmatrix-baseline.md's 3-part critique): `{what_happened, expected_vs_actual, next_step, E_ord}`. The `E_ord` ordinal evidence score (§7.7) replaces raw LLM confidence in the UCB formula. This makes the Evaluation Agent's output a first-class input to the VDG update rule. The `E_ord` value is parsed deterministically from constrained JSON — not inferred from free-form text.
 - **Validation Agent with Diagnosis-Adapt-Cap Loop [CHANGE]:** Mandatory before any finding is recorded. Instead of a single attempt (MAPTA's design), the Validation Agent uses a bounded retry structure:
 
 ```
@@ -876,7 +876,7 @@ These are **targets for the hypothesis**, not guaranteed outcomes. If targets ar
 
 ### 12.3 Statistical Rigor and Methodology
 
-> **[CHANGE from architecture-1.md — no statistical methodology was specified. This section is adopted from GLM's adjudication proposal, which is the only proposal that provides a complete statistical plan.]*
+> **[CHANGE from architecture-v2-cmatrix-baseline.md — no statistical methodology was specified. This section is adopted from GLM's adjudication proposal, which is the only proposal that provides a complete statistical plan.]*
 
 **Sample sizes:**
 - CVE-Bench (40 CVEs): **10 runs per condition** with different random seeds
@@ -904,7 +904,7 @@ These are **targets for the hypothesis**, not guaranteed outcomes. If targets ar
 
 ## 13. Required Ablation Design
 
-> **[CHANGE from architecture-1.md §7 — the original ablation list had 4 conditions and did not decompose VDG components. This section provides the full causal ablation design required to support each contribution claim at a top-tier venue.]*
+> **[CHANGE from architecture-v2-cmatrix-baseline.md §7 — the original ablation list had 4 conditions and did not decompose VDG components. This section provides the full causal ablation design required to support each contribution claim at a top-tier venue.]*
 
 ### 13.1 Core Ablations (Must Have)
 

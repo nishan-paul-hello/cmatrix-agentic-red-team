@@ -502,4 +502,4 @@ CMatrix can become a publishable top-tier security systems paper if the followin
 
 ---
 
-> *All evidence is separated as: **Established** (peer-reviewed results from the 29-paper corpus), **Reasonable Hypothesis** (logically grounded predictions from related evidence), and **Speculative** (unvalidated design choices). This audit is based on architecture-1.md, architecture-2.md, and the combined 29-paper survey notes.*
+> *All evidence is separated as: **Established** (peer-reviewed results from the 29-paper corpus), **Reasonable Hypothesis** (logically grounded predictions from related evidence), and **Speculative** (unvalidated design choices). This audit is based on architecture-v2-cmatrix-baseline.md, architecture-v1-claude-web-dual-graph.md, and the combined 29-paper survey notes.*

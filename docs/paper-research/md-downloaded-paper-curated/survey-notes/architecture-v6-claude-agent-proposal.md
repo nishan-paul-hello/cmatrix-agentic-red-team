@@ -2,8 +2,8 @@
 
 **Working title for publication:** *CMatrix: A Vulnerability Dependency Graph Framework for Exploration-Breadth and Dependency-Aware Autonomous Penetration Testing*
 
-**Status:** Revised architecture — derived from the 29-paper systematic synthesis and the research-grade audit of architecture-1.md.
-All changes from the audit are annotated with `[CHANGE]` tags so diffs against architecture-1.md are traceable.
+**Status:** Revised architecture — derived from the 29-paper systematic synthesis and the research-grade audit of architecture-v2-cmatrix-baseline.md.
+All changes from the audit are annotated with `[CHANGE]` tags so diffs against architecture-v2-cmatrix-baseline.md are traceable.
 
 **Scoping rule applied throughout:** CMatrix targets **only attack surfaces for which a dedicated, reusable, oracle-backed benchmark already exists in the surveyed literature.** Every claimed capability maps to a benchmark in §2.
 
@@ -103,7 +103,7 @@ Everything CMatrix claims to do is bounded by this table. Binary exploitation, p
 
 CMatrix uses a **four-layer hierarchy** — the structural pattern every high-performing surveyed system independently converges on (HPTSA, PentestGPT, D-CIPHER, VulnBot, Incalmo, CO-REDTEAM).
 
-**[CHANGE from architecture-1.md]** The single-structure VDG is replaced by a **Dual-Layer World Model** (§5): an **Environmental Layer** (EL) containing only confirmed discovered facts, written exclusively by Specialists, and an **Attack Layer** (AL / VDG) containing only UCB-scored attack hypotheses with prerequisite/enables edges, written exclusively by the Team Manager. This eliminates fact/hypothesis contamination — a failure class documented in Architecture-2's §5c and common in flat-memory systems.
+**[CHANGE from architecture-v2-cmatrix-baseline.md]** The single-structure VDG is replaced by a **Dual-Layer World Model** (§5): an **Environmental Layer** (EL) containing only confirmed discovered facts, written exclusively by Specialists, and an **Attack Layer** (AL / VDG) containing only UCB-scored attack hypotheses with prerequisite/enables edges, written exclusively by the Team Manager. This eliminates fact/hypothesis contamination — a failure class documented in Architecture-2's §5c and common in flat-memory systems.
 
 **[CHANGE]** A **FullCompact** mechanism (reconstructing Team Manager reasoning context from EL+AL state at 85% context utilization) is added to address long-session Commander context inflation — the documented failure mode in PentestGPT Finding 4. Specialists retain fresh-context-per-invocation (unchanged).
 
@@ -183,7 +183,7 @@ flowchart TD
 ## 4. The VDG Algorithm (Formalized)
 
 > **[NEW SECTION — resolves W1 from the audit]**
-> This section provides the algorithm-level specification missing from architecture-1.md. It defines the UCB formula, the edge construction procedure, the ordinal evidence scoring, and the backpropagation update rule — all at pseudocode level sufficient for implementation and reproducibility.
+> This section provides the algorithm-level specification missing from architecture-v2-cmatrix-baseline.md. It defines the UCB formula, the edge construction procedure, the ordinal evidence scoring, and the backpropagation update rule — all at pseudocode level sufficient for implementation and reproducibility.
 
 ### 4.1 VDG Node Schema
 
@@ -393,7 +393,7 @@ The Evaluation Agent outputs `E_ord` as part of its structured 4-part critique: 
 
 ## 5. The Dual-Layer World Model
 
-> **[CHANGE from architecture-1.md — resolves W1 and W6]**
+> **[CHANGE from architecture-v2-cmatrix-baseline.md — resolves W1 and W6]**
 > Architecture-1's single-structure VDG conflated confirmed environmental facts with inferred attack hypotheses in one data structure, making it harder to ablate, inspect, or reason about epistemically. This section replaces it with two strictly-separated layers: an **Environmental Layer (EL)** of confirmed facts (written exclusively by Specialists) and an **Attack Layer (AL/VDG)** of scored attack hypotheses (written exclusively by the Team Manager).
 > This separation is borrowed from Architecture-2's ASG/APG write-ownership principle, but combined with Architecture-1's UCB scoring and dependency-edge mechanisms that Architecture-2 lacks.
 
@@ -479,7 +479,7 @@ Each Specialist is internally a small deterministic sub-FSM — the paper-valida
 ### 6.4 Layer 4 — Execution and Validation
 
 - **Execution Agent:** Strict separation of command generation (LLM) from command execution (deterministic wrapper). The AutoGen `AssistantAgent`/`UserProxyAgent` split, generalized. The executor never reasons; the LLM never executes directly.
-- **Evaluation Agent [CHANGE]:** Produces a **4-part** structured output (extended from architecture-1.md's 3-part critique): `{what_happened, expected_vs_actual, next_step, E_ord}`. The `E_ord` ordinal evidence score (§4.5) replaces raw LLM confidence in the UCB formula. This makes the Evaluation Agent's output a first-class input to the VDG update rule.
+- **Evaluation Agent [CHANGE]:** Produces a **4-part** structured output (extended from architecture-v2-cmatrix-baseline.md's 3-part critique): `{what_happened, expected_vs_actual, next_step, E_ord}`. The `E_ord` ordinal evidence score (§4.5) replaces raw LLM confidence in the UCB formula. This makes the Evaluation Agent's output a first-class input to the VDG update rule.
 - **Validation Agent:** Mandatory before any finding is recorded. Per-surface oracle: CVE-Bench's 8-attack-type oracle for web findings; MHBench's per-environment success criterion for multi-host findings; PrediQL's `{vulnerability_type, severity, confidence_score, evidence_snippet}` schema for GraphQL findings. All findings deduplicated via RESTler-style sequence bucketization.
 
 ### 6.5 VAPT Protocol Prompt — Methodology-as-Configuration
@@ -641,9 +641,9 @@ This reflection is embedded (using the same embedding model as the 3-tier store)
 
 ### 8.4 Skill Library — Cross-Mission Verified Exploitation Procedures
 
-> **[CHANGE from architecture-1.md — resolves W4 (Voyager re-execution feasibility gap)]**
+> **[CHANGE from architecture-v2-cmatrix-baseline.md — resolves W4 (Voyager re-execution feasibility gap)]**
 
-The Skill Library stores crystallized, reusable exploitation procedures. It replaces architecture-1.md's Voyager-style self-verification-gated promotion (which requires safe re-execution of exploits — infeasible for VAPT after mission close) with a **crystallization threshold**: a skill is promoted to the library when **≥2 independent missions against the same technology fingerprint produce a validated exploitation chain** for the same vulnerability class.
+The Skill Library stores crystallized, reusable exploitation procedures. It replaces architecture-v2-cmatrix-baseline.md's Voyager-style self-verification-gated promotion (which requires safe re-execution of exploits — infeasible for VAPT after mission close) with a **crystallization threshold**: a skill is promoted to the library when **≥2 independent missions against the same technology fingerprint produce a validated exploitation chain** for the same vulnerability class.
 
 **Why this resolves W4:** The ≥2-mission threshold requires no re-execution of exploits. The two independent successful missions constitute mutual verification — the same approach worked twice on the same technology class, which is a stronger generalizable signal than a single mission's self-verification on the same target.
 
@@ -669,7 +669,7 @@ SkillEntry {
 
 ### 8.5 Usage Tracker + Engagement Trajectory Export
 
-> **[CHANGE — extends architecture-1.md's Usage Tracker with reasoning-trace level; adds Architecture-2's Trajectory Export]**
+> **[CHANGE — extends architecture-v2-cmatrix-baseline.md's Usage Tracker with reasoning-trace level; adds Architecture-2's Trajectory Export]**
 
 Every mission produces a **structured engagement trajectory** — a complete, machine-readable record of every planning cycle step:
 
@@ -705,7 +705,7 @@ TrajectoryEntry {
 
 ## 9. Core Novelty — Precise Claims
 
-> **[CHANGE from architecture-1.md]** Claims are tightened to reflect the audit findings. Contributions that were design intents are moved to "subject to pilot study" or "future work." Claims are labeled by evidence type: **[Established]**, **[Reasonable Hypothesis]**, or **[Speculative]**.
+> **[CHANGE from architecture-v2-cmatrix-baseline.md]** Claims are tightened to reflect the audit findings. Contributions that were design intents are moved to "subject to pilot study" or "future work." Claims are labeled by evidence type: **[Established]**, **[Reasonable Hypothesis]**, or **[Speculative]**.
 
 ### C1 — The VDG Algorithm: Unifying Exploration Search with Dynamic Dependency Planning
 
@@ -743,7 +743,7 @@ TrajectoryEntry {
 
 **Precise claim:** CMatrix is the first autonomous VAPT system evaluated on **three independently-benchmarked attack-surface families** (web CVEs, GraphQL APIs, multi-host networks) using a **shared orchestration layer** (VDG + Team Manager) with surface-specific execution modules (Specialist pools). Results are reported with per-surface breakdowns against each surface's own established baseline systems.
 
-**[CHANGE from architecture-1.md]** The framing is corrected from "one unmodified architecture" (inaccurate) to "shared orchestration layer with surface-specific execution modules" (accurate). The contribution is the shared orchestration layer and the evaluation across all three surfaces — not a claim that zero surface-specific code exists.
+**[CHANGE from architecture-v2-cmatrix-baseline.md]** The framing is corrected from "one unmodified architecture" (inaccurate) to "shared orchestration layer with surface-specific execution modules" (accurate). The contribution is the shared orchestration layer and the evaluation across all three surfaces — not a claim that zero surface-specific code exists.
 
 **What prior work does:** All 29 surveyed papers evaluate on exactly one attack-surface family. No multi-surface evaluation exists.
 
@@ -753,7 +753,7 @@ TrajectoryEntry {
 
 **Precise claim:** CMatrix is the first system to treat CVE-Bench's "insufficient exploration is the dominant failure mode" diagnostic as a primary architectural design constraint rather than an acknowledged limitation. Concretely: (a) the UCB formula forces explicit enumeration of all eligible VDG nodes at each decision (prevents depth-first tunnel vision); (b) the VAPT Protocol Prompt includes a configurable meta-critic that fires every N actions in zero-day mode to force reconsideration of unexplored EL surface; (c) Recon Specialists default to full-surface tools (`nmap -p- -sV`, not top-1000 ports) because HackWorld identifies default scan depth as a top-4 failure mode.
 
-**[CHANGE from architecture-1.md]** The "parallel alternative_surface_queue" is removed from the contribution claim because the mechanism was underspecified. The UCB formula's exploration term already implements the exploration incentive; the parallel queue added complexity without a specified mechanism. If a parallel dispatch protocol is implemented (§4.5 graph-lock discussion), it can be ablated separately.
+**[CHANGE from architecture-v2-cmatrix-baseline.md]** The "parallel alternative_surface_queue" is removed from the contribution claim because the mechanism was underspecified. The UCB formula's exploration term already implements the exploration incentive; the parallel queue added complexity without a specified mechanism. If a parallel dispatch protocol is implemented (§4.5 graph-lock discussion), it can be ablated separately.
 
 **Experimental validation:** Ablation A2 (UCB vs. FIFO dispatch) on CVE-Bench zero-day mode; measure exploration-failure fraction with and without UCB.
 
@@ -904,7 +904,7 @@ CMatrix may exercise RESTler-style dependency inference internally (§7.3, Graph
 
 ## 14. Summary of Contribution Claims
 
-> **[CHANGE from architecture-1.md]** Contributions are tightened to reflect the audit. Design intents without implementation plans are removed. Each claim is labeled by evidence type.
+> **[CHANGE from architecture-v2-cmatrix-baseline.md]** Contributions are tightened to reflect the audit. Design intents without implementation plans are removed. Each claim is labeled by evidence type.
 
 | # | Contribution | Evidence type |
 |---|---|---|
@@ -923,4 +923,4 @@ CMatrix may exercise RESTler-style dependency inference internally (§7.3, Graph
 
 ---
 
-*This document supersedes architecture-1.md. All [CHANGE] annotations reference the audit findings in cmatrix_research_audit.md. Sections marked [NEW] introduce components absent from architecture-1.md. All evidence is labeled [Established], [Reasonable Hypothesis], or [Speculative].*
+*This document supersedes architecture-v2-cmatrix-baseline.md. All [CHANGE] annotations reference the audit findings in cmatrix_research_audit.md. Sections marked [NEW] introduce components absent from architecture-v2-cmatrix-baseline.md. All evidence is labeled [Established], [Reasonable Hypothesis], or [Speculative].*

@@ -3,14 +3,14 @@ We are conducting research on **“CMatrix: LLM-Orchestrated Multi-Agent Framewo
 We have:
 
 * **`survey-notes/combined-papers.md`** — a synthesis of 29 research papers we studied.
-* **`survey-notes/architecture-1.md`** — our proposed architecture, developed from those papers.
-* **`survey-notes/architecture-2.md`** — an alternative architecture developed independently using Claude AI.
+* **`survey-notes/architecture-v2-cmatrix-baseline.md`** — our proposed architecture, developed from those papers.
+* **`survey-notes/architecture-v1-claude-web-dual-graph.md`** — an alternative architecture developed independently using Claude AI.
 
 Your task is to perform a **rigorous research-level audit and comparison**, not merely improve the writing.
 
 ### 1. Evaluate Architecture-1
 
-Determine whether `survey-notes/architecture-1.md` is genuinely strong enough for a **top-tier security/AI conference**.
+Determine whether `survey-notes/architecture-v2-cmatrix-baseline.md` is genuinely strong enough for a **top-tier security/AI conference**.
 
 Specifically assess whether it contains:
 
