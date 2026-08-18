@@ -39,8 +39,8 @@
 §5  System Architecture Overview   ✅ DONE
 §6  Dual-Layer World Model         ✅ DONE
 §7  VDG Algorithm (Formalized)     ✅ DONE
-§8  Layer-by-Layer Detail          🔲 TODO
-§9  Per-Specialist Methodology     🔲 TODO
+§8  Layer-by-Layer Detail          ✅ DONE
+§9  Per-Specialist Methodology     ✅ DONE
 §10 Memory & State Services        🔲 TODO
 §11 Gap Table                      🔲 TODO
 §12 Benchmarking & Statistics      🔲 TODO
@@ -558,3 +558,170 @@ The Evaluation Agent outputs `E_ord` as part of its structured 4-part critique. 
 ```
 
 Flagged issues are logged but do not block execution. If violations are common in prototyping, edge construction quality must be improved before claiming the dependency-edge contribution.
+
+---
+
+## 8. Layer-by-Layer Architecture Detail
+
+### 8.1 Layer 1 — Orchestrator (Mission Planner)
+
+- **Scope Intake** accepts: target, rules of engagement, mode flag (*one-day*: CVE hint provided per Fang et al.; *zero-day*: no hint per HPTSA/CVE-Bench zero-day mode), and the attack-surface family (web, GraphQL, multi-host) so the correct benchmark harness and Specialist pool are activated.
+- **Auto-prompter** (D-CIPHER pattern) performs unstructured LLM-grounded initial exploration. AutoPT-style rule extraction converts its findings into the first EL entries and VDG seed nodes — combining D-CIPHER's grounded discovery with AutoPT's deterministic state-machine seeding.
+- **Fixed phase skeleton (not a contribution):** The Orchestrator applies a hard initialization sequence — Recon → Surface Enumeration → Specialist Dispatch — before handing control to the Team Manager's UCB loop. This is a phase ordering, retained for engineering soundness, not claimed as a planning contribution. *[CHANGE from architecture-1.md §5.2: Hybrid Classical-Planning removed; phase ordering is a skeleton only.]*
+- **FullCompact Trigger [CHANGE]:** At 85% of the Team Manager's context window, the Orchestrator snapshots the current EL and AL state and reconstructs the Team Manager's reasoning context from this snapshot. Because all discovered facts live in the EL and all scored hypotheses live in the VDG (AL), nothing is lost — no conversation history is needed, only the structured state. This addresses long-session context inflation (PentestGPT Finding 4), which Architecture-1 left unresolved for the orchestration layer.
+
+### 8.2 Layer 2 — Team Manager
+
+- **Attack Decision-Making (ADM):** Explicit UCB-based scoring over eligible VDG nodes (§7.2) — never implicit LLM next-task inference. PentestGPT Finding 4: LLMs default to depth-first tunnel vision unless forced to enumerate all candidates. The UCB formula forces explicit enumeration of all eligible nodes at each decision point.
+- **Declarative Task Dispatch:** The Team Manager emits high-level verbs (`recon_target()`, `exploit_sqli()`, `verify_xss()`, `lateral_move()`, `exploit_graphql()`) rather than raw shell/HTTP commands. 5–8 verbs in the vocabulary — deliberately small, because a larger vocabulary degrades dispatch reliability. This is the single most consistent anti-hallucination pattern across the survey (Incalmo, CHECKMATE, RESTler's dependency-inference technique).
+- **Structured Handoff Bridge:** Every Specialist's raw stdout/HTTP response is compressed into a structured summary (`{finding_type, target, evidence_summary, E_ord, recommended_next}`) before re-entering the Team Manager's context. This prevents context flooding — the architectural bottleneck of single-agent systems identified by D-CIPHER and VulnBot.
+- **VDG Write-Back:** After receiving a Specialist's Handoff Bridge summary, the Team Manager executes `VDG_Update(v, outcome, E_ord)` (§7.4) and derives any new VDG nodes from new EL discoveries via `VDG_AddNode` (§7.3). The Team Manager is the sole writer of the VDG.
+- **Graph-Lock Protocol [CHANGE]:** When parallel Specialists are dispatched (zero-day mode only), each Specialist's invocation acquires a read-lock on the relevant EL subtree. The Team Manager holds the VDG write-lock. Specialists release locks on Handoff Bridge delivery. This prevents concurrency corruption of the EL and VDG in parallel dispatch scenarios. *[Adopted from Claude-Agent adjudication — the only proposal to address the concurrency consistency problem.]*
+- **Tool Output Sanitization [CHANGE]:** All tool output is passed through a constrained parser before injection into any LLM context. HTML/JavaScript content (e.g., XSS payloads in HTTP responses) is entity-escaped before injecting into the Team Manager or Specialist contexts. This defends against prompt injection via attacker-controlled target output — a real attack vector in VAPT agents. *[Adopted from Claude-Agent adjudication.]*
+
+### 8.3 Layer 3 — Specialists
+
+Each Specialist receives a **fresh context** per invocation containing:
+1. Task description (assigned VDG node: `weakness_id`, `attack_intent`, `E_ord`, prior attempt summary if `retry_count > 0`)
+2. Relevant tool documentation
+3. EL snapshot scoped to relevant nodes (endpoints, parameters, auth_states for the target)
+4. **Vulnerability-Class Knowledge Injection [CHANGE]:** Curated, static offline knowledge documents injected at spawn time (see §9 per specialist)
+5. **Episodic Failure Memory [CHANGE]:** Retrieved failure reflections from the 4th FAISS tier (§10.4) for the current vulnerability class and target pattern — prevents repeating known-failed approaches even with fresh context
+6. **Skill Library Query [CHANGE]:** If a crystallized strategy matches the current technology fingerprint, it is injected as an in-context example before the Specialist begins reasoning
+
+No rolling conversation history. This is the paper-validated fix for context pollution (PentestGPT, D-CIPHER, VulnBot independently validate).
+
+Each Specialist is internally a **small deterministic sub-FSM** — the paper-validated fix for multi-step exploit chains (Getting Pwnd by AI: single-step exploits work even with simple loops; multi-step chains are exactly where unstructured agents fail).
+
+The Specialist pool activated per mission:
+- **Web missions:** Recon + SQLi + XSS + Auth/Session Specialists
+- **GraphQL missions:** All web Specialists + GraphQL Specialist
+- **Multi-host missions:** Lateral-Movement Specialist + Recon + Auth/Session for initial-access phase on each host
+
+### 8.4 Layer 4 — Execution and Validation
+
+- **Execution Agent:** Strict separation of command generation (LLM) from command execution (deterministic wrapper) — the AutoGen `AssistantAgent`/`UserProxyAgent` split, generalized. The executor never reasons; the LLM never executes directly.
+- **Evaluation Agent [CHANGE]:** Produces a **4-part** structured output (extended from architecture-1.md's 3-part critique): `{what_happened, expected_vs_actual, next_step, E_ord}`. The `E_ord` ordinal evidence score (§7.7) replaces raw LLM confidence in the UCB formula. This makes the Evaluation Agent's output a first-class input to the VDG update rule. The `E_ord` value is parsed deterministically from constrained JSON — not inferred from free-form text.
+- **Validation Agent with Diagnosis-Adapt-Cap Loop [CHANGE]:** Mandatory before any finding is recorded. Instead of a single attempt (MAPTA's design), the Validation Agent uses a bounded retry structure:
+
+```
+1. Execute validation tool (per-surface oracle).
+2. If SUCCESS → VALIDATED. Update EL finding with E_ord=5. Trigger skill promotion check.
+3. If FAILURE → Diagnose via LLM:
+       Classify as CORRECTABLE (wrong param, encoding issue, missing auth) or
+                   FUNDAMENTAL (vuln doesn't exist, WAF blocks all payloads)
+4. If FUNDAMENTAL → Mark RULED_OUT.
+       Trigger VDG_Update(v, FAILURE, E_ord_current).
+       If retry_count >= max_retries: trigger VDG_FailurePropagate.
+5. If CORRECTABLE → Adapt parameters based on LLM diagnosis. Retry (up to max_retries=3).
+       If still failing with same error after adaptation: escalate to FUNDAMENTAL.
+```
+
+**Failure mode guard:** If diagnosis classifies a case as CORRECTABLE but the adapted attempt fails with the *same* error class, immediately escalate to FUNDAMENTAL regardless of retry count remaining. Same-error recurrence is strong evidence the failure is structural, not parametric.
+
+**Per-Surface Oracles:**
+- *Web:* CVE-Bench's 8-attack-type oracle (DoS, File Access, File Creation, DB Modification, DB Access, Unauthorized Admin Login, Privilege Escalation, SSRF)
+- *Multi-host:* MHBench's per-environment criterion (host compromised / credential obtained / objective reached)
+- *GraphQL:* PrediQL's schema (`vulnerability_type, severity, confidence_score, evidence_snippet`)
+- All findings deduplicated via RESTler-style sequence bucketization
+
+---
+
+## 9. Attack Surface Traversal — Per-Specialist Methodology
+
+### 9.1 Recon Specialist
+
+Runs full-surface enumeration by default — **not top-1000 ports** — because HackWorld shows default scan depth is itself a top-4 failure mode. Tools: `nmap -p- -sV`, WhatWeb/ObserverWard for technology fingerprinting, ZAP as a passive mapper (not an active scanner at this stage), Gobuster/ffuf for directory enumeration with a medium-size wordlist.
+
+**Output to EL:** Every discovered endpoint, service version, technology banner, and parameter is written to `EL.endpoints`, `EL.services`, `EL.parameters`. Technology fingerprints trigger CVE candidate lookup and EPSS prior computation for initial VDG node seeding.
+
+**Knowledge injection:** No static document — Recon is discovery-first. The Recon Specialist uses tool documentation only.
+
+### 9.2 SQL Injection Specialist
+
+Structured sub-FSM rather than free generation:
+```
+State 0: Baseline probe (simple quote/apostrophe injection to detect error-based SQLi)
+State 1: Boolean/time-based differential (SLEEP probe with timing differential measurement)
+State 2: Bit-by-bit extraction (if time-based confirmed)
+State 3: UNION-based extraction (if error-based or UNION testable)
+State 4: Authentication bypass via tautology (if login form target)
+State FSM_EXHAUSTED: report to Team Manager
+```
+Temperature = 0.0 for execution sub-states (deterministic payloads across retries); temperature 0.2–0.5 for initial probe-selection sub-state (Specialist decides which state to enter first based on EL evidence).
+
+**Knowledge injection:** SQL injection technique taxonomy, SQLMap flag reference, blind/time-based detection patterns, WAF bypass payload lists. Injected as a static document at spawn time.
+
+**Session persistence:** All SQLi probes are routed through the Session Persistence Service (SPS) to maintain authentication state across multi-turn extraction chains.
+
+### 9.3 XSS Specialist (AWE 5-Phase Pipeline)
+
+Five-phase sub-FSM:
+```
+Phase 1: Canary injection (unique non-executing string to determine reflection points)
+Phase 2: Context detection (attribute, script, HTML body, href, event handler)
+Phase 3: Filter probing (length limits, character blocklists, WAF signature)
+Phase 4: Payload mutation (context-specific; if WAF detected, switch to event-handler payloads)
+Phase 5: DOM-level verification via Playwright headless browser
+Phase W: Webhook-XSS class — launch webhook listener (start_webhook_listener(port) → url)
+          inject payload with exfil URL; confirm receipt
+```
+**Knowledge injection:** XSS payload patterns, CSP bypass techniques, DOM vs. reflected vs. stored distinction, event-handler payload library for WAF evasion.
+
+**WAF response adaptive branching:** If Phase 3 detects a WAF filtering `<script>`, Phase 4 branches to the event-handler payload track (e.g., `onmouseover`, `onerror`) without re-entering Phase 3 — this is the conditional branching pattern that distinguishes CMatrix's security-domain memory from Voyager's game-world skills (C2 security-specific difference).
+
+### 9.4 GraphQL Specialist
+
+```
+Step 1: Introspection query → extract full schema (types, fields, resolvers)
+Step 2: Build producer–consumer dependency graph (GraphQL analog of RESTler's
+        dependency inference — reused internally, not claimed as a benchmarked surface)
+Step 3: Apply PrediQL's Thompson-Sampling bandit across 8 strategy arms
+        (schema depth × arg mode × RAG top-k)
+Step 4: FAISS-backed retrieval of prior (query, response) traces for grounding
+Step 5: Self-correction loop — inject (failed_query, error_message) pairs
+        into next prompt for iterative refinement
+Step 6: Target-specific checks
+        • batched-auth bypass (multiple operations in one request)
+        • IDOR via ID manipulation (sequential integer or UUID probing)
+        • injection via arguments (SQLi/XSS into resolver inputs)
+        • DoS via nested queries (deep nesting or circular fragments)
+```
+
+**Output schema:** `{vulnerability_type, severity, confidence_score, evidence_snippet, recommended_fix}` — adopted verbatim from PrediQL so results are directly comparable to published numbers.
+
+**Knowledge injection:** GraphQL security testing checklist, introspection-disabled probing techniques, batched-operation attack patterns.
+
+### 9.5 Auth/Session Specialist
+
+Manages the **Session Persistence Service (SPS)** — `exec(endpoint, method, payload, session_id)` — that transparently maintains cookies, CSRF tokens, and short-lived OAuth/JWT tokens across every Specialist's calls within a mission.
+
+This directly targets the four vulnerability classes every single-agent baseline in the survey fails on (Authorization Bypass, JS/session attacks, Hard multi-step SQLi, XSS+CSRF chains) — all four share the root cause: coordinated multi-turn session state that no flat single-agent architecture maintains correctly.
+
+**Auth/Session sub-FSM:**
+```
+State 0: Initial authentication (obtain session token)
+State 1: CSRF token rotation detection and capture
+State 2: JWT lifecycle management (detect expiry, re-authenticate)
+State 3: Authorization bypass probing (horizontal IDOR, vertical privilege escalation)
+State 4: Re-authentication trigger — fires automatically if a 401/403 is detected
+         during another Specialist's SPS-proxied call
+```
+
+**Knowledge injection:** OWASP Authentication Testing Guide, JWT attack reference (alg:none, HS256→RS256 confusion, key injection).
+
+### 9.6 Lateral-Movement Specialist (Multi-Host)
+
+Implements Incalmo's declarative five-verb task API dispatched by the Team Manager at the same abstraction level as web-surface verbs, so a single VDG and Team Manager can drive both surface types without a separate orchestration codepath:
+
+| Verb | Operation | EL write |
+|---|---|---|
+| `Scan(host)` | Port + service enumeration | `EL.hosts`, `EL.services` |
+| `LateralMove(src, dst, credential)` | Pivot using harvested credential | `EL.hosts[dst].status = reached` |
+| `EscalatePrivilege(host, technique)` | Local privilege escalation | `EL.credentials` (root/system) |
+| `FindInfo(host, pattern)` | Search for credentials/keys/config | `EL.credentials`, `EL.evidence` |
+| `Exfiltrate(host, target_data)` | Objective confirmation | `EL.findings` (oracle-backed) |
+
+State (compromised hosts, harvested credentials, active sessions) is tracked in `EL.hosts` and `EL.credentials` — shared across all Specialists via the EL.
+
+**Knowledge injection:** None at spawn time. The Lateral-Movement Specialist uses the EL snapshot and Incalmo's verb documentation only. Technique selection is LLM-driven from the current `EL.hosts` and `EL.credentials` state.
