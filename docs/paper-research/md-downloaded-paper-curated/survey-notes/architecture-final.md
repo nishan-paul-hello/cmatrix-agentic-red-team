@@ -41,13 +41,13 @@
 §7  VDG Algorithm (Formalized)     ✅ DONE
 §8  Layer-by-Layer Detail          ✅ DONE
 §9  Per-Specialist Methodology     ✅ DONE
-§10 Memory & State Services        🔲 TODO
-§11 Gap Table                      🔲 TODO
-§12 Benchmarking & Statistics      🔲 TODO
-§13 Ablation Design                🔲 TODO
-§14 Model Config                   🔲 TODO
-§15 Threats to Validity            🔲 TODO
-§16 Contribution Summary           🔲 TODO
+§10 Memory & State Services        ✅ DONE
+§11 Gap Table                      ✅ DONE
+§12 Benchmarking & Statistics      ✅ DONE
+§13 Ablation Design                ✅ DONE
+§14 Model Config                   ✅ DONE
+§15 Threats to Validity            ✅ DONE
+§16 Contribution Summary           ✅ DONE
 -->
 
 ---
@@ -725,3 +725,383 @@ Implements Incalmo's declarative five-verb task API dispatched by the Team Manag
 State (compromised hosts, harvested credentials, active sessions) is tracked in `EL.hosts` and `EL.credentials` — shared across all Specialists via the EL.
 
 **Knowledge injection:** None at spawn time. The Lateral-Movement Specialist uses the EL snapshot and Incalmo's verb documentation only. Technique selection is LLM-driven from the current `EL.hosts` and `EL.credentials` state.
+
+---
+
+## 10. Memory and State Services
+
+### 10.1 Environmental Layer (EL) as Primary External Store
+
+The EL (§6.1) is the canonical structured store outside any LLM's context window. Every mature surveyed system independently converges on a similar construct (Incalmo's ESS, PentestAgent's Env Info DB, cochise's PTT, VulnBot's PTG). CMatrix's EL unifies the multi-host fields (`hosts`, `credentials`) that Architecture-1's ESS added and the write-ownership enforcement that Architecture-2's ASG introduced.
+
+The EL is not a blackboard. It has enforced write ownership, a versioned schema, and is queryable by all agents with read access. No LLM ever receives the full EL — only a scoped snapshot relevant to the current task.
+
+### 10.2 Three-Tier Long-Term Memory
+
+Adapted from CO-REDTEAM (3-tier design) and Voyager (description-embedding skill retrieval), specialized for the security domain:
+
+| Tier | Contents | Key Security-Specific Adaptation |
+|---|---|---|
+| **Tier 1: Vulnerability-Pattern Memory** | Schema-level experience: what vulnerability classes were found on what technology stacks, version ranges, and endpoint patterns | Technology fingerprint → likely vuln class mapping; seeded from prior missions |
+| **Tier 2: Strategy Memory** | Exploit workflow generalizations with **conditional branching** (e.g., `if WAF blocks <script>: use event-handler payloads`) | Conditional branching for WAF/filter responses — the security-specific difference from Voyager's deterministic game-world skills |
+| **Tier 3: Technical-Action Memory** | Working commands, payload templates, successful tool flag combinations, and known failure pitfalls | SQLMap flags that bypassed a specific WAF; XSS payloads confirmed on a specific framework |
+
+**Store implementation:** Three separate FAISS stores with distinct embedding schemas. Retrieved via cross-encoder reranker. **Retrieval trigger:** At Team Manager's VDG scoring step, before each Specialist dispatch, keyed on technology fingerprint from EL + vulnerability class of the selected VDG node.
+
+**Skill promotion (read: storage gate):** After the Validation Agent confirms a finding (E_ord = 5, oracle-confirmed), the Evaluation Agent generates a structured description of the successful exploit chain. This description is embedded and stored in the appropriate memory tier. **Promotion is conditional on oracle confirmation — no LLM self-report of success is sufficient.**
+
+**Negative transfer guard:** Strategies are keyed on `{technology_fingerprint, framework_version_range}`. If a retrieved strategy's version range does not overlap the current target's version, it is injected with an explicit caveat: *"This strategy was validated on version X.Y — verify applicability before use."* Strategies inactive for > N missions are flagged for re-verification. This directly addresses the negative transfer risk identified in the adjudication: a strategy successful against Framework A version X may be harmful against version Y.
+
+### 10.3 Usage Tracker
+
+Logs per mission and per Specialist invocation: input/output/cached/reasoning tokens, tool-call count, wall-clock time, and USD cost. Elevated to a first-class architectural component (not a logging afterthought) because:
+- **Cost-per-successful-exploit** (`cost_per_run / pass@1_rate`) is a primary comparative metric, per BountyBench
+- Compute normalization for fair baseline comparison (§12.3) requires per-condition API call counts
+- VDG's cost-aware scoring term (μ in §7.2) reads from the Usage Tracker at runtime
+
+### 10.4 Episodic Failure Memory (4th FAISS Tier) [CHANGE]
+
+> **[NEW — adopted from Claude-Agent adjudication. Grounded in Reflexion (Shinn et al., NeurIPS 2023) and CO-REDTEAM's −41.6pp ablation showing execution feedback is the most critical component.]*
+
+A per-mission FAISS store of structured failure reflections. Indexed by `{vulnerability_class, tool_used, target_pattern, error_class}`. Retrieved before each Specialist invocation to inject relevant prior failures into the Specialist's fresh context.
+
+**Why this is necessary:** Specialists receive fresh context per invocation, eliminating context pollution. But without Episodic Failure Memory, the Team Manager can repeatedly dispatch a Specialist to the same failed approach — the system as a whole loops even though each individual Specialist invocation is clean. The failure log in the EL prevents exact-match repeats; Episodic Failure Memory handles semantically similar attempts with different surface parameters.
+
+**Structure of a failure reflection:**
+```
+FailureReflection {
+    mission_id      : str
+    vulnerability_class : str
+    tool_used       : str
+    target_pattern  : str          -- e.g., "login form on Flask/SQLite"
+    error_class     : str          -- e.g., "WAF_BLOCK", "TIMEOUT", "FALSE_POSITIVE"
+    attempted_params: dict
+    diagnosis       : str          -- CORRECTABLE or FUNDAMENTAL
+    reflection_text : str          -- "Approach X failed because Y; try Z instead"
+    timestamp       : datetime
+}
+```
+
+**Scope:** Per-mission. Failure reflections are not promoted to long-term Strategy Memory unless the pattern recurs across ≥2 missions (avoids over-generalizing from a single target's idiosyncrasies).
+
+### 10.5 Skill Library (Crystallization)
+
+Successfully validated exploit chains are stored as parameterized strategies with technology-scope keys. The Skill Library differs from the Strategy Memory tier in structure: Strategy Memory contains conditional workflow trees; the Skill Library contains instantiable procedure templates with explicit parameter slots.
+
+**Promotion gate:** Validation Agent oracle confirmation (E_ord = 5) required. No self-assessed success is accepted.
+
+**Crystallization threshold:** Architecture-2's ≥2-mission crystallization threshold is not adopted for this paper (see C2 rationale in §3). Per-mission oracle-confirmed storage is used instead. Crystallization across missions is deferred to future work.
+
+### 10.6 Engagement Trajectory Log [CHANGE]
+
+Incrementally logs every mission step:
+```
+TrajectoryStep {
+    step            : int
+    timestamp       : datetime
+    trigger         : str          -- what caused this step (EL change / UCB selection / Validation)
+    vdg_delta       : dict         -- changes to VDG state at this step
+    action_type     : str          -- Specialist dispatched, VDG updated, etc.
+    action_payload  : dict         -- full parameters
+    el_delta        : dict         -- changes to EL at this step
+    specialist_output_summary : str
+    e_ord           : int          -- E_ord at this step
+    cost_usd        : float
+}
+```
+
+**Purpose:** Full reproducibility and post-hoc failure analysis. Every failed CVE in the primary metric (CVE-Bench) is post-hoc classified using the Trajectory Log by a human annotator: `{exploration_failure, reasoning_failure, tool_failure, validation_failure}`. This failure analysis protocol is required for top-tier publication and is absent from all 29 surveyed papers.
+
+### 10.7 Early Stopping Heuristic [CHANGE]
+
+If no new VDG nodes are added in the last N=5 Specialist invocations **AND** the VDG frontier is empty or fully attempted, trigger mission termination before hitting the hard time/cost ceiling.
+
+**Why this matters:** Without early stopping, a mission that has exhausted all meaningful attack paths still runs until the hard timeout, wasting budget and inflating cost-per-exploit. The heuristic improves cost efficiency without reducing pass rate (a node that hasn't fired a new VDG update in 5 invocations is not going to produce new findings).
+
+**Cost-per-exploit impact (hypothesis):** Early stopping is expected to reduce cost-per-exploit without reducing pass@1. This is tested in Ablation A7 (§13).
+
+---
+
+## 11. Prior Work Gap Table
+
+| Gap in prior work | Papers exhibiting the gap | CMatrix's fix |
+|---|---|---|
+| Flat task dispatch with no formal prerequisite modeling | HPTSA, MAPTA, AWE, T-Agent, CVE-Bench systems | VDG: UCB-guided node selection over a dependency-constrained frontier (§7) |
+| Dependency-aware planning evaluated only on pre-curated weakness sets, not scalable to open-ended discovery | PentestEval SMP, CHECKMATE | VDG grows dynamically from Specialist discovery via `VDG_AddNode` (not pre-annotated) |
+| Node-level scoring insufficient for multi-step attack chains | EGATS (UCB without path optimization) | VDG path scoring: product of node scores × impact weight / cumulative cost (§7.5) |
+| No failure recovery or failure propagation in the search structure | All 29 papers | VDG Failure Propagation with BLOCKED status propagation and frontier recomputation (§7.6) |
+| Exploration failure unaddressed architecturally | CVE-Bench (diagnostic only) | Full-surface Recon defaults + dependency-constrained frontier prevents premature exploitation commitment |
+| Session/multi-turn state loss causes 4 vulnerability classes to fail | Fang et al., PentestGPT | First-class Session Persistence Service (SPS) with Auth/Session Specialist (§9.5) |
+| Context pollution from rolling conversation history | PentestGPT, D-CIPHER, VulnBot | Fresh context per Specialist invocation (paper-validated independently by all three papers) |
+| Flat LLM command generation produces hallucinated/invalid tool calls | Most single-agent systems | Declarative task API with ≥8 high-level verbs — tool arguments never inferred from scratch |
+| Long-session Commander context inflation | PentestGPT Finding 4 | FullCompact: EL+AL-based lossless context reconstruction at 85% utilization (§8.1) |
+| Raw LLM confidence is overconfident (used directly in scoring) | EGATS and derivative systems | Ordinal evidence scoring E_ord (calibrated 0–5 scale) replaces raw confidence in UCB formula (§7.7) |
+| Single-attempt validation produces false positives | All single-agent systems | Mandatory Diagnosis-Adapt-Cap loop in Validation Agent (up to 3 retries with failure-type classification) |
+| Per-mission failure repetition (fresh context loses episode history) | All fresh-context designs | Episodic Failure Memory (4th FAISS tier) persists failure reflections within mission (§10.4) |
+| Single undifferentiated vector memory, no cross-mission skill promotion | AWE, PrediQL, VulnBot | 3-tier memory with security-specific conditional workflow strategies + oracle-gated skill promotion (§10.2) |
+| No dollar-cost reporting standard | Most systems report pass rate only | Usage Tracker + cost-per-exploit as co-primary metric; compute-normalized ablations |
+| Every system evaluated on a single benchmarked surface | All 29 papers individually | Shared orchestration layer evaluated across web, GraphQL, multi-host with standardized per-surface oracles |
+| No statistical rigor (runs, CIs, significance tests) | All 29 papers | McNemar's test, 95% Wilson CI, 10 runs on CVE-Bench, compute-normalized at 50 API calls per CVE (§12.3) |
+
+---
+
+## 12. Benchmarking Strategy and Statistical Methodology
+
+### 12.1 Tiered Benchmark Suite
+
+Assembled entirely from existing published benchmarks. No benchmark is constructed for this project.
+
+| Tier | Benchmark | Surface | Size | Role |
+|---|---|---|---|---|
+| **Tier 0** | Fang et al. 15-vulnerability sandbox suite | Web | 15 | Fast CI regression; floor: GPT-4's 73.3% pass@5. CMatrix must not regress and must close the 4 GPT-4 failure classes (AuthBypass, JS attacks, Hard SQLi, XSS+CSRF) |
+| **Tier 0b** | HPTSA 14-CVE zero-day suite | Web | 14 | Zero-day mode validation; floor: HPTSA's 42% pass@5 |
+| **Tier 1** | PentestEval 12 real-world scenarios (346 tasks) | Web | 12 / 346 | Stage-level (IC/WG/WF/ADM/EG/ER) diagnosis; UCB hyperparameter tuning (§7.2) |
+| **Tier 2** | CVE-Bench | Web | 40 critical CVEs | **Primary metric** — pass@1 and pass@5, one-day and zero-day, 8-attack-type oracle, 10 runs |
+| **Tier 2b** | MAPTA XBOW (104), HackWorld (36), NYU CTF Bench, Cybench (40) | Web | ~180 | Cross-benchmark generalization; reported per-benchmark and pooled |
+| **Tier 3** | PrediQL 6-API suite | GraphQL | 6 APIs | Schema-coverage % and vulnerability count vs. ZAP / Burp Suite / EvoMaster / GraphQLer baselines |
+| **Tier 4** | Incalmo MHBench | Multi-host | 40 environments | Host-compromise / credential-theft success rate; floor: Incalmo's 37/40 |
+| **Tier 5** | BountyBench | Web (production) | 25 real systems | Hardest tier; dollar-value and cost-per-exploit axes |
+| **Tier 6** | PentestGPT 13-machine set + HTB Season 8 (5 machines) | Web | 18 | Live-competition validation with human-solved ground truth |
+
+**Primary metric definition (C1 validation):**
+- CVE-Bench zero-day pass@1 ≥ 25% (vs. HPTSA's ~21%, T-Agent's ~10–13%)
+- CVE-Bench one-day pass@1 ≥ 50% (vs. GPT-4 ReAct's ~40%)
+- PentestEval ADM score ≥ 0.50 (vs. SMP baseline 0.31; GT-ADM upper bound 0.67)
+
+These are **targets for the hypothesis**, not guaranteed outcomes. If targets are missed, the gap is reported and analyzed via Trajectory Log failure classification.
+
+### 12.2 Reporting Standards
+
+- **Primary metric:** CVE-Bench pass@1 and pass@5, one-day and zero-day, broken down by the 8 attack-type oracle and by source-code availability.
+- **Separate axes:** GraphQL and multi-host results are never averaged into web pass-rate numbers. They are reported on strictly separate axes with separate baselines.
+- **Detection vs. exploitation:** Reported separately (per Fang et al.'s finding that detection ≠ exploitation — high detection / low exploitation pinpoints the failure stage).
+- **Cost reporting:** `cost_per_run / pass@1_rate` reported alongside every pass-rate number, per surface. Model and pricing date stated explicitly.
+- **Generalization table:** One architecture, three surfaces, one table — the paper's C3 evaluation evidence.
+
+### 12.3 Statistical Rigor and Methodology
+
+> **[CHANGE from architecture-1.md — no statistical methodology was specified. This section is adopted from GLM's adjudication proposal, which is the only proposal that provides a complete statistical plan.]*
+
+**Sample sizes:**
+- CVE-Bench (40 CVEs): **10 runs per condition** with different random seeds
+- All other benchmarks: **5 runs per condition**
+- Minimum 5 runs per ablation condition on CVE-Bench (40 CVEs × 5 = 200 total runs per ablation condition)
+
+**Metrics:**
+- Mean ± **95% Wilson score confidence interval** for all binary outcomes (pass@1, pass@5)
+- **McNemar's test** for paired binary outcomes (same CVE, different conditions) — appropriate for within-subject binary comparisons
+- Report p-values but emphasize effect sizes (percentage-point differences) over p-values
+
+**Compute normalization:**
+- All ablation conditions capped at **50 LLM API calls per CVE** on CVE-Bench — matching the median call count of the HPTSA baseline. This prevents a compute-heavy condition from winning unfairly.
+- Both raw and compute-normalized results are reported.
+- Cost-per-exploit normalized by model pricing at time of writing (model, version, and date stated explicitly).
+
+**Failure analysis protocol:**
+- For every failed CVE in the primary metric (CVE-Bench), a human annotator classifies the failure mode from the Engagement Trajectory Log: `{exploration_failure, reasoning_failure, tool_failure, validation_failure}`.
+- Failure distribution across classes is reported as a secondary result (this tells the research community where to improve next).
+
+**Baseline re-run policy:**
+- All baselines re-run under the same model, compute budget, and evaluation harness as CMatrix — not taken from published numbers, which may use different models or compute budgets. Published numbers are reported as a second column for reference.
+
+---
+
+## 13. Required Ablation Design
+
+> **[CHANGE from architecture-1.md §7 — the original ablation list had 4 conditions and did not decompose VDG components. This section provides the full causal ablation design required to support each contribution claim at a top-tier venue.]*
+
+### 13.1 Core Ablations (Must Have)
+
+These ablations are required to support the primary contribution claims. No claim is made without the corresponding ablation.
+
+**A1 — VDG Decomposition (isolates C1 — the critical ablation)**
+
+Four nested conditions, all compute-normalized at 50 API calls per CVE:
+
+| Condition | Description |
+|---|---|---|
+| **(a) Flat UCB** | Flat priority list of vulnerability candidates, UCB scoring, no graph structure, no dependency edges |
+| **(b) UCB + Dependency edges** | Full VDG node schema and edge inference, UCB selection, no path-level scoring |
+| **(c) Stacked (UCB filtered by dependency satisfaction)** | Run UCB independently; then apply dependency constraints as a filter wrapper. **This is the key discriminant: if (d) ≈ (c), unification has no value and the contribution downgrades.** |
+| **(d) Full VDG** | UCB + dependency edges + path-level scoring + failure propagation + early stopping |
+
+Benchmarks: CVE-Bench (exploration metric + pass@1 zero-day) and PentestEval (ADM score).
+If (d) > (c): unification claim holds. If (d) ≈ (c): contribution is "dependency-aware UCB filtering."
+
+**A2 — Memory (isolates C2)**
+
+| Condition | Description |
+|---|---|---|
+| No memory | Fresh state per mission; no 3-tier memory, no skill library, no episodic failure memory |
+| Episodic Failure Memory only | 4th FAISS tier only; no long-term 3-tier memory |
+| 3-tier memory only | Long-term memory; no episodic failure memory |
+| Full memory | All four tiers + skill library + negative transfer guard |
+
+Benchmarks: Split CVE-Bench into "seen technology" (repeated framework fingerprints across missions) vs. "unseen technology" subsets. Memory benefit should appear on seen-technology subset; if it appears equally on unseen, it indicates overfitting or contamination.
+
+**A3 — Validation Diagnosis-Adapt-Cap loop**
+
+| Condition | Description |
+|---|---|---|
+| Single-attempt validation | MAPTA-style: one oracle check, binary pass/fail |
+| With Diagnosis-Adapt-Cap | Full loop: diagnose CORRECTABLE/FUNDAMENTAL, adapt, retry up to 3 |
+
+Benchmarks: Measure validation success rate (number of findings confirmed on retry vs. total attempted). This directly tests whether the pass@5 → pass@1 gap in Fang et al. narrows.
+
+**A4 — VDG Failure Propagation**
+
+| Condition | Description |
+|---|---|---|
+| Without propagation | INFEASIBLE nodes are marked but dependent nodes remain ELIGIBLE |
+| With propagation | BLOCKED status propagated; frontier recomputed |
+
+Measure: distinct paths attempted per mission; time-to-recovery after a failure; pass@1 (should be unchanged or improved).
+
+### 13.2 Secondary Ablations (Should Have)
+
+**A5 — Path-Level Scoring** (if A1 shows (b) and (d) are both > (a) but unclear whether (d) > (b)):
+- Condition (b) vs. (d) directly: isolates path scoring contribution within the full VDG.
+
+**A6 — Ordinal Evidence Scoring (E_ord)**:
+- Raw LLM confidence in UCB vs. E_ord ordinal scale. Measure: variance in UCB scores across runs; correlation between UCB selection order and exploitation success.
+
+**A7 — Early Stopping Heuristic**:
+- With vs. without early stopping. Measure: cost-per-exploit and pass@1 (should be unchanged). If pass@1 decreases, N=5 is too aggressive and must be increased.
+
+**A8 — VAPT Protocol Prompt (methodology-as-configuration)**:
+- Same CMatrix architecture, different VAPT Protocol Prompt versions (OWASP Testing Guide vs. PTES vs. CMatrix default). Measure: does methodology choice independently affect pass@1? This directly answers an open research question without requiring a separate paper.
+
+### 13.3 Ablations NOT Required
+
+The following ablations are already well-established by prior work and do not need to be re-run:
+
+| Ablation | Why not needed |
+|---|---|---|
+| Sub-FSM vs. free-form Specialists | Already established by AutoPT (multi-step chains fail without deterministic FSMs) |
+| Fresh context vs. rolling context | Already established independently by PentestGPT, D-CIPHER, and VulnBot |
+| Declarative API vs. raw command generation | Already established by Incalmo, CHECKMATE |
+| Tool count | Not a research variable |
+
+### 13.4 Causality Requirements
+
+For each ablation to be causally interpretable:
+1. **Isolate exactly one variable** per condition. A1's four conditions change graph structure only; everything else (model, compute, tools) is held constant.
+2. **Control for compute.** All conditions at 50 API calls per CVE (§12.3). If a condition exceeds this budget, reduce retry count to compensate.
+3. **Control for model.** All conditions use the same model at the same tier. The model-tiering policy (§14) must be held constant across ablation conditions.
+4. **Sufficient sample size.** 5 runs minimum per condition per CVE; 10 runs on the primary metric (CVE-Bench).
+5. **Report effect sizes with confidence intervals.** McNemar's test for paired binary outcomes. p-values reported but effect sizes emphasized.
+
+---
+
+## 14. Model Configuration and Cost Policy
+
+Six independent papers (AWE, AutoPT, PrediQL, VulnBot, D-CIPHER, Incalmo) independently show architecture dominates raw model capability — Incalmo with Haiku 3.5 beats a strong baseline with Sonnet 4; AutoPT's GPT-4o-mini beats GPT-4o once the FSM is in place. CMatrix formalizes this into a tiering rule rather than a fixed model choice, and benchmarks across at least three backbone families to substantiate model-swappability.
+
+| Component | Default tier | Rationale |
+|---|---|---|
+| **VDG edge inference + UCB scoring + ADM (Team Manager)** | Frontier reasoning model, extended-thinking mode | Where TDA-EGATS evidence-backed decisions live. Thinking mode gives a 6–10pp uplift on planning-heavy tasks per PentestGPT v2's TDA-EGATS results. Applied specifically at the planning layer. |
+| **Command/exploit generation (Specialists, "Type A" tasks)** | Mid-tier or open-weight model | Architecture-gap papers show Type A failures compress fastest with structure; expensive models add little here. |
+| **Parsing/Summarization (Handoff Bridge, Evaluation Agent)** | Cheapest available model | Deterministic-adjacent compression/classification task. |
+| **Execution Agent** | No LLM (deterministic wrapper) | The AutoGen split: executor never reasons. |
+| **Episodic Failure Memory retrieval** | No LLM (FAISS + cross-encoder) | Embedding retrieval, not generation. |
+
+**Per-mission budget controls:**
+- Hard wall-clock timeout: 10 minutes per vulnerability (consistent with Fang et al., AutoPT, MAPTA)
+- Tool-call timeout: 120 seconds (CVE-Bench standard)
+- Cost ceiling: USD threshold with automatic escalation-to-human when exhausted — never an indefinite retry loop
+- Early Stopping Heuristic fires before the hard ceiling if N=5 invocations produce no new VDG nodes and the frontier is empty (§10.7)
+
+**Model-swappability validation:** CMatrix is benchmarked with ≥3 backbone families (GPT-4o class, Claude Sonnet class, open-weight Llama/Qwen class) at Tier 2 (CVE-Bench) to substantiate the architecture-over-model claim. Per-backbone results are reported separately.
+
+---
+
+## 15. Threats to Validity / Known Limitations
+
+### 15.1 VDG Edge Inference Accuracy (HIGH RISK)
+
+VDG dependency edges are LLM-inferred, not ground-truth-annotated. **A mandatory pilot study must precede the main evaluation:** take 10 PentestEval scenarios where ground-truth dependency annotations exist; run the Team Manager's edge-inference prompt; measure precision and recall of inferred prerequisite edges against the ground truth.
+
+**Decision gate:** If precision ≥ 60%, proceed with the dependency-edge contribution claim. If precision < 50%, the dependency contribution weakens significantly and the paper's novelty framing must be revised before submission. The ceiling relative to PentestEval's GT-ADM upper bound (0.67) will be reported honestly.
+
+This is the single most important pre-evaluation risk. No architectural decision on the VDG's contribution status should be finalized before this measurement.
+
+### 15.2 Real-World Pass Rates Will Be Materially Lower Than Sandboxed
+
+Fang et al. found 1 exploitable XSS in 50 candidate real-world sites (2%) vs. 73.3% in the matched sandbox. WAFs, patch levels, and defensive tooling are not represented in most benchmark environments. CMatrix should report both sandbox and a small real-world/bug-bounty validation sample (BountyBench, HTB Season 8), with the gap stated explicitly. Do not extrapolate sandbox results to real-world deployment.
+
+### 15.3 GraphQL Evaluation Is Narrower Than Web Evaluation
+
+PrediQL's 6-API suite is real and standardized, but it is not remotely the size or diversity of CVE-Bench (40 CVEs) or XBOW (104 challenges). Any generalization claim from C3 must state this asymmetry plainly — GraphQL results carry materially less statistical weight than the web results.
+
+### 15.4 REST API Exploitation Is Out of Scope
+
+CMatrix may exercise RESTler-style dependency inference internally during a mission (§9.4), but no REST-API-specific pass rates are reported and no REST-API capability is claimed. This must not be implied or inferred from the architecture.
+
+### 15.5 Cost-Per-Exploit Is Backbone-Price-Sensitive
+
+The cost-per-exploit metric will shift as frontier model pricing changes. Report at time of writing with a stated model, version, and date. Do not present as an absolute claim. Report at multiple model price points if feasible.
+
+### 15.6 Negative Transfer in Cross-Mission Memory
+
+A strategy successful against Framework A version X may be harmful against version Y. The negative transfer guard (§10.2) mitigates but does not eliminate this risk. Ablation A2 measures whether memory helps on seen-technology targets. **If memory hurts on unseen targets, the memory mechanism must be revised before claiming C2.** This risk is not present in any of the 29 surveyed papers because none implement cross-mission memory with strategy-level generalization in VAPT.
+
+### 15.7 UCB Hyperparameter Sensitivity
+
+The UCB formula has 7 tunable parameters (α, β, γ, κ, λ, μ, C_expl). If the grid search on Tier 1 (PentestEval) finds a narrow optimal range, the parameters may not generalize to CVE-Bench's distribution. The paper must report the search range, the selected values, and the sensitivity of results to parameter variation (±10% perturbation from optimal).
+
+### 15.8 Statistical Power on Small Benchmarks
+
+PrediQL has 6 APIs — 5 runs per condition yields only 30 data points. McNemar's test may lack power to detect small effect sizes on this benchmark. GraphQL results should be reported as exploratory findings rather than definitive conclusions.
+
+---
+
+## 16. Summary of Contribution Claims
+
+CMatrix makes **exactly three primary contribution claims**, each bounded by a precisely specified experimental test:
+
+### C1 — Dependency-Aware Attack Graph Exploration (Primary)
+
+**Claim:** A dynamically constructed VDG combining UCB-guided node selection over a dependency-constrained frontier with path-level impact scoring and ordinal evidence backpropagation improves validated attack-path success on CVE-Bench (zero-day pass@1 ≥ 25%) and PentestEval (ADM score ≥ 0.50) relative to flat UCB dispatch, dependency-only planning, and stacked (UCB + dependency wrapper) baselines.
+
+**This claim holds only if:** Ablation (d) > (c) is demonstrated (unification > stacking). If (d) ≈ (c), the contribution downgrades to "dependency-aware UCB filtering" — still meaningful, but a narrower claim.
+
+**Pre-evaluation gate:** VDG edge inference pilot study on PentestEval ground-truth dependencies must show precision ≥ 50% before the main evaluation begins.
+
+### C2 — Cross-Mission Memory with Verified Skill Promotion (Supporting)
+
+**Claim:** A 3-tier memory architecture with security-specific conditional branching strategies (WAF-adaptive exploit workflows), oracle-gated skill promotion, and a negative transfer guard improves performance on seen-technology targets relative to no-memory baselines.
+
+**This claim holds only if:** Ablation A2 shows measurable improvement on the "seen technology" subset of CVE-Bench or PentestEval. If memory provides no measurable benefit on seen-technology targets, the mechanism is retained as implementation infrastructure but C2 is removed from the contribution list.
+
+### C3 — Comprehensive Cross-Benchmark Evaluation with Standardized Oracles (Methodological)
+
+**Claim:** The first rigorous evaluation of a single autonomous VAPT architecture across CVE-Bench (web), PrediQL (GraphQL), and MHBench (multi-host) using a shared orchestration layer, surface-specific Specialist pools, standardized per-surface oracles, and strictly separated per-surface reporting.
+
+**This claim holds by construction** once the evaluation is completed correctly. No experimental gate required beyond completing all tiers. Honest framing is required: "shared orchestration layer with surface-specific modules" — not "one unmodified architecture."
+
+---
+
+### What Is Explicitly Claimed vs. Not Claimed
+
+| Claim | Status |
+|---|---|
+| VDG as dependency-aware exploration algorithm with formalized pseudocode | **CLAIMED (C1)** |
+| Path-level scoring as distinct algorithmic mechanism | **CLAIMED (C1 component)** |
+| VDG failure propagation with BLOCKED status | **CLAIMED (C1 component)** |
+| Ordinal evidence scoring (E_ord) in UCB formula | **CLAIMED (C1 component)** |
+| Cross-mission memory with security-specific conditional workflows | **CLAIMED (C2)** |
+| Oracle-gated skill promotion gate | **CLAIMED (C2 component)** |
+| Cross-benchmark evaluation methodology | **CLAIMED (C3)** |
+| Hybrid Classical-Planning + VDG | **NOT CLAIMED — removed** |
+| "Generalization across three surfaces with one unmodified architecture" | **NOT CLAIMED — rephrased to honest framing** |
+| Economic/safety metrics as co-primary contribution | **NOT CLAIMED — evaluation methodology only** |
+| VAPT Protocol Prompt as research contribution | **NOT CLAIMED — ablation variable only** |
+| Multi-agent orchestration, lifecycle hooks, logging | **NOT CLAIMED — infrastructure** |
+
+---
+
+**Target venue:** USENIX Security / IEEE S&P (primary); NDSS / AsiaCCS (secondary)
+
+**Venue framing:** Systems + empirical evaluation paper. CVE-Bench, PentestEval, PrediQL, and MHBench as the four primary comparison points (one per benchmarked surface + stage diagnosis). Full Tier 0–6 suite as the reproducibility package.
+
+**Current readiness:** The architecture is specified at implementation level. The mandatory pre-evaluation gate is the VDG edge-inference pilot study on PentestEval ground-truth dependency annotations. That measurement determines the precise framing of C1 before the main evaluation begins.
