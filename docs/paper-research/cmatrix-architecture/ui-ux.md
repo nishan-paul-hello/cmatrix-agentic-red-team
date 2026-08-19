@@ -558,7 +558,7 @@ Layout:
 ```text
 ┌───────────────┬──────────────────────────────┬──────────────┐
 │               │                              │              │
-│ MISSION       │       ATTACK GRAPH            │ LIVE STATE   │
+│ MISSION       │       ATTACK GRAPH           │ LIVE STATE   │
 │ NAVIGATION    │                              │              │
 │               │                              │              │
 │               │                              │              │
@@ -633,7 +633,7 @@ Example:
 │                            │
 │ UCB     0.82               │
 │ E_ord   3/5                │
-│ STATUS  ELIGIBLE            │
+│ STATUS  ELIGIBLE           │
 └────────────────────────────┘
 ```
 
@@ -2678,31 +2678,31 @@ If your AI agent needs to generate **the most important CMatrix screenshot first
 │               │                                         │               │
 │ MISSION       │              VDG ATTACK GRAPH           │ ENVIRONMENT   │
 │               │                                         │               │
-│ Overview      │       ┌──────────┐                     │ ENDPOINTS 143 │
-│ Attack Graph  │       │ RECON    │                     │ SERVICES  17  │
-│ Environment   │       └────┬─────┘                     │ HOSTS      4  │
-│ Specialists   │            │                           │               │
-│ Execution     │       ┌────▼─────┐                     │               │
-│ Findings      │       │ AUTH     │                     │               │
-│ Validation    │       └────┬─────┘                     │               │
-│ Memory        │            │                           │               │
-│ Trajectory    │       ┌────▼─────┐                     │               │
-│ Cost          │       │ SQLI     │                     │               │
-│               │       │ UCB .82  │                     │               │
-│               │       │ E 3/5    │                     │               │
-│               │       └────┬─────┘                     │               │
-│               │            │                           │               │
-│               │       ┌────▼─────┐                     │               │
-│               │       │ DB-ACCESS│                     │               │
-│               │       └──────────┘                     │               │
+│ Overview      │       ┌──────────┐                      │ ENDPOINTS 143 │
+│ Attack Graph  │       │ RECON    │                      │ SERVICES  17  │
+│ Environment   │       └────┬─────┘                      │ HOSTS      4  │
+│ Specialists   │            │                            │               │
+│ Execution     │       ┌────▼─────┐                      │               │
+│ Findings      │       │ AUTH     │                      │               │
+│ Validation    │       └────┬─────┘                      │               │
+│ Memory        │            │                            │               │
+│ Trajectory    │       ┌────▼─────┐                      │               │
+│ Cost          │       │ SQLI     │                      │               │
+│               │       │ UCB .82  │                      │               │
+│               │       │ E 3/5    │                      │               │
+│               │       └────┬─────┘                      │               │
+│               │            │                            │               │
+│               │       ┌────▼─────┐                      │               │
+│               │       │ DB-ACCESS│                      │               │
+│               │       └──────────┘                      │               │
 │               │                                         │               │
 ├───────────────┼─────────────────────────────────────────┼───────────────┤
 │               │ LIVE ACTIVITY                           │ MISSION STATE │
 │ SPECIALISTS   │                                         │               │
-│               │ 20:41:02 RECON → endpoint discovered   │ VDG 27        │
-│ ● Recon       │ 20:41:07 TM → SQLI-003 selected        │ EL  143       │
-│ ● SQLi        │ 20:41:13 SQLi → E_ord 3                │ FINDINGS 3    │
-│ ○ XSS         │ 20:41:18 VALIDATION → pending         │ COST $1.42    │
+│               │ 20:41:02 RECON → endpoint discovered    │ VDG 27        │
+│ ● Recon       │ 20:41:07 TM → SQLI-003 selected         │ EL  143       │
+│ ● SQLi        │ 20:41:13 SQLi → E_ord 3                 │ FINDINGS 3    │
+│ ○ XSS         │ 20:41:18 VALIDATION → pending           │ COST $1.42    │
 │ ○ Auth        │                                         │ TIME 06:31    │
 └───────────────┴─────────────────────────────────────────┴───────────────┘
 ```
