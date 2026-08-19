@@ -70,8 +70,6 @@ Every attack surface below is included **only because it has a dedicated, reusab
 
 **Explicitly excluded: general REST API attack surface.** RESTler's evaluation targets (self-hosted GitLab, Microsoft Azure services, Office365) are one-off real-world case studies, not a standardized, reusable target set. There is no "RESTBench" equivalent in the survey. RESTler's core techniques (producer–consumer dependency inference, response-feedback pruning) are methodologically reusable and are adopted internally by the GraphQL Specialist and the dependency-inference logic in the Team Manager (§9.3), but REST API exploitation is **not evaluated and not claimed** — no REST-API-specific pass rates are reported anywhere in this paper.
 
-**Explicitly excluded: Hybrid Classical-Planning + VDG.** Architecture-1 §5.2 proposed combining PDDL planning with the VDG. This is removed from the contribution list and from the architecture. "Recon → surface enumeration → exploit" is a phase ordering, not a PDDL plan. No domain file is specified, no operator library exists, and no planning algorithm is defined. The claim cannot be evaluated. The phase ordering is retained as a fixed initialization skeleton in §8.1 (Orchestrator), but is not claimed as a contribution.
-
 ### 2.2 In-Scope Attack Surfaces
 
 | Attack surface | Benchmark(s) | What's covered |
@@ -111,7 +109,6 @@ CMatrix adapts CO-REDTEAM's 3-tier memory and Voyager's description-embedding re
 
 **Validation requirement:** Must show measurable improvement on a "seen technology" subset of benchmarks (e.g., improved performance on ThinkPHP CVEs after encountering other ThinkPHP CVEs in prior missions). Measured by strategy hit rate computed from Engagement Trajectory logs.
 
-**Note on crystallization:** Architecture-2's ≥2-mission crystallization threshold is not adopted for this paper. The chosen benchmarks (CVE-Bench: 40 diverse CVEs, PrediQL: 6 APIs, MHBench: 40 environments) do not supply enough repeated technology-fingerprint matches for crystallization to trigger reliably. Skill storage uses per-mission Validation-Agent confirmation as the promotion gate — stronger than Voyager's self-check (oracle-backed), simpler than re-execution. Crystallization is deferred to future work with a dedicated technology-repetition benchmark.
 
 ### C3 — Comprehensive Cross-Benchmark Evaluation with Standardized Oracles
 
@@ -135,8 +132,7 @@ The following items are retained as supporting infrastructure but are **not clai
 | **"One unmodified architecture across three surfaces"** | Honest framing: shared orchestrator + surface-specific modules | Different Specialist pools activate per surface. "Unmodified" is inaccurate. |
 | **Economic and safety-framing metrics as co-primary contribution** | Evaluation methodology — reported alongside every pass rate | Reporting choice, not technical novelty. BountyBench already introduces this. |
 | **Parallel alternative-surface queue + meta-critic as architectural fix for CVE-Bench** | Design choice (retained but not claimed) | A secondary todo list + periodic prompt injection + default scan setting is not architectural innovation. |
-| **Tool Risk Gate (3-tier LLM permission classifier)** | Not adopted | Safety/deployment mechanism, not VAPT effectiveness mechanism. Adds LLM cost per tool invocation without improving any measured metric in sandboxed evaluation. |
-| **Context compaction (MicroCompact / AutoCompact)** | Not adopted | Architecture-1's fresh-context-per-Specialist design avoids this problem. If a Specialist task exceeds one context window, the sub-FSM should be decomposed, not patched. |
+
 | **VAPT Protocol Prompt as a primary contribution** | Ablation variable (§13, Ablation A8) | Engineering configuration variable. Research value as an ablation axis only. |
 | **Multi-agent orchestration, tool adapter, lifecycle hooks, logging** | Implementation infrastructure | Not novel research mechanisms. |
 | **"We orchestrate N tools"** | Implementation documentation | Tool count is not a research contribution. |
@@ -230,7 +226,7 @@ flowchart TD
 
 ## 6. The Dual-Layer World Model
 
-> Architecture-1's single-structure VDG conflated confirmed environmental facts with inferred attack hypotheses. This section replaces it with two strictly-separated layers. The write-ownership principle is adopted from Architecture-2's ASG/APG design, combined with Architecture-1's UCB scoring and dependency-edge mechanisms that Architecture-2 lacks.
+> CMatrix separates confirmed environmental facts from inferred attack hypotheses into two strictly-separated layers. Write-ownership enforcement ensures that only Specialists can write facts and only the Team Manager can write attack hypotheses — preventing the fact/hypothesis conflation common in single-structure world models.
 
 ### 6.1 Environmental Layer (EL) — Confirmed Facts Only
 
@@ -279,7 +275,7 @@ The VDG (Attack Layer) contains only inferred attack opportunities — nodes wit
 
 ## 7. The VDG Algorithm (Formalized)
 
-> Architecture-1 specified only a node schema and a scoring formula placeholder. This section provides the algorithm-level specification: UCB formula, edge construction procedure, ordinal evidence scoring, backpropagation update rule, path scoring, failure propagation, and consistency checks — all at pseudocode level sufficient for implementation and reproduction.
+> This section provides the full algorithm-level specification of the VDG: UCB formula, edge construction procedure, ordinal evidence scoring, update rule, path scoring, failure propagation, and consistency checks — all at pseudocode level sufficient for implementation and reproduction.
 
 ### 7.1 VDG Node Schema
 
@@ -559,7 +555,7 @@ Flagged issues are logged but do not block execution. If violations are common i
 - **Scope Intake** accepts: target, rules of engagement, mode flag (*one-day*: CVE hint provided per Fang et al.; *zero-day*: no hint per HPTSA/CVE-Bench zero-day mode), and the attack-surface family (web, GraphQL, multi-host) so the correct benchmark harness and Specialist pool are activated.
 - **Auto-prompter** (D-CIPHER pattern) performs unstructured LLM-grounded initial exploration. AutoPT-style rule extraction converts its findings into the first EL entries and VDG seed nodes — combining D-CIPHER's grounded discovery with AutoPT's deterministic state-machine seeding.
 - **Fixed phase skeleton (not a contribution):** The Orchestrator applies a hard initialization sequence — Recon → Surface Enumeration → Specialist Dispatch — before handing control to the Team Manager's UCB loop. This is a phase ordering, retained for engineering soundness, not claimed as a planning contribution.
-- **FullCompact Trigger:** At 85% of the Team Manager's context window, the Orchestrator snapshots the current EL and AL state and reconstructs the Team Manager's reasoning context from this snapshot. Because all discovered facts live in the EL and all scored hypotheses live in the VDG (AL), nothing is lost — no conversation history is needed, only the structured state. This addresses long-session context inflation (PentestGPT Finding 4), which Architecture-1 left unresolved for the orchestration layer.
+- **FullCompact Trigger:** At 85% of the Team Manager's context window, the Orchestrator snapshots the current EL and AL state and reconstructs the Team Manager's reasoning context from this snapshot. Because all discovered facts live in the EL and all scored hypotheses live in the VDG (AL), nothing is lost — no conversation history is needed, only the structured state. This directly addresses long-session context inflation (PentestGPT Finding 4).
 
 ### 8.2 Layer 2 — Team Manager
 
@@ -567,8 +563,8 @@ Flagged issues are logged but do not block execution. If violations are common i
 - **Declarative Task Dispatch:** The Team Manager emits high-level verbs (`recon_target()`, `exploit_sqli()`, `verify_xss()`, `lateral_move()`, `exploit_graphql()`) rather than raw shell/HTTP commands. 5–8 verbs in the vocabulary — deliberately small, because a larger vocabulary degrades dispatch reliability. This is the single most consistent anti-hallucination pattern across the survey (Incalmo, CHECKMATE, RESTler's dependency-inference technique).
 - **Structured Handoff Bridge:** Every Specialist's raw stdout/HTTP response is compressed into a structured summary (`{finding_type, target, evidence_summary, E_ord, recommended_next}`) before re-entering the Team Manager's context. This prevents context flooding — the architectural bottleneck of single-agent systems identified by D-CIPHER and VulnBot.
 - **VDG Write-Back:** After receiving a Specialist's Handoff Bridge summary, the Team Manager executes `VDG_Update(v, outcome, E_ord)` (§7.4) and derives any new VDG nodes from new EL discoveries via `VDG_AddNode` (§7.3). The Team Manager is the sole writer of the VDG.
-- **Graph-Lock Protocol:** When parallel Specialists are dispatched (zero-day mode only), each Specialist's invocation acquires a read-lock on the relevant EL subtree. The Team Manager holds the VDG write-lock. Specialists release locks on Handoff Bridge delivery. This prevents concurrency corruption of the EL and VDG in parallel dispatch scenarios. *[Adopted from Claude-Agent adjudication — the only proposal to address the concurrency consistency problem.]*
-- **Tool Output Sanitization:** All tool output is passed through a constrained parser before injection into any LLM context. HTML/JavaScript content (e.g., XSS payloads in HTTP responses) is entity-escaped before injecting into the Team Manager or Specialist contexts. This defends against prompt injection via attacker-controlled target output — a real attack vector in VAPT agents. *[Adopted from Claude-Agent adjudication.]*
+- **Graph-Lock Protocol:** When parallel Specialists are dispatched (zero-day mode only), each Specialist's invocation acquires a read-lock on the relevant EL subtree. The Team Manager holds the VDG write-lock. Specialists release locks on Handoff Bridge delivery. This prevents concurrency corruption of the EL and VDG in parallel dispatch scenarios.
+- **Tool Output Sanitization:** All tool output is passed through a constrained parser before injection into any LLM context. HTML/JavaScript content (e.g., XSS payloads in HTTP responses) is entity-escaped before injecting into the Team Manager or Specialist contexts. This defends against prompt injection via attacker-controlled target output — a real attack vector in VAPT agents.
 
 ### 8.3 Layer 3 — Specialists
 
@@ -723,7 +719,7 @@ State (compromised hosts, harvested credentials, active sessions) is tracked in 
 
 ### 10.1 Environmental Layer (EL) as Primary External Store
 
-The EL (§6.1) is the canonical structured store outside any LLM's context window. Every mature surveyed system independently converges on a similar construct (Incalmo's ESS, PentestAgent's Env Info DB, cochise's PTT, VulnBot's PTG). CMatrix's EL unifies the multi-host fields (`hosts`, `credentials`) that Architecture-1's ESS added and the write-ownership enforcement that Architecture-2's ASG introduced.
+The EL (§6.1) is the canonical structured store outside any LLM's context window. Every mature surveyed system independently converges on a similar construct (Incalmo's ESS, PentestAgent's Env Info DB, cochise's PTT, VulnBot's PTG). CMatrix's EL unifies multi-host fields (`hosts`, `credentials`) with strict write-ownership enforcement — Specialists write facts, the Team Manager writes attack hypotheses, and no agent crosses these boundaries.
 
 The EL is not a blackboard. It has enforced write ownership, a versioned schema, and is queryable by all agents with read access. No LLM ever receives the full EL — only a scoped snapshot relevant to the current task.
 
@@ -779,7 +775,7 @@ Successfully validated exploit chains are stored as parameterized strategies wit
 
 **Promotion gate:** Validation Agent oracle confirmation (E_ord = 5) required. No self-assessed success is accepted.
 
-**Crystallization threshold:** Architecture-2's ≥2-mission crystallization threshold is not adopted for this paper (see C2 rationale in §3). Per-mission oracle-confirmed storage is used instead. Crystallization across missions is deferred to future work.
+**Crystallization threshold:** Per-mission oracle-confirmed storage is used as the promotion gate.
 
 ### 10.6 Engagement Trajectory Log
 
