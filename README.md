@@ -30,7 +30,7 @@ CMatrix is an advanced, AI-powered security orchestration platform utilizing a m
 ## 📸 Application Preview
 
 <div align="center">
-  <img src="assets/preview.gif" alt="CMatrix Overview" width="100%" />
+  <img src="docs/assets/preview.gif" alt="CMatrix Overview" width="100%" />
 </div>
 
 ---
