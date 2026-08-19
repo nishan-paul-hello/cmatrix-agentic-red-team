@@ -904,7 +904,7 @@ These ablations are required to support the primary contribution claims. No clai
 Four nested conditions, all compute-normalized at 50 API calls per CVE:
 
 | Condition | Description |
-|---|---|---|
+|---|---|
 | **(a) Flat UCB** | Flat priority list of vulnerability candidates, UCB scoring, no graph structure, no dependency edges |
 | **(b) UCB + Dependency edges** | Full VDG node schema and edge inference, UCB selection, no path-level scoring |
 | **(c) Stacked (UCB filtered by dependency satisfaction)** | Run UCB independently over all nodes (ignoring prerequisites in the eligible set); then apply dependency constraints as a post-filter. **This is the key discriminant: if (d) ≈ (c), unification has no value and the contribution downgrades.** See pseudocode below. |
@@ -932,7 +932,7 @@ If (d) > (c): unification claim holds. If (d) ≈ (c): contribution is "dependen
 **A2 — Memory (isolates C2)**
 
 | Condition | Description |
-|---|---|---|
+|---|---|
 | No memory | Fresh state per mission; no 3-tier memory, no skill library, no episodic failure memory |
 | Episodic Failure Memory only | 4th FAISS tier only; no long-term 3-tier memory |
 | 3-tier memory only | Long-term memory; no episodic failure memory |
@@ -943,7 +943,7 @@ Benchmarks: Split CVE-Bench into "seen technology" (repeated framework fingerpri
 **A3 — Validation Diagnosis-Adapt-Cap loop**
 
 | Condition | Description |
-|---|---|---|
+|---|---|
 | Single-attempt validation | MAPTA-style: one oracle check, binary pass/fail |
 | With Diagnosis-Adapt-Cap | Full loop: diagnose CORRECTABLE/FUNDAMENTAL, adapt, retry up to 3 |
 
@@ -952,7 +952,7 @@ Benchmarks: Measure validation success rate (number of findings confirmed on ret
 **A4 — VDG Failure Propagation**
 
 | Condition | Description |
-|---|---|---|
+|---|---|
 | Without propagation | INFEASIBLE nodes are marked but dependent nodes remain ELIGIBLE |
 | With propagation | BLOCKED status propagated; frontier recomputed |
 
@@ -977,7 +977,7 @@ Measure: distinct paths attempted per mission; time-to-recovery after a failure;
 The following ablations are already well-established by prior work and do not need to be re-run:
 
 | Ablation | Why not needed |
-|---|---|---|
+|---|---|
 | Sub-FSM vs. free-form Specialists | Already established by AutoPT (multi-step chains fail without deterministic FSMs) |
 | Fresh context vs. rolling context | Already established independently by PentestGPT, D-CIPHER, and VulnBot |
 | Declarative API vs. raw command generation | Already established by Incalmo, CHECKMATE |
