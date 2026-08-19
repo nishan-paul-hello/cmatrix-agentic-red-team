@@ -1,6 +1,4 @@
-# CMatrix: An LLM-Orchestrated Multi-Agent Framework for Autonomous VAPT
-
-**Working title for publication:** *CMatrix: Dependency-Aware Attack Graph Exploration for Autonomous Vulnerability Assessment and Penetration Testing*
+# CMatrix: Dependency-Constrained UCB Exploration for Autonomous Penetration Testing
 
 **Status:** Final architecture — synthesized from a 29-paper systematic survey, four independent AI agent proposals, and expert adjudication. Defines target attack surface, system architecture, methodology, contribution claims, and evaluation plan.
 
