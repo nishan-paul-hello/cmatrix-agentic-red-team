@@ -1,0 +1,11 @@
+{
+  "title": "cm",
+  "description": "This web application streamlines user authentication with a sleek login interface, enhancing security and accessibility for users across various platforms.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
