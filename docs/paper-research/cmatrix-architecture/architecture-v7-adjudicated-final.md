@@ -132,7 +132,6 @@ The following items are retained as supporting infrastructure but are **not clai
 | **"One unmodified architecture across three surfaces"** | Honest framing: shared orchestrator + surface-specific modules | Different Specialist pools activate per surface. "Unmodified" is inaccurate. |
 | **Economic and safety-framing metrics as co-primary contribution** | Evaluation methodology — reported alongside every pass rate | Reporting choice, not technical novelty. BountyBench already introduces this. |
 | **Parallel alternative-surface queue + meta-critic as architectural fix for CVE-Bench** | Design choice (retained but not claimed) | A secondary todo list + periodic prompt injection + default scan setting is not architectural innovation. |
-
 | **VAPT Protocol Prompt as a primary contribution** | Ablation variable (§13, Ablation A8) | Engineering configuration variable. Research value as an ablation axis only. |
 | **Multi-agent orchestration, tool adapter, lifecycle hooks, logging** | Implementation infrastructure | Not novel research mechanisms. |
 | **"We orchestrate N tools"** | Implementation documentation | Tool count is not a research contribution. |
