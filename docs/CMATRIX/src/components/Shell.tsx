@@ -1,10 +1,9 @@
 import type { ReactNode } from "react";
 
 export type NavItem =
-  | "dashboard" | "missions" | "attack-graph" | "environment" | "specialists"
-  | "execution" | "findings" | "validation"
+  | "dashboard" | "missions"
   | "memory" | "skill-library" | "failure-memory"
-  | "trajectory" | "benchmarks" | "ablations" | "statistics" | "failure-analysis" | "reports"
+  | "benchmarks" | "ablations" | "statistics" | "failure-analysis" | "reports"
   | "cost-usage" | "audit-log" | "settings";
 
 const NAV_GROUPS = [
@@ -12,40 +11,33 @@ const NAV_GROUPS = [
     label: "OPERATIONS",
     items: [
       { id: "dashboard", label: "Dashboard" },
-      { id: "missions", label: "Missions" },
-      { id: "attack-graph", label: "Attack Graph" },
-      { id: "environment", label: "Environment" },
-      { id: "specialists", label: "Specialists" },
-      { id: "execution", label: "Execution" },
-      { id: "findings", label: "Findings" },
-      { id: "validation", label: "Validation" },
+      { id: "missions",  label: "Missions"  },
     ],
   },
   {
     label: "KNOWLEDGE",
     items: [
-      { id: "memory", label: "Memory" },
-      { id: "skill-library", label: "Skill Library" },
+      { id: "memory",         label: "Memory"         },
+      { id: "skill-library",  label: "Skill Library"  },
       { id: "failure-memory", label: "Failure Memory" },
     ],
   },
   {
     label: "RESEARCH",
     items: [
-      { id: "trajectory", label: "Trajectory" },
-      { id: "benchmarks", label: "Benchmarks" },
-      { id: "ablations", label: "Ablations" },
-      { id: "statistics", label: "Statistics" },
+      { id: "benchmarks",       label: "Benchmarks"       },
+      { id: "ablations",        label: "Ablations"        },
+      { id: "statistics",       label: "Statistics"       },
       { id: "failure-analysis", label: "Failure Analysis" },
-      { id: "reports", label: "Reports" },
+      { id: "reports",          label: "Reports"          },
     ],
   },
   {
     label: "SYSTEM",
     items: [
       { id: "cost-usage", label: "Cost & Usage" },
-      { id: "audit-log", label: "Audit Log" },
-      { id: "settings", label: "Settings" },
+      { id: "audit-log",  label: "Audit Log"    },
+      { id: "settings",   label: "Settings"     },
     ],
   },
 ] as const;
@@ -63,10 +55,9 @@ function GeometricMark() {
 
 function NavIcon({ id }: { id: string }) {
   const icons: Record<string, string> = {
-    dashboard: "▪", missions: "◈", "attack-graph": "⬡", environment: "◉",
-    specialists: "⊛", execution: "▶", findings: "◆", validation: "✓",
+    dashboard: "▪", missions: "◈",
     memory: "⊞", "skill-library": "⊟", "failure-memory": "⊠",
-    trajectory: "↗", benchmarks: "≡", ablations: "∿", statistics: "∑",
+    benchmarks: "≡", ablations: "∿", statistics: "∑",
     "failure-analysis": "⊗", reports: "⊕",
     "cost-usage": "$", "audit-log": "≣", settings: "⚙",
   };
@@ -84,27 +75,24 @@ export default function Shell({ activeNav, onNavChange, children, missionId = "C
   return (
     <div className="flex h-screen overflow-hidden" style={{ background: "#080808", color: "#F2F2F2" }}>
       {/* Sidebar */}
-      <aside
-        className="flex flex-col flex-shrink-0 overflow-y-auto"
-        style={{ width: 248, background: "#0B0B0B", borderRight: "1px solid #1E1E1E" }}
-      >
+      <aside className="flex flex-col flex-shrink-0 overflow-y-auto" style={{ width: 200, background: "#0B0B0B", borderRight: "1px solid #1E1E1E", position:"relative" }}>
+        {/* Red accent stripe */}
+        <div style={{ position:"absolute", left:0, top:0, bottom:0, width:2, background:"#E31B23" }} />
         {/* Logo */}
-        <div className="flex items-center gap-2.5 px-4 py-4" style={{ borderBottom: "1px solid #1E1E1E" }}>
+        <div className="flex items-center gap-2.5 px-4 py-4" style={{ borderBottom: "1px solid #1E1E1E", paddingLeft:16 }}>
           <GeometricMark />
           <div className="flex flex-col">
-            <span className="font-bold" style={{ fontSize: 13, color: "#F2F2F2", letterSpacing: "0.2em" }}>CMATRIX</span>
-            <span style={{ fontSize: 7.5, color: "#666666", letterSpacing: "0.22em" }}>AUTONOMOUS VAPT</span>
+            <span className="font-bold" style={{ fontSize: 12, color: "#F2F2F2", letterSpacing: "0.2em" }}>CMATRIX</span>
+            <span style={{ fontSize: 7, color: "#666666", letterSpacing: "0.2em" }}>AUTONOMOUS VAPT</span>
           </div>
-          {/* red accent line */}
-          <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: 2, background: "#E31B23", borderRadius: 0 }} />
         </div>
 
         {/* Nav groups */}
-        <nav className="flex flex-col flex-1 py-2" style={{ position: "relative" }}>
+        <nav className="flex flex-col flex-1 py-2">
           {NAV_GROUPS.map((group, gi) => (
             <div key={group.label}>
               {gi > 0 && <div className="mx-4 my-2" style={{ height: 1, background: "#1E1E1E" }} />}
-              <div className="px-4 pt-2 pb-1" style={{ fontSize: 8.5, color: "#444444", letterSpacing: "0.22em", fontWeight: 600 }}>
+              <div className="px-4 pt-2 pb-1" style={{ fontSize: 8, color: "#444444", letterSpacing: "0.22em", fontWeight: 600 }}>
                 {group.label}
               </div>
               {group.items.map((item) => {
@@ -113,12 +101,12 @@ export default function Shell({ activeNav, onNavChange, children, missionId = "C
                   <button
                     key={item.id}
                     onClick={() => onNavChange(item.id as NavItem)}
-                    className="w-full flex items-center gap-2 px-4 py-1.5 text-left transition-colors"
+                    className="w-full flex items-center gap-2 px-4 py-1.5 text-left"
                     style={{
                       background: active ? "#1A0A0B" : "transparent",
                       borderLeft: active ? "2px solid #E31B23" : "2px solid transparent",
                       color: active ? "#F2F2F2" : "#666666",
-                      fontSize: 11,
+                      fontSize: 10.5,
                       fontFamily: "inherit",
                       cursor: "pointer",
                       letterSpacing: "0.02em",
@@ -134,27 +122,30 @@ export default function Shell({ activeNav, onNavChange, children, missionId = "C
             </div>
           ))}
         </nav>
+
+        {/* Ctrl+K hint */}
+        <div className="flex items-center gap-2 px-4 py-3" style={{ borderTop:"1px solid #1E1E1E" }}>
+          <kbd style={{ fontSize:8, color:"#333333", background:"#111111", border:"1px solid #1E1E1E", borderRadius:2, padding:"1px 5px", fontFamily:"inherit" }}>⌘K</kbd>
+          <span style={{ fontSize:8, color:"#333333", letterSpacing:"0.1em" }}>COMMAND PALETTE</span>
+        </div>
       </aside>
 
       {/* Main column */}
       <div className="flex flex-col flex-1 overflow-hidden">
         {/* Top bar */}
-        <div
-          className="flex items-center justify-between flex-shrink-0 px-4"
-          style={{ height: 36, background: "#0D0D0D", borderBottom: "1px solid #1E1E1E" }}
-        >
+        <div className="flex items-center justify-between flex-shrink-0 px-4" style={{ height: 36, background: "#0D0D0D", borderBottom: "1px solid #1E1E1E" }}>
           <span style={{ fontSize: 10, color: "#A0A0A0", letterSpacing: "0.14em" }}>
-            MISSION / <span style={{ color: "#F2F2F2" }}>{missionId}</span>
+            MISSION / <span style={{ color: "#E31B23", fontWeight:700 }}>{missionId}</span>
           </span>
           <div className="flex items-center gap-5">
             <div className="flex items-center gap-1.5">
               <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#3FB950", flexShrink: 0 }} />
               <span style={{ fontSize: 9.5, color: "#3FB950", letterSpacing: "0.14em" }}>SYSTEM ONLINE</span>
             </div>
-            <Topbar label="MISSION STATUS" value="RUNNING" valueColor="#3FB950" />
-            <Topbar label="MODEL" value="FRONTIER" />
-            <Topbar label="COST" value="$184.22" />
-            <Topbar label="TIME" value="14:22:08" />
+            <Topbar label="STATUS" value="RUNNING" valueColor="#3FB950" />
+            <Topbar label="MODEL" value="SONNET-5" />
+            <Topbar label="COST" value="$0.223" />
+            <Topbar label="TIME" value="00:19:04" />
             <div className="flex items-center gap-2 ml-2" style={{ borderLeft: "1px solid #1E1E1E", paddingLeft: 12 }}>
               <div style={{ width: 22, height: 22, borderRadius: 2, background: "#191919", border: "1px solid #292929", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, color: "#666666", cursor: "pointer" }}>⚙</div>
               <div style={{ width: 22, height: 22, borderRadius: "50%", background: "#1E1E1E", border: "1px solid #292929", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, color: "#A0A0A0", cursor: "pointer" }}>R</div>
@@ -163,7 +154,7 @@ export default function Shell({ activeNav, onNavChange, children, missionId = "C
         </div>
 
         {/* Page content */}
-        <main className="flex-1 overflow-y-auto" style={{ background: "#0D0D0D" }}>
+        <main className="flex-1 overflow-hidden" style={{ background: "#0D0D0D" }}>
           {children}
         </main>
       </div>
