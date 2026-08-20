@@ -62,6 +62,36 @@ function BenchmarkList({onSelect}:{onSelect:(b:Bench)=>void}) {
           </div>
         ))}
       </div>
+      {/* E1: BENCHMARK SUITES — 7 tier tiles */}
+      {(() => {
+        const TIERS = [
+          { n: 0, name: "FANG SANDBOX",   desc: "Internal sandbox",        score: null  },
+          { n: 1, name: "PENTESTEVAL",    desc: "Basic web pentesting",     score: 0.821 },
+          { n: 2, name: "CVE-BENCH",      desc: "40 critical CVEs",         score: 0.812 },
+          { n: 3, name: "PREDIQL",        desc: "IDOR + GraphQL",           score: 0.741 },
+          { n: 4, name: "MHBENCH",        desc: "Multi-host lateral",       score: 0.634 },
+          { n: 5, name: "BOUNTYBENCH",    desc: "Real bug bounty targets",  score: 0.488 },
+          { n: 6, name: "PENTESTGPT/HTB", desc: "HackTheBox integration",   score: null  },
+        ];
+        return (
+          <div style={{ padding: "16px 24px", borderBottom: "1px solid #1E1E1E", flexShrink: 0 }}>
+            <div style={{ fontSize: 8, color: "#444444", letterSpacing: "0.2em", marginBottom: 12 }}>BENCHMARK SUITES</div>
+            <div style={{ display: "flex", gap: 8 }}>
+              {TIERS.map(t => {
+                const scoreColor = t.score === null ? "#333333" : t.score >= 0.75 ? "#3FB950" : t.score >= 0.50 ? "#D29922" : "#333333";
+                return (
+                  <div key={t.n} style={{ flex: 1, background: "#0D0D0D", border: "1px solid #1E1E1E", borderRadius: 2, padding: "10px 12px", minWidth: 0 }}>
+                    <div style={{ fontSize: 7.5, color: "#444444", letterSpacing: "0.16em" }}>TIER {t.n}</div>
+                    <div style={{ fontSize: 10, fontWeight: 700, color: "#F2F2F2", letterSpacing: "0.1em", marginTop: 4, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{t.name}</div>
+                    <div style={{ fontSize: 8.5, color: "#444444", marginTop: 2 }}>{t.desc}</div>
+                    <div style={{ fontSize: 11, fontWeight: 700, color: scoreColor, marginTop: 6 }}>{t.score !== null ? `${(t.score * 100).toFixed(1)}%` : "—"}</div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      })()}
       {/* Table */}
       <div className="flex-1 overflow-y-auto">
         <table style={{width:"100%",borderCollapse:"collapse"}}>
