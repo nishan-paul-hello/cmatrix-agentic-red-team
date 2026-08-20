@@ -187,8 +187,22 @@ Nmap done: 1 IP address scanned in 12.3 seconds`}
         )}
 
         {tab === "TRAJECTORY" && (
-          <div style={{ fontSize:9, color:"#444444", letterSpacing:"0.06em", lineHeight:1.7 }}>
-            STEP 003 · VDG DELTA: RECON-001 → IN_PROGRESS · EL DELTA: +8 facts · COST: $0.00 (deterministic)
+          <div style={{ paddingTop: 4 }}>
+            <div style={{ fontSize: 8, color: "#444444", letterSpacing: "0.2em", marginBottom: 10 }}>
+              TRAJECTORY CONTRIBUTION
+            </div>
+            {[
+              { step: `STEP ${String(entry.id).padStart(3, "0")}`, vdgDelta: entry.task.split("(")[0].toUpperCase(), elDelta: "+2 facts", cost: entry.duration !== "—" ? `~$0.0${entry.id.slice(-2)}` : "$0.00" },
+            ].map((r, i) => (
+              <div key={i} style={{ display: "flex", gap: 0, border: "1px solid #1E1E1E", borderRadius: 2, overflow: "hidden" }}>
+                {[["STEP", r.step], ["VDG DELTA", r.vdgDelta], ["EL DELTA", r.elDelta], ["COST", r.cost]].map(([k, v], j, a) => (
+                  <div key={k} style={{ flex: 1, padding: "9px 12px", borderRight: j < a.length - 1 ? "1px solid #1A1A1A" : "none", background: "#0D0D0D" }}>
+                    <div style={{ fontSize: 7.5, color: "#444444", letterSpacing: "0.18em", marginBottom: 4 }}>{k}</div>
+                    <div style={{ fontSize: 10, color: "#888888", fontWeight: 600 }}>{v}</div>
+                  </div>
+                ))}
+              </div>
+            ))}
           </div>
         )}
       </div>

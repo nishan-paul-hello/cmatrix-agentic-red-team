@@ -95,13 +95,18 @@ export default function HumanEscalation() {
             onFocus={e=>e.target.style.borderColor="#E31B23"} onBlur={e=>e.target.style.borderColor="#292929"}
           />
           <div className="flex gap-3 mt-4">
-            <button onClick={()=>response.trim()&&setSubmitted(true)} style={{fontSize:9.5,color:"#F2F2F2",background:response.trim()?"#E31B23":"#1A1A1A",border:"none",borderRadius:2,padding:"8px 20px",letterSpacing:"0.14em",cursor:response.trim()?"pointer":"not-allowed",fontFamily:"inherit",transition:"background 0.15s"}}
+            <button disabled={!response.trim()} onClick={()=>response.trim()&&setSubmitted(true)} style={{fontSize:9.5,color:"#F2F2F2",background:response.trim()?"#E31B23":"#1A1A1A",border:"none",borderRadius:2,padding:"8px 20px",letterSpacing:"0.14em",cursor:response.trim()?"pointer":"not-allowed",fontFamily:"inherit",transition:"background 0.15s"}}
               onMouseEnter={e=>response.trim()&&(e.currentTarget.style.background="#FF2A32")} onMouseLeave={e=>response.trim()&&(e.currentTarget.style.background="#E31B23")}>SEND RESPONSE</button>
             <button onClick={()=>setSubmitted(true)} style={{fontSize:9.5,color:"#3FB950",background:"transparent",border:"1px solid #3FB95044",borderRadius:2,padding:"8px 18px",letterSpacing:"0.14em",cursor:"pointer",fontFamily:"inherit"}}
               onMouseEnter={e=>{e.currentTarget.style.borderColor="#3FB950";e.currentTarget.style.background="#0A1A0C"}} onMouseLeave={e=>{e.currentTarget.style.borderColor="#3FB95044";e.currentTarget.style.background="transparent"}}>AUTHORIZE ALL</button>
             <button onClick={()=>setSubmitted(true)} style={{fontSize:9.5,color:"#FF2A32",background:"transparent",border:"1px solid #FF2A3244",borderRadius:2,padding:"8px 18px",letterSpacing:"0.14em",cursor:"pointer",fontFamily:"inherit"}}
               onMouseEnter={e=>{e.currentTarget.style.borderColor="#FF2A32";e.currentTarget.style.background="#130408"}} onMouseLeave={e=>{e.currentTarget.style.borderColor="#FF2A3244";e.currentTarget.style.background="transparent"}}>HALT MISSION</button>
           </div>
+          {!response.trim() && (
+            <div style={{ fontSize: 8.5, color: "#444444", letterSpacing: "0.1em", marginTop: 4 }}>
+              TYPE A RESPONSE TO ENABLE SUBMIT
+            </div>
+          )}
         </div>
 
         {/* Right: escalation history */}
