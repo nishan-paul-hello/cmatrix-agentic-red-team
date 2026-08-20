@@ -60,7 +60,7 @@ export default function TrajectoryPage() {
       {/* Filter strip */}
       <div className="flex-shrink-0 flex items-center gap-2 px-6 py-2" style={{borderBottom:"1px solid #141414",background:"#0A0A0A"}}>
         {types.map(t=>(
-          <button key={t} onClick={()=>setFilter(t)} style={{fontSize:8,letterSpacing:"0.14em",padding:"3px 10px",background:filter===t?TYPE_C[t as TrajStep["type"]]?.bg??"#120608":"transparent",border:`1px solid ${filter===t?TYPE_C[t as TrajStep["type"]]?.color??"#E31B23":"#1E1E1E"}`,borderRadius:2,color:filter===t?TYPE_C[t as TrajStep["type"]]?.color??"#E31B23":"#444444",cursor:"pointer",fontFamily:"inherit"}}>{t}</button>
+          <button key={t} onClick={()=>setFilter(t)} style={{fontSize:8,letterSpacing:"0.14em",padding:"3px 10px",background:filter===t?(TYPE_C[t as TrajStep["type"]]?.bg??"#111111"):"transparent",border:`1px solid ${filter===t?(TYPE_C[t as TrajStep["type"]]?.color??"#F2F2F2"):"#1E1E1E"}`,borderRadius:2,color:filter===t?(TYPE_C[t as TrajStep["type"]]?.color??"#F2F2F2"):"#444444",cursor:"pointer",fontFamily:"inherit"}}>{t}</button>
         ))}
         <span style={{marginLeft:"auto",fontSize:8,color:"#333333",letterSpacing:"0.12em"}}>{visible.length} EVENTS</span>
       </div>

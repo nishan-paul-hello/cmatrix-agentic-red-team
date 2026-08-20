@@ -244,6 +244,10 @@ function FailureAnalysis() {
             </div>
             {sel?.id===c.id&&(
               <div style={{padding:"12px 16px",borderTop:"1px solid #141414",marginTop:8}}>
+                <div className="flex items-center justify-between mb-2">
+                  <span style={{fontSize:8,color:"#444444",letterSpacing:"0.16em"}}>{c.id} DETAIL</span>
+                  <button onClick={e=>{e.stopPropagation();setSel(null);}} style={{background:"transparent",border:"none",cursor:"pointer",color:"#444444",fontSize:13,lineHeight:1,padding:"0 2px"}}>✕</button>
+                </div>
                 <div style={{fontSize:9.5,color:"#555555",lineHeight:1.8,marginBottom:10}}>{c.desc}</div>
                 <div className="flex items-start gap-2">
                   <span style={{fontSize:8,color:"#3FB950",letterSpacing:"0.14em",fontWeight:700,flexShrink:0}}>FIX →</span>

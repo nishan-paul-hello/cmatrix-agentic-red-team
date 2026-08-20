@@ -38,7 +38,7 @@ interface Specialist {
 const VDG_NODES: VDGNode[] = [
   { id: "RECON-001",    type: "RECONNAISSANCE", status: "COMPLETED",  x: 0, y: 0 },
   { id: "AUTH-001",     type: "AUTHENTICATION", status: "EXPLOITED",  x: 0, y: 1 },
-  { id: "SQLI-007",     type: "SQL INJECTION",  status: "ELIGIBLE",   ucb: 0.824, eord: 3, eordMax: 5, x: 0, y: 2 },
+  { id: "SQLI-001",     type: "SQL INJECTION",  status: "ELIGIBLE",   ucb: 0.824, eord: 3, eordMax: 5, x: 0, y: 2 },
   { id: "DB-ACCESS-002",type: "DATABASE ACCESS",status: "DEPENDENT",  x: 0, y: 3 },
 ];
 
@@ -51,7 +51,7 @@ const SPECIALISTS: Specialist[] = [
 ];
 
 const INITIAL_LOG: LogEntry[] = [
-  { id: 12, ts: "06:31:04", agent: "TEAM-MGR",    action: "UCB_SELECT",       desc: "SQLI-007 selected — UCB 0.824, path 0.612, E_ord 3/5", color: "#E31B23" },
+  { id: 12, ts: "06:31:04", agent: "TEAM-MGR",    action: "UCB_SELECT",       desc: "SQLI-001 selected — UCB 0.824, path 0.612, E_ord 3/5", color: "#E31B23" },
   { id: 11, ts: "06:30:58", agent: "INJECT-SPEC",  action: "TOOL_CALL",        desc: "sqlmap --time-sec=4 --technique=T -u /api/users", color: "#A0A0A0" },
   { id: 10, ts: "06:30:51", agent: "VALID-AGENT",  action: "ORACLE_PASS",      desc: "AUTH-001 oracle confirmed — CVE-BENCH PASS", color: "#3FB950" },
   { id: 9,  ts: "06:30:44", agent: "EVAL-AGENT",   action: "E_ORD_UPDATE",     desc: "AUTH-001 evidence raised E_ord 3 → 4 (CONFIRMED)", color: "#3FB950" },
@@ -59,7 +59,7 @@ const INITIAL_LOG: LogEntry[] = [
   { id: 7,  ts: "06:30:31", agent: "TEAM-MGR",     action: "EL_SNAPSHOT",      desc: "Environmental Layer snapshot: 87 confirmed facts", color: "#A0A0A0" },
   { id: 6,  ts: "06:30:22", agent: "AUTH-SPEC",    action: "CREDENTIAL_FOUND", desc: "admin@targetcorp.com extracted from /api/auth", color: "#3FB950" },
   { id: 5,  ts: "06:30:14", agent: "TEAM-MGR",     action: "PATH_SCORE",       desc: "RECON→AUTH→SQLI→DB-ACCESS path scored 0.612", color: "#A0A0A0" },
-  { id: 4,  ts: "06:30:07", agent: "INJECT-SPEC",  action: "SPAWN",            desc: "INJECTION SPECIALIST spawned — FRESH context, node SQLI-007", color: "#666666" },
+  { id: 4,  ts: "06:30:07", agent: "INJECT-SPEC",  action: "SPAWN",            desc: "INJECTION SPECIALIST spawned — FRESH context, node SQLI-001", color: "#666666" },
   { id: 3,  ts: "06:29:58", agent: "EVAL-AGENT",   action: "E_ORD_UPDATE",     desc: "AUTH-001 evidence raised E_ord 2 → 3 (WEAK → CLEAR)", color: "#A0A0A0" },
   { id: 2,  ts: "06:29:49", agent: "AUTH-SPEC",    action: "EXPLOIT_ATTEMPT",  desc: "Credential stuffing /api/login — 200 OK, session token returned", color: "#A0A0A0" },
   { id: 1,  ts: "06:29:40", agent: "RECON-SPEC",   action: "TOOL_RESULT",      desc: "nmap complete: 3 open ports, 14 endpoints enumerated", color: "#666666" },
@@ -78,13 +78,13 @@ const SUB_NAV: { id: MissionSubNav; label: string }[] = [
   { id: "trajectory",    label: "Trajectory"   },
   { id: "cost",          label: "Cost"         },
   { id: "team-manager",  label: "Team Manager" },
-  { id: "escalation",    label: "Escalation !" },
+  { id: "escalation",    label: "Escalation" },
 ];
 
 const STREAM_EVENTS: Omit<LogEntry, "id">[] = [
   { ts: "06:31:09", agent: "INJECT-SPEC",  action: "RESPONSE_PARSE", desc: "Response time 4.18s — timing injection confirmed", color: "#3FB950" },
-  { ts: "06:31:14", agent: "TEAM-MGR",     action: "UCB_UPDATE",     desc: "SQLI-007 UCB raised to 0.891 post-evidence", color: "#E31B23" },
-  { ts: "06:31:19", agent: "EVAL-AGENT",   action: "E_ORD_UPDATE",   desc: "SQLI-007 evidence raised E_ord 3 → 4 (CONFIRMED)", color: "#3FB950" },
+  { ts: "06:31:14", agent: "TEAM-MGR",     action: "UCB_UPDATE",     desc: "SQLI-001 UCB raised to 0.891 post-evidence", color: "#E31B23" },
+  { ts: "06:31:19", agent: "EVAL-AGENT",   action: "E_ORD_UPDATE",   desc: "SQLI-001 evidence raised E_ord 3 → 4 (CONFIRMED)", color: "#3FB950" },
 ];
 
 /* ── Node status styles ─────────────────────────────────── */
@@ -139,12 +139,17 @@ function useElapsed(start: number) {
 export default function MissionWorkspace({ missionId = "CVE-001" }: { missionId?: string }) {
   const [subNav, setSubNav] = useState<MissionSubNav>("overview");
   const [log, setLog] = useState<LogEntry[]>(INITIAL_LOG);
+  const [paused, setPaused] = useState(false);
+  const [terminated, setTerminated] = useState(false);
   const nextId = useRef(INITIAL_LOG.length + 1);
   const queue = useRef([...STREAM_EVENTS]);
-  const time = useElapsed(391); // 06:31 in seconds
+  const time = useElapsed(391);
+  const pausedRef = useRef(paused);
+  pausedRef.current = paused;
 
   useEffect(() => {
     const iv = setInterval(() => {
+      if (pausedRef.current) return;
       const next = queue.current.shift();
       if (!next) return;
       setLog((prev) => [{ ...next, id: nextId.current++ }, ...prev].slice(0, 60));
@@ -177,7 +182,7 @@ export default function MissionWorkspace({ missionId = "CVE-001" }: { missionId?
           {[
             { label: "VDG NODES", value: "42"    },
             { label: "EL FACTS",  value: "87"    },
-            { label: "FINDINGS",  value: "03", red: true },
+            { label: "FINDINGS",  value: "07", red: true },
             { label: "COST",      value: "$1.42", red: true },
             { label: "TIME",      value: time     },
           ].map((m, i) => (
@@ -220,7 +225,12 @@ export default function MissionWorkspace({ missionId = "CVE-001" }: { missionId?
                   {item.id === "findings" ? (
                     <span className="flex items-center gap-1.5">
                       {item.label}
-                      <span style={{ fontSize: 8, color: "#E31B23", background: "#1A0608", border: "1px solid #6F171B", borderRadius: 2, padding: "0 4px", letterSpacing: "0.1em" }}>3</span>
+                      <span style={{ fontSize: 8, color: "#E31B23", background: "#1A0608", border: "1px solid #6F171B", borderRadius: 2, padding: "0 4px", letterSpacing: "0.1em" }}>7</span>
+                    </span>
+                  ) : item.id === "escalation" ? (
+                    <span className="flex items-center gap-1.5">
+                      {item.label}
+                      <span style={{ fontSize: 8, color: "#FF2A32", background: "#1A0608", border: "1px solid #FF2A3266", borderRadius: 2, padding: "0 4px", letterSpacing: "0.1em" }}>!</span>
                     </span>
                   ) : item.label}
                 </button>
@@ -232,19 +242,22 @@ export default function MissionWorkspace({ missionId = "CVE-001" }: { missionId?
           <div className="flex flex-col gap-2 p-3" style={{ borderTop: "1px solid #1E1E1E" }}>
             <button
               className="w-full"
-              style={{ background: "#111111", border: "1px solid #333333", borderRadius: 2, color: "#D29922", fontSize: 9.5, fontWeight: 600, letterSpacing: "0.16em", padding: "7px 0", cursor: "pointer", fontFamily: "inherit" }}
+              onClick={() => setPaused(p => !p)}
+              style={{ background: "#111111", border: `1px solid ${paused ? "#D29922" : "#333333"}`, borderRadius: 2, color: paused ? "#D29922" : "#D29922", fontSize: 9.5, fontWeight: 600, letterSpacing: "0.16em", padding: "7px 0", cursor: "pointer", fontFamily: "inherit" }}
               onMouseEnter={(e) => e.currentTarget.style.borderColor = "#D29922"}
-              onMouseLeave={(e) => e.currentTarget.style.borderColor = "#333333"}
+              onMouseLeave={(e) => e.currentTarget.style.borderColor = paused ? "#D29922" : "#333333"}
             >
-              ⏸ PAUSE
+              {paused ? "▶ RESUME" : "⏸ PAUSE"}
             </button>
             <button
               className="w-full"
-              style={{ background: "#110808", border: "1px solid #6F171B", borderRadius: 2, color: "#E31B23", fontSize: 9.5, fontWeight: 600, letterSpacing: "0.16em", padding: "7px 0", cursor: "pointer", fontFamily: "inherit" }}
-              onMouseEnter={(e) => { e.currentTarget.style.background = "#1A0A0B"; e.currentTarget.style.borderColor = "#E31B23"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.background = "#110808"; e.currentTarget.style.borderColor = "#6F171B"; }}
+              onClick={() => { setPaused(true); setTerminated(true); }}
+              disabled={terminated}
+              style={{ background: terminated ? "#0D0808" : "#110808", border: `1px solid ${terminated ? "#333333" : "#6F171B"}`, borderRadius: 2, color: terminated ? "#555555" : "#E31B23", fontSize: 9.5, fontWeight: 600, letterSpacing: "0.16em", padding: "7px 0", cursor: terminated ? "not-allowed" : "pointer", fontFamily: "inherit" }}
+              onMouseEnter={(e) => { if (!terminated) { e.currentTarget.style.background = "#1A0A0B"; e.currentTarget.style.borderColor = "#E31B23"; } }}
+              onMouseLeave={(e) => { if (!terminated) { e.currentTarget.style.background = "#110808"; e.currentTarget.style.borderColor = "#6F171B"; } }}
             >
-              ✕ TERMINATE
+              {terminated ? "— TERMINATED" : "✕ TERMINATE"}
             </button>
           </div>
         </div>
@@ -310,6 +323,7 @@ export default function MissionWorkspace({ missionId = "CVE-001" }: { missionId?
 
                       {/* Node card */}
                       <div
+                        onClick={() => setSubNav("attack-graph")}
                         style={{
                           width: 224,
                           background: s.bg,
@@ -317,7 +331,9 @@ export default function MissionWorkspace({ missionId = "CVE-001" }: { missionId?
                           borderRadius: 2,
                           padding: "10px 12px",
                           position: "relative",
+                          cursor: "pointer",
                         }}
+                        title="Click to open Attack Graph"
                       >
                         {/* Active pulse ring for ELIGIBLE */}
                         {node.status === "ELIGIBLE" && (

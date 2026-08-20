@@ -379,13 +379,294 @@ export default function EnvironmentalLayer() {
 
         {tab === "HOSTS" && <HostTopology />}
         {tab === "CREDENTIALS" && <CredentialsPanel />}
-
-        {!["ENDPOINTS","SERVICES","HOSTS","CREDENTIALS"].includes(tab) && (
-          <div className="flex items-center justify-center h-full" style={{ color: "#222222", fontSize: 10, letterSpacing: "0.18em" }}>
-            {tab} — NOT YET IMPLEMENTED
-          </div>
-        )}
+        {tab === "AUTH STATES" && <AuthStatesPanel />}
+        {tab === "PARAMETERS" && <ParametersPanel />}
+        {tab === "CVE CANDIDATES" && <CVECandidatesPanel />}
+        {tab === "FINDINGS" && <ELFindingsPanel />}
+        {tab === "EVIDENCE" && <EvidencePanel />}
+        {tab === "FAILURES" && <FailuresPanel />}
       </div>
+    </div>
+  );
+}
+
+/* ─── AUTH STATES ─────────────────────────────────────── */
+const AUTH_STATES = [
+  {id:"AS-001",session:"sess_8f4a2b",user:"admin@targetcorp.com",role:"ADMIN",method:"JWT/HS256",issued:"06:22:14",expiry:"07:22:14",status:"ACTIVE",csrf:"b3d9f1e2"},
+  {id:"AS-002",session:"sess_2c7e9d",user:"user@targetcorp.com", role:"USER", method:"SESSION_COOKIE",issued:"06:12:18",expiry:"06:42:18",status:"EXPIRED",csrf:"—"},
+  {id:"AS-003",session:"sess_forged",user:"admin@targetcorp.com",role:"ADMIN",method:"JWT/FORGED", issued:"06:22:50",expiry:"07:22:50",status:"ACTIVE",csrf:"—"},
+];
+function AuthStatesPanel() {
+  return (
+    <div className="overflow-auto flex-1">
+      <div className="flex items-center gap-2 px-4 py-2 flex-shrink-0" style={{borderBottom:"1px solid #141414",background:"#0A0A0A"}}>
+        <span style={{fontSize:8,color:"#3FB950",letterSpacing:"0.18em"}}>CONFIRMED</span>
+        <span style={{fontSize:8,color:"#555555",letterSpacing:"0.12em",marginLeft:8}}>Active authentication sessions observed by Specialists</span>
+      </div>
+      <table style={{width:"100%",borderCollapse:"collapse",fontSize:10.5}}>
+        <thead><tr style={{background:"#0F0F0F",position:"sticky",top:0}}>
+          {["ID","SESSION","USER","ROLE","METHOD","ISSUED","EXPIRY","STATUS","CSRF TOKEN"].map(h=>(
+            <th key={h} style={{padding:"6px 12px",textAlign:"left",fontSize:8,color:"#444444",letterSpacing:"0.16em",borderBottom:"1px solid #1A1A1A",fontWeight:600,whiteSpace:"nowrap"}}>{h}</th>
+          ))}
+        </tr></thead>
+        <tbody>
+          {AUTH_STATES.map((a,i)=>(
+            <tr key={a.id} style={{borderBottom:"1px solid #111111"}} onMouseEnter={e=>e.currentTarget.style.background="#0F0F0F"} onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
+              <td style={{padding:"7px 12px",color:"#E31B23",fontWeight:700,fontSize:9}}>{a.id}</td>
+              <td style={{padding:"7px 12px",color:"#555555",fontSize:9}}>{a.session}</td>
+              <td style={{padding:"7px 12px",color:"#A0A0A0"}}>{a.user}</td>
+              <td style={{padding:"7px 12px"}}><span style={{fontSize:8.5,color:a.role==="ADMIN"?"#FF2A32":"#666666",letterSpacing:"0.1em",fontWeight:600}}>{a.role}</span></td>
+              <td style={{padding:"7px 12px",color:"#666666",fontSize:9}}>{a.method}</td>
+              <td style={{padding:"7px 12px",color:"#444444",fontSize:9}}>{a.issued}</td>
+              <td style={{padding:"7px 12px",color:a.status==="EXPIRED"?"#333333":"#444444",fontSize:9}}>{a.expiry}</td>
+              <td style={{padding:"7px 12px"}}><span style={{fontSize:8.5,color:a.status==="ACTIVE"?"#3FB950":"#444444",letterSpacing:"0.12em",fontWeight:600}}>{a.status}</span></td>
+              <td style={{padding:"7px 12px",color:"#444444",fontSize:9,letterSpacing:"0.06em"}}>{a.csrf}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+/* ─── PARAMETERS ─────────────────────────────────────── */
+const PARAMS = [
+  {id:"P-001",endpoint:"GET /api/users",       param:"id",       type:"INTEGER",source:"QUERY",injectable:true, lastVal:"1"},
+  {id:"P-002",endpoint:"POST /api/auth/login", param:"username", type:"STRING", source:"BODY",injectable:false,lastVal:"admin@targetcorp.com"},
+  {id:"P-003",endpoint:"POST /api/auth/login", param:"password", type:"STRING", source:"BODY",injectable:false,lastVal:"[REDACTED]"},
+  {id:"P-004",endpoint:"GET /api/users/:id",   param:"id",       type:"PATH",   source:"PATH",injectable:true, lastVal:"1"},
+  {id:"P-005",endpoint:"GET /api/products",    param:"category", type:"STRING", source:"QUERY",injectable:true, lastVal:"electronics"},
+  {id:"P-006",endpoint:"GET /api/products",    param:"sort",     type:"STRING", source:"QUERY",injectable:false,lastVal:"asc"},
+  {id:"P-007",endpoint:"POST /api/graphql",    param:"query",    type:"STRING", source:"BODY",injectable:true, lastVal:"{ users { id } }"},
+  {id:"P-008",endpoint:"GET /api/orders",      param:"user_id",  type:"INTEGER",source:"QUERY",injectable:true, lastVal:"1"},
+];
+function ParametersPanel() {
+  return (
+    <div className="overflow-auto flex-1">
+      <div className="flex items-center gap-2 px-4 py-2 flex-shrink-0" style={{borderBottom:"1px solid #141414",background:"#0A0A0A"}}>
+        <span style={{fontSize:8,color:"#444444",letterSpacing:"0.18em"}}>DISCOVERED PARAMETERS</span>
+        <span style={{marginLeft:"auto",fontSize:8,color:"#E31B23",letterSpacing:"0.12em"}}>{PARAMS.filter(p=>p.injectable).length} INJECTION ELIGIBLE</span>
+      </div>
+      <table style={{width:"100%",borderCollapse:"collapse",fontSize:10.5}}>
+        <thead><tr style={{background:"#0F0F0F",position:"sticky",top:0}}>
+          {["ID","ENDPOINT","PARAMETER","TYPE","SOURCE","INJECTABLE","LAST VALUE"].map(h=>(
+            <th key={h} style={{padding:"6px 12px",textAlign:"left",fontSize:8,color:"#444444",letterSpacing:"0.16em",borderBottom:"1px solid #1A1A1A",fontWeight:600,whiteSpace:"nowrap"}}>{h}</th>
+          ))}
+        </tr></thead>
+        <tbody>
+          {PARAMS.map((p,i)=>(
+            <tr key={p.id} style={{borderBottom:"1px solid #111111",background:i%2?"#0B0B0B":"transparent"}} onMouseEnter={e=>e.currentTarget.style.background="#0F0F0F"} onMouseLeave={e=>e.currentTarget.style.background=i%2?"#0B0B0B":"transparent"}>
+              <td style={{padding:"7px 12px",color:"#E31B23",fontWeight:700,fontSize:9}}>{p.id}</td>
+              <td style={{padding:"7px 12px",color:"#555555",fontSize:9}}>{p.endpoint}</td>
+              <td style={{padding:"7px 12px",color:"#A0A0A0",fontWeight:600}}>{p.param}</td>
+              <td style={{padding:"7px 12px",color:"#666666",fontSize:9}}>{p.type}</td>
+              <td style={{padding:"7px 12px",color:"#555555",fontSize:9}}>{p.source}</td>
+              <td style={{padding:"7px 12px"}}><span style={{fontSize:8.5,color:p.injectable?"#FF2A32":"#333333",letterSpacing:"0.12em",fontWeight:600}}>{p.injectable?"YES":"—"}</span></td>
+              <td style={{padding:"7px 12px",color:"#444444",fontSize:9}}>{p.lastVal}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+/* ─── CVE CANDIDATES ──────────────────────────────────── */
+const CVE_CANDIDATES = [
+  {id:"CVE-2024-1187",tech:"PostgreSQL 14.8",  class:"SQL INJECTION",    epss:0.71,poc:true, node:"SQLI-001",eord:4},
+  {id:"CVE-2023-9921",tech:"nginx/1.24.0",     class:"PATH TRAVERSAL",   epss:0.38,poc:false,node:"PATH-005",eord:1},
+  {id:"CVE-2024-5532",tech:"Flask/Jinja2",     class:"SSTI",             epss:0.55,poc:true, node:"SSTI-006",eord:1},
+  {id:"CVE-2022-3916",tech:"OpenSSH 8.9p1",    class:"AUTH BYPASS",      epss:0.22,poc:false,node:"AUTH-001",eord:3},
+  {id:"CVE-2024-0012",tech:"Gunicorn 20.1.0",  class:"REQUEST SMUGGLING",epss:0.18,poc:false,node:"—",       eord:0},
+  {id:"CVE-2023-4863",tech:"Redis 7.0.11",     class:"COMMAND INJECTION",epss:0.63,poc:true, node:"RCE-007", eord:0},
+];
+function CVECandidatesPanel() {
+  return (
+    <div className="overflow-auto flex-1">
+      <div className="flex items-center gap-2 px-4 py-2 flex-shrink-0" style={{borderBottom:"1px solid #141414",background:"#0A0A0A"}}>
+        <span style={{fontSize:8,color:"#444444",letterSpacing:"0.18em"}}>VDG HYPOTHESIS CANDIDATES</span>
+        <span style={{marginLeft:"auto",fontSize:8,color:"#D29922",letterSpacing:"0.12em"}}>{CVE_CANDIDATES.filter(c=>c.poc).length} WITH PoC</span>
+      </div>
+      <table style={{width:"100%",borderCollapse:"collapse",fontSize:10.5}}>
+        <thead><tr style={{background:"#0F0F0F",position:"sticky",top:0}}>
+          {["CVE ID","TECHNOLOGY","VULN CLASS","EPSS","PoC","LINKED VDG NODE","E_ORD"].map(h=>(
+            <th key={h} style={{padding:"6px 12px",textAlign:"left",fontSize:8,color:"#444444",letterSpacing:"0.16em",borderBottom:"1px solid #1A1A1A",fontWeight:600,whiteSpace:"nowrap"}}>{h}</th>
+          ))}
+        </tr></thead>
+        <tbody>
+          {[...CVE_CANDIDATES].sort((a,b)=>b.epss-a.epss).map((c,i)=>(
+            <tr key={c.id} style={{borderBottom:"1px solid #111111"}} onMouseEnter={e=>e.currentTarget.style.background="#0F0F0F"} onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
+              <td style={{padding:"7px 12px",color:"#E31B23",fontWeight:700,fontSize:9,letterSpacing:"0.06em"}}>{c.id}</td>
+              <td style={{padding:"7px 12px",color:"#A0A0A0"}}>{c.tech}</td>
+              <td style={{padding:"7px 12px",color:"#666666",fontSize:9}}>{c.class}</td>
+              <td style={{padding:"7px 12px"}}><span style={{fontSize:10,fontWeight:700,color:c.epss>0.5?"#FF2A32":c.epss>0.3?"#D29922":"#555555"}}>{c.epss.toFixed(2)}</span></td>
+              <td style={{padding:"7px 12px"}}><span style={{fontSize:8.5,color:c.poc?"#3FB950":"#333333",letterSpacing:"0.12em"}}>{c.poc?"YES":"NO"}</span></td>
+              <td style={{padding:"7px 12px",color:c.node!=="—"?"#E31B23":"#333333",fontSize:9,fontWeight:c.node!=="—"?700:400}}>{c.node}</td>
+              <td style={{padding:"7px 12px",color:"#666666"}}>{c.eord}/5</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+/* ─── FINDINGS (EL cross-ref) ─────────────────────────── */
+const EL_FINDINGS = [
+  {id:"F-001",type:"SQL INJECTION",       target:"/api/users?id=", eord:5,vdgNode:"SQLI-001",evidence:["ev-00483-req","ev-00483-resp","ev-00484-timing"]},
+  {id:"F-002",type:"AUTH BYPASS",         target:"/api/auth/login",eord:4,vdgNode:"AUTH-001", evidence:["ev-00241-jwt","ev-00242-forged"]},
+  {id:"F-003",type:"IDOR",               target:"/api/users/:id",  eord:4,vdgNode:"IDOR-008", evidence:["ev-00301-crossacc"]},
+  {id:"F-004",type:"XSS REFLECTED",      target:"/search?q=",      eord:3,vdgNode:"XSS-002",  evidence:["ev-00411-reflect"]},
+  {id:"F-005",type:"SENSITIVE DATA",     target:"/static/config.json",eord:4,vdgNode:"ENUM-002",evidence:["ev-00121-static"]},
+];
+function ELFindingsPanel() {
+  return (
+    <div className="overflow-auto flex-1">
+      <div className="flex items-center gap-2 px-4 py-2 flex-shrink-0" style={{borderBottom:"1px solid #141414",background:"#0A0A0A"}}>
+        <span style={{fontSize:8,color:"#444444",letterSpacing:"0.18em"}}>EL FINDINGS CROSS-REFERENCE</span>
+        <span style={{fontSize:8,color:"#555555",marginLeft:8}}>confirmed findings linked to EL evidence artifacts</span>
+      </div>
+      <table style={{width:"100%",borderCollapse:"collapse",fontSize:10.5}}>
+        <thead><tr style={{background:"#0F0F0F",position:"sticky",top:0}}>
+          {["FINDING","TYPE","TARGET","E_ORD","LINKED VDG NODE","EVIDENCE ARTIFACTS"].map(h=>(
+            <th key={h} style={{padding:"6px 12px",textAlign:"left",fontSize:8,color:"#444444",letterSpacing:"0.16em",borderBottom:"1px solid #1A1A1A",fontWeight:600,whiteSpace:"nowrap"}}>{h}</th>
+          ))}
+        </tr></thead>
+        <tbody>
+          {EL_FINDINGS.map((f,i)=>(
+            <tr key={f.id} style={{borderBottom:"1px solid #111111",background:i%2?"#0B0B0B":"transparent"}} onMouseEnter={e=>e.currentTarget.style.background="#0F0F0F"} onMouseLeave={e=>e.currentTarget.style.background=i%2?"#0B0B0B":"transparent"}>
+              <td style={{padding:"7px 12px",color:"#E31B23",fontWeight:700,fontSize:9}}>{f.id}</td>
+              <td style={{padding:"7px 12px",color:"#A0A0A0"}}>{f.type}</td>
+              <td style={{padding:"7px 12px",color:"#555555",fontSize:9}}>{f.target}</td>
+              <td style={{padding:"7px 12px",color:"#666666"}}>{f.eord}/5</td>
+              <td style={{padding:"7px 12px",color:"#E31B23",fontSize:9,fontWeight:700}}>{f.vdgNode}</td>
+              <td style={{padding:"7px 12px"}}>
+                <div className="flex flex-wrap gap-1">
+                  {f.evidence.map(e=>(
+                    <span key={e} style={{fontSize:7.5,color:"#444444",background:"#111111",border:"1px solid #1E1E1E",borderRadius:2,padding:"1px 5px",letterSpacing:"0.08em"}}>{e}</span>
+                  ))}
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+/* ─── EVIDENCE ────────────────────────────────────────── */
+const EVIDENCE_ARTIFACTS = [
+  {id:"ev-00483-resp",  type:"HTTP RESPONSE",  finding:"F-001",ts:"06:30:51",size:"1,247B",note:"4.18s RTT — timing injection confirmed"},
+  {id:"ev-00483-req",   type:"HTTP REQUEST",   finding:"F-001",ts:"06:30:47",size:"412B",  note:"Time-based SLEEP(4) payload"},
+  {id:"ev-00484-timing",type:"TIMING DELTA",   finding:"F-001",ts:"06:30:58",size:"84B",   note:"4,100ms above baseline, σ=12ms"},
+  {id:"ev-00241-jwt",   type:"TOKEN ARTIFACT", finding:"F-002",ts:"06:22:00",size:"312B",  note:"HS256 JWT with weak secret cracked"},
+  {id:"ev-00242-forged",type:"TOKEN ARTIFACT", finding:"F-002",ts:"06:22:14",size:"312B",  note:"Forged admin token — access confirmed"},
+  {id:"ev-00301-crossacc",type:"HTTP RESPONSE",finding:"F-003",ts:"06:25:33",size:"891B",  note:"id=2 returned while auth as id=1"},
+  {id:"ev-00411-reflect",type:"HTTP RESPONSE", finding:"F-004",ts:"06:28:47",size:"6,012B",note:"Input reflected unescaped in response"},
+  {id:"ev-00121-static",type:"FILE CONTENT",   finding:"F-005",ts:"06:16:07",size:"2,341B",note:"DB credentials exposed in config.json"},
+];
+function EvidencePanel() {
+  const [sel,setSel] = useState<string|null>(null);
+  return (
+    <div className="flex flex-1 overflow-hidden" style={{minHeight:0}}>
+      <div className="flex flex-col overflow-y-auto" style={{flex:1,minWidth:0}}>
+        <div className="flex items-center gap-2 px-4 py-2 flex-shrink-0" style={{borderBottom:"1px solid #141414",background:"#0A0A0A"}}>
+          <span style={{fontSize:8,color:"#444444",letterSpacing:"0.18em"}}>RAW EVIDENCE ARTIFACTS</span>
+          <span style={{marginLeft:"auto",fontSize:8,color:"#555555"}}>{EVIDENCE_ARTIFACTS.length} ARTIFACTS</span>
+        </div>
+        <table style={{width:"100%",borderCollapse:"collapse",fontSize:10.5}}>
+          <thead><tr style={{background:"#0F0F0F",position:"sticky",top:0}}>
+            {["ARTIFACT ID","TYPE","FINDING","TIMESTAMP","SIZE","NOTE"].map(h=>(
+              <th key={h} style={{padding:"6px 12px",textAlign:"left",fontSize:8,color:"#444444",letterSpacing:"0.16em",borderBottom:"1px solid #1A1A1A",fontWeight:600,whiteSpace:"nowrap"}}>{h}</th>
+            ))}
+          </tr></thead>
+          <tbody>
+            {EVIDENCE_ARTIFACTS.map((a,i)=>(
+              <tr key={a.id} onClick={()=>setSel(a.id===sel?null:a.id)} style={{borderBottom:"1px solid #111111",cursor:"pointer",background:sel===a.id?"#0F0F0F":i%2?"#0B0B0B":"transparent"}}
+                onMouseEnter={e=>e.currentTarget.style.background="#0F0F0F"} onMouseLeave={e=>e.currentTarget.style.background=sel===a.id?"#0F0F0F":i%2?"#0B0B0B":"transparent"}>
+                <td style={{padding:"7px 12px",color:"#E31B23",fontWeight:700,fontSize:9}}>{a.id}</td>
+                <td style={{padding:"7px 12px",color:"#666666",fontSize:9}}>{a.type}</td>
+                <td style={{padding:"7px 12px",color:"#E31B23",fontSize:9,fontWeight:700}}>{a.finding}</td>
+                <td style={{padding:"7px 12px",color:"#444444",fontSize:9}}>{a.ts}</td>
+                <td style={{padding:"7px 12px",color:"#444444",fontSize:9,textAlign:"right"}}>{a.size}</td>
+                <td style={{padding:"7px 12px",color:"#555555"}}>{a.note}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      {sel && (
+        <div style={{width:280,borderLeft:"1px solid #1E1E1E",background:"#0A0A0A",padding:"16px 14px",flexShrink:0,overflowY:"auto"}}>
+          {(()=>{const a=EVIDENCE_ARTIFACTS.find(x=>x.id===sel)!;return (
+            <>
+              <div style={{fontSize:8,color:"#444444",letterSpacing:"0.2em",marginBottom:12}}>ARTIFACT DETAIL</div>
+              {[{k:"ID",v:a.id},{k:"TYPE",v:a.type},{k:"FINDING",v:a.finding},{k:"TIMESTAMP",v:a.ts},{k:"SIZE",v:a.size}].map(r=>(
+                <div key={r.k} style={{marginBottom:8}}><div style={{fontSize:7.5,color:"#444444",letterSpacing:"0.16em",marginBottom:2}}>{r.k}</div><div style={{fontSize:10,color:"#888888"}}>{r.v}</div></div>
+              ))}
+              <div style={{marginTop:12,padding:"8px 10px",background:"#111111",border:"1px solid #1E1E1E",borderRadius:2,fontSize:9,color:"#555555",lineHeight:1.8}}>{a.note}</div>
+            </>
+          );})()}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ─── FAILURES ────────────────────────────────────────── */
+const FAILURE_LOG = [
+  {id:"FL-011",ts:"06:29:44",spec:"INJECT-SPEC",action:"SQLI_PROBE",      target:"/api/users?id=1' UNION",error:"UNION SELECT column mismatch — HTTP 400",eord:1,resolved:true},
+  {id:"FL-010",ts:"06:29:03",spec:"NETWORK-SPEC",action:"PORT_SCAN",      target:"5432/tcp",               error:"TIMEOUT after 120s — port filtered",    eord:0,resolved:false},
+  {id:"FL-009",ts:"06:28:12",spec:"INJECT-SPEC",action:"SQLI_ERROR_BASED",target:"/api/users?id=",         error:"No SQL error — error-based ruled out",  eord:1,resolved:true},
+  {id:"FL-008",ts:"06:24:41",spec:"AUTH-SPEC",  action:"BRUTE_FORCE",     target:"/api/auth/login",        error:"Rate limiting — 429 after 50 attempts",  eord:0,resolved:true},
+  {id:"FL-007",ts:"06:21:08",spec:"RECON-SPEC", action:"DIR_ENUM",        target:"/admin/*",               error:"403 Forbidden — directory listing off",  eord:0,resolved:false},
+  {id:"FL-006",ts:"06:18:33",spec:"INJECT-SPEC",action:"XSS_CANARY",      target:"/search?q=",             error:"CSP blocks inline scripts — adapting",   eord:2,resolved:false},
+];
+function FailuresPanel() {
+  const [sel,setSel] = useState<string|null>(null);
+  return (
+    <div className="flex flex-1 overflow-hidden" style={{minHeight:0}}>
+      <div className="flex flex-col overflow-y-auto" style={{flex:1,minWidth:0}}>
+        <div className="flex items-center gap-2 px-4 py-2 flex-shrink-0" style={{borderBottom:"1px solid #141414",background:"#0A0A0A"}}>
+          <span style={{fontSize:8,color:"#444444",letterSpacing:"0.18em"}}>SPECIALIST FAILURE LOG</span>
+          <span style={{marginLeft:"auto",fontSize:8,color:"#D29922",letterSpacing:"0.12em"}}>{FAILURE_LOG.filter(f=>!f.resolved).length} UNRESOLVED</span>
+        </div>
+        <table style={{width:"100%",borderCollapse:"collapse",fontSize:10.5}}>
+          <thead><tr style={{background:"#0F0F0F",position:"sticky",top:0}}>
+            {["ID","TIMESTAMP","SPECIALIST","ACTION","TARGET","ERROR","E_ORD","RESOLVED"].map(h=>(
+              <th key={h} style={{padding:"6px 12px",textAlign:"left",fontSize:8,color:"#444444",letterSpacing:"0.16em",borderBottom:"1px solid #1A1A1A",fontWeight:600,whiteSpace:"nowrap"}}>{h}</th>
+            ))}
+          </tr></thead>
+          <tbody>
+            {FAILURE_LOG.map((f,i)=>(
+              <tr key={f.id} onClick={()=>setSel(f.id===sel?null:f.id)} style={{borderBottom:"1px solid #111111",cursor:"pointer",background:sel===f.id?"#110808":i%2?"#0B0B0B":"transparent"}}
+                onMouseEnter={e=>e.currentTarget.style.background="#0F0F0F"} onMouseLeave={e=>e.currentTarget.style.background=sel===f.id?"#110808":i%2?"#0B0B0B":"transparent"}>
+                <td style={{padding:"7px 12px",color:"#E31B23",fontWeight:700,fontSize:9}}>{f.id}</td>
+                <td style={{padding:"7px 12px",color:"#444444",fontSize:9}}>{f.ts}</td>
+                <td style={{padding:"7px 12px",color:"#A0A0A0",fontSize:9,fontWeight:600}}>{f.spec}</td>
+                <td style={{padding:"7px 12px",color:"#666666",fontSize:9}}>{f.action}</td>
+                <td style={{padding:"7px 12px",color:"#555555",fontSize:9}}>{f.target}</td>
+                <td style={{padding:"7px 12px",color:"#666666",fontSize:9}}>{f.error}</td>
+                <td style={{padding:"7px 12px",color:"#555555"}}>{f.eord}/5</td>
+                <td style={{padding:"7px 12px"}}><span style={{fontSize:8.5,color:f.resolved?"#3FB950":"#D29922",letterSpacing:"0.12em",fontWeight:600}}>{f.resolved?"YES":"NO"}</span></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      {sel && (
+        <div style={{width:280,borderLeft:"1px solid #1E1E1E",background:"#0A0A0A",padding:"16px 14px",flexShrink:0,overflowY:"auto"}}>
+          {(()=>{const f=FAILURE_LOG.find(x=>x.id===sel)!;return (
+            <>
+              <div style={{fontSize:8,color:"#444444",letterSpacing:"0.2em",marginBottom:12}}>FAILURE DETAIL</div>
+              {[{k:"ID",v:f.id},{k:"TIMESTAMP",v:f.ts},{k:"SPECIALIST",v:f.spec},{k:"ACTION",v:f.action},{k:"TARGET",v:f.target},{k:"E_ORD",v:`${f.eord}/5`},{k:"RESOLVED",v:f.resolved?"YES":"NO"}].map(r=>(
+                <div key={r.k} style={{marginBottom:8}}><div style={{fontSize:7.5,color:"#444444",letterSpacing:"0.16em",marginBottom:2}}>{r.k}</div><div style={{fontSize:10,color:r.k==="RESOLVED"?(f.resolved?"#3FB950":"#D29922"):"#888888"}}>{r.v}</div></div>
+              ))}
+              <div style={{marginTop:12,padding:"8px 10px",background:"#111111",border:"1px solid #1E1E1E",borderRadius:2,fontSize:9,color:"#FF2A32",lineHeight:1.7}}>{f.error}</div>
+            </>
+          );})()}
+        </div>
+      )}
     </div>
   );
 }

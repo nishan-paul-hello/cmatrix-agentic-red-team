@@ -14,10 +14,11 @@ type ModeType     = "ONE-DAY" | "ZERO-DAY";
 
 interface WizardProps {
   onCancel: () => void;
+  onStart?: () => void;
   initialStep?: number;
 }
 
-export default function NewMissionWizard({ onCancel, initialStep }: WizardProps) {
+export default function NewMissionWizard({ onCancel, onStart, initialStep }: WizardProps) {
   const [step, setStep] = useState(initialStep ?? 1);
 
   // Step 1 state
@@ -370,7 +371,7 @@ export default function NewMissionWizard({ onCancel, initialStep }: WizardProps)
             </button>
           )}
           <button
-            onClick={() => step < 5 && setStep((s) => s + 1)}
+            onClick={() => step < 5 ? setStep((s) => s + 1) : onStart?.()}
             style={{
               background: "#E31B23", border: "none", borderRadius: 2, color: "#F2F2F2",
               fontSize: 10, fontWeight: 600, letterSpacing: "0.18em",

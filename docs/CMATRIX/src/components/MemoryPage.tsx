@@ -9,8 +9,8 @@ const PATTERNS = [
   {id:"VP-0044",vuln:"IDOR",target:"REST /api/users/:id",subtype:"DIRECT OBJECT REFERENCE",score:0.67,uses:6,lastSeen:"06:25:33",techniques:["sequential id enumeration","auth header swap","cross-account access probe"],indicators:["integer id in path","predictable sequence","missing ownership check"],evolution:[{ts:"06:18:00",note:"Pattern detected from endpoint enumeration"},{ts:"06:25:33",note:"Access to id=2 confirmed while authenticated as id=1"}]},
 ];
 
-export default function MemoryPage() {
-  const [tab,setTab]=useState<MemTab>("VULNERABILITY PATTERNS");
+export default function MemoryPage({initialTab="VULNERABILITY PATTERNS"}:{initialTab?:MemTab}) {
+  const [tab,setTab]=useState<MemTab>(initialTab);
   const tabs: MemTab[]=["VULNERABILITY PATTERNS","STRATEGY BRANCHING","TECHNICAL ACTIONS","FAILURE MEMORY","SKILL LIBRARY","CONTEXT UTILIZATION"];
   return (
     <div className="flex flex-col h-full" style={{minHeight:0}}>
@@ -135,7 +135,7 @@ function StrategyBranching() {
       <div className="flex items-center justify-between mb-5">
         <div style={{fontSize:9,color:"#666666",letterSpacing:"0.16em"}}>{BRANCHES.length} ROOT DECISIONS · 4 TOTAL BRANCHES</div>
         <div className="flex gap-4">
-          {[{l:"SUCCESS",c:"#3FB950"},{l:"IN PROGRESS",c:"#D29922"},{l:"RUNNING",c:"#E31B23"}].map(x=>(
+          {[{l:"SUCCESS",c:"#3FB950"},{l:"IN PROGRESS",c:"#D29922"},{l:"RUNNING",c:"#D29922"}].map(x=>(
             <div key={x.l} className="flex items-center gap-2"><div style={{width:6,height:6,borderRadius:"50%",background:x.c}}/><span style={{fontSize:8,color:"#444444",letterSpacing:"0.12em"}}>{x.l}</span></div>
           ))}
         </div>
@@ -265,7 +265,8 @@ const SKILLS = [
 function SkillLibrary() {
   const [sel,setSel]=useState(SKILLS[0]);
   const [filter,setFilter]=useState("");
-  const filtered=SKILLS.filter(s=>s.name.includes(filter.toLowerCase())||s.cat.includes(filter.toUpperCase()));
+  const q=filter.toLowerCase();
+  const filtered=SKILLS.filter(s=>s.name.includes(q)||s.cat.toLowerCase().includes(q)||s.desc.toLowerCase().includes(q)||s.spec.toLowerCase().includes(q));
   return (
     <div className="flex flex-1 overflow-hidden" style={{minHeight:0}}>
       <div className="flex-shrink-0 flex flex-col overflow-hidden" style={{width:280,borderRight:"1px solid #1E1E1E"}}>

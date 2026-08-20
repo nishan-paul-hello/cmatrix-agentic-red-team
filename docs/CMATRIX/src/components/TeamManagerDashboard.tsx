@@ -129,10 +129,12 @@ export default function TeamManagerDashboard() {
 /* ── screen 37: UCB BREAKDOWN MODAL ── */
 function UCBModal({entry,onClose}:{entry:VDGEntry;onClose:()=>void}) {
   const BAR_W = 280;
+  const epss = 0.42;
   const bars = [
     {label:"EXPLOIT TERM", value:entry.exploit, color:"#E31B23", desc:"Q(s,a) — average reward from past attempts"},
     {label:"EXPLORE TERM", value:entry.explore, color:"#3FB950", desc:"c × √(ln N / n) — exploration bonus"},
-    {label:"UCB SCORE",    value:entry.ucb,     color:"#FF2A32", desc:"Exploit + Explore — final selection score"},
+    {label:"EPSS PRIOR",   value:epss,          color:"#D29922", desc:"λ × EPSS score — initial exploitability prior from NVD/FIRST API"},
+    {label:"UCB SCORE",    value:entry.ucb,     color:"#FF2A32", desc:"Combined final selection score"},
   ];
   const C = 0.4;
   const N = VDG.reduce((s,v)=>s+v.visits,0);

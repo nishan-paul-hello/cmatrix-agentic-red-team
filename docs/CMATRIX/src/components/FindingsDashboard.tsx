@@ -126,13 +126,15 @@ function FindingDetail({f,onBack}:{f:Finding;onBack:()=>void}) {
               <div className="flex gap-3 mt-6">
                 <button onClick={()=>setEvOpen(true)} style={{fontSize:9.5,color:"#F2F2F2",background:"#E31B23",border:"none",borderRadius:2,padding:"7px 18px",letterSpacing:"0.14em",cursor:"pointer",fontFamily:"inherit"}}
                   onMouseEnter={e=>e.currentTarget.style.background="#FF2A32"} onMouseLeave={e=>e.currentTarget.style.background="#E31B23"}>VIEW EVIDENCE</button>
-                <button style={{fontSize:9.5,color:"#A0A0A0",background:"transparent",border:"1px solid #292929",borderRadius:2,padding:"7px 18px",letterSpacing:"0.14em",cursor:"pointer",fontFamily:"inherit"}}>VIEW PATH</button>
+                <button onClick={()=>setTab("ATTACK PATH")} style={{fontSize:9.5,color:"#A0A0A0",background:"transparent",border:"1px solid #292929",borderRadius:2,padding:"7px 18px",letterSpacing:"0.14em",cursor:"pointer",fontFamily:"inherit"}}
+                  onMouseEnter={e=>e.currentTarget.style.borderColor="#A0A0A0"} onMouseLeave={e=>e.currentTarget.style.borderColor="#292929"}>VIEW PATH</button>
               </div>
             </>
           )}
           {tab==="EVIDENCE" && <EvidenceViewer inline />}
           {tab==="ATTACK PATH" && <AttackPath nodes={f.path} large />}
-          {tab!=="OVERVIEW"&&tab!=="EVIDENCE"&&tab!=="ATTACK PATH" && <div style={{color:"#333333",fontSize:10,letterSpacing:"0.16em"}}>{tab} — CONTENT</div>}
+          {tab==="VALIDATION" && <ValidationTab f={f}/>}
+          {tab==="TRAJECTORY" && <TrajectoryTab f={f}/>}
         </div>
       </div>
       {evOpen && (
@@ -146,6 +148,65 @@ function FindingDetail({f,onBack}:{f:Finding;onBack:()=>void}) {
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+function ValidationTab({f}:{f:Finding}) {
+  const eord_labels=["UNSEEN","NOTHING","WEAK","CLEAR","CONFIRMED","ORACLE"];
+  const steps=[
+    {ts:f.first,       label:"SPECIALIST SUBMITTED",  eord:2, note:"Initial evidence flagged — weak signal from response anomaly"},
+    {ts:"06:30:42",    label:"EVALUATION AGENT",       eord:3, note:"Behavioral evidence confirmed — E_ord raised to CLEAR"},
+    {ts:"06:30:51",    label:"VALIDATION AGENT",       eord:4, note:"Controlled timing delta confirmed (4.18s, 2× reproduced)"},
+    {ts:f.validated!=="—"?f.validated:"—", label:"ORACLE CONFIRMED", eord:5, note:"CVE-BENCH FILE ACCESS oracle: PASS"},
+  ].filter(s=>s.ts!=="—"||s.eord<5);
+  return (
+    <div style={{paddingBottom:24}}>
+      <div style={{fontSize:8,color:"#444444",letterSpacing:"0.2em",marginBottom:16}}>VALIDATION LIFECYCLE</div>
+      {steps.map((s,i)=>(
+        <div key={i} className="flex gap-4" style={{marginBottom:i<steps.length-1?0:0}}>
+          <div className="flex flex-col items-center" style={{width:24,flexShrink:0}}>
+            <div style={{width:8,height:8,borderRadius:"50%",background:s.eord===5?"#3FB950":s.eord>=4?"#FF2A32":s.eord>=3?"#D29922":"#333333",border:"1px solid transparent",flexShrink:0}}/>
+            {i<steps.length-1&&<div style={{width:1,flex:1,minHeight:24,background:"#1E1E1E",margin:"4px 0"}}/>}
+          </div>
+          <div style={{paddingBottom:16}}>
+            <div className="flex items-center gap-3 mb-1">
+              <span style={{fontSize:8.5,fontWeight:700,color:s.eord===5?"#3FB950":"#A0A0A0",letterSpacing:"0.1em"}}>{s.label}</span>
+              <span style={{fontSize:7.5,color:"#444444"}}>{s.ts}</span>
+              <span style={{fontSize:8,color:s.eord===5?"#3FB950":s.eord>=4?"#FF2A32":s.eord>=3?"#D29922":"#555555",letterSpacing:"0.1em",fontWeight:600}}>E_ord {s.eord} — {eord_labels[s.eord]}</span>
+            </div>
+            <div style={{fontSize:9.5,color:"#555555",lineHeight:1.7}}>{s.note}</div>
+          </div>
+        </div>
+      ))}
+      <div style={{marginTop:8,border:"1px solid #1E1E1E",borderRadius:2,padding:"14px 16px",background:"#0A0A0A"}}>
+        <div style={{fontSize:8,color:"#444444",letterSpacing:"0.2em",marginBottom:8}}>ORACLE RESULT</div>
+        <div className="flex gap-6">
+          {[{k:"ORACLE",v:"CVE-BENCH"},{k:"ATTACK TYPE",v:"FILE ACCESS"},{k:"RESULT",v:f.status==="ORACLE CONFIRMED"?"PASS":"PENDING"},{k:"RETRIES",v:"1 / 3"}].map(r=>(
+            <div key={r.k}><div style={{fontSize:7.5,color:"#444444",letterSpacing:"0.14em",marginBottom:2}}>{r.k}</div><div style={{fontSize:10,fontWeight:700,color:r.k==="RESULT"?(f.status==="ORACLE CONFIRMED"?"#3FB950":"#D29922"):"#888888"}}>{r.v}</div></div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function TrajectoryTab({f}:{f:Finding}) {
+  return (
+    <div>
+      <div style={{fontSize:8,color:"#444444",letterSpacing:"0.2em",marginBottom:16}}>ATTACK TRAJECTORY FOR {f.id}</div>
+      {f.path.map((node,i)=>(
+        <div key={node} className="flex gap-3" style={{marginBottom:0}}>
+          <div className="flex flex-col items-center" style={{width:24,flexShrink:0}}>
+            <div style={{width:8,height:8,borderRadius:1,background:"#E31B23",flexShrink:0,marginTop:3}}/>
+            {i<f.path.length-1&&<div style={{width:1,flex:1,minHeight:20,background:"#E31B2344",margin:"4px 0"}}/>}
+          </div>
+          <div style={{paddingBottom:i<f.path.length-1?12:0}}>
+            <div style={{fontSize:10,fontWeight:700,color:"#A0A0A0",letterSpacing:"0.08em",marginBottom:2}}>{node}</div>
+            <div style={{fontSize:8.5,color:"#444444"}}>{i===0?"Initial discovery via enumeration":i===f.path.length-1?"Terminal — finding confirmed":"Prerequisite satisfied — enabled downstream nodes"}</div>
+          </div>
+        </div>
+      ))}
     </div>
   );
 }

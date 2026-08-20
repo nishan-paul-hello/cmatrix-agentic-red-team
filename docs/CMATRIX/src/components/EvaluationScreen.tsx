@@ -58,7 +58,7 @@ export default function EvaluationScreen() {
                   {i === VALUE && (
                     <div style={{ fontSize:8, color:"#FF2A32", marginTop:2, fontWeight:700 }}>▲</div>
                   )}
-                  <div style={{ position:"absolute", bottom:0, fontSize:7.5, color:i===VALUE?"#E31B23":"#333333", letterSpacing:"0.1em", whiteSpace:"nowrap", transform:"translateX(-50%)", left:`${(i/5)*100}%` }}>
+                  <div style={{ position:"absolute", bottom:0, fontSize:7.5, color:i===VALUE?"#E31B23":"#333333", letterSpacing:"0.1em", whiteSpace:"nowrap", transform:i===5?"translateX(-90%)":i===0?"translateX(-10%)":"translateX(-50%)", left:`${(i/5)*100}%` }}>
                     {lbl}
                   </div>
                 </div>

@@ -34,7 +34,7 @@ const TIMELINE = [
   {ts:"06:30:51",event:"Time-based confirm",cost:0.0000},{ts:"06:30:58",event:"Evaluation",cost:0.0024},
 ];
 
-const TOTAL = 0.2230;
+const TOTAL = 1.42;
 const CEILING = 5.00;
 
 export default function CostDashboard() {
@@ -125,9 +125,9 @@ function CostUsage() {
         {TIMELINE.map((t,i)=>{
           const maxCost=Math.max(...TIMELINE.map(x=>x.cost));
           const h=maxCost>0?Math.round((t.cost/maxCost)*60):0;
-          return (
-            <div key={i} title={`${t.ts} · ${t.event} · $${t.cost.toFixed(4)}`} style={{position:"absolute",bottom:0,left:`${(i/TIMELINE.length)*100}%`,width:`${(1/TIMELINE.length)*100-1}%`,height:`${h+4}px`,background:t.cost>0?"#E31B23":"#1A1A1A",borderRadius:"1px 1px 0 0",cursor:"default"}}/>
-          );
+          return t.cost>0?(
+            <div key={i} title={`${t.ts} · ${t.event} · $${t.cost.toFixed(4)}`} style={{position:"absolute",bottom:0,left:`${(i/TIMELINE.length)*100}%`,width:`${(1/TIMELINE.length)*100-1}%`,height:`${h}px`,background:"#E31B23",borderRadius:"1px 1px 0 0",cursor:"default"}}/>
+          ):null;
         })}
       </div>
       <div className="flex justify-between" style={{fontSize:7.5,color:"#333333"}}>

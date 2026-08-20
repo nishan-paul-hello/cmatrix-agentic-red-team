@@ -49,7 +49,7 @@ const NODE_STYLE: Record<NodeStatus, { border: string; bg: string; labelColor: s
   DEPRIORITIZED:{ border: "#252525", bg: "#0C0C0C",  labelColor: "#363636", typeColor: "#252525", badgeColor: "#363636", badgeBg: "transparent"},
 };
 
-const STATUS_FILTERS: FilterStatus[] = ["ALL","ELIGIBLE","IN_PROGRESS","EXPLOITED","BLOCKED","INFEASIBLE"];
+const STATUS_FILTERS: FilterStatus[] = ["ALL","ELIGIBLE","IN_PROGRESS","EXPLOITED","BLOCKED","INFEASIBLE","DEPRIORITIZED"];
 const VULN_FILTERS: VulnFilter[]     = ["ALL","SQLi","XSS","CSRF","SSRF","SSTI","IDOR","RCE","AUTH","GRAPHQL","LATERAL"];
 
 const LOGIC_W = 1000, LOGIC_H = 560, NODE_W = 158, NODE_H = 84;

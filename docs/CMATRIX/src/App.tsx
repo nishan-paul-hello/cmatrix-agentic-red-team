@@ -11,6 +11,7 @@ import AuditLogPage from "./components/AuditLogPage";
 import SettingsPage from "./components/SettingsPage";
 import CommandPalette from "./components/CommandPalette";
 import MemoryPage from "./components/MemoryPage";
+import CostDashboard from "./components/CostDashboard";
 
 type View = "login" | "dashboard" | "new-mission" | "mission-workspace";
 
@@ -59,14 +60,14 @@ export default function App() {
 
   const NAV_COMPONENTS: Partial<Record<NavItem, React.ReactNode>> = {
     memory:             <MemoryPage key="global-memory" />,
-    "skill-library":    <Placeholder label="SKILL LIBRARY" />,
+    "skill-library":    <MemoryPage key="skill-library" initialTab="SKILL LIBRARY" />,
     "failure-memory":   <MemoryPage key="failure-memory" />,
     reports:            <ReportsPage />,
     benchmarks:         <BenchmarksHub />,
     ablations:          <ResearchLab key="ablations"        initialTab="ABLATION" />,
     statistics:         <ResearchLab key="statistics"       initialTab="STATISTICAL EVALUATION" />,
     "failure-analysis": <ResearchLab key="failure-analysis" initialTab="FAILURE ANALYSIS" />,
-    "cost-usage":       <Placeholder label="GLOBAL COST & USAGE" />,
+    "cost-usage":       <CostDashboard />,
     "audit-log":        <AuditLogPage />,
     settings:           <SettingsPage />,
   };
@@ -74,7 +75,7 @@ export default function App() {
   return (
     <>
       <Shell activeNav={activeNav} onNavChange={handleNavChange} missionId={activeMission}>
-        {view === "new-mission" && <NewMissionWizard onCancel={() => setView("dashboard")} />}
+        {view === "new-mission" && <NewMissionWizard onCancel={() => setView("dashboard")} onStart={() => { setActiveMission("NEW-001"); setView("mission-workspace"); }} />}
         {view === "mission-workspace" && <MissionWorkspace missionId={activeMission} />}
         {view === "dashboard" && (activeNav === "dashboard" || activeNav === "missions") && (
           <Dashboard
