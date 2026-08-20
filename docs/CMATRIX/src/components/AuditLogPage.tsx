@@ -27,7 +27,7 @@ const ENTRIES: AuditEntry[] = [
 ];
 
 const TYPE_C: Record<EvtType,{c:string;bg:string}> = {
-  AUTH:       {c:"#3B82F6",bg:"#060E1A"},
+  AUTH:       {c:"#A0A0A0",bg:"#111111"},
   MISSION:    {c:"#E31B23",bg:"#120608"},
   EXECUTION:  {c:"#666666",bg:"#0D0D0D"},
   ESCALATION: {c:"#D29922",bg:"#110E00"},

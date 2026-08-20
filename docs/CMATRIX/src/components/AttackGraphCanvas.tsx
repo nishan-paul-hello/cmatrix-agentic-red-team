@@ -60,7 +60,7 @@ export default function AttackGraphCanvas() {
   const [statusFilter, setStatusFilter] = useState<FilterStatus>("ALL");
   const [vulnFilter, setVulnFilter]     = useState<VulnFilter>("ALL");
   const [hovered, setHovered]           = useState<string | null>(null);
-  const [drawerOpen, setDrawerOpen]     = useState(false);
+  const [drawerNode, setDrawerNode] = useState<VDGNode | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [dims, setDims] = useState({ w: 900, h: 560 });
 
@@ -91,6 +91,15 @@ export default function AttackGraphCanvas() {
             <span style={{ fontSize: 8.5, color: "#292929", letterSpacing: "0.12em" }}>VDG / CVE-001 · {NODES.length} NODES · {EDGES.length} EDGES</span>
           </div>
           <button style={{ fontSize: 9, color: "#A0A0A0", background: "#151515", border: "1px solid #333333", borderRadius: 2, padding: "4px 12px", letterSpacing: "0.14em", cursor: "pointer", fontFamily: "inherit" }}
+            onClick={() => {
+              const top = [...NODES]
+                .filter(n => n.status === "ELIGIBLE")
+                .sort((a, b) => b.ucb - a.ucb)[0];
+              if (!top) return;
+              setStatusFilter("ALL");
+              setVulnFilter("ALL");
+              setDrawerNode(top);
+            }}
             onMouseEnter={(e) => (e.currentTarget.style.borderColor = "#E31B23")}
             onMouseLeave={(e) => (e.currentTarget.style.borderColor = "#333333")}>
             ◈ FOCUS HIGHEST-SCORE PATH
@@ -158,7 +167,7 @@ export default function AttackGraphCanvas() {
               <div key={node.id}
                 onMouseEnter={() => setHovered(node.id)}
                 onMouseLeave={() => setHovered(null)}
-                onClick={() => setDrawerOpen(true)}
+                onClick={() => setDrawerNode(node)}
                 style={{
                   position: "absolute",
                   left: lx(node.cx, w) - NODE_W / 2,
@@ -218,7 +227,7 @@ export default function AttackGraphCanvas() {
         </div>
 
         {/* Node detail drawer */}
-        {drawerOpen && <VDGNodeDrawer onClose={() => setDrawerOpen(false)} />}
+        {drawerNode && <VDGNodeDrawer node={drawerNode} onClose={() => setDrawerNode(null)} />}
       </div>
     </div>
   );
