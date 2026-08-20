@@ -143,7 +143,7 @@ export default function MissionWorkspace({ missionId = "CVE-001" }: { missionId?
   const [terminated, setTerminated] = useState(false);
   const nextId = useRef(INITIAL_LOG.length + 1);
   const queue = useRef([...STREAM_EVENTS]);
-  const time = useElapsed(391);
+  const time = useElapsed(0);
   const pausedRef = useRef(paused);
   pausedRef.current = paused;
 
@@ -180,7 +180,7 @@ export default function MissionWorkspace({ missionId = "CVE-001" }: { missionId?
         {/* Metrics row */}
         <div className="flex items-center gap-0">
           {[
-            { label: "VDG NODES", value: "42"    },
+            { label: "VDG NODES", value: "12"    },
             { label: "EL FACTS",  value: "87"    },
             { label: "FINDINGS",  value: "07", red: true },
             { label: "COST",      value: "$1.42", red: true },
@@ -291,13 +291,13 @@ export default function MissionWorkspace({ missionId = "CVE-001" }: { missionId?
 
             {/* Canvas label */}
             <div className="absolute top-3 left-4 flex items-center gap-2">
-              <span style={{ fontSize: 8.5, color: "#333333", letterSpacing: "0.2em" }}>ATTACK GRAPH</span>
+              <span style={{ fontSize: 8.5, color: "#333333", letterSpacing: "0.2em" }}>ATTACK GRAPH — OVERVIEW (4 OF 12 NODES)</span>
               <span style={{ fontSize: 8, color: "#1E1E1E", letterSpacing: "0.12em" }}>VDG / CVE-001</span>
             </div>
 
             {/* Focus path button */}
             <div className="absolute top-3 right-4">
-              <button style={{ fontSize: 8.5, color: "#666666", background: "#111111", border: "1px solid #292929", borderRadius: 2, padding: "3px 10px", letterSpacing: "0.14em", cursor: "pointer", fontFamily: "inherit" }}>
+              <button onClick={() => setSubNav("attack-graph")} style={{ fontSize: 8.5, color: "#666666", background: "#111111", border: "1px solid #292929", borderRadius: 2, padding: "3px 10px", letterSpacing: "0.14em", cursor: "pointer", fontFamily: "inherit" }}>
                 FOCUS HIGHEST-SCORE PATH
               </button>
             </div>
@@ -402,9 +402,9 @@ export default function MissionWorkspace({ missionId = "CVE-001" }: { missionId?
             <div className="px-4 pt-4 pb-2" style={{ fontSize: 8.5, color: "#444444", letterSpacing: "0.2em" }}>LIVE STATE</div>
             <div className="grid grid-cols-2 gap-0">
               {[
-                { label: "VDG NODES",  value: "42",    sub: "8 ELIGIBLE" },
+                { label: "VDG NODES",  value: "12",    sub: "3 ELIGIBLE" },
                 { label: "EL FACTS",   value: "87",    sub: "23 NEW"     },
-                { label: "FINDINGS",   value: "03",    sub: "1 CRITICAL", red: true },
+                { label: "FINDINGS",   value: "07",    sub: "1 CRITICAL", red: true },
                 { label: "COST",       value: "$1.42", sub: "/ $10.00 CEI", red: true },
               ].map((s, i) => (
                 <div key={s.label} style={{ padding: "10px 16px", borderRight: i % 2 === 0 ? "1px solid #151515" : "none", borderBottom: i < 2 ? "1px solid #151515" : "none" }}>

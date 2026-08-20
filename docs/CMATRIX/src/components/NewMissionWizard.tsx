@@ -31,6 +31,10 @@ export default function NewMissionWizard({ onCancel, onStart, initialStep }: Wiz
   // Step 4 state
   const [mode, setMode] = useState<ModeType>("ONE-DAY");
 
+  // Benchmark sub-form state (F8)
+  const [benchSuite, setBenchSuite] = useState("CVE-BENCH");
+  const [benchTaskId, setBenchTaskId] = useState("");
+
   // Step 2 state
   const [roe, setRoe]               = useState("Do not access, modify, or exfiltrate data beyond what is necessary to demonstrate the vulnerability. Avoid persistent modifications to the target environment. All exploitation attempts must be reversible. Do not pivot to out-of-scope hosts. Cease all activity immediately upon cost ceiling or runtime threshold breach.");
   const [maxRuntime, setMaxRuntime] = useState("10");
@@ -66,21 +70,37 @@ export default function NewMissionWizard({ onCancel, onStart, initialStep }: Wiz
             return (
               <div key={s.id} className="flex items-center">
                 {i > 0 && <div style={{ width: 40, height: 1, background: done ? "#E31B23" : "#292929", flexShrink: 0 }} />}
-                <div className="flex flex-col items-center gap-1.5">
+              {done ? (
+                <button
+                  onClick={() => setStep(s.index)}
+                  title={`Go back to Step ${s.index}`}
+                  style={{ background: "none", border: "none", padding: 0, cursor: "pointer", fontFamily: "inherit", display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}
+                >
                   <div style={{
-                    width: 26, height: 26, borderRadius: 2, flexShrink: 0,
+                    width: 26, height: 26, borderRadius: "50%", flexShrink: 0,
                     display: "flex", alignItems: "center", justifyContent: "center",
                     fontSize: 10, fontWeight: 700, letterSpacing: "0.06em",
-                    border: active ? "1px solid #E31B23" : done ? "1px solid #9E1118" : "1px solid #292929",
-                    background: active ? "#1A0A0B" : done ? "#120608" : "#111111",
-                    color: active ? "#FF2A32" : done ? "#9E1118" : "#444444",
+                    border: "1px solid #9E1118", background: "#120608", color: "#9E1118",
+                  }}>✓</div>
+                  <span style={{ fontSize: 7.5, color: "#6F171B", letterSpacing: "0.16em", whiteSpace: "nowrap" }}>{s.label}</span>
+                </button>
+              ) : (
+                <div className="flex flex-col items-center gap-1.5">
+                  <div style={{
+                    width: 26, height: 26, borderRadius: "50%", flexShrink: 0,
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    fontSize: 10, fontWeight: 700, letterSpacing: "0.06em",
+                    border: active ? "1px solid #E31B23" : "1px solid #292929",
+                    background: active ? "#1A0A0B" : "#111111",
+                    color: active ? "#FF2A32" : "#444444",
                   }}>
-                    {done ? "✓" : s.index}
+                    {s.index}
                   </div>
-                  <span style={{ fontSize: 7.5, color: active ? "#A0A0A0" : done ? "#6F171B" : "#333333", letterSpacing: "0.16em", whiteSpace: "nowrap" }}>
+                  <span style={{ fontSize: 7.5, color: active ? "#A0A0A0" : "#333333", letterSpacing: "0.16em", whiteSpace: "nowrap" }}>
                     {s.label}
                   </span>
                 </div>
+              )}
               </div>
             );
           })}
@@ -111,6 +131,32 @@ export default function NewMissionWizard({ onCancel, onStart, initialStep }: Wiz
                     ]}
                   />
                 </FieldBlock>
+                {/* F8: Benchmark sub-form — visible only when BENCHMARK ENVIRONMENT is selected */}
+                {targetType === "BENCHMARK ENVIRONMENT" && (
+                  <div style={{ marginTop: 16, padding: "14px 16px", background: "#0D0D0D", border: "1px solid #1E1E1E", borderRadius: 2 }}>
+                    <div style={{ fontSize: 8, color: "#444444", letterSpacing: "0.2em", marginBottom: 12 }}>BENCHMARK SUITE</div>
+                    <div style={{ display: "flex", gap: 6, marginBottom: 14 }}>
+                      {["CVE-BENCH", "PREDIQL", "MHBENCH"].map(s => (
+                        <button key={s} onClick={() => setBenchSuite(s)}
+                          style={{ fontSize: 9, padding: "4px 12px",
+                            background: benchSuite === s ? "#1A0608" : "transparent",
+                            border: `1px solid ${benchSuite === s ? "#E31B23" : "#292929"}`,
+                            color: benchSuite === s ? "#FF2A32" : "#555555",
+                            borderRadius: 2, cursor: "pointer", fontFamily: "inherit", letterSpacing: "0.12em" }}>
+                          {s}
+                        </button>
+                      ))}
+                    </div>
+                    <div style={{ fontSize: 8, color: "#444444", letterSpacing: "0.2em", marginBottom: 8 }}>TASK / CVE ID</div>
+                    <input value={benchTaskId} onChange={e => setBenchTaskId(e.target.value)}
+                      placeholder="e.g. CVE-2023-44487 or leave blank for full suite"
+                      style={{ width: "100%", background: "#080808", border: "1px solid #292929", borderRadius: 2,
+                        color: "#A0A0A0", fontSize: 10, padding: "7px 10px", fontFamily: "inherit", outline: "none",
+                        boxSizing: "border-box", letterSpacing: "0.04em" }}
+                      onFocus={e => e.target.style.borderColor = "#E31B23"}
+                      onBlur={e => e.target.style.borderColor = "#292929"} />
+                  </div>
+                )}
               </>
             )}
 
@@ -260,6 +306,34 @@ export default function NewMissionWizard({ onCancel, onStart, initialStep }: Wiz
                         onBlur={(e) => (e.currentTarget.style.borderColor = "#333333")}
                       />
                       <span style={{ fontSize: 9.5, color: "#444444", letterSpacing: "0.12em" }}>sec</span>
+                    </div>
+                  </div>
+
+                  {/* F9: MAX RETRIES field */}
+                  <div
+                    className="flex items-center justify-between"
+                    style={{ padding: "14px 16px", borderTop: "1px solid #1E1E1E", background: "#0D0D0D" }}
+                  >
+                    <div>
+                      <div style={{ fontSize: 10, fontWeight: 600, color: "#A0A0A0", letterSpacing: "0.16em", marginBottom: 3 }}>MAX RETRIES</div>
+                      <div style={{ fontSize: 9, color: "#444444", letterSpacing: "0.1em" }}>Maximum retry attempts per VDG node before it is deprioritized.</div>
+                    </div>
+                    <div className="flex items-center gap-2 flex-shrink-0 ml-6">
+                      <input
+                        type="number"
+                        defaultValue="3"
+                        min={1}
+                        max={10}
+                        className="outline-none text-right"
+                        style={{
+                          width: 56, background: "#151515", border: "1px solid #333333",
+                          borderRadius: 2, color: "#F2F2F2", fontSize: 13, fontWeight: 600,
+                          padding: "6px 8px", fontFamily: "inherit", letterSpacing: "0.04em",
+                        }}
+                        onFocus={(e) => (e.currentTarget.style.borderColor = "#E31B23")}
+                        onBlur={(e) => (e.currentTarget.style.borderColor = "#333333")}
+                      />
+                      <span style={{ fontSize: 9.5, color: "#444444", letterSpacing: "0.12em" }}>attempts</span>
                     </div>
                   </div>
                 </div>
