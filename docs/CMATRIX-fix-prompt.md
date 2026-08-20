@@ -2,15 +2,15 @@
 
 ## Role
 
-You are an expert React/TypeScript coding agent. Fix the defects listed below in the CMatrix mockup codebase at `docs/CMATRIX/src/`. Do **not** invent new features, do **not** change anything that already works, do **not** modify files for findings marked ✅ FIXED. Fix only what this document specifies.
+You are an expert React/TypeScript coding agent. Fix the defects listed below in the CMatrix mockup codebase at `CMATRIX/src/`. Do **not** invent new features, do **not** change anything that already works, do **not** modify files for findings marked ✅ FIXED. Fix only what this document specifies.
 
 ---
 
 ## Source of Truth (read fully before touching code)
 
-1. `docs/paper-research/cmatrix-architecture/architecture.md` — canonical system spec
-2. `docs/paper-research/cmatrix-architecture/image-generation-prompt.md` — UI/UX design spec (palette, typography, layout, 49-screen manifest)
-3. `docs/CMATRIX/src/` — the codebase to fix
+1. `architecture.md` — canonical system spec
+2. `image-generation-prompt.md` — UI/UX design spec (palette, typography, layout, 49-screen manifest)
+3. `CMATRIX/src/` — the codebase to fix
 
 ### Non-negotiable design rules (from image-generation-prompt.md §A)
 
@@ -836,7 +836,7 @@ Run `pnpm dev` and confirm manually:
 
 ## Constraints (Do Not Violate)
 
-- Do **not** change anything marked ✅ FIXED in `docs/paper-research/cmatrix-architecture/ui-audit-findings.md`
+- Do **not** change anything marked ✅ FIXED in `ui-audit-findings.md`
 - Do **not** add pages or components beyond what this document describes
 - Keep **all inline styles** — do not convert to Tailwind classes (layout utilities like `flex`, `gap-2` are fine; all color/size/spacing tokens must remain inline)
 - Preserve **all existing comments and docstrings** unrelated to your changes
