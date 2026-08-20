@@ -1,13 +1,7 @@
 import { useEffect, useRef, useState } from "react";
+import { MISSIONS } from "../lib/data";
 
-const MISSIONS = [
-  { id: "CVE-001", target: "app.targetcorp.com", surface: "WEB APPLICATION", mode: "ONE-DAY", status: "RUNNING", nodes: 42, findings: 3, cost: "$1.42" },
-  { id: "CVE-002", target: "api.targetcorp.com", surface: "GRAPHQL", mode: "ZERO-DAY", status: "RUNNING", nodes: 18, findings: 1, cost: "$0.87" },
-  { id: "CVE-003", target: "10.0.4.0/24", surface: "MULTI-HOST", mode: "ONE-DAY", status: "PAUSED", nodes: 67, findings: 8, cost: "$4.11" },
-  { id: "CVE-004", target: "shop.targetcorp.com", surface: "WEB APPLICATION", mode: "ONE-DAY", status: "VALIDATING", nodes: 29, findings: 2, cost: "$2.06" },
-  { id: "CVE-005", target: "portal.corpx.io", surface: "WEB APPLICATION", mode: "ZERO-DAY", status: "RUNNING", nodes: 51, findings: 5, cost: "$3.74" },
-  { id: "CVE-006", target: "internal.targetcorp.com", surface: "GRAPHQL", mode: "ONE-DAY", status: "QUEUED", nodes: 0, findings: 0, cost: "$0.00" },
-];
+
 
 type ActivityEntry = {
   id: number;
