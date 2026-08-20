@@ -7,14 +7,14 @@ interface TrajStep {
 }
 
 const STEPS: TrajStep[] = [
-  {step:1, ts:"06:12:00", type:"DECISION",   agent:"TEAM-MANAGER",  summary:"Mission initialized. UCB scoring computed for 12 VDG candidates. RECON-001 selected (UCB=0.94).",                       vdgDelta:"12 CANDIDATE", elDelta:"+0 facts",  eordDelta:"—",   cost:"$0.0021", tokens:"2,100", status:"SUCCESS"},
+  {step:1, ts:"06:12:00", type:"DECISION",   agent:"TEAM-MGR",  summary:"Mission initialized. UCB scoring computed for 12 VDG candidates. RECON-001 selected (UCB=0.94).",                       vdgDelta:"12 CANDIDATE", elDelta:"+0 facts",  eordDelta:"—",   cost:"$0.0021", tokens:"2,100", status:"SUCCESS"},
   {step:2, ts:"06:13:45", type:"EXECUTION",  agent:"RECON-SPEC",    summary:"Service scan dispatched via execution agent (nmap -sV). 8 services discovered, 3 open.",                                    vdgDelta:"RECON-001 IN_PROGRESS", elDelta:"+8 facts",  eordDelta:"—",   cost:"$0.0000", tokens:"0",     status:"SUCCESS"},
   {step:3, ts:"06:15:20", type:"EVALUATION", agent:"RECON-SPEC",    summary:"Scan output evaluated. 3 services confirmed open. Endpoints spider queued.",                                                   vdgDelta:"—",            elDelta:"+3 services",eordDelta:"—",  cost:"$0.0018", tokens:"1,800", status:"SUCCESS"},
   {step:4, ts:"06:18:31", type:"EXECUTION",  agent:"RECON-SPEC",    summary:"Endpoint spider complete. 12 endpoints, 3 require authentication.",                                                             vdgDelta:"AUTH-001 ELIGIBLE", elDelta:"+12 endpoints",eordDelta:"—", cost:"$0.0000", tokens:"0",     status:"SUCCESS"},
-  {step:5, ts:"06:20:00", type:"DECISION",   agent:"TEAM-MANAGER",  summary:"UCB rescore. AUTH-001 UCB=0.91 — auth bypass queued. RECON-001 → COMPLETED.",                                                vdgDelta:"RECON-001 COMPLETED AUTH-001 IN_PROGRESS", elDelta:"—", eordDelta:"—", cost:"$0.0019", tokens:"1,900", status:"SUCCESS"},
+  {step:5, ts:"06:20:00", type:"DECISION",   agent:"TEAM-MGR",  summary:"UCB rescore. AUTH-001 UCB=0.91 — auth bypass queued. RECON-001 → COMPLETED.",                                                vdgDelta:"RECON-001 COMPLETED AUTH-001 IN_PROGRESS", elDelta:"—", eordDelta:"—", cost:"$0.0019", tokens:"1,900", status:"SUCCESS"},
   {step:6, ts:"06:22:14", type:"EXECUTION",  agent:"AUTH-SPEC",     summary:"JWT brute-force (hashcat). Secret cracked in 48s: password123. Admin token forged.",                                         vdgDelta:"AUTH-001 EXPLOITED", elDelta:"+2 credentials", eordDelta:"2→4", cost:"$0.0000", tokens:"0",    status:"SUCCESS"},
   {step:7, ts:"06:24:00", type:"EVALUATION", agent:"AUTH-SPEC",     summary:"Auth bypass confirmed. E_ord raised to 4. SQLI-001, IDOR-008 now eligible for scheduling.",                                  vdgDelta:"SQLI-001 ELIGIBLE IDOR-008 ELIGIBLE", elDelta:"+1 session", eordDelta:"2→4", cost:"$0.0022", tokens:"2,200", status:"SUCCESS"},
-  {step:8, ts:"06:25:00", type:"BRANCH",     agent:"TEAM-MANAGER",  summary:"PARALLEL BRANCH: INJECT-SPEC (SQLI-001, UCB=0.824) and RECON-SPEC (IDOR-008, UCB=0.762) spawned concurrently.",            vdgDelta:"SQLI-001 IN_PROGRESS IDOR-008 IN_PROGRESS", elDelta:"—", eordDelta:"—", cost:"$0.0031", tokens:"3,100", status:"SUCCESS"},
+  {step:8, ts:"06:25:00", type:"BRANCH",     agent:"TEAM-MGR",  summary:"PARALLEL BRANCH: INJECT-SPEC (SQLI-001, UCB=0.824) and RECON-SPEC (IDOR-008, UCB=0.762) spawned concurrently.",            vdgDelta:"SQLI-001 IN_PROGRESS IDOR-008 IN_PROGRESS", elDelta:"—", eordDelta:"—", cost:"$0.0031", tokens:"3,100", status:"SUCCESS"},
   {step:9, ts:"06:25:33", type:"EXECUTION",  agent:"RECON-SPEC",    summary:"IDOR enumeration on /api/users/:id. Cross-account access confirmed (id=2 with id=1 token).",                                vdgDelta:"IDOR-008 EXPLOITED", elDelta:"+1 finding", eordDelta:"1→3", cost:"$0.0000", tokens:"0",   status:"SUCCESS"},
   {step:10,ts:"06:28:47", type:"EXECUTION",  agent:"INJECT-SPEC",   summary:"SQL error probe: id=1' → HTTP 500 with SQL syntax error in body.",                                                            vdgDelta:"—",            elDelta:"+1 fact",   eordDelta:"2→3", cost:"$0.0000", tokens:"0",    status:"SUCCESS"},
   {step:11,ts:"06:29:03", type:"EXECUTION",  agent:"NETWORK-SPEC",  summary:"Lateral pivot attempt on port 5432. Port filtered — timeout. Technique ruled out.",                                          vdgDelta:"—",            elDelta:"—",         eordDelta:"—",   cost:"$0.0000", tokens:"0",    status:"TIMEOUT"},
@@ -60,7 +60,14 @@ export default function TrajectoryPage() {
       {/* Filter strip */}
       <div className="flex-shrink-0 flex items-center gap-2 px-6 py-2" style={{borderBottom:"1px solid #141414",background:"#0A0A0A"}}>
         {types.map(t=>(
-          <button key={t} onClick={()=>setFilter(t)} style={{fontSize:8,letterSpacing:"0.14em",padding:"3px 10px",background:filter===t?(TYPE_C[t as TrajStep["type"]]?.bg??"#111111"):"transparent",border:`1px solid ${filter===t?(TYPE_C[t as TrajStep["type"]]?.color??"#F2F2F2"):"#1E1E1E"}`,borderRadius:2,color:filter===t?(TYPE_C[t as TrajStep["type"]]?.color??"#F2F2F2"):"#444444",cursor:"pointer",fontFamily:"inherit"}}>{t}</button>
+          <button key={t} onClick={()=>setFilter(t)} style={{
+            fontSize:8,letterSpacing:"0.14em",padding:"3px 10px",
+            background: filter===t ? (t==="ALL" ? "#1A1A1A" : (TYPE_C[t as TrajStep["type"]]?.bg ?? "#111111")) : "transparent",
+            border: `1px solid ${filter===t ? (t==="ALL" ? "#444444" : (TYPE_C[t as TrajStep["type"]]?.color ?? "#444444") + "66") : "#1E1E1E"}`,
+            borderRadius:2,
+            color: filter===t ? (t==="ALL" ? "#F2F2F2" : (TYPE_C[t as TrajStep["type"]]?.color ?? "#F2F2F2")) : "#444444",
+            cursor:"pointer",fontFamily:"inherit"
+          }}>{t}</button>
         ))}
         <span style={{marginLeft:"auto",fontSize:8,color:"#333333",letterSpacing:"0.12em"}}>{visible.length} EVENTS</span>
       </div>
