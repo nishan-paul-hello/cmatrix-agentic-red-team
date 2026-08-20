@@ -19,9 +19,27 @@ export default function MemoryPage({initialTab="VULNERABILITY PATTERNS"}:{initia
         <h1 style={{fontSize:20,fontWeight:700,color:"#F2F2F2",letterSpacing:"0.12em",marginBottom:12}}>MEMORY</h1>
         <div className="flex overflow-x-auto">
           {tabs.map(t=>(
-            <button key={t} onClick={()=>setTab(t)} style={{fontSize:8.5,letterSpacing:"0.12em",padding:"5px 14px",background:"transparent",border:"none",borderBottom:t===tab?"2px solid #E31B23":"2px solid transparent",color:t===tab?"#F2F2F2":"#444444",cursor:"pointer",fontFamily:"inherit",whiteSpace:"nowrap",marginBottom:-1}}>{t}</button>
+            <button key={t} onClick={()=>setTab(t)} style={{fontSize:8.5,letterSpacing:"0.12em",padding:"5px 14px",background:"transparent",border:"none",borderBottom:t===tab?"2px solid #E31B23":"2px solid transparent",color:t===tab?"#F2F2F2":"#444444",cursor:"pointer",fontFamily:"inherit",whiteSpace:"nowrap",marginBottom:-1,display:"flex",alignItems:"center",gap:4}}>
+              {t}
+              <span style={{fontSize:7.5,color:"#444444",background:"#1A1A1A",borderRadius:2,padding:"0px 4px",marginLeft:4}}>
+                {t==="CONTEXT UTILIZATION"?"T1":t==="SKILL LIBRARY"?"T3":"T2"}
+              </span>
+            </button>
           ))}
         </div>
+      </div>
+      {/* G2: Tier legend row */}
+      <div style={{ padding: "6px 24px", borderBottom: "1px solid #141414", display: "flex", gap: 20, flexShrink: 0 }}>
+        {[
+          { n: 1, label: "WORKING CONTEXT", color: "#D29922" },
+          { n: 2, label: "EPISODIC MEMORY",  color: "#666666" },
+          { n: 3, label: "SKILL LIBRARY",    color: "#E31B23" },
+        ].map(t => (
+          <div key={t.n} style={{ display: "flex", alignItems: "center", gap: 5 }}>
+            <div style={{ width: 6, height: 6, borderRadius: 1, background: t.color }} />
+            <span style={{ fontSize: 7.5, color: "#444444", letterSpacing: "0.16em" }}>TIER {t.n} — {t.label}</span>
+          </div>
+        ))}
       </div>
       {tab==="VULNERABILITY PATTERNS"  && <VulnPatterns />}
       {tab==="STRATEGY BRANCHING"      && <StrategyBranching />}
