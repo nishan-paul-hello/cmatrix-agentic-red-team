@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 export type NavItem =
   | "dashboard" | "missions"
   | "memory" | "skill-library" | "failure-memory"
-  | "benchmarks" | "ablations" | "statistics" | "failure-analysis" | "reports"
+  | "trajectory" | "benchmarks" | "ablations" | "statistics" | "failure-analysis" | "reports"
   | "cost-usage" | "audit-log" | "settings";
 
 const NAV_GROUPS = [
@@ -25,6 +25,7 @@ const NAV_GROUPS = [
   {
     label: "RESEARCH",
     items: [
+      { id: "trajectory",     label: "Trajectory"      },
       { id: "benchmarks",       label: "Benchmarks"       },
       { id: "ablations",        label: "Ablations"        },
       { id: "statistics",       label: "Statistics"       },
@@ -57,7 +58,7 @@ function NavIcon({ id }: { id: string }) {
   const icons: Record<string, string> = {
     dashboard: "▪", missions: "◈",
     memory: "⊞", "skill-library": "⊟", "failure-memory": "⊠",
-    benchmarks: "≡", ablations: "∿", statistics: "∑",
+    trajectory: "⤴", benchmarks: "≡", ablations: "∿", statistics: "∑",
     "failure-analysis": "⊗", reports: "⊕",
     "cost-usage": "$", "audit-log": "≣", settings: "⚙",
   };
@@ -144,7 +145,7 @@ export default function Shell({ activeNav, onNavChange, children, missionId = "C
             </div>
             <Topbar label="STATUS" value="RUNNING" valueColor="#3FB950" />
             <Topbar label="MODEL" value="SONNET-5" />
-            <Topbar label="COST" value="$0.223" />
+            <Topbar label="COST" value="$1.42" />
             <Topbar label="TIME" value="00:19:04" />
             <div className="flex items-center gap-2 ml-2" style={{ borderLeft: "1px solid #1E1E1E", paddingLeft: 12 }}>
               <div style={{ width: 22, height: 22, borderRadius: 2, background: "#191919", border: "1px solid #292929", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, color: "#666666", cursor: "pointer" }}>⚙</div>

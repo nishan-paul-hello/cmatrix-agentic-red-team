@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 /* ── UCB data ── */
 interface VDGEntry {
@@ -50,7 +50,7 @@ export default function TeamManagerDashboard() {
           <div className="flex items-center gap-6">
             <KPI label="ACTIVE SPECIALISTS" value="1" />
             <KPI label="VDG ELIGIBLE" value={String(VDG.filter(v=>v.status==="ELIGIBLE").length)} red />
-            <KPI label="TOTAL COST" value="$0.223" />
+            <KPI label="TOTAL COST" value="$1.42" />
             <KPI label="RUNTIME" value="00:19:04" />
           </div>
         </div>
@@ -128,6 +128,13 @@ export default function TeamManagerDashboard() {
 
 /* ── screen 37: UCB BREAKDOWN MODAL ── */
 function UCBModal({entry,onClose}:{entry:VDGEntry;onClose:()=>void}) {
+  // F10: ESC key closes modal
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) { if (e.key === "Escape") onClose(); }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
   const BAR_W = 280;
   const epss = 0.42;
   const bars = [
@@ -160,6 +167,8 @@ function UCBModal({entry,onClose}:{entry:VDGEntry;onClose:()=>void}) {
             <div style={{fontSize:9,color:"#333333",marginTop:8,letterSpacing:"0.08em"}}>
               c={C} · N={N} total visits · n={n===0?"0 (new node)":n} visits · ln(N)={(Math.log(N||1)).toFixed(3)}
             </div>
+            {/* G1: c constant note */}
+            <div style={{fontSize:8,color:"#333333",marginTop:6,letterSpacing:"0.1em"}}>UCB POLICY c = {C.toFixed(2)} — configurable in Settings → VDG</div>
           </div>
           {/* Score bars */}
           {bars.map(b=>(
@@ -176,6 +185,8 @@ function UCBModal({entry,onClose}:{entry:VDGEntry;onClose:()=>void}) {
               </div>
             </div>
           ))}
+          {/* G3: EPSS ONE-DAY mode footnote */}
+          <div style={{fontSize:8,color:"#333333",letterSpacing:"0.1em",marginTop:6}}>ONE-DAY mode: Q(s,a) seeded from EPSS prior</div>
           {/* Stats grid */}
           <div className="grid grid-cols-4 gap-0 mt-4" style={{border:"1px solid #1E1E1E",borderRadius:2,overflow:"hidden"}}>
             {[{k:"E_ORD",v:`${entry.eord}/5`},{k:"VISITS",v:String(entry.visits)},{k:"STATUS",v:entry.status},{k:"COST",v:entry.cost}].map((m,i,a)=>(
