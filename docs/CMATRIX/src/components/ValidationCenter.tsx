@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 type VStatus = "PENDING"|"RETRY"|"VALIDATED"|"RULED OUT";
 interface VFinding { id:string; type:string; evidence:string; retry:number; status:VStatus; oracle:string; }
@@ -25,6 +25,7 @@ export default function ValidationCenter() {
   const [modal, setModal] = useState(false);
   const [oracleOpen, setOracleOpen] = useState(false);
   const [selected, setSelected] = useState<VFinding|null>(null);
+  const [stateMachineFinding, setStateMachineFinding] = useState<VFinding|null>(null);
   const metrics = [
     {label:"PENDING VALIDATION",value:"08",color:"#D29922"},
     {label:"VALIDATED",         value:"21",color:"#3FB950"},
@@ -39,7 +40,7 @@ export default function ValidationCenter() {
         <div className="flex items-center justify-between">
           <h1 style={{fontSize:20,fontWeight:700,color:"#F2F2F2",letterSpacing:"0.12em"}}>VALIDATION CENTER</h1>
           <div className="flex gap-2">
-            <Btn onClick={()=>setModal(true)} label="STATE MACHINE" />
+            <Btn onClick={()=>{setStateMachineFinding(selected);setModal(true)}} label="STATE MACHINE" />
             <Btn onClick={()=>setOracleOpen(v=>!v)} label="ORACLE PANEL" red />
           </div>
         </div>
@@ -70,10 +71,13 @@ export default function ValidationCenter() {
             <tbody>
               {FINDINGS.map(f=>{
                 const sb=SB[f.status];
+                const isSelected = selected?.id === f.id;
                 return (
-                  <tr key={f.id} style={{borderBottom:"1px solid #111111",cursor:"pointer"}}
+                  <tr key={f.id}
+                    style={{borderBottom:"1px solid #111111",cursor:"pointer",background:isSelected?"#0F0F0F":"transparent"}}
+                    onClick={()=>setSelected(f)}
                     onMouseEnter={e=>e.currentTarget.style.background="#0F0F0F"}
-                    onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
+                    onMouseLeave={e=>e.currentTarget.style.background=isSelected?"#0F0F0F":"transparent"}>
                     <td style={{padding:"8px 16px",color:"#E31B23",fontWeight:700,letterSpacing:"0.08em"}}>{f.id}</td>
                     <td style={{padding:"8px 16px",color:"#A0A0A0"}}>{f.type}</td>
                     <td style={{padding:"8px 16px",color:"#666666",fontSize:9}}>{f.evidence}</td>
@@ -83,7 +87,7 @@ export default function ValidationCenter() {
                     </td>
                     <td style={{padding:"8px 16px",color:"#555555",fontSize:9}}>{f.oracle}</td>
                     <td style={{padding:"8px 16px"}}>
-                      <button onClick={()=>setSelected(f)} style={{fontSize:8.5,color:"#666666",background:"#111111",border:"1px solid #292929",borderRadius:2,padding:"2px 8px",letterSpacing:"0.1em",cursor:"pointer",fontFamily:"inherit"}}
+                      <button onClick={e=>{e.stopPropagation();setSelected(f)}} style={{fontSize:8.5,color:"#666666",background:"#111111",border:"1px solid #292929",borderRadius:2,padding:"2px 8px",letterSpacing:"0.1em",cursor:"pointer",fontFamily:"inherit"}}
                         onMouseEnter={e=>e.currentTarget.style.borderColor="#E31B23"}
                         onMouseLeave={e=>e.currentTarget.style.borderColor="#292929"}>DETAIL</button>
                     </td>
@@ -99,7 +103,7 @@ export default function ValidationCenter() {
       </div>
 
       {/* State machine modal */}
-      {modal && <StateMachineModal onClose={()=>setModal(false)} />}
+      {modal && <StateMachineModal onClose={()=>setModal(false)} finding={stateMachineFinding} />}
 
       {/* Finding detail drawer */}
       {selected && (
@@ -124,7 +128,27 @@ export default function ValidationCenter() {
   );
 }
 
-function StateMachineModal({onClose}:{onClose:()=>void}) {
+/* B4: State machine modal with active state highlight based on finding.status */
+function StateMachineModal({onClose, finding}:{onClose:()=>void; finding:VFinding|null}) {
+  // F10: ESC key closes modal
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) { if (e.key === "Escape") onClose(); }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
+  // Derive active state from finding status
+  const activeState = (() => {
+    if (!finding) return null;
+    switch (finding.status) {
+      case "PENDING":    return "VALIDATION";
+      case "RETRY":      return "RETRY";
+      case "VALIDATED":  return "VALIDATED";
+      case "RULED OUT":  return "RULED OUT";
+      default:           return null;
+    }
+  })();
+
   const nodes = [
     {id:"VALIDATION",  x:200, y:20,  w:120, h:32, color:"#333333", text:"#A0A0A0"},
     {id:"ORACLE TEST", x:200, y:100, w:120, h:32, color:"#1A0608", text:"#E31B23", border:"#E31B23"},
@@ -157,7 +181,9 @@ function StateMachineModal({onClose}:{onClose:()=>void}) {
         <div className="flex justify-between mb-5">
           <div>
             <div style={{fontSize:13,fontWeight:700,color:"#F2F2F2",letterSpacing:"0.12em"}}>VALIDATION STATE MACHINE</div>
-            <div style={{fontSize:8.5,color:"#444444",letterSpacing:"0.16em"}}>DIAGNOSIS → ADAPT → CAP RETRY LOOP</div>
+            <div style={{fontSize:8.5,color:"#444444",letterSpacing:"0.16em"}}>
+              {finding ? `${finding.id} — ${finding.type} — ${finding.status}` : "DIAGNOSIS → ADAPT → CAP RETRY LOOP"}
+            </div>
           </div>
           <button onClick={onClose} style={{color:"#444444",background:"transparent",border:"none",cursor:"pointer",fontSize:14}}>✕</button>
         </div>
@@ -177,11 +203,19 @@ function StateMachineModal({onClose}:{onClose:()=>void}) {
               <marker id="sm-arrow-red" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L6,3 z" fill="#6F171B" /></marker>
             </defs>
           </svg>
-          {nodes.map(n=>(
-            <div key={n.id} style={{position:"absolute",left:n.x,top:n.y,width:n.w,height:n.h,background:n.color,border:`1px solid ${(n as any).border??"#292929"}`,borderRadius:2,display:"flex",alignItems:"center",justifyContent:"center"}}>
-              <span style={{fontSize:9,fontWeight:700,color:n.text,letterSpacing:"0.12em"}}>{n.id}</span>
-            </div>
-          ))}
+          {nodes.map(n=>{
+            const isActive = n.id === activeState;
+            return (
+              <div key={n.id} style={{
+                position:"absolute",left:n.x,top:n.y,width:n.w,height:n.h,
+                background: isActive ? "#E31B23" : n.color,
+                border: `1px solid ${isActive ? "#FF2A32" : ((n as any).border ?? "#292929")}`,
+                borderRadius:2,display:"flex",alignItems:"center",justifyContent:"center",
+              }}>
+                <span style={{fontSize:9,fontWeight:700,color: isActive ? "#F2F2F2" : n.text,letterSpacing:"0.12em"}}>{n.id}</span>
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>
@@ -189,6 +223,13 @@ function StateMachineModal({onClose}:{onClose:()=>void}) {
 }
 
 function OraclePanel({onClose}:{onClose:()=>void}) {
+  // F10: ESC key closes panel
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) { if (e.key === "Escape") onClose(); }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
   const oracles = [
     {oracle:"CVE-BENCH",  type:"FILE ACCESS",          result:"PASS",  severity:"CRITICAL", details:"Flag file /flag.txt read — exploit confirmed"},
     {oracle:"PREDIQL",    type:"IDOR",                  result:"PASS",  severity:"HIGH",     details:"Unauthorized record access validated"},
@@ -200,7 +241,7 @@ function OraclePanel({onClose}:{onClose:()=>void}) {
         <span style={{fontSize:10,fontWeight:600,color:"#A0A0A0",letterSpacing:"0.16em"}}>ORACLE PANEL</span>
         <button onClick={onClose} style={{color:"#444444",background:"transparent",border:"none",cursor:"pointer",fontSize:13}}>✕</button>
       </div>
-      {oracles.map((o,i)=>(
+      {oracles.map((o)=>(
         <div key={o.oracle} className="px-4 py-4" style={{borderBottom:"1px solid #141414"}}>
           <div className="flex items-center justify-between mb-3">
             <span style={{fontSize:10,fontWeight:700,color:"#F2F2F2",letterSpacing:"0.1em"}}>{o.oracle}</span>
