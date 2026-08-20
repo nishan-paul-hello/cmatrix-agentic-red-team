@@ -1,10 +1,10 @@
 # CMatrix Mockup — UI/UX Audit Findings
 
-**Audit Scope:** Every page, route, component, and interactive element in `docs/CMATRIX/src/`  
+**Audit Scope:** Every page, route, component, and interactive element in `CMATRIX/src/`  
 **Sources of Truth (in priority order):**
-1. `docs/paper-research/cmatrix-architecture/architecture.md` (canonical system spec)
-2. `docs/paper-research/cmatrix-architecture/image-generation-prompt.md` (design spec / UI manifest)
-3. `docs/CMATRIX/src/` (the mockup codebase being audited)
+1. `architecture.md` (canonical system spec)
+2. `image-generation-prompt.md` (design spec / UI manifest)
+3. `CMATRIX/src/` (the mockup codebase being audited)
 
 **Auditor note:** This report is "findings only." No code was modified. Each finding includes a precise file path and line number or component/route name.
 
