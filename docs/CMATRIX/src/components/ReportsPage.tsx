@@ -25,7 +25,7 @@ export default function ReportsPage() {
   return (
     <div className="flex flex-col h-full" style={{minHeight:0}}>
       <div className="flex-shrink-0 px-6 pt-5 pb-4" style={{borderBottom:"1px solid #1E1E1E"}}>
-        <div style={{fontSize:9,color:"#666666",letterSpacing:"0.22em",marginBottom:3}}>KNOWLEDGE BASE</div>
+        <div style={{fontSize:9,color:"#666666",letterSpacing:"0.22em",marginBottom:3}}>RESEARCH</div>
         <div className="flex items-baseline justify-between">
           <h1 style={{fontSize:20,fontWeight:700,color:"#F2F2F2",letterSpacing:"0.12em"}}>REPORTS</h1>
           <div className="flex gap-2">
