@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Login from "./components/Login";
 import Shell, { type NavItem } from "./components/Shell";
 import Dashboard from "./components/Dashboard";
+import MissionsPage from "./components/MissionsPage";
 import NewMissionWizard from "./components/NewMissionWizard";
 import MissionWorkspace from "./components/MissionWorkspace";
 import ReportsPage from "./components/ReportsPage";
@@ -12,6 +13,7 @@ import SettingsPage from "./components/SettingsPage";
 import CommandPalette from "./components/CommandPalette";
 import MemoryPage from "./components/MemoryPage";
 import CostDashboard from "./components/CostDashboard";
+import TrajectoryBrowser from "./components/TrajectoryBrowser";
 
 type View = "login" | "dashboard" | "new-mission" | "mission-workspace";
 
@@ -62,6 +64,7 @@ export default function App() {
     memory:             <MemoryPage key="global-memory" />,
     "skill-library":    <MemoryPage key="skill-library" initialTab="SKILL LIBRARY" />,
     "failure-memory":   <MemoryPage key="failure-memory" />,
+    trajectory:         <TrajectoryBrowser />,
     reports:            <ReportsPage />,
     benchmarks:         <BenchmarksHub />,
     ablations:          <ResearchLab key="ablations"        initialTab="ABLATION" />,
@@ -77,8 +80,14 @@ export default function App() {
       <Shell activeNav={activeNav} onNavChange={handleNavChange} missionId={activeMission}>
         {view === "new-mission" && <NewMissionWizard onCancel={() => setView("dashboard")} onStart={() => { setActiveMission("NEW-001"); setView("mission-workspace"); }} />}
         {view === "mission-workspace" && <MissionWorkspace missionId={activeMission} />}
-        {view === "dashboard" && (activeNav === "dashboard" || activeNav === "missions") && (
+        {view === "dashboard" && activeNav === "dashboard" && (
           <Dashboard
+            onNewMission={() => setView("new-mission")}
+            onOpenMission={(id) => { setActiveMission(id); setView("mission-workspace"); }}
+          />
+        )}
+        {view === "dashboard" && activeNav === "missions" && (
+          <MissionsPage
             onNewMission={() => setView("new-mission")}
             onOpenMission={(id) => { setActiveMission(id); setView("mission-workspace"); }}
           />
