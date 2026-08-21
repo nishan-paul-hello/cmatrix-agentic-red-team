@@ -116,9 +116,14 @@ export const PREVIEW_SECTIONS = [
     },
 ];
 
-export function getReportsData(): Promise<{
+export async function getReportsData(options?: { page?: number; limit?: number }): Promise<{
     reports: Report[];
     previewSections: typeof PREVIEW_SECTIONS;
 }> {
-    return Promise.resolve({ reports: REPORTS, previewSections: PREVIEW_SECTIONS });
+    const { page = 1, limit = 50 } = options ?? {};
+    const start = (page - 1) * limit;
+    return Promise.resolve({
+        reports: REPORTS.slice(start, start + limit),
+        previewSections: PREVIEW_SECTIONS,
+    });
 }
