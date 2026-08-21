@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useParams } from "next/navigation";
 
-import MissionWorkspace from "@/components/MissionWorkspace";
+import MissionWorkspace from "@/features/missions/components/workspace/MissionWorkspace";
 import { useMission } from "@/lib/mission-context";
 
 export default function MissionWorkspaceRoute() {
