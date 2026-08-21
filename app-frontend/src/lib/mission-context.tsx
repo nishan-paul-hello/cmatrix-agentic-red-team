@@ -1,16 +1,26 @@
 "use client";
 
-import { createContext, useContext, useState, type ReactNode } from "react";
+import { createContext, useContext, useState, useCallback, type ReactNode } from "react";
+
+// ─── Types ────────────────────────────────────────────────────────────────────
 
 interface MissionContextValue {
   activeMissionId: string;
   setActiveMissionId: (id: string) => void;
 }
 
+// ─── Context ──────────────────────────────────────────────────────────────────
+
 const MissionContext = createContext<MissionContextValue | null>(null);
 
+// ─── Provider ─────────────────────────────────────────────────────────────────
+
 export function MissionProvider({ children }: { children: ReactNode }) {
-  const [activeMissionId, setActiveMissionId] = useState("CVE-001");
+  const [activeMissionId, setActiveMissionIdRaw] = useState("CVE-001");
+
+  const setActiveMissionId = useCallback((id: string) => {
+    setActiveMissionIdRaw(id);
+  }, []);
 
   return (
     <MissionContext.Provider value={{ activeMissionId, setActiveMissionId }}>
@@ -19,7 +29,9 @@ export function MissionProvider({ children }: { children: ReactNode }) {
   );
 }
 
-export function useMission() {
+// ─── Hook ─────────────────────────────────────────────────────────────────────
+
+export function useMission(): MissionContextValue {
   const ctx = useContext(MissionContext);
   if (!ctx) throw new Error("useMission must be used within MissionProvider");
   return ctx;
