@@ -134,7 +134,7 @@ export default function Login({ onLogin }: LoginProps) {
         {/* Version / copyright */}
         <div className="mt-5 flex justify-between w-full">
           <span className="text-[9px] text-[var(--color-hex-333333)] tracking-[0.1em]">
-            v2.4.1
+            v1.1.1
           </span>
           <span className="text-[9px] text-[var(--color-hex-333333)] tracking-[0.1em]">
             CMATRIX © 2026
