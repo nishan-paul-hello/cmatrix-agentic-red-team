@@ -23,4 +23,3 @@ export default function GeometricMark({ size = 28 }: GeometricMarkProps) {
     />
   );
 }
-
