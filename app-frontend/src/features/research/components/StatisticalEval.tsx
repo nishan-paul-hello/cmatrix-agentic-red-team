@@ -1,6 +1,4 @@
-import React from "react";
-
-import { STAT_DATA } from "../data/researchMockData";
+import { STAT_DATA } from "@/features/research/data/researchMockData";
 
 export default function StatisticalEval() {
     return (

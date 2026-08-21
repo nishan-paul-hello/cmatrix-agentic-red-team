@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function RadioGroup<T extends string>({
     value,
     onChange,

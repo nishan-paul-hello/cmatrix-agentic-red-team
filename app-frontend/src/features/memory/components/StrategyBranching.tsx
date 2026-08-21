@@ -1,5 +1,5 @@
-import { BRANCHES } from "../data/mockData";
-import BranchTree from "./BranchTree";
+import BranchTree from "@/features/memory/components/BranchTree";
+import { BRANCHES } from "@/features/memory/data/mockData";
 
 export default function StrategyBranching() {
     return (

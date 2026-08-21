@@ -1,8 +1,6 @@
-import React from "react";
-
-import { useBenchmarksData } from "../hooks/useBenchmarksData";
-import BenchmarkDetail from "./BenchmarkDetail";
-import BenchmarkList from "./BenchmarkList";
+import BenchmarkDetail from "@/features/benchmarks/components/BenchmarkDetail";
+import BenchmarkList from "@/features/benchmarks/components/BenchmarkList";
+import { useBenchmarksData } from "@/features/benchmarks/hooks/useBenchmarksData";
 
 export default function BenchmarksHub() {
     const { detail, setDetail } = useBenchmarksData();

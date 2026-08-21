@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { CTX_SPECS } from "../data/mockData";
+import { CTX_SPECS } from "@/features/memory/data/mockData";
 
 export default function ContextUtilization() {
     const [sel, setSel] = useState(CTX_SPECS[2]);

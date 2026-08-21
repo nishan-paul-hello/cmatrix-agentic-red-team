@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { EORD_COLOR, HOSTS, STATUS_BADGE } from "../data/mockData";
+import { EORD_COLOR, HOSTS, STATUS_BADGE } from "@/features/environment/data/mockData";
 
 export default function HostTopology() {
     const [selected, setSelected] = useState<string | null>("HOST-01");

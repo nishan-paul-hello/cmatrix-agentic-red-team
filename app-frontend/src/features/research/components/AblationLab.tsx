@@ -1,6 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
-import { ABLATION_FLAG_KEYS, ABLATION_RUNS, COMPONENTS } from "../data/researchMockData";
+import {
+    ABLATION_FLAG_KEYS,
+    ABLATION_RUNS,
+    COMPONENTS,
+} from "@/features/research/data/researchMockData";
 
 export default function AblationLab() {
     const [sel, setSel] = useState(ABLATION_RUNS[0]);

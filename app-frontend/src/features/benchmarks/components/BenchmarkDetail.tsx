@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
-import { TASK_DATA, TYPE_C, type Bench } from "../data/benchmarksMockData";
+import { TASK_DATA, TYPE_C, type Bench } from "@/features/benchmarks/data/benchmarksMockData";
 
 export default function BenchmarkDetail({ bench, onBack }: { bench: Bench; onBack: () => void }) {
     const [tab, setTab] = useState<"OVERVIEW" | "TASKS" | "CATEGORIES">("OVERVIEW");

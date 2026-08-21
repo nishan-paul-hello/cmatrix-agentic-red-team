@@ -1,12 +1,11 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
+import AttackPath from "@/features/findings/components/AttackPath";
+import EvidenceViewer from "@/features/findings/components/EvidenceViewer";
+import TrajectoryTab from "@/features/findings/components/TrajectoryTab";
+import ValidationTab from "@/features/findings/components/ValidationTab";
+import { SEV_C, STATUS_C, type Tab } from "@/features/findings/data/findingsMockData";
 import { type Finding } from "@/types/domain-types";
-
-import { SEV_C, STATUS_C, type Tab } from "../data/findingsMockData";
-import AttackPath from "./AttackPath";
-import EvidenceViewer from "./EvidenceViewer";
-import TrajectoryTab from "./TrajectoryTab";
-import ValidationTab from "./ValidationTab";
 
 export default function FindingDetail({ f, onBack }: { f: Finding; onBack: () => void }) {
     const [tab, setTab] = useState<Tab>("OVERVIEW");

@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function AttackPath({ nodes, large }: { nodes: string[]; large?: boolean }) {
     return (
         <div

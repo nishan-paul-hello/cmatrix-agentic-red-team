@@ -1,21 +1,18 @@
-import React from "react";
-
 import { AUDIT_EVENT } from "@/features/audit/hooks/useAuditFeed";
+import Divider from "@/features/missions/components/wizard/Divider";
+import FieldBlock from "@/features/missions/components/wizard/FieldBlock";
+import MetaRow from "@/features/missions/components/wizard/MetaRow";
+import ModeCards from "@/features/missions/components/wizard/ModeCards";
+import RadioGroup from "@/features/missions/components/wizard/RadioGroup";
+import ReviewStep from "@/features/missions/components/wizard/ReviewStep";
+import StepHeading from "@/features/missions/components/wizard/StepHeading";
+import SurfaceCards from "@/features/missions/components/wizard/SurfaceCards";
+import TextInput from "@/features/missions/components/wizard/TextInput";
+import { STEPS, type TargetType, type WizardProps } from "@/features/missions/data/wizardMockData";
+import { useNewMissionWizard } from "@/features/missions/hooks/useNewMissionWizard";
 import { useTelemetry } from "@/hooks/useTelemetry";
 import { useServices } from "@/lib/services-context";
 import { type AuditEntry } from "@/types/domain-types";
-
-import { STEPS, type TargetType, type WizardProps } from "../../data/wizardMockData";
-import { useNewMissionWizard } from "../../hooks/useNewMissionWizard";
-import Divider from "./Divider";
-import FieldBlock from "./FieldBlock";
-import MetaRow from "./MetaRow";
-import ModeCards from "./ModeCards";
-import RadioGroup from "./RadioGroup";
-import ReviewStep from "./ReviewStep";
-import StepHeading from "./StepHeading";
-import SurfaceCards from "./SurfaceCards";
-import TextInput from "./TextInput";
 
 export default function NewMissionWizard({ onCancel, onStart }: WizardProps) {
     const {

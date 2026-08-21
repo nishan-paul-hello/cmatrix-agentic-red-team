@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 export default function EvidenceViewer({ inline }: { inline?: boolean }) {
     const [tab, setTab] = useState<"REQUEST" | "RESPONSE" | "EVIDENCE" | "ORACLE">("RESPONSE");

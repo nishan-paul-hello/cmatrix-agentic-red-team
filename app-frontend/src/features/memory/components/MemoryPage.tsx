@@ -1,11 +1,11 @@
-import { type MemTab } from "../data/mockData";
-import { useMemoryData } from "../hooks/useMemoryData";
-import ContextUtilization from "./ContextUtilization";
-import FailureMemory from "./FailureMemory";
-import SkillLibrary from "./SkillLibrary";
-import StrategyBranching from "./StrategyBranching";
-import TechnicalActions from "./TechnicalActions";
-import VulnPatterns from "./VulnPatterns";
+import ContextUtilization from "@/features/memory/components/ContextUtilization";
+import FailureMemory from "@/features/memory/components/FailureMemory";
+import SkillLibrary from "@/features/memory/components/SkillLibrary";
+import StrategyBranching from "@/features/memory/components/StrategyBranching";
+import TechnicalActions from "@/features/memory/components/TechnicalActions";
+import VulnPatterns from "@/features/memory/components/VulnPatterns";
+import { type MemTab } from "@/features/memory/data/mockData";
+import { useMemoryData } from "@/features/memory/hooks/useMemoryData";
 
 export default function MemoryPage({
     initialTab = "VULNERABILITY PATTERNS",

@@ -1,9 +1,8 @@
 import { useState } from "react";
 
 import { MetricTile } from "@/components/ui/MetricTile";
-
-import { type FailureRecord } from "../data/mockData";
-import { globalBlackboard } from "../domain/Blackboard";
+import { type FailureRecord } from "@/features/memory/data/mockData";
+import { globalBlackboard } from "@/features/memory/domain/Blackboard";
 
 export default function FailureMemory() {
     const failures = globalBlackboard.readFailures();

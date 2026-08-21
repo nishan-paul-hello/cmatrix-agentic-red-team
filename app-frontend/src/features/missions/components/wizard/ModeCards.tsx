@@ -1,6 +1,4 @@
-import React from "react";
-
-import { MODE_OPTIONS, type ModeType } from "../../data/wizardMockData";
+import { MODE_OPTIONS, type ModeType } from "@/features/missions/data/wizardMockData";
 
 export default function ModeCards({
     value,

@@ -1,6 +1,4 @@
-import React from "react";
-
-import { MODEL_ROWS } from "../data/costMockData";
+import { MODEL_ROWS } from "@/features/cost/data/costMockData";
 
 export default function ModelBreakdown() {
     const MODEL_C: Record<string, string> = {

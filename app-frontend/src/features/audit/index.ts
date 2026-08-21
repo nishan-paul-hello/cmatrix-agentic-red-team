@@ -1,2 +1,2 @@
-export * from "./components/AuditLogPage";
-export * from "./hooks/useAuditFeed";
+export * from "@/features/audit/components/AuditLogPage";
+export * from "@/features/audit/hooks/useAuditFeed";

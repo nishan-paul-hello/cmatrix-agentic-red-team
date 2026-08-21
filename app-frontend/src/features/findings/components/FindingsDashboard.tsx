@@ -1,8 +1,6 @@
-import React from "react";
-
-import { useFindingsData } from "../hooks/useFindingsData";
-import FindingDetail from "./FindingDetail";
-import FindingsList from "./FindingsList";
+import FindingDetail from "@/features/findings/components/FindingDetail";
+import FindingsList from "@/features/findings/components/FindingsList";
+import { useFindingsData } from "@/features/findings/hooks/useFindingsData";
 
 export default function FindingsDashboard() {
     const { detail, setDetail } = useFindingsData();

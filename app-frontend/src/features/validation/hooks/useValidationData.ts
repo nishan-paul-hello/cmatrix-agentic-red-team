@@ -1,9 +1,8 @@
 import { useState } from "react";
 
+import { type VFinding } from "@/features/validation/data/validationMockData";
 import { type FindingStatus } from "@/types/domain-types";
 import { canTransitionFinding } from "@/utils/FSM";
-
-import { type VFinding } from "../data/validationMockData";
 
 export function useValidationData() {
     const [modal, setModal] = useState(false);

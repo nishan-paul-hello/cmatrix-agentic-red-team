@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { EVIDENCE_ARTIFACTS } from "../data/mockData";
+import { EVIDENCE_ARTIFACTS } from "@/features/environment/data/mockData";
 
 export default function EvidencePanel() {
     const [sel, setSel] = useState<string | null>(null);

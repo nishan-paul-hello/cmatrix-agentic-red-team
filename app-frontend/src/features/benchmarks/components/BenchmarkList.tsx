@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
+import { BENCHMARKS, TYPE_C, type Bench } from "@/features/benchmarks/data/benchmarksMockData";
 import { BENCHMARK_STATUS } from "@/types/domain-types";
-
-import { BENCHMARKS, TYPE_C, type Bench } from "../data/benchmarksMockData";
 
 export default function BenchmarkList({ onSelect }: { onSelect: (b: Bench) => void }) {
     const [filter, setFilter] = useState<string>("ALL");

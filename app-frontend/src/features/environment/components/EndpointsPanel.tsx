@@ -1,4 +1,4 @@
-import { ENDPOINTS, METHOD_COLOR } from "../data/mockData";
+import { ENDPOINTS, METHOD_COLOR } from "@/features/environment/data/mockData";
 
 export default function EndpointsPanel() {
     return (

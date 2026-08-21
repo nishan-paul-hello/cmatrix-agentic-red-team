@@ -1,6 +1,4 @@
-import React from "react";
-
-import { SURFACE_OPTIONS, type SurfaceType } from "../../data/wizardMockData";
+import { SURFACE_OPTIONS, type SurfaceType } from "@/features/missions/data/wizardMockData";
 
 export default function SurfaceCards({
     value,

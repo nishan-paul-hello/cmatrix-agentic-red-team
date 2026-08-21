@@ -1,2 +1,2 @@
-export * from "./components/ReportsPage";
-export * from "./hooks/useReportsData";
+export * from "@/features/reports/components/ReportsPage";
+export * from "@/features/reports/hooks/useReportsData";

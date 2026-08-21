@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 
 import { AUDIT_EVENT } from "@/features/audit/hooks/useAuditFeed";
+import { getExecutionEntries } from "@/features/execution/data/fixtures/executionMockData";
 import { useServices } from "@/lib/services-context";
 import { type AuditEntry, type ExecEntry } from "@/types/domain-types";
 import { useFeatureFlag } from "@/utils/FeatureFlags";
-
-import { getExecutionEntries } from "../data/fixtures/executionMockData";
 
 export const EXECUTION_EVENT = "EXECUTION_EVENT";
 

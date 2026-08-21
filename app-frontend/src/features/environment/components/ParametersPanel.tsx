@@ -1,4 +1,4 @@
-import { PARAMS } from "../data/mockData";
+import { PARAMS } from "@/features/environment/data/mockData";
 
 export default function ParametersPanel() {
     return (

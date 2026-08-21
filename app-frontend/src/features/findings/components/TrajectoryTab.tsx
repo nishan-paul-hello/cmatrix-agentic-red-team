@@ -1,5 +1,3 @@
-import React from "react";
-
 import { type Finding } from "@/types/domain-types";
 
 export default function TrajectoryTab({ f }: { f: Finding }) {

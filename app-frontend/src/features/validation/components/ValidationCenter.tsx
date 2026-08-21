@@ -1,10 +1,8 @@
-import React from "react";
-
-import { FINDINGS, SB } from "../data/validationMockData";
-import { useValidationData } from "../hooks/useValidationData";
-import Btn from "./Btn";
-import OraclePanel from "./OraclePanel";
-import StateMachineModal from "./StateMachineModal";
+import Btn from "@/features/validation/components/Btn";
+import OraclePanel from "@/features/validation/components/OraclePanel";
+import StateMachineModal from "@/features/validation/components/StateMachineModal";
+import { FINDINGS, SB } from "@/features/validation/data/validationMockData";
+import { useValidationData } from "@/features/validation/hooks/useValidationData";
 
 export default function ValidationCenter() {
     const {

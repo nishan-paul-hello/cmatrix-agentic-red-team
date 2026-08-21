@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function Meta({ label, value }: { label: string; value: string }) {
     return (
         <div className="flex items-center gap-1.5">

@@ -1,8 +1,11 @@
 import { useEffect, useReducer } from "react";
 
+import {
+    type ModeType,
+    type SurfaceType,
+    type TargetType,
+} from "@/features/missions/data/wizardMockData";
 import { sanitizeInput } from "@/utils/sanitize";
-
-import { type ModeType, type SurfaceType, type TargetType } from "../data/wizardMockData";
 
 interface WizardState {
     step: number;

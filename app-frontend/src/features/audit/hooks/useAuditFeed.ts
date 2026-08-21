@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 
+import { getAuditEntries } from "@/features/audit/data/fixtures/auditMockData";
 import { useServices } from "@/lib/services-context";
 import { type AuditEntry } from "@/types/domain-types";
 import { useFeatureFlag } from "@/utils/FeatureFlags";
-
-import { getAuditEntries } from "../data/fixtures/auditMockData";
 
 export const AUDIT_EVENT = "AUDIT_EVENT";
 

@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-import { PATTERNS } from "../data/mockData";
-import Sub from "./Sub";
+import Sub from "@/features/memory/components/Sub";
+import { PATTERNS } from "@/features/memory/data/mockData";
 
 export default function VulnPatterns() {
     const [sel, setSel] = useState(PATTERNS[0]);

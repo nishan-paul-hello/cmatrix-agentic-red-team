@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { getReportsData, type Report } from "../data/fixtures/reportsMockData";
+import { getReportsData, type Report } from "@/features/reports/data/fixtures/reportsMockData";
 
 export function useReportsData() {
     const [sel, setSel] = useState<Report | null>(null);

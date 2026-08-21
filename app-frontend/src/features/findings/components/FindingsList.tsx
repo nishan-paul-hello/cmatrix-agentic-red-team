@@ -1,8 +1,5 @@
-import React from "react";
-
+import { DATA, SEV_C, STATUS_C } from "@/features/findings/data/findingsMockData";
 import { type Finding, type Severity } from "@/types/domain-types";
-
-import { DATA, SEV_C, STATUS_C } from "../data/findingsMockData";
 
 export default function FindingsList({ onSelect }: { onSelect: (f: Finding) => void }) {
     const counts: Record<Severity, number> = {

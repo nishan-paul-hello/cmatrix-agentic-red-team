@@ -1,4 +1,4 @@
-import { type NodeStatus } from "../../data/workspaceMockData";
+import { type NodeStatus } from "@/features/missions/data/workspaceMockData";
 
 export default function StatusBadge(status: NodeStatus) {
     const map: Record<

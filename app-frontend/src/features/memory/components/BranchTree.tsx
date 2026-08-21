@@ -1,4 +1,4 @@
-import { type BRANCHES } from "../data/mockData";
+import { type BRANCHES } from "@/features/memory/data/mockData";
 
 export default function BranchTree({
     nodes,

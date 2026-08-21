@@ -1,15 +1,15 @@
-import { TABS } from "../data/mockData";
-import { useEnvironmentalData } from "../hooks/useEnvironmentalData";
-import AuthStatesPanel from "./AuthStatesPanel";
-import CredentialsPanel from "./CredentialsPanel";
-import CVECandidatesPanel from "./CVECandidatesPanel";
-import ELFindingsPanel from "./ELFindingsPanel";
-import EndpointsPanel from "./EndpointsPanel";
-import EvidencePanel from "./EvidencePanel";
-import FailuresPanel from "./FailuresPanel";
-import HostTopology from "./HostTopology";
-import ParametersPanel from "./ParametersPanel";
-import ServicesPanel from "./ServicesPanel";
+import AuthStatesPanel from "@/features/environment/components/AuthStatesPanel";
+import CredentialsPanel from "@/features/environment/components/CredentialsPanel";
+import CVECandidatesPanel from "@/features/environment/components/CVECandidatesPanel";
+import ELFindingsPanel from "@/features/environment/components/ELFindingsPanel";
+import EndpointsPanel from "@/features/environment/components/EndpointsPanel";
+import EvidencePanel from "@/features/environment/components/EvidencePanel";
+import FailuresPanel from "@/features/environment/components/FailuresPanel";
+import HostTopology from "@/features/environment/components/HostTopology";
+import ParametersPanel from "@/features/environment/components/ParametersPanel";
+import ServicesPanel from "@/features/environment/components/ServicesPanel";
+import { TABS } from "@/features/environment/data/mockData";
+import { useEnvironmentalData } from "@/features/environment/hooks/useEnvironmentalData";
 
 export default function EnvironmentalLayer() {
     const { activeTab, setActiveTab } = useEnvironmentalData();

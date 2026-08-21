@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useRef } from "react";
+import { useEffect, useReducer, useRef } from "react";
 import dynamic from "next/dynamic";
 
 import CostDashboard from "@/features/cost/components/CostDashboard";
@@ -7,13 +7,13 @@ import HumanEscalation from "@/features/escalation/components/HumanEscalation";
 import ExecutionConsole from "@/features/execution/components/ExecutionConsole";
 import FindingsDashboard from "@/features/findings/components/FindingsDashboard";
 import MemoryPage from "@/features/memory/components/MemoryPage";
-import Specialists from "@/features/specialists/components/Specialists";
-import TeamManagerDashboard from "@/features/specialists/components/TeamManagerDashboard";
-import TrajectoryPage from "@/features/trajectory/components/TrajectoryPage";
-import EvaluationScreen from "@/features/validation/components/EvaluationScreen";
-import ValidationCenter from "@/features/validation/components/ValidationCenter";
-import { MISSION_STATUS } from "@/types/domain-types";
-
+import Meta from "@/features/missions/components/workspace/Meta";
+import nodeStyle from "@/features/missions/components/workspace/NodeStyle";
+import Sep from "@/features/missions/components/workspace/Sep";
+import SpecBadge from "@/features/missions/components/workspace/SpecBadge";
+import specialistStatusDot from "@/features/missions/components/workspace/SpecialistStatusDot";
+import Stat from "@/features/missions/components/workspace/Stat";
+import statusBadge from "@/features/missions/components/workspace/StatusBadge";
 import {
     INITIAL_LOG,
     SPECIALISTS,
@@ -22,15 +22,14 @@ import {
     VDG_NODES,
     type LogEntry,
     type MissionSubNav,
-} from "../../data/workspaceMockData";
-import { useElapsed } from "../../hooks/useElapsed";
-import Meta from "./Meta";
-import nodeStyle from "./NodeStyle";
-import Sep from "./Sep";
-import SpecBadge from "./SpecBadge";
-import specialistStatusDot from "./SpecialistStatusDot";
-import Stat from "./Stat";
-import statusBadge from "./StatusBadge";
+} from "@/features/missions/data/workspaceMockData";
+import { useElapsed } from "@/features/missions/hooks/useElapsed";
+import Specialists from "@/features/specialists/components/Specialists";
+import TeamManagerDashboard from "@/features/specialists/components/TeamManagerDashboard";
+import TrajectoryPage from "@/features/trajectory/components/TrajectoryPage";
+import EvaluationScreen from "@/features/validation/components/EvaluationScreen";
+import ValidationCenter from "@/features/validation/components/ValidationCenter";
+import { MISSION_STATUS } from "@/types/domain-types";
 
 const AttackGraphCanvas = dynamic(
     () => import("@/features/missions/components/workspace/AttackGraphCanvas"),

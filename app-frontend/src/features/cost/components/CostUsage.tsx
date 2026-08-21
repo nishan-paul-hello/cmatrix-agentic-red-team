@@ -1,6 +1,10 @@
 import React from "react";
 
-import { getCostData, type CostTimeline, type SpecialistCost } from "../data/costMockData";
+import {
+    getCostData,
+    type CostTimeline,
+    type SpecialistCost,
+} from "@/features/cost/data/costMockData";
 
 export default function CostUsage() {
     const [costData, setCostData] = React.useState<{

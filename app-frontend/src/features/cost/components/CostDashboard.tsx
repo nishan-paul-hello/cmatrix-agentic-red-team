@@ -1,10 +1,8 @@
-import React from "react";
-
-import { type CostTab } from "../data/costMockData";
-import { useCostData } from "../hooks/useCostData";
-import ContextState from "./ContextState";
-import CostUsage from "./CostUsage";
-import ModelBreakdown from "./ModelBreakdown";
+import ContextState from "@/features/cost/components/ContextState";
+import CostUsage from "@/features/cost/components/CostUsage";
+import ModelBreakdown from "@/features/cost/components/ModelBreakdown";
+import { type CostTab } from "@/features/cost/data/costMockData";
+import { useCostData } from "@/features/cost/hooks/useCostData";
 
 export default function CostDashboard() {
     const { tab, setTab } = useCostData();

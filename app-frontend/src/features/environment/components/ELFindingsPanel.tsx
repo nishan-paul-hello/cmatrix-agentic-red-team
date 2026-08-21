@@ -1,4 +1,4 @@
-import { EL_FINDINGS } from "../data/mockData";
+import { EL_FINDINGS } from "@/features/environment/data/mockData";
 
 export default function ELFindingsPanel() {
     return (

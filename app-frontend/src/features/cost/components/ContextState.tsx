@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
-import { CTX_ENTRIES } from "../data/costMockData";
+import { CTX_ENTRIES } from "@/features/cost/data/costMockData";
 
 export default function ContextState() {
     const [sel, setSel] = useState(CTX_ENTRIES[2]);

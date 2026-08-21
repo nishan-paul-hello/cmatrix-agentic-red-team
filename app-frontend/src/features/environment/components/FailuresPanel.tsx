@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { FAILURE_LOG } from "../data/mockData";
+import { FAILURE_LOG } from "@/features/environment/data/mockData";
 
 export default function FailuresPanel() {
     const [sel, setSel] = useState<string | null>(null);

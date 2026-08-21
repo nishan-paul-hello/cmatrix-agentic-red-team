@@ -1,6 +1,5 @@
+import specialistStatusDot from "@/features/missions/components/workspace/SpecialistStatusDot";
 import { type Specialist } from "@/types/domain-types";
-
-import specialistStatusDot from "./SpecialistStatusDot";
 
 export default function SpecBadge({ status }: { status: Specialist["status"] }) {
     const color = specialistStatusDot(status);

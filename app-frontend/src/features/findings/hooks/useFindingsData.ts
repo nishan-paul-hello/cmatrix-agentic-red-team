@@ -1,8 +1,7 @@
 import { useState } from "react";
 
+import { type Tab } from "@/features/findings/data/findingsMockData";
 import { type Finding } from "@/types/domain-types";
-
-import { type Tab } from "../data/findingsMockData";
 
 export function useFindingsData() {
     const [detail, setDetail] = useState<Finding | null>(null);

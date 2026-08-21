@@ -1,10 +1,8 @@
-import React from "react";
-
-import { type LabTab } from "../data/researchMockData";
-import { useResearchData } from "../hooks/useResearchData";
-import AblationLab from "./AblationLab";
-import FailureAnalysis from "./FailureAnalysis";
-import StatisticalEval from "./StatisticalEval";
+import AblationLab from "@/features/research/components/AblationLab";
+import FailureAnalysis from "@/features/research/components/FailureAnalysis";
+import StatisticalEval from "@/features/research/components/StatisticalEval";
+import { type LabTab } from "@/features/research/data/researchMockData";
+import { useResearchData } from "@/features/research/hooks/useResearchData";
 
 export default function ResearchLab({ initialTab }: { initialTab?: LabTab }) {
     const { tab, setTab } = useResearchData(initialTab);

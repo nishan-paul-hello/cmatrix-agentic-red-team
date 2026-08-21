@@ -1,3 +1,3 @@
-export * from "./components/CommandPalette";
-export * from "./components/Dashboard";
-export * from "./components/Shell";
+export * from "@/features/core/components/CommandPalette";
+export * from "@/features/core/components/Dashboard";
+export * from "@/features/core/components/Shell";

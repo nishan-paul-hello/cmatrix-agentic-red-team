@@ -1,4 +1,4 @@
-import { AUTH_STATES } from "../data/mockData";
+import { AUTH_STATES } from "@/features/environment/data/mockData";
 
 export default function AuthStatesPanel() {
     return (

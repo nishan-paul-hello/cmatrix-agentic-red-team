@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-import VDGNodeDrawer from "./VDGNodeDrawer";
+import VDGNodeDrawer from "@/features/missions/components/workspace/VDGNodeDrawer";
 
 type NodeStatus =
     "EXPLOITED" | "ELIGIBLE" | "IN_PROGRESS" | "BLOCKED" | "INFEASIBLE" | "DEPRIORITIZED";

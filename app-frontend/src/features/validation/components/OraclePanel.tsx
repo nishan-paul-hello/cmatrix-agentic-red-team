@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 
 export default function OraclePanel({ onClose }: { onClose: () => void }) {
     // F10: ESC key closes panel

@@ -1,4 +1,4 @@
-import { CVE_CANDIDATES } from "../data/mockData";
+import { CVE_CANDIDATES } from "@/features/environment/data/mockData";
 
 export default function CVECandidatesPanel() {
     return (

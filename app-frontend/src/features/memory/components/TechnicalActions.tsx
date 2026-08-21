@@ -1,8 +1,7 @@
 import { useState } from "react";
 
+import { ACTIONS } from "@/features/memory/data/mockData";
 import { TASK_STATUS } from "@/types/domain-types";
-
-import { ACTIONS } from "../data/mockData";
 
 export default function TechnicalActions() {
     const [sel, setSel] = useState<(typeof ACTIONS)[0] | null>(null);

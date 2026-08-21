@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 
-import { type VFinding } from "../data/validationMockData";
+import { type VFinding } from "@/features/validation/data/validationMockData";
 
 export default function StateMachineModal({
     onClose,

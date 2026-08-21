@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { CREDS } from "../data/mockData";
+import { CREDS } from "@/features/environment/data/mockData";
 
 export default function CredentialsPanel() {
     const [revealed, setRevealed] = useState<Set<string>>(new Set());

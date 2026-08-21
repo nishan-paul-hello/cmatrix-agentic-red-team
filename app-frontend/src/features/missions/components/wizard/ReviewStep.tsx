@@ -1,12 +1,10 @@
-import React from "react";
-
+import StepHeading from "@/features/missions/components/wizard/StepHeading";
 import {
     SURFACE_SPECIALISTS,
     type ModeType,
     type SurfaceType,
     type TargetType,
-} from "../../data/wizardMockData";
-import StepHeading from "./StepHeading";
+} from "@/features/missions/data/wizardMockData";
 
 export default function ReviewStep({
     target,

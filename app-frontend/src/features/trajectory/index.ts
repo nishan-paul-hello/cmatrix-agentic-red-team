@@ -1,3 +1,3 @@
-export * from "./components/TrajectoryBrowser";
-export * from "./components/TrajectoryPage";
-export * from "./hooks/useTrajectoryFeed";
+export * from "@/features/trajectory/components/TrajectoryBrowser";
+export * from "@/features/trajectory/components/TrajectoryPage";
+export * from "@/features/trajectory/hooks/useTrajectoryFeed";

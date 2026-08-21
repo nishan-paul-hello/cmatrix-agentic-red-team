@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function StepHeading({ step, label }: { step: number; label: string }) {
     return (
         <div className="mb-7 flex items-center gap-3">

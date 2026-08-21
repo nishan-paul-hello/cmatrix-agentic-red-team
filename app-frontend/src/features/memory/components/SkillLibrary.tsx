@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-import { globalBlackboard } from "../domain/Blackboard";
-import Sub from "./Sub";
+import Sub from "@/features/memory/components/Sub";
+import { globalBlackboard } from "@/features/memory/domain/Blackboard";
 
 export default function SkillLibrary() {
     const skills = globalBlackboard.readSkills();

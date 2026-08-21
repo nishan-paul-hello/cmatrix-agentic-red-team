@@ -1,1 +1,1 @@
-export * from "./components/SettingsPage";
+export * from "@/features/settings/components/SettingsPage";

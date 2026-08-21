@@ -1,4 +1,4 @@
-import { SERVICES, STATUS_COLOR } from "../data/mockData";
+import { SERVICES, STATUS_COLOR } from "@/features/environment/data/mockData";
 
 export default function ServicesPanel() {
     return (

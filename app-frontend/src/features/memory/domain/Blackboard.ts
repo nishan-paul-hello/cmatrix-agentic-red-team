@@ -1,4 +1,9 @@
-import { FAILURES, SKILLS, type FailureRecord, type SkillRecord } from "../data/mockData";
+import {
+    FAILURES,
+    SKILLS,
+    type FailureRecord,
+    type SkillRecord,
+} from "@/features/memory/data/mockData";
 
 /**
  * Blackboard Pattern

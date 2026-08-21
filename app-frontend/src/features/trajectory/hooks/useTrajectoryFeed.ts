@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 
+import {
+    getTrajectorySteps,
+    type TrajStep,
+} from "@/features/trajectory/data/fixtures/trajectoryMockData";
 import { globalEventBus } from "@/utils/EventBus";
-
-import { getTrajectorySteps, type TrajStep } from "../data/fixtures/trajectoryMockData";
 
 export const TRAJECTORY_EVENT = "TRAJECTORY_EVENT";
 
