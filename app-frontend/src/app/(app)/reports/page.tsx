@@ -1,6 +1,6 @@
 "use client";
 
-import ReportsPage from "@/components/ReportsPage";
+import ReportsPage from "@/features/reports/components/ReportsPage";
 
 export default function Reports() {
     return <ReportsPage />;
