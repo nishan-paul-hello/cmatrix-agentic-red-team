@@ -1,6 +1,5 @@
+import { MISSIONS } from "@/data/fixtures/missions";
 import { type Mission } from "@/types/domain-types";
-
-import { MISSIONS } from "../data/fixtures/missions";
 
 export class MissionRepository {
     private static mockData: Mission[] = [...MISSIONS];

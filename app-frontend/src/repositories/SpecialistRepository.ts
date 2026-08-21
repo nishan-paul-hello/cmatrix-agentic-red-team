@@ -1,6 +1,5 @@
+import { SPECIALISTS } from "@/data/fixtures/specialists";
 import { type Specialist } from "@/types/domain-types";
-
-import { SPECIALISTS } from "../data/fixtures/specialists";
 
 export class SpecialistRepository {
     private static mockData: Specialist[] = [...SPECIALISTS];
@@ -21,7 +20,7 @@ export class SpecialistRepository {
     static async getTimeline(): Promise<{ ts: string; event: string; detail: string }[]> {
         return new Promise((resolve) => {
             setTimeout(() => {
-                void import("../data/fixtures/specialists").then((m) => resolve(m.TIMELINE));
+                void import("@/data/fixtures/specialists").then((m) => resolve(m.TIMELINE));
             }, 100);
         });
     }
