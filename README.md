@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="docs/assets/logo-brand.svg" alt="CMATRIX Logo" width="400" height="400" />
+  <img src="docs/assets/logo-brand.svg" alt="CMATRIX Logo" width="200" height="200" />
   <h1>CMATRIX</h1>
   <p>AI-Powered Multi-Agent Security Orchestration & VAPT Platform</p>
 
