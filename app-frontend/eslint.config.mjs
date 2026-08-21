@@ -69,32 +69,40 @@ export default tseslint.config(
                 { checksVoidReturn: { attributes: false } },
             ],
             "@typescript-eslint/no-unnecessary-type-assertion": "error",
-            "@typescript-eslint/prefer-nullish-coalescing": "warn",
-            "@typescript-eslint/prefer-optional-chain": "warn",
-            "@typescript-eslint/no-unsafe-assignment": "warn",
-            "@typescript-eslint/no-unsafe-call": "warn",
-            "@typescript-eslint/no-unsafe-member-access": "warn",
-            "@typescript-eslint/no-unsafe-return": "warn",
-            "@typescript-eslint/no-unsafe-argument": "warn",
-            "@typescript-eslint/restrict-template-expressions": "warn",
+            "@typescript-eslint/prefer-nullish-coalescing": "error",
+            "@typescript-eslint/prefer-optional-chain": "error",
+            "@typescript-eslint/switch-exhaustiveness-check": "error",
+            "@typescript-eslint/no-unnecessary-condition": [
+                "error",
+                { allowConstantLoopConditions: true },
+            ],
+            "@typescript-eslint/no-confusing-void-expression": [
+                "error",
+                { ignoreArrowShorthand: true },
+            ],
+            "@typescript-eslint/no-meaningless-void-operator": "error",
+            "@typescript-eslint/no-unnecessary-template-expression": "error",
 
             // ── React ───────────────────────────────────────────────────────
-            "react/react-in-jsx-scope": "off", // Not needed in React 17+
-            "react/prop-types": "off", // TypeScript handles this
+            "react/react-in-jsx-scope": "off",
+            "react/prop-types": "off",
             "react/jsx-no-target-blank": "error",
             "react/jsx-key": ["error", { checkFragmentShorthand: true }],
-            "react/no-array-index-key": "warn",
+            "react/no-array-index-key": "error",
             "react/no-unstable-nested-components": "error",
-            "react/self-closing-comp": "warn",
-            "react/hook-use-state": "warn",
-            "react/jsx-boolean-value": ["warn", "never"],
-            "react/jsx-curly-brace-presence": ["warn", { props: "never", children: "never" }],
+            "react/self-closing-comp": "error",
+            "react/hook-use-state": "off",
+            "react/jsx-boolean-value": ["error", "never"],
+            "react/jsx-curly-brace-presence": ["error", { props: "never", children: "never" }],
             "react/no-danger": "error",
             "react/display-name": "error",
+            "react/jsx-no-useless-fragment": ["error", { allowExpressions: true }],
+            "react/no-children-prop": "error",
+            "react/no-direct-mutation-state": "error",
 
             // ── React Hooks ─────────────────────────────────────────────────
             "react-hooks/rules-of-hooks": "error",
-            "react-hooks/exhaustive-deps": "warn",
+            "react-hooks/exhaustive-deps": "error",
 
             // ── Accessibility (jsx-a11y) ────────────────────────────────────
             "jsx-a11y/alt-text": "error",
@@ -114,39 +122,41 @@ export default tseslint.config(
             // ── Import ordering & hygiene ───────────────────────────────────
             "import/no-duplicates": "error",
             "import/no-self-import": "error",
-            "import/no-cycle": "warn",
-            "import/no-useless-path-segments": "warn",
+            "import/no-cycle": "error",
+            "import/no-useless-path-segments": "error",
             "import/first": "error",
             "import/newline-after-import": "error",
-            "import/no-default-export": "off", // Next.js pages require default exports
+            "import/no-default-export": "off",
             "import/consistent-type-specifier-style": ["error", "prefer-inline"],
 
             // ── General best practices ──────────────────────────────────────
-            "no-console": ["warn", { allow: ["warn", "error"] }],
+            "no-console": ["error", { allow: ["warn", "error"] }],
             "no-debugger": "error",
             "no-alert": "error",
             eqeqeq: ["error", "always", { null: "ignore" }],
             "prefer-const": "error",
             "no-var": "error",
-            "object-shorthand": ["warn", "always"],
-            "prefer-template": "warn",
-            "no-nested-ternary": "warn",
+            "object-shorthand": ["error", "always"],
+            "prefer-template": "error",
+            "no-nested-ternary": "error",
             curly: ["error", "all"],
             "no-return-assign": "error",
             "no-param-reassign": [
                 "error",
                 {
                     props: true,
-                    ignorePropertyModificationsFor: [
-                        "acc", // Reducer accumulators
-                        "ref", // React refs
-                        "e", // Event objects (e.target.value etc.)
-                        "event", // Event objects (event.target.value etc.)
-                    ],
+                    ignorePropertyModificationsFor: ["acc", "ref", "e", "ev", "event"],
                 },
             ],
-            "no-shadow": "off", // Use TS version instead
+            "no-shadow": "off",
             "@typescript-eslint/no-shadow": "error",
+            "no-sequences": "error",
+            "no-fallthrough": "error",
+            "default-case": "error",
+            "no-cond-assign": ["error", "always"],
+            "no-duplicate-case": "error",
+            "no-extra-boolean-cast": "error",
+            "no-unreachable": "error",
         },
     },
 
