@@ -41,8 +41,8 @@ format:
 	cd app-frontend && npm run format
 
 lint:
-	@echo "🔍 Linting frontend code with ESLint..."
-	cd app-frontend && npm run lint
+	@echo "🔍 Linting and fixing frontend code with ESLint..."
+	cd app-frontend && npm run lint:fix
 
 # Paper Build Directories
 PAPER_DIR_01 := docs/paper-research/paper-structure/paper-01-llm-orch-vapt
