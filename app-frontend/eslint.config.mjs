@@ -1,8 +1,8 @@
 // @ts-check
-import { FlatCompat } from "@eslint/eslintrc";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 
+import nextCoreWebVitals from "eslint-config-next/core-web-vitals";
 import tseslint from "typescript-eslint";
 import pluginReact from "eslint-plugin-react";
 import pluginReactHooks from "eslint-plugin-react-hooks";
@@ -11,11 +11,6 @@ import pluginImport from "eslint-plugin-import";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-
-const compat = new FlatCompat({ baseDirectory: __dirname });
-
-// ─── Base Next.js config ──────────────────────────────────────────────────────
-const nextCoreConfig = compat.extends("next/core-web-vitals");
 
 // ─── Main config ──────────────────────────────────────────────────────────────
 export default tseslint.config(
@@ -32,8 +27,8 @@ export default tseslint.config(
         ],
     },
 
-    // ── Next.js recommended (core-web-vitals) ───────────────────────────────
-    ...nextCoreConfig,
+    // ── Next.js core config (native flat config) ────────────────────────────
+    ...nextCoreWebVitals,
 
     // ── TypeScript-aware rules ───────────────────────────────────────────────
     ...tseslint.configs.recommended,
@@ -47,15 +42,8 @@ export default tseslint.config(
         },
     },
 
-    // ── Project-wide rules ──────────────────────────────────────────────────
+    // ── Project-wide settings and rules ─────────────────────────────────────
     {
-        plugins: {
-            react: pluginReact,
-            "react-hooks": pluginReactHooks,
-            "jsx-a11y": pluginJsxA11y,
-            import: pluginImport,
-        },
-
         settings: {
             react: { version: "detect" },
             "import/resolver": {
