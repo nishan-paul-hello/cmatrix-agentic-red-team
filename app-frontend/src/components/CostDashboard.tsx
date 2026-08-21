@@ -444,7 +444,7 @@ function CostUsage() {
                     const barH = maxCost > 0 ? Math.round((t.cost / maxCost) * 60) : 0;
                     return (
                         <div
-                            key={i}
+                            key={`timeline-${t.ts}-${t.event}`}
                             title={`${t.ts} · ${t.event} · $${t.cost.toFixed(4)}`}
                             className="absolute bottom-0 cursor-default"
                             style={{
@@ -707,17 +707,27 @@ function ContextState() {
                 {/* Context bars */}
                 {CTX_ENTRIES.map((s) => {
                     const pct = Math.round((s.used / s.max) * 100);
-                    const bc =
-                        pct > 85
-                            ? "var(--color-hex-ff2a32)"
-                            : pct > 60
-                              ? "var(--color-hex-d29922)"
-                              : "var(--color-hex-3fb950)";
+                    const bc = (() => {
+                        if (pct > 85) {
+                            return "var(--color-hex-ff2a32)";
+                        }
+                        if (pct > 60) {
+                            return "var(--color-hex-d29922)";
+                        }
+                        return "var(--color-hex-3fb950)";
+                    })();
                     const isSel = sel.id === s.id;
                     return (
                         <div
                             key={s.id}
                             onClick={() => setSel(s)}
+                            onKeyDown={(ev) => {
+                                if (ev.key === "Enter" || ev.key === " ") {
+                                    setSel(s);
+                                }
+                            }}
+                            role="button"
+                            tabIndex={0}
                             className="mb-[8px] cursor-pointer rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)] px-[16px] py-[14px]"
                             style={{
                                 background: isSel ? "var(--color-hex-0d0d0d)" : "transparent",
@@ -850,7 +860,7 @@ function ContextState() {
                         "→ CONTEXT REPLACED",
                         "ACTIVE TASK PRESERVED",
                     ].map((node, i) => (
-                        <div key={i} className="flex flex-col items-start">
+                        <div key={`lifecycle-${node}`} className="flex flex-col items-start">
                             {i > 0 && (
                                 <div className="ml-[9px] h-[12px] w-[1px] bg-[var(--color-hex-1e1e1e)]" />
                             )}
@@ -866,12 +876,15 @@ function ContextState() {
                                     style={{
                                         borderRadius: "50%",
                                         border: "1px solid",
-                                        borderColor:
-                                            sel.compacted > 0 && i === 4
-                                                ? "var(--color-hex-3fb950)"
-                                                : i === 0 && sel.state === "ACTIVE"
-                                                  ? "var(--color-hex-e31b23)"
-                                                  : "var(--color-hex-333333)",
+                                        borderColor: (() => {
+                                            if (sel.compacted > 0 && i === 4) {
+                                                return "var(--color-hex-3fb950)";
+                                            }
+                                            if (i === 0 && sel.state === "ACTIVE") {
+                                                return "var(--color-hex-e31b23)";
+                                            }
+                                            return "var(--color-hex-333333)";
+                                        })(),
                                         background:
                                             i === 4 && sel.compacted > 0
                                                 ? "var(--color-hex-3fb950)"
@@ -881,12 +894,15 @@ function ContextState() {
                                 <span
                                     className="text-[8.5px] tracking-[0.06em]"
                                     style={{
-                                        color:
-                                            i === 0 && sel.state === "ACTIVE"
-                                                ? "var(--color-hex-e31b23)"
-                                                : i === 4 && sel.compacted > 0
-                                                  ? "var(--color-hex-3fb950)"
-                                                  : "var(--color-hex-333333)",
+                                        color: (() => {
+                                            if (i === 0 && sel.state === "ACTIVE") {
+                                                return "var(--color-hex-e31b23)";
+                                            }
+                                            if (i === 4 && sel.compacted > 0) {
+                                                return "var(--color-hex-3fb950)";
+                                            }
+                                            return "var(--color-hex-333333)";
+                                        })(),
                                     }}
                                 >
                                     {node}

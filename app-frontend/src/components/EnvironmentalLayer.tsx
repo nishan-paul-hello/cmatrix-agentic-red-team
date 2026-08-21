@@ -295,7 +295,7 @@ function HostTopology() {
                         gap: 0,
                     }}
                 >
-                    {HOSTS.map((host, i) => {
+                    {HOSTS.map((host) => {
                         const isSel = selected === host.id;
                         const sb = STATUS_BADGE[host.status];
                         return (
@@ -659,7 +659,11 @@ function CredentialsPanel() {
     const toggle = (u: string) =>
         setRevealed((p) => {
             const n = new Set(p);
-            n.has(u) ? n.delete(u) : n.add(u);
+            if (n.has(u)) {
+                n.delete(u);
+            } else {
+                n.add(u);
+            }
             return n;
         });
     return (
@@ -739,12 +743,15 @@ function CredentialsPanel() {
                                     <span
                                         className="text-[9px] tracking-[0.12em]"
                                         style={{
-                                            color:
-                                                row.scope === "ADMIN"
-                                                    ? "var(--color-hex-e31b23)"
-                                                    : row.scope === "SERVICE"
-                                                      ? "var(--color-hex-d29922)"
-                                                      : "var(--color-hex-666666)",
+                                            color: (() => {
+                                                if (row.scope === "ADMIN") {
+                                                    return "var(--color-hex-e31b23)";
+                                                }
+                                                if (row.scope === "SERVICE") {
+                                                    return "var(--color-hex-d29922)";
+                                                }
+                                                return "var(--color-hex-666666)";
+                                            })(),
                                         }}
                                     >
                                         {row.scope}
@@ -891,9 +898,9 @@ export default function EnvironmentalLayer() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {ENDPOINTS.map((row, i) => (
+                                {ENDPOINTS.map((row) => (
                                     <tr
-                                        key={i}
+                                        key={`${row.method}-${row.endpoint}`}
                                         className="cursor-pointer"
                                         style={{
                                             borderBottom: "1px solid var(--color-hex-111111)",
@@ -975,9 +982,9 @@ export default function EnvironmentalLayer() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {SERVICES.map((row, i) => (
+                                {SERVICES.map((row) => (
                                     <tr
-                                        key={i}
+                                        key={`${row.host}-${row.port}`}
                                         className="cursor-pointer"
                                         style={{
                                             borderBottom: "1px solid var(--color-hex-111111)",
@@ -1114,7 +1121,7 @@ function AuthStatesPanel() {
                     </tr>
                 </thead>
                 <tbody>
-                    {AUTH_STATES.map((a, i) => (
+                    {AUTH_STATES.map((a) => (
                         <tr
                             key={a.id}
                             style={{
@@ -1457,7 +1464,7 @@ function CVECandidatesPanel() {
                 <tbody>
                     {[...CVE_CANDIDATES]
                         .sort((a, b) => b.epss - a.epss)
-                        .map((c, i) => (
+                        .map((c) => (
                             <tr
                                 key={c.id}
                                 style={{
@@ -1483,12 +1490,15 @@ function CVECandidatesPanel() {
                                     <span
                                         className="text-[10px] font-bold"
                                         style={{
-                                            color:
-                                                c.epss > 0.5
-                                                    ? "var(--color-hex-ff2a32)"
-                                                    : c.epss > 0.3
-                                                      ? "var(--color-hex-d29922)"
-                                                      : "var(--color-hex-555555)",
+                                            color: (() => {
+                                                if (c.epss > 0.5) {
+                                                    return "var(--color-hex-ff2a32)";
+                                                }
+                                                if (c.epss > 0.3) {
+                                                    return "var(--color-hex-d29922)";
+                                                }
+                                                return "var(--color-hex-555555)";
+                                            })(),
                                         }}
                                     >
                                         {c.epss.toFixed(2)}
@@ -1773,23 +1783,29 @@ function EvidencePanel() {
                                 className="cursor-pointer"
                                 style={{
                                     borderBottom: "1px solid var(--color-hex-111111)",
-                                    background:
-                                        sel === a.id
-                                            ? "var(--color-hex-0f0f0f)"
-                                            : i % 2
-                                              ? "var(--color-hex-0b0b0b)"
-                                              : "transparent",
+                                    background: (() => {
+                                        if (sel === a.id) {
+                                            return "var(--color-hex-0f0f0f)";
+                                        }
+                                        if (i % 2) {
+                                            return "var(--color-hex-0b0b0b)";
+                                        }
+                                        return "transparent";
+                                    })(),
                                 }}
                                 onMouseEnter={(e) =>
                                     (e.currentTarget.style.background = "var(--color-hex-0f0f0f)")
                                 }
                                 onMouseLeave={(e) =>
-                                    (e.currentTarget.style.background =
-                                        sel === a.id
-                                            ? "var(--color-hex-0f0f0f)"
-                                            : i % 2
-                                              ? "var(--color-hex-0b0b0b)"
-                                              : "transparent")
+                                    (e.currentTarget.style.background = (() => {
+                                        if (sel === a.id) {
+                                            return "var(--color-hex-0f0f0f)";
+                                        }
+                                        if (i % 2) {
+                                            return "var(--color-hex-0b0b0b)";
+                                        }
+                                        return "transparent";
+                                    })())
                                 }
                             >
                                 <td className="px-[12px] py-[7px] text-[9px] font-bold text-[var(--color-hex-e31b23)]">
@@ -1823,7 +1839,10 @@ function EvidencePanel() {
                     }}
                 >
                     {(() => {
-                        const a = EVIDENCE_ARTIFACTS.find((x) => x.id === sel)!;
+                        const a = EVIDENCE_ARTIFACTS.find((x) => x.id === sel);
+                        if (!a) {
+                            return null;
+                        }
                         return (
                             <>
                                 <div className="mb-[12px] text-[8px] tracking-[0.2em] text-[var(--color-hex-444444)]">
@@ -1986,23 +2005,29 @@ function FailuresPanel() {
                                 className="cursor-pointer"
                                 style={{
                                     borderBottom: "1px solid var(--color-hex-111111)",
-                                    background:
-                                        sel === f.id
-                                            ? "var(--color-hex-110808)"
-                                            : i % 2
-                                              ? "var(--color-hex-0b0b0b)"
-                                              : "transparent",
+                                    background: (() => {
+                                        if (sel === f.id) {
+                                            return "var(--color-hex-110808)";
+                                        }
+                                        if (i % 2) {
+                                            return "var(--color-hex-0b0b0b)";
+                                        }
+                                        return "transparent";
+                                    })(),
                                 }}
                                 onMouseEnter={(e) =>
                                     (e.currentTarget.style.background = "var(--color-hex-0f0f0f)")
                                 }
                                 onMouseLeave={(e) =>
-                                    (e.currentTarget.style.background =
-                                        sel === f.id
-                                            ? "var(--color-hex-110808)"
-                                            : i % 2
-                                              ? "var(--color-hex-0b0b0b)"
-                                              : "transparent")
+                                    (e.currentTarget.style.background = (() => {
+                                        if (sel === f.id) {
+                                            return "var(--color-hex-110808)";
+                                        }
+                                        if (i % 2) {
+                                            return "var(--color-hex-0b0b0b)";
+                                        }
+                                        return "transparent";
+                                    })())
                                 }
                             >
                                 <td className="px-[12px] py-[7px] text-[9px] font-bold text-[var(--color-hex-e31b23)]">
@@ -2051,7 +2076,10 @@ function FailuresPanel() {
                     }}
                 >
                     {(() => {
-                        const f = FAILURE_LOG.find((x) => x.id === sel)!;
+                        const f = FAILURE_LOG.find((x) => x.id === sel);
+                        if (!f) {
+                            return null;
+                        }
                         return (
                             <>
                                 <div className="mb-[12px] text-[8px] tracking-[0.2em] text-[var(--color-hex-444444)]">
@@ -2094,12 +2122,15 @@ function FailuresPanel() {
                                         <div
                                             className="text-[10px]"
                                             style={{
-                                                color:
-                                                    r.k === "RESOLVED"
-                                                        ? f.resolved
-                                                            ? "var(--color-hex-3fb950)"
-                                                            : "var(--color-hex-d29922)"
-                                                        : "var(--color-hex-888888)",
+                                                color: (() => {
+                                                    if (r.k === "RESOLVED" && f.resolved) {
+                                                        return "var(--color-hex-3fb950)";
+                                                    }
+                                                    if (r.k === "RESOLVED") {
+                                                        return "var(--color-hex-d29922)";
+                                                    }
+                                                    return "var(--color-hex-888888)";
+                                                })(),
                                             }}
                                         >
                                             {r.v}
