@@ -121,12 +121,15 @@ export default function EvaluationScreen({ entry = DEFAULT_ENTRY }: { entry?: Ev
                                         className="h-[7px] w-[7px] rounded-[1px]"
                                         style={{
                                             border: `1px solid ${i <= VALUE ? "var(--color-hex-e31b23)" : "var(--color-hex-292929)"}`,
-                                            background:
-                                                i < VALUE
-                                                    ? "var(--color-hex-e31b23)"
-                                                    : i === VALUE
-                                                      ? "var(--color-hex-ff2a32)"
-                                                      : "transparent",
+                                            background: (() => {
+                                                if (i < VALUE) {
+                                                    return "var(--color-hex-e31b23)";
+                                                }
+                                                if (i === VALUE) {
+                                                    return "var(--color-hex-ff2a32)";
+                                                }
+                                                return "transparent";
+                                            })(),
                                         }}
                                     />
                                     {i === VALUE && (
@@ -141,12 +144,15 @@ export default function EvaluationScreen({ entry = DEFAULT_ENTRY }: { entry?: Ev
                                                 i === VALUE
                                                     ? "var(--color-hex-e31b23)"
                                                     : "var(--color-hex-333333)",
-                                            transform:
-                                                i === 5
-                                                    ? "translateX(-90%)"
-                                                    : i === 0
-                                                      ? "translateX(-10%)"
-                                                      : "translateX(-50%)",
+                                            transform: (() => {
+                                                if (i === 5) {
+                                                    return "translateX(-90%)";
+                                                }
+                                                if (i === 0) {
+                                                    return "translateX(-10%)";
+                                                }
+                                                return "translateX(-50%)";
+                                            })(),
                                             left: `${(i / 5) * 100}%`,
                                         }}
                                     >

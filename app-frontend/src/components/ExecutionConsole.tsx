@@ -235,6 +235,13 @@ export default function ExecutionConsole() {
                                 borderBottom: "1px solid var(--color-hex-0e0e0e)",
                             }}
                             onClick={() => setDrawer(e)}
+                            onKeyDown={(ev) => {
+                                if (ev.key === "Enter" || ev.key === " ") {
+                                    setDrawer(e);
+                                }
+                            }}
+                            role="button"
+                            tabIndex={0}
                             onMouseEnter={(ev) =>
                                 (ev.currentTarget.style.background = "var(--color-hex-0d0d0d)")
                             }
@@ -524,9 +531,9 @@ Nmap done: 1 IP address scanned in 12.3 seconds`}
                                 cost:
                                     entry.duration !== "—" ? `~$0.0${entry.id.slice(-2)}` : "$0.00",
                             },
-                        ].map((r, i) => (
+                        ].map((r) => (
                             <div
-                                key={i}
+                                key={r.step}
                                 className="overflow-hidden rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)]"
                                 style={{
                                     display: "flex",
