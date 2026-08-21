@@ -14,7 +14,6 @@ help:
 	@echo "  make dev                    Start dev server"
 	@echo "  make build                  Build for production"
 	@echo "  make format                 Format codebase with Prettier"
-	@echo "  make format-check           Check formatting with Prettier"
 	@echo "  make lint                   Lint codebase with ESLint"
 	@echo "  make clean                  Clean all build artifacts and caches"
 	@echo "  make paper                  Build the Research Paper PDF"
@@ -40,10 +39,6 @@ build:
 format:
 	@echo "✨ Formatting frontend code with Prettier..."
 	cd app-frontend && npm run format
-
-format-check:
-	@echo "🔍 Checking frontend formatting with Prettier..."
-	cd app-frontend && npm run format:check
 
 lint:
 	@echo "🔍 Linting frontend code with ESLint..."
