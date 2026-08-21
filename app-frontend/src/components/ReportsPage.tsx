@@ -171,11 +171,11 @@ export default function ReportsPage() {
                             }}
                             onMouseEnter={(e) => {
                                 if (sel.id !== r.id)
-                                    e.currentTarget.style.background = "var(--color-hex-0a0a0a)";
+                                    {e.currentTarget.style.background = "var(--color-hex-0a0a0a)";}
                             }}
                             onMouseLeave={(e) => {
                                 if (sel.id !== r.id)
-                                    e.currentTarget.style.background = "transparent";
+                                    {e.currentTarget.style.background = "transparent";}
                             }}
                         >
                             <div className="mb-1 flex items-center justify-between">

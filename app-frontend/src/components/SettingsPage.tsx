@@ -54,10 +54,10 @@ export default function SettingsPage() {
                                 t === tab ? "var(--color-hex-f2f2f2)" : "var(--color-hex-555555)",
                         }}
                         onMouseEnter={(e) => {
-                            if (t !== tab) e.currentTarget.style.color = "var(--color-hex-a0a0a0)";
+                            if (t !== tab) {e.currentTarget.style.color = "var(--color-hex-a0a0a0)";}
                         }}
                         onMouseLeave={(e) => {
-                            if (t !== tab) e.currentTarget.style.color = "var(--color-hex-555555)";
+                            if (t !== tab) {e.currentTarget.style.color = "var(--color-hex-555555)";}
                         }}
                     >
                         {t}
@@ -325,9 +325,7 @@ function GeneralSettings() {
             </Field>
             <Field label="ROE TEXT">
                 <textarea
-                    defaultValue={
-                        "No destructive actions. No data exfiltration beyond evidence collection. No lateral movement beyond defined scope. Stop on any sign of production data exposure. Authorized targets only."
-                    }
+                    defaultValue="No destructive actions. No data exfiltration beyond evidence collection. No lateral movement beyond defined scope. Stop on any sign of production data exposure. Authorized targets only."
                     className="font-inherit min-h-[80px] w-full rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)] bg-[var(--color-hex-0d0d0d)] px-[12px] py-[10px] text-[10px] leading-[1.8] tracking-[0.04em] text-[var(--color-hex-888888)] outline-none"
                     style={{
                         resize: "vertical",
@@ -465,7 +463,7 @@ function MissionsSettings() {
                 <Chips options={["ONE-DAY", "ZERO-DAY"]} value={mode} onChange={setMode} />
             </Field>
             <SectionHead label="AUTOMATION" />
-            <ToggleRow label="AUTO-START VALIDATION AFTER EXPLOIT" on={true} />
+            <ToggleRow label="AUTO-START VALIDATION AFTER EXPLOIT" on />
             <ToggleRow label="EARLY-STOP ON CRITICAL FINDING" on={false} />
             <SaveBar />
         </div>
@@ -572,7 +570,7 @@ function ValidationSettings() {
                 onChange={setTimeout_}
             />
             <SectionHead label="REQUIREMENTS" />
-            <ToggleRow label="REQUIRE ORACLE FOR CRITICAL FINDINGS" on={true} />
+            <ToggleRow label="REQUIRE ORACLE FOR CRITICAL FINDINGS" on />
             <SaveBar />
         </div>
     );
@@ -645,7 +643,7 @@ function SecuritySettings() {
     return (
         <div className="max-w-[600px] flex-1 overflow-y-auto px-6 py-6">
             <SectionHead label="AUTHENTICATION" />
-            <ToggleRow label="REQUIRE MFA" on={true} />
+            <ToggleRow label="REQUIRE MFA" on />
             <FieldRow
                 label="SESSION TIMEOUT"
                 unit="minutes"

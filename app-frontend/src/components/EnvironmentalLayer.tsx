@@ -834,11 +834,11 @@ export default function EnvironmentalLayer() {
                             }}
                             onMouseEnter={(e) => {
                                 if (t !== tab)
-                                    e.currentTarget.style.color = "var(--color-hex-888888)";
+                                    {e.currentTarget.style.color = "var(--color-hex-888888)";}
                             }}
                             onMouseLeave={(e) => {
                                 if (t !== tab)
-                                    e.currentTarget.style.color = "var(--color-hex-444444)";
+                                    {e.currentTarget.style.color = "var(--color-hex-444444)";}
                             }}
                         >
                             {t}

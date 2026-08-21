@@ -453,9 +453,9 @@ export default function MissionWorkspace({ missionId = "CVE-001" }: { missionId?
     }, [paused]);
     useEffect(() => {
         const iv = setInterval(() => {
-            if (pausedRef.current) return;
+            if (pausedRef.current) {return;}
             const next = queue.current.shift();
-            if (!next) return;
+            if (!next) {return;}
             setLog((prev) =>
                 [
                     {
@@ -591,11 +591,11 @@ export default function MissionWorkspace({ missionId = "CVE-001" }: { missionId?
                                     }}
                                     onMouseEnter={(e) => {
                                         if (!active)
-                                            e.currentTarget.style.color = "var(--color-hex-888888)";
+                                            {e.currentTarget.style.color = "var(--color-hex-888888)";}
                                     }}
                                     onMouseLeave={(e) => {
                                         if (!active)
-                                            e.currentTarget.style.color = "var(--color-hex-555555)";
+                                            {e.currentTarget.style.color = "var(--color-hex-555555)";}
                                     }}
                                 >
                                     {item.id === "findings" ? (

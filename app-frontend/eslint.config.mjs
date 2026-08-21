@@ -4,10 +4,6 @@ import { fileURLToPath } from "url";
 
 import nextCoreWebVitals from "eslint-config-next/core-web-vitals";
 import tseslint from "typescript-eslint";
-import pluginReact from "eslint-plugin-react";
-import pluginReactHooks from "eslint-plugin-react-hooks";
-import pluginJsxA11y from "eslint-plugin-jsx-a11y";
-import pluginImport from "eslint-plugin-import";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -149,8 +145,10 @@ export default tseslint.config(
                 {
                     props: true,
                     ignorePropertyModificationsFor: [
-                        "acc", // Reducer accumulators
-                        "ref", // React refs
+                        "acc",   // Reducer accumulators
+                        "ref",   // React refs
+                        "e",     // Event objects (e.target.value etc.)
+                        "event", // Event objects (event.target.value etc.)
                     ],
                 },
             ],

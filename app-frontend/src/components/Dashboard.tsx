@@ -177,7 +177,7 @@ export default function Dashboard({ onNewMission, onOpenMission }: DashboardProp
     useEffect(() => {
         const interval = setInterval(() => {
             const next = eventQueue.current.shift();
-            if (!next) return;
+            if (!next) {return;}
             const entry: ActivityEntry = { ...next, id: nextId.current++ };
             setActivity((prev) => [entry, ...prev].slice(0, 40));
         }, 2800);

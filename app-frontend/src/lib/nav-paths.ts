@@ -1,4 +1,4 @@
-import type { NavItem } from "@/components/Shell";
+import  { type NavItem } from "@/components/Shell";
 
 export const NAV_PATHS: Record<NavItem, string> = {
     dashboard: "/dashboard",
@@ -25,9 +25,9 @@ const PATH_TO_NAV: [string, NavItem][] = Object.entries(NAV_PATHS)
     .sort((a, b) => b[0].length - a[0].length);
 
 export function navItemForPath(pathname: string): NavItem {
-    if (pathname.startsWith("/missions")) return "missions";
+    if (pathname.startsWith("/missions")) {return "missions";}
     for (const [path, nav] of PATH_TO_NAV) {
-        if (pathname === path || pathname.startsWith(path + "/")) return nav;
+        if (pathname === path || pathname.startsWith(`${path  }/`)) {return nav;}
     }
     return "dashboard";
 }

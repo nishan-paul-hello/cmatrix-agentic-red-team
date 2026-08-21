@@ -33,6 +33,6 @@ export function MissionProvider({ children }: { children: ReactNode }) {
 
 export function useMission(): MissionContextValue {
     const ctx = useContext(MissionContext);
-    if (!ctx) throw new Error("useMission must be used within MissionProvider");
+    if (!ctx) {throw new Error("useMission must be used within MissionProvider");}
     return ctx;
 }

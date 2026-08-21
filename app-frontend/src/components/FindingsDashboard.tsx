@@ -821,7 +821,7 @@ function EvidenceViewer({ inline }: { inline?: boolean }) {
                                     }
                                 </span>
                             </div>
-                            {"]"}
+                            ]
                             <br />
                             {"}"}
                         </div>

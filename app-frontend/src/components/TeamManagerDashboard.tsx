@@ -473,7 +473,7 @@ function UCBModal({ entry, onClose }: { entry: VDGEntry; onClose: () => void }) 
     // F10: ESC key closes modal
     useEffect(() => {
         function onKey(e: KeyboardEvent) {
-            if (e.key === "Escape") onClose();
+            if (e.key === "Escape") {onClose();}
         }
         window.addEventListener("keydown", onKey);
         return () => window.removeEventListener("keydown", onKey);
