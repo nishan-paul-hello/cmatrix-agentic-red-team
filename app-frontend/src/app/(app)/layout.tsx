@@ -1,67 +1,98 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Shell, { type NavItem } from "@/components/Shell";
 import CommandPalette from "@/components/CommandPalette";
-import { useAuth } from "@/lib/auth-context";
 import { MissionProvider, useMission } from "@/lib/mission-context";
 import { NAV_PATHS, navItemForPath } from "@/lib/nav-paths";
+import { useAuthGuard } from "@/lib/hooks/useAuthGuard";
+
+// ─── Inner layout (needs MissionProvider context) ─────────────────────────────
 
 function AppLayoutInner({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
-  const { authenticated } = useAuth();
   const { activeMissionId, setActiveMissionId } = useMission();
   const [paletteOpen, setPaletteOpen] = useState(false);
 
-  useEffect(() => {
-    if (!authenticated) router.replace("/login");
-  }, [authenticated, router]);
+  // Redirect to /login when unauthenticated. Returns false while pending.
+  const isReady = useAuthGuard();
 
+  // Global keyboard shortcut: Ctrl/⌘ + K → open command palette.
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
       if ((e.ctrlKey || e.metaKey) && e.key === "k") {
         e.preventDefault();
-        setPaletteOpen((p) => !p);
+        setPaletteOpen((prev) => !prev);
       }
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  function handleNavChange(id: NavItem) {
-    router.push(NAV_PATHS[id]);
-  }
+  const handleNavChange = useCallback(
+    (id: NavItem) => {
+      router.push(NAV_PATHS[id]);
+    },
+    [router],
+  );
 
-  function handlePaletteNav(id: string) {
-    const navMap: Record<string, () => void> = {
-      "go-dashboard": () => router.push(NAV_PATHS.dashboard),
-      "go-missions": () => router.push(NAV_PATHS.missions),
-      "go-benchmarks": () => router.push(NAV_PATHS.benchmarks),
-      "go-reports": () => router.push(NAV_PATHS.reports),
-      "go-audit": () => router.push(NAV_PATHS["audit-log"]),
-      "go-settings": () => router.push(NAV_PATHS.settings),
-      "act-new": () => router.push("/missions/new"),
-      "m-cve001": () => {
+  const handlePaletteNav = useCallback(
+    (id: string) => {
+      // For simple nav items, derive path from NAV_PATHS via a prefix mapping.
+      const PALETTE_NAV_MAP: Record<string, NavItem> = {
+        "go-dashboard": "dashboard",
+        "go-missions": "missions",
+        "go-benchmarks": "benchmarks",
+        "go-reports": "reports",
+        "go-audit": "audit-log",
+        "go-settings": "settings",
+      };
+
+      if (id in PALETTE_NAV_MAP) {
+        router.push(NAV_PATHS[PALETTE_NAV_MAP[id]]);
+        return;
+      }
+
+      // Special actions that don't map directly to a NavItem path.
+      if (id === "act-new") {
+        router.push("/missions/new");
+        return;
+      }
+
+      if (id === "m-cve001") {
         setActiveMissionId("CVE-001");
         router.push("/missions/CVE-001");
-      },
-    };
-    navMap[id]?.();
-  }
+      }
+    },
+    [router, setActiveMissionId],
+  );
 
-  if (!authenticated) return null;
+  // Don't render children until auth state is confirmed.
+  if (!isReady) return null;
 
   return (
     <>
-      <Shell activeNav={navItemForPath(pathname)} onNavChange={handleNavChange} missionId={activeMissionId}>
+      <Shell
+        activeNav={navItemForPath(pathname)}
+        onNavChange={handleNavChange}
+        missionId={activeMissionId}
+      >
         {children}
       </Shell>
-      {paletteOpen && <CommandPalette onClose={() => setPaletteOpen(false)} onNavigate={handlePaletteNav} />}
+
+      {paletteOpen && (
+        <CommandPalette
+          onClose={() => setPaletteOpen(false)}
+          onNavigate={handlePaletteNav}
+        />
+      )}
     </>
   );
 }
+
+// ─── Exported layout ──────────────────────────────────────────────────────────
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
