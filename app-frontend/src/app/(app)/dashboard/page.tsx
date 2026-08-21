@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 
-import Dashboard from "@/components/Dashboard";
+import Dashboard from "@/features/core/components/Dashboard";
 import { useMission } from "@/lib/mission-context";
 
 export default function DashboardPage() {
