@@ -4,17 +4,17 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: {
-    default: "CMatrix — Autonomous VAPT",
-    template: "%s | CMatrix",
+    default: "CMATRIX - Agentic Red Team",
+    template: "%s | CMATRIX",
   },
   description:
-    "CMatrix is an autonomous vulnerability assessment and penetration testing platform powered by multi-agent AI.",
+    "CMATRIX is an LLM-orchestrated multi-agent framework designed for autonomous vulnerability assessment and penetration testing.",
   metadataBase: new URL("https://cmatrix.internal"),
   openGraph: {
-    title: "CMatrix — Autonomous VAPT",
+    title: "CMATRIX - Agentic Red Team",
     description:
       "Autonomous vulnerability assessment and penetration testing.",
-    siteName: "CMatrix",
+    siteName: "CMATRIX",
     type: "website",
   },
   robots: {

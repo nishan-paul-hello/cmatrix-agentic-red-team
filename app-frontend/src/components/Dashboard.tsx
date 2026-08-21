@@ -81,9 +81,6 @@ export default function Dashboard({ onNewMission, onOpenMission }: DashboardProp
           <h1 className="text-[20px] font-bold text-[var(--color-hex-f2f2f2)] tracking-[0.12em]">
             COMMAND CENTER
           </h1>
-          <span className="text-[10px] text-[var(--color-hex-444444)] tracking-[0.18em]">
-            AUTONOMOUS VAPT OPERATIONS
-          </span>
         </div>
       </div>
 

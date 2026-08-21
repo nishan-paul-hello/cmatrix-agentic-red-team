@@ -42,7 +42,7 @@ export default function Login({ onLogin }: LoginProps) {
               CMATRIX
             </span>
             <span className="font-normal text-[9px] text-[var(--color-hex-666666)] tracking-[0.28em]">
-              AUTONOMOUS VAPT
+              AGENTIC RED TEAM
             </span>
           </div>
         </div>

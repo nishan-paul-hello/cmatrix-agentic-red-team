@@ -56,7 +56,7 @@ const REPORTS = [{
 }];
 const PREVIEW_SECTIONS = [{
   title: "EXECUTIVE SUMMARY",
-  content: "CMatrix autonomous VAPT agent completed mission CVE-001 against target app.targetcorp.com. 7 vulnerabilities identified, 3 oracle-confirmed. Critical finding: time-based SQL injection in /api/users endpoint grants full database read access."
+  content: "CMATRIX completed mission CVE-001 against target app.targetcorp.com. 7 vulnerabilities identified, 3 oracle-confirmed. Critical finding: time-based SQL injection in /api/users endpoint grants full database read access."
 }, {
   title: "CRITICAL FINDINGS",
   items: [{
@@ -160,7 +160,7 @@ export default function ReportsPage() {
             </div> : <div className="flex-1 overflow-y-auto px-8 py-6 max-w-[720px]">
               {/* Report cover block */}
               <div className="border-[1px] border-solid border-[var(--color-hex-1e1e1e)] rounded-[2px] py-[20px] px-[24px] bg-[var(--color-hex-0d0d0d)] mb-[24px]">
-                <div className="text-[8.5px] text-[var(--color-hex-444444)] tracking-[0.2em] mb-[6px]">CMATRIX AUTONOMOUS VAPT REPORT</div>
+                <div className="text-[8.5px] text-[var(--color-hex-444444)] tracking-[0.2em] mb-[6px]">CMATRIX REPORT</div>
                 <div className="text-[18px] font-bold text-[var(--color-hex-f2f2f2)] tracking-[0.1em] mb-[4px]">{sel.type}</div>
                 <div className="text-[9px] text-[var(--color-hex-e31b23)] tracking-[0.1em] mb-[12px]">MISSION {sel.mission}</div>
                 <div className="flex gap-6">

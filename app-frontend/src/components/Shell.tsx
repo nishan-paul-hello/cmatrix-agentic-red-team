@@ -148,7 +148,7 @@ export default function Shell({
               CMATRIX
             </span>
             <span className="text-[7px] text-[var(--color-hex-666666)] tracking-[0.2em]">
-              AUTONOMOUS VAPT
+              AGENTIC RED TEAM
             </span>
           </div>
         </div>
