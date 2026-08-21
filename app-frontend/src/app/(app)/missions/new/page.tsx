@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 
-import NewMissionWizard from "@/components/NewMissionWizard";
+import NewMissionWizard from "@/features/missions/components/wizard/NewMissionWizard";
 import { useMission } from "@/lib/mission-context";
 
 export default function NewMission() {
