@@ -7,7 +7,7 @@ export const ENTRIES: ExecEntry[] = [
         specialist: "INJECT-SPEC",
         command: {
             name: "sqli_blind_time",
-            tool: "sqlmap",
+            tool: { id: "sqlmap" },
         },
         duration: "6.2s",
         status: TASK_STATUS.RUNNING,
@@ -20,7 +20,7 @@ export const ENTRIES: ExecEntry[] = [
         specialist: "INJECT-SPEC",
         command: {
             name: "sqli_payload_dispatch",
-            tool: "curl",
+            tool: { id: "curl" },
         },
         duration: "4.2s",
         status: TASK_STATUS.SUCCESS,
@@ -33,7 +33,7 @@ export const ENTRIES: ExecEntry[] = [
         specialist: "VALID-AGENT",
         command: {
             name: "oracle_test",
-            tool: "cve_bench",
+            tool: { id: "cve_bench" },
             target: "AUTH-001",
         },
         duration: "3.1s",
@@ -47,7 +47,7 @@ export const ENTRIES: ExecEntry[] = [
         specialist: "AUTH-SPEC",
         command: {
             name: "exploit_auth",
-            tool: "requests",
+            tool: { id: "requests" },
         },
         duration: "1.8s",
         status: TASK_STATUS.SUCCESS,
@@ -60,7 +60,7 @@ export const ENTRIES: ExecEntry[] = [
         specialist: "INJECT-SPEC",
         command: {
             name: "sqli_error_probe",
-            tool: "curl",
+            tool: { id: "curl" },
         },
         duration: "2.1s",
         status: TASK_STATUS.SUCCESS,
@@ -73,7 +73,7 @@ export const ENTRIES: ExecEntry[] = [
         specialist: "RECON-SPEC",
         command: {
             name: "endpoint_enumerate",
-            tool: "spider",
+            tool: { id: "spider" },
         },
         duration: "18.4s",
         status: TASK_STATUS.SUCCESS,
@@ -86,7 +86,7 @@ export const ENTRIES: ExecEntry[] = [
         specialist: "NETWORK-SPEC",
         command: {
             name: "lateral_pivot",
-            tool: "nmap",
+            tool: { id: "nmap" },
         },
         duration: "30.0s",
         status: TASK_STATUS.TIMEOUT,
@@ -99,7 +99,7 @@ export const ENTRIES: ExecEntry[] = [
         specialist: "RECON-SPEC",
         command: {
             name: "service_scan",
-            tool: "nmap",
+            tool: { id: "nmap" },
         },
         duration: "12.3s",
         status: TASK_STATUS.SUCCESS,
@@ -108,8 +108,13 @@ export const ENTRIES: ExecEntry[] = [
     },
 ];
 
-export function getExecutionEntries(): Promise<ExecEntry[]> {
-    return Promise.resolve(ENTRIES);
+export async function getExecutionEntries(options?: {
+    page?: number;
+    limit?: number;
+}): Promise<ExecEntry[]> {
+    const { page = 1, limit = 50 } = options ?? {};
+    const start = (page - 1) * limit;
+    return Promise.resolve(ENTRIES.slice(start, start + limit));
 }
 
 export const PARSED_ROWS = [
