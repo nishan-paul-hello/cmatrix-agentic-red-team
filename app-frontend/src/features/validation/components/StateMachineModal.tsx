@@ -32,8 +32,12 @@ export default function StateMachineModal({
                 return "RETRY";
             case "VALIDATED":
                 return "VALIDATED";
-            case "RULED OUT":
-                return "RULED OUT";
+            case "RULED_OUT":
+                return "RULED_OUT";
+            case "ORACLE_CONFIRMED":
+                return "ORACLE_CONFIRMED";
+            case "ORACLE CONFIRMED":
+                return "ORACLE_CONFIRMED";
             default:
                 return null;
         }
@@ -138,7 +142,7 @@ export default function StateMachineModal({
             border: "var(--color-hex-33333344)",
         },
         {
-            id: "RULED OUT",
+            id: "RULED_OUT",
             x: 420,
             y: 410,
             w: 100,
