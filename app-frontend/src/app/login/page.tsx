@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 
-import Login from "@/components/Login";
+import Login from "@/features/auth/components/Login";
 import { useAuth } from "@/lib/auth-context";
 
 export default function LoginPage() {
