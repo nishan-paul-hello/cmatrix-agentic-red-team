@@ -1,47 +1,46 @@
 # app-frontend
 
-React + Vite + Tailwind CSS project.
+React + Next.js (App Router) + Tailwind CSS project.
 
 ## Development Server
-
-Start the dev server with:
 
 ```
 npm install
 npm run dev
 ```
 
-By default it runs on port 8443 (override with the `PORT` env var).
-
-- Preview URL: http://localhost:8443 (or your configured `PORT`)
-- Hot reload: changes to source files are reflected immediately
+Runs on http://localhost:3000 by default.
 
 ## Project Structure
 
-This is the canonical project structure. Start with task-relevant files below. Only follow imports or inspect other files when required, when a documented path is missing, or when the repository contradicts this guide.
+- `src/app/layout.tsx` - Root layout; sets page metadata (title) and loads global styles
+- `src/app/page.tsx` - Root route (`/`); renders `AppShell`, the client-side application
+- `src/app/globals.css` - Global CSS entrypoint and Tailwind CSS v4 import
+- `src/components/AppShell.tsx` - Primary application component (client component) — the usual starting point for UI work; owns top-level view/navigation state
+- `src/components/*` - UI components used by `AppShell`
+- `src/lib/*` - Shared constants and data
+- `next.config.ts` - Next.js configuration
+- `postcss.config.mjs` - PostCSS configuration wiring up the Tailwind CSS v4 plugin
 
-- `src/main.tsx` - React entrypoint; imports `src/index.css` and mounts `src/App.tsx` into the `#root` element
-- `src/App.tsx` - Primary application component and the usual starting point for UI work
-- `src/index.css` - Global CSS entrypoint and Tailwind CSS v4 import
-- `index.html` - Vite HTML shell containing the `#root` element and loading `src/main.tsx`
-- `package.json` - Project dependencies and the Vite build, development, preview, and formatting scripts
-- `vite.config.ts` - Vite configuration with the React and Tailwind CSS v4 plugins plus the `@` alias for `src`
+## Routing
+
+This app currently renders as a single client-side view (`AppShell`) mounted at `/`, matching its original single-page navigation model (in-memory view state, not URL-based routing). Additional routes can be added under `src/app/` using standard Next.js App Router conventions (e.g. `src/app/missions/page.tsx`) if URL-based routing is introduced later.
 
 ## Dependencies
 
-- Runtime: React 19 and React DOM 19
-- Styling: Tailwind CSS v4 with the `@tailwindcss/vite` plugin
-- Build tooling: Vite 8, TypeScript 5.7, and `@vitejs/plugin-react`
+- Runtime: React 19, React DOM 19, Next.js 16 (App Router)
+- Styling: Tailwind CSS v4 via `@tailwindcss/postcss`
+- Build tooling: TypeScript 5.7
+- Linting: ESLint 9 with `eslint-config-next`
 - Formatting: oxfmt
 
 ## Styling
 
-This project uses **Tailwind CSS v4** through the `@tailwindcss/vite` plugin configured in `vite.config.ts`. `src/index.css` imports Tailwind with `@import 'tailwindcss';`. Use Tailwind utility classes directly in JSX and put global CSS or Tailwind v4 theme customization in `src/index.css`. This scaffold does not need a Tailwind config file or PostCSS config.
-
-`src/main.tsx` imports `src/index.css`, so global font wiring belongs in `src/index.css`. Keep CSS `@import` statements first, then add any `@font-face` rules and font-family defaults there.
+Tailwind CSS v4 is wired up via `@tailwindcss/postcss` in `postcss.config.mjs`. `src/app/globals.css` imports Tailwind with `@import 'tailwindcss';` and defines the monospace font theme. This scaffold does not need a `tailwind.config.js` file.
 
 ## Code quality
 
-- Use double quotes for strings containing apostrophes (`"We're here to help"`), or escape them in single-quoted strings. An unescaped apostrophe in a single-quoted string breaks the build.
+- Use double quotes for strings containing apostrophes (`"We're here to help"`), or escape them in single-quoted strings.
 - Ensure JSX tags are closed and braces are balanced.
 - Export components as default exports.
+- Components under `src/components/` that use React state/effects/browser APIs must keep the `"use client"` directive at the top of the file.
