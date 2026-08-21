@@ -2,6 +2,7 @@
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 import nextCoreWebVitals from "eslint-config-next/core-web-vitals";
+import unusedImports from "eslint-plugin-unused-imports";
 import tseslint from "typescript-eslint";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -39,6 +40,9 @@ export default tseslint.config(
 
     // ── Project-wide settings and rules ─────────────────────────────────────
     {
+        plugins: {
+            "unused-imports": unusedImports,
+        },
         settings: {
             react: { version: "detect" },
             "import/resolver": {
@@ -52,7 +56,9 @@ export default tseslint.config(
         rules: {
             // ── TypeScript ──────────────────────────────────────────────────
             "@typescript-eslint/no-explicit-any": "error",
-            "@typescript-eslint/no-unused-vars": [
+            "@typescript-eslint/no-unused-vars": "off",
+            "unused-imports/no-unused-imports": "error",
+            "unused-imports/no-unused-vars": [
                 "error",
                 { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
             ],
@@ -85,6 +91,7 @@ export default tseslint.config(
 
             // ── React ───────────────────────────────────────────────────────
             "react/react-in-jsx-scope": "off",
+            "react/jsx-uses-react": "off",
             "react/prop-types": "off",
             "react/jsx-no-target-blank": "error",
             "react/jsx-key": ["error", { checkFragmentShorthand: true }],
