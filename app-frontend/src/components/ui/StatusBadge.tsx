@@ -3,8 +3,14 @@
  * Previously duplicated verbatim in Dashboard.tsx and MissionsPage.tsx.
  */
 
-type StatusValue =
-    "RUNNING" | "PAUSED" | "VALIDATING" | "QUEUED" | "COMPLETED" | "FAILED" | (string & {});
+import {
+    MISSION_STATUS,
+    TASK_STATUS,
+    type MissionStatus,
+    type TaskStatus,
+} from "@/types/domain-types";
+
+type StatusValue = MissionStatus | TaskStatus | (string & {});
 
 interface StatusConfig {
     bg: string;
@@ -12,29 +18,42 @@ interface StatusConfig {
 }
 
 const STATUS_MAP: Record<string, StatusConfig> = {
-    RUNNING: {
+    [MISSION_STATUS.RUNNING]: {
         bg: "var(--color-hex-0d2010)",
         color: "var(--color-hex-3fb950)",
     },
-    PAUSED: {
+    [MISSION_STATUS.PAUSED]: {
         bg: "var(--color-hex-1a1a00)",
         color: "var(--color-hex-d29922)",
     },
-    VALIDATING: {
+    [MISSION_STATUS.VALIDATING]: {
         bg: "var(--color-hex-1a0a0b)",
         color: "var(--color-hex-ff2a32)",
     },
-    QUEUED: {
+    [MISSION_STATUS.QUEUED]: {
         bg: "var(--color-hex-111111)",
         color: "var(--color-hex-666666)",
     },
-    COMPLETED: {
+    [MISSION_STATUS.COMPLETED]: {
         bg: "var(--color-hex-0a1a10)",
         color: "var(--color-hex-3fb950)",
     },
-    FAILED: {
+    [MISSION_STATUS.FAILED]: {
         bg: "var(--color-hex-1a0808)",
         color: "var(--color-hex-ff2a32)",
+    },
+    // Adding Task specific statuses just in case they differ later
+    [TASK_STATUS.SUCCESS]: {
+        bg: "var(--color-hex-0a1a10)",
+        color: "var(--color-hex-3fb950)",
+    },
+    [TASK_STATUS.TIMEOUT]: {
+        bg: "var(--color-hex-1a1a00)",
+        color: "var(--color-hex-d29922)",
+    },
+    [TASK_STATUS.PENDING]: {
+        bg: "var(--color-hex-111111)",
+        color: "var(--color-hex-666666)",
     },
 };
 
