@@ -1,6 +1,9 @@
 import React from "react";
 
+import { AUDIT_EVENT } from "@/features/audit/hooks/useAuditFeed";
 import { useTelemetry } from "@/hooks/useTelemetry";
+import { useServices } from "@/lib/services-context";
+import { type AuditEntry } from "@/types/domain-types";
 
 import { STEPS, type TargetType, type WizardProps } from "../../data/wizardMockData";
 import { useNewMissionWizard } from "../../hooks/useNewMissionWizard";
@@ -39,6 +42,7 @@ export default function NewMissionWizard({ onCancel, onStart }: WizardProps) {
         mode,
         setMode,
     } = useNewMissionWizard();
+    const { eventBus } = useServices();
     const { logEvent } = useTelemetry();
 
     const costNum = parseFloat(costCeiling) || 0;
@@ -550,6 +554,22 @@ export default function NewMissionWizard({ onCancel, onStart }: WizardProps) {
                                 setStep((s) => s + 1);
                             } else {
                                 logEvent("MISSION_CREATED", { target, targetType, surface, mode });
+                                eventBus.publish<AuditEntry>(AUDIT_EVENT, {
+                                    id: `EV-${Date.now().toString().slice(-6)}`,
+                                    ts: new Date().toLocaleTimeString("en-US", {
+                                        hour12: false,
+                                        hour: "2-digit",
+                                        minute: "2-digit",
+                                        second: "2-digit",
+                                    }),
+                                    type: "MISSION",
+                                    actor: "user",
+                                    action: "CREATE",
+                                    resource: `mission/${target}`,
+                                    result: "SUCCESS",
+                                    ip: "127.0.0.1",
+                                    detail: `Created mission for ${target} (${surface}, ${mode})`,
+                                });
                                 onStart?.();
                             }
                         }}
