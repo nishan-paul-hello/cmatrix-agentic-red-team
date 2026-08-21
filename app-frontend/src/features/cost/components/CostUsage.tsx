@@ -1,8 +1,24 @@
 import React from "react";
 
-import { CEILING, SPECIALISTS_COST, TIMELINE, TOTAL } from "../data/costMockData";
+import { getCostData, type CostTimeline, type SpecialistCost } from "../data/costMockData";
 
 export default function CostUsage() {
+    const [costData, setCostData] = React.useState<{
+        TOTAL: number;
+        CEILING: number;
+        TIMELINE: CostTimeline[];
+        SPECIALISTS_COST: SpecialistCost[];
+    } | null>(null);
+
+    React.useEffect(() => {
+        void getCostData().then(setCostData);
+    }, []);
+
+    if (!costData) {
+        return null;
+    }
+    const { TOTAL, CEILING, TIMELINE, SPECIALISTS_COST } = costData;
+
     return (
         <div className="flex-1 overflow-y-auto px-6 py-5">
             {/* KPI row */}
