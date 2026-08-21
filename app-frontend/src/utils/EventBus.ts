@@ -6,7 +6,7 @@
  */
 type EventHandler<T = unknown> = (payload: T) => void;
 
-class EventBus {
+export class EventBus {
     private listeners: Record<string, EventHandler<unknown>[]> = {};
 
     subscribe<T>(event: string, callback: EventHandler<T>): () => void {
