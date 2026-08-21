@@ -4,9 +4,15 @@
  * rather than a free-form string.
  */
 
+export interface ToolDescriptor {
+    id: string;
+    version?: string;
+    category?: string;
+}
+
 export interface TaskCommand {
     name: string;
-    tool: string;
+    tool: ToolDescriptor;
     target?: string;
     params?: Record<string, string | number | boolean>;
 }
