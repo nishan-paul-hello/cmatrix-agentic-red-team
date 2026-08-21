@@ -1,6 +1,7 @@
 **/build/
 .docker_pkg_hash
 .env
+.env.production
 .vscode/
 .ruff_cache/
 .mypy_cache/
@@ -9,5 +10,3 @@ node_modules/
 # Python
 __pycache__/
 *.py[cod]
-
-docs/paper-research/remaining_files.txt
