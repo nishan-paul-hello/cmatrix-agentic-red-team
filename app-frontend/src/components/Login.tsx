@@ -137,7 +137,15 @@ export default function Login({ onLogin }: LoginProps) {
             v1.1.1
           </span>
           <span className="text-[9px] text-[var(--color-hex-333333)] tracking-[0.1em]">
-            CMATRIX © 2026
+            <a
+              href="https://kaiofficial.xyz/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#00F07C] font-semibold hover:opacity-80 transition-opacity"
+            >
+              KAI
+            </a>{" "}
+            © 2026
           </span>
         </div>
       </div>
