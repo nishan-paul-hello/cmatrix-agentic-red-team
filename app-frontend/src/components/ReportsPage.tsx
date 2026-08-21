@@ -1,115 +1,35 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const REPORTS = [
-    {
-        id: "RPT-0041",
-        mission: "CVE-001",
-        type: "EXECUTIVE SUMMARY",
-        status: "READY",
-        generated: "06:31:04",
-        findings: 7,
-        critical: 1,
-        pages: 4,
-    },
-    {
-        id: "RPT-0039",
-        mission: "CVE-001",
-        type: "TECHNICAL DETAIL",
-        status: "GENERATING",
-        generated: "—",
-        findings: 7,
-        critical: 1,
-        pages: 0,
-    },
-    {
-        id: "RPT-0031",
-        mission: "BENCH-014",
-        type: "BENCHMARK REPORT",
-        status: "READY",
-        generated: "Yesterday 22:14",
-        findings: 12,
-        critical: 3,
-        pages: 9,
-    },
-    {
-        id: "RPT-0028",
-        mission: "BENCH-013",
-        type: "BENCHMARK REPORT",
-        status: "READY",
-        generated: "Yesterday 18:07",
-        findings: 8,
-        critical: 1,
-        pages: 7,
-    },
-    {
-        id: "RPT-0022",
-        mission: "CVE-003",
-        type: "TECHNICAL DETAIL",
-        status: "READY",
-        generated: "2d ago",
-        findings: 3,
-        critical: 0,
-        pages: 6,
-    },
-    {
-        id: "RPT-0019",
-        mission: "CVE-002",
-        type: "EXECUTIVE SUMMARY",
-        status: "READY",
-        generated: "3d ago",
-        findings: 5,
-        critical: 2,
-        pages: 3,
-    },
-];
-const PREVIEW_SECTIONS = [
-    {
-        title: "EXECUTIVE SUMMARY",
-        content:
-            "CMATRIX completed mission CVE-001 against target app.targetcorp.com. 7 vulnerabilities identified, 3 oracle-confirmed. Critical finding: time-based SQL injection in /api/users endpoint grants full database read access.",
-    },
-    {
-        title: "CRITICAL FINDINGS",
-        items: [
-            {
-                sev: "CRITICAL",
-                id: "F-001",
-                name: "SQL INJECTION",
-                target: "/api/users?id=",
-                eord: "5/5",
-            },
-            {
-                sev: "HIGH",
-                id: "F-002",
-                name: "AUTH BYPASS",
-                target: "/api/auth/login",
-                eord: "4/5",
-            },
-            {
-                sev: "HIGH",
-                id: "F-003",
-                name: "IDOR",
-                target: "/api/users/:id",
-                eord: "4/5",
-            },
-        ],
-    },
-    {
-        title: "ATTACK NARRATIVE",
-        content:
-            "Agent initiated passive/active recon hybrid, discovering 12 endpoints. JWT authentication was bypassed via HS256 secret brute-force (password123, 48s). Authenticated access enabled SQL injection enumeration. Time-based blind injection confirmed via 4.18s timing delta (>3σ above baseline). Oracle validation: CVE-BENCH FILE ACCESS PASS.",
-    },
-    {
-        title: "RISK ASSESSMENT",
-        content:
-            "OVERALL RISK: CRITICAL\nPriority remediation: parameterize SQL queries (F-001), rotate JWT secrets with RS256 migration (F-002), implement ownership checks on user endpoints (F-003).\nEstimated remediation effort: 3–5 engineer-days.",
-    },
-];
+import { getReportsData, type Report } from "@/features/reports/data/fixtures/reportsMockData";
+
 export default function ReportsPage() {
-    const [sel, setSel] = useState(REPORTS[0]);
+    const [sel, setSel] = useState<Report | null>(null);
+    const [reports, setReports] = useState<Report[]>([]);
+    const [previewSections, setPreviewSections] = useState<
+        {
+            title: string;
+            content?: string;
+            items?: { sev: string; id: string; name: string; target: string; eord: string }[];
+        }[]
+    >([]);
     const [filter, setFilter] = useState<string>("ALL");
     const types = ["ALL", "EXECUTIVE SUMMARY", "TECHNICAL DETAIL", "BENCHMARK REPORT"];
-    const filtered = filter === "ALL" ? REPORTS : REPORTS.filter((r) => r.type === filter);
+
+    useEffect(() => {
+        void getReportsData().then((data) => {
+            setReports(data.reports);
+            setPreviewSections(data.previewSections);
+            if (data.reports.length > 0) {
+                setSel(data.reports[0]);
+            }
+        });
+    }, []);
+
+    const filtered = filter === "ALL" ? reports : reports.filter((r) => r.type === filter);
+
+    if (!sel) {
+        return null;
+    }
     return (
         <div className="flex h-full min-h-[0px] flex-col">
             <div
@@ -328,7 +248,7 @@ export default function ReportsPage() {
                                     ))}
                                 </div>
                             </div>
-                            {PREVIEW_SECTIONS.map((s, i) => (
+                            {previewSections.map((s, i) => (
                                 <div key={s.title} className="mb-[24px]">
                                     <div className="mb-4 flex items-center gap-3">
                                         <div className="h-[14px] w-[2px] bg-[var(--color-hex-e31b23)]" />
@@ -349,15 +269,7 @@ export default function ReportsPage() {
                                     )}
                                     {s.items && (
                                         <div className="overflow-hidden rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)]">
-                                            {(
-                                                s.items as {
-                                                    sev: string;
-                                                    id: string;
-                                                    name: string;
-                                                    target: string;
-                                                    eord: string;
-                                                }[]
-                                            ).map((item, j, a) => (
+                                            {s.items.map((item, j, a) => (
                                                 <div
                                                     key={item.id}
                                                     className="flex items-center gap-4 px-[14px] py-[9px]"
@@ -399,7 +311,7 @@ export default function ReportsPage() {
                                             ))}
                                         </div>
                                     )}
-                                    {i < PREVIEW_SECTIONS.length - 1 && (
+                                    {i < previewSections.length - 1 && (
                                         <div className="mt-[20px] h-[1px] bg-[var(--color-hex-141414)]" />
                                     )}
                                 </div>

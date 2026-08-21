@@ -1,79 +1,32 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-type Reason =
-    | "AMBIGUOUS_SCOPE"
-    | "NOVEL_VULNERABILITY"
-    | "HIGH_RISK_ACTION"
-    | "ORACLE_FAILURE"
-    | "COST_THRESHOLD";
-const REASONS: {
-    id: Reason;
-    label: string;
-    desc: string;
-    color: string;
-}[] = [
-    {
-        id: "AMBIGUOUS_SCOPE",
-        label: "AMBIGUOUS SCOPE",
-        desc: "Agent cannot determine if target is in-scope for this engagement",
-        color: "var(--color-hex-d29922)",
-    },
-    {
-        id: "NOVEL_VULNERABILITY",
-        label: "NOVEL VULNERABILITY",
-        desc: "Potential zero-day pattern detected — requires human expert verification before exploitation",
-        color: "var(--color-hex-e31b23)",
-    },
-    {
-        id: "HIGH_RISK_ACTION",
-        label: "HIGH-RISK ACTION",
-        desc: "Next action may cause irreversible damage or unintended lateral impact",
-        color: "var(--color-hex-ff2a32)",
-    },
-    {
-        id: "ORACLE_FAILURE",
-        label: "ORACLE FAILURE",
-        desc: "Validation oracle returned unexpected result — human review required",
-        color: "var(--color-hex-d29922)",
-    },
-    {
-        id: "COST_THRESHOLD",
-        label: "COST THRESHOLD",
-        desc: "Projected cost exceeds ROE ceiling — explicit authorization required to continue",
-        color: "var(--color-hex-555555)",
-    },
-];
-const CONTEXT_BLOCKS = [
-    {
-        k: "MISSION",
-        v: "CVE-001 — app.targetcorp.com",
-    },
-    {
-        k: "CURRENT NODE",
-        v: "SQLI-001 (IN_PROGRESS, E_ord 4)",
-    },
-    {
-        k: "SPECIALIST",
-        v: "INJECT-SPEC",
-    },
-    {
-        k: "RUNTIME",
-        v: "00:19:04",
-    },
-    {
-        k: "COST INCURRED",
-        v: "$0.223",
-    },
-    {
-        k: "NEXT ACTION",
-        v: "sqli_schema_dump() — full DB extraction via time-based blind",
-    },
-];
+import { getEscalationContextBlocks } from "@/features/escalation/data/fixtures/escalationMockData";
+import {
+    ESCALATION_CATEGORIES,
+    globalEscalationManager,
+    type EscalationReason,
+} from "@/features/escalation/domain/EscalationManager";
+import { useTelemetry } from "@/hooks/useTelemetry";
+
 export default function HumanEscalation() {
-    const [activeReason, setActiveReason] = useState<Reason>("HIGH_RISK_ACTION");
+    const [activeReason, setActiveReason] = useState<EscalationReason>("HIGH_RISK_ACTION");
     const [response, setResponse] = useState("");
     const [submitted, setSubmitted] = useState(false);
-    const reason = REASONS.find((r) => r.id === activeReason);
+    const { logEvent } = useTelemetry();
+    const reason = ESCALATION_CATEGORIES.find((r) => r.id === activeReason);
+    const history = globalEscalationManager.getHistory();
+
+    const [contextBlocks, setContextBlocks] = useState<{ k: string; v: string }[]>([]);
+
+    useEffect(() => {
+        void getEscalationContextBlocks().then(setContextBlocks);
+    }, []);
+
+    const handleSubmit = (type: "RESPONSE" | "AUTHORIZE_ALL" | "HALT") => {
+        setSubmitted(true);
+        logEvent("ESCALATION_APPROVED", { reason: activeReason, type, response });
+    };
+
     if (!reason) {
         return null;
     }
@@ -144,7 +97,7 @@ export default function HumanEscalation() {
                         ESCALATION CATEGORY
                     </div>
                     <div className="mb-6 flex flex-col gap-2">
-                        {REASONS.map((r) => (
+                        {ESCALATION_CATEGORIES.map((r) => (
                             <div
                                 key={r.id}
                                 onClick={() => setActiveReason(r.id)}
@@ -211,7 +164,7 @@ export default function HumanEscalation() {
                         MISSION CONTEXT
                     </div>
                     <div className="mb-[24px] overflow-hidden rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)]">
-                        {CONTEXT_BLOCKS.map((b, i, a) => (
+                        {contextBlocks.map((b, i, a) => (
                             <div
                                 key={b.k}
                                 className="flex"
@@ -290,7 +243,7 @@ export default function HumanEscalation() {
                     <div className="mt-4 flex gap-3">
                         <button
                             disabled={!response.trim()}
-                            onClick={() => response.trim() && setSubmitted(true)}
+                            onClick={() => response.trim() && handleSubmit("RESPONSE")}
                             className="font-inherit rounded-[2px] border-none px-[20px] py-[8px] text-[9.5px] tracking-[0.14em] text-[var(--color-hex-f2f2f2)]"
                             style={{
                                 background: response.trim()
@@ -311,7 +264,7 @@ export default function HumanEscalation() {
                             SEND RESPONSE
                         </button>
                         <button
-                            onClick={() => setSubmitted(true)}
+                            onClick={() => handleSubmit("AUTHORIZE_ALL")}
                             className="font-inherit cursor-pointer rounded-[2px] border-[1px] border-solid border-[var(--color-hex-3fb95044)] bg-[transparent] px-[18px] py-[8px] text-[9.5px] tracking-[0.14em] text-[var(--color-hex-3fb950)]"
                             onMouseEnter={(e) => {
                                 e.currentTarget.style.borderColor = "var(--color-hex-3fb950)";
@@ -325,7 +278,7 @@ export default function HumanEscalation() {
                             AUTHORIZE ALL
                         </button>
                         <button
-                            onClick={() => setSubmitted(true)}
+                            onClick={() => handleSubmit("HALT")}
                             className="font-inherit cursor-pointer rounded-[2px] border-[1px] border-solid border-[var(--color-hex-ff2a3244)] bg-[transparent] px-[18px] py-[8px] text-[9.5px] tracking-[0.14em] text-[var(--color-hex-ff2a32)]"
                             onMouseEnter={(e) => {
                                 e.currentTarget.style.borderColor = "var(--color-hex-ff2a32)";
@@ -356,26 +309,7 @@ export default function HumanEscalation() {
                     <div className="mb-[14px] text-[8px] tracking-[0.2em] text-[var(--color-hex-444444)]">
                         ESCALATION HISTORY
                     </div>
-                    {[
-                        {
-                            ts: "06:24:00",
-                            type: "COST THRESHOLD",
-                            status: "RESOLVED",
-                            response: "Authorized — proceed",
-                        },
-                        {
-                            ts: "05:58:00",
-                            type: "AMBIGUOUS SCOPE",
-                            status: "RESOLVED",
-                            response: "In-scope confirmed",
-                        },
-                        {
-                            ts: "04:12:00",
-                            type: "ORACLE FAILURE",
-                            status: "RESOLVED",
-                            response: "Retry with PREDIQL",
-                        },
-                    ].map((h) => (
+                    {history.map((h) => (
                         <div
                             key={h.ts}
                             className="mb-[12px]"

@@ -1,6 +1,7 @@
 import { type ReactNode } from "react";
 
 import GeometricMark from "@/components/ui/GeometricMark";
+import { MISSION_STATUS } from "@/types/domain-types";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -231,7 +232,7 @@ export default function Shell({
 
                         <TopbarStat
                             label="STATUS"
-                            value="RUNNING"
+                            value={MISSION_STATUS.RUNNING}
                             valueColor="var(--color-hex-3fb950)"
                         />
                         <TopbarStat label="MODEL" value="SONNET-5" />

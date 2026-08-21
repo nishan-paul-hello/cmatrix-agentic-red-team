@@ -1,13 +1,22 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
+import { EmptyState } from "@/components/ui/EmptyState";
 import StatusBadge from "@/components/ui/StatusBadge";
-import { MISSIONS } from "@/lib/data";
+import { MissionRepository } from "@/repositories/MissionRepository";
+import { MISSION_STATUS, type Mission, type MissionStatus } from "@/types/domain-types";
 
 // ─── Types & constants ────────────────────────────────────────────────────────
 
-type MissionFilter = "ALL" | "RUNNING" | "PAUSED" | "VALIDATING" | "QUEUED" | "COMPLETED";
+type MissionFilter = "ALL" | MissionStatus;
 
-const FILTERS: MissionFilter[] = ["ALL", "RUNNING", "PAUSED", "VALIDATING", "QUEUED", "COMPLETED"];
+const FILTERS: MissionFilter[] = [
+    "ALL",
+    MISSION_STATUS.RUNNING,
+    MISSION_STATUS.PAUSED,
+    MISSION_STATUS.VALIDATING,
+    MISSION_STATUS.QUEUED,
+    MISSION_STATUS.COMPLETED,
+];
 
 const TABLE_HEADERS = [
     "ID",
@@ -32,8 +41,17 @@ interface MissionsPageProps {
 
 export default function MissionsPage({ onNewMission, onOpenMission }: MissionsPageProps) {
     const [filter, setFilter] = useState<MissionFilter>("ALL");
+    const [missions, setMissions] = useState<Mission[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
 
-    const filtered = filter === "ALL" ? MISSIONS : MISSIONS.filter((m) => m.status === filter);
+    useEffect(() => {
+        void MissionRepository.getMissions().then((data) => {
+            setMissions(data);
+            setIsLoading(false);
+        });
+    }, []);
+
+    const filtered = filter === "ALL" ? missions : missions.filter((m) => m.status === filter);
 
     return (
         <div className="flex h-full min-h-0 flex-col">
@@ -95,50 +113,62 @@ export default function MissionsPage({ onNewMission, onOpenMission }: MissionsPa
                         </tr>
                     </thead>
                     <tbody>
-                        {filtered.map((m) => (
-                            <tr
-                                key={m.id}
-                                onClick={() => onOpenMission?.(m.id)}
-                                className="cursor-pointer border-b border-[var(--color-hex-191919)] transition-colors duration-75 hover:bg-[var(--color-hex-131313)]"
-                            >
-                                <td className="px-[16px] py-[8px] font-semibold tracking-[0.08em] whitespace-nowrap text-[var(--color-hex-e31b23)]">
-                                    {m.id}
-                                </td>
-                                <td className="cell-truncate max-w-[180px] px-[16px] py-[8px] whitespace-nowrap text-[var(--color-hex-a0a0a0)]">
-                                    {m.target}
-                                </td>
-                                <td className="px-[16px] py-[8px] text-[10px] whitespace-nowrap text-[var(--color-hex-666666)]">
-                                    {m.surface}
-                                </td>
-                                <td className="px-[16px] py-[8px] text-[10px] whitespace-nowrap text-[var(--color-hex-666666)]">
-                                    {m.mode}
-                                </td>
-                                <td className="px-[16px] py-[8px] whitespace-nowrap">
-                                    <StatusBadge status={m.status} />
-                                </td>
-                                <td className="px-[16px] py-[8px] text-right text-[var(--color-hex-a0a0a0)]">
-                                    {m.nodes}
-                                </td>
-                                <td
-                                    className="px-[16px] py-[8px] text-right"
-                                    style={{
-                                        color:
-                                            m.findings > 0
-                                                ? "var(--color-hex-ff2a32)"
-                                                : "var(--color-hex-666666)",
-                                        fontWeight: m.findings > 0 ? 600 : 400,
-                                    }}
+                        {(() => {
+                            if (isLoading) {
+                                return (
+                                    <EmptyState message="LOADING MISSIONS..." isTable colSpan={9} />
+                                );
+                            }
+                            if (filtered.length === 0) {
+                                return (
+                                    <EmptyState message="NO MISSIONS FOUND" isTable colSpan={9} />
+                                );
+                            }
+                            return filtered.map((m) => (
+                                <tr
+                                    key={m.id}
+                                    onClick={() => onOpenMission?.(m.id)}
+                                    className="cursor-pointer border-b border-[var(--color-hex-191919)] transition-colors duration-75 hover:bg-[var(--color-hex-131313)]"
                                 >
-                                    {m.findings}
-                                </td>
-                                <td className="px-[16px] py-[8px] text-right text-[var(--color-hex-a0a0a0)]">
-                                    {m.cost}
-                                </td>
-                                <td className="px-[16px] py-[8px] text-[9.5px] whitespace-nowrap text-[var(--color-hex-555555)]">
-                                    {m.started}
-                                </td>
-                            </tr>
-                        ))}
+                                    <td className="px-[16px] py-[8px] font-semibold tracking-[0.08em] whitespace-nowrap text-[var(--color-hex-e31b23)]">
+                                        {m.id}
+                                    </td>
+                                    <td className="cell-truncate max-w-[180px] px-[16px] py-[8px] whitespace-nowrap text-[var(--color-hex-a0a0a0)]">
+                                        {m.target}
+                                    </td>
+                                    <td className="px-[16px] py-[8px] text-[10px] whitespace-nowrap text-[var(--color-hex-666666)]">
+                                        {m.surface}
+                                    </td>
+                                    <td className="px-[16px] py-[8px] text-[10px] whitespace-nowrap text-[var(--color-hex-666666)]">
+                                        {m.mode}
+                                    </td>
+                                    <td className="px-[16px] py-[8px] whitespace-nowrap">
+                                        <StatusBadge status={m.status} />
+                                    </td>
+                                    <td className="px-[16px] py-[8px] text-right text-[var(--color-hex-a0a0a0)]">
+                                        {m.nodes}
+                                    </td>
+                                    <td
+                                        className="px-[16px] py-[8px] text-right"
+                                        style={{
+                                            color:
+                                                m.findings > 0
+                                                    ? "var(--color-hex-ff2a32)"
+                                                    : "var(--color-hex-666666)",
+                                            fontWeight: m.findings > 0 ? 600 : 400,
+                                        }}
+                                    >
+                                        {m.findings}
+                                    </td>
+                                    <td className="px-[16px] py-[8px] text-right text-[var(--color-hex-a0a0a0)]">
+                                        {m.cost}
+                                    </td>
+                                    <td className="px-[16px] py-[8px] text-[9.5px] whitespace-nowrap text-[var(--color-hex-555555)]">
+                                        {m.started}
+                                    </td>
+                                </tr>
+                            ));
+                        })()}
                     </tbody>
                 </table>
             </div>

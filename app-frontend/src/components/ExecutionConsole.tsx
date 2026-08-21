@@ -1,146 +1,111 @@
-import { useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
+import { useVirtualizer } from "@tanstack/react-virtual";
 
-interface ExecEntry {
-    id: string;
-    ts: string;
-    specialist: string;
-    task: string;
-    tool: string;
-    duration: string;
-    status: "SUCCESS" | "FAILED" | "TIMEOUT" | "RUNNING";
-    output: string;
-    size: string;
-}
-const ENTRIES: ExecEntry[] = [
-    {
-        id: "00484",
-        ts: "06:31:04",
-        specialist: "INJECT-SPEC",
-        task: "sqli_blind_time()",
-        tool: "sqlmap",
-        duration: "6.2s",
-        status: "RUNNING",
-        output: "",
-        size: "—",
-    },
-    {
-        id: "00483",
-        ts: "06:30:51",
-        specialist: "INJECT-SPEC",
-        task: "sqli_payload_dispatch()",
-        tool: "curl",
-        duration: "4.2s",
-        status: "SUCCESS",
-        output: "HTTP 200 · 4.18s delta · timing confirmed",
-        size: "1.2 KB",
-    },
-    {
-        id: "00482",
-        ts: "06:30:39",
-        specialist: "VALID-AGENT",
-        task: "oracle_test(AUTH-001)",
-        tool: "cve_bench",
-        duration: "3.1s",
-        status: "SUCCESS",
-        output: "ORACLE PASS · CVE-BENCH · FILE ACCESS",
-        size: "0.4 KB",
-    },
-    {
-        id: "00481",
-        ts: "06:30:22",
-        specialist: "AUTH-SPEC",
-        task: "exploit_auth()",
-        tool: "requests",
-        duration: "1.8s",
-        status: "SUCCESS",
-        output: "Session token returned · admin@targetcorp.com",
-        size: "0.8 KB",
-    },
-    {
-        id: "00480",
-        ts: "06:29:58",
-        specialist: "INJECT-SPEC",
-        task: "sqli_error_probe()",
-        tool: "curl",
-        duration: "2.1s",
-        status: "SUCCESS",
-        output: "HTTP 500 · SQL error in response body",
-        size: "3.1 KB",
-    },
-    {
-        id: "00479",
-        ts: "06:29:44",
-        specialist: "RECON-SPEC",
-        task: "endpoint_enumerate()",
-        tool: "spider",
-        duration: "18.4s",
-        status: "SUCCESS",
-        output: "12 endpoints discovered · 3 authenticated",
-        size: "14.2KB",
-    },
-    {
-        id: "00478",
-        ts: "06:29:03",
-        specialist: "NETWORK-SPEC",
-        task: "lateral_pivot()",
-        tool: "nmap",
-        duration: "30.0s",
-        status: "TIMEOUT",
-        output: "Port 5432 filtered — timeout exceeded",
-        size: "0.2 KB",
-    },
-    {
-        id: "00477",
-        ts: "06:28:47",
-        specialist: "RECON-SPEC",
-        task: "service_scan()",
-        tool: "nmap",
-        duration: "12.3s",
-        status: "SUCCESS",
-        output: "8 services · 3 open · SSH OpenSSH 8.9p1",
-        size: "2.4 KB",
-    },
-];
-const PARSED_ROWS = [
-    {
-        port: "22",
-        state: "OPEN",
-        service: "SSH",
-        version: "OpenSSH 8.9p1",
-    },
-    {
-        port: "80",
-        state: "OPEN",
-        service: "HTTP",
-        version: "nginx/1.24.0",
-    },
-    {
-        port: "443",
-        state: "OPEN",
-        service: "HTTPS",
-        version: "nginx/1.24.0",
-    },
-    {
-        port: "5432",
-        state: "FILTERED",
-        service: "POSTGRESQL",
-        version: "—",
-    },
-    {
-        port: "6379",
-        state: "FILTERED",
-        service: "REDIS",
-        version: "—",
-    },
-];
+import { getParsedRows } from "@/features/execution/data/fixtures/executionMockData";
+import { formatCommand } from "@/features/execution/domain/TaskCommand";
+import { useExecutionFeed } from "@/features/execution/hooks/useExecutionFeed";
+import { TASK_STATUS, type ExecEntry } from "@/types/domain-types";
+
 const STATUS_C: Record<ExecEntry["status"], string> = {
-    SUCCESS: "var(--color-hex-3fb950)",
-    FAILED: "var(--color-hex-ff2a32)",
-    TIMEOUT: "var(--color-hex-d29922)",
-    RUNNING: "var(--color-hex-e31b23)",
+    [TASK_STATUS.SUCCESS]: "var(--color-hex-3fb950)",
+    [TASK_STATUS.FAILED]: "var(--color-hex-ff2a32)",
+    [TASK_STATUS.TIMEOUT]: "var(--color-hex-d29922)",
+    [TASK_STATUS.RUNNING]: "var(--color-hex-e31b23)",
+    [TASK_STATUS.PENDING]: "var(--color-hex-666666)",
 };
+
+const ExecutionEntryRow = React.memo(function ExecutionEntryRowInner({
+    e,
+    onClick,
+}: {
+    e: ExecEntry;
+    onClick: () => void;
+}) {
+    return (
+        <div
+            className="flex cursor-pointer items-start gap-0"
+            style={{
+                borderBottom: "1px solid var(--color-hex-0e0e0e)",
+            }}
+            onClick={onClick}
+            onKeyDown={(ev) => {
+                if (ev.key === "Enter" || ev.key === " ") {
+                    onClick();
+                }
+            }}
+            role="button"
+            tabIndex={0}
+            onMouseEnter={(ev) => (ev.currentTarget.style.background = "var(--color-hex-0d0d0d)")}
+            onMouseLeave={(ev) => (ev.currentTarget.style.background = "transparent")}
+        >
+            <div className="w-[48px] shrink-0 px-[12px] py-[7px] text-[9px] text-[var(--color-hex-333333)]">
+                {e.id}
+            </div>
+            <div className="w-[80px] shrink-0 px-[12px] py-[7px] text-[9px] tracking-[0.04em] text-[var(--color-hex-333333)]">
+                {e.ts}
+            </div>
+            <div className="w-[108px] shrink-0 px-[12px] py-[7px] text-[9px] font-semibold tracking-[0.08em] text-[var(--color-hex-e31b23)]">
+                {e.specialist}
+            </div>
+            <div
+                className="w-[160px] shrink-0 overflow-hidden px-[12px] py-[7px] text-[9px] tracking-[0.04em] whitespace-nowrap text-[var(--color-hex-666666)]"
+                style={{
+                    textOverflow: "ellipsis",
+                }}
+            >
+                {formatCommand(e.command)}
+            </div>
+            <div className="w-[72px] shrink-0 px-[12px] py-[7px] text-[9px] text-[var(--color-hex-444444)]">
+                {e.command.tool}
+            </div>
+            <div className="w-[64px] shrink-0 px-[12px] py-[7px] text-right text-[9px] text-[var(--color-hex-444444)]">
+                {e.duration}
+            </div>
+            <div className="w-[72px] shrink-0 px-[12px] py-[7px]">
+                <span
+                    className="text-[8.5px] font-semibold tracking-[0.1em]"
+                    style={{
+                        color: STATUS_C[e.status],
+                    }}
+                >
+                    {e.status}
+                </span>
+            </div>
+            <div
+                className="flex-1 overflow-hidden px-[12px] py-[7px] text-[9px] leading-[1.4] tracking-[0.03em] whitespace-nowrap text-[var(--color-hex-555555)]"
+                style={{
+                    textOverflow: "ellipsis",
+                }}
+            >
+                {e.output || <span className="text-[var(--color-hex-2a2a2a)]">IN PROGRESS…</span>}
+            </div>
+        </div>
+    );
+});
+
 export default function ExecutionConsole() {
+    const entries = useExecutionFeed();
+    const [parsedRows, setParsedRows] = React.useState<
+        { port: string; state: string; service: string; version: string }[]
+    >([]);
+
+    React.useEffect(() => {
+        void getParsedRows().then(setParsedRows);
+    }, []);
+
     const [drawer, setDrawer] = useState<ExecEntry | null>(null);
+    const parentRef = useRef<HTMLDivElement>(null);
+    // eslint-disable-next-line react-hooks/incompatible-library
+    const rowVirtualizer = useVirtualizer({
+        count: entries.length,
+        getScrollElement: () => parentRef.current,
+        estimateSize: () => 33, // Approximate row height based on paddings (7px top/bottom + text)
+        overscan: 10,
+    });
+
+    const handleRowClick = useCallback((e: ExecEntry) => {
+        setDrawer(e);
+    }, []);
     return (
         <div className="flex h-full min-h-[0px]">
             <div className="flex min-h-[0px] flex-1 flex-col overflow-hidden">
@@ -196,7 +161,10 @@ export default function ExecutionConsole() {
                 </div>
 
                 {/* Console log */}
-                <div className="flex-1 overflow-y-auto bg-[var(--color-hex-080808)]">
+                <div
+                    className="flex-1 overflow-y-auto bg-[var(--color-hex-080808)]"
+                    ref={parentRef}
+                >
                     {/* Header row */}
                     <div
                         className="sticky top-0 flex gap-0 bg-[var(--color-hex-0d0d0d)]"
@@ -227,85 +195,51 @@ export default function ExecutionConsole() {
                         ))}
                     </div>
 
-                    {ENTRIES.map((e) => (
+                    {rowVirtualizer.getVirtualItems().length > 0 && (
+                        <div style={{ height: `${rowVirtualizer.getVirtualItems()[0].start}px` }} />
+                    )}
+                    {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+                        const e = entries[virtualRow.index];
+                        return (
+                            <ExecutionEntryRow key={e.id} e={e} onClick={() => handleRowClick(e)} />
+                        );
+                    })}
+                    {rowVirtualizer.getVirtualItems().length > 0 && (
                         <div
-                            key={e.id}
-                            className="flex cursor-pointer items-start gap-0"
                             style={{
-                                borderBottom: "1px solid var(--color-hex-0e0e0e)",
+                                height: `${
+                                    rowVirtualizer.getTotalSize() -
+                                    rowVirtualizer.getVirtualItems()[
+                                        rowVirtualizer.getVirtualItems().length - 1
+                                    ].end
+                                }px`,
                             }}
-                            onClick={() => setDrawer(e)}
-                            onKeyDown={(ev) => {
-                                if (ev.key === "Enter" || ev.key === " ") {
-                                    setDrawer(e);
-                                }
-                            }}
-                            role="button"
-                            tabIndex={0}
-                            onMouseEnter={(ev) =>
-                                (ev.currentTarget.style.background = "var(--color-hex-0d0d0d)")
-                            }
-                            onMouseLeave={(ev) =>
-                                (ev.currentTarget.style.background = "transparent")
-                            }
-                        >
-                            <div className="w-[48px] shrink-0 px-[12px] py-[7px] text-[9px] text-[var(--color-hex-333333)]">
-                                {e.id}
-                            </div>
-                            <div className="w-[80px] shrink-0 px-[12px] py-[7px] text-[9px] tracking-[0.04em] text-[var(--color-hex-333333)]">
-                                {e.ts}
-                            </div>
-                            <div className="w-[108px] shrink-0 px-[12px] py-[7px] text-[9px] font-semibold tracking-[0.08em] text-[var(--color-hex-e31b23)]">
-                                {e.specialist}
-                            </div>
-                            <div
-                                className="w-[160px] shrink-0 overflow-hidden px-[12px] py-[7px] text-[9px] tracking-[0.04em] whitespace-nowrap text-[var(--color-hex-666666)]"
-                                style={{
-                                    textOverflow: "ellipsis",
-                                }}
-                            >
-                                {e.task}
-                            </div>
-                            <div className="w-[72px] shrink-0 px-[12px] py-[7px] text-[9px] text-[var(--color-hex-444444)]">
-                                {e.tool}
-                            </div>
-                            <div className="w-[64px] shrink-0 px-[12px] py-[7px] text-right text-[9px] text-[var(--color-hex-444444)]">
-                                {e.duration}
-                            </div>
-                            <div className="w-[72px] shrink-0 px-[12px] py-[7px]">
-                                <span
-                                    className="text-[8.5px] font-semibold tracking-[0.1em]"
-                                    style={{
-                                        color: STATUS_C[e.status],
-                                    }}
-                                >
-                                    {e.status}
-                                </span>
-                            </div>
-                            <div
-                                className="flex-1 overflow-hidden px-[12px] py-[7px] text-[9px] leading-[1.4] tracking-[0.03em] whitespace-nowrap text-[var(--color-hex-555555)]"
-                                style={{
-                                    textOverflow: "ellipsis",
-                                }}
-                            >
-                                {e.output || (
-                                    <span className="text-[var(--color-hex-2a2a2a)]">
-                                        IN PROGRESS…
-                                    </span>
-                                )}
-                            </div>
-                        </div>
-                    ))}
+                        />
+                    )}
                 </div>
                 <style>{`@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}`}</style>
             </div>
 
             {/* Drawer */}
-            {drawer && <ExecDrawer entry={drawer} onClose={() => setDrawer(null)} />}
+            {drawer && (
+                <ExecDrawer
+                    entry={drawer}
+                    parsedRows={parsedRows}
+                    onClose={() => setDrawer(null)}
+                />
+            )}
         </div>
     );
 }
-function ExecDrawer({ entry, onClose }: { entry: ExecEntry; onClose: () => void }) {
+function ExecDrawer({
+    entry,
+    parsedRows,
+    onClose,
+}: {
+    entry: ExecEntry;
+    parsedRows: { port: string; state: string; service: string; version: string }[];
+    onClose: () => void;
+}) {
     const [tab, setTab] = useState<
         "SUMMARY" | "RAW OUTPUT" | "PARSED OUTPUT" | "EL CHANGES" | "TRAJECTORY"
     >("SUMMARY");
@@ -328,7 +262,7 @@ function ExecDrawer({ entry, onClose }: { entry: ExecEntry; onClose: () => void 
                         EXECUTION #{entry.id}
                     </div>
                     <div className="mt-[2px] text-[8.5px] tracking-[0.12em] text-[var(--color-hex-444444)]">
-                        {entry.specialist} · {entry.tool}
+                        {entry.specialist} · {entry.command.tool}
                     </div>
                 </div>
                 <button
@@ -378,11 +312,11 @@ function ExecDrawer({ entry, onClose }: { entry: ExecEntry; onClose: () => void 
                                 },
                                 {
                                     k: "TASK",
-                                    v: entry.task,
+                                    v: formatCommand(entry.command),
                                 },
                                 {
                                     k: "TOOL",
-                                    v: entry.tool,
+                                    v: entry.command.tool,
                                 },
                                 {
                                     k: "START",
@@ -442,7 +376,7 @@ function ExecDrawer({ entry, onClose }: { entry: ExecEntry; onClose: () => void 
                             </tr>
                         </thead>
                         <tbody>
-                            {PARSED_ROWS.map((r) => (
+                            {parsedRows.map((r) => (
                                 <tr
                                     key={r.port}
                                     style={{
@@ -526,7 +460,7 @@ Nmap done: 1 IP address scanned in 12.3 seconds`}
                         {[
                             {
                                 step: `STEP ${String(entry.id).padStart(3, "0")}`,
-                                vdgDelta: entry.task.split("(")[0].toUpperCase(),
+                                vdgDelta: entry.command.name.toUpperCase(),
                                 elDelta: "+2 facts",
                                 cost:
                                     entry.duration !== "—" ? `~$0.0${entry.id.slice(-2)}` : "$0.00",

@@ -1,202 +1,11 @@
-import { useState } from "react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
+import { useVirtualizer } from "@tanstack/react-virtual";
 
-// ─── Types ────────────────────────────────────────────────────────────────────
-
-type EvtType = "AUTH" | "MISSION" | "EXECUTION" | "ESCALATION" | "SYSTEM" | "CONFIG";
-type ResultValue = "SUCCESS" | "FAILURE" | "WARNING";
-
-interface AuditEntry {
-    id: string;
-    ts: string;
-    type: EvtType;
-    actor: string;
-    action: string;
-    resource: string;
-    result: ResultValue;
-    ip: string;
-    detail: string;
-}
+import { useAuditFeed } from "@/features/audit/hooks/useAuditFeed";
+import { useDebounce } from "@/hooks/useDebounce";
+import { type AuditEntry, type AuditEventType, type AuditResultValue } from "@/types/domain-types";
 
 // ─── Static data ──────────────────────────────────────────────────────────────
-
-const ENTRIES: AuditEntry[] = [
-    {
-        id: "AL-0891",
-        ts: "2026-08-19 06:31:04",
-        type: "MISSION",
-        actor: "TEAM-MANAGER",
-        action: "ORACLE_DISPATCH",
-        resource: "CVE-001/SQLI-001",
-        result: "SUCCESS",
-        ip: "internal",
-        detail: "Oracle test dispatched to CVE-BENCH FILE ACCESS endpoint",
-    },
-    {
-        id: "AL-0890",
-        ts: "2026-08-19 06:30:58",
-        type: "EXECUTION",
-        actor: "INJECT-SPEC",
-        action: "SPECIALIST_EVALUATE",
-        resource: "CVE-001/SQLI-001",
-        result: "SUCCESS",
-        ip: "internal",
-        detail: "E_ord raised 3→4. DB-ACCESS-002 unlocked.",
-    },
-    {
-        id: "AL-0889",
-        ts: "2026-08-19 06:30:51",
-        type: "EXECUTION",
-        actor: "EXEC-AGENT",
-        action: "TOOL_EXECUTION",
-        resource: "curl/sqli_payload",
-        result: "SUCCESS",
-        ip: "internal",
-        detail: "time-based SQLi confirmed: RTT 4.18s",
-    },
-    {
-        id: "AL-0888",
-        ts: "2026-08-19 06:30:39",
-        type: "MISSION",
-        actor: "VALID-AGENT",
-        action: "ORACLE_TEST",
-        resource: "CVE-001/AUTH-001",
-        result: "SUCCESS",
-        ip: "internal",
-        detail: "CVE-BENCH oracle PASS — FILE ACCESS confirmed",
-    },
-    {
-        id: "AL-0887",
-        ts: "2026-08-19 06:29:58",
-        type: "EXECUTION",
-        actor: "INJECT-SPEC",
-        action: "CONTEXT_COMPACTION",
-        resource: "S-03",
-        result: "SUCCESS",
-        ip: "internal",
-        detail: "Context compacted 94K→48K tokens",
-    },
-    {
-        id: "AL-0886",
-        ts: "2026-08-19 06:29:44",
-        type: "EXECUTION",
-        actor: "INJECT-SPEC",
-        action: "TOOL_EXECUTION",
-        resource: "curl/union_probe",
-        result: "FAILURE",
-        ip: "internal",
-        detail: "Union-based SQLi failed — column count mismatch",
-    },
-    {
-        id: "AL-0885",
-        ts: "2026-08-19 06:29:03",
-        type: "EXECUTION",
-        actor: "NETWORK-SPEC",
-        action: "TOOL_EXECUTION",
-        resource: "nmap/lateral",
-        result: "WARNING",
-        ip: "internal",
-        detail: "Port 5432 filtered — timeout after 30s",
-    },
-    {
-        id: "AL-0884",
-        ts: "2026-08-19 06:25:33",
-        type: "MISSION",
-        actor: "RECON-SPEC",
-        action: "FINDING_RECORDED",
-        resource: "CVE-001/F-003",
-        result: "SUCCESS",
-        ip: "internal",
-        detail: "IDOR confirmed on /api/users/:id — E_ord 3",
-    },
-    {
-        id: "AL-0883",
-        ts: "2026-08-19 06:24:00",
-        type: "ESCALATION",
-        actor: "TEAM-MANAGER",
-        action: "HUMAN_ESCALATION",
-        resource: "CVE-001",
-        result: "SUCCESS",
-        ip: "internal",
-        detail: "Cost threshold escalation — operator authorized continuation",
-    },
-    {
-        id: "AL-0882",
-        ts: "2026-08-19 06:22:14",
-        type: "MISSION",
-        actor: "AUTH-SPEC",
-        action: "EXPLOIT_CONFIRMED",
-        resource: "CVE-001/AUTH-001",
-        result: "SUCCESS",
-        ip: "internal",
-        detail: "JWT HS256 secret cracked: password123",
-    },
-    {
-        id: "AL-0881",
-        ts: "2026-08-19 06:20:00",
-        type: "MISSION",
-        actor: "TEAM-MANAGER",
-        action: "UCB_RESCORE",
-        resource: "CVE-001",
-        result: "SUCCESS",
-        ip: "internal",
-        detail: "12 VDG nodes rescored. AUTH-001 selected (UCB=0.91)",
-    },
-    {
-        id: "AL-0880",
-        ts: "2026-08-19 06:12:00",
-        type: "MISSION",
-        actor: "OPERATOR:usr-01",
-        action: "MISSION_START",
-        resource: "CVE-001",
-        result: "SUCCESS",
-        ip: "10.0.0.4",
-        detail: "Mission initiated: target=app.targetcorp.com type=URL",
-    },
-    {
-        id: "AL-0879",
-        ts: "2026-08-19 06:11:42",
-        type: "AUTH",
-        actor: "usr-01",
-        action: "LOGIN",
-        resource: "AUTH",
-        result: "SUCCESS",
-        ip: "10.0.0.4",
-        detail: "Interactive session authenticated — MFA verified",
-    },
-    {
-        id: "AL-0878",
-        ts: "2026-08-19 06:11:30",
-        type: "AUTH",
-        actor: "usr-02",
-        action: "LOGIN",
-        resource: "AUTH",
-        result: "FAILURE",
-        ip: "10.0.0.9",
-        detail: "Authentication failed — incorrect password (attempt 1/3)",
-    },
-    {
-        id: "AL-0877",
-        ts: "2026-08-18 22:14:01",
-        type: "CONFIG",
-        actor: "usr-01",
-        action: "CONFIG_CHANGE",
-        resource: "SETTINGS/ROE",
-        result: "SUCCESS",
-        ip: "10.0.0.4",
-        detail: "MAX_RUNTIME updated: 4h→8h",
-    },
-    {
-        id: "AL-0876",
-        ts: "2026-08-18 22:13:50",
-        type: "SYSTEM",
-        actor: "SYSTEM",
-        action: "BENCHMARK_COMPLETE",
-        resource: "B-031",
-        result: "SUCCESS",
-        ip: "internal",
-        detail: "CVE-BENCH v2 Full completed: score 81.2%",
-    },
-];
 
 // ─── Style maps ───────────────────────────────────────────────────────────────
 
@@ -205,7 +14,7 @@ interface ColorPair {
     bg: string;
 }
 
-const TYPE_C: Record<EvtType, ColorPair> = {
+const TYPE_C: Record<AuditEventType, ColorPair> = {
     AUTH: { c: "var(--color-hex-a0a0a0)", bg: "var(--color-hex-111111)" },
     MISSION: { c: "var(--color-hex-e31b23)", bg: "var(--color-hex-120608)" },
     EXECUTION: { c: "var(--color-hex-666666)", bg: "var(--color-hex-0d0d0d)" },
@@ -214,7 +23,7 @@ const TYPE_C: Record<EvtType, ColorPair> = {
     CONFIG: { c: "var(--color-hex-a0a0a0)", bg: "var(--color-hex-111111)" },
 };
 
-const RESULT_C: Record<ResultValue, string> = {
+const RESULT_C: Record<AuditResultValue, string> = {
     SUCCESS: "var(--color-hex-3fb950)",
     FAILURE: "var(--color-hex-ff2a32)",
     WARNING: "var(--color-hex-d29922)",
@@ -260,25 +69,93 @@ function drawerFields(sel: AuditEntry): DrawerField[] {
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
+const AuditLogRow = React.memo(function AuditLogRowInner({
+    e,
+    isSelected,
+    onClick,
+}: {
+    e: AuditEntry;
+    isSelected: boolean;
+    onClick: () => void;
+}) {
+    const tc = TYPE_C[e.type];
+    const rc = RESULT_C[e.result];
+    return (
+        <tr
+            onClick={onClick}
+            className={[
+                "cursor-pointer border-b border-[var(--color-hex-0e0e0e)] transition-colors duration-75",
+                isSelected ? "bg-[var(--color-hex-0d0d0d)]" : "hover:bg-[var(--color-hex-0a0a0a)]",
+            ].join(" ")}
+        >
+            <td className="px-[12px] py-[7px] text-[8.5px] text-[var(--color-hex-333333)]">
+                {e.id}
+            </td>
+            <td className="px-[12px] py-[7px] text-[8.5px] whitespace-nowrap text-[var(--color-hex-333333)]">
+                {e.ts}
+            </td>
+            <td className="px-[12px] py-[7px]">
+                <span
+                    className="rounded-[2px] px-[5px] py-[1px] text-[8px] font-semibold tracking-[0.1em]"
+                    style={{
+                        color: tc.c,
+                        background: tc.bg,
+                        border: `1px solid ${tc.c}33`,
+                    }}
+                >
+                    {e.type}
+                </span>
+            </td>
+            <td className="px-[12px] py-[7px] text-[9px] tracking-[0.04em] text-[var(--color-hex-666666)]">
+                {e.actor}
+            </td>
+            <td className="px-[12px] py-[7px] text-[9px] font-semibold tracking-[0.04em] text-[var(--color-hex-a0a0a0)]">
+                {e.action}
+            </td>
+            <td className="px-[12px] py-[7px] text-[9px] text-[var(--color-hex-444444)]">
+                {e.resource}
+            </td>
+            <td className="px-[12px] py-[7px]">
+                <span className="text-[8.5px] font-semibold tracking-[0.1em]" style={{ color: rc }}>
+                    {e.result}
+                </span>
+            </td>
+        </tr>
+    );
+});
+
 export default function AuditLogPage() {
+    const entries = useAuditFeed();
     const [typeFilter, setTypeFilter] = useState<TypeFilter>("ALL");
     const [resultFilter, setResultFilter] = useState<ResultFilter>("ALL");
     const [sel, setSel] = useState<AuditEntry | null>(null);
     const [search, setSearch] = useState("");
+    const debouncedSearch = useDebounce(search, 300);
 
-    const visible = ENTRIES.filter(
-        (e) =>
-            (typeFilter === "ALL" || e.type === typeFilter) &&
-            (resultFilter === "ALL" || e.result === resultFilter) &&
-            (!search ||
-                e.action.includes(search.toUpperCase()) ||
-                e.actor.toLowerCase().includes(search.toLowerCase()) ||
-                e.resource.toLowerCase().includes(search.toLowerCase())),
-    );
+    const visible = useMemo(() => {
+        return entries.filter(
+            (e) =>
+                (typeFilter === "ALL" || e.type === typeFilter) &&
+                (resultFilter === "ALL" || e.result === resultFilter) &&
+                (!debouncedSearch ||
+                    e.action.includes(debouncedSearch.toUpperCase()) ||
+                    e.actor.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
+                    e.resource.toLowerCase().includes(debouncedSearch.toLowerCase())),
+        );
+    }, [typeFilter, resultFilter, debouncedSearch, entries]);
 
-    function toggleSel(entry: AuditEntry) {
+    const toggleSel = useCallback((entry: AuditEntry) => {
         setSel((prev) => (prev?.id === entry.id ? null : entry));
-    }
+    }, []);
+
+    const parentRef = useRef<HTMLDivElement>(null);
+    // eslint-disable-next-line react-hooks/incompatible-library
+    const rowVirtualizer = useVirtualizer({
+        count: visible.length,
+        getScrollElement: () => parentRef.current,
+        estimateSize: () => 37, // Approximate row height
+        overscan: 10,
+    });
 
     return (
         <div className="flex h-full min-h-0 flex-col">
@@ -339,7 +216,7 @@ export default function AuditLogPage() {
                 <div className="flex gap-1" role="group" aria-label="Filter by result">
                     {RESULT_FILTERS.map((r) => {
                         const active = resultFilter === r;
-                        const color: string | undefined = RESULT_C[r as ResultValue];
+                        const color: string | undefined = RESULT_C[r as AuditResultValue];
                         return (
                             <button
                                 key={r}
@@ -361,7 +238,7 @@ export default function AuditLogPage() {
             {/* Table + detail drawer */}
             <div className="flex min-h-0 flex-1 overflow-hidden">
                 {/* Table */}
-                <div className="flex-1 overflow-y-auto">
+                <div className="flex-1 overflow-y-auto" ref={parentRef}>
                     <table className="w-full border-collapse">
                         <thead>
                             <tr className="sticky top-0 z-10 bg-[var(--color-hex-0f0f0f)]">
@@ -376,59 +253,42 @@ export default function AuditLogPage() {
                             </tr>
                         </thead>
                         <tbody>
-                            {visible.map((e) => {
-                                const tc = TYPE_C[e.type];
-                                const rc = RESULT_C[e.result];
-                                const isSelected = sel?.id === e.id;
+                            {rowVirtualizer.getVirtualItems().length > 0 && (
+                                <tr>
+                                    <td
+                                        style={{
+                                            height: `${rowVirtualizer.getVirtualItems()[0].start}px`,
+                                        }}
+                                        colSpan={7}
+                                    />
+                                </tr>
+                            )}
+                            {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+                                const e = visible[virtualRow.index];
                                 return (
-                                    <tr
+                                    <AuditLogRow
                                         key={e.id}
+                                        e={e}
+                                        isSelected={sel?.id === e.id}
                                         onClick={() => toggleSel(e)}
-                                        className={[
-                                            "cursor-pointer border-b border-[var(--color-hex-0e0e0e)] transition-colors duration-75",
-                                            isSelected
-                                                ? "bg-[var(--color-hex-0d0d0d)]"
-                                                : "hover:bg-[var(--color-hex-0a0a0a)]",
-                                        ].join(" ")}
-                                    >
-                                        <td className="px-[12px] py-[7px] text-[8.5px] text-[var(--color-hex-333333)]">
-                                            {e.id}
-                                        </td>
-                                        <td className="px-[12px] py-[7px] text-[8.5px] whitespace-nowrap text-[var(--color-hex-333333)]">
-                                            {e.ts}
-                                        </td>
-                                        <td className="px-[12px] py-[7px]">
-                                            <span
-                                                className="rounded-[2px] px-[5px] py-[1px] text-[8px] font-semibold tracking-[0.1em]"
-                                                style={{
-                                                    color: tc.c,
-                                                    background: tc.bg,
-                                                    border: `1px solid ${tc.c}33`,
-                                                }}
-                                            >
-                                                {e.type}
-                                            </span>
-                                        </td>
-                                        <td className="px-[12px] py-[7px] text-[9px] tracking-[0.04em] text-[var(--color-hex-666666)]">
-                                            {e.actor}
-                                        </td>
-                                        <td className="px-[12px] py-[7px] text-[9px] font-semibold tracking-[0.04em] text-[var(--color-hex-a0a0a0)]">
-                                            {e.action}
-                                        </td>
-                                        <td className="px-[12px] py-[7px] text-[9px] text-[var(--color-hex-444444)]">
-                                            {e.resource}
-                                        </td>
-                                        <td className="px-[12px] py-[7px]">
-                                            <span
-                                                className="text-[8.5px] font-semibold tracking-[0.1em]"
-                                                style={{ color: rc }}
-                                            >
-                                                {e.result}
-                                            </span>
-                                        </td>
-                                    </tr>
+                                    />
                                 );
                             })}
+                            {rowVirtualizer.getVirtualItems().length > 0 && (
+                                <tr>
+                                    <td
+                                        style={{
+                                            height: `${
+                                                rowVirtualizer.getTotalSize() -
+                                                rowVirtualizer.getVirtualItems()[
+                                                    rowVirtualizer.getVirtualItems().length - 1
+                                                ].end
+                                            }px`,
+                                        }}
+                                        colSpan={7}
+                                    />
+                                </tr>
+                            )}
                         </tbody>
                     </table>
                 </div>

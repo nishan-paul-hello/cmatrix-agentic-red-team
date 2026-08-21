@@ -1,193 +1,11 @@
 import { useEffect, useState } from "react";
 
-/* ── UCB data ── */
-interface VDGEntry {
-    id: string;
-    type: string;
-    status: "ELIGIBLE" | "IN_PROGRESS" | "EXPLOITED" | "BLOCKED" | "DEPRIORITIZED";
-    ucb: number;
-    exploit: number;
-    explore: number;
-    visits: number;
-    eord: number;
-    cost: string;
-    specialist: string | null;
-}
-const VDG: VDGEntry[] = [
-    {
-        id: "SQLI-001",
-        type: "SQL INJECTION",
-        status: "IN_PROGRESS",
-        ucb: 0.891,
-        exploit: 0.712,
-        explore: 0.179,
-        visits: 4,
-        eord: 4,
-        cost: "$0.084",
-        specialist: "INJECT-SPEC",
-    },
-    {
-        id: "AUTH-001",
-        type: "AUTH BYPASS",
-        status: "EXPLOITED",
-        ucb: 0.0,
-        exploit: 0.91,
-        explore: 0.0,
-        visits: 9,
-        eord: 5,
-        cost: "$0.054",
-        specialist: null,
-    },
-    {
-        id: "IDOR-008",
-        type: "ACCESS CONTROL",
-        status: "EXPLOITED",
-        ucb: 0.0,
-        exploit: 0.78,
-        explore: 0.0,
-        visits: 3,
-        eord: 4,
-        cost: "$0.019",
-        specialist: null,
-    },
-    {
-        id: "DB-ACCESS-002",
-        type: "DATABASE ACCESS",
-        status: "ELIGIBLE",
-        ucb: 0.762,
-        exploit: 0.68,
-        explore: 0.082,
-        visits: 0,
-        eord: 0,
-        cost: "—",
-        specialist: null,
-    },
-    {
-        id: "RCE-007",
-        type: "REMOTE CODE EXEC",
-        status: "ELIGIBLE",
-        ucb: 0.721,
-        exploit: 0.64,
-        explore: 0.081,
-        visits: 0,
-        eord: 0,
-        cost: "—",
-        specialist: null,
-    },
-    {
-        id: "XSS-002",
-        type: "CROSS SITE SCRIPTING",
-        status: "ELIGIBLE",
-        ucb: 0.644,
-        exploit: 0.52,
-        explore: 0.124,
-        visits: 1,
-        eord: 2,
-        cost: "$0.008",
-        specialist: null,
-    },
-    {
-        id: "CSRF-003",
-        type: "CSRF",
-        status: "ELIGIBLE",
-        ucb: 0.598,
-        exploit: 0.49,
-        explore: 0.108,
-        visits: 1,
-        eord: 2,
-        cost: "$0.006",
-        specialist: null,
-    },
-    {
-        id: "PATH-005",
-        type: "PATH TRAVERSAL",
-        status: "DEPRIORITIZED",
-        ucb: 0.312,
-        exploit: 0.31,
-        explore: 0.002,
-        visits: 2,
-        eord: 1,
-        cost: "$0.004",
-        specialist: null,
-    },
-    {
-        id: "XXE-009",
-        type: "XXE INJECTION",
-        status: "BLOCKED",
-        ucb: 0.0,
-        exploit: 0.21,
-        explore: 0.0,
-        visits: 0,
-        eord: 0,
-        cost: "—",
-        specialist: null,
-    },
-];
-const SPECIALISTS = [
-    {
-        id: "S-01",
-        role: "RECON-SPEC",
-        status: "COMPLETED",
-        task: "recon_target()",
-        node: "RECON-001",
-        score: 0.94,
-    },
-    {
-        id: "S-02",
-        role: "AUTH-SPEC",
-        status: "COMPLETED",
-        task: "exploit_auth()",
-        node: "AUTH-001",
-        score: 0.91,
-    },
-    {
-        id: "S-03",
-        role: "INJECT-SPEC",
-        status: "RUNNING",
-        task: "sqli_blind_time()",
-        node: "SQLI-001",
-        score: 0.891,
-    },
-    {
-        id: "S-04",
-        role: "VALID-AGENT",
-        status: "WAITING",
-        task: "oracle_test(AUTH-001)",
-        node: "SQLI-001",
-        score: 0.762,
-    },
-    {
-        id: "S-05",
-        role: "NETWORK-SPEC",
-        status: "IDLE",
-        task: "—",
-        node: "—",
-        score: 0.0,
-    },
-];
-const SCHED = [
-    {
-        step: "NEXT",
-        node: "DB-ACCESS-002",
-        ucb: 0.762,
-        eta: "~2min",
-        reason: "SQLI-001 EXPLOITED → dependency unlocked",
-    },
-    {
-        step: "QUEUED",
-        node: "RCE-007",
-        ucb: 0.721,
-        eta: "~5min",
-        reason: "Depends on DB-ACCESS-002",
-    },
-    {
-        step: "QUEUED",
-        node: "XSS-002",
-        ucb: 0.644,
-        eta: "~7min",
-        reason: "Parallel — no dependency",
-    },
-];
+import {
+    getTeamDashboardData,
+    type VDGEntry,
+} from "@/features/specialists/data/fixtures/teamDashboardMockData";
+import { SPEC_STATUS } from "@/types/domain-types";
+
 const STATUS_C: Record<VDGEntry["status"], string> = {
     ELIGIBLE: "var(--color-hex-e31b23)",
     IN_PROGRESS: "var(--color-hex-ff2a32)",
@@ -196,13 +14,39 @@ const STATUS_C: Record<VDGEntry["status"], string> = {
     DEPRIORITIZED: "var(--color-hex-555555)",
 };
 const SPEC_C: Record<string, string> = {
-    COMPLETED: "var(--color-hex-3fb950)",
-    RUNNING: "var(--color-hex-ff2a32)",
-    WAITING: "var(--color-hex-d29922)",
-    IDLE: "var(--color-hex-333333)",
+    [SPEC_STATUS.COMPLETED]: "var(--color-hex-3fb950)",
+    [SPEC_STATUS.RUNNING]: "var(--color-hex-ff2a32)",
+    [SPEC_STATUS.WAITING]: "var(--color-hex-d29922)",
+    [SPEC_STATUS.IDLE]: "var(--color-hex-333333)",
 };
 export default function TeamManagerDashboard() {
     const [ucbEntry, setUcbEntry] = useState<VDGEntry | null>(null);
+    const [vdg, setVdg] = useState<VDGEntry[]>([]);
+    const [specialists, setSpecialists] = useState<
+        {
+            id: string;
+            role: string;
+            status: string;
+            task: string;
+            node: string;
+            score: number;
+            failures: number;
+            skills: number;
+            context: string;
+            evidence: number;
+        }[]
+    >([]);
+    const [sched, setSched] = useState<
+        { step: string; node: string; ucb: number; eta: string; reason: string }[]
+    >([]);
+
+    useEffect(() => {
+        void getTeamDashboardData().then((data) => {
+            setVdg(data.vdg);
+            setSpecialists(data.specialists);
+            setSched(data.sched);
+        });
+    }, []);
     return (
         <div className="flex h-full min-h-[0px] flex-col">
             {/* Header */}
@@ -223,7 +67,7 @@ export default function TeamManagerDashboard() {
                         <KPI label="ACTIVE SPECIALISTS" value="1" />
                         <KPI
                             label="VDG ELIGIBLE"
-                            value={String(VDG.filter((v) => v.status === "ELIGIBLE").length)}
+                            value={String(vdg.filter((v) => v.status === "ELIGIBLE").length)}
                             red
                         />
                         <KPI label="TOTAL COST" value="$1.42" />
@@ -285,90 +129,92 @@ export default function TeamManagerDashboard() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {VDG.sort((a, b) => b.ucb - a.ucb).map((v) => (
-                                    <tr
-                                        key={v.id}
-                                        onClick={() => setUcbEntry(v)}
-                                        className="cursor-pointer"
-                                        style={{
-                                            borderBottom: "1px solid var(--color-hex-111111)",
-                                            opacity: v.status === "BLOCKED" ? 0.4 : 1,
-                                        }}
-                                        onMouseEnter={(e) =>
-                                            (e.currentTarget.style.background =
-                                                "var(--color-hex-0d0d0d)")
-                                        }
-                                        onMouseLeave={(e) =>
-                                            (e.currentTarget.style.background = "transparent")
-                                        }
-                                    >
-                                        <td className="px-[12px] py-[7px] text-[9.5px] font-bold tracking-[0.06em] text-[var(--color-hex-e31b23)]">
-                                            {v.id}
-                                        </td>
-                                        <td className="px-[12px] py-[7px] text-[9px] text-[var(--color-hex-555555)]">
-                                            {v.type}
-                                        </td>
-                                        <td className="px-[12px] py-[7px]">
-                                            <span
-                                                className="text-[8.5px] font-semibold tracking-[0.1em]"
-                                                style={{
-                                                    color: STATUS_C[v.status],
-                                                }}
-                                            >
-                                                {v.status}
-                                            </span>
-                                        </td>
-                                        <td className="px-[12px] py-[7px] text-right">
-                                            <span
-                                                className="text-[10px] font-bold"
+                                {vdg
+                                    .sort((a, b) => b.ucb - a.ucb)
+                                    .map((v) => (
+                                        <tr
+                                            key={v.id}
+                                            onClick={() => setUcbEntry(v)}
+                                            className="cursor-pointer"
+                                            style={{
+                                                borderBottom: "1px solid var(--color-hex-111111)",
+                                                opacity: v.status === "BLOCKED" ? 0.4 : 1,
+                                            }}
+                                            onMouseEnter={(e) =>
+                                                (e.currentTarget.style.background =
+                                                    "var(--color-hex-0d0d0d)")
+                                            }
+                                            onMouseLeave={(e) =>
+                                                (e.currentTarget.style.background = "transparent")
+                                            }
+                                        >
+                                            <td className="px-[12px] py-[7px] text-[9.5px] font-bold tracking-[0.06em] text-[var(--color-hex-e31b23)]">
+                                                {v.id}
+                                            </td>
+                                            <td className="px-[12px] py-[7px] text-[9px] text-[var(--color-hex-555555)]">
+                                                {v.type}
+                                            </td>
+                                            <td className="px-[12px] py-[7px]">
+                                                <span
+                                                    className="text-[8.5px] font-semibold tracking-[0.1em]"
+                                                    style={{
+                                                        color: STATUS_C[v.status],
+                                                    }}
+                                                >
+                                                    {v.status}
+                                                </span>
+                                            </td>
+                                            <td className="px-[12px] py-[7px] text-right">
+                                                <span
+                                                    className="text-[10px] font-bold"
+                                                    style={{
+                                                        color: (() => {
+                                                            if (v.ucb > 0.8) {
+                                                                return "var(--color-hex-ff2a32)";
+                                                            }
+                                                            if (v.ucb > 0.6) {
+                                                                return "var(--color-hex-e31b23)";
+                                                            }
+                                                            if (v.ucb > 0) {
+                                                                return "var(--color-hex-a0a0a0)";
+                                                            }
+                                                            return "var(--color-hex-333333)";
+                                                        })(),
+                                                    }}
+                                                >
+                                                    {v.ucb > 0 ? v.ucb.toFixed(3) : "—"}
+                                                </span>
+                                            </td>
+                                            <td className="px-[12px] py-[7px] text-right text-[9px] text-[var(--color-hex-555555)]">
+                                                {v.exploit > 0 ? v.exploit.toFixed(3) : "—"}
+                                            </td>
+                                            <td className="px-[12px] py-[7px] text-right text-[9px] text-[var(--color-hex-3fb950)]">
+                                                {v.explore > 0 ? v.explore.toFixed(3) : "—"}
+                                            </td>
+                                            <td className="px-[12px] py-[7px] text-right text-[9px] text-[var(--color-hex-444444)]">
+                                                {v.visits}
+                                            </td>
+                                            <td
+                                                className="px-[12px] py-[7px] text-right text-[9px]"
                                                 style={{
                                                     color: (() => {
-                                                        if (v.ucb > 0.8) {
-                                                            return "var(--color-hex-ff2a32)";
+                                                        if (v.eord >= 4) {
+                                                            return "var(--color-hex-3fb950)";
                                                         }
-                                                        if (v.ucb > 0.6) {
-                                                            return "var(--color-hex-e31b23)";
+                                                        if (v.eord >= 2) {
+                                                            return "var(--color-hex-d29922)";
                                                         }
-                                                        if (v.ucb > 0) {
-                                                            return "var(--color-hex-a0a0a0)";
-                                                        }
-                                                        return "var(--color-hex-333333)";
+                                                        return "var(--color-hex-444444)";
                                                     })(),
                                                 }}
                                             >
-                                                {v.ucb > 0 ? v.ucb.toFixed(3) : "—"}
-                                            </span>
-                                        </td>
-                                        <td className="px-[12px] py-[7px] text-right text-[9px] text-[var(--color-hex-555555)]">
-                                            {v.exploit > 0 ? v.exploit.toFixed(3) : "—"}
-                                        </td>
-                                        <td className="px-[12px] py-[7px] text-right text-[9px] text-[var(--color-hex-3fb950)]">
-                                            {v.explore > 0 ? v.explore.toFixed(3) : "—"}
-                                        </td>
-                                        <td className="px-[12px] py-[7px] text-right text-[9px] text-[var(--color-hex-444444)]">
-                                            {v.visits}
-                                        </td>
-                                        <td
-                                            className="px-[12px] py-[7px] text-right text-[9px]"
-                                            style={{
-                                                color: (() => {
-                                                    if (v.eord >= 4) {
-                                                        return "var(--color-hex-3fb950)";
-                                                    }
-                                                    if (v.eord >= 2) {
-                                                        return "var(--color-hex-d29922)";
-                                                    }
-                                                    return "var(--color-hex-444444)";
-                                                })(),
-                                            }}
-                                        >
-                                            {v.eord}/5
-                                        </td>
-                                        <td className="px-[12px] py-[7px] text-right text-[9px] text-[var(--color-hex-444444)]">
-                                            {v.cost}
-                                        </td>
-                                    </tr>
-                                ))}
+                                                {v.eord}/5
+                                            </td>
+                                            <td className="px-[12px] py-[7px] text-right text-[9px] text-[var(--color-hex-444444)]">
+                                                {v.cost}
+                                            </td>
+                                        </tr>
+                                    ))}
                             </tbody>
                         </table>
                     </div>
@@ -386,7 +232,7 @@ export default function TeamManagerDashboard() {
                     >
                         SPECIALIST STATUS
                     </div>
-                    {SPECIALISTS.map((s) => (
+                    {specialists.map((s) => (
                         <div
                             key={s.id}
                             className="px-[16px] py-[10px]"
@@ -435,9 +281,9 @@ export default function TeamManagerDashboard() {
                     >
                         NEXT SCHEDULED
                     </div>
-                    {SCHED.map((s, i) => (
+                    {sched.map((s, i) => (
                         <div
-                            key={s.step}
+                            key={`${s.step}-${i}`}
                             className="px-[16px] py-[10px]"
                             style={{
                                 borderBottom: "1px solid var(--color-hex-111111)",
@@ -470,13 +316,27 @@ export default function TeamManagerDashboard() {
                 </div>
             </div>
 
-            {ucbEntry && <UCBModal entry={ucbEntry} onClose={() => setUcbEntry(null)} />}
+            {ucbEntry && (
+                <UCBModal
+                    entry={ucbEntry}
+                    totalVisits={vdg.reduce((s, v) => s + v.visits, 0)}
+                    onClose={() => setUcbEntry(null)}
+                />
+            )}
         </div>
     );
 }
 
 /* ── screen 37: UCB BREAKDOWN MODAL ── */
-function UCBModal({ entry, onClose }: { entry: VDGEntry; onClose: () => void }) {
+function UCBModal({
+    entry,
+    totalVisits,
+    onClose,
+}: {
+    entry: VDGEntry;
+    totalVisits: number;
+    onClose: () => void;
+}) {
     // F10: ESC key closes modal
     useEffect(() => {
         function onKey(e: KeyboardEvent) {
@@ -515,7 +375,7 @@ function UCBModal({ entry, onClose }: { entry: VDGEntry; onClose: () => void }) 
         },
     ];
     const C = 0.4;
-    const N = VDG.reduce((s, v) => s + v.visits, 0);
+    const N = totalVisits;
     const n = entry.visits;
     return (
         <div

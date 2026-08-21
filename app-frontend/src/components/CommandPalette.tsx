@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useRef, useState, type KeyboardEvent } from "react";
 
+import { useDebounce } from "@/hooks/useDebounce";
+
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 interface PaletteItem {
@@ -136,16 +138,17 @@ interface CommandPaletteProps {
 
 export default function CommandPalette({ onClose, onNavigate }: CommandPaletteProps) {
     const [query, setQuery] = useState("");
+    const debouncedQuery = useDebounce(query, 300);
     const [cursor, setCursor] = useState(0);
     const inputRef = useRef<HTMLInputElement>(null);
     const listRef = useRef<HTMLDivElement>(null);
 
-    const filtered = query.trim()
+    const filtered = debouncedQuery.trim()
         ? ALL_ITEMS.filter(
               (i) =>
-                  i.label.toLowerCase().includes(query.toLowerCase()) ||
-                  i.sub.toLowerCase().includes(query.toLowerCase()) ||
-                  i.category.includes(query.toUpperCase()),
+                  i.label.toLowerCase().includes(debouncedQuery.toLowerCase()) ||
+                  i.sub.toLowerCase().includes(debouncedQuery.toLowerCase()) ||
+                  i.category.includes(debouncedQuery.toUpperCase()),
           )
         : ALL_ITEMS;
 

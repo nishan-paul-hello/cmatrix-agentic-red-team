@@ -1,7 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 
+import { EmptyState } from "@/components/ui/EmptyState";
+import { MetricTile } from "@/components/ui/MetricTile";
 import StatusBadge from "@/components/ui/StatusBadge";
-import { MISSIONS } from "@/lib/data";
+import { MissionRepository } from "@/repositories/MissionRepository";
+import { type Mission } from "@/types/domain-types";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -170,6 +173,8 @@ interface DashboardProps {
 
 export default function Dashboard({ onNewMission, onOpenMission }: DashboardProps) {
     const [activity, setActivity] = useState<ActivityEntry[]>(INITIAL_ACTIVITY);
+    const [missions, setMissions] = useState<Mission[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
     const nextId = useRef(INITIAL_ACTIVITY.length + 1);
     const eventQueue = useRef([...NEW_EVENTS]);
 
@@ -184,6 +189,13 @@ export default function Dashboard({ onNewMission, onOpenMission }: DashboardProp
             setActivity((prev) => [entry, ...prev].slice(0, 40));
         }, 2800);
         return () => clearInterval(interval);
+    }, []);
+
+    useEffect(() => {
+        void MissionRepository.getMissions().then((data) => {
+            setMissions(data);
+            setIsLoading(false);
+        });
     }, []);
 
     return (
@@ -201,27 +213,14 @@ export default function Dashboard({ onNewMission, onOpenMission }: DashboardProp
             {/* KPI strip */}
             <div className="grid flex-shrink-0 grid-cols-6 border-b border-[var(--color-hex-1e1e1e)]">
                 {KPI_ITEMS.map((kpi, i) => (
-                    <div
+                    <MetricTile
                         key={kpi.label}
-                        className="flex flex-col justify-center bg-[var(--color-hex-0d0d0d)] px-5 py-4"
-                        style={{
-                            borderRight: i < 5 ? "1px solid var(--color-hex-1e1e1e)" : "none",
-                        }}
-                    >
-                        <div className="mb-[6px] text-[8.5px] tracking-[0.2em] text-[var(--color-hex-444444)]">
-                            {kpi.label}
-                        </div>
-                        <div
-                            className="text-[26px] leading-none font-bold tracking-[0.04em]"
-                            style={{
-                                color: kpi.red
-                                    ? "var(--color-hex-e31b23)"
-                                    : "var(--color-hex-f2f2f2)",
-                            }}
-                        >
-                            {kpi.value}
-                        </div>
-                    </div>
+                        label={kpi.label}
+                        value={kpi.value}
+                        variant="dashboard"
+                        borderRight={i < 5}
+                        valueColor={kpi.red ? "var(--color-hex-e31b23)" : "var(--color-hex-f2f2f2)"}
+                    />
                 ))}
             </div>
 
@@ -256,47 +255,67 @@ export default function Dashboard({ onNewMission, onOpenMission }: DashboardProp
                                 </tr>
                             </thead>
                             <tbody>
-                                {MISSIONS.map((m) => (
-                                    <tr
-                                        key={m.id}
-                                        onClick={() => onOpenMission?.(m.id)}
-                                        className="cursor-pointer border-b border-[var(--color-hex-191919)] transition-colors duration-75 hover:bg-[var(--color-hex-131313)]"
-                                    >
-                                        <td className="px-[16px] py-[8px] font-semibold tracking-[0.08em] whitespace-nowrap text-[var(--color-hex-e31b23)]">
-                                            {m.id}
-                                        </td>
-                                        <td className="cell-truncate max-w-[180px] px-[16px] py-[8px] whitespace-nowrap text-[var(--color-hex-a0a0a0)]">
-                                            {m.target}
-                                        </td>
-                                        <td className="px-[16px] py-[8px] text-[10px] whitespace-nowrap text-[var(--color-hex-666666)]">
-                                            {m.surface}
-                                        </td>
-                                        <td className="px-[16px] py-[8px] text-[10px] whitespace-nowrap text-[var(--color-hex-666666)]">
-                                            {m.mode}
-                                        </td>
-                                        <td className="px-[16px] py-[8px] whitespace-nowrap">
-                                            <StatusBadge status={m.status} />
-                                        </td>
-                                        <td className="px-[16px] py-[8px] text-right text-[var(--color-hex-a0a0a0)]">
-                                            {m.nodes}
-                                        </td>
-                                        <td
-                                            className="px-[16px] py-[8px] text-right"
-                                            style={{
-                                                color:
-                                                    m.findings > 0
-                                                        ? "var(--color-hex-ff2a32)"
-                                                        : "var(--color-hex-666666)",
-                                                fontWeight: m.findings > 0 ? 600 : 400,
-                                            }}
+                                {(() => {
+                                    if (isLoading) {
+                                        return (
+                                            <EmptyState
+                                                message="LOADING MISSIONS..."
+                                                isTable
+                                                colSpan={8}
+                                            />
+                                        );
+                                    }
+                                    if (missions.length === 0) {
+                                        return (
+                                            <EmptyState
+                                                message="NO MISSIONS FOUND"
+                                                isTable
+                                                colSpan={8}
+                                            />
+                                        );
+                                    }
+                                    return missions.map((m) => (
+                                        <tr
+                                            key={m.id}
+                                            onClick={() => onOpenMission?.(m.id)}
+                                            className="cursor-pointer border-b border-[var(--color-hex-191919)] transition-colors duration-75 hover:bg-[var(--color-hex-131313)]"
                                         >
-                                            {m.findings}
-                                        </td>
-                                        <td className="px-[16px] py-[8px] text-right text-[var(--color-hex-a0a0a0)]">
-                                            {m.cost}
-                                        </td>
-                                    </tr>
-                                ))}
+                                            <td className="px-[16px] py-[8px] font-semibold tracking-[0.08em] whitespace-nowrap text-[var(--color-hex-e31b23)]">
+                                                {m.id}
+                                            </td>
+                                            <td className="cell-truncate max-w-[180px] px-[16px] py-[8px] whitespace-nowrap text-[var(--color-hex-a0a0a0)]">
+                                                {m.target}
+                                            </td>
+                                            <td className="px-[16px] py-[8px] text-[10px] whitespace-nowrap text-[var(--color-hex-666666)]">
+                                                {m.surface}
+                                            </td>
+                                            <td className="px-[16px] py-[8px] text-[10px] whitespace-nowrap text-[var(--color-hex-666666)]">
+                                                {m.mode}
+                                            </td>
+                                            <td className="px-[16px] py-[8px] whitespace-nowrap">
+                                                <StatusBadge status={m.status} />
+                                            </td>
+                                            <td className="px-[16px] py-[8px] text-right text-[var(--color-hex-a0a0a0)]">
+                                                {m.nodes}
+                                            </td>
+                                            <td
+                                                className="px-[16px] py-[8px] text-right"
+                                                style={{
+                                                    color:
+                                                        m.findings > 0
+                                                            ? "var(--color-hex-ff2a32)"
+                                                            : "var(--color-hex-666666)",
+                                                    fontWeight: m.findings > 0 ? 600 : 400,
+                                                }}
+                                            >
+                                                {m.findings}
+                                            </td>
+                                            <td className="px-[16px] py-[8px] text-right text-[var(--color-hex-a0a0a0)]">
+                                                {m.cost}
+                                            </td>
+                                        </tr>
+                                    ));
+                                })()}
                             </tbody>
                         </table>
                     </div>
