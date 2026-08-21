@@ -54,10 +54,14 @@ export default function SettingsPage() {
                                 t === tab ? "var(--color-hex-f2f2f2)" : "var(--color-hex-555555)",
                         }}
                         onMouseEnter={(e) => {
-                            if (t !== tab) {e.currentTarget.style.color = "var(--color-hex-a0a0a0)";}
+                            if (t !== tab) {
+                                e.currentTarget.style.color = "var(--color-hex-a0a0a0)";
+                            }
                         }}
                         onMouseLeave={(e) => {
-                            if (t !== tab) {e.currentTarget.style.color = "var(--color-hex-555555)";}
+                            if (t !== tab) {
+                                e.currentTarget.style.color = "var(--color-hex-555555)";
+                            }
                         }}
                     >
                         {t}

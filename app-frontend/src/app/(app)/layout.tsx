@@ -71,7 +71,9 @@ function AppLayoutInner({ children }: { children: React.ReactNode }) {
     );
 
     // Don't render children until auth state is confirmed.
-    if (!isReady) {return null;}
+    if (!isReady) {
+        return null;
+    }
 
     return (
         <>

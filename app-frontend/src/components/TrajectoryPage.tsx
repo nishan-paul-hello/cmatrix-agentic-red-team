@@ -330,16 +330,14 @@ export default function TrajectoryPage() {
                                 filter === t
                                     ? t === "ALL"
                                         ? "var(--color-hex-1a1a1a)"
-                                        : (TYPE_C[t]?.bg ??
-                                          "var(--color-hex-111111)")
+                                        : (TYPE_C[t]?.bg ?? "var(--color-hex-111111)")
                                     : "transparent",
-                            border: `1px solid ${filter === t ? (t === "ALL" ? "var(--color-hex-444444)" : `${TYPE_C[t]?.color ?? "var(--color-hex-444444)"  }66`) : "var(--color-hex-1e1e1e)"}`,
+                            border: `1px solid ${filter === t ? (t === "ALL" ? "var(--color-hex-444444)" : `${TYPE_C[t]?.color ?? "var(--color-hex-444444)"}66`) : "var(--color-hex-1e1e1e)"}`,
                             color:
                                 filter === t
                                     ? t === "ALL"
                                         ? "var(--color-hex-f2f2f2)"
-                                        : (TYPE_C[t]?.color ??
-                                          "var(--color-hex-f2f2f2)")
+                                        : (TYPE_C[t]?.color ?? "var(--color-hex-f2f2f2)")
                                     : "var(--color-hex-444444)",
                         }}
                     >

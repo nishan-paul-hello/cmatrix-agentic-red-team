@@ -63,7 +63,9 @@ export default function NewMissionWizard({ onCancel, onStart, initialStep }: Wiz
     const runtimeNum = parseInt(maxRuntime) || 0;
     const timeoutNum = parseInt(toolTimeout) || 0;
     function runtimeLabel() {
-        if (!runtimeNum) {return "—";}
+        if (!runtimeNum) {
+            return "—";
+        }
         return `${runtimeNum} min / vulnerability`;
     }
     return (

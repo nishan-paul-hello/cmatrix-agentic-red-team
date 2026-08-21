@@ -243,11 +243,14 @@ function VulnPatterns() {
                                     : "2px solid transparent",
                         }}
                         onMouseEnter={(e) => {
-                            if (sel.id !== p.id)
-                                {e.currentTarget.style.background = "var(--color-hex-0d0d0d)";}
+                            if (sel.id !== p.id) {
+                                e.currentTarget.style.background = "var(--color-hex-0d0d0d)";
+                            }
                         }}
                         onMouseLeave={(e) => {
-                            if (sel.id !== p.id) {e.currentTarget.style.background = "transparent";}
+                            if (sel.id !== p.id) {
+                                e.currentTarget.style.background = "transparent";
+                            }
                         }}
                     >
                         <div className="mb-1 flex justify-between">
@@ -1264,12 +1267,14 @@ function SkillLibrary() {
                                         : "2px solid transparent",
                             }}
                             onMouseEnter={(e) => {
-                                if (sel.id !== sk.id)
-                                    {e.currentTarget.style.background = "var(--color-hex-0d0d0d)";}
+                                if (sel.id !== sk.id) {
+                                    e.currentTarget.style.background = "var(--color-hex-0d0d0d)";
+                                }
                             }}
                             onMouseLeave={(e) => {
-                                if (sel.id !== sk.id)
-                                    {e.currentTarget.style.background = "transparent";}
+                                if (sel.id !== sk.id) {
+                                    e.currentTarget.style.background = "transparent";
+                                }
                             }}
                         >
                             <div className="font-inherit mb-[2px] text-[10px] font-bold tracking-[0.06em] text-[var(--color-hex-a0a0a0)]">

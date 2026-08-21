@@ -1,7 +1,6 @@
 // @ts-check
 import { dirname } from "path";
 import { fileURLToPath } from "url";
-
 import nextCoreWebVitals from "eslint-config-next/core-web-vitals";
 import tseslint from "typescript-eslint";
 
@@ -89,10 +88,7 @@ export default tseslint.config(
             "react/self-closing-comp": "warn",
             "react/hook-use-state": "warn",
             "react/jsx-boolean-value": ["warn", "never"],
-            "react/jsx-curly-brace-presence": [
-                "warn",
-                { props: "never", children: "never" },
-            ],
+            "react/jsx-curly-brace-presence": ["warn", { props: "never", children: "never" }],
             "react/no-danger": "error",
             "react/display-name": "error",
 
@@ -123,10 +119,7 @@ export default tseslint.config(
             "import/first": "error",
             "import/newline-after-import": "error",
             "import/no-default-export": "off", // Next.js pages require default exports
-            "import/consistent-type-specifier-style": [
-                "error",
-                "prefer-inline",
-            ],
+            "import/consistent-type-specifier-style": ["error", "prefer-inline"],
 
             // ── General best practices ──────────────────────────────────────
             "no-console": ["warn", { allow: ["warn", "error"] }],
@@ -145,9 +138,9 @@ export default tseslint.config(
                 {
                     props: true,
                     ignorePropertyModificationsFor: [
-                        "acc",   // Reducer accumulators
-                        "ref",   // React refs
-                        "e",     // Event objects (e.target.value etc.)
+                        "acc", // Reducer accumulators
+                        "ref", // React refs
+                        "e", // Event objects (e.target.value etc.)
                         "event", // Event objects (event.target.value etc.)
                     ],
                 },

@@ -1,4 +1,4 @@
-import  { type Metadata, type Viewport } from "next";
+import { type Metadata, type Viewport } from "next";
 
 import { AuthProvider } from "@/lib/auth-context";
 

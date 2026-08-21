@@ -305,7 +305,9 @@ export default function AttackGraphCanvas() {
     });
     useEffect(() => {
         const el = containerRef.current;
-        if (!el) {return;}
+        if (!el) {
+            return;
+        }
         const ro = new ResizeObserver(([e]) =>
             setDims({
                 w: e.contentRect.width,
@@ -351,7 +353,9 @@ export default function AttackGraphCanvas() {
                             const top = [...NODES]
                                 .filter((n) => n.status === "ELIGIBLE")
                                 .sort((a, b) => b.ucb - a.ucb)[0];
-                            if (!top) {return;}
+                            if (!top) {
+                                return;
+                            }
                             setStatusFilter("ALL");
                             setVulnFilter("ALL");
                             setDrawerNode(top);
@@ -451,7 +455,9 @@ export default function AttackGraphCanvas() {
                         {EDGES.map((edge) => {
                             const src = nodeMap[edge.from],
                                 dst = nodeMap[edge.to];
-                            if (!src || !dst) {return null;}
+                            if (!src || !dst) {
+                                return null;
+                            }
                             const vis = visible(src) && visible(dst);
                             const isDim =
                                 dst.status === "BLOCKED" ||
@@ -675,13 +681,16 @@ function FilterChip({
                 whiteSpace: "nowrap" as const,
             }}
             onMouseEnter={(e) => {
-                if (!active) {e.currentTarget.style.color = "var(--color-hex-888888)";}
+                if (!active) {
+                    e.currentTarget.style.color = "var(--color-hex-888888)";
+                }
             }}
             onMouseLeave={(e) => {
-                if (!active)
-                    {e.currentTarget.style.color = dim
+                if (!active) {
+                    e.currentTarget.style.color = dim
                         ? "var(--color-hex-383838)"
-                        : "var(--color-hex-555555)";}
+                        : "var(--color-hex-555555)";
+                }
             }}
         >
             {label}

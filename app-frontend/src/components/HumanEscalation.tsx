@@ -74,7 +74,9 @@ export default function HumanEscalation() {
     const [response, setResponse] = useState("");
     const [submitted, setSubmitted] = useState(false);
     const reason = REASONS.find((r) => r.id === activeReason)!;
-    if (submitted) {return <EscalationSubmitted />;}
+    if (submitted) {
+        return <EscalationSubmitted />;
+    }
     return (
         <div className="flex h-full min-h-[0px] flex-col">
             {/* Header */}
@@ -145,7 +147,7 @@ export default function HumanEscalation() {
                                 onClick={() => setActiveReason(r.id)}
                                 className="cursor-pointer rounded-[2px] px-[14px] py-[10px]"
                                 style={{
-                                    border: `1px solid ${activeReason === r.id ? `${r.color  }66` : "var(--color-hex-1e1e1e)"}`,
+                                    border: `1px solid ${activeReason === r.id ? `${r.color}66` : "var(--color-hex-1e1e1e)"}`,
                                     background:
                                         activeReason === r.id
                                             ? "var(--color-hex-0d0d0d)"
