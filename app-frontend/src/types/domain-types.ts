@@ -21,6 +21,15 @@ export const TASK_STATUS = {
 
 export type TaskStatus = (typeof TASK_STATUS)[keyof typeof TASK_STATUS];
 
+export const FINDING_STATUS = {
+    PENDING: "PENDING",
+    VALIDATED: "VALIDATED",
+    ORACLE_CONFIRMED: "ORACLE_CONFIRMED",
+    RULED_OUT: "RULED_OUT",
+} as const;
+
+export type FindingStatus = (typeof FINDING_STATUS)[keyof typeof FINDING_STATUS];
+
 export const BENCHMARK_STATUS = {
     COMPLETE: "COMPLETE",
     RUNNING: "RUNNING",
@@ -85,7 +94,7 @@ export interface Finding {
     target: string;
     severity: Severity;
     eord: number;
-    status: string; // e.g., "ORACLE CONFIRMED" | "VALIDATED" | "PENDING" | "RULED OUT"
+    status: FindingStatus;
     first: string;
     validated: string;
     path: string[];
