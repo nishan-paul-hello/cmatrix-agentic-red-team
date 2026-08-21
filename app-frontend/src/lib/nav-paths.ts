@@ -1,4 +1,4 @@
-import { type NavItem } from "@/components/Shell";
+import { type NavItem } from "@/features/core/components/Shell";
 
 export const NAV_PATHS: Record<NavItem, string> = {
     dashboard: "/dashboard",
