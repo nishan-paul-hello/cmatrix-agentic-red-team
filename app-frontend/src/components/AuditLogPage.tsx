@@ -310,7 +310,7 @@ export default function AuditLogPage() {
                 <div className="flex gap-1" role="group" aria-label="Filter by event type">
                     {TYPE_FILTERS.map((t) => {
                         const active = typeFilter === t;
-                        const cc = TYPE_C[t as EvtType];
+                        const cc: ColorPair | undefined = t === "ALL" ? undefined : TYPE_C[t];
                         return (
                             <button
                                 key={t}
@@ -319,11 +319,11 @@ export default function AuditLogPage() {
                                 className="cursor-pointer rounded-[2px] px-[8px] py-[2px] text-[7.5px] tracking-[0.12em] transition-colors duration-100"
                                 style={{
                                     background: active
-                                        ? (cc?.bg ?? "var(--color-hex-120608)")
+                                        ? (cc?.bg ?? "var(--color-hex-1e1e1e)")
                                         : "transparent",
-                                    border: `1px solid ${active ? (cc?.c ?? "var(--color-hex-e31b23)") : "var(--color-hex-1e1e1e)"}`,
+                                    border: `1px solid ${active ? (cc?.c ?? "var(--color-hex-f2f2f2)") : "var(--color-hex-1e1e1e)"}`,
                                     color: active
-                                        ? (cc?.c ?? "var(--color-hex-e31b23)")
+                                        ? (cc?.c ?? "var(--color-hex-f2f2f2)")
                                         : "var(--color-hex-444444)",
                                 }}
                             >
@@ -339,7 +339,7 @@ export default function AuditLogPage() {
                 <div className="flex gap-1" role="group" aria-label="Filter by result">
                     {RESULT_FILTERS.map((r) => {
                         const active = resultFilter === r;
-                        const color = RESULT_C[r as ResultValue];
+                        const color: string | undefined = RESULT_C[r as ResultValue];
                         return (
                             <button
                                 key={r}
@@ -347,10 +347,8 @@ export default function AuditLogPage() {
                                 aria-pressed={active}
                                 className="cursor-pointer rounded-[2px] bg-transparent px-[8px] py-[2px] text-[7.5px] tracking-[0.12em] transition-colors duration-100"
                                 style={{
-                                    border: `1px solid ${active ? (color ?? "var(--color-hex-e31b23)") : "var(--color-hex-1e1e1e)"}`,
-                                    color: active
-                                        ? (color ?? "var(--color-hex-e31b23)")
-                                        : "var(--color-hex-444444)",
+                                    border: `1px solid ${active ? color : "var(--color-hex-1e1e1e)"}`,
+                                    color: active ? color : "var(--color-hex-444444)",
                                 }}
                             >
                                 {r}

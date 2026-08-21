@@ -322,7 +322,9 @@ export default function AttackGraphCanvas() {
         return () => ro.disconnect();
     }, []);
     const { w, h } = dims;
-    const nodeMap = Object.fromEntries(NODES.map((n) => [n.id, n]));
+    const nodeMap: Record<string, VDGNode | undefined> = Object.fromEntries(
+        NODES.map((n) => [n.id, n]),
+    );
     function visible(n: VDGNode) {
         return (
             (statusFilter === "ALL" || n.status === statusFilter) &&
@@ -350,12 +352,9 @@ export default function AttackGraphCanvas() {
                     <button
                         className="font-inherit cursor-pointer rounded-[2px] border-[1px] border-solid border-[var(--color-hex-333333)] bg-[var(--color-hex-151515)] px-[12px] py-[4px] text-[9px] tracking-[0.14em] text-[var(--color-hex-a0a0a0)]"
                         onClick={() => {
-                            const top = [...NODES]
+                            const top: VDGNode | undefined = [...NODES]
                                 .filter((n) => n.status === "ELIGIBLE")
                                 .sort((a, b) => b.ucb - a.ucb)[0];
-                            if (!top) {
-                                return;
-                            }
                             setStatusFilter("ALL");
                             setVulnFilter("ALL");
                             setDrawerNode(top);
@@ -464,12 +463,24 @@ export default function AttackGraphCanvas() {
                                 dst.status === "INFEASIBLE" ||
                                 dst.status === "DEPRIORITIZED";
                             const isActive = edge.active && dst.status === "IN_PROGRESS";
-                            const color = isActive
-                                ? "var(--color-hex-ff2a32)"
-                                : isDim
-                                  ? "var(--color-hex-252525)"
-                                  : "var(--color-hex-e31b23)";
-                            const marker = isActive ? "arr-active" : isDim ? "arr-dim" : "arr-red";
+                            const color = (() => {
+                                if (isActive) {
+                                    return "var(--color-hex-ff2a32)";
+                                }
+                                if (isDim) {
+                                    return "var(--color-hex-252525)";
+                                }
+                                return "var(--color-hex-e31b23)";
+                            })();
+                            const marker = (() => {
+                                if (isActive) {
+                                    return "arr-active";
+                                }
+                                if (isDim) {
+                                    return "arr-dim";
+                                }
+                                return "arr-red";
+                            })();
                             return (
                                 <line
                                     key={`${edge.from}-${edge.to}`}
@@ -480,7 +491,15 @@ export default function AttackGraphCanvas() {
                                     stroke={color}
                                     strokeWidth={isActive ? 1.5 : 1}
                                     strokeDasharray={isActive ? "4 3" : "none"}
-                                    opacity={vis ? (isDim ? 0.4 : 0.8) : 0.1}
+                                    opacity={(() => {
+                                        if (!vis) {
+                                            return 0.1;
+                                        }
+                                        if (isDim) {
+                                            return 0.4;
+                                        }
+                                        return 0.8;
+                                    })()}
                                     markerEnd={`url(#${marker})`}
                                 />
                             );
@@ -498,6 +517,13 @@ export default function AttackGraphCanvas() {
                                 onMouseEnter={() => setHovered(node.id)}
                                 onMouseLeave={() => setHovered(null)}
                                 onClick={() => setDrawerNode(node)}
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter" || e.key === " ") {
+                                        setDrawerNode(node);
+                                    }
+                                }}
+                                role="button"
+                                tabIndex={0}
                                 className="absolute cursor-pointer rounded-[2px] px-[10px] py-[8px]"
                                 style={{
                                     left: lx(node.cx, w) - NODE_W / 2,
@@ -538,13 +564,18 @@ export default function AttackGraphCanvas() {
                                                     : "none",
                                         }}
                                     >
-                                        {node.status === "EXPLOITED"
-                                            ? "✓"
-                                            : node.status === "BLOCKED"
-                                              ? "⊗"
-                                              : node.status === "IN_PROGRESS"
-                                                ? "▶"
-                                                : ""}
+                                        {(() => {
+                                            if (node.status === "EXPLOITED") {
+                                                return "✓";
+                                            }
+                                            if (node.status === "BLOCKED") {
+                                                return "⊗";
+                                            }
+                                            if (node.status === "IN_PROGRESS") {
+                                                return "▶";
+                                            }
+                                            return "";
+                                        })()}
                                     </span>
                                 </div>
                                 <div
@@ -583,11 +614,15 @@ export default function AttackGraphCanvas() {
                                                 border: `1px solid ${s.badgeColor}33`,
                                             }}
                                         >
-                                            {node.status === "IN_PROGRESS"
-                                                ? "IN PROG"
-                                                : node.status === "DEPRIORITIZED"
-                                                  ? "DEPRIO"
-                                                  : node.status}
+                                            {(() => {
+                                                if (node.status === "IN_PROGRESS") {
+                                                    return "IN PROG";
+                                                }
+                                                if (node.status === "DEPRIORITIZED") {
+                                                    return "DEPRIO";
+                                                }
+                                                return node.status;
+                                            })()}
                                         </span>
                                     </div>
                                 </div>
@@ -665,19 +700,36 @@ function FilterChip({
             onClick={onClick}
             className="font-inherit cursor-pointer rounded-[2px] px-[7px] py-[2px] text-[8.5px] tracking-[0.12em]"
             style={{
-                color: active
-                    ? red
-                        ? "var(--color-hex-ff2a32)"
-                        : "var(--color-hex-f2f2f2)"
-                    : dim
-                      ? "var(--color-hex-383838)"
-                      : "var(--color-hex-555555)",
-                background: active
-                    ? red
-                        ? "var(--color-hex-1a0608)"
-                        : "var(--color-hex-191919)"
-                    : "transparent",
-                border: `1px solid ${active ? (red ? "var(--color-hex-6f171b)" : "var(--color-hex-333333)") : "var(--color-hex-1e1e1e)"}`,
+                color: (() => {
+                    if (active && red) {
+                        return "var(--color-hex-ff2a32)";
+                    }
+                    if (active) {
+                        return "var(--color-hex-f2f2f2)";
+                    }
+                    if (dim) {
+                        return "var(--color-hex-383838)";
+                    }
+                    return "var(--color-hex-555555)";
+                })(),
+                background: (() => {
+                    if (active && red) {
+                        return "var(--color-hex-1a0608)";
+                    }
+                    if (active) {
+                        return "var(--color-hex-191919)";
+                    }
+                    return "transparent";
+                })(),
+                border: `1px solid ${(() => {
+                    if (active && red) {
+                        return "var(--color-hex-6f171b)";
+                    }
+                    if (active) {
+                        return "var(--color-hex-333333)";
+                    }
+                    return "var(--color-hex-1e1e1e)";
+                })()}`,
                 whiteSpace: "nowrap" as const,
             }}
             onMouseEnter={(e) => {
