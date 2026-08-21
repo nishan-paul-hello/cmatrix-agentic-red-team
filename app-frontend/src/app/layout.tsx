@@ -1,6 +1,7 @@
 import { type Metadata, type Viewport } from "next";
 
 import { AuthProvider } from "@/lib/auth-context";
+import { ServicesProvider } from "@/lib/services-context";
 
 import "./globals.css";
 
@@ -52,7 +53,9 @@ export default function RootLayout({
              * dark-mode detection, causing a harmless mismatch on first hydration.
              */}
             <body suppressHydrationWarning>
-                <AuthProvider>{children}</AuthProvider>
+                <ServicesProvider>
+                    <AuthProvider>{children}</AuthProvider>
+                </ServicesProvider>
             </body>
         </html>
     );
