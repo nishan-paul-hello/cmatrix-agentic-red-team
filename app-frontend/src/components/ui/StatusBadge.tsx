@@ -3,7 +3,8 @@
  * Previously duplicated verbatim in Dashboard.tsx and MissionsPage.tsx.
  */
 
-type StatusValue = "RUNNING" | "PAUSED" | "VALIDATING" | "QUEUED" | "COMPLETED" | "FAILED" | string; // allow unknown values with a fallback
+type StatusValue =
+    "RUNNING" | "PAUSED" | "VALIDATING" | "QUEUED" | "COMPLETED" | "FAILED" | (string & {});
 
 interface StatusConfig {
     bg: string;
