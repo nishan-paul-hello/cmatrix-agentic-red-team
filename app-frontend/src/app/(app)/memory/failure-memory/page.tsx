@@ -1,7 +1,7 @@
 "use client";
 
-import MemoryPage from "@/components/MemoryPage";
+import MemoryPage from "@/features/memory/components/MemoryPage";
 
 export default function FailureMemory() {
-    return <MemoryPage />;
+    return <MemoryPage initialTab="FAILURE MEMORY" />;
 }
