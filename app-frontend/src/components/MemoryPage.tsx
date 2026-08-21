@@ -140,12 +140,17 @@ export default function MemoryPage({
                             }}
                         >
                             {t}
+                            {}
                             <span className="ml-[4px] rounded-[2px] bg-[var(--color-hex-1a1a1a)] px-[4px] py-[0px] text-[7.5px] text-[var(--color-hex-444444)]">
-                                {t === "CONTEXT UTILIZATION"
-                                    ? "T1"
-                                    : t === "SKILL LIBRARY"
-                                      ? "T3"
-                                      : "T2"}
+                                {(() => {
+                                    if (t === "CONTEXT UTILIZATION") {
+                                        return "T1";
+                                    }
+                                    if (t === "SKILL LIBRARY") {
+                                        return "T3";
+                                    }
+                                    return "T2";
+                                })()}
                             </span>
                         </button>
                     ))}
@@ -232,7 +237,14 @@ function VulnPatterns() {
                 {PATTERNS.map((p) => (
                     <div
                         key={p.id}
+                        role="button"
+                        tabIndex={0}
                         onClick={() => setSel(p)}
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter" || e.key === " ") {
+                                setSel(p);
+                            }
+                        }}
                         className="cursor-pointer px-[16px] py-[12px]"
                         style={{
                             borderBottom: "1px solid var(--color-hex-111111)",
@@ -330,7 +342,7 @@ function VulnPatterns() {
                 </div>
                 <Sub label="TECHNIQUE SEQUENCE">
                     {sel.techniques.map((t, i) => (
-                        <div key={i} className="mb-2 flex items-center gap-3">
+                        <div key={t} className="mb-2 flex items-center gap-3">
                             <div
                                 className="h-[17px] w-[17px] shrink-0 border-[1px] border-solid border-[var(--color-hex-1e1e1e)]"
                                 style={{
@@ -349,8 +361,8 @@ function VulnPatterns() {
                     ))}
                 </Sub>
                 <Sub label="DETECTION INDICATORS">
-                    {sel.indicators.map((ind, i) => (
-                        <div key={i} className="mb-2 flex items-center gap-2">
+                    {sel.indicators.map((ind) => (
+                        <div key={ind} className="mb-2 flex items-center gap-2">
                             <div
                                 className="h-[5px] w-[5px] shrink-0 bg-[var(--color-hex-e31b23)]"
                                 style={{
@@ -365,7 +377,7 @@ function VulnPatterns() {
                 </Sub>
                 <Sub label="PATTERN EVOLUTION" last>
                     {sel.evolution.map((ev, i, a) => (
-                        <div key={i} className="flex items-start gap-3">
+                        <div key={ev.ts} className="flex items-start gap-3">
                             <div className="flex shrink-0 flex-col items-center">
                                 <div
                                     className="mt-[2px] h-[7px] w-[7px] border-[1px] border-solid border-[var(--color-hex-e31b23)]"
@@ -493,13 +505,18 @@ function BranchTree({ nodes, depth = 0 }: { nodes: typeof BRANCHES; depth?: numb
                                 <span
                                     className="text-[8px] font-semibold tracking-[0.12em]"
                                     style={{
-                                        color:
-                                            b.outcome === "SUCCESS"
-                                                ? "var(--color-hex-3fb950)"
-                                                : b.outcome === "IN PROGRESS" ||
-                                                    b.outcome === "RUNNING"
-                                                  ? "var(--color-hex-d29922)"
-                                                  : "var(--color-hex-e31b23)",
+                                        color: (() => {
+                                            if (b.outcome === "SUCCESS") {
+                                                return "var(--color-hex-3fb950)";
+                                            }
+                                            if (
+                                                b.outcome === "IN PROGRESS" ||
+                                                b.outcome === "RUNNING"
+                                            ) {
+                                                return "var(--color-hex-d29922)";
+                                            }
+                                            return "var(--color-hex-e31b23)";
+                                        })(),
                                     }}
                                 >
                                     {b.outcome}
@@ -995,7 +1012,14 @@ function FailureMemory() {
                 {FAILURES.map((f) => (
                     <div
                         key={f.id}
+                        role="button"
+                        tabIndex={0}
                         onClick={() => setSel(f === sel ? null : f)}
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter" || e.key === " ") {
+                                setSel(f === sel ? null : f);
+                            }
+                        }}
                         className="mb-[10px] cursor-pointer rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)]"
                         style={{
                             background:
@@ -1075,8 +1099,8 @@ function FailureMemory() {
                                 <div className="mb-[4px] text-[7.5px] tracking-[0.18em] text-[var(--color-hex-444444)]">
                                     LESSONS LEARNED
                                 </div>
-                                {f.lessons.map((l, i) => (
-                                    <div key={i} className="flex items-start gap-2">
+                                {f.lessons.map((l) => (
+                                    <div key={l} className="flex items-start gap-2">
                                         <span className="mt-[1px] text-[9px] text-[var(--color-hex-d29922)]">
                                             ◆
                                         </span>
@@ -1255,7 +1279,14 @@ function SkillLibrary() {
                     {filtered.map((sk) => (
                         <div
                             key={sk.id}
+                            role="button"
+                            tabIndex={0}
                             onClick={() => setSel(sk)}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter" || e.key === " ") {
+                                    setSel(sk);
+                                }
+                            }}
                             className="cursor-pointer px-[14px] py-[11px]"
                             style={{
                                 borderBottom: "1px solid var(--color-hex-111111)",
@@ -1385,12 +1416,15 @@ function SkillLibrary() {
                                 <div
                                     className="text-[14px] font-bold"
                                     style={{
-                                        color:
-                                            m.k === "SUCCESS"
-                                                ? "var(--color-hex-3fb950)"
-                                                : m.k === "E_ORD DELTA"
-                                                  ? "var(--color-hex-e31b23)"
-                                                  : "var(--color-hex-f2f2f2)",
+                                        color: (() => {
+                                            if (m.k === "SUCCESS") {
+                                                return "var(--color-hex-3fb950)";
+                                            }
+                                            if (m.k === "E_ORD DELTA") {
+                                                return "var(--color-hex-e31b23)";
+                                            }
+                                            return "var(--color-hex-f2f2f2)";
+                                        })(),
                                     }}
                                 >
                                     {m.v}
@@ -1504,16 +1538,26 @@ function ContextUtilization() {
                 </div>
                 {CTX_SPECS.map((s) => {
                     const pct = Math.round((s.used / s.max) * 100);
-                    const barColor =
-                        pct > 85
-                            ? "var(--color-hex-ff2a32)"
-                            : pct > 60
-                              ? "var(--color-hex-d29922)"
-                              : "var(--color-hex-3fb950)";
+                    const barColor = (() => {
+                        if (pct > 85) {
+                            return "var(--color-hex-ff2a32)";
+                        }
+                        if (pct > 60) {
+                            return "var(--color-hex-d29922)";
+                        }
+                        return "var(--color-hex-3fb950)";
+                    })();
                     return (
                         <div
                             key={s.id}
+                            role="button"
+                            tabIndex={0}
                             onClick={() => setSel(s)}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter" || e.key === " ") {
+                                    setSel(s);
+                                }
+                            }}
                             className="mb-[8px] cursor-pointer rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)] px-[16px] py-[12px]"
                             style={{
                                 background:
@@ -1569,64 +1613,63 @@ function ContextUtilization() {
                         </div>
                     );
                 })}
+                {}
             </div>
-            {sel && (
-                <div
-                    className="flex w-[280px] flex-shrink-0 flex-col overflow-y-auto p-[16px]"
-                    style={{
-                        borderLeft: "1px solid var(--color-hex-1e1e1e)",
-                    }}
-                >
-                    <div className="mb-[4px] text-[11px] font-bold tracking-[0.1em] text-[var(--color-hex-f2f2f2)]">
-                        {sel.role}
-                    </div>
-                    <div className="mb-[16px] text-[8.5px] tracking-[0.14em] text-[var(--color-hex-444444)]">
-                        {sel.id} · {sel.state}
-                    </div>
-                    {[
-                        {
-                            k: "TOKENS USED",
-                            v: `${(sel.used / 1024).toFixed(0)}K`,
-                        },
-                        {
-                            k: "CONTEXT LIMIT",
-                            v: `${sel.max / 1024}K`,
-                        },
-                        {
-                            k: "UTILIZATION",
-                            v: `${Math.round((sel.used / sel.max) * 100)}%`,
-                        },
-                        {
-                            k: "COMPACTION EVENTS",
-                            v: String(sel.compacted),
-                        },
-                        {
-                            k: "SESSION TOKENS",
-                            v: `${(sel.tokens / 1000).toFixed(1)}K`,
-                        },
-                    ].map((r) => (
-                        <div key={r.k} className="mb-[12px]">
-                            <div className="mb-[3px] text-[7.5px] tracking-[0.18em] text-[var(--color-hex-444444)]">
-                                {r.k}
-                            </div>
-                            <div className="text-[13px] font-bold text-[var(--color-hex-f2f2f2)]">
-                                {r.v}
-                            </div>
-                        </div>
-                    ))}
-                    {sel.compacted > 0 && (
-                        <div className="mt-[8px] rounded-[2px] border-[1px] border-solid border-[var(--color-hex-d2992244)] bg-[var(--color-hex-110e00)] px-[12px] py-[10px]">
-                            <div className="mb-[4px] text-[8px] tracking-[0.16em] text-[var(--color-hex-d29922)]">
-                                COMPACTION NOTE
-                            </div>
-                            <div className="text-[9px] leading-[1.7] text-[var(--color-hex-666666)]">
-                                Context was compacted {sel.compacted}× to preserve working memory.
-                                Historical tool outputs summarized. Active state preserved.
-                            </div>
-                        </div>
-                    )}
+            <div
+                className="flex w-[280px] flex-shrink-0 flex-col overflow-y-auto p-[16px]"
+                style={{
+                    borderLeft: "1px solid var(--color-hex-1e1e1e)",
+                }}
+            >
+                <div className="mb-[4px] text-[11px] font-bold tracking-[0.1em] text-[var(--color-hex-f2f2f2)]">
+                    {sel.role}
                 </div>
-            )}
+                <div className="mb-[16px] text-[8.5px] tracking-[0.14em] text-[var(--color-hex-444444)]">
+                    {sel.id} · {sel.state}
+                </div>
+                {[
+                    {
+                        k: "TOKENS USED",
+                        v: `${(sel.used / 1024).toFixed(0)}K`,
+                    },
+                    {
+                        k: "CONTEXT LIMIT",
+                        v: `${sel.max / 1024}K`,
+                    },
+                    {
+                        k: "UTILIZATION",
+                        v: `${Math.round((sel.used / sel.max) * 100)}%`,
+                    },
+                    {
+                        k: "COMPACTION EVENTS",
+                        v: String(sel.compacted),
+                    },
+                    {
+                        k: "SESSION TOKENS",
+                        v: `${(sel.tokens / 1000).toFixed(1)}K`,
+                    },
+                ].map((r) => (
+                    <div key={r.k} className="mb-[12px]">
+                        <div className="mb-[3px] text-[7.5px] tracking-[0.18em] text-[var(--color-hex-444444)]">
+                            {r.k}
+                        </div>
+                        <div className="text-[13px] font-bold text-[var(--color-hex-f2f2f2)]">
+                            {r.v}
+                        </div>
+                    </div>
+                ))}
+                {sel.compacted > 0 && (
+                    <div className="mt-[8px] rounded-[2px] border-[1px] border-solid border-[var(--color-hex-d2992244)] bg-[var(--color-hex-110e00)] px-[12px] py-[10px]">
+                        <div className="mb-[4px] text-[8px] tracking-[0.16em] text-[var(--color-hex-d29922)]">
+                            COMPACTION NOTE
+                        </div>
+                        <div className="text-[9px] leading-[1.7] text-[var(--color-hex-666666)]">
+                            Context was compacted {sel.compacted}× to preserve working memory.
+                            Historical tool outputs summarized. Active state preserved.
+                        </div>
+                    </div>
+                )}
+            </div>
         </div>
     );
 }

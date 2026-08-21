@@ -362,6 +362,13 @@ function nodeStyle(status: NodeStatus): {
                 labelColor: "var(--color-hex-2a2a2a)",
                 typeColor: "var(--color-hex-1e1e1e)",
             };
+        default:
+            return {
+                border: "var(--color-hex-1e1e1e)",
+                bg: "var(--color-hex-0a0a0a)",
+                labelColor: "var(--color-hex-2a2a2a)",
+                typeColor: "var(--color-hex-1e1e1e)",
+            };
     }
 }
 function statusBadge(status: NodeStatus) {
@@ -539,7 +546,7 @@ export default function MissionWorkspace({ missionId = "CVE-001" }: { missionId?
                             label: "TIME",
                             value: time,
                         },
-                    ].map((m, i) => (
+                    ].map((m) => (
                         <div
                             key={m.label}
                             className="flex items-center gap-2 px-4 py-1.5"
@@ -604,33 +611,39 @@ export default function MissionWorkspace({ missionId = "CVE-001" }: { missionId?
                                         }
                                     }}
                                 >
-                                    {item.id === "findings" ? (
-                                        <span className="flex items-center gap-1.5">
-                                            {item.label}
-                                            <span
-                                                className="rounded-[2px] border-[1px] border-solid border-[var(--color-hex-6f171b)] bg-[var(--color-hex-1a0608)] text-[8px] tracking-[0.1em] text-[var(--color-hex-e31b23)]"
-                                                style={{
-                                                    padding: "0 4px",
-                                                }}
-                                            >
-                                                7
-                                            </span>
-                                        </span>
-                                    ) : item.id === "escalation" ? (
-                                        <span className="flex items-center gap-1.5">
-                                            {item.label}
-                                            <span
-                                                className="rounded-[2px] border-[1px] border-solid border-[var(--color-hex-ff2a3266)] bg-[var(--color-hex-1a0608)] text-[8px] tracking-[0.1em] text-[var(--color-hex-ff2a32)]"
-                                                style={{
-                                                    padding: "0 4px",
-                                                }}
-                                            >
-                                                !
-                                            </span>
-                                        </span>
-                                    ) : (
-                                        item.label
-                                    )}
+                                    {(() => {
+                                        if (item.id === "findings") {
+                                            return (
+                                                <span className="flex items-center gap-1.5">
+                                                    {item.label}
+                                                    <span
+                                                        className="rounded-[2px] border-[1px] border-solid border-[var(--color-hex-6f171b)] bg-[var(--color-hex-1a0608)] text-[8px] tracking-[0.1em] text-[var(--color-hex-e31b23)]"
+                                                        style={{
+                                                            padding: "0 4px",
+                                                        }}
+                                                    >
+                                                        7
+                                                    </span>
+                                                </span>
+                                            );
+                                        }
+                                        if (item.id === "escalation") {
+                                            return (
+                                                <span className="flex items-center gap-1.5">
+                                                    {item.label}
+                                                    <span
+                                                        className="rounded-[2px] border-[1px] border-solid border-[var(--color-hex-ff2a3266)] bg-[var(--color-hex-1a0608)] text-[8px] tracking-[0.1em] text-[var(--color-hex-ff2a32)]"
+                                                        style={{
+                                                            padding: "0 4px",
+                                                        }}
+                                                    >
+                                                        !
+                                                    </span>
+                                                </span>
+                                            );
+                                        }
+                                        return item.label;
+                                    })()}
                                 </button>
                             );
                         })}
@@ -823,6 +836,16 @@ export default function MissionWorkspace({ missionId = "CVE-001" }: { missionId?
                                                             onClick={() =>
                                                                 setSubNav("attack-graph")
                                                             }
+                                                            onKeyDown={(e) => {
+                                                                if (
+                                                                    e.key === "Enter" ||
+                                                                    e.key === " "
+                                                                ) {
+                                                                    setSubNav("attack-graph");
+                                                                }
+                                                            }}
+                                                            role="button"
+                                                            tabIndex={0}
                                                             className="relative w-[224px] cursor-pointer rounded-[2px] px-[12px] py-[10px]"
                                                             style={{
                                                                 background: s.bg,
