@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 /* ── UCB data ── */
 interface VDGEntry {
@@ -556,7 +556,8 @@ function UCBModal({ entry, onClose }: { entry: VDGEntry; onClose: () => void }) 
                         </div>
                         <div className="mt-[8px] text-[9px] tracking-[0.08em] text-[var(--color-hex-333333)]">
                             c={C} · N={N} total visits · n={n === 0 ? "0 (new node)" : n} visits ·
-                            ln(N)={Math.log(N || 1).toFixed(3)}
+                            ln(N)=
+                            {Math.log(N || 1).toFixed(3)}
                         </div>
                         {/* G1: c constant note */}
                         <div className="mt-[6px] text-[8px] tracking-[0.1em] text-[var(--color-hex-333333)]">

@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+
 type VStatus = "PENDING" | "RETRY" | "VALIDATED" | "RULED OUT";
 interface VFinding {
     id: string;

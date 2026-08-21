@@ -1,4 +1,5 @@
 import { useState } from "react";
+
 type Sev = "CRITICAL" | "HIGH" | "MEDIUM" | "LOW";
 type Tab = "OVERVIEW" | "EVIDENCE" | "ATTACK PATH" | "VALIDATION" | "TRAJECTORY";
 interface Finding {

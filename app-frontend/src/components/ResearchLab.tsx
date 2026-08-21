@@ -1,4 +1,5 @@
 import { useState } from "react";
+
 type LabTab = "ABLATION" | "STATISTICAL EVALUATION" | "FAILURE ANALYSIS";
 export default function ResearchLab({ initialTab }: { initialTab?: LabTab }) {
     const [tab, setTab] = useState<LabTab>(initialTab ?? "ABLATION");

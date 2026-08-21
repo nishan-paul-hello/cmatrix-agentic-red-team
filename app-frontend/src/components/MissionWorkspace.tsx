@@ -1,16 +1,17 @@
 import { useEffect, useRef, useState } from "react";
+
 import AttackGraphCanvas from "./AttackGraphCanvas";
-import EnvironmentalLayer from "./EnvironmentalLayer";
-import Specialists from "./Specialists";
-import ExecutionConsole from "./ExecutionConsole";
-import EvaluationScreen from "./EvaluationScreen";
-import ValidationCenter from "./ValidationCenter";
-import FindingsDashboard from "./FindingsDashboard";
-import MemoryPage from "./MemoryPage";
-import TrajectoryPage from "./TrajectoryPage";
 import CostDashboard from "./CostDashboard";
-import TeamManagerDashboard from "./TeamManagerDashboard";
+import EnvironmentalLayer from "./EnvironmentalLayer";
+import EvaluationScreen from "./EvaluationScreen";
+import ExecutionConsole from "./ExecutionConsole";
+import FindingsDashboard from "./FindingsDashboard";
 import HumanEscalation from "./HumanEscalation";
+import MemoryPage from "./MemoryPage";
+import Specialists from "./Specialists";
+import TeamManagerDashboard from "./TeamManagerDashboard";
+import TrajectoryPage from "./TrajectoryPage";
+import ValidationCenter from "./ValidationCenter";
 
 /* ── Types ─────────────────────────────────────────────── */
 type MissionSubNav =

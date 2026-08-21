@@ -1,5 +1,7 @@
 import { useState } from "react";
+
 import TrajectoryPage from "./TrajectoryPage";
+
 const MISSION_OPTIONS = ["CVE-001", "CVE-002", "CVE-003", "BENCH-014"];
 export default function TrajectoryBrowser() {
     const [mission, setMission] = useState("CVE-001");

@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+
 import GeometricMark from "@/components/ui/GeometricMark";
 
 // ─── Types ────────────────────────────────────────────────────────────────────

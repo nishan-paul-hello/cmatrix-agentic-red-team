@@ -1,5 +1,7 @@
-import { useState, useRef, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
+
 import VDGNodeDrawer from "./VDGNodeDrawer";
+
 type NodeStatus =
     "EXPLOITED" | "ELIGIBLE" | "IN_PROGRESS" | "BLOCKED" | "INFEASIBLE" | "DEPRIORITIZED";
 type FilterStatus = "ALL" | NodeStatus;

@@ -1,4 +1,5 @@
 import { useState } from "react";
+
 type SettingsTab =
     | "GENERAL"
     | "MODELS"

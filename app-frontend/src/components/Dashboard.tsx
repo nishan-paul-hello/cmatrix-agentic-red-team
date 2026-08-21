@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import { MISSIONS } from "@/lib/data";
+
 import StatusBadge from "@/components/ui/StatusBadge";
+import { MISSIONS } from "@/lib/data";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 

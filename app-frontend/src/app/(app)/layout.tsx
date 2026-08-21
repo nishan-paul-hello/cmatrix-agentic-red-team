@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import Shell, { type NavItem } from "@/components/Shell";
+
 import CommandPalette from "@/components/CommandPalette";
+import Shell, { type NavItem } from "@/components/Shell";
+import { useAuthGuard } from "@/lib/hooks/useAuthGuard";
 import { MissionProvider, useMission } from "@/lib/mission-context";
 import { NAV_PATHS, navItemForPath } from "@/lib/nav-paths";
-import { useAuthGuard } from "@/lib/hooks/useAuthGuard";
 
 // ─── Inner layout (needs MissionProvider context) ─────────────────────────────
 
