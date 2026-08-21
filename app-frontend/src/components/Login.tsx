@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Image from "next/image";
 import GeometricMark from "@/components/ui/GeometricMark";
 
 interface LoginProps {
@@ -132,18 +133,25 @@ export default function Login({ onLogin }: LoginProps) {
         </div>
 
         {/* Version / copyright */}
-        <div className="mt-5 flex justify-between w-full">
+        <div className="mt-5 flex justify-between items-center w-full">
           <span className="text-[9px] text-[var(--color-hex-333333)] tracking-[0.1em]">
             v1.1.1
           </span>
-          <span className="text-[9px] text-[var(--color-hex-333333)] tracking-[0.1em]">
+          <span className="inline-flex items-center gap-1.5 text-[9px] text-[var(--color-hex-333333)] tracking-[0.1em]">
             <a
               href="https://kaiofficial.xyz/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[#00F07C] font-semibold hover:opacity-80 transition-opacity"
+              className="inline-flex items-center gap-1 text-[#00F07C] font-semibold hover:opacity-80 transition-opacity"
             >
-              KAI
+              <Image
+                src="/logo-company.svg"
+                alt="KAI Logo"
+                width={16}
+                height={16}
+                className="inline-block"
+              />
+              <span>KAI</span>
             </a>{" "}
             © 2026
           </span>
