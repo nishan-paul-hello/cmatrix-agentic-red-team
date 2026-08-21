@@ -261,12 +261,15 @@ function AblationLab() {
                                 <td
                                     className="px-[12px] py-[8px] text-[10px] font-bold"
                                     style={{
-                                        color:
-                                            r.score > 0.75
-                                                ? "var(--color-hex-3fb950)"
-                                                : r.score > 0.55
-                                                  ? "var(--color-hex-d29922)"
-                                                  : "var(--color-hex-ff2a32)",
+                                        color: (() => {
+                                            if (r.score > 0.75) {
+                                                return "var(--color-hex-3fb950)";
+                                            }
+                                            if (r.score > 0.55) {
+                                                return "var(--color-hex-d29922)";
+                                            }
+                                            return "var(--color-hex-ff2a32)";
+                                        })(),
                                     }}
                                 >
                                     {(r.score * 100).toFixed(1)}%
@@ -274,12 +277,15 @@ function AblationLab() {
                                 <td
                                     className="px-[12px] py-[8px] text-[9px] font-bold"
                                     style={{
-                                        color:
-                                            r.delta === 0
-                                                ? "var(--color-hex-555555)"
-                                                : r.delta > -0.05
-                                                  ? "var(--color-hex-d29922)"
-                                                  : "var(--color-hex-ff2a32)",
+                                        color: (() => {
+                                            if (r.delta === 0) {
+                                                return "var(--color-hex-555555)";
+                                            }
+                                            if (r.delta > -0.05) {
+                                                return "var(--color-hex-d29922)";
+                                            }
+                                            return "var(--color-hex-ff2a32)";
+                                        })(),
                                     }}
                                 >
                                     {r.delta === 0 ? "—" : `${(r.delta * 100).toFixed(1)}%`}
@@ -322,12 +328,15 @@ function AblationLab() {
                                 <span
                                     className="text-[10px] font-bold"
                                     style={{
-                                        color:
-                                            impact > 0.1
-                                                ? "var(--color-hex-e31b23)"
-                                                : impact > 0.05
-                                                  ? "var(--color-hex-d29922)"
-                                                  : "var(--color-hex-555555)",
+                                        color: (() => {
+                                            if (impact > 0.1) {
+                                                return "var(--color-hex-e31b23)";
+                                            }
+                                            if (impact > 0.05) {
+                                                return "var(--color-hex-d29922)";
+                                            }
+                                            return "var(--color-hex-555555)";
+                                        })(),
                                     }}
                                 >
                                     -{(impact * 100).toFixed(1)}% if removed
@@ -338,12 +347,15 @@ function AblationLab() {
                                     className="h-full rounded-[2px]"
                                     style={{
                                         width: `${Math.min(impact * 200, 100)}%`,
-                                        background:
-                                            impact > 0.1
-                                                ? "var(--color-hex-e31b23)"
-                                                : impact > 0.05
-                                                  ? "var(--color-hex-d29922)"
-                                                  : "var(--color-hex-555555)",
+                                        background: (() => {
+                                            if (impact > 0.1) {
+                                                return "var(--color-hex-e31b23)";
+                                            }
+                                            if (impact > 0.05) {
+                                                return "var(--color-hex-d29922)";
+                                            }
+                                            return "var(--color-hex-555555)";
+                                        })(),
                                     }}
                                 />
                             </div>
@@ -398,22 +410,28 @@ function AblationLab() {
                     {
                         k: "SCORE",
                         v: `${(sel.score * 100).toFixed(1)}%`,
-                        c:
-                            sel.score > 0.75
-                                ? "var(--color-hex-3fb950)"
-                                : sel.score > 0.55
-                                  ? "var(--color-hex-d29922)"
-                                  : "var(--color-hex-ff2a32)",
+                        c: (() => {
+                            if (sel.score > 0.75) {
+                                return "var(--color-hex-3fb950)";
+                            }
+                            if (sel.score > 0.55) {
+                                return "var(--color-hex-d29922)";
+                            }
+                            return "var(--color-hex-ff2a32)";
+                        })(),
                     },
                     {
                         k: "vs FULL SYSTEM",
                         v: sel.delta === 0 ? "baseline" : `${(sel.delta * 100).toFixed(1)}%`,
-                        c:
-                            sel.delta < -0.1
-                                ? "var(--color-hex-ff2a32)"
-                                : sel.delta < -0.05
-                                  ? "var(--color-hex-d29922)"
-                                  : "var(--color-hex-555555)",
+                        c: (() => {
+                            if (sel.delta < -0.1) {
+                                return "var(--color-hex-ff2a32)";
+                            }
+                            if (sel.delta < -0.05) {
+                                return "var(--color-hex-d29922)";
+                            }
+                            return "var(--color-hex-555555)";
+                        })(),
                     },
                     {
                         k: "COST",
@@ -627,12 +645,15 @@ function StatisticalEval() {
                         <div
                             className="flex-1 px-[12px] py-[8px] text-right text-[9px]"
                             style={{
-                                color:
-                                    row.pValue < 0.01
-                                        ? "var(--color-hex-3fb950)"
-                                        : row.pValue < 0.05
-                                          ? "var(--color-hex-d29922)"
-                                          : "var(--color-hex-555555)",
+                                color: (() => {
+                                    if (row.pValue < 0.01) {
+                                        return "var(--color-hex-3fb950)";
+                                    }
+                                    if (row.pValue < 0.05) {
+                                        return "var(--color-hex-d29922)";
+                                    }
+                                    return "var(--color-hex-555555)";
+                                })(),
                             }}
                         >
                             {row.pValue.toFixed(3)}
@@ -641,15 +662,26 @@ function StatisticalEval() {
                             <span
                                 className="text-[9px] font-bold"
                                 style={{
-                                    color:
-                                        row.pValue < 0.01
-                                            ? "var(--color-hex-3fb950)"
-                                            : row.pValue < 0.05
-                                              ? "var(--color-hex-d29922)"
-                                              : "var(--color-hex-444444)",
+                                    color: (() => {
+                                        if (row.pValue < 0.01) {
+                                            return "var(--color-hex-3fb950)";
+                                        }
+                                        if (row.pValue < 0.05) {
+                                            return "var(--color-hex-d29922)";
+                                        }
+                                        return "var(--color-hex-444444)";
+                                    })(),
                                 }}
                             >
-                                {row.pValue < 0.01 ? "***" : row.pValue < 0.05 ? "**" : "ns"}
+                                {(() => {
+                                    if (row.pValue < 0.01) {
+                                        return "***";
+                                    }
+                                    if (row.pValue < 0.05) {
+                                        return "**";
+                                    }
+                                    return "ns";
+                                })()}
                             </span>
                         </div>
                     </div>
@@ -874,7 +906,14 @@ function FailureAnalysis() {
                 {FAILURE_CLUSTERS.map((c) => (
                     <div
                         key={c.id}
+                        role="button"
+                        tabIndex={0}
                         onClick={() => setSel(sel?.id === c.id ? null : c)}
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter" || e.key === " ") {
+                                setSel(sel?.id === c.id ? null : c);
+                            }
+                        }}
                         className="mb-[8px] cursor-pointer rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)]"
                         style={{
                             background:
@@ -991,7 +1030,7 @@ function FailureAnalysis() {
                     </div>
                     {FAILURE_TIMELINE.map((f, i) => (
                         <div
-                            key={i}
+                            key={f.ts}
                             className="flex items-center"
                             style={{
                                 borderBottom:

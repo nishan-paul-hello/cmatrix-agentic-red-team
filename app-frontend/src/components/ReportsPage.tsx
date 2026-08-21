@@ -158,7 +158,14 @@ export default function ReportsPage() {
                     {filtered.map((r) => (
                         <div
                             key={r.id}
+                            role="button"
+                            tabIndex={0}
                             onClick={() => setSel(r)}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter" || e.key === " ") {
+                                    setSel(r);
+                                }
+                            }}
                             className="cursor-pointer px-[16px] py-[13px]"
                             style={{
                                 borderBottom: "1px solid var(--color-hex-111111)",
@@ -322,7 +329,7 @@ export default function ReportsPage() {
                                 </div>
                             </div>
                             {PREVIEW_SECTIONS.map((s, i) => (
-                                <div key={i} className="mb-[24px]">
+                                <div key={s.title} className="mb-[24px]">
                                     <div className="mb-4 flex items-center gap-3">
                                         <div className="h-[14px] w-[2px] bg-[var(--color-hex-e31b23)]" />
                                         <span className="text-[9px] font-bold tracking-[0.2em] text-[var(--color-hex-f2f2f2)]">
