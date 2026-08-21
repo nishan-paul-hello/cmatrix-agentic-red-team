@@ -25,7 +25,7 @@ export default function ValidationTab({ f }: { f: Finding }) {
         },
         {
             ts: f.validated !== "—" ? f.validated : "—",
-            label: "ORACLE CONFIRMED",
+            label: "ORACLE_CONFIRMED",
             eord: 5,
             note: "CVE-BENCH FILE ACCESS oracle: PASS",
         },
@@ -137,7 +137,7 @@ export default function ValidationTab({ f }: { f: Finding }) {
                         },
                         {
                             k: "RESULT",
-                            v: f.status === "ORACLE CONFIRMED" ? "PASS" : "PENDING",
+                            v: f.status === "ORACLE_CONFIRMED" ? "PASS" : "PENDING",
                         },
                         {
                             k: "RETRIES",
@@ -153,7 +153,7 @@ export default function ValidationTab({ f }: { f: Finding }) {
                                 style={{
                                     color: (() => {
                                         if (r.k === "RESULT") {
-                                            return f.status === "ORACLE CONFIRMED"
+                                            return f.status === "ORACLE_CONFIRMED"
                                                 ? "var(--color-hex-3fb950)"
                                                 : "var(--color-hex-d29922)";
                                         }
