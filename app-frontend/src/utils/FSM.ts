@@ -9,7 +9,7 @@ import {
     type MissionStatus,
     type SpecStatus,
     type TaskStatus,
-} from "../types/domain-types";
+} from "@/types/domain-types";
 
 const MISSION_TRANSITIONS: Record<MissionStatus, Set<MissionStatus>> = {
     [MISSION_STATUS.QUEUED]: new Set([MISSION_STATUS.RUNNING, MISSION_STATUS.FAILED]),
