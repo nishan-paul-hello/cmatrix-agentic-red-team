@@ -1,7 +1,23 @@
+export interface SpecialistCost {
+    id: string;
+    role: string;
+    model: string;
+    calls: number;
+    inputTok: number;
+    outputTok: number;
+    cost: number;
+    pct: number;
+}
+export interface CostTimeline {
+    ts: string;
+    event: string;
+    cost: number;
+}
+
 export type CostTab = "COST & USAGE" | "MODEL BREAKDOWN" | "CONTEXT STATE";
 
 /* ── Data ── */
-export const SPECIALISTS_COST = [
+export const SPECIALISTS_COST: SpecialistCost[] = [
     {
         id: "S-03",
         role: "INJECT-SPEC",
@@ -150,7 +166,7 @@ export const CTX_ENTRIES = [
         cost: 0.0012,
     },
 ];
-export const TIMELINE = [
+export const TIMELINE: CostTimeline[] = [
     {
         ts: "06:12:00",
         event: "Mission start",
@@ -210,3 +226,25 @@ export const CEILING = 5.0;
 /* ── TAB 2: MODEL BREAKDOWN (screen 34) ── */
 
 /* ── TAB 3: CONTEXT STATE (screen 35) ── */
+
+export async function getCostData() {
+    return new Promise<{
+        SPECIALISTS_COST: typeof SPECIALISTS_COST;
+        MODEL_ROWS: typeof MODEL_ROWS;
+        CTX_ENTRIES: typeof CTX_ENTRIES;
+        TIMELINE: typeof TIMELINE;
+        TOTAL: typeof TOTAL;
+        CEILING: typeof CEILING;
+    }>((resolve) => {
+        setTimeout(() => {
+            resolve({
+                SPECIALISTS_COST,
+                MODEL_ROWS,
+                CTX_ENTRIES,
+                TIMELINE,
+                TOTAL,
+                CEILING,
+            });
+        }, 100);
+    });
+}
