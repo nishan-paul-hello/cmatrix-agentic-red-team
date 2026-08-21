@@ -1,4 +1,5 @@
-export type VStatus = "PENDING" | "RETRY" | "VALIDATED" | "RULED OUT";
+export type VStatus =
+    "PENDING" | "RETRY" | "VALIDATED" | "RULED_OUT" | "ORACLE_CONFIRMED" | "ORACLE CONFIRMED";
 export interface VFinding {
     id: string;
     type: string;
@@ -45,7 +46,7 @@ export const FINDINGS: VFinding[] = [
         type: "SSRF",
         evidence: "E_ord 1/5",
         retry: 3,
-        status: "RULED OUT",
+        status: "RULED_OUT",
         oracle: "CVE-BENCH",
     },
     {
@@ -96,10 +97,20 @@ export const SB: Record<
         bg: "var(--color-hex-0a1a10)",
         border: "var(--color-hex-3fb95044)",
     },
-    "RULED OUT": {
+    RULED_OUT: {
         color: "var(--color-hex-555555)",
         bg: "var(--color-hex-111111)",
         border: "var(--color-hex-33333344)",
+    },
+    ORACLE_CONFIRMED: {
+        color: "var(--color-hex-a371f7)",
+        bg: "var(--color-hex-1a0f2e)",
+        border: "var(--color-hex-a371f744)",
+    },
+    "ORACLE CONFIRMED": {
+        color: "var(--color-hex-a371f7)",
+        bg: "var(--color-hex-1a0f2e)",
+        border: "var(--color-hex-a371f744)",
     },
 };
 
