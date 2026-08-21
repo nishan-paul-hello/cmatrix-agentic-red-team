@@ -1,6 +1,6 @@
 "use client";
 
-import TrajectoryBrowser from "@/components/TrajectoryBrowser";
+import TrajectoryBrowser from "@/features/trajectory/components/TrajectoryBrowser";
 
 export default function Trajectory() {
     return <TrajectoryBrowser />;
