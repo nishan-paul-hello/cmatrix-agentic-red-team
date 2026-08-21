@@ -131,14 +131,18 @@ export default function VDGNodeDrawer({
     onClose: () => void;
 }) {
     const detail = NODE_DETAIL[node.id] ?? DEFAULT_DETAIL;
-    const statusColor =
-        node.status === "ELIGIBLE"
-            ? "var(--color-hex-ff2a32)"
-            : node.status === "EXPLOITED"
-              ? "var(--color-hex-e31b23)"
-              : node.status === "IN_PROGRESS"
-                ? "var(--color-hex-ff2a32)"
-                : "var(--color-hex-a0a0a0)";
+    const statusColor = (() => {
+        if (node.status === "ELIGIBLE") {
+            return "var(--color-hex-ff2a32)";
+        }
+        if (node.status === "EXPLOITED") {
+            return "var(--color-hex-e31b23)";
+        }
+        if (node.status === "IN_PROGRESS") {
+            return "var(--color-hex-ff2a32)";
+        }
+        return "var(--color-hex-a0a0a0)";
+    })();
     const statusBg = ["ELIGIBLE", "EXPLOITED", "IN_PROGRESS"].includes(node.status)
         ? "var(--color-hex-1a0608)"
         : "var(--color-hex-111111)";
@@ -406,7 +410,7 @@ export default function VDGNodeDrawer({
                                 color: "var(--color-hex-ff2a32)",
                             },
                         ].map((t, i, a) => (
-                            <div key={i} className="flex items-start gap-3">
+                            <div key={t.ts} className="flex items-start gap-3">
                                 <div className="flex shrink-0 flex-col items-center">
                                     <div
                                         className="mt-[2px] h-[6px] w-[6px]"
@@ -495,12 +499,15 @@ function EOrdIndicator({ value }: { value: number }) {
                             className="mb-[2px] h-[6px] w-[6px] rounded-[1px]"
                             style={{
                                 border: `1px solid ${i <= value ? "var(--color-hex-e31b23)" : "var(--color-hex-292929)"}`,
-                                background:
-                                    i < value
-                                        ? "var(--color-hex-e31b23)"
-                                        : i === value
-                                          ? "var(--color-hex-ff2a32)"
-                                          : "transparent",
+                                background: (() => {
+                                    if (i < value) {
+                                        return "var(--color-hex-e31b23)";
+                                    }
+                                    if (i === value) {
+                                        return "var(--color-hex-ff2a32)";
+                                    }
+                                    return "transparent";
+                                })(),
                             }}
                         />
                         {i === value && (

@@ -307,6 +307,13 @@ export default function ValidationCenter() {
             {/* Finding detail drawer */}
             {selected && (
                 <div
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                        if (e.key === "Escape" || e.key === "Enter") {
+                            setSelected(null);
+                        }
+                    }}
                     className="fixed inset-0 flex items-center justify-center bg-[var(--color-hex-00000088)]"
                     style={{
                         zIndex: 50,
@@ -314,6 +321,9 @@ export default function ValidationCenter() {
                     onClick={() => setSelected(null)}
                 >
                     <div
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={(e) => e.stopPropagation()}
                         className="w-[400px] rounded-[2px] border-[1px] border-solid border-[var(--color-hex-292929)] bg-[var(--color-hex-111111)] px-[28px] py-[24px]"
                         onClick={(e) => e.stopPropagation()}
                     >
@@ -600,6 +610,13 @@ function StateMachineModal({
     ];
     return (
         <div
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+                if (e.key === "Escape" || e.key === "Enter") {
+                    onClose();
+                }
+            }}
             className="fixed inset-0 flex items-center justify-center bg-[var(--color-hex-00000099)]"
             style={{
                 zIndex: 60,
@@ -607,6 +624,9 @@ function StateMachineModal({
             onClick={onClose}
         >
             <div
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => e.stopPropagation()}
                 className="w-[620px] rounded-[2px] border-[1px] border-solid border-[var(--color-hex-292929)] bg-[var(--color-hex-0d0d0d)] p-[24px]"
                 onClick={(e) => e.stopPropagation()}
             >
@@ -637,8 +657,8 @@ function StateMachineModal({
                         width="100%"
                         height="100%"
                     >
-                        {edges.map((e, i) => (
-                            <g key={i}>
+                        {edges.map((e) => (
+                            <g key={`${e.x1}-${e.y1}-${e.x2}-${e.y2}`}>
                                 <line
                                     x1={e.x1}
                                     y1={e.y1}
