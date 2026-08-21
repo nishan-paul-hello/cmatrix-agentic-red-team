@@ -326,19 +326,33 @@ export default function TrajectoryPage() {
                         onClick={() => setFilter(t)}
                         className="font-inherit cursor-pointer rounded-[2px] px-[10px] py-[3px] text-[8px] tracking-[0.14em]"
                         style={{
-                            background:
-                                filter === t
-                                    ? t === "ALL"
-                                        ? "var(--color-hex-1a1a1a)"
-                                        : (TYPE_C[t]?.bg ?? "var(--color-hex-111111)")
-                                    : "transparent",
-                            border: `1px solid ${filter === t ? (t === "ALL" ? "var(--color-hex-444444)" : `${TYPE_C[t]?.color ?? "var(--color-hex-444444)"}66`) : "var(--color-hex-1e1e1e)"}`,
-                            color:
-                                filter === t
-                                    ? t === "ALL"
-                                        ? "var(--color-hex-f2f2f2)"
-                                        : (TYPE_C[t]?.color ?? "var(--color-hex-f2f2f2)")
-                                    : "var(--color-hex-444444)",
+                            background: (() => {
+                                if (filter === t) {
+                                    if (t === "ALL") {
+                                        return "var(--color-hex-1a1a1a)";
+                                    }
+                                    return (TYPE_C[t] as { bg: string }).bg;
+                                }
+                                return "transparent";
+                            })(),
+                            border: `1px solid ${(() => {
+                                if (filter === t) {
+                                    if (t === "ALL") {
+                                        return "var(--color-hex-444444)";
+                                    }
+                                    return `${(TYPE_C[t] as { color: string }).color}66`;
+                                }
+                                return "var(--color-hex-1e1e1e)";
+                            })()}`,
+                            color: (() => {
+                                if (filter === t) {
+                                    if (t === "ALL") {
+                                        return "var(--color-hex-f2f2f2)";
+                                    }
+                                    return (TYPE_C[t] as { color: string }).color;
+                                }
+                                return "var(--color-hex-444444)";
+                            })(),
                         }}
                     >
                         {t}
@@ -364,11 +378,15 @@ export default function TrajectoryPage() {
                                         style={{
                                             borderRadius: "50%",
                                             border: `1px solid ${tc.color}`,
-                                            background: isSel
-                                                ? tc.color
-                                                : step.status === "RUNNING"
-                                                  ? tc.color
-                                                  : "transparent",
+                                            background: (() => {
+                                                if (isSel) {
+                                                    return tc.color;
+                                                }
+                                                if (step.status === "RUNNING") {
+                                                    return tc.color;
+                                                }
+                                                return "transparent";
+                                            })(),
                                             zIndex: 1,
                                         }}
                                     />
@@ -378,6 +396,13 @@ export default function TrajectoryPage() {
                                 </div>
                                 {/* Card */}
                                 <div
+                                    role="button"
+                                    tabIndex={0}
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter") {
+                                            setSel(isSel ? null : step);
+                                        }
+                                    }}
                                     onClick={() => setSel(isSel ? null : step)}
                                     className="flex-1 cursor-pointer"
                                     style={{
@@ -484,15 +509,21 @@ export default function TrajectoryPage() {
                                                             <div
                                                                 className="text-[10px]"
                                                                 style={{
-                                                                    color:
-                                                                        r.k === "COST" ||
-                                                                        r.k === "TOKENS"
-                                                                            ? "var(--color-hex-555555)"
-                                                                            : r.k ===
-                                                                                    "E_ORD DELTA" &&
-                                                                                r.v !== "—"
-                                                                              ? "var(--color-hex-3fb950)"
-                                                                              : "var(--color-hex-888888)",
+                                                                    color: (() => {
+                                                                        if (
+                                                                            r.k === "COST" ||
+                                                                            r.k === "TOKENS"
+                                                                        ) {
+                                                                            return "var(--color-hex-555555)";
+                                                                        }
+                                                                        if (
+                                                                            r.k === "E_ORD DELTA" &&
+                                                                            r.v !== "—"
+                                                                        ) {
+                                                                            return "var(--color-hex-3fb950)";
+                                                                        }
+                                                                        return "var(--color-hex-888888)";
+                                                                    })(),
                                                                 }}
                                                             >
                                                                 {r.v}

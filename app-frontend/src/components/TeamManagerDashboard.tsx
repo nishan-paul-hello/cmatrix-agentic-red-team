@@ -285,7 +285,7 @@ export default function TeamManagerDashboard() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {VDG.sort((a, b) => b.ucb - a.ucb).map((v, i) => (
+                                {VDG.sort((a, b) => b.ucb - a.ucb).map((v) => (
                                     <tr
                                         key={v.id}
                                         onClick={() => setUcbEntry(v)}
@@ -322,14 +322,18 @@ export default function TeamManagerDashboard() {
                                             <span
                                                 className="text-[10px] font-bold"
                                                 style={{
-                                                    color:
-                                                        v.ucb > 0.8
-                                                            ? "var(--color-hex-ff2a32)"
-                                                            : v.ucb > 0.6
-                                                              ? "var(--color-hex-e31b23)"
-                                                              : v.ucb > 0
-                                                                ? "var(--color-hex-a0a0a0)"
-                                                                : "var(--color-hex-333333)",
+                                                    color: (() => {
+                                                        if (v.ucb > 0.8) {
+                                                            return "var(--color-hex-ff2a32)";
+                                                        }
+                                                        if (v.ucb > 0.6) {
+                                                            return "var(--color-hex-e31b23)";
+                                                        }
+                                                        if (v.ucb > 0) {
+                                                            return "var(--color-hex-a0a0a0)";
+                                                        }
+                                                        return "var(--color-hex-333333)";
+                                                    })(),
                                                 }}
                                             >
                                                 {v.ucb > 0 ? v.ucb.toFixed(3) : "—"}
@@ -347,12 +351,15 @@ export default function TeamManagerDashboard() {
                                         <td
                                             className="px-[12px] py-[7px] text-right text-[9px]"
                                             style={{
-                                                color:
-                                                    v.eord >= 4
-                                                        ? "var(--color-hex-3fb950)"
-                                                        : v.eord >= 2
-                                                          ? "var(--color-hex-d29922)"
-                                                          : "var(--color-hex-444444)",
+                                                color: (() => {
+                                                    if (v.eord >= 4) {
+                                                        return "var(--color-hex-3fb950)";
+                                                    }
+                                                    if (v.eord >= 2) {
+                                                        return "var(--color-hex-d29922)";
+                                                    }
+                                                    return "var(--color-hex-444444)";
+                                                })(),
                                             }}
                                         >
                                             {v.eord}/5
@@ -430,7 +437,7 @@ export default function TeamManagerDashboard() {
                     </div>
                     {SCHED.map((s, i) => (
                         <div
-                            key={i}
+                            key={s.step}
                             className="px-[16px] py-[10px]"
                             style={{
                                 borderBottom: "1px solid var(--color-hex-111111)",
@@ -480,7 +487,6 @@ function UCBModal({ entry, onClose }: { entry: VDGEntry; onClose: () => void }) 
         window.addEventListener("keydown", onKey);
         return () => window.removeEventListener("keydown", onKey);
     }, [onClose]);
-    const BAR_W = 280;
     const epss = 0.42;
     const bars = [
         {
@@ -513,6 +519,13 @@ function UCBModal({ entry, onClose }: { entry: VDGEntry; onClose: () => void }) 
     const n = entry.visits;
     return (
         <div
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+                if (e.key === "Escape" || e.key === "Enter") {
+                    onClose();
+                }
+            }}
             className="fixed inset-0 flex items-center justify-center bg-[var(--color-hex-00000099)]"
             style={{
                 zIndex: 60,
@@ -520,6 +533,9 @@ function UCBModal({ entry, onClose }: { entry: VDGEntry; onClose: () => void }) 
             onClick={onClose}
         >
             <div
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => e.stopPropagation()}
                 className="w-[540px] rounded-[2px] border-[1px] border-solid border-[var(--color-hex-292929)] bg-[var(--color-hex-0d0d0d)]"
                 onClick={(e) => e.stopPropagation()}
             >
