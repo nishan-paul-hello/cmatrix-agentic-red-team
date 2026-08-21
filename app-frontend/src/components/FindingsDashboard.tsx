@@ -409,12 +409,15 @@ function FindingDetail({ f, onBack }: { f: Finding; onBack: () => void }) {
                                         <div
                                             className="flex-1 px-[14px] py-[9px] text-[10px]"
                                             style={{
-                                                color:
-                                                    r.k === "STATUS"
-                                                        ? stc
-                                                        : r.k === "SEVERITY"
-                                                          ? sc.color
-                                                          : "var(--color-hex-888888)",
+                                                color: (() => {
+                                                    if (r.k === "STATUS") {
+                                                        return stc;
+                                                    }
+                                                    if (r.k === "SEVERITY") {
+                                                        return sc.color;
+                                                    }
+                                                    return "var(--color-hex-888888)";
+                                                })(),
                                             }}
                                         >
                                             {r.v}
@@ -455,8 +458,21 @@ function FindingDetail({ f, onBack }: { f: Finding; onBack: () => void }) {
                         zIndex: 60,
                     }}
                     onClick={() => setEvOpen(false)}
+                    onKeyDown={(e) => {
+                        if (e.key === "Escape") {
+                            setEvOpen(false);
+                        }
+                    }}
+                    role="presentation"
                 >
                     <div
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter" || e.key === " ") {
+                                e.stopPropagation();
+                            }
+                        }}
                         className="w-[700px] overflow-auto rounded-[2px] border-[1px] border-solid border-[var(--color-hex-292929)] bg-[var(--color-hex-0d0d0d)]"
                         style={{
                             maxHeight: "80vh",
@@ -525,7 +541,7 @@ function ValidationTab({ f }: { f: Finding }) {
             </div>
             {steps.map((s, i) => (
                 <div
-                    key={i}
+                    key={`step-${s.label}`}
                     className="flex gap-4"
                     style={{
                         marginBottom: i < steps.length - 1 ? 0 : 0,
@@ -536,14 +552,18 @@ function ValidationTab({ f }: { f: Finding }) {
                             className="h-[8px] w-[8px] shrink-0 border-[1px] border-solid border-[transparent]"
                             style={{
                                 borderRadius: "50%",
-                                background:
-                                    s.eord === 5
-                                        ? "var(--color-hex-3fb950)"
-                                        : s.eord >= 4
-                                          ? "var(--color-hex-ff2a32)"
-                                          : s.eord >= 3
-                                            ? "var(--color-hex-d29922)"
-                                            : "var(--color-hex-333333)",
+                                background: (() => {
+                                    if (s.eord === 5) {
+                                        return "var(--color-hex-3fb950)";
+                                    }
+                                    if (s.eord >= 4) {
+                                        return "var(--color-hex-ff2a32)";
+                                    }
+                                    if (s.eord >= 3) {
+                                        return "var(--color-hex-d29922)";
+                                    }
+                                    return "var(--color-hex-333333)";
+                                })(),
                             }}
                         />
                         {i < steps.length - 1 && (
@@ -578,14 +598,18 @@ function ValidationTab({ f }: { f: Finding }) {
                             <span
                                 className="text-[8px] font-semibold tracking-[0.1em]"
                                 style={{
-                                    color:
-                                        s.eord === 5
-                                            ? "var(--color-hex-3fb950)"
-                                            : s.eord >= 4
-                                              ? "var(--color-hex-ff2a32)"
-                                              : s.eord >= 3
-                                                ? "var(--color-hex-d29922)"
-                                                : "var(--color-hex-555555)",
+                                    color: (() => {
+                                        if (s.eord === 5) {
+                                            return "var(--color-hex-3fb950)";
+                                        }
+                                        if (s.eord >= 4) {
+                                            return "var(--color-hex-ff2a32)";
+                                        }
+                                        if (s.eord >= 3) {
+                                            return "var(--color-hex-d29922)";
+                                        }
+                                        return "var(--color-hex-555555)";
+                                    })(),
                                 }}
                             >
                                 E_ord {s.eord} — {eord_labels[s.eord]}
@@ -627,12 +651,14 @@ function ValidationTab({ f }: { f: Finding }) {
                             <div
                                 className="text-[10px] font-bold"
                                 style={{
-                                    color:
-                                        r.k === "RESULT"
-                                            ? f.status === "ORACLE CONFIRMED"
+                                    color: (() => {
+                                        if (r.k === "RESULT") {
+                                            return f.status === "ORACLE CONFIRMED"
                                                 ? "var(--color-hex-3fb950)"
-                                                : "var(--color-hex-d29922)"
-                                            : "var(--color-hex-888888)",
+                                                : "var(--color-hex-d29922)";
+                                        }
+                                        return "var(--color-hex-888888)";
+                                    })(),
                                 }}
                             >
                                 {r.v}
@@ -672,11 +698,15 @@ function TrajectoryTab({ f }: { f: Finding }) {
                             {node}
                         </div>
                         <div className="text-[8.5px] text-[var(--color-hex-444444)]">
-                            {i === 0
-                                ? "Initial discovery via enumeration"
-                                : i === f.path.length - 1
-                                  ? "Terminal — finding confirmed"
-                                  : "Prerequisite satisfied — enabled downstream nodes"}
+                            {(() => {
+                                if (i === 0) {
+                                    return "Initial discovery via enumeration";
+                                }
+                                if (i === f.path.length - 1) {
+                                    return "Terminal — finding confirmed";
+                                }
+                                return "Prerequisite satisfied — enabled downstream nodes";
+                            })()}
                         </div>
                     </div>
                 </div>

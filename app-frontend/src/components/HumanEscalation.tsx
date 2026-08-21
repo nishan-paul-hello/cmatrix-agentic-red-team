@@ -73,7 +73,10 @@ export default function HumanEscalation() {
     const [activeReason, setActiveReason] = useState<Reason>("HIGH_RISK_ACTION");
     const [response, setResponse] = useState("");
     const [submitted, setSubmitted] = useState(false);
-    const reason = REASONS.find((r) => r.id === activeReason)!;
+    const reason = REASONS.find((r) => r.id === activeReason);
+    if (!reason) {
+        return null;
+    }
     if (submitted) {
         return <EscalationSubmitted />;
     }
@@ -145,6 +148,13 @@ export default function HumanEscalation() {
                             <div
                                 key={r.id}
                                 onClick={() => setActiveReason(r.id)}
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter" || e.key === " ") {
+                                        setActiveReason(r.id);
+                                    }
+                                }}
+                                role="button"
+                                tabIndex={0}
                                 className="cursor-pointer rounded-[2px] px-[14px] py-[10px]"
                                 style={{
                                     border: `1px solid ${activeReason === r.id ? `${r.color}66` : "var(--color-hex-1e1e1e)"}`,
@@ -365,9 +375,9 @@ export default function HumanEscalation() {
                             status: "RESOLVED",
                             response: "Retry with PREDIQL",
                         },
-                    ].map((h, i) => (
+                    ].map((h) => (
                         <div
-                            key={i}
+                            key={h.ts}
                             className="mb-[12px]"
                             style={{
                                 paddingBottom: 12,
