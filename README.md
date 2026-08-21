@@ -1,6 +1,6 @@
 <div align="center">
-  <img src="docs/assets/logo-brand-2.svg" alt="CMatrix Logo" width="400" height="400" />
-  <h1>CMatrix</h1>
+  <img src="docs/assets/logo-brand.svg" alt="CMATRIX Logo" width="400" height="400" />
+  <h1>CMATRIX</h1>
   <p>AI-Powered Multi-Agent Security Orchestration & VAPT Platform</p>
 
   <a href="https://cmatrix.kaiofficial.xyz" target="_blank">
@@ -8,7 +8,7 @@
   </a>
 </div>
 
-CMatrix is an advanced, AI-powered security orchestration platform utilizing a multi-agent architecture to automate security assessments, vulnerability scanning, and threat intelligence. Powered by **LangGraph** and **FastAPI** with a **Next.js** frontend, CMatrix acts as an autonomous security operations center.
+CMATRIX is an advanced, AI-powered security orchestration platform utilizing a multi-agent architecture to automate security assessments, vulnerability scanning, and threat intelligence. Powered by **LangGraph** and **FastAPI** with a **Next.js** frontend, CMATRIX acts as an autonomous security operations center.
 
 ---
 
@@ -30,7 +30,7 @@ CMatrix is an advanced, AI-powered security orchestration platform utilizing a m
 ## 📸 Application Preview
 
 <div align="center">
-  <img src="docs/assets/preview.gif" alt="CMatrix Overview" width="100%" />
+  <img src="docs/assets/preview.gif" alt="CMATRIX Overview" width="100%" />
 </div>
 
 ---
@@ -50,7 +50,7 @@ CMatrix is an advanced, AI-powered security orchestration platform utilizing a m
 
 ## 🚀 Installation
 
-CMatrix supports both local development workflows and a fully containerized Docker approach. 
+CMATRIX supports both local development workflows and a fully containerized Docker approach. 
 
 ### 1. Prerequisites
 
@@ -141,7 +141,7 @@ npm run dev
 
 ## 📜 Research Works
 
-CMatrix includes a professional, independent LaTeX build system for documenting research findings. We have five specialized research papers (formatted for **IEEE S&P**) covering different aspects of agentic security.
+CMATRIX includes a professional, independent LaTeX build system for documenting research findings. We have five specialized research papers (formatted for **IEEE S&P**) covering different aspects of agentic security.
 
 ### 📚 Available Research Papers
 
