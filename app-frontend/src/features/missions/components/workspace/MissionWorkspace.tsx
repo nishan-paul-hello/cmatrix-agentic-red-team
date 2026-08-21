@@ -1,16 +1,16 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useReducer, useRef } from "react";
 import dynamic from "next/dynamic";
 
-import EvaluationScreen from "@/components/EvaluationScreen";
-import ExecutionConsole from "@/components/ExecutionConsole";
-import HumanEscalation from "@/components/HumanEscalation";
-import Specialists from "@/components/Specialists";
-import TeamManagerDashboard from "@/components/TeamManagerDashboard";
-import TrajectoryPage from "@/components/TrajectoryPage";
 import CostDashboard from "@/features/cost/components/CostDashboard";
 import EnvironmentalLayer from "@/features/environment/components/EnvironmentalLayer";
+import HumanEscalation from "@/features/escalation/components/HumanEscalation";
+import ExecutionConsole from "@/features/execution/components/ExecutionConsole";
 import FindingsDashboard from "@/features/findings/components/FindingsDashboard";
 import MemoryPage from "@/features/memory/components/MemoryPage";
+import Specialists from "@/features/specialists/components/Specialists";
+import TeamManagerDashboard from "@/features/specialists/components/TeamManagerDashboard";
+import TrajectoryPage from "@/features/trajectory/components/TrajectoryPage";
+import EvaluationScreen from "@/features/validation/components/EvaluationScreen";
 import ValidationCenter from "@/features/validation/components/ValidationCenter";
 import { MISSION_STATUS } from "@/types/domain-types";
 
@@ -25,20 +25,61 @@ import {
 } from "../../data/workspaceMockData";
 import { useElapsed } from "../../hooks/useElapsed";
 import Meta from "./Meta";
-import nodeStyle from "./nodeStyle";
+import nodeStyle from "./NodeStyle";
 import Sep from "./Sep";
 import SpecBadge from "./SpecBadge";
-import specialistStatusDot from "./specialistStatusDot";
+import specialistStatusDot from "./SpecialistStatusDot";
 import Stat from "./Stat";
-import statusBadge from "./statusBadge";
+import statusBadge from "./StatusBadge";
 
-const AttackGraphCanvas = dynamic(() => import("@/components/AttackGraphCanvas"), { ssr: false });
+const AttackGraphCanvas = dynamic(
+    () => import("@/features/missions/components/workspace/AttackGraphCanvas"),
+    { ssr: false },
+);
+
+interface WorkspaceState {
+    subNav: MissionSubNav;
+    log: LogEntry[];
+    paused: boolean;
+    terminated: boolean;
+}
+
+type WorkspaceAction =
+    | { type: "SET_SUB_NAV"; payload: MissionSubNav }
+    | { type: "ADD_LOG_ENTRY"; payload: LogEntry }
+    | { type: "SET_PAUSED"; payload: boolean | ((p: boolean) => boolean) }
+    | { type: "SET_TERMINATED"; payload: boolean };
+
+function workspaceReducer(state: WorkspaceState, action: WorkspaceAction): WorkspaceState {
+    switch (action.type) {
+        case "SET_SUB_NAV":
+            return { ...state, subNav: action.payload };
+        case "ADD_LOG_ENTRY":
+            return { ...state, log: [action.payload, ...state.log].slice(0, 60) };
+        case "SET_PAUSED":
+            return {
+                ...state,
+                paused:
+                    typeof action.payload === "function"
+                        ? action.payload(state.paused)
+                        : action.payload,
+            };
+        case "SET_TERMINATED":
+            return { ...state, terminated: action.payload };
+        default:
+            return state;
+    }
+}
 
 export default function MissionWorkspace({ missionId = "CVE-001" }: { missionId?: string }) {
-    const [subNav, setSubNav] = useState<MissionSubNav>("overview");
-    const [log, setLog] = useState<LogEntry[]>(INITIAL_LOG);
-    const [paused, setPaused] = useState(false);
-    const [terminated, setTerminated] = useState(false);
+    const [state, dispatch] = useReducer(workspaceReducer, {
+        subNav: "overview",
+        log: INITIAL_LOG,
+        paused: false,
+        terminated: false,
+    });
+    const { subNav, log, paused, terminated } = state;
+
     const nextId = useRef(INITIAL_LOG.length + 1);
     const queue = useRef([...STREAM_EVENTS]);
     const time = useElapsed(0);
@@ -55,15 +96,13 @@ export default function MissionWorkspace({ missionId = "CVE-001" }: { missionId?
             if (!next) {
                 return;
             }
-            setLog((prev) =>
-                [
-                    {
-                        ...next,
-                        id: nextId.current++,
-                    },
-                    ...prev,
-                ].slice(0, 60),
-            );
+            dispatch({
+                type: "ADD_LOG_ENTRY",
+                payload: {
+                    ...next,
+                    id: nextId.current++,
+                },
+            });
         }, 3200);
         return () => clearInterval(iv);
     }, []);
@@ -175,7 +214,9 @@ export default function MissionWorkspace({ missionId = "CVE-001" }: { missionId?
                             return (
                                 <button
                                     key={item.id}
-                                    onClick={() => setSubNav(item.id)}
+                                    onClick={() =>
+                                        dispatch({ type: "SET_SUB_NAV", payload: item.id })
+                                    }
                                     className="font-inherit flex w-full cursor-pointer items-center px-4 py-2 text-left text-[10.5px] tracking-[0.06em]"
                                     style={{
                                         background: active
@@ -246,7 +287,9 @@ export default function MissionWorkspace({ missionId = "CVE-001" }: { missionId?
                     >
                         <button
                             className="font-inherit w-full cursor-pointer rounded-[2px] bg-[var(--color-hex-111111)] text-[9.5px] font-semibold tracking-[0.16em]"
-                            onClick={() => setPaused((p) => !p)}
+                            onClick={() =>
+                                dispatch({ type: "SET_PAUSED", payload: (p: boolean) => !p })
+                            }
                             style={{
                                 border: `1px solid ${paused ? "var(--color-hex-d29922)" : "var(--color-hex-333333)"}`,
                                 color: paused
@@ -268,8 +311,8 @@ export default function MissionWorkspace({ missionId = "CVE-001" }: { missionId?
                         <button
                             className="font-inherit w-full rounded-[2px] text-[9.5px] font-semibold tracking-[0.16em]"
                             onClick={() => {
-                                setPaused(true);
-                                setTerminated(true);
+                                dispatch({ type: "SET_PAUSED", payload: true });
+                                dispatch({ type: "SET_TERMINATED", payload: true });
                             }}
                             disabled={terminated}
                             style={{
@@ -359,7 +402,12 @@ export default function MissionWorkspace({ missionId = "CVE-001" }: { missionId?
                                     {/* Focus path button */}
                                     <div className="absolute top-3 right-4">
                                         <button
-                                            onClick={() => setSubNav("attack-graph")}
+                                            onClick={() =>
+                                                dispatch({
+                                                    type: "SET_SUB_NAV",
+                                                    payload: "attack-graph",
+                                                })
+                                            }
                                             className="font-inherit cursor-pointer rounded-[2px] border-[1px] border-solid border-[var(--color-hex-292929)] bg-[var(--color-hex-111111)] px-[10px] py-[3px] text-[8.5px] tracking-[0.14em] text-[var(--color-hex-666666)]"
                                         >
                                             FOCUS HIGHEST-SCORE PATH
@@ -422,14 +470,20 @@ export default function MissionWorkspace({ missionId = "CVE-001" }: { missionId?
                                                         {/* Node card */}
                                                         <div
                                                             onClick={() =>
-                                                                setSubNav("attack-graph")
+                                                                dispatch({
+                                                                    type: "SET_SUB_NAV",
+                                                                    payload: "attack-graph",
+                                                                })
                                                             }
                                                             onKeyDown={(e) => {
                                                                 if (
                                                                     e.key === "Enter" ||
                                                                     e.key === " "
                                                                 ) {
-                                                                    setSubNav("attack-graph");
+                                                                    dispatch({
+                                                                        type: "SET_SUB_NAV",
+                                                                        payload: "attack-graph",
+                                                                    });
                                                                 }
                                                             }}
                                                             role="button"

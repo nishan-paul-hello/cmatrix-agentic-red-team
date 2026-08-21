@@ -1,6 +1,6 @@
 import { SPEC_STATUS, type Specialist } from "@/types/domain-types";
 
-export default function specialistStatusDot(status: Specialist["status"]): string {
+export default function SpecialistStatusDot(status: Specialist["status"]): string {
     return {
         [SPEC_STATUS.RUNNING]: "var(--color-hex-e31b23)",
         [SPEC_STATUS.IDLE]: "var(--color-hex-333333)",

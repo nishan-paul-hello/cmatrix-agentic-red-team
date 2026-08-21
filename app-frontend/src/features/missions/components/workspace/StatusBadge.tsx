@@ -1,6 +1,6 @@
 import { type NodeStatus } from "../../data/workspaceMockData";
 
-export default function statusBadge(status: NodeStatus) {
+export default function StatusBadge(status: NodeStatus) {
     const map: Record<
         NodeStatus,
         {

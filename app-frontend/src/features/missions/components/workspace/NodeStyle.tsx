@@ -1,6 +1,6 @@
 import { type NodeStatus } from "../../data/workspaceMockData";
 
-export default function nodeStyle(status: NodeStatus): {
+export default function NodeStyle(status: NodeStatus): {
     border: string;
     bg: string;
     labelColor: string;

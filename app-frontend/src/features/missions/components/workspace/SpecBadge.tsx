@@ -1,8 +1,6 @@
-import React from "react";
-
 import { type Specialist } from "@/types/domain-types";
 
-import specialistStatusDot from "./specialistStatusDot";
+import specialistStatusDot from "./SpecialistStatusDot";
 
 export default function SpecBadge({ status }: { status: Specialist["status"] }) {
     const color = specialistStatusDot(status);
