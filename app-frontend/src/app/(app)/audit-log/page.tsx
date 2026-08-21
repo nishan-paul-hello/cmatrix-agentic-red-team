@@ -1,6 +1,6 @@
 "use client";
 
-import AuditLogPage from "@/components/AuditLogPage";
+import AuditLogPage from "@/features/audit/components/AuditLogPage";
 
 export default function AuditLog() {
     return <AuditLogPage />;
