@@ -22,6 +22,11 @@ export const metadata: Metadata = {
     index: false,
     follow: false,
   },
+  icons: {
+    icon: "/logo-brand.svg",
+    shortcut: "/logo-brand.svg",
+    apple: "/logo-brand.svg",
+  },
 };
 
 /**
