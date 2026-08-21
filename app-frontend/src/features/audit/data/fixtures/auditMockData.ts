@@ -179,6 +179,11 @@ export const ENTRIES: AuditEntry[] = [
     },
 ];
 
-export function getAuditEntries(): Promise<AuditEntry[]> {
-    return Promise.resolve(ENTRIES);
+export async function getAuditEntries(options?: {
+    page?: number;
+    limit?: number;
+}): Promise<AuditEntry[]> {
+    const { page = 1, limit = 50 } = options ?? {};
+    const start = (page - 1) * limit;
+    return Promise.resolve(ENTRIES.slice(start, start + limit));
 }
