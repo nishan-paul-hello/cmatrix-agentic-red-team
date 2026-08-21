@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type KeyboardEvent } from "react";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -160,7 +160,7 @@ export default function CommandPalette({ onClose, onNavigate }: CommandPalettePr
     }
 
     const handleKey = useCallback(
-        (e: React.KeyboardEvent) => {
+        (e: KeyboardEvent) => {
             switch (e.key) {
                 case "ArrowDown":
                     e.preventDefault();
@@ -179,6 +179,8 @@ export default function CommandPalette({ onClose, onNavigate }: CommandPalettePr
                 case "Escape":
                     onClose();
                     break;
+                default:
+                    break;
             }
         },
         [filtered, cursor, onNavigate, onClose],
@@ -196,7 +198,16 @@ export default function CommandPalette({ onClose, onNavigate }: CommandPalettePr
     return (
         <div
             className="fixed inset-0 z-[100] flex items-start justify-center bg-[var(--color-hex-00000099)] pt-[120px]"
-            onClick={onClose}
+            onClick={(e) => {
+                if (e.target === e.currentTarget) {
+                    onClose();
+                }
+            }}
+            onKeyDown={(e) => {
+                if (e.key === "Escape") {
+                    onClose();
+                }
+            }}
             role="presentation"
         >
             <div
@@ -205,7 +216,6 @@ export default function CommandPalette({ onClose, onNavigate }: CommandPalettePr
                 aria-label="Command palette"
                 className="w-[600px] overflow-hidden rounded-[3px] border border-[var(--color-hex-292929)] bg-[var(--color-hex-0d0d0d)]"
                 style={{ boxShadow: "0 24px 48px var(--color-hex-000000cc)" }}
-                onClick={(e) => e.stopPropagation()}
             >
                 {/* Search input */}
                 <div className="flex h-[48px] items-center gap-3 border-b border-[var(--color-hex-1e1e1e)] px-4">
@@ -272,9 +282,16 @@ export default function CommandPalette({ onClose, onNavigate }: CommandPalettePr
                                                     onNavigate(item.id);
                                                     onClose();
                                                 }}
+                                                onKeyDown={(e) => {
+                                                    if (e.key === "Enter" || e.key === " ") {
+                                                        onNavigate(item.id);
+                                                        onClose();
+                                                    }
+                                                }}
                                                 onMouseEnter={() => setCursor(idx)}
                                                 role="option"
                                                 aria-selected={active}
+                                                tabIndex={0}
                                                 className={[
                                                     "flex cursor-pointer items-center gap-3 border-l-2 px-[16px] py-[9px] transition-colors duration-75",
                                                     active

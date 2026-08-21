@@ -228,14 +228,16 @@ function BenchmarkList({ onSelect }: { onSelect: (b: Bench) => void }) {
                                 style={{
                                     background:
                                         filter === t
-                                            ? (TYPE_C[t as Bench["type"]] ??
-                                              "var(--color-hex-120608)")
+                                            ? ((TYPE_C as Partial<Record<string, string>>)[
+                                                  t as Bench["type"]
+                                              ] ?? "var(--color-hex-120608)")
                                             : "transparent",
-                                    border: `1px solid ${filter === t ? (TYPE_C[t as Bench["type"]] ?? "var(--color-hex-e31b23)") : "var(--color-hex-1e1e1e)"}`,
+                                    border: `1px solid ${filter === t ? ((TYPE_C as Partial<Record<string, string>>)[t as Bench["type"]] ?? "var(--color-hex-e31b23)") : "var(--color-hex-1e1e1e)"}`,
                                     color:
                                         filter === t
-                                            ? (TYPE_C[t as Bench["type"]] ??
-                                              "var(--color-hex-f2f2f2)")
+                                            ? ((TYPE_C as Partial<Record<string, string>>)[
+                                                  t as Bench["type"]
+                                              ] ?? "var(--color-hex-f2f2f2)")
                                             : "var(--color-hex-444444)",
                                 }}
                             >
@@ -376,14 +378,18 @@ function BenchmarkList({ onSelect }: { onSelect: (b: Bench) => void }) {
                             }}
                         >
                             {TIERS.map((t) => {
-                                const scoreColor =
-                                    t.score === null
-                                        ? "var(--color-hex-333333)"
-                                        : t.score >= 0.75
-                                          ? "var(--color-hex-3fb950)"
-                                          : t.score >= 0.5
-                                            ? "var(--color-hex-d29922)"
-                                            : "var(--color-hex-333333)";
+                                const scoreColor = (() => {
+                                    if (t.score === null) {
+                                        return "var(--color-hex-333333)";
+                                    }
+                                    if (t.score >= 0.75) {
+                                        return "var(--color-hex-3fb950)";
+                                    }
+                                    if (t.score >= 0.5) {
+                                        return "var(--color-hex-d29922)";
+                                    }
+                                    return "var(--color-hex-333333)";
+                                })();
                                 return (
                                     <div
                                         key={t.n}
@@ -501,12 +507,15 @@ function BenchmarkList({ onSelect }: { onSelect: (b: Bench) => void }) {
                                                 <span
                                                     className="text-[10px] font-bold"
                                                     style={{
-                                                        color:
-                                                            b.score > 0.8
-                                                                ? "var(--color-hex-3fb950)"
-                                                                : b.score > 0.6
-                                                                  ? "var(--color-hex-d29922)"
-                                                                  : "var(--color-hex-e31b23)",
+                                                        color: (() => {
+                                                            if (b.score > 0.8) {
+                                                                return "var(--color-hex-3fb950)";
+                                                            }
+                                                            if (b.score > 0.6) {
+                                                                return "var(--color-hex-d29922)";
+                                                            }
+                                                            return "var(--color-hex-e31b23)";
+                                                        })(),
                                                     }}
                                                 >
                                                     {(b.score * 100).toFixed(1)}%
@@ -516,12 +525,15 @@ function BenchmarkList({ onSelect }: { onSelect: (b: Bench) => void }) {
                                                         className="h-full"
                                                         style={{
                                                             width: `${pct}%`,
-                                                            background:
-                                                                b.score > 0.8
-                                                                    ? "var(--color-hex-3fb950)"
-                                                                    : b.score > 0.6
-                                                                      ? "var(--color-hex-d29922)"
-                                                                      : "var(--color-hex-e31b23)",
+                                                            background: (() => {
+                                                                if (b.score > 0.8) {
+                                                                    return "var(--color-hex-3fb950)";
+                                                                }
+                                                                if (b.score > 0.6) {
+                                                                    return "var(--color-hex-d29922)";
+                                                                }
+                                                                return "var(--color-hex-e31b23)";
+                                                            })(),
                                                         }}
                                                     />
                                                 </div>
@@ -545,12 +557,15 @@ function BenchmarkList({ onSelect }: { onSelect: (b: Bench) => void }) {
                                         <span
                                             className="text-[8.5px] font-semibold tracking-[0.12em]"
                                             style={{
-                                                color:
-                                                    b.status === "COMPLETE"
-                                                        ? "var(--color-hex-3fb950)"
-                                                        : b.status === "RUNNING"
-                                                          ? "var(--color-hex-ff2a32)"
-                                                          : "var(--color-hex-333333)",
+                                                color: (() => {
+                                                    if (b.status === "COMPLETE") {
+                                                        return "var(--color-hex-3fb950)";
+                                                    }
+                                                    if (b.status === "RUNNING") {
+                                                        return "var(--color-hex-ff2a32)";
+                                                    }
+                                                    return "var(--color-hex-333333)";
+                                                })(),
                                             }}
                                         >
                                             {b.status}
@@ -689,13 +704,18 @@ function BenchmarkDetail({ bench, onBack }: { bench: Bench; onBack: () => void }
                                     <div
                                         className="text-[22px] font-bold"
                                         style={{
-                                            color: m.green
-                                                ? "var(--color-hex-3fb950)"
-                                                : m.warn
-                                                  ? "var(--color-hex-d29922)"
-                                                  : m.red
-                                                    ? "var(--color-hex-ff2a32)"
-                                                    : "var(--color-hex-f2f2f2)",
+                                            color: (() => {
+                                                if (m.green) {
+                                                    return "var(--color-hex-3fb950)";
+                                                }
+                                                if (m.warn) {
+                                                    return "var(--color-hex-d29922)";
+                                                }
+                                                if (m.red) {
+                                                    return "var(--color-hex-ff2a32)";
+                                                }
+                                                return "var(--color-hex-f2f2f2)";
+                                            })(),
                                         }}
                                     >
                                         {m.v}
@@ -834,14 +854,26 @@ function BenchmarkDetail({ bench, onBack }: { bench: Bench; onBack: () => void }
                                         <span
                                             className="text-[8.5px] font-bold tracking-[0.12em]"
                                             style={{
-                                                color: t.solved
-                                                    ? "var(--color-hex-3fb950)"
-                                                    : t.partial
-                                                      ? "var(--color-hex-d29922)"
-                                                      : "var(--color-hex-ff2a32)",
+                                                color: (() => {
+                                                    if (t.solved) {
+                                                        return "var(--color-hex-3fb950)";
+                                                    }
+                                                    if (t.partial) {
+                                                        return "var(--color-hex-d29922)";
+                                                    }
+                                                    return "var(--color-hex-ff2a32)";
+                                                })(),
                                             }}
                                         >
-                                            {t.solved ? "SOLVED" : t.partial ? "PARTIAL" : "FAILED"}
+                                            {(() => {
+                                                if (t.solved) {
+                                                    return "SOLVED";
+                                                }
+                                                if (t.partial) {
+                                                    return "PARTIAL";
+                                                }
+                                                return "FAILED";
+                                            })()}
                                         </span>
                                     </td>
                                     <td className="px-[12px] py-[8px] text-[9px] text-[var(--color-hex-444444)]">
@@ -890,12 +922,15 @@ function BenchmarkDetail({ bench, onBack }: { bench: Bench; onBack: () => void }
                                             <span
                                                 className="text-[10px] font-bold"
                                                 style={{
-                                                    color:
-                                                        pct > 80
-                                                            ? "var(--color-hex-3fb950)"
-                                                            : pct > 50
-                                                              ? "var(--color-hex-d29922)"
-                                                              : "var(--color-hex-ff2a32)",
+                                                    color: (() => {
+                                                        if (pct > 80) {
+                                                            return "var(--color-hex-3fb950)";
+                                                        }
+                                                        if (pct > 50) {
+                                                            return "var(--color-hex-d29922)";
+                                                        }
+                                                        return "var(--color-hex-ff2a32)";
+                                                    })(),
                                                 }}
                                             >
                                                 {pct}%
@@ -906,12 +941,15 @@ function BenchmarkDetail({ bench, onBack }: { bench: Bench; onBack: () => void }
                                                 className="h-full"
                                                 style={{
                                                     width: `${pct}%`,
-                                                    background:
-                                                        pct > 80
-                                                            ? "var(--color-hex-3fb950)"
-                                                            : pct > 50
-                                                              ? "var(--color-hex-d29922)"
-                                                              : "var(--color-hex-ff2a32)",
+                                                    background: (() => {
+                                                        if (pct > 80) {
+                                                            return "var(--color-hex-3fb950)";
+                                                        }
+                                                        if (pct > 50) {
+                                                            return "var(--color-hex-d29922)";
+                                                        }
+                                                        return "var(--color-hex-ff2a32)";
+                                                    })(),
                                                 }}
                                             />
                                         </div>
