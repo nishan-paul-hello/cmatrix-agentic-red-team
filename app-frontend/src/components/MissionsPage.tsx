@@ -1,97 +1,141 @@
 import { useState } from "react";
-import { MISSIONS } from "../lib/data";
+import { MISSIONS } from "@/lib/data";
+import StatusBadge from "@/components/ui/StatusBadge";
+
+// ─── Types & constants ────────────────────────────────────────────────────────
 
 type MissionFilter = "ALL" | "RUNNING" | "PAUSED" | "VALIDATING" | "QUEUED" | "COMPLETED";
 
-function StatusBadge({ status }: { status: string }) {
-  const map: Record<string, { bg: string; color: string }> = {
-    RUNNING:    { bg: "#0D2010", color: "#3FB950" },
-    PAUSED:     { bg: "#1A1A00", color: "#D29922" },
-    VALIDATING: { bg: "#1A0A0B", color: "#FF2A32" },
-    QUEUED:     { bg: "#111111", color: "#666666" },
-    COMPLETED:  { bg: "#0A1A10", color: "#3FB950" },
-    FAILED:     { bg: "#1A0808", color: "#FF2A32" },
-  };
-  const style = map[status] ?? { bg: "#111111", color: "#666666" };
-  return (
-    <span style={{ background: style.bg, color: style.color, border: `1px solid ${style.color}22`, borderRadius: 2, padding: "1px 6px", fontSize: 9.5, letterSpacing: "0.14em", fontWeight: 600 }}>
-      {status}
-    </span>
-  );
+const FILTERS: MissionFilter[] = [
+  "ALL",
+  "RUNNING",
+  "PAUSED",
+  "VALIDATING",
+  "QUEUED",
+  "COMPLETED",
+];
+
+const TABLE_HEADERS = [
+  "ID", "TARGET", "SURFACE", "MODE", "STATUS", "NODES", "FINDINGS", "COST", "STARTED",
+] as const;
+
+// ─── Props ────────────────────────────────────────────────────────────────────
+
+interface MissionsPageProps {
+  onNewMission?: () => void;
+  onOpenMission?: (id: string) => void;
 }
 
-const FILTERS: MissionFilter[] = ["ALL", "RUNNING", "PAUSED", "VALIDATING", "QUEUED", "COMPLETED"];
+// ─── Component ────────────────────────────────────────────────────────────────
 
-export default function MissionsPage({ onNewMission, onOpenMission }: { onNewMission?: () => void; onOpenMission?: (id: string) => void }) {
+export default function MissionsPage({ onNewMission, onOpenMission }: MissionsPageProps) {
   const [filter, setFilter] = useState<MissionFilter>("ALL");
 
-  const filtered = filter === "ALL" ? MISSIONS : MISSIONS.filter(m => m.status === filter);
+  const filtered =
+    filter === "ALL" ? MISSIONS : MISSIONS.filter((m) => m.status === filter);
 
   return (
-    <div className="flex flex-col h-full" style={{ minHeight: 0 }}>
+    <div className="flex flex-col h-full min-h-0">
       {/* Page header */}
-      <div className="flex-shrink-0 px-6 pt-5 pb-4" style={{ borderBottom: "1px solid #1E1E1E" }}>
-        <div style={{ fontSize: 9, color: "#666666", letterSpacing: "0.22em", marginBottom: 3 }}>OPERATIONS</div>
+      <div className="flex-shrink-0 px-6 pt-5 pb-4 border-b border-[var(--color-hex-1e1e1e)]">
+        <div className="page-eyebrow">OPERATIONS</div>
         <div className="flex items-baseline justify-between">
-          <h1 style={{ fontSize: 20, fontWeight: 700, color: "#F2F2F2", letterSpacing: "0.12em" }}>MISSIONS</h1>
+          <h1 className="text-[20px] font-bold text-[var(--color-hex-f2f2f2)] tracking-[0.12em]">
+            MISSIONS
+          </h1>
           <button
             onClick={onNewMission}
-            style={{ fontSize: 9, color: "#E31B23", background: "transparent", border: "1px solid #6F171B", borderRadius: 2, padding: "4px 12px", letterSpacing: "0.14em", cursor: "pointer", fontFamily: "inherit", fontWeight: 600 }}
-            onMouseEnter={e => { e.currentTarget.style.background = "#1A0608"; e.currentTarget.style.borderColor = "#E31B23"; }}
-            onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.borderColor = "#6F171B"; }}
-          >NEW MISSION →</button>
+            className="text-[9px] text-[var(--color-hex-e31b23)] bg-transparent border border-[var(--color-hex-6f171b)] rounded-[2px] py-[4px] px-[12px] tracking-[0.14em] cursor-pointer font-semibold hover:bg-[var(--color-hex-1a0608)] hover:border-[var(--color-hex-e31b23)] transition-colors duration-100"
+          >
+            NEW MISSION →
+          </button>
         </div>
       </div>
 
       {/* Filter strip */}
-      <div className="flex-shrink-0 flex items-center gap-1 px-6 py-3" style={{ borderBottom: "1px solid #1E1E1E", background: "#0B0B0B" }}>
-        {FILTERS.map(f => (
+      <div
+        className="flex-shrink-0 flex items-center gap-1 px-6 py-3 bg-[var(--color-hex-0b0b0b)] border-b border-[var(--color-hex-1e1e1e)]"
+        role="group"
+        aria-label="Filter missions by status"
+      >
+        {FILTERS.map((f) => (
           <button
             key={f}
             onClick={() => setFilter(f)}
-            style={{
-              fontSize: 8.5, letterSpacing: "0.12em", padding: "3px 10px",
-              background: filter === f ? "#120608" : "transparent",
-              border: `1px solid ${filter === f ? "#E31B23" : "#1E1E1E"}`,
-              borderRadius: 2,
-              color: filter === f ? "#FF2A32" : "#555555",
-              cursor: "pointer", fontFamily: "inherit",
-            }}
-            onMouseEnter={e => { if (filter !== f) e.currentTarget.style.color = "#A0A0A0"; }}
-            onMouseLeave={e => { if (filter !== f) e.currentTarget.style.color = "#555555"; }}
-          >{f}</button>
+            aria-pressed={filter === f}
+            className={[
+              "filter-btn transition-colors duration-100",
+              filter === f
+                ? "bg-[var(--color-hex-120608)] border-[var(--color-hex-e31b23)] text-[var(--color-hex-ff2a32)]"
+                : "bg-transparent border-[var(--color-hex-1e1e1e)] text-[var(--color-hex-555555)] hover:text-[var(--color-hex-a0a0a0)]",
+            ].join(" ")}
+          >
+            {f}
+          </button>
         ))}
-        <span style={{ marginLeft: "auto", fontSize: 8.5, color: "#444444", letterSpacing: "0.12em" }}>{filtered.length} MISSIONS</span>
+        <span className="ml-auto text-[8.5px] text-[var(--color-hex-444444)] tracking-[0.12em]">
+          {filtered.length} MISSIONS
+        </span>
       </div>
 
       {/* Missions table */}
       <div className="flex-1 overflow-auto">
-        <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 11 }}>
+        <table className="w-full border-collapse text-[11px]">
           <thead>
-            <tr style={{ background: "#111111", position: "sticky", top: 0 }}>
-              {["ID", "TARGET", "SURFACE", "MODE", "STATUS", "NODES", "FINDINGS", "COST", "STARTED"].map(h => (
-                <th key={h} style={{ padding: "6px 16px", textAlign: "left", fontSize: 8.5, color: "#444444", letterSpacing: "0.18em", fontWeight: 600, borderBottom: "1px solid #1E1E1E", whiteSpace: "nowrap" }}>{h}</th>
+            <tr className="bg-[var(--color-hex-111111)] sticky top-0 z-10">
+              {TABLE_HEADERS.map((h) => (
+                <th
+                  key={h}
+                  className="py-[6px] px-[16px] text-left text-[8.5px] text-[var(--color-hex-444444)] tracking-[0.18em] font-semibold whitespace-nowrap border-b border-[var(--color-hex-1e1e1e)]"
+                >
+                  {h}
+                </th>
               ))}
             </tr>
           </thead>
           <tbody>
-            {filtered.map(m => (
+            {filtered.map((m) => (
               <tr
                 key={m.id}
-                style={{ borderBottom: "1px solid #191919", cursor: "pointer" }}
-                onMouseEnter={e => (e.currentTarget.style.background = "#131313")}
-                onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
                 onClick={() => onOpenMission?.(m.id)}
+                className="cursor-pointer border-b border-[var(--color-hex-191919)] hover:bg-[var(--color-hex-131313)] transition-colors duration-75"
               >
-                <td style={{ padding: "8px 16px", color: "#E31B23", fontWeight: 600, letterSpacing: "0.08em", whiteSpace: "nowrap" }}>{m.id}</td>
-                <td style={{ padding: "8px 16px", color: "#A0A0A0", whiteSpace: "nowrap", maxWidth: 180, overflow: "hidden", textOverflow: "ellipsis" }}>{m.target}</td>
-                <td style={{ padding: "8px 16px", color: "#666666", whiteSpace: "nowrap", fontSize: 10 }}>{m.surface}</td>
-                <td style={{ padding: "8px 16px", color: "#666666", whiteSpace: "nowrap", fontSize: 10 }}>{m.mode}</td>
-                <td style={{ padding: "8px 16px", whiteSpace: "nowrap" }}><StatusBadge status={m.status} /></td>
-                <td style={{ padding: "8px 16px", color: "#A0A0A0", textAlign: "right" }}>{m.nodes}</td>
-                <td style={{ padding: "8px 16px", color: m.findings > 0 ? "#FF2A32" : "#666666", textAlign: "right", fontWeight: m.findings > 0 ? 600 : 400 }}>{m.findings}</td>
-                <td style={{ padding: "8px 16px", color: "#A0A0A0", textAlign: "right" }}>{m.cost}</td>
-                <td style={{ padding: "8px 16px", color: "#555555", fontSize: 9.5, whiteSpace: "nowrap" }}>{m.started}</td>
+                <td className="py-[8px] px-[16px] text-[var(--color-hex-e31b23)] font-semibold tracking-[0.08em] whitespace-nowrap">
+                  {m.id}
+                </td>
+                <td className="py-[8px] px-[16px] text-[var(--color-hex-a0a0a0)] whitespace-nowrap max-w-[180px] cell-truncate">
+                  {m.target}
+                </td>
+                <td className="py-[8px] px-[16px] text-[var(--color-hex-666666)] whitespace-nowrap text-[10px]">
+                  {m.surface}
+                </td>
+                <td className="py-[8px] px-[16px] text-[var(--color-hex-666666)] whitespace-nowrap text-[10px]">
+                  {m.mode}
+                </td>
+                <td className="py-[8px] px-[16px] whitespace-nowrap">
+                  <StatusBadge status={m.status} />
+                </td>
+                <td className="py-[8px] px-[16px] text-[var(--color-hex-a0a0a0)] text-right">
+                  {m.nodes}
+                </td>
+                <td
+                  className="py-[8px] px-[16px] text-right"
+                  style={{
+                    color:
+                      m.findings > 0
+                        ? "var(--color-hex-ff2a32)"
+                        : "var(--color-hex-666666)",
+                    fontWeight: m.findings > 0 ? 600 : 400,
+                  }}
+                >
+                  {m.findings}
+                </td>
+                <td className="py-[8px] px-[16px] text-[var(--color-hex-a0a0a0)] text-right">
+                  {m.cost}
+                </td>
+                <td className="py-[8px] px-[16px] text-[var(--color-hex-555555)] text-[9.5px] whitespace-nowrap">
+                  {m.started}
+                </td>
               </tr>
             ))}
           </tbody>
