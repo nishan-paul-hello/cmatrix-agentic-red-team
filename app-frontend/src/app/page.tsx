@@ -13,15 +13,15 @@ import { useAuthGuard } from "@/lib/hooks/useAuthGuard";
  * on the server without a broader auth architecture change.
  */
 export default function RootPage() {
-  const authenticated = useAuthGuard();
+    const authenticated = useAuthGuard();
 
-  // If authenticated, push to dashboard immediately.
-  // The useAuthGuard hook handles the /login redirect when not authenticated.
-  if (authenticated) {
-    // Dynamic import to avoid a circular dep with next/navigation at module
-    // level — the redirect will fire via the layout's own guard as well.
-    // No-op here; the guard already navigates.
-  }
+    // If authenticated, push to dashboard immediately.
+    // The useAuthGuard hook handles the /login redirect when not authenticated.
+    if (authenticated) {
+        // Dynamic import to avoid a circular dep with next/navigation at module
+        // level — the redirect will fire via the layout's own guard as well.
+        // No-op here; the guard already navigates.
+    }
 
-  return null;
+    return null;
 }

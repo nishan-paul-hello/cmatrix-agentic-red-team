@@ -21,14 +21,14 @@ import { useAuth } from "@/lib/auth-context";
  * ```
  */
 export function useAuthGuard(): boolean {
-  const router = useRouter();
-  const { authenticated } = useAuth();
+    const router = useRouter();
+    const { authenticated } = useAuth();
 
-  useEffect(() => {
-    if (!authenticated) {
-      router.replace("/login");
-    }
-  }, [authenticated, router]);
+    useEffect(() => {
+        if (!authenticated) {
+            router.replace("/login");
+        }
+    }, [authenticated, router]);
 
-  return authenticated;
+    return authenticated;
 }

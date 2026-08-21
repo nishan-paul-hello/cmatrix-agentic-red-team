@@ -3,5 +3,5 @@
 import ResearchLab from "@/components/ResearchLab";
 
 export default function FailureAnalysis() {
-  return <ResearchLab initialTab="FAILURE ANALYSIS" />;
+    return <ResearchLab initialTab="FAILURE ANALYSIS" />;
 }

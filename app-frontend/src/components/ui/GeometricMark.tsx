@@ -6,20 +6,20 @@ import Image from "next/image";
  * truth for the mark geometry and colours.
  */
 interface GeometricMarkProps {
-  /** Rendered width and height in pixels. Defaults to 28. */
-  size?: number;
+    /** Rendered width and height in pixels. Defaults to 28. */
+    size?: number;
 }
 
 export default function GeometricMark({ size = 28 }: GeometricMarkProps) {
-  return (
-    <Image
-      src="/logo-brand.svg"
-      width={size}
-      height={size}
-      alt=""
-      aria-hidden="true"
-      draggable={false}
-      style={{ display: "block" }}
-    />
-  );
+    return (
+        <Image
+            src="/logo-brand.svg"
+            width={size}
+            height={size}
+            alt=""
+            aria-hidden="true"
+            draggable={false}
+            style={{ display: "block" }}
+        />
+    );
 }
