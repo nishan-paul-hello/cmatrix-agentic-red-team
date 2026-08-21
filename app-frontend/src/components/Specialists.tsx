@@ -367,12 +367,15 @@ function SpecDetail({ spec, onBack }: { spec: Spec; onBack: () => void }) {
                                         className="mt-[2px] h-[8px] w-[8px] rounded-[1px]"
                                         style={{
                                             border: `1px solid ${i === TIMELINE.length - 1 ? "var(--color-hex-e31b23)" : "var(--color-hex-333333)"}`,
-                                            background:
-                                                i === TIMELINE.length - 1
-                                                    ? "var(--color-hex-e31b23)"
-                                                    : i < TIMELINE.length - 1
-                                                      ? "var(--color-hex-1a1a1a)"
-                                                      : "transparent",
+                                            background: (() => {
+                                                if (i === TIMELINE.length - 1) {
+                                                    return "var(--color-hex-e31b23)";
+                                                }
+                                                if (i < TIMELINE.length - 1) {
+                                                    return "var(--color-hex-1a1a1a)";
+                                                }
+                                                return "transparent";
+                                            })(),
                                         }}
                                     />
                                     {i < TIMELINE.length - 1 && (
@@ -442,11 +445,12 @@ function SpecDetail({ spec, onBack }: { spec: Spec; onBack: () => void }) {
                                 No failures recorded
                             </span>
                         ) : (
-                            Array.from({
-                                length: spec.failures,
-                            }).map((_, i) => (
+                            Array.from(
+                                { length: spec.failures },
+                                (_, i) => `fail-${spec.id}-${i}`,
+                            ).map((failId, i) => (
                                 <div
-                                    key={i}
+                                    key={failId}
                                     className="mb-[4px] text-[9px] leading-[1.5] text-[var(--color-hex-555555)]"
                                 >
                                     Reflection #{i + 1}: payload timeout on FILTERED port
@@ -459,16 +463,28 @@ function SpecDetail({ spec, onBack }: { spec: Spec; onBack: () => void }) {
                             <div
                                 className="h-full bg-[var(--color-hex-e31b23)]"
                                 style={{
-                                    width: `${spec.context === "FRESH" ? 12 : spec.context === "COMPACTED" ? 31 : 0}%`,
+                                    width: `${(() => {
+                                        if (spec.context === "FRESH") {
+                                            return 12;
+                                        }
+                                        if (spec.context === "COMPACTED") {
+                                            return 31;
+                                        }
+                                        return 0;
+                                    })()}%`,
                                 }}
                             />
                         </div>
                         <div className="mt-[4px] text-[8px] tracking-[0.1em] text-[var(--color-hex-444444)]">
-                            {spec.context === "FRESH"
-                                ? "12%"
-                                : spec.context === "COMPACTED"
-                                  ? "31% (post-compaction)"
-                                  : "—"}
+                            {(() => {
+                                if (spec.context === "FRESH") {
+                                    return "12%";
+                                }
+                                if (spec.context === "COMPACTED") {
+                                    return "31% (post-compaction)";
+                                }
+                                return "—";
+                            })()}
                         </div>
                     </Sidebar>
                 </div>

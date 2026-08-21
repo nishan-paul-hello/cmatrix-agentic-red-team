@@ -154,6 +154,13 @@ function Toggle({ on }: { on: boolean }) {
     const [v, setV] = useState(on);
     return (
         <div
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                    setV(!v);
+                }
+            }}
             onClick={() => setV(!v)}
             className="relative h-[16px] w-[32px] shrink-0 cursor-pointer rounded-[8px]"
             style={{
