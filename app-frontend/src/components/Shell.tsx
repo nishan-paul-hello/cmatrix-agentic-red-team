@@ -1,69 +1,116 @@
 import type { ReactNode } from "react";
+import GeometricMark from "@/components/ui/GeometricMark";
+
+// ─── Types ────────────────────────────────────────────────────────────────────
 
 export type NavItem =
-  | "dashboard" | "missions"
-  | "memory" | "skill-library" | "failure-memory"
-  | "trajectory" | "benchmarks" | "ablations" | "statistics" | "failure-analysis" | "reports"
-  | "cost-usage" | "audit-log" | "settings";
+  | "dashboard"
+  | "missions"
+  | "memory"
+  | "skill-library"
+  | "failure-memory"
+  | "trajectory"
+  | "benchmarks"
+  | "ablations"
+  | "statistics"
+  | "failure-analysis"
+  | "reports"
+  | "cost-usage"
+  | "audit-log"
+  | "settings";
+
+// ─── Static data ──────────────────────────────────────────────────────────────
 
 const NAV_GROUPS = [
   {
     label: "OPERATIONS",
     items: [
-      { id: "dashboard", label: "Dashboard" },
-      { id: "missions",  label: "Missions"  },
+      { id: "dashboard" as NavItem, label: "Dashboard" },
+      { id: "missions" as NavItem, label: "Missions" },
     ],
   },
   {
     label: "KNOWLEDGE",
     items: [
-      { id: "memory",         label: "Memory"         },
-      { id: "skill-library",  label: "Skill Library"  },
-      { id: "failure-memory", label: "Failure Memory" },
+      { id: "memory" as NavItem, label: "Memory" },
+      { id: "skill-library" as NavItem, label: "Skill Library" },
+      { id: "failure-memory" as NavItem, label: "Failure Memory" },
     ],
   },
   {
     label: "RESEARCH",
     items: [
-      { id: "trajectory",     label: "Trajectory"      },
-      { id: "benchmarks",       label: "Benchmarks"       },
-      { id: "ablations",        label: "Ablations"        },
-      { id: "statistics",       label: "Statistics"       },
-      { id: "failure-analysis", label: "Failure Analysis" },
-      { id: "reports",          label: "Reports"          },
+      { id: "trajectory" as NavItem, label: "Trajectory" },
+      { id: "benchmarks" as NavItem, label: "Benchmarks" },
+      { id: "ablations" as NavItem, label: "Ablations" },
+      { id: "statistics" as NavItem, label: "Statistics" },
+      { id: "failure-analysis" as NavItem, label: "Failure Analysis" },
+      { id: "reports" as NavItem, label: "Reports" },
     ],
   },
   {
     label: "SYSTEM",
     items: [
-      { id: "cost-usage", label: "Cost & Usage" },
-      { id: "audit-log",  label: "Audit Log"    },
-      { id: "settings",   label: "Settings"     },
+      { id: "cost-usage" as NavItem, label: "Cost & Usage" },
+      { id: "audit-log" as NavItem, label: "Audit Log" },
+      { id: "settings" as NavItem, label: "Settings" },
     ],
   },
 ] as const;
 
-function GeometricMark() {
+/** Icon glyphs keyed by NavItem — typed to catch unknown ids at compile time. */
+const NAV_ICONS: Record<NavItem, string> = {
+  dashboard: "▪",
+  missions: "◈",
+  memory: "⊞",
+  "skill-library": "⊟",
+  "failure-memory": "⊠",
+  trajectory: "⤴",
+  benchmarks: "≡",
+  ablations: "∿",
+  statistics: "∑",
+  "failure-analysis": "⊗",
+  reports: "⊕",
+  "cost-usage": "$",
+  "audit-log": "≣",
+  settings: "⚙",
+};
+
+// ─── Sub-components ───────────────────────────────────────────────────────────
+
+function NavIcon({ id }: { id: NavItem }) {
   return (
-    <svg width="20" height="20" viewBox="0 0 28 28" fill="none">
-      <rect x="0.5" y="0.5" width="11" height="11" stroke="#E31B23" strokeWidth="1" fill="none" />
-      <rect x="8.5" y="8.5" width="11" height="11" stroke="#9E1118" strokeWidth="1" fill="none" />
-      <rect x="16.5" y="16.5" width="11" height="11" stroke="#6F171B" strokeWidth="1" fill="none" />
-      <line x1="6" y1="6" x2="22" y2="22" stroke="#E31B23" strokeWidth="0.75" />
-    </svg>
+    <span className="text-[10px] w-[14px] inline-block" aria-hidden="true">
+      {NAV_ICONS[id]}
+    </span>
   );
 }
 
-function NavIcon({ id }: { id: string }) {
-  const icons: Record<string, string> = {
-    dashboard: "▪", missions: "◈",
-    memory: "⊞", "skill-library": "⊟", "failure-memory": "⊠",
-    trajectory: "⤴", benchmarks: "≡", ablations: "∿", statistics: "∑",
-    "failure-analysis": "⊗", reports: "⊕",
-    "cost-usage": "$", "audit-log": "≣", settings: "⚙",
-  };
-  return <span style={{ fontSize: 10, width: 14, display: "inline-block" }}>{icons[id] ?? "·"}</span>;
+function TopbarStat({
+  label,
+  value,
+  valueColor,
+}: {
+  label: string;
+  value: string;
+  valueColor?: string;
+}) {
+  return (
+    <div className="flex items-center gap-1.5">
+      <span className="text-[8.5px] text-[var(--color-hex-444444)] tracking-[0.14em]">
+        {label}
+      </span>
+      <span
+        className="text-[9.5px] tracking-[0.08em]"
+        style={{ color: valueColor ?? "var(--color-hex-a0a0a0)" }}
+      >
+        {value}
+      </span>
+    </div>
+  );
 }
+
+// ─── Props ────────────────────────────────────────────────────────────────────
 
 interface ShellProps {
   activeNav: NavItem;
@@ -72,28 +119,51 @@ interface ShellProps {
   missionId?: string;
 }
 
-export default function Shell({ activeNav, onNavChange, children, missionId = "CVE-001" }: ShellProps) {
+// ─── Component ────────────────────────────────────────────────────────────────
+
+export default function Shell({
+  activeNav,
+  onNavChange,
+  children,
+  missionId = "CVE-001",
+}: ShellProps) {
   return (
-    <div className="flex h-screen overflow-hidden" style={{ background: "#080808", color: "#F2F2F2" }}>
-      {/* Sidebar */}
-      <aside className="flex flex-col flex-shrink-0 overflow-y-auto" style={{ width: 200, background: "#0B0B0B", borderRight: "1px solid #1E1E1E", position:"relative" }}>
+    <div className="flex h-screen overflow-hidden bg-[var(--color-hex-080808)] text-[var(--color-hex-f2f2f2)]">
+      {/* ── Sidebar ────────────────────────────────────────────────────── */}
+      <aside
+        className="flex flex-col flex-shrink-0 overflow-y-auto w-[200px] bg-[var(--color-hex-0b0b0b)] relative border-r border-[var(--color-hex-1e1e1e)]"
+        aria-label="Main navigation"
+      >
         {/* Red accent stripe */}
-        <div style={{ position:"absolute", left:0, top:0, bottom:0, width:2, background:"#E31B23" }} />
+        <div
+          className="absolute left-0 top-0 bottom-0 w-[2px] bg-[var(--color-hex-e31b23)]"
+          aria-hidden="true"
+        />
+
         {/* Logo */}
-        <div className="flex items-center gap-2.5 px-4 py-4" style={{ borderBottom: "1px solid #1E1E1E", paddingLeft:16 }}>
-          <GeometricMark />
+        <div className="flex items-center gap-2.5 px-4 py-4 border-b border-[var(--color-hex-1e1e1e)]">
+          <GeometricMark size={20} />
           <div className="flex flex-col">
-            <span className="font-bold" style={{ fontSize: 12, color: "#F2F2F2", letterSpacing: "0.2em" }}>CMATRIX</span>
-            <span style={{ fontSize: 7, color: "#666666", letterSpacing: "0.2em" }}>AUTONOMOUS VAPT</span>
+            <span className="font-bold text-[12px] text-[var(--color-hex-f2f2f2)] tracking-[0.2em]">
+              CMATRIX
+            </span>
+            <span className="text-[7px] text-[var(--color-hex-666666)] tracking-[0.2em]">
+              AUTONOMOUS VAPT
+            </span>
           </div>
         </div>
 
         {/* Nav groups */}
-        <nav className="flex flex-col flex-1 py-2">
+        <nav className="flex flex-col flex-1 py-2" aria-label="Sections">
           {NAV_GROUPS.map((group, gi) => (
             <div key={group.label}>
-              {gi > 0 && <div className="mx-4 my-2" style={{ height: 1, background: "#1E1E1E" }} />}
-              <div className="px-4 pt-2 pb-1" style={{ fontSize: 8, color: "#444444", letterSpacing: "0.22em", fontWeight: 600 }}>
+              {gi > 0 && (
+                <div
+                  className="mx-4 my-2 h-[1px] bg-[var(--color-hex-1e1e1e)]"
+                  aria-hidden="true"
+                />
+              )}
+              <div className="px-4 pt-2 pb-1 text-[8px] text-[var(--color-hex-444444)] tracking-[0.22em] font-semibold">
                 {group.label}
               </div>
               {group.items.map((item) => {
@@ -101,19 +171,15 @@ export default function Shell({ activeNav, onNavChange, children, missionId = "C
                 return (
                   <button
                     key={item.id}
-                    onClick={() => onNavChange(item.id as NavItem)}
-                    className="w-full flex items-center gap-2 px-4 py-1.5 text-left"
-                    style={{
-                      background: active ? "#1A0A0B" : "transparent",
-                      borderLeft: active ? "2px solid #E31B23" : "2px solid transparent",
-                      color: active ? "#F2F2F2" : "#666666",
-                      fontSize: 10.5,
-                      fontFamily: "inherit",
-                      cursor: "pointer",
-                      letterSpacing: "0.02em",
-                    }}
-                    onMouseEnter={(e) => { if (!active) e.currentTarget.style.color = "#A0A0A0"; }}
-                    onMouseLeave={(e) => { if (!active) e.currentTarget.style.color = "#666666"; }}
+                    onClick={() => onNavChange(item.id)}
+                    aria-current={active ? "page" : undefined}
+                    className={[
+                      "w-full flex items-center gap-2 px-4 py-1.5 text-left text-[10.5px] cursor-pointer tracking-[0.02em]",
+                      "border-l-2 transition-colors duration-100",
+                      active
+                        ? "bg-[var(--color-hex-1a0a0b)] border-[var(--color-hex-e31b23)] text-[var(--color-hex-f2f2f2)]"
+                        : "border-transparent text-[var(--color-hex-666666)] hover:text-[var(--color-hex-a0a0a0)]",
+                    ].join(" ")}
                   >
                     <NavIcon id={item.id} />
                     {item.label}
@@ -125,49 +191,75 @@ export default function Shell({ activeNav, onNavChange, children, missionId = "C
         </nav>
 
         {/* Ctrl+K hint */}
-        <div className="flex items-center gap-2 px-4 py-3" style={{ borderTop:"1px solid #1E1E1E" }}>
-          <kbd style={{ fontSize:8, color:"#333333", background:"#111111", border:"1px solid #1E1E1E", borderRadius:2, padding:"1px 5px", fontFamily:"inherit" }}>⌘K</kbd>
-          <span style={{ fontSize:8, color:"#333333", letterSpacing:"0.1em" }}>COMMAND PALETTE</span>
+        <div className="flex items-center gap-2 px-4 py-3 border-t border-[var(--color-hex-1e1e1e)]">
+          <kbd className="text-[8px] text-[var(--color-hex-333333)] bg-[var(--color-hex-111111)] border border-[var(--color-hex-1e1e1e)] rounded-[2px] py-[1px] px-[5px]">
+            ⌘K
+          </kbd>
+          <span className="text-[8px] text-[var(--color-hex-333333)] tracking-[0.1em]">
+            COMMAND PALETTE
+          </span>
         </div>
       </aside>
 
-      {/* Main column */}
+      {/* ── Main column ────────────────────────────────────────────────── */}
       <div className="flex flex-col flex-1 overflow-hidden">
         {/* Top bar */}
-        <div className="flex items-center justify-between flex-shrink-0 px-4" style={{ height: 36, background: "#0D0D0D", borderBottom: "1px solid #1E1E1E" }}>
-          <span style={{ fontSize: 10, color: "#A0A0A0", letterSpacing: "0.14em" }}>
-            MISSION / <span style={{ color: "#E31B23", fontWeight:700 }}>{missionId}</span>
+        <header
+          className="flex items-center justify-between flex-shrink-0 px-4 h-[36px] bg-[var(--color-hex-0d0d0d)] border-b border-[var(--color-hex-1e1e1e)]"
+          aria-label="Mission context bar"
+        >
+          <span className="text-[10px] text-[var(--color-hex-a0a0a0)] tracking-[0.14em]">
+            MISSION /{" "}
+            <span className="text-[var(--color-hex-e31b23)] font-bold">
+              {missionId}
+            </span>
           </span>
+
           <div className="flex items-center gap-5">
+            {/* System status indicator */}
             <div className="flex items-center gap-1.5">
-              <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#3FB950", flexShrink: 0 }} />
-              <span style={{ fontSize: 9.5, color: "#3FB950", letterSpacing: "0.14em" }}>SYSTEM ONLINE</span>
+              <div
+                className="w-[6px] h-[6px] bg-[var(--color-hex-3fb950)] shrink-0 rounded-full"
+                style={{ animation: "pulse 1.4s ease-in-out infinite" }}
+                aria-hidden="true"
+              />
+              <span className="text-[9.5px] text-[var(--color-hex-3fb950)] tracking-[0.14em]">
+                SYSTEM ONLINE
+              </span>
             </div>
-            <Topbar label="STATUS" value="RUNNING" valueColor="#3FB950" />
-            <Topbar label="MODEL" value="SONNET-5" />
-            <Topbar label="COST" value="$1.42" />
-            <Topbar label="TIME" value="00:19:04" />
-            <div className="flex items-center gap-2 ml-2" style={{ borderLeft: "1px solid #1E1E1E", paddingLeft: 12 }}>
-              <div style={{ width: 22, height: 22, borderRadius: 2, background: "#191919", border: "1px solid #292929", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, color: "#666666", cursor: "pointer" }}>⚙</div>
-              <div style={{ width: 22, height: 22, borderRadius: "50%", background: "#1E1E1E", border: "1px solid #292929", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, color: "#A0A0A0", cursor: "pointer" }}>R</div>
+
+            <TopbarStat
+              label="STATUS"
+              value="RUNNING"
+              valueColor="var(--color-hex-3fb950)"
+            />
+            <TopbarStat label="MODEL" value="SONNET-5" />
+            <TopbarStat label="COST" value="$1.42" />
+            <TopbarStat label="TIME" value="00:19:04" />
+
+            {/* User actions */}
+            <div className="flex items-center gap-2 ml-2 pl-3 border-l border-[var(--color-hex-1e1e1e)]">
+              <button
+                aria-label="Settings"
+                className="w-[22px] h-[22px] flex items-center justify-center rounded-[2px] bg-[var(--color-hex-191919)] border border-[var(--color-hex-292929)] text-[10px] text-[var(--color-hex-666666)] cursor-pointer hover:text-[var(--color-hex-a0a0a0)] transition-colors duration-100"
+              >
+                ⚙
+              </button>
+              <button
+                aria-label="User profile"
+                className="w-[22px] h-[22px] flex items-center justify-center rounded-full bg-[var(--color-hex-1e1e1e)] border border-[var(--color-hex-292929)] text-[10px] text-[var(--color-hex-a0a0a0)] cursor-pointer hover:text-[var(--color-hex-f2f2f2)] transition-colors duration-100"
+              >
+                R
+              </button>
             </div>
           </div>
-        </div>
+        </header>
 
         {/* Page content */}
-        <main className="flex-1 overflow-hidden" style={{ background: "#0D0D0D" }}>
+        <main className="flex-1 overflow-hidden bg-[var(--color-hex-0d0d0d)]">
           {children}
         </main>
       </div>
-    </div>
-  );
-}
-
-function Topbar({ label, value, valueColor }: { label: string; value: string; valueColor?: string }) {
-  return (
-    <div className="flex items-center gap-1.5">
-      <span style={{ fontSize: 8.5, color: "#444444", letterSpacing: "0.14em" }}>{label}</span>
-      <span style={{ fontSize: 9.5, color: valueColor ?? "#A0A0A0", letterSpacing: "0.08em" }}>{value}</span>
     </div>
   );
 }
