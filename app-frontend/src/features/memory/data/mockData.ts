@@ -9,6 +9,7 @@ export type MemTab =
     | "CONTEXT UTILIZATION";
 
 /* ── Shared data ── */
+export type MemoryPattern = (typeof PATTERNS)[0];
 export const PATTERNS = [
     {
         id: "VP-0291",
