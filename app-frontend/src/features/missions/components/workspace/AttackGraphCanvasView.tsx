@@ -1,209 +1,18 @@
 import React from "react";
 
+import { AttackGraphEdge } from "@/features/missions/components/workspace/AttackGraphEdge";
 import { AttackGraphLegend } from "@/features/missions/components/workspace/AttackGraphLegend";
+import { AttackGraphNode } from "@/features/missions/components/workspace/AttackGraphNode";
 import { AttackGraphToolbar } from "@/features/missions/components/workspace/AttackGraphToolbar";
-import { NodeStat } from "@/features/missions/components/workspace/NodeStat";
 import VDGNodeDrawer from "@/features/missions/components/workspace/VDGNodeDrawer";
+import {
+    type Edge,
+    type FilterStatus,
+    type NodeStatus,
+    type VDGNode,
+    type VulnFilter,
+} from "@/features/missions/data/fixtures/attackGraphMockData";
 
-type NodeStatus =
-    "EXPLOITED" | "ELIGIBLE" | "IN_PROGRESS" | "BLOCKED" | "INFEASIBLE" | "DEPRIORITIZED";
-type FilterStatus = "ALL" | NodeStatus;
-type VulnFilter =
-    | "ALL"
-    | "SQLi"
-    | "XSS"
-    | "CSRF"
-    | "SSRF"
-    | "SSTI"
-    | "IDOR"
-    | "RCE"
-    | "AUTH"
-    | "GRAPHQL"
-    | "LATERAL";
-interface VDGNode {
-    id: string;
-    type: string;
-    vulnClass: VulnFilter;
-    status: NodeStatus;
-    ucb: number;
-    eord: number;
-    cx: number;
-    cy: number;
-}
-interface Edge {
-    from: string;
-    to: string;
-    active?: boolean;
-}
-const NODES: VDGNode[] = [
-    {
-        id: "RECON-001",
-        type: "RECONNAISSANCE",
-        vulnClass: "ALL",
-        status: "EXPLOITED",
-        ucb: 0,
-        eord: 5,
-        cx: 500,
-        cy: 50,
-    },
-    {
-        id: "AUTH-001",
-        type: "AUTHENTICATION",
-        vulnClass: "AUTH",
-        status: "EXPLOITED",
-        ucb: 0,
-        eord: 4,
-        cx: 270,
-        cy: 170,
-    },
-    {
-        id: "ENUM-002",
-        type: "ENUMERATION",
-        vulnClass: "ALL",
-        status: "EXPLOITED",
-        ucb: 0,
-        eord: 4,
-        cx: 720,
-        cy: 170,
-    },
-    {
-        id: "SQLI-001",
-        type: "SQL INJECTION",
-        vulnClass: "SQLi",
-        status: "ELIGIBLE",
-        ucb: 0.824,
-        eord: 3,
-        cx: 110,
-        cy: 320,
-    },
-    {
-        id: "XSS-002",
-        type: "CROSS-SITE SCRIPT",
-        vulnClass: "XSS",
-        status: "IN_PROGRESS",
-        ucb: 0.741,
-        eord: 3,
-        cx: 310,
-        cy: 320,
-    },
-    {
-        id: "CSRF-003",
-        type: "CROSS-SITE REQ",
-        vulnClass: "CSRF",
-        status: "BLOCKED",
-        ucb: 0.512,
-        eord: 1,
-        cx: 500,
-        cy: 320,
-    },
-    {
-        id: "SSRF-005",
-        type: "SERVER-SIDE REQ",
-        vulnClass: "SSRF",
-        status: "INFEASIBLE",
-        ucb: 0,
-        eord: 2,
-        cx: 690,
-        cy: 320,
-    },
-    {
-        id: "IDOR-008",
-        type: "INSECURE DIR REF",
-        vulnClass: "IDOR",
-        status: "ELIGIBLE",
-        ucb: 0.631,
-        eord: 2,
-        cx: 890,
-        cy: 320,
-    },
-    {
-        id: "DB-ACCESS-002",
-        type: "DATABASE ACCESS",
-        vulnClass: "SQLi",
-        status: "BLOCKED",
-        ucb: 0.39,
-        eord: 0,
-        cx: 60,
-        cy: 480,
-    },
-    {
-        id: "RCE-007",
-        type: "REMOTE CODE EXEC",
-        vulnClass: "RCE",
-        status: "BLOCKED",
-        ucb: 0.44,
-        eord: 1,
-        cx: 240,
-        cy: 480,
-    },
-    {
-        id: "SSTI-006",
-        type: "SERVER-SIDE TMPL",
-        vulnClass: "SSTI",
-        status: "DEPRIORITIZED",
-        ucb: 0.21,
-        eord: 1,
-        cx: 690,
-        cy: 480,
-    },
-    {
-        id: "IDOR-009",
-        type: "INSECURE DIR REF",
-        vulnClass: "IDOR",
-        status: "ELIGIBLE",
-        ucb: 0.588,
-        eord: 2,
-        cx: 890,
-        cy: 480,
-    },
-];
-const EDGES: Edge[] = [
-    {
-        from: "RECON-001",
-        to: "AUTH-001",
-    },
-    {
-        from: "RECON-001",
-        to: "ENUM-002",
-    },
-    {
-        from: "AUTH-001",
-        to: "SQLI-001",
-    },
-    {
-        from: "AUTH-001",
-        to: "XSS-002",
-        active: true,
-    },
-    {
-        from: "AUTH-001",
-        to: "CSRF-003",
-    },
-    {
-        from: "ENUM-002",
-        to: "SSRF-005",
-    },
-    {
-        from: "ENUM-002",
-        to: "IDOR-008",
-    },
-    {
-        from: "SQLI-001",
-        to: "DB-ACCESS-002",
-    },
-    {
-        from: "SQLI-001",
-        to: "RCE-007",
-    },
-    {
-        from: "SSRF-005",
-        to: "SSTI-006",
-    },
-    {
-        from: "IDOR-008",
-        to: "IDOR-009",
-    },
-];
 const NODE_STYLE: Record<
     NodeStatus,
     {
@@ -264,6 +73,7 @@ const NODE_STYLE: Record<
         badgeBg: "transparent",
     },
 };
+
 const STATUS_FILTERS: FilterStatus[] = [
     "ALL",
     "ELIGIBLE",
@@ -286,10 +96,12 @@ const VULN_FILTERS: VulnFilter[] = [
     "GRAPHQL",
     "LATERAL",
 ];
+
 const LOGIC_W = 1000,
     LOGIC_H = 560,
     NODE_W = 158,
     NODE_H = 84;
+
 function lx(x: number, cw: number) {
     return (x / LOGIC_W) * cw;
 }
@@ -298,6 +110,8 @@ function ly(y: number, ch: number) {
 }
 
 export default function AttackGraphCanvasView({
+    nodes,
+    edges,
     statusFilter,
     setStatusFilter,
     vulnFilter,
@@ -309,6 +123,8 @@ export default function AttackGraphCanvasView({
     containerRef,
     dims,
 }: {
+    nodes: VDGNode[];
+    edges: Edge[];
     statusFilter: FilterStatus;
     setStatusFilter: (v: FilterStatus) => void;
     vulnFilter: VulnFilter;
@@ -322,20 +138,22 @@ export default function AttackGraphCanvasView({
 }) {
     const { w, h } = dims;
     const nodeMap: Record<string, VDGNode | undefined> = Object.fromEntries(
-        NODES.map((n) => [n.id, n]),
+        nodes.map((n) => [n.id, n]),
     );
+
     function visible(n: VDGNode) {
         return (
             (statusFilter === "ALL" || n.status === statusFilter) &&
             (vulnFilter === "ALL" || n.vulnClass === vulnFilter || n.vulnClass === "ALL")
         );
     }
+
     return (
         <div className="flex h-full min-h-[0px] flex-col">
             {/* Toolbar */}
             <AttackGraphToolbar
-                nodeCount={NODES.length}
-                edgeCount={EDGES.length}
+                nodeCount={nodes.length}
+                edgeCount={edges.length}
                 statusFilter={statusFilter}
                 setStatusFilter={setStatusFilter as (v: string) => void}
                 vulnFilter={vulnFilter}
@@ -343,7 +161,7 @@ export default function AttackGraphCanvasView({
                 statusFilters={STATUS_FILTERS}
                 vulnFilters={VULN_FILTERS}
                 onFocusHighestScore={() => {
-                    const top = [...NODES]
+                    const top = [...nodes]
                         .filter((n) => n.status === "ELIGIBLE")
                         .sort((a, b) => b.ucb - a.ucb)[0] as VDGNode | undefined;
                     setStatusFilter("ALL");
@@ -407,182 +225,47 @@ export default function AttackGraphCanvasView({
                                 <path d="M0,0 L0,6 L6,3 z" fill="var(--color-hex-ff2a32)" />
                             </marker>
                         </defs>
-                        {EDGES.map((edge) => {
-                            const src = nodeMap[edge.from],
-                                dst = nodeMap[edge.to];
+                        {edges.map((edge) => {
+                            const src = nodeMap[edge.from];
+                            const dst = nodeMap[edge.to];
                             if (!src || !dst) {
                                 return null;
                             }
                             const vis = visible(src) && visible(dst);
-                            const isDim =
-                                dst.status === "BLOCKED" ||
-                                dst.status === "INFEASIBLE" ||
-                                dst.status === "DEPRIORITIZED";
-                            const isActive = edge.active && dst.status === "IN_PROGRESS";
-                            const color = (() => {
-                                if (isActive) {
-                                    return "var(--color-hex-ff2a32)";
-                                }
-                                if (isDim) {
-                                    return "var(--color-hex-252525)";
-                                }
-                                return "var(--color-hex-e31b23)";
-                            })();
-                            const marker = (() => {
-                                if (isActive) {
-                                    return "arr-active";
-                                }
-                                if (isDim) {
-                                    return "arr-dim";
-                                }
-                                return "arr-red";
-                            })();
                             return (
-                                <line
+                                <AttackGraphEdge
                                     key={`${edge.from}-${edge.to}`}
+                                    edge={edge}
+                                    dst={dst}
+                                    vis={vis}
                                     x1={lx(src.cx, w)}
                                     y1={ly(src.cy, h) + NODE_H / 2}
                                     x2={lx(dst.cx, w)}
                                     y2={ly(dst.cy, h) - 4}
-                                    stroke={color}
-                                    strokeWidth={isActive ? 1.5 : 1}
-                                    strokeDasharray={isActive ? "4 3" : "none"}
-                                    opacity={(() => {
-                                        if (!vis) {
-                                            return 0.1;
-                                        }
-                                        if (isDim) {
-                                            return 0.4;
-                                        }
-                                        return 0.8;
-                                    })()}
-                                    markerEnd={`url(#${marker})`}
                                 />
                             );
                         })}
                     </svg>
 
                     {/* Node cards */}
-                    {NODES.map((node) => {
-                        const s = NODE_STYLE[node.status];
+                    {nodes.map((node) => {
+                        const style = NODE_STYLE[node.status];
                         const isVis = visible(node);
                         const isHov = hovered === node.id;
                         return (
-                            <div
+                            <AttackGraphNode
                                 key={node.id}
+                                node={node}
+                                style={style}
+                                isVis={isVis}
+                                isHov={isHov}
+                                x={lx(node.cx, w) - NODE_W / 2}
+                                y={ly(node.cy, h)}
+                                width={NODE_W}
                                 onMouseEnter={() => setHovered(node.id)}
                                 onMouseLeave={() => setHovered(null)}
                                 onClick={() => setDrawerNode(node)}
-                                onKeyDown={(e) => {
-                                    if (e.key === "Enter" || e.key === " ") {
-                                        setDrawerNode(node);
-                                    }
-                                }}
-                                role="button"
-                                tabIndex={0}
-                                className="absolute cursor-pointer rounded-[2px] px-[10px] py-[8px]"
-                                style={{
-                                    left: lx(node.cx, w) - NODE_W / 2,
-                                    top: ly(node.cy, h),
-                                    width: NODE_W,
-                                    background: s.bg,
-                                    border: `1px solid ${isHov && isVis ? "var(--color-hex-ff2a32)" : s.border}`,
-                                    opacity: isVis ? 1 : 0.12,
-                                    zIndex: isHov ? 10 : 1,
-                                    transition: "opacity 0.15s, border-color 0.1s",
-                                }}
-                            >
-                                {node.status === "ELIGIBLE" && isVis && (
-                                    <div
-                                        className="absolute rounded-[3px] border-[1px] border-solid border-[var(--color-hex-e31b2330)]"
-                                        style={{
-                                            inset: -4,
-                                            pointerEvents: "none",
-                                            animation: "nodeRing 2.2s ease infinite",
-                                        }}
-                                    />
-                                )}
-                                <div className="mb-1 flex items-center justify-between">
-                                    <span
-                                        className="text-[9.5px] font-bold tracking-[0.1em]"
-                                        style={{
-                                            color: s.labelColor,
-                                        }}
-                                    >
-                                        {node.id}
-                                    </span>
-                                    <span
-                                        className="text-[8px] text-[var(--color-hex-ff2a32)]"
-                                        style={{
-                                            animation:
-                                                node.status === "IN_PROGRESS"
-                                                    ? "blink 1s ease infinite"
-                                                    : "none",
-                                        }}
-                                    >
-                                        {(() => {
-                                            if (node.status === "EXPLOITED") {
-                                                return "✓";
-                                            }
-                                            if (node.status === "BLOCKED") {
-                                                return "⊗";
-                                            }
-                                            if (node.status === "IN_PROGRESS") {
-                                                return "▶";
-                                            }
-                                            return "";
-                                        })()}
-                                    </span>
-                                </div>
-                                <div
-                                    className="mb-[6px] text-[7.5px] leading-[1.2] tracking-[0.14em]"
-                                    style={{
-                                        color: s.typeColor,
-                                    }}
-                                >
-                                    {node.type}
-                                </div>
-                                <div
-                                    className="flex items-center gap-3"
-                                    style={{
-                                        borderTop: `1px solid ${s.border}`,
-                                        paddingTop: 5,
-                                    }}
-                                >
-                                    <NodeStat
-                                        label="UCB"
-                                        value={
-                                            node.status === "EXPLOITED" ? "—" : node.ucb.toFixed(3)
-                                        }
-                                        color={s.labelColor}
-                                    />
-                                    <NodeStat
-                                        label="E_ord"
-                                        value={`${node.eord}/5`}
-                                        color={s.labelColor}
-                                    />
-                                    <div className="ml-auto">
-                                        <span
-                                            className="rounded-[2px] px-[4px] py-[1px] text-[7.5px] font-semibold tracking-[0.1em]"
-                                            style={{
-                                                color: s.badgeColor,
-                                                background: s.badgeBg,
-                                                border: `1px solid ${s.badgeColor}33`,
-                                            }}
-                                        >
-                                            {(() => {
-                                                if (node.status === "IN_PROGRESS") {
-                                                    return "IN PROG";
-                                                }
-                                                if (node.status === "DEPRIORITIZED") {
-                                                    return "DEPRIO";
-                                                }
-                                                return node.status;
-                                            })()}
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
+                            />
                         );
                     })}
 
