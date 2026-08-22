@@ -6,4 +6,3 @@ export * from "@/features/findings/components/FindingsList";
 export * from "@/features/findings/components/TrajectoryTab";
 export * from "@/features/findings/components/ValidationTab";
 export * from "@/features/findings/hooks/useFindingsData";
-export * from "@/features/findings/data/fixtures/findingsMockData";

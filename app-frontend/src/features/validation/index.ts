@@ -5,4 +5,3 @@ export * from "@/features/validation/components/StateMachineModal";
 export * from "@/features/validation/components/ValidationCenter";
 export * from "@/features/validation/hooks/useValidationData";
 export * from "@/features/validation/domain/Supervisor";
-export * from "@/features/validation/data/fixtures/validationMockData";

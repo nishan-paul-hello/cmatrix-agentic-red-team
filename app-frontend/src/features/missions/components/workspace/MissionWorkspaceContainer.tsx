@@ -14,6 +14,8 @@ import { useElapsed } from "@/features/missions/hooks/useElapsed";
 import { useTelemetry } from "@/hooks/useTelemetry";
 import { MissionRepository } from "@/repositories/MissionRepository";
 import { SpecialistRepository } from "@/repositories/SpecialistRepository";
+import { MISSION_STATUS } from "@/types/domain-types";
+import { canTransitionMission } from "@/utils/FSM";
 
 interface WorkspaceState {
     subNav: MissionSubNav;
@@ -96,6 +98,18 @@ export default function MissionWorkspaceContainer({
                     typeof action.payload === "function"
                         ? action.payload(pausedRef.current)
                         : action.payload;
+
+                setOrchestrator((prev) => {
+                    if (!prev) {
+                        return prev;
+                    }
+                    const targetStatus = willPause ? MISSION_STATUS.PAUSED : MISSION_STATUS.RUNNING;
+                    if (!canTransitionMission(prev.status, targetStatus)) {
+                        return prev; // invalid transition, no-op
+                    }
+                    return new MissionOrchestratorModel(prev.id, targetStatus, prev.workers);
+                });
+
                 logEvent(willPause ? "MISSION_PAUSED" : "MISSION_RESUMED", { missionId });
             } else if (action.type === "SET_TERMINATED") {
                 logEvent("MISSION_TERMINATED", { missionId });
