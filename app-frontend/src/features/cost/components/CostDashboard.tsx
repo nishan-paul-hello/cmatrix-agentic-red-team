@@ -1,11 +1,30 @@
+import { useEffect, useState } from "react";
+
+import { EmptyState } from "@/components/ui/EmptyState";
 import ContextState from "@/features/cost/components/ContextState";
 import CostUsage from "@/features/cost/components/CostUsage";
 import ModelBreakdown from "@/features/cost/components/ModelBreakdown";
 import { type CostTab } from "@/features/cost/data/costMockData";
+import { CostRepository } from "@/features/cost/data/CostRepository";
 import { useCostData } from "@/features/cost/hooks/useCostData";
 
 export default function CostDashboard() {
     const { tab, setTab } = useCostData();
+    const [dataLoaded, setDataLoaded] = useState(false);
+
+    useEffect(() => {
+        // Just verify repository connection at dashboard level
+        void CostRepository.getCostData().then(() => setDataLoaded(true));
+    }, []);
+
+    if (!dataLoaded) {
+        return (
+            <div className="flex h-full flex-1 items-center justify-center">
+                <EmptyState message="LOADING COST DATA..." />
+            </div>
+        );
+    }
+
     return (
         <div className="flex h-full min-h-[0px] flex-col">
             <div
