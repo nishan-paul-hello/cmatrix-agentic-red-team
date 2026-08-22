@@ -1,5 +1,4 @@
-import React, { useCallback, useRef, useState } from "react";
-import { useVirtualizer } from "@tanstack/react-virtual";
+import React, { useCallback, useState } from "react";
 
 import { useAuditFeed } from "@/features/audit/hooks/useAuditFeed";
 import { useAuditFilters } from "@/features/audit/hooks/useAuditFilters";
@@ -137,19 +136,29 @@ export default function AuditLogPage() {
     const { typeFilter, setTypeFilter, resultFilter, setResultFilter, search, setSearch, visible } =
         useAuditFilters(entries);
     const [sel, setSel] = useState<AuditEntry | null>(null);
+    const [page, setPage] = useState(1);
+    const PAGE_SIZE = 50;
 
     const toggleSel = useCallback((entry: AuditEntry) => {
         setSel((prev) => (prev?.id === entry.id ? null : entry));
     }, []);
 
-    const parentRef = useRef<HTMLDivElement>(null);
-    // eslint-disable-next-line react-hooks/incompatible-library
-    const rowVirtualizer = useVirtualizer({
-        count: visible.length,
-        getScrollElement: () => parentRef.current,
-        estimateSize: () => 37, // Approximate row height
-        overscan: 10,
-    });
+    const [prevFilters, setPrevFilters] = useState({ search, typeFilter, resultFilter });
+    if (
+        search !== prevFilters.search ||
+        typeFilter !== prevFilters.typeFilter ||
+        resultFilter !== prevFilters.resultFilter
+    ) {
+        setPrevFilters({ search, typeFilter, resultFilter });
+        setPage(1);
+    }
+
+    const paginatedVisible = React.useMemo(() => {
+        const start = (page - 1) * PAGE_SIZE;
+        return visible.slice(start, start + PAGE_SIZE);
+    }, [visible, page, PAGE_SIZE]);
+
+    const totalPages = Math.max(1, Math.ceil(visible.length / PAGE_SIZE));
 
     return (
         <div className="flex h-full min-h-0 flex-col">
@@ -232,7 +241,7 @@ export default function AuditLogPage() {
             {/* Table + detail drawer */}
             <div className="flex min-h-0 flex-1 overflow-hidden">
                 {/* Table */}
-                <div className="flex-1 overflow-y-auto" ref={parentRef}>
+                <div className="flex flex-1 flex-col overflow-y-auto">
                     <table className="w-full border-collapse">
                         <thead>
                             <tr className="sticky top-0 z-10 bg-[var(--color-hex-0f0f0f)]">
@@ -247,44 +256,39 @@ export default function AuditLogPage() {
                             </tr>
                         </thead>
                         <tbody>
-                            {rowVirtualizer.getVirtualItems().length > 0 && (
-                                <tr>
-                                    <td
-                                        style={{
-                                            height: `${rowVirtualizer.getVirtualItems()[0].start}px`,
-                                        }}
-                                        colSpan={7}
-                                    />
-                                </tr>
-                            )}
-                            {rowVirtualizer.getVirtualItems().map((virtualRow) => {
-                                const e = visible[virtualRow.index];
-                                return (
-                                    <AuditLogRow
-                                        key={e.id}
-                                        e={e}
-                                        isSelected={sel?.id === e.id}
-                                        onClick={() => toggleSel(e)}
-                                    />
-                                );
-                            })}
-                            {rowVirtualizer.getVirtualItems().length > 0 && (
-                                <tr>
-                                    <td
-                                        style={{
-                                            height: `${
-                                                rowVirtualizer.getTotalSize() -
-                                                rowVirtualizer.getVirtualItems()[
-                                                    rowVirtualizer.getVirtualItems().length - 1
-                                                ].end
-                                            }px`,
-                                        }}
-                                        colSpan={7}
-                                    />
-                                </tr>
-                            )}
+                            {paginatedVisible.map((e) => (
+                                <AuditLogRow
+                                    key={e.id}
+                                    e={e}
+                                    isSelected={sel?.id === e.id}
+                                    onClick={() => toggleSel(e)}
+                                />
+                            ))}
                         </tbody>
                     </table>
+
+                    {/* Pagination Controls */}
+                    <div className="flex flex-shrink-0 items-center justify-between border-t border-[var(--color-hex-1a1a1a)] bg-[var(--color-hex-0f0f0f)] px-6 py-4">
+                        <div className="text-[10px] tracking-[0.1em] text-[var(--color-hex-666666)]">
+                            PAGE {page} OF {totalPages}
+                        </div>
+                        <div className="flex gap-2">
+                            <button
+                                className="font-inherit cursor-pointer rounded-[2px] border-none bg-[var(--color-hex-111111)] px-[12px] py-[6px] text-[9px] font-semibold tracking-[0.16em] text-[var(--color-hex-f2f2f2)] transition-colors duration-100 hover:bg-[var(--color-hex-222222)] disabled:opacity-50"
+                                onClick={() => setPage((p) => Math.max(1, p - 1))}
+                                disabled={page === 1}
+                            >
+                                PREV
+                            </button>
+                            <button
+                                className="font-inherit cursor-pointer rounded-[2px] border-none bg-[var(--color-hex-111111)] px-[12px] py-[6px] text-[9px] font-semibold tracking-[0.16em] text-[var(--color-hex-f2f2f2)] transition-colors duration-100 hover:bg-[var(--color-hex-222222)] disabled:opacity-50"
+                                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                                disabled={page === totalPages}
+                            >
+                                NEXT
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
                 {/* Detail drawer */}
