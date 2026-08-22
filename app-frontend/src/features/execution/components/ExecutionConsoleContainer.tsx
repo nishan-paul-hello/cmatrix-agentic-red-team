@@ -2,7 +2,7 @@ import React, { useCallback, useRef, useState } from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
 
 import ExecutionConsoleView from "@/features/execution/components/ExecutionConsoleView";
-import { getParsedRows } from "@/features/execution/data/fixtures/executionMockData";
+import { ExecutionRepository } from "@/features/execution/data/ExecutionRepository";
 import { useExecutionFeed } from "@/features/execution/hooks/useExecutionFeed";
 import { type ExecEntry } from "@/types/domain-types";
 
@@ -13,7 +13,7 @@ export default function ExecutionConsoleContainer() {
     >([]);
 
     React.useEffect(() => {
-        void getParsedRows().then(setParsedRows);
+        void ExecutionRepository.getParsedRows().then(setParsedRows);
     }, []);
 
     const [drawer, setDrawer] = useState<ExecEntry | null>(null);
