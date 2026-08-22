@@ -1,15 +1,23 @@
-import { type BRANCHES } from "@/features/memory/data/mockData";
+import { useEffect, useState } from "react";
 
-export default function BranchTree({
-    nodes,
-    depth = 0,
-}: {
-    nodes: typeof BRANCHES;
-    depth?: number;
-}) {
+import { MemoryRepository } from "@/features/memory/data/MemoryRepository";
+import { type BranchEntry } from "@/types/domain-types";
+
+export default function BranchTree({ nodes, depth = 0 }: { nodes: BranchEntry[]; depth?: number }) {
+    const [BRANCHES, setData] = useState<BranchEntry[]>([]);
+    useEffect(() => {
+        void new MemoryRepository()
+            .fetchAll<BranchEntry>({ collection: "BRANCHES", limit: 1000 })
+            .then(setData);
+    }, []);
+
+    if (BRANCHES.length === 0) {
+        return null;
+    }
+
     return (
         <>
-            {nodes.map((b) => (
+            {nodes.map((b: BranchEntry) => (
                 <div
                     key={b.id}
                     style={{
@@ -82,7 +90,7 @@ export default function BranchTree({
                                         ALTERNATIVES REJECTED
                                     </div>
                                     <div className="flex flex-wrap gap-2">
-                                        {b.alternatives.map((a) => (
+                                        {b.alternatives.map((a: string) => (
                                             <span
                                                 key={a}
                                                 className="rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1a1a1a)] bg-[var(--color-hex-111111)] px-[7px] py-[2px] text-[8.5px] text-[var(--color-hex-333333)]"

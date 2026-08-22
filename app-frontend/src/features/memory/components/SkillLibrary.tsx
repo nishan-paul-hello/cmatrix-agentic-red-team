@@ -2,12 +2,13 @@ import { useState } from "react";
 
 import Sub from "@/features/memory/components/Sub";
 import { useServices } from "@/lib/services-context";
+import { type SkillEntry } from "@/types/domain-types";
 
 export default function SkillLibrary() {
     const { blackboard } = useServices();
-    const skills = blackboard.readSkills();
-    const [sel, setSel] = useState(skills[0]);
+    const skills: SkillEntry[] = blackboard.readSkills();
     const [filter, setFilter] = useState("");
+    const [selId, setSelId] = useState<string | null>(null);
     const q = filter.toLowerCase();
     const filtered = skills.filter(
         (s) =>
@@ -16,6 +17,7 @@ export default function SkillLibrary() {
             s.desc.toLowerCase().includes(q) ||
             s.spec.toLowerCase().includes(q),
     );
+    const sel = (selId ? skills.find((s) => s.id === selId) : skills[0]) as unknown as SkillEntry;
     return (
         <div className="flex min-h-[0px] flex-1 overflow-hidden">
             <div
@@ -46,10 +48,10 @@ export default function SkillLibrary() {
                             key={sk.id}
                             role="button"
                             tabIndex={0}
-                            onClick={() => setSel(sk)}
+                            onClick={() => setSelId(sk.id)}
                             onKeyDown={(e) => {
                                 if (e.key === "Enter" || e.key === " ") {
-                                    setSel(sk);
+                                    setSelId(sk.id);
                                 }
                             }}
                             className="cursor-pointer px-[14px] py-[11px]"
@@ -162,7 +164,7 @@ export default function SkillLibrary() {
                             },
                             {
                                 k: "E_ORD DELTA",
-                                v: sel.eordDelta,
+                                v: (sel as unknown as Record<string, string>).eordDelta,
                             },
                         ].map((m, i, a) => (
                             <div

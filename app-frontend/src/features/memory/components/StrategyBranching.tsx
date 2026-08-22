@@ -1,7 +1,21 @@
+import { useEffect, useState } from "react";
+
 import BranchTree from "@/features/memory/components/BranchTree";
-import { BRANCHES } from "@/features/memory/data/mockData";
+import { MemoryRepository } from "@/features/memory/data/MemoryRepository";
+import { type BranchEntry } from "@/types/domain-types";
 
 export default function StrategyBranching() {
+    const [BRANCHES, setData] = useState<BranchEntry[]>([]);
+    useEffect(() => {
+        void new MemoryRepository()
+            .fetchAll<BranchEntry>({ collection: "BRANCHES", limit: 1000 })
+            .then(setData);
+    }, []);
+
+    if (BRANCHES.length === 0) {
+        return null;
+    }
+
     return (
         <div className="flex-1 overflow-y-auto px-6 py-5">
             <div className="mb-5 flex items-center justify-between">

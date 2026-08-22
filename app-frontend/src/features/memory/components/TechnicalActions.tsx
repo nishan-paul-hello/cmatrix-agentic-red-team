@@ -1,10 +1,23 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-import { ACTIONS } from "@/features/memory/data/mockData";
-import { TASK_STATUS } from "@/types/domain-types";
+import { MemoryRepository } from "@/features/memory/data/MemoryRepository";
+import { TASK_STATUS, type ActionEntry } from "@/types/domain-types";
 
 export default function TechnicalActions() {
-    const [sel, setSel] = useState<(typeof ACTIONS)[0] | null>(null);
+    const [ACTIONS, setData] = useState<ActionEntry[]>([]);
+    useEffect(() => {
+        void new MemoryRepository()
+            .fetchAll<ActionEntry>({ collection: "ACTIONS", limit: 1000 })
+            .then(setData);
+    }, []);
+
+    const [selId, setSelId] = useState<string | null>(null);
+
+    if (ACTIONS.length === 0) {
+        return null;
+    }
+
+    const sel = ACTIONS.find((a) => a.id === selId) ?? ACTIONS[0];
     const sc: Record<string, string> = {
         [TASK_STATUS.SUCCESS]: "var(--color-hex-3fb950)",
         [TASK_STATUS.TIMEOUT]: "var(--color-hex-d29922)",
@@ -40,10 +53,10 @@ export default function TechnicalActions() {
                         </tr>
                     </thead>
                     <tbody>
-                        {ACTIONS.map((a) => (
+                        {ACTIONS.map((a: ActionEntry) => (
                             <tr
                                 key={a.id}
-                                onClick={() => setSel(a)}
+                                onClick={() => setSelId(a.id)}
                                 className="cursor-pointer"
                                 style={{
                                     borderBottom: "1px solid var(--color-hex-111111)",
@@ -104,91 +117,89 @@ export default function TechnicalActions() {
                     </tbody>
                 </table>
             </div>
-            {sel && (
+            <div
+                className="flex w-[320px] flex-shrink-0 flex-col overflow-y-auto bg-[var(--color-hex-0d0d0d)]"
+                style={{
+                    borderLeft: "1px solid var(--color-hex-292929)",
+                }}
+            >
                 <div
-                    className="flex w-[320px] flex-shrink-0 flex-col overflow-y-auto bg-[var(--color-hex-0d0d0d)]"
+                    className="flex items-start justify-between px-4 pt-4 pb-3"
                     style={{
-                        borderLeft: "1px solid var(--color-hex-292929)",
+                        borderBottom: "1px solid var(--color-hex-1e1e1e)",
                     }}
                 >
-                    <div
-                        className="flex items-start justify-between px-4 pt-4 pb-3"
-                        style={{
-                            borderBottom: "1px solid var(--color-hex-1e1e1e)",
-                        }}
+                    <div>
+                        <div className="text-[12px] font-bold tracking-[0.1em] text-[var(--color-hex-f2f2f2)]">
+                            {sel.id}
+                        </div>
+                        <div className="mt-[2px] text-[8.5px] text-[var(--color-hex-444444)]">
+                            {sel.spec} · {sel.tool}
+                        </div>
+                    </div>
+                    <button
+                        onClick={() => setSelId(null)}
+                        className="cursor-pointer border-none bg-[transparent] text-[14px] text-[var(--color-hex-444444)]"
                     >
-                        <div>
-                            <div className="text-[12px] font-bold tracking-[0.1em] text-[var(--color-hex-f2f2f2)]">
-                                {sel.id}
+                        ✕
+                    </button>
+                </div>
+                <div className="flex flex-col gap-4 px-4 py-4">
+                    {(
+                        [
+                            {
+                                k: "ACTION",
+                                v: sel.action,
+                            },
+                            {
+                                k: "TOOL",
+                                v: sel.tool,
+                            },
+                            {
+                                k: "ARGUMENTS",
+                                v: sel.args,
+                            },
+                            {
+                                k: "RESULT",
+                                v: sel.result,
+                            },
+                            {
+                                k: "E_ORD DELTA",
+                                v: sel.eord,
+                                red: sel.eord !== "—",
+                            },
+                            {
+                                k: "STATUS",
+                                v: sel.status,
+                                col: sc[sel.status],
+                            },
+                        ] as {
+                            k: string;
+                            v: string;
+                            red?: boolean;
+                            col?: string;
+                        }[]
+                    ).map((r) => (
+                        <div key={r.k}>
+                            <div className="mb-[3px] text-[7.5px] tracking-[0.18em] text-[var(--color-hex-444444)]">
+                                {r.k}
                             </div>
-                            <div className="mt-[2px] text-[8.5px] text-[var(--color-hex-444444)]">
-                                {sel.spec} · {sel.tool}
+                            <div
+                                className="text-[10px] leading-[1.6]"
+                                style={{
+                                    color:
+                                        r.col ??
+                                        (r.red
+                                            ? "var(--color-hex-3fb950)"
+                                            : "var(--color-hex-888888)"),
+                                }}
+                            >
+                                {r.v}
                             </div>
                         </div>
-                        <button
-                            onClick={() => setSel(null)}
-                            className="cursor-pointer border-none bg-[transparent] text-[14px] text-[var(--color-hex-444444)]"
-                        >
-                            ✕
-                        </button>
-                    </div>
-                    <div className="flex flex-col gap-4 px-4 py-4">
-                        {(
-                            [
-                                {
-                                    k: "ACTION",
-                                    v: sel.action,
-                                },
-                                {
-                                    k: "TOOL",
-                                    v: sel.tool,
-                                },
-                                {
-                                    k: "ARGUMENTS",
-                                    v: sel.args,
-                                },
-                                {
-                                    k: "RESULT",
-                                    v: sel.result,
-                                },
-                                {
-                                    k: "E_ORD DELTA",
-                                    v: sel.eord,
-                                    red: sel.eord !== "—",
-                                },
-                                {
-                                    k: "STATUS",
-                                    v: sel.status,
-                                    col: sc[sel.status],
-                                },
-                            ] as {
-                                k: string;
-                                v: string;
-                                red?: boolean;
-                                col?: string;
-                            }[]
-                        ).map((r) => (
-                            <div key={r.k}>
-                                <div className="mb-[3px] text-[7.5px] tracking-[0.18em] text-[var(--color-hex-444444)]">
-                                    {r.k}
-                                </div>
-                                <div
-                                    className="text-[10px] leading-[1.6]"
-                                    style={{
-                                        color:
-                                            r.col ??
-                                            (r.red
-                                                ? "var(--color-hex-3fb950)"
-                                                : "var(--color-hex-888888)"),
-                                    }}
-                                >
-                                    {r.v}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
+                    ))}
                 </div>
-            )}
+            </div>
         </div>
     );
 }

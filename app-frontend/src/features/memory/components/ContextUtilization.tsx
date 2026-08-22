@@ -1,14 +1,31 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-import { CTX_SPECS } from "@/features/memory/data/mockData";
+import { MemoryRepository } from "@/features/memory/data/MemoryRepository";
+import { type FailureRecord, type SkillRecord } from "@/features/memory/data/mockData";
+import { type ContextRecord } from "@/features/memory/domain/Blackboard";
 import { useServices } from "@/lib/services-context";
+import { type CtxSpecEntry } from "@/types/domain-types";
 
 export default function ContextUtilization() {
     const { blackboard } = useServices();
-    const shortTerm = blackboard.readAllContexts();
-    const longTermSkills = blackboard.readSkills();
-    const longTermFailures = blackboard.readFailures();
-    const [sel, setSel] = useState(CTX_SPECS[2]);
+    const [CTX_SPECS, setData] = useState<CtxSpecEntry[]>([]);
+    useEffect(() => {
+        void new MemoryRepository()
+            .fetchAll<CtxSpecEntry>({ collection: "CTX_SPECS", limit: 1000 })
+            .then(setData);
+    }, []);
+
+    const [selId, setSelId] = useState<string | null>(null);
+    if (CTX_SPECS.length === 0) {
+        return null;
+    }
+    const sel = (selId
+        ? CTX_SPECS.find((s) => s.id === selId)
+        : (CTX_SPECS[2] ?? CTX_SPECS[0])) as unknown as CtxSpecEntry;
+
+    const shortTerm: (ContextRecord & { tier: string })[] = blackboard.readAllContexts();
+    const longTermSkills: (SkillRecord & { tier: string })[] = blackboard.readSkills();
+    const longTermFailures: (FailureRecord & { tier: string })[] = blackboard.readFailures();
     const stc: Record<string, string> = {
         COMPACTED: "var(--color-hex-d29922)",
         ACTIVE: "var(--color-hex-3fb950)",
@@ -71,10 +88,10 @@ export default function ContextUtilization() {
                             key={s.id}
                             role="button"
                             tabIndex={0}
-                            onClick={() => setSel(s)}
+                            onClick={() => setSelId(s.id)}
                             onKeyDown={(e) => {
                                 if (e.key === "Enter" || e.key === " ") {
-                                    setSel(s);
+                                    setSelId(s.id);
                                 }
                             }}
                             className="mb-[8px] cursor-pointer rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)] px-[16px] py-[12px]"

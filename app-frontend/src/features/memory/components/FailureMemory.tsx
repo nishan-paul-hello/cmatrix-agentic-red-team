@@ -1,13 +1,13 @@
 import { useState } from "react";
 
 import { MetricTile } from "@/components/ui/MetricTile";
-import { type FailureRecord } from "@/features/memory/data/mockData";
 import { useServices } from "@/lib/services-context";
+import { type FailureLogEntry } from "@/types/domain-types";
 
 export default function FailureMemory() {
     const { blackboard } = useServices();
-    const failures = blackboard.readFailures();
-    const [sel, setSel] = useState<FailureRecord | null>(failures[0] || null);
+    const failures: FailureLogEntry[] = blackboard.readFailures();
+    const [selId, setSelId] = useState<string | null>(null);
     const tc: Record<string, string> = {
         TIMEOUT: "var(--color-hex-d29922)",
         FAILED: "var(--color-hex-ff2a32)",
@@ -19,6 +19,7 @@ export default function FailureMemory() {
         HIGH: "var(--color-hex-ff2a32)",
         CRITICAL: "var(--color-hex-ff2a32)",
     };
+    const sel = (selId ? failures.find((f) => f.id === selId) : failures[0]) ?? null;
     return (
         <div className="flex min-h-[0px] flex-1 overflow-hidden">
             <div className="flex-1 overflow-y-auto px-6 py-5">
@@ -49,10 +50,10 @@ export default function FailureMemory() {
                         key={f.id}
                         role="button"
                         tabIndex={0}
-                        onClick={() => setSel(f === sel ? null : f)}
+                        onClick={() => setSelId(f.id === selId ? null : f.id)}
                         onKeyDown={(e) => {
                             if (e.key === "Enter" || e.key === " ") {
-                                setSel(f === sel ? null : f);
+                                setSelId(f.id === selId ? null : f.id);
                             }
                         }}
                         className="mb-[10px] cursor-pointer rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)]"

@@ -1,10 +1,24 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import Sub from "@/features/memory/components/Sub";
-import { PATTERNS } from "@/features/memory/data/mockData";
+import { MemoryRepository } from "@/features/memory/data/MemoryRepository";
+import { type MemoryNode } from "@/types/domain-types";
 
 export default function VulnPatterns() {
-    const [sel, setSel] = useState(PATTERNS[0]);
+    const [PATTERNS, setData] = useState<MemoryNode[]>([]);
+    useEffect(() => {
+        void new MemoryRepository()
+            .fetchAll<MemoryNode>({ collection: "PATTERNS", limit: 1000 })
+            .then(setData);
+    }, []);
+
+    const [selId, setSelId] = useState<string | null>(null);
+
+    if (PATTERNS.length === 0) {
+        return null;
+    }
+
+    const sel = PATTERNS.find((p) => p.id === selId) ?? PATTERNS[0];
     return (
         <div className="flex min-h-[0px] flex-1 overflow-hidden">
             <div
@@ -27,10 +41,10 @@ export default function VulnPatterns() {
                         key={p.id}
                         role="button"
                         tabIndex={0}
-                        onClick={() => setSel(p)}
+                        onClick={() => setSelId(p.id)}
                         onKeyDown={(e) => {
                             if (e.key === "Enter" || e.key === " ") {
-                                setSel(p);
+                                setSelId(p.id);
                             }
                         }}
                         className="cursor-pointer px-[16px] py-[12px]"
@@ -129,7 +143,7 @@ export default function VulnPatterns() {
                     ))}
                 </div>
                 <Sub label="TECHNIQUE SEQUENCE">
-                    {sel.techniques.map((t, i) => (
+                    {sel.techniques.map((t: string, i: number) => (
                         <div key={t} className="mb-2 flex items-center gap-3">
                             <div
                                 className="h-[17px] w-[17px] shrink-0 border-[1px] border-solid border-[var(--color-hex-1e1e1e)]"
@@ -149,7 +163,7 @@ export default function VulnPatterns() {
                     ))}
                 </Sub>
                 <Sub label="DETECTION INDICATORS">
-                    {sel.indicators.map((ind) => (
+                    {sel.indicators.map((ind: string) => (
                         <div key={ind} className="mb-2 flex items-center gap-2">
                             <div
                                 className="h-[5px] w-[5px] shrink-0 bg-[var(--color-hex-e31b23)]"
@@ -164,33 +178,39 @@ export default function VulnPatterns() {
                     ))}
                 </Sub>
                 <Sub label="PATTERN EVOLUTION" last>
-                    {sel.evolution.map((ev, i, a) => (
-                        <div key={ev.ts} className="flex items-start gap-3">
-                            <div className="flex shrink-0 flex-col items-center">
-                                <div
-                                    className="mt-[2px] h-[7px] w-[7px] border-[1px] border-solid border-[var(--color-hex-e31b23)]"
-                                    style={{
-                                        borderRadius: "50%",
-                                        background:
-                                            i === a.length - 1
-                                                ? "var(--color-hex-e31b23)"
-                                                : "transparent",
-                                    }}
-                                />
-                                {i < a.length - 1 && (
-                                    <div className="h-[20px] w-[1px] bg-[var(--color-hex-1e1e1e)]" />
-                                )}
+                    {sel.evolution.map(
+                        (
+                            ev: { ts: string; note?: string },
+                            i: number,
+                            a: { ts: string; note?: string }[],
+                        ) => (
+                            <div key={ev.ts} className="flex items-start gap-3">
+                                <div className="flex shrink-0 flex-col items-center">
+                                    <div
+                                        className="mt-[2px] h-[7px] w-[7px] border-[1px] border-solid border-[var(--color-hex-e31b23)]"
+                                        style={{
+                                            borderRadius: "50%",
+                                            background:
+                                                i === a.length - 1
+                                                    ? "var(--color-hex-e31b23)"
+                                                    : "transparent",
+                                        }}
+                                    />
+                                    {i < a.length - 1 && (
+                                        <div className="h-[20px] w-[1px] bg-[var(--color-hex-1e1e1e)]" />
+                                    )}
+                                </div>
+                                <div>
+                                    <span className="mr-[8px] text-[8px] text-[var(--color-hex-333333)]">
+                                        {ev.ts}
+                                    </span>
+                                    <span className="text-[9.5px] leading-[1.6] text-[var(--color-hex-666666)]">
+                                        {ev.note}
+                                    </span>
+                                </div>
                             </div>
-                            <div>
-                                <span className="mr-[8px] text-[8px] text-[var(--color-hex-333333)]">
-                                    {ev.ts}
-                                </span>
-                                <span className="text-[9.5px] leading-[1.6] text-[var(--color-hex-666666)]">
-                                    {ev.note}
-                                </span>
-                            </div>
-                        </div>
-                    ))}
+                        ),
+                    )}
                 </Sub>
             </div>
         </div>
