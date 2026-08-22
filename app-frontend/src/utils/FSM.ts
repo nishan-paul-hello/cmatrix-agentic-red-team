@@ -4,11 +4,13 @@ import {
     MISSION_STATUS,
     SPEC_STATUS,
     TASK_STATUS,
+    VDG_NODE_STATUS,
     type BenchmarkStatus,
     type FindingStatus,
     type MissionStatus,
     type SpecStatus,
     type TaskStatus,
+    type VdgNodeStatus,
 } from "@/types/domain-types";
 
 const MISSION_TRANSITIONS: Record<MissionStatus, Set<MissionStatus>> = {
@@ -92,4 +94,21 @@ export function canTransitionSpec(from: SpecStatus, to: SpecStatus): boolean {
 
 export function canTransitionFinding(from: FindingStatus, to: FindingStatus): boolean {
     return FINDING_TRANSITIONS[from].has(to);
+}
+
+const VDG_NODE_TRANSITIONS: Record<VdgNodeStatus, Set<VdgNodeStatus>> = {
+    [VDG_NODE_STATUS.DEPENDENT]: new Set([VDG_NODE_STATUS.ELIGIBLE, VDG_NODE_STATUS.INFEASIBLE]),
+    [VDG_NODE_STATUS.ELIGIBLE]: new Set([VDG_NODE_STATUS.IN_PROGRESS]),
+    [VDG_NODE_STATUS.IN_PROGRESS]: new Set([
+        VDG_NODE_STATUS.COMPLETED,
+        VDG_NODE_STATUS.EXPLOITED,
+        VDG_NODE_STATUS.INFEASIBLE,
+    ]),
+    [VDG_NODE_STATUS.COMPLETED]: new Set([]),
+    [VDG_NODE_STATUS.EXPLOITED]: new Set([]),
+    [VDG_NODE_STATUS.INFEASIBLE]: new Set([]),
+};
+
+export function canTransitionVdgNode(from: VdgNodeStatus, to: VdgNodeStatus): boolean {
+    return VDG_NODE_TRANSITIONS[from].has(to);
 }
