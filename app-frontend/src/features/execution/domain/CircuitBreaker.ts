@@ -4,6 +4,8 @@
  * and pauses execution temporarily, falling back to a human or alternate strategy.
  */
 
+import { globalEventBus } from "@/utils/EventBus";
+
 export interface CircuitBreakerState {
     status: "CLOSED" | "OPEN" | "HALF_OPEN";
     failures: number;
@@ -39,8 +41,12 @@ export class ToolCircuitBreaker {
         const state = this.getState(toolId);
         state.failures += 1;
         state.lastFailureTime = Date.now();
-        if (state.failures >= state.threshold) {
+        if (state.failures >= state.threshold && state.status !== "OPEN") {
             state.status = "OPEN";
+            globalEventBus.publish("ESCALATION_REQUIRED", {
+                reason: "TOOL_CIRCUIT_BREAKER_TRIPPED",
+                toolId,
+            });
         }
     }
 

@@ -8,6 +8,8 @@ export interface ToolDescriptor {
     id: string;
     version?: string;
     category?: string;
+    inputSchema?: Record<string, "string" | "number" | "boolean">;
+    outputShape?: Record<string, "string" | "number" | "boolean" | "array" | "object">;
 }
 
 export interface TaskCommand {
