@@ -101,7 +101,14 @@ export interface Finding {
 }
 
 export type AuditEventType = "AUTH" | "MISSION" | "EXECUTION" | "ESCALATION" | "SYSTEM" | "CONFIG";
-export type AuditResultValue = "SUCCESS" | "FAILURE" | "WARNING";
+
+export const AUDIT_RESULT = {
+    SUCCESS: "SUCCESS",
+    FAILURE: "FAILURE",
+    WARNING: "WARNING",
+} as const;
+
+export type AuditResultValue = (typeof AUDIT_RESULT)[keyof typeof AUDIT_RESULT];
 
 export interface AuditEntry {
     id: string;
@@ -114,3 +121,31 @@ export interface AuditEntry {
     ip: string;
     detail: string;
 }
+
+export const VDG_NODE_STATUS = {
+    COMPLETED: "COMPLETED",
+    EXPLOITED: "EXPLOITED",
+    ELIGIBLE: "ELIGIBLE",
+    IN_PROGRESS: "IN_PROGRESS",
+    DEPENDENT: "DEPENDENT",
+    INFEASIBLE: "INFEASIBLE",
+} as const;
+
+export type VdgNodeStatus = (typeof VDG_NODE_STATUS)[keyof typeof VDG_NODE_STATUS];
+
+// §18 Human-in-the-loop / Escalation pattern
+export interface RiskAssessment {
+    score: number;
+    threshold: number;
+}
+
+// §19 Supervisor / Guardrail pattern
+export interface GuardrailResult {
+    findingId: string;
+    verifiedBy: "SUPERVISOR";
+    verdict: "PASS" | "FAIL" | "NEEDS_REVIEW";
+    notes?: string;
+}
+
+// §22 Context-Window / Memory-Tiering pattern
+export type MemoryTier = "SHORT_TERM" | "LONG_TERM";
