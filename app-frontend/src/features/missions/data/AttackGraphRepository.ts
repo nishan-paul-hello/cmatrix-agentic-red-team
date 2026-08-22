@@ -1,6 +1,10 @@
+import {
+    EDGES,
+    NODES,
+    type Edge,
+    type VDGNode,
+} from "@/features/missions/data/fixtures/attackGraphMockData";
 import { type DataSource } from "@/types/adapters";
-
-import { EDGES, NODES, type Edge, type VDGNode } from "@/features/missions/data/fixtures/attackGraphMockData";
 
 export class AttackGraphRepository implements DataSource<VDGNode> {
     private static mockNodes: VDGNode[] = [...NODES];
