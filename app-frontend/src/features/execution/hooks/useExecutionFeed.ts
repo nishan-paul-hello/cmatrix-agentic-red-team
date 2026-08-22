@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 
 import { AUDIT_EVENT } from "@/features/audit/hooks/useAuditFeed";
-import { getExecutionEntries } from "@/features/execution/data/fixtures/executionMockData";
+import { ExecutionRepository } from "@/features/execution/data/ExecutionRepository";
 import { useServices } from "@/lib/services-context";
-import { type AuditEntry, type ExecEntry } from "@/types/domain-types";
+import { AUDIT_RESULT, type AuditEntry, type ExecEntry } from "@/types/domain-types";
 import { useFeatureFlag } from "@/utils/FeatureFlags";
 
 export const EXECUTION_EVENT = "EXECUTION_EVENT";
@@ -16,7 +16,7 @@ export function useExecutionFeed() {
 
     useEffect(() => {
         // Load initial mock data
-        void getExecutionEntries().then((data) => {
+        void ExecutionRepository.getAll().then((data) => {
             data.forEach((entry) => {
                 if (entry.status === "FAILED" || entry.status === "TIMEOUT") {
                     circuitBreaker.recordFailure(entry.command.tool.id);
@@ -41,7 +41,10 @@ export function useExecutionFeed() {
                         actor: entry.specialist,
                         action: "EXECUTE",
                         resource: `tool/${entry.command.tool.id}`,
-                        result: entry.status === "SUCCESS" ? "SUCCESS" : "FAILURE",
+                        result:
+                            entry.status === "SUCCESS"
+                                ? AUDIT_RESULT.SUCCESS
+                                : AUDIT_RESULT.FAILURE,
                         ip: "127.0.0.1",
                         detail: `Executed ${entry.command.tool.id} with status ${entry.status}`,
                     });
