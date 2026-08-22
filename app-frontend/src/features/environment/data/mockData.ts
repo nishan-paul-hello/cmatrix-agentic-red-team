@@ -21,6 +21,7 @@ export const TABS: ELTab[] = [
     "EVIDENCE",
     "FAILURES",
 ];
+export type Endpoint = (typeof ENDPOINTS)[0];
 export const ENDPOINTS = [
     {
         endpoint: "GET /api/users",
