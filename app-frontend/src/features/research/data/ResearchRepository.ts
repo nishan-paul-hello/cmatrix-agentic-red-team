@@ -22,14 +22,18 @@ export class ResearchRepository implements DataSource<AblationRun> {
         });
     }
 
-    async fetchAll(options?: { page?: number; limit?: number }): Promise<AblationRun[]> {
+    async fetchAll<U = AblationRun>(options?: {
+        page?: number;
+        limit?: number;
+        collection?: string;
+    }): Promise<U[]> {
         return new Promise((resolve) => {
             setTimeout(() => {
                 const { page = 1, limit = 50 } = options ?? {};
                 const start = (page - 1) * limit;
                 const data = ResearchRepository.mockData.slice(start, start + limit);
                 // VALIDATION SEAM: insert schema.parse(data) here once a real backend replaces mock data
-                resolve(data);
+                resolve(data as unknown as U[]);
             }, 300);
         });
     }
