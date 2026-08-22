@@ -1,7 +1,6 @@
-/* eslint-disable import/no-cycle */
-
 import { KPI } from "@/features/specialists/components/KPI";
 import { UCBModal } from "@/features/specialists/components/UCBModal";
+import { STATUS_C } from "@/features/specialists/constants";
 import {
     type SchedEntry,
     type SpecialistEntry,
@@ -9,13 +8,6 @@ import {
 } from "@/features/specialists/data/fixtures/teamDashboardMockData";
 import { SPEC_STATUS } from "@/types/domain-types";
 
-export const STATUS_C: Record<VDGEntry["status"], string> = {
-    ELIGIBLE: "var(--color-hex-e31b23)",
-    IN_PROGRESS: "var(--color-hex-ff2a32)",
-    EXPLOITED: "var(--color-hex-3fb950)",
-    BLOCKED: "var(--color-hex-333333)",
-    DEPRIORITIZED: "var(--color-hex-555555)",
-};
 const SPEC_C: Record<string, string> = {
     [SPEC_STATUS.COMPLETED]: "var(--color-hex-3fb950)",
     [SPEC_STATUS.RUNNING]: "var(--color-hex-ff2a32)",
