@@ -1,8 +1,8 @@
 import React from "react";
 
-import ModeCards from "./ModeCards";
-import StepHeading from "./StepHeading";
-import { useWizardContext } from "./WizardContext";
+import ModeCards from "@/features/missions/components/wizard/ModeCards";
+import StepHeading from "@/features/missions/components/wizard/StepHeading";
+import { useWizardContext } from "@/features/missions/components/wizard/WizardContext";
 
 export function Step4() {
     const { mode, setMode } = useWizardContext();

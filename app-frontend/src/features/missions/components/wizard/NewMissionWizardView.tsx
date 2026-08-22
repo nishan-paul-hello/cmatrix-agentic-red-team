@@ -1,14 +1,16 @@
 import { AUDIT_EVENT } from "@/features/audit/hooks/useAuditFeed";
 import MetaRow from "@/features/missions/components/wizard/MetaRow";
+import { Step1 } from "@/features/missions/components/wizard/Step1";
+import { Step2 } from "@/features/missions/components/wizard/Step2";
+import { Step3 } from "@/features/missions/components/wizard/Step3";
+import { Step4 } from "@/features/missions/components/wizard/Step4";
+import { Step5 } from "@/features/missions/components/wizard/Step5";
+import {
+    WizardContext,
+    type WizardContextType,
+} from "@/features/missions/components/wizard/WizardContext";
 import { STEPS } from "@/features/missions/data/wizardMockData";
 import { AUDIT_RESULT, type AuditEntry } from "@/types/domain-types";
-
-import { Step1 } from "./Step1";
-import { Step2 } from "./Step2";
-import { Step3 } from "./Step3";
-import { Step4 } from "./Step4";
-import { Step5 } from "./Step5";
-import { WizardContext, type WizardContextType } from "./WizardContext";
 
 export default function NewMissionWizardView(props: WizardContextType) {
     const { eventBus, logEvent } = props;

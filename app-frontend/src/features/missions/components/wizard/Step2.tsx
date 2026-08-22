@@ -1,9 +1,9 @@
 import React from "react";
 
-import Divider from "./Divider";
-import FieldBlock from "./FieldBlock";
-import StepHeading from "./StepHeading";
-import { useWizardContext } from "./WizardContext";
+import Divider from "@/features/missions/components/wizard/Divider";
+import FieldBlock from "@/features/missions/components/wizard/FieldBlock";
+import StepHeading from "@/features/missions/components/wizard/StepHeading";
+import { useWizardContext } from "@/features/missions/components/wizard/WizardContext";
 
 export function Step2() {
     const {

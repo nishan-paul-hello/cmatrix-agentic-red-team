@@ -1,8 +1,8 @@
 import React from "react";
 
-import StepHeading from "./StepHeading";
-import SurfaceCards from "./SurfaceCards";
-import { useWizardContext } from "./WizardContext";
+import StepHeading from "@/features/missions/components/wizard/StepHeading";
+import SurfaceCards from "@/features/missions/components/wizard/SurfaceCards";
+import { useWizardContext } from "@/features/missions/components/wizard/WizardContext";
 
 export function Step3() {
     const { surface, setSurface } = useWizardContext();

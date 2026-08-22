@@ -1,7 +1,7 @@
 import React from "react";
 
-import ReviewStep from "./ReviewStep";
-import { useWizardContext } from "./WizardContext";
+import ReviewStep from "@/features/missions/components/wizard/ReviewStep";
+import { useWizardContext } from "@/features/missions/components/wizard/WizardContext";
 
 export function Step5() {
     const { target, targetType, surface, mode, maxRuntime, costCeiling, toolTimeout, roe } =

@@ -1,13 +1,12 @@
 import React from "react";
 
+import Divider from "@/features/missions/components/wizard/Divider";
+import FieldBlock from "@/features/missions/components/wizard/FieldBlock";
+import RadioGroup from "@/features/missions/components/wizard/RadioGroup";
+import StepHeading from "@/features/missions/components/wizard/StepHeading";
+import TextInput from "@/features/missions/components/wizard/TextInput";
+import { useWizardContext } from "@/features/missions/components/wizard/WizardContext";
 import { type TargetType } from "@/features/missions/data/wizardMockData";
-
-import Divider from "./Divider";
-import FieldBlock from "./FieldBlock";
-import RadioGroup from "./RadioGroup";
-import StepHeading from "./StepHeading";
-import TextInput from "./TextInput";
-import { useWizardContext } from "./WizardContext";
 
 export function Step1() {
     const {
