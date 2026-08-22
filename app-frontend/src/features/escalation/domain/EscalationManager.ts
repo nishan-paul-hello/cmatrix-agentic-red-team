@@ -4,6 +4,8 @@
  * or high-risk situations (e.g. out of scope, zero-day, cost limit).
  */
 
+import { type RiskAssessment } from "@/types/domain-types";
+
 export type EscalationReason =
     | "AMBIGUOUS_SCOPE"
     | "NOVEL_VULNERABILITY"
@@ -84,3 +86,7 @@ export class EscalationManager {
 }
 
 export const globalEscalationManager = new EscalationManager();
+
+export function shouldEscalate(assessment: RiskAssessment): boolean {
+    return assessment.score >= assessment.threshold;
+}
