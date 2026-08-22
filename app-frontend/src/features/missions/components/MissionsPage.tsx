@@ -1,13 +1,10 @@
-import { useEffect, useState } from "react";
-
 import { EmptyState } from "@/components/ui/EmptyState";
 import StatusBadge from "@/components/ui/StatusBadge";
-import { MissionRepository } from "@/repositories/MissionRepository";
-import { MISSION_STATUS, type Mission, type MissionStatus } from "@/types/domain-types";
+import { useMissionsData } from "@/features/missions/hooks/useMissionsData";
+import { type MissionFilter } from "@/features/missions/utils";
+import { MISSION_STATUS } from "@/types/domain-types";
 
 // ─── Types & constants ────────────────────────────────────────────────────────
-
-type MissionFilter = "ALL" | MissionStatus;
 
 const FILTERS: MissionFilter[] = [
     "ALL",
@@ -40,18 +37,7 @@ interface MissionsPageProps {
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export default function MissionsPage({ onNewMission, onOpenMission }: MissionsPageProps) {
-    const [filter, setFilter] = useState<MissionFilter>("ALL");
-    const [missions, setMissions] = useState<Mission[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
-
-    useEffect(() => {
-        void MissionRepository.getMissions().then((data) => {
-            setMissions(data);
-            setIsLoading(false);
-        });
-    }, []);
-
-    const filtered = filter === "ALL" ? missions : missions.filter((m) => m.status === filter);
+    const { filter, setFilter, isLoading, filtered } = useMissionsData();
 
     return (
         <div className="flex h-full min-h-0 flex-col">
