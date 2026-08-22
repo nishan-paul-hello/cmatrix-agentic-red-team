@@ -1,4 +1,4 @@
-import { DATA } from "@/features/findings/data/findingsMockData";
+import { DATA } from "@/features/findings/data/fixtures/findingsMockData";
 import { type DataSource } from "@/types/adapters";
 import { type Finding } from "@/types/domain-types";
 
