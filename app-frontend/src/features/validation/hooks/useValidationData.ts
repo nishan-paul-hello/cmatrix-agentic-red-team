@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { type VFinding } from "@/features/validation/data/validationMockData";
+import { type VFinding } from "@/features/validation/data/fixtures/validationMockData";
 import { ValidationRepository } from "@/features/validation/data/ValidationRepository";
 import { type FindingStatus, type GuardrailResult } from "@/types/domain-types";
 import { canTransitionFinding } from "@/utils/FSM";
