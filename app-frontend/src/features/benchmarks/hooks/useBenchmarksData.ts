@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 
-import { type Bench } from "@/features/benchmarks/data/benchmarksMockData";
 import { BenchmarksRepository } from "@/features/benchmarks/data/BenchmarksRepository";
+import { type Bench } from "@/features/benchmarks/data/fixtures/benchmarksMockData";
 import { computeBenchmarkStats } from "@/features/benchmarks/utils";
 
 export function useBenchmarksData() {

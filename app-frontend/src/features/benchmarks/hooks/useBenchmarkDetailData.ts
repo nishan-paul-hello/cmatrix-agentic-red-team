@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 
-import { type Task } from "@/features/benchmarks/data/benchmarksMockData";
 import { BenchmarksRepository } from "@/features/benchmarks/data/BenchmarksRepository";
+import { type Task } from "@/features/benchmarks/data/fixtures/benchmarksMockData";
 import { computeCategoryStats } from "@/features/benchmarks/utils";
 
 export function useBenchmarkDetailData() {
