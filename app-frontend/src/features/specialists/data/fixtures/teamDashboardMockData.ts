@@ -218,3 +218,6 @@ export function getTeamDashboardData(): Promise<{
 }> {
     return Promise.resolve({ vdg: VDG, specialists: SPECIALISTS, sched: SCHED });
 }
+
+export type SpecialistEntry = (typeof SPECIALISTS)[0];
+export type SchedEntry = (typeof SCHED)[0];
