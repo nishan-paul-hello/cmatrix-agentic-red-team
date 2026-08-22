@@ -1,4 +1,4 @@
-import { ENTRIES } from "@/features/execution/data/fixtures/executionMockData";
+import { ENTRIES, getParsedRows } from "@/features/execution/data/fixtures/executionMockData";
 import { type DataSource } from "@/types/adapters";
 import { type ExecEntry } from "@/types/domain-types";
 
@@ -23,14 +23,18 @@ export class ExecutionRepository implements DataSource<ExecEntry> {
         });
     }
 
-    async fetchAll(options?: { page?: number; limit?: number }): Promise<ExecEntry[]> {
+    async fetchAll<U = ExecEntry>(options?: {
+        page?: number;
+        limit?: number;
+        collection?: string;
+    }): Promise<U[]> {
         return new Promise((resolve) => {
             setTimeout(() => {
                 const { page = 1, limit = 50 } = options ?? {};
                 const start = (page - 1) * limit;
                 const data = ExecutionRepository.mockData.slice(start, start + limit);
                 // VALIDATION SEAM: insert schema.parse(data) here once a real backend replaces mock data
-                resolve(data);
+                resolve(data as unknown as U[]);
             }, 300);
         });
     }
@@ -72,6 +76,10 @@ export class ExecutionRepository implements DataSource<ExecEntry> {
                 resolve(ExecutionRepository.mockData.length < initialLength);
             }, 100);
         });
+    }
+
+    static async getParsedRows() {
+        return getParsedRows();
     }
 
     static async getAll(): Promise<ExecEntry[]> {
