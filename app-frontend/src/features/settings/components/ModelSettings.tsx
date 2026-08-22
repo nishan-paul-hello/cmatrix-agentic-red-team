@@ -1,12 +1,11 @@
 import React from "react";
 
+import { Field } from "@/features/settings/components/Field";
+import { ModelSelect } from "@/features/settings/components/ModelSelect";
+import { SaveBar } from "@/features/settings/components/SaveBar";
+import { SectionHead } from "@/features/settings/components/SectionHead";
+import { Toggle } from "@/features/settings/components/Toggle";
 import { type SettingsData } from "@/features/settings/hooks/useSettingsData";
-
-import { Field } from "./Field";
-import { ModelSelect } from "./ModelSelect";
-import { SaveBar } from "./SaveBar";
-import { SectionHead } from "./SectionHead";
-import { Toggle } from "./Toggle";
 
 export function ModelSettings({ data }: { data: SettingsData["models"] }) {
     const { specialist, setSpecialist, manager, setManager, validator, setValidator } = data;

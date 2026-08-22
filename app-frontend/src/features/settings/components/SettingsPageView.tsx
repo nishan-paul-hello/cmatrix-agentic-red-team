@@ -1,17 +1,16 @@
 import React from "react";
 
+import { BenchmarksSettings } from "@/features/settings/components/BenchmarksSettings";
+import { CostSettings } from "@/features/settings/components/CostSettings";
+import { GeneralSettings } from "@/features/settings/components/GeneralSettings";
+import { MemorySettings } from "@/features/settings/components/MemorySettings";
+import { MissionsSettings } from "@/features/settings/components/MissionsSettings";
+import { ModelSettings } from "@/features/settings/components/ModelSettings";
+import { SecuritySettings } from "@/features/settings/components/SecuritySettings";
+import { ToolsSettings } from "@/features/settings/components/ToolsSettings";
+import { ValidationSettings } from "@/features/settings/components/ValidationSettings";
+import { VDGSettings } from "@/features/settings/components/VDGSettings";
 import { type SettingsData } from "@/features/settings/hooks/useSettingsData";
-
-import { BenchmarksSettings } from "./BenchmarksSettings";
-import { CostSettings } from "./CostSettings";
-import { GeneralSettings } from "./GeneralSettings";
-import { MemorySettings } from "./MemorySettings";
-import { MissionsSettings } from "./MissionsSettings";
-import { ModelSettings } from "./ModelSettings";
-import { SecuritySettings } from "./SecuritySettings";
-import { ToolsSettings } from "./ToolsSettings";
-import { ValidationSettings } from "./ValidationSettings";
-import { VDGSettings } from "./VDGSettings";
 
 export type SettingsTab =
     | "GENERAL"

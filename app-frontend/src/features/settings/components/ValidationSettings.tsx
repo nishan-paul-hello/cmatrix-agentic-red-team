@@ -1,11 +1,10 @@
 import React from "react";
 
+import { FieldRow } from "@/features/settings/components/FieldRow";
+import { SaveBar } from "@/features/settings/components/SaveBar";
+import { SectionHead } from "@/features/settings/components/SectionHead";
+import { ToggleRow } from "@/features/settings/components/ToggleRow";
 import { type SettingsData } from "@/features/settings/hooks/useSettingsData";
-
-import { FieldRow } from "./FieldRow";
-import { SaveBar } from "./SaveBar";
-import { SectionHead } from "./SectionHead";
-import { ToggleRow } from "./ToggleRow";
 
 export function ValidationSettings({ data }: { data: SettingsData["validation"] }) {
     const { retries, setRetries, timeout, setTimeout: setTimeout_ } = data;

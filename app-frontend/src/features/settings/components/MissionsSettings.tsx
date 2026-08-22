@@ -1,12 +1,11 @@
 import React from "react";
 
+import { Chips } from "@/features/settings/components/Chips";
+import { Field } from "@/features/settings/components/Field";
+import { SaveBar } from "@/features/settings/components/SaveBar";
+import { SectionHead } from "@/features/settings/components/SectionHead";
+import { ToggleRow } from "@/features/settings/components/ToggleRow";
 import { type SettingsData } from "@/features/settings/hooks/useSettingsData";
-
-import { Chips } from "./Chips";
-import { Field } from "./Field";
-import { SaveBar } from "./SaveBar";
-import { SectionHead } from "./SectionHead";
-import { ToggleRow } from "./ToggleRow";
 
 export function MissionsSettings({ data }: { data: SettingsData["missions"] }) {
     const { surface, setSurface, mode, setMode } = data;

@@ -1,12 +1,11 @@
 import React from "react";
 
+import { Chips } from "@/features/settings/components/Chips";
+import { Field } from "@/features/settings/components/Field";
+import { FieldRow } from "@/features/settings/components/FieldRow";
+import { SaveBar } from "@/features/settings/components/SaveBar";
+import { SectionHead } from "@/features/settings/components/SectionHead";
 import { type SettingsData } from "@/features/settings/hooks/useSettingsData";
-
-import { Chips } from "./Chips";
-import { Field } from "./Field";
-import { FieldRow } from "./FieldRow";
-import { SaveBar } from "./SaveBar";
-import { SectionHead } from "./SectionHead";
 
 export function BenchmarksSettings({ data }: { data: SettingsData["benchmarks"] }) {
     const { suite, setSuite, runs, setRuns, budget, setBudget } = data;

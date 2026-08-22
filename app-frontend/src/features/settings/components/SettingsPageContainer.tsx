@@ -1,8 +1,7 @@
 import React from "react";
 
+import SettingsPageView from "@/features/settings/components/SettingsPageView";
 import { useSettingsData } from "@/features/settings/hooks/useSettingsData";
-
-import SettingsPageView from "./SettingsPageView";
 
 export default function SettingsPageContainer() {
     const data = useSettingsData();

@@ -1,10 +1,9 @@
 import React from "react";
 
+import { FieldRow } from "@/features/settings/components/FieldRow";
+import { SaveBar } from "@/features/settings/components/SaveBar";
+import { SectionHead } from "@/features/settings/components/SectionHead";
 import { type SettingsData } from "@/features/settings/hooks/useSettingsData";
-
-import { FieldRow } from "./FieldRow";
-import { SaveBar } from "./SaveBar";
-import { SectionHead } from "./SectionHead";
 
 export function CostSettings({ data }: { data: SettingsData["cost"] }) {
     const { ceiling, setCeiling, perSpec, setPerSpec, alertPct, setAlertPct } = data;

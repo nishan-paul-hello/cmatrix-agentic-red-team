@@ -1,14 +1,13 @@
 import React from "react";
 
+import { Chips } from "@/features/settings/components/Chips";
+import { Field } from "@/features/settings/components/Field";
+import { SaveBar } from "@/features/settings/components/SaveBar";
+import { SectionHead } from "@/features/settings/components/SectionHead";
+import { TextInput } from "@/features/settings/components/TextInput";
+import { Toggle } from "@/features/settings/components/Toggle";
 import { type SettingsData } from "@/features/settings/hooks/useSettingsData";
 import { sanitizeInput } from "@/utils/sanitize";
-
-import { Chips } from "./Chips";
-import { Field } from "./Field";
-import { SaveBar } from "./SaveBar";
-import { SectionHead } from "./SectionHead";
-import { TextInput } from "./TextInput";
-import { Toggle } from "./Toggle";
 
 export function GeneralSettings({ data }: { data: SettingsData["general"] }) {
     const { runtime, setRuntime, ceiling, setCeiling, roe, setRoe, devRef, setDevRef } = data;

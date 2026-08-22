@@ -1,11 +1,10 @@
 import React from "react";
 
+import { FieldRow } from "@/features/settings/components/FieldRow";
+import { SaveBar } from "@/features/settings/components/SaveBar";
+import { SectionHead } from "@/features/settings/components/SectionHead";
+import { Toggle } from "@/features/settings/components/Toggle";
 import { type SettingsData } from "@/features/settings/hooks/useSettingsData";
-
-import { FieldRow } from "./FieldRow";
-import { SaveBar } from "./SaveBar";
-import { SectionHead } from "./SectionHead";
-import { Toggle } from "./Toggle";
 
 export function ToolsSettings({ data }: { data: SettingsData["tools"] }) {
     const { timeout, setTimeout: setTimeout_, parallel, setParallel } = data;

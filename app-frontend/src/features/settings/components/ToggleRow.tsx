@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Toggle } from "./Toggle";
+import { Toggle } from "@/features/settings/components/Toggle";
 
 export function ToggleRow({ label, on }: { label: string; on: boolean }) {
     return (
