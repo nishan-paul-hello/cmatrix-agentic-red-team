@@ -1,6 +1,20 @@
-import { AUTH_STATES } from "@/features/environment/data/mockData";
+import { useEffect, useState } from "react";
+
+import { EnvironmentRepository } from "@/features/environment/data/EnvironmentRepository";
+import { type AuthState } from "@/types/domain-types";
 
 export default function AuthStatesPanel() {
+    const [AUTH_STATES, setData] = useState<AuthState[]>([]);
+    useEffect(() => {
+        void new EnvironmentRepository()
+            .fetchAll<AuthState>({ collection: "AUTH_STATES", limit: 1000 })
+            .then(setData);
+    }, []);
+
+    if (AUTH_STATES.length === 0) {
+        return null;
+    }
+
     return (
         <div className="flex-1 overflow-auto">
             <div
@@ -43,7 +57,7 @@ export default function AuthStatesPanel() {
                     </tr>
                 </thead>
                 <tbody>
-                    {AUTH_STATES.map((a) => (
+                    {AUTH_STATES.map((a: AuthState) => (
                         <tr
                             key={a.id}
                             style={{

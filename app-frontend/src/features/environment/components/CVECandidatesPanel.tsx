@@ -1,6 +1,20 @@
-import { CVE_CANDIDATES } from "@/features/environment/data/mockData";
+import { useEffect, useState } from "react";
+
+import { EnvironmentRepository } from "@/features/environment/data/EnvironmentRepository";
+import { type CveCandidate } from "@/types/domain-types";
 
 export default function CVECandidatesPanel() {
+    const [CVE_CANDIDATES, setData] = useState<CveCandidate[]>([]);
+    useEffect(() => {
+        void new EnvironmentRepository()
+            .fetchAll<CveCandidate>({ collection: "CVE_CANDIDATES", limit: 1000 })
+            .then(setData);
+    }, []);
+
+    if (CVE_CANDIDATES.length === 0) {
+        return null;
+    }
+
     return (
         <div className="flex-1 overflow-auto">
             <div

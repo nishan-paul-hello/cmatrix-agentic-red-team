@@ -1,6 +1,20 @@
-import { PARAMS } from "@/features/environment/data/mockData";
+import { useEffect, useState } from "react";
+
+import { EnvironmentRepository } from "@/features/environment/data/EnvironmentRepository";
+import { type Parameter } from "@/types/domain-types";
 
 export default function ParametersPanel() {
+    const [PARAMS, setData] = useState<Parameter[]>([]);
+    useEffect(() => {
+        void new EnvironmentRepository()
+            .fetchAll<Parameter>({ collection: "PARAMS", limit: 1000 })
+            .then(setData);
+    }, []);
+
+    if (PARAMS.length === 0) {
+        return null;
+    }
+
     return (
         <div className="flex-1 overflow-auto">
             <div

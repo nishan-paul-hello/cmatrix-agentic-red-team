@@ -1,9 +1,22 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-import { CREDS } from "@/features/environment/data/mockData";
+import { EnvironmentRepository } from "@/features/environment/data/EnvironmentRepository";
+import { type CredentialEntry } from "@/types/domain-types";
 
 export default function CredentialsPanel() {
+    const [CREDS, setData] = useState<CredentialEntry[]>([]);
+    useEffect(() => {
+        void new EnvironmentRepository()
+            .fetchAll<CredentialEntry>({ collection: "CREDS", limit: 1000 })
+            .then(setData);
+    }, []);
+
     const [revealed, setRevealed] = useState<Set<string>>(new Set());
+
+    if (CREDS.length === 0) {
+        return null;
+    }
+
     const toggle = (u: string) =>
         setRevealed((p) => {
             const n = new Set(p);

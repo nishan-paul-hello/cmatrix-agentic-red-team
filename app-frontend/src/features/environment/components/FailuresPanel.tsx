@@ -1,9 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-import { FAILURE_LOG } from "@/features/environment/data/mockData";
+import { EnvironmentRepository } from "@/features/environment/data/EnvironmentRepository";
+import { type EnvFailureLogEntry } from "@/types/domain-types";
 
 export default function FailuresPanel() {
-    const [sel, setSel] = useState<string | null>(null);
+    const [FAILURE_LOG, setData] = useState<EnvFailureLogEntry[]>([]);
+    useEffect(() => {
+        void new EnvironmentRepository()
+            .fetchAll<EnvFailureLogEntry>({ collection: "FAILURE_LOG", limit: 1000 })
+            .then(setData);
+    }, []);
+
+    const [selId, setSelId] = useState<string | null>(null);
+
+    if (FAILURE_LOG.length === 0) {
+        return null;
+    }
     return (
         <div className="flex min-h-[0px] flex-1 overflow-hidden">
             <div className="flex min-w-[0px] flex-1 flex-col overflow-y-auto">
@@ -49,12 +61,12 @@ export default function FailuresPanel() {
                         {FAILURE_LOG.map((f, i) => (
                             <tr
                                 key={f.id}
-                                onClick={() => setSel(f.id === sel ? null : f.id)}
+                                onClick={() => setSelId(f.id === selId ? null : f.id)}
                                 className="cursor-pointer"
                                 style={{
                                     borderBottom: "1px solid var(--color-hex-111111)",
                                     background: (() => {
-                                        if (sel === f.id) {
+                                        if (selId === f.id) {
                                             return "var(--color-hex-110808)";
                                         }
                                         if (i % 2) {
@@ -68,7 +80,7 @@ export default function FailuresPanel() {
                                 }
                                 onMouseLeave={(e) =>
                                     (e.currentTarget.style.background = (() => {
-                                        if (sel === f.id) {
+                                        if (selId === f.id) {
                                             return "var(--color-hex-110808)";
                                         }
                                         if (i % 2) {
@@ -116,7 +128,7 @@ export default function FailuresPanel() {
                     </tbody>
                 </table>
             </div>
-            {sel && (
+            {selId && (
                 <div
                     className="w-[280px] shrink-0 overflow-y-auto bg-[var(--color-hex-0a0a0a)] px-[14px] py-[16px]"
                     style={{
@@ -124,7 +136,7 @@ export default function FailuresPanel() {
                     }}
                 >
                     {(() => {
-                        const f = FAILURE_LOG.find((x) => x.id === sel);
+                        const f = FAILURE_LOG.find((x) => x.id === selId);
                         if (!f) {
                             return null;
                         }
@@ -152,7 +164,7 @@ export default function FailuresPanel() {
                                     },
                                     {
                                         k: "TARGET",
-                                        v: f.target,
+                                        v: (f as unknown as Record<string, string>).target,
                                     },
                                     {
                                         k: "E_ORD",

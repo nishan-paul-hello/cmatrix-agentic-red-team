@@ -1,9 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-import { EVIDENCE_ARTIFACTS } from "@/features/environment/data/mockData";
+import { EnvironmentRepository } from "@/features/environment/data/EnvironmentRepository";
+import { type EvidenceArtifact } from "@/types/domain-types";
 
 export default function EvidencePanel() {
+    const [EVIDENCE_ARTIFACTS, setData] = useState<EvidenceArtifact[]>([]);
+    useEffect(() => {
+        void new EnvironmentRepository()
+            .fetchAll<EvidenceArtifact>({ collection: "EVIDENCE_ARTIFACTS", limit: 1000 })
+            .then(setData);
+    }, []);
+
     const [sel, setSel] = useState<string | null>(null);
+
+    if (EVIDENCE_ARTIFACTS.length === 0) {
+        return null;
+    }
     return (
         <div className="flex min-h-[0px] flex-1 overflow-hidden">
             <div className="flex min-w-[0px] flex-1 flex-col overflow-y-auto">

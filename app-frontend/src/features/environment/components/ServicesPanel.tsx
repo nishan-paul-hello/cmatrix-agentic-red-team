@@ -1,6 +1,21 @@
-import { SERVICES, STATUS_COLOR } from "@/features/environment/data/mockData";
+import { useEffect, useState } from "react";
+
+import { EnvironmentRepository } from "@/features/environment/data/EnvironmentRepository";
+import { STATUS_COLOR } from "@/features/environment/data/mockData";
+import { type Service } from "@/types/domain-types";
 
 export default function ServicesPanel() {
+    const [SERVICES, setData] = useState<Service[]>([]);
+    useEffect(() => {
+        void new EnvironmentRepository()
+            .fetchAll<Service>({ collection: "SERVICES", limit: 1000 })
+            .then(setData);
+    }, []);
+
+    if (SERVICES.length === 0) {
+        return null;
+    }
+
     return (
         <>
             <div

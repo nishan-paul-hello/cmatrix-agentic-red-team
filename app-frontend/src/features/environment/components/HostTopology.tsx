@@ -1,9 +1,22 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-import { EORD_COLOR, HOSTS, STATUS_BADGE } from "@/features/environment/data/mockData";
+import { EnvironmentRepository } from "@/features/environment/data/EnvironmentRepository";
+import { EORD_COLOR, STATUS_BADGE } from "@/features/environment/data/mockData";
+import { type HostNode } from "@/types/domain-types";
 
 export default function HostTopology() {
+    const [HOSTS, setData] = useState<HostNode[]>([]);
+    useEffect(() => {
+        void new EnvironmentRepository()
+            .fetchAll<HostNode>({ collection: "HOSTS", limit: 1000 })
+            .then(setData);
+    }, []);
+
     const [selected, setSelected] = useState<string | null>("HOST-01");
+
+    if (HOSTS.length === 0) {
+        return null;
+    }
     const sel = HOSTS.find((h) => h.id === selected);
     return (
         <div className="flex h-full min-h-[0px]">
@@ -121,7 +134,7 @@ export default function HostTopology() {
                                             {host.role}
                                         </div>
                                         <div className="flex flex-wrap gap-1">
-                                            {host.services.map((s) => (
+                                            {host.services.map((s: string) => (
                                                 <span
                                                     key={s}
                                                     className="rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)] bg-[var(--color-hex-111111)] px-[5px] py-[1px] text-[8px] tracking-[0.08em] text-[var(--color-hex-555555)]"
@@ -163,7 +176,6 @@ export default function HostTopology() {
                                     </div>
                                 </button>
 
-                                {/* Edge connector to next host */}
                                 {host.edges.map((edge) => (
                                     <div key={edge.to} className="ml-[28px] flex items-stretch">
                                         {/* Vertical line */}
@@ -290,7 +302,7 @@ export default function HostTopology() {
                                 OPEN SERVICES
                             </div>
                             <div className="flex flex-col gap-1.5">
-                                {sel.services.map((s) => (
+                                {sel.services.map((s: string) => (
                                     <div key={s} className="flex items-center gap-2">
                                         <div
                                             className="h-[5px] w-[5px] shrink-0 bg-[var(--color-hex-3fb950)]"

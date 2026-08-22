@@ -1,6 +1,20 @@
-import { ENDPOINTS, METHOD_COLOR } from "@/features/environment/data/mockData";
+import { useEffect, useState } from "react";
+
+import { EnvironmentRepository } from "@/features/environment/data/EnvironmentRepository";
+import { METHOD_COLOR, type Endpoint } from "@/features/environment/data/mockData";
 
 export default function EndpointsPanel() {
+    const [ENDPOINTS, setData] = useState<Endpoint[]>([]);
+    useEffect(() => {
+        void new EnvironmentRepository()
+            .fetchAll<Endpoint>({ collection: "ENDPOINTS", limit: 1000 })
+            .then(setData);
+    }, []);
+
+    if (ENDPOINTS.length === 0) {
+        return null;
+    }
+
     return (
         <>
             <div

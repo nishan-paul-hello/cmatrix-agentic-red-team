@@ -1,6 +1,20 @@
-import { EL_FINDINGS } from "@/features/environment/data/mockData";
+import { useEffect, useState } from "react";
+
+import { EnvironmentRepository } from "@/features/environment/data/EnvironmentRepository";
+import { type ElFinding } from "@/types/domain-types";
 
 export default function ELFindingsPanel() {
+    const [EL_FINDINGS, setData] = useState<ElFinding[]>([]);
+    useEffect(() => {
+        void new EnvironmentRepository()
+            .fetchAll<ElFinding>({ collection: "EL_FINDINGS", limit: 1000 })
+            .then(setData);
+    }, []);
+
+    if (EL_FINDINGS.length === 0) {
+        return null;
+    }
+
     return (
         <div className="flex-1 overflow-auto">
             <div
@@ -72,7 +86,7 @@ export default function ELFindingsPanel() {
                             </td>
                             <td className="px-[12px] py-[7px]">
                                 <div className="flex flex-wrap gap-1">
-                                    {f.evidence.map((e) => (
+                                    {f.evidence.map((e: string) => (
                                         <span
                                             key={e}
                                             className="rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)] bg-[var(--color-hex-111111)] px-[5px] py-[1px] text-[7.5px] tracking-[0.08em] text-[var(--color-hex-444444)]"
