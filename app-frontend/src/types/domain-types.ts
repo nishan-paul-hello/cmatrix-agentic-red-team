@@ -149,3 +149,171 @@ export interface GuardrailResult {
 
 // §22 Context-Window / Memory-Tiering pattern
 export type MemoryTier = "SHORT_TERM" | "LONG_TERM";
+
+export interface Service {
+    host: string;
+    port: string;
+    service: string;
+    version: string;
+    banner: string;
+    status: string;
+}
+
+export interface CredentialEntry {
+    username: string;
+    hash: string;
+    source: string;
+    scope: string;
+    status: string;
+    plain: string;
+}
+
+export interface AuthState {
+    id: string;
+    session: string;
+    user: string;
+    role: string;
+    method: string;
+    issued: string;
+    expiry: string;
+    status: string;
+    csrf: string;
+}
+
+export interface Parameter {
+    id: string;
+    endpoint: string;
+    param: string;
+    type: string;
+    source: string;
+    injectable: boolean;
+    lastVal: string;
+}
+
+export interface CveCandidate {
+    id: string;
+    tech: string;
+    class: string;
+    epss: number;
+    poc: boolean;
+    node: string;
+    eord: number;
+}
+
+export interface EvidenceArtifact {
+    id: string;
+    type: string;
+    finding: string;
+    ts: string;
+    size: string;
+    note: string;
+}
+
+export interface FailureLogEntry {
+    id: string;
+    ts: string;
+    spec: string;
+    action: string;
+    type: string;
+    severity: string;
+    diagnosis: string;
+    correctable: boolean;
+    resolution: string;
+    lessons: string[];
+}
+
+export interface EnvFailureLogEntry {
+    id: string;
+    ts: string;
+    spec: string;
+    action: string;
+    target: string;
+    error: string;
+    eord: number;
+    resolved: boolean;
+}
+
+export interface MemoryNode {
+    id: string;
+    vuln: string;
+    target: string;
+    subtype: string;
+    score: number;
+    uses: number;
+    lastSeen: string;
+    techniques: string[];
+    indicators: string[];
+    evolution: { ts: string; note: string }[];
+}
+
+export interface HostNode {
+    id: string;
+    ip: string;
+    hostname: string;
+    role: string;
+    os: string;
+    services: string[];
+    status: string;
+    eord: number;
+    edges: {
+        to: string;
+        label: string;
+        detail: string;
+        eord: number;
+    }[];
+}
+
+export interface ElFinding {
+    id: string;
+    type: string;
+    target: string;
+    eord: number;
+    vdgNode: string;
+    evidence: string[];
+}
+
+export interface SkillEntry {
+    id: string;
+    name: string;
+    cat: string;
+    spec: string;
+    calls: number;
+    success: number;
+    lastCall: string;
+    desc: string;
+    params: { k: string; t: string; desc: string }[];
+}
+
+export interface CtxSpecEntry {
+    id: string;
+    role: string;
+    state: string;
+    used: number;
+    max: number;
+    compacted: number;
+    tokens: number;
+}
+
+export interface ActionEntry {
+    id: string;
+    action: string;
+    ts: string;
+    spec: string;
+    tool: string;
+    args: string;
+    result: string;
+    eord: string;
+    status: string;
+}
+
+export interface BranchEntry {
+    id: string;
+    ts: string;
+    decision: string;
+    chosen: string;
+    alternatives: string[];
+    reason: string;
+    outcome: string;
+    impact: string;
+    children: BranchEntry[];
+}
