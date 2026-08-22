@@ -1,3 +1,4 @@
+export type EscalationContextBlock = (typeof CONTEXT_BLOCKS)[0];
 export const CONTEXT_BLOCKS = [
     {
         k: "MISSION",
