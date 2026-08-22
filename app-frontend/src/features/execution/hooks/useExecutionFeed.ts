@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 
-import { AUDIT_EVENT } from "@/features/audit/hooks/useAuditFeed";
+import { emitAuditEvent } from "@/features/audit/emitAuditEvent";
 import { ExecutionRepository } from "@/features/execution/data/ExecutionRepository";
 import { useServices } from "@/lib/services-context";
-import { AUDIT_RESULT, type AuditEntry, type ExecEntry } from "@/types/domain-types";
+import { AUDIT_RESULT, type ExecEntry } from "@/types/domain-types";
 import { useFeatureFlag } from "@/utils/FeatureFlags";
 
 export const EXECUTION_EVENT = "EXECUTION_EVENT";
@@ -29,14 +29,7 @@ export function useExecutionFeed() {
                     entry.status === "FAILED" ||
                     entry.status === "TIMEOUT"
                 ) {
-                    eventBus.publish<AuditEntry>(AUDIT_EVENT, {
-                        id: `EV-${Date.now().toString().slice(-6)}-${entry.id}`,
-                        ts: new Date().toLocaleTimeString("en-US", {
-                            hour12: false,
-                            hour: "2-digit",
-                            minute: "2-digit",
-                            second: "2-digit",
-                        }),
+                    emitAuditEvent(eventBus, {
                         type: "EXECUTION",
                         actor: entry.specialist,
                         action: "EXECUTE",
@@ -45,7 +38,6 @@ export function useExecutionFeed() {
                             entry.status === "SUCCESS"
                                 ? AUDIT_RESULT.SUCCESS
                                 : AUDIT_RESULT.FAILURE,
-                        ip: "127.0.0.1",
                         detail: `Executed ${entry.command.tool.id} with status ${entry.status}`,
                     });
                 }
