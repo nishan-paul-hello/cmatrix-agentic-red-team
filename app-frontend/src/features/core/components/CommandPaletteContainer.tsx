@@ -2,7 +2,8 @@
 
 import { useCallback, useEffect, useRef, useState, type KeyboardEvent } from "react";
 
-import CommandPaletteView, { ALL_ITEMS } from "@/features/core/components/CommandPaletteView";
+import { ALL_ITEMS } from "@/features/core/components/CommandPaletteConstants";
+import CommandPaletteView from "@/features/core/components/CommandPaletteView";
 import { useDebounce } from "@/hooks/useDebounce";
 import { sanitizeInput } from "@/utils/sanitize";
 
@@ -69,7 +70,7 @@ export default function CommandPaletteContainer({ onClose, onNavigate }: Command
         el?.scrollIntoView({ block: "nearest" });
     }, [cursor]);
 
-    const cats = Array.from(new Set(filtered.map((i) => i.category)));
+    const cats = Array.from(new Set(filtered.map((i) => i.category))) as string[];
 
     return (
         <CommandPaletteView
