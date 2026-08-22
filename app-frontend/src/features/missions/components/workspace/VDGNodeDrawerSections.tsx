@@ -1,8 +1,8 @@
 import React from "react";
 
-import { EOrdIndicator } from "./EOrdIndicator";
-import { Section } from "./Section";
-import { useNodeDrawerContext } from "./VDGNodeDrawerContext";
+import { EOrdIndicator } from "@/features/missions/components/workspace/EOrdIndicator";
+import { Section } from "@/features/missions/components/workspace/Section";
+import { useNodeDrawerContext } from "@/features/missions/components/workspace/VDGNodeDrawerContext";
 
 export function VDGNodeDrawerIntent() {
     const { detail } = useNodeDrawerContext();

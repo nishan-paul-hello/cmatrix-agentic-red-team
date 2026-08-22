@@ -1,6 +1,6 @@
 import React from "react";
 
-import { useNodeDrawerContext } from "./VDGNodeDrawerContext";
+import { useNodeDrawerContext } from "@/features/missions/components/workspace/VDGNodeDrawerContext";
 
 export function VDGNodeDrawerHeader() {
     const { node, onClose, statusColor, statusBg, statusBorder } = useNodeDrawerContext();

@@ -1,10 +1,9 @@
 import React from "react";
 
+import { AttackGraphLegend } from "@/features/missions/components/workspace/AttackGraphLegend";
+import { AttackGraphToolbar } from "@/features/missions/components/workspace/AttackGraphToolbar";
+import { NodeStat } from "@/features/missions/components/workspace/NodeStat";
 import VDGNodeDrawer from "@/features/missions/components/workspace/VDGNodeDrawer";
-
-import { AttackGraphLegend } from "./AttackGraphLegend";
-import { AttackGraphToolbar } from "./AttackGraphToolbar";
-import { NodeStat } from "./NodeStat";
 
 type NodeStatus =
     "EXPLOITED" | "ELIGIBLE" | "IN_PROGRESS" | "BLOCKED" | "INFEASIBLE" | "DEPRIORITIZED";

@@ -1,7 +1,10 @@
 import React from "react";
 
-import { NodeDrawerContext, type DrawerNode } from "./VDGNodeDrawerContext";
-import { VDGNodeDrawerHeader } from "./VDGNodeDrawerHeader";
+import {
+    NodeDrawerContext,
+    type DrawerNode,
+} from "@/features/missions/components/workspace/VDGNodeDrawerContext";
+import { VDGNodeDrawerHeader } from "@/features/missions/components/workspace/VDGNodeDrawerHeader";
 import {
     VDGNodeDrawerEnables,
     VDGNodeDrawerEvidence,
@@ -10,7 +13,7 @@ import {
     VDGNodeDrawerLifecycle,
     VDGNodeDrawerMetrics,
     VDGNodeDrawerPrerequisites,
-} from "./VDGNodeDrawerSections";
+} from "@/features/missions/components/workspace/VDGNodeDrawerSections";
 
 const NODE_DETAIL: Record<
     string,
