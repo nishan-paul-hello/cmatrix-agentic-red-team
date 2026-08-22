@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { getStrategyForRole } from "@/features/specialists/domain/SpecialistStrategy";
 import { useSpecialistsData } from "@/features/specialists/hooks/useSpecialistsData";
