@@ -1,4 +1,4 @@
-.PHONY: help install dev build clean paper ppt clean-paper format format-check lint
+.PHONY: help install dev build clean paper ppt clean-paper format format-check lint typecheck
 
 # Global Environment Variables
 ROOT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
@@ -15,6 +15,7 @@ help:
 	@echo "  make build                  Build for production"
 	@echo "  make format                 Format codebase with Prettier"
 	@echo "  make lint                   Lint codebase with ESLint"
+	@echo "  make typecheck              Typecheck codebase with TypeScript"
 	@echo "  make clean                  Clean all build artifacts and caches"
 	@echo "  make paper                  Build the Research Paper PDF"
 	@echo "  make ppt                    Build the Presentation PPTX"
@@ -43,6 +44,10 @@ format:
 lint:
 	@echo "🔍 Linting and fixing frontend code with ESLint..."
 	cd app-frontend && npm run lint:fix
+
+typecheck:
+	@echo "🩺 Typechecking frontend code..."
+	cd app-frontend && npx tsc --noEmit
 
 # Paper Build Directories
 PAPER_DIR_01 := docs/paper-research/paper-structure/paper-01-llm-orch-vapt
