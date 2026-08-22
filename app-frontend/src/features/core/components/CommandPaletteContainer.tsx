@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState, type KeyboardEvent } from "re
 
 import CommandPaletteView, { ALL_ITEMS } from "@/features/core/components/CommandPaletteView";
 import { useDebounce } from "@/hooks/useDebounce";
+import { sanitizeInput } from "@/utils/sanitize";
 
 interface CommandPaletteProps {
     onClose: () => void;
@@ -17,12 +18,13 @@ export default function CommandPaletteContainer({ onClose, onNavigate }: Command
     const inputRef = useRef<HTMLInputElement>(null);
     const listRef = useRef<HTMLDivElement>(null);
 
-    const filtered = debouncedQuery.trim()
+    const cleanQuery = sanitizeInput(debouncedQuery.trim());
+    const filtered = cleanQuery
         ? ALL_ITEMS.filter(
               (i) =>
-                  i.label.toLowerCase().includes(debouncedQuery.toLowerCase()) ||
-                  i.sub.toLowerCase().includes(debouncedQuery.toLowerCase()) ||
-                  i.category.includes(debouncedQuery.toUpperCase()),
+                  i.label.toLowerCase().includes(cleanQuery.toLowerCase()) ||
+                  i.sub.toLowerCase().includes(cleanQuery.toLowerCase()) ||
+                  i.category.includes(cleanQuery.toUpperCase()),
           )
         : ALL_ITEMS;
 
