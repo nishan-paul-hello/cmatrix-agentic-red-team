@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 
+import { EmptyState } from "@/components/ui/EmptyState";
 import { type ModelRow } from "@/features/cost/data/costMockData";
 import { CostRepository } from "@/features/cost/data/CostRepository";
 
@@ -14,6 +15,15 @@ export default function ModelBreakdown() {
         "claude-haiku-4-5": "var(--color-hex-d29922)",
         "claude-opus-5": "var(--color-hex-3fb950)",
     };
+
+    if (models.length === 0) {
+        return (
+            <div className="flex h-full flex-1 items-center justify-center">
+                <EmptyState message="LOADING MODEL DATA..." />
+            </div>
+        );
+    }
+
     return (
         <div className="flex-1 overflow-y-auto px-6 py-5">
             {/* Model cards */}
