@@ -1,6 +1,6 @@
 import React from "react";
 
-import { SEV_C, STATUS_C } from "@/features/findings/data/findingsMockData";
+import { SEV_C, STATUS_C } from "@/features/findings/data/fixtures/findingsMockData";
 import { type Finding, type Severity } from "@/types/domain-types";
 
 export default function FindingsList({

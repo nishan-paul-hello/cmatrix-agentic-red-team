@@ -4,7 +4,7 @@ import AttackPath from "@/features/findings/components/AttackPath";
 import EvidenceViewer from "@/features/findings/components/EvidenceViewer";
 import TrajectoryTab from "@/features/findings/components/TrajectoryTab";
 import ValidationTab from "@/features/findings/components/ValidationTab";
-import { SEV_C, STATUS_C, type Tab } from "@/features/findings/data/findingsMockData";
+import { SEV_C, STATUS_C, type Tab } from "@/features/findings/data/fixtures/findingsMockData";
 import { type Finding } from "@/types/domain-types";
 
 export default function FindingDetail({ f, onBack }: { f: Finding; onBack: () => void }) {
