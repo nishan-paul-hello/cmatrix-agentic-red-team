@@ -1,7 +1,15 @@
 import { useCallback } from "react";
 
 export type TelemetryEventName =
-    "MISSION_CREATED" | "ESCALATION_APPROVED" | "TASK_COMPLETED" | "ORACLE_EVALUATED";
+    | "MISSION_CREATED"
+    | "ESCALATION_APPROVED"
+    | "TASK_COMPLETED"
+    | "ORACLE_EVALUATED"
+    | "FINDING_VERIFIED"
+    | "FINDING_REJECTED"
+    | "MISSION_PAUSED"
+    | "MISSION_RESUMED"
+    | "MISSION_TERMINATED";
 
 export function useTelemetry() {
     const logEvent = useCallback(
