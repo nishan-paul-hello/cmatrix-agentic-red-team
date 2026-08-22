@@ -1,14 +1,13 @@
 /* eslint-disable import/no-cycle */
 
+import { KPI } from "@/features/specialists/components/KPI";
+import { UCBModal } from "@/features/specialists/components/UCBModal";
 import {
     type SchedEntry,
     type SpecialistEntry,
     type VDGEntry,
 } from "@/features/specialists/data/fixtures/teamDashboardMockData";
 import { SPEC_STATUS } from "@/types/domain-types";
-
-import { KPI } from "./KPI";
-import { UCBModal } from "./UCBModal";
 
 export const STATUS_C: Record<VDGEntry["status"], string> = {
     ELIGIBLE: "var(--color-hex-e31b23)",

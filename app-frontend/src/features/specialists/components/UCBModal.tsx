@@ -1,9 +1,8 @@
 /* eslint-disable import/no-cycle */
 import React, { useEffect } from "react";
 
+import { STATUS_C } from "@/features/specialists/components/TeamManagerDashboardView";
 import { type VDGEntry } from "@/features/specialists/data/fixtures/teamDashboardMockData";
-
-import { STATUS_C } from "./TeamManagerDashboardView";
 
 export function UCBModal({
     entry,
