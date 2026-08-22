@@ -6,11 +6,13 @@ import {
     globalCircuitBreaker,
     type ToolCircuitBreaker,
 } from "@/features/execution/domain/CircuitBreaker";
+import { globalBlackboard, type Blackboard } from "@/features/memory/domain/Blackboard";
 import { globalEventBus, type EventBus } from "@/utils/EventBus";
 
 export interface ServicesContextType {
     eventBus: EventBus;
     circuitBreaker: ToolCircuitBreaker;
+    blackboard: Blackboard;
 }
 
 const ServicesContext = createContext<ServicesContextType | null>(null);
@@ -21,6 +23,7 @@ export function ServicesProvider({ children }: { children: ReactNode }) {
             value={{
                 eventBus: globalEventBus,
                 circuitBreaker: globalCircuitBreaker,
+                blackboard: globalBlackboard,
             }}
         >
             {children}

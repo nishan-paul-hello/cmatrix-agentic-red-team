@@ -6,8 +6,10 @@ import { createContext, useCallback, useContext, useState, type ReactNode } from
 
 interface AuthContextValue {
     authenticated: boolean;
+    role: "ANALYST" | "ADMIN" | null;
     login: () => void;
     logout: () => void;
+    canApprove: (action: string) => boolean;
 }
 
 // ─── Context ──────────────────────────────────────────────────────────────────
@@ -18,12 +20,14 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
     const [authenticated, setAuthenticated] = useState(false);
+    const [role] = useState<"ANALYST" | "ADMIN" | null>("ANALYST");
 
     const login = useCallback(() => setAuthenticated(true), []);
     const logout = useCallback(() => setAuthenticated(false), []);
+    const canApprove = useCallback((_action: string) => true, []);
 
     return (
-        <AuthContext.Provider value={{ authenticated, login, logout }}>
+        <AuthContext.Provider value={{ authenticated, role, login, logout, canApprove }}>
             {children}
         </AuthContext.Provider>
     );
