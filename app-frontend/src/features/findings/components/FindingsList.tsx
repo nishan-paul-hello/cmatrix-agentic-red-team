@@ -1,14 +1,21 @@
-import { DATA, SEV_C, STATUS_C } from "@/features/findings/data/findingsMockData";
+import React from "react";
+
+import { SEV_C, STATUS_C } from "@/features/findings/data/findingsMockData";
 import { type Finding, type Severity } from "@/types/domain-types";
 
-export default function FindingsList({ onSelect }: { onSelect: (f: Finding) => void }) {
-    const counts: Record<Severity, number> = {
-        CRITICAL: 0,
-        HIGH: 0,
-        MEDIUM: 0,
-        LOW: 0,
-    };
-    DATA.forEach((f) => counts[f.severity]++);
+export default function FindingsList({
+    findings,
+    counts,
+    onSelect,
+    page,
+    setPage,
+}: {
+    findings: Finding[];
+    counts: Record<Severity, number>;
+    onSelect: (f: Finding) => void;
+    page: number;
+    setPage: React.Dispatch<React.SetStateAction<number>>;
+}) {
     return (
         <div className="flex h-full min-h-[0px] flex-col">
             <div
@@ -81,7 +88,7 @@ export default function FindingsList({ onSelect }: { onSelect: (f: Finding) => v
                         </tr>
                     </thead>
                     <tbody>
-                        {DATA.map((f) => {
+                        {findings.map((f) => {
                             const sc = SEV_C[f.severity],
                                 stc = STATUS_C[f.status] ?? "var(--color-hex-666666)";
                             return (
@@ -145,6 +152,31 @@ export default function FindingsList({ onSelect }: { onSelect: (f: Finding) => v
                         })}
                     </tbody>
                 </table>
+            </div>
+
+            {/* Pagination Controls */}
+            <div className="mt-2 flex items-center justify-between px-6 pb-4">
+                <div className="text-[10px] tracking-[0.1em] text-[var(--color-hex-666666)]">
+                    PAGE {page}
+                </div>
+                <div className="flex gap-2">
+                    <button
+                        className="font-inherit cursor-pointer rounded-[2px] border-none bg-[var(--color-hex-111111)] px-[12px] py-[6px] text-[9px] font-semibold tracking-[0.16em] text-[var(--color-hex-f2f2f2)]"
+                        onClick={() => setPage((p) => Math.max(1, p - 1))}
+                        disabled={page === 1}
+                        style={{ opacity: page === 1 ? 0.5 : 1 }}
+                    >
+                        PREV
+                    </button>
+                    <button
+                        className="font-inherit cursor-pointer rounded-[2px] border-none bg-[var(--color-hex-111111)] px-[12px] py-[6px] text-[9px] font-semibold tracking-[0.16em] text-[var(--color-hex-f2f2f2)]"
+                        onClick={() => setPage((p) => p + 1)}
+                        disabled={findings.length < 50}
+                        style={{ opacity: findings.length < 50 ? 0.5 : 1 }}
+                    >
+                        NEXT
+                    </button>
+                </div>
             </div>
         </div>
     );
