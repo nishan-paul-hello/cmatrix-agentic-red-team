@@ -6,7 +6,7 @@ import {
     type ContextEntry,
     type CostTimeline,
     type ModelRow,
-} from "@/features/cost/data/costMockData";
+} from "@/features/cost/data/fixtures/costMockData";
 import { type DataSource } from "@/types/adapters";
 
 export class CostRepository implements DataSource<CostTimeline> {
