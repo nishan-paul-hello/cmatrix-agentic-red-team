@@ -1,8 +1,8 @@
-import { type NodeStatus } from "@/features/missions/data/workspaceMockData";
+import { type VdgNodeStatus } from "@/types/domain-types";
 
-export default function StatusBadge(status: NodeStatus) {
+export default function StatusBadge(status: VdgNodeStatus) {
     const map: Record<
-        NodeStatus,
+        VdgNodeStatus,
         {
             color: string;
             bg: string;
