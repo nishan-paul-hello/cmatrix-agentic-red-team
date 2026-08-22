@@ -1,4 +1,4 @@
-import { type MissionStatus, type SpecStatus } from "@/types/domain-types";
+import { SPEC_STATUS, type MissionStatus, type SpecStatus } from "@/types/domain-types";
 
 /**
  * Orchestrator-Worker pattern for modeling the parent-child relationship
@@ -30,6 +30,8 @@ export class MissionOrchestratorModel implements MissionOrchestrator {
     ) {}
 
     public hasActiveWorkers(): boolean {
-        return this.workers.some((w) => w.status === "RUNNING" || w.status === "VALIDATING");
+        return this.workers.some(
+            (w) => w.status === SPEC_STATUS.RUNNING || w.status === SPEC_STATUS.VALIDATING,
+        );
     }
 }
