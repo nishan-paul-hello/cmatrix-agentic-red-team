@@ -2,6 +2,18 @@ import { MISSION_STATUS, type Mission } from "@/types/domain-types";
 
 export const MISSIONS: Mission[] = [
     {
+        id: "NEW-001",
+        target: "https://app.targetcorp.com",
+        surface: "WEB APPLICATION",
+        mode: "ONE-DAY",
+        status: MISSION_STATUS.RUNNING,
+        nodes: 1,
+        findings: 0,
+        cost: "$0.00",
+        started: "00:00:00",
+    },
+
+    {
         id: "CVE-001",
         target: "app.targetcorp.com",
         surface: "WEB APPLICATION",
