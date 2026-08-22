@@ -1,4 +1,4 @@
-import { FINDINGS, type VFinding } from "@/features/validation/data/validationMockData";
+import { FINDINGS, type VFinding } from "@/features/validation/data/fixtures/validationMockData";
 import { type DataSource } from "@/types/adapters";
 
 export class ValidationRepository implements DataSource<VFinding> {
