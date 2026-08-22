@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 
-import { getReportsData, type Report } from "@/features/reports/data/fixtures/reportsMockData";
+import { type Report } from "@/features/reports/data/fixtures/reportsMockData";
+import { ReportsRepository } from "@/features/reports/data/ReportsRepository";
 
-export function useReportsData() {
+export function useReportsData(page: number = 1, limit: number = 50) {
     const [sel, setSel] = useState<Report | null>(null);
     const [reports, setReports] = useState<Report[]>([]);
     const [previewSections, setPreviewSections] = useState<
@@ -14,14 +15,18 @@ export function useReportsData() {
     >([]);
 
     useEffect(() => {
-        void getReportsData().then((data) => {
-            setReports(data.reports);
-            setPreviewSections(data.previewSections);
-            if (data.reports.length > 0) {
-                setSel(data.reports[0]);
+        const repo = new ReportsRepository();
+        void Promise.all([
+            repo.fetchAll({ page, limit }),
+            ReportsRepository.getPreviewSections(),
+        ]).then(([reportsData, previewData]) => {
+            setReports(reportsData);
+            setPreviewSections(previewData);
+            if (reportsData.length > 0) {
+                setSel(reportsData[0]);
             }
         });
-    }, []);
+    }, [page, limit]);
 
     return { sel, setSel, reports, previewSections };
 }
