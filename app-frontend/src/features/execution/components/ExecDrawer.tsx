@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 
+import { STATUS_C } from "@/features/execution/components/ExecutionEntryRow";
 import { formatCommand } from "@/features/execution/domain/TaskCommand";
 import { type ExecEntry } from "@/types/domain-types";
-
-import { STATUS_C } from "./ExecutionEntryRow";
 
 export function ExecDrawer({
     entry,

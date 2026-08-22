@@ -1,10 +1,9 @@
 import React from "react";
 import { type Virtualizer } from "@tanstack/react-virtual";
 
+import { ExecDrawer } from "@/features/execution/components/ExecDrawer";
+import { ExecutionEntryRow } from "@/features/execution/components/ExecutionEntryRow";
 import { type ExecEntry } from "@/types/domain-types";
-
-import { ExecDrawer } from "./ExecDrawer";
-import { ExecutionEntryRow } from "./ExecutionEntryRow";
 
 export default function ExecutionConsoleView({
     entries,
