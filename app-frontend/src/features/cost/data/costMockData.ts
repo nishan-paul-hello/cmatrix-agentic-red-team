@@ -79,6 +79,7 @@ export const SPECIALISTS_COST: SpecialistCost[] = [
         pct: 11,
     },
 ];
+export type ModelRow = (typeof MODEL_ROWS)[0];
 export const MODEL_ROWS = [
     {
         model: "claude-sonnet-5",
@@ -114,6 +115,7 @@ export const MODEL_ROWS = [
         pct: 10,
     },
 ];
+export type ContextEntry = (typeof CTX_ENTRIES)[0];
 export const CTX_ENTRIES = [
     {
         id: "S-01",
