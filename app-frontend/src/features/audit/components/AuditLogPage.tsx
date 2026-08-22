@@ -1,164 +1,49 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
+import { useVirtualizer } from "@tanstack/react-virtual";
 
-import { useAuditFeed } from "@/features/audit/hooks/useAuditFeed";
-import { useAuditFilters } from "@/features/audit/hooks/useAuditFilters";
 import {
-    AUDIT_RESULT,
-    type AuditEntry,
-    type AuditEventType,
-    type AuditResultValue,
-} from "@/types/domain-types";
-
+    drawerFields,
+    RESULT_FILTERS,
+    TABLE_HEADERS,
+    TYPE_FILTERS,
+} from "@/features/audit/components/AuditLogConstants";
 // ─── Static data ──────────────────────────────────────────────────────────────
 
-// ─── Style maps ───────────────────────────────────────────────────────────────
-
-interface ColorPair {
-    c: string;
-    bg: string;
-}
-
-const TYPE_C: Record<AuditEventType, ColorPair> = {
-    AUTH: { c: "var(--color-hex-a0a0a0)", bg: "var(--color-hex-111111)" },
-    MISSION: { c: "var(--color-hex-e31b23)", bg: "var(--color-hex-120608)" },
-    EXECUTION: { c: "var(--color-hex-666666)", bg: "var(--color-hex-0d0d0d)" },
-    ESCALATION: { c: "var(--color-hex-d29922)", bg: "var(--color-hex-110e00)" },
-    SYSTEM: { c: "var(--color-hex-3fb950)", bg: "var(--color-hex-061a0c)" },
-    CONFIG: { c: "var(--color-hex-a0a0a0)", bg: "var(--color-hex-111111)" },
-};
-
-const RESULT_C: Record<AuditResultValue, string> = {
-    SUCCESS: "var(--color-hex-3fb950)",
-    FAILURE: "var(--color-hex-ff2a32)",
-    WARNING: "var(--color-hex-d29922)",
-};
-
-// ─── Filter options ───────────────────────────────────────────────────────────
-
-const TYPE_FILTERS = [
-    "ALL",
-    "AUTH",
-    "MISSION",
-    "EXECUTION",
-    "ESCALATION",
-    "SYSTEM",
-    "CONFIG",
-] as const;
-
-const RESULT_FILTERS = [
-    "ALL",
-    AUDIT_RESULT.SUCCESS,
-    AUDIT_RESULT.FAILURE,
-    AUDIT_RESULT.WARNING,
-] as const;
-
-const TABLE_HEADERS = ["ID", "TIMESTAMP", "TYPE", "ACTOR", "ACTION", "RESOURCE", "RESULT"] as const;
-
-// ─── Detail drawer field definition ──────────────────────────────────────────
-
-interface DrawerField {
-    k: string;
-    v: string;
-    c?: string;
-}
-
-function drawerFields(sel: AuditEntry): DrawerField[] {
-    return [
-        { k: "TYPE", v: sel.type, c: TYPE_C[sel.type].c },
-        { k: "ACTOR", v: sel.actor },
-        { k: "ACTION", v: sel.action },
-        { k: "RESOURCE", v: sel.resource },
-        { k: "RESULT", v: sel.result, c: RESULT_C[sel.result] },
-        { k: "IP / SOURCE", v: sel.ip },
-        { k: "DETAIL", v: sel.detail },
-    ];
-}
-
-// ─── Component ────────────────────────────────────────────────────────────────
-
-const AuditLogRow = React.memo(function AuditLogRowInner({
-    e,
-    isSelected,
-    onClick,
-}: {
-    e: AuditEntry;
-    isSelected: boolean;
-    onClick: () => void;
-}) {
-    const tc = TYPE_C[e.type];
-    const rc = RESULT_C[e.result];
-    return (
-        <tr
-            onClick={onClick}
-            className={[
-                "cursor-pointer border-b border-[var(--color-hex-0e0e0e)] transition-colors duration-75",
-                isSelected ? "bg-[var(--color-hex-0d0d0d)]" : "hover:bg-[var(--color-hex-0a0a0a)]",
-            ].join(" ")}
-        >
-            <td className="px-[12px] py-[7px] text-[8.5px] text-[var(--color-hex-333333)]">
-                {e.id}
-            </td>
-            <td className="px-[12px] py-[7px] text-[8.5px] whitespace-nowrap text-[var(--color-hex-333333)]">
-                {e.ts}
-            </td>
-            <td className="px-[12px] py-[7px]">
-                <span
-                    className="rounded-[2px] px-[5px] py-[1px] text-[8px] font-semibold tracking-[0.1em]"
-                    style={{
-                        color: tc.c,
-                        background: tc.bg,
-                        border: `1px solid ${tc.c}33`,
-                    }}
-                >
-                    {e.type}
-                </span>
-            </td>
-            <td className="px-[12px] py-[7px] text-[9px] tracking-[0.04em] text-[var(--color-hex-666666)]">
-                {e.actor}
-            </td>
-            <td className="px-[12px] py-[7px] text-[9px] font-semibold tracking-[0.04em] text-[var(--color-hex-a0a0a0)]">
-                {e.action}
-            </td>
-            <td className="px-[12px] py-[7px] text-[9px] text-[var(--color-hex-444444)]">
-                {e.resource}
-            </td>
-            <td className="px-[12px] py-[7px]">
-                <span className="text-[8.5px] font-semibold tracking-[0.1em]" style={{ color: rc }}>
-                    {e.result}
-                </span>
-            </td>
-        </tr>
-    );
-});
+import {
+    AuditLogRow,
+    RESULT_C,
+    TYPE_C,
+    type ColorPair,
+} from "@/features/audit/components/AuditLogRow";
+import { useAuditFeed } from "@/features/audit/hooks/useAuditFeed";
+import { useAuditFilters } from "@/features/audit/hooks/useAuditFilters";
+import { type AuditEntry, type AuditResultValue } from "@/types/domain-types";
 
 export default function AuditLogPage() {
     const entries = useAuditFeed();
     const { typeFilter, setTypeFilter, resultFilter, setResultFilter, search, setSearch, visible } =
         useAuditFilters(entries);
     const [sel, setSel] = useState<AuditEntry | null>(null);
-    const [page, setPage] = useState(1);
-    const PAGE_SIZE = 50;
+    const parentRef = useRef<HTMLDivElement>(null);
 
     const toggleSel = useCallback((entry: AuditEntry) => {
         setSel((prev) => (prev?.id === entry.id ? null : entry));
     }, []);
 
-    const [prevFilters, setPrevFilters] = useState({ search, typeFilter, resultFilter });
-    if (
-        search !== prevFilters.search ||
-        typeFilter !== prevFilters.typeFilter ||
-        resultFilter !== prevFilters.resultFilter
-    ) {
-        setPrevFilters({ search, typeFilter, resultFilter });
-        setPage(1);
-    }
+    // eslint-disable-next-line react-hooks/incompatible-library
+    const rowVirtualizer = useVirtualizer({
+        count: visible.length,
+        getScrollElement: () => parentRef.current,
+        estimateSize: () => 33, // Approx height of a row
+        overscan: 10,
+    });
 
-    const paginatedVisible = React.useMemo(() => {
-        const start = (page - 1) * PAGE_SIZE;
-        return visible.slice(start, start + PAGE_SIZE);
-    }, [visible, page, PAGE_SIZE]);
-
-    const totalPages = Math.max(1, Math.ceil(visible.length / PAGE_SIZE));
+    const virtualItems = rowVirtualizer.getVirtualItems();
+    const paddingTop = virtualItems.length > 0 ? (virtualItems[0]?.start ?? 0) : 0;
+    const paddingBottom =
+        virtualItems.length > 0
+            ? rowVirtualizer.getTotalSize() - (virtualItems[virtualItems.length - 1]?.end ?? 0)
+            : 0;
 
     return (
         <div className="flex h-full min-h-0 flex-col">
@@ -241,7 +126,7 @@ export default function AuditLogPage() {
             {/* Table + detail drawer */}
             <div className="flex min-h-0 flex-1 overflow-hidden">
                 {/* Table */}
-                <div className="flex flex-1 flex-col overflow-y-auto">
+                <div ref={parentRef} className="flex flex-1 flex-col overflow-y-auto">
                     <table className="w-full border-collapse">
                         <thead>
                             <tr className="sticky top-0 z-10 bg-[var(--color-hex-0f0f0f)]">
@@ -256,39 +141,29 @@ export default function AuditLogPage() {
                             </tr>
                         </thead>
                         <tbody>
-                            {paginatedVisible.map((e) => (
-                                <AuditLogRow
-                                    key={e.id}
-                                    e={e}
-                                    isSelected={sel?.id === e.id}
-                                    onClick={() => toggleSel(e)}
-                                />
-                            ))}
+                            {paddingTop > 0 && (
+                                <tr>
+                                    <td style={{ height: `${paddingTop}px` }} />
+                                </tr>
+                            )}
+                            {virtualItems.map((virtualRow) => {
+                                const e = visible[virtualRow.index];
+                                return (
+                                    <AuditLogRow
+                                        key={e.id}
+                                        e={e}
+                                        isSelected={sel?.id === e.id}
+                                        onClick={() => toggleSel(e)}
+                                    />
+                                );
+                            })}
+                            {paddingBottom > 0 && (
+                                <tr>
+                                    <td style={{ height: `${paddingBottom}px` }} />
+                                </tr>
+                            )}
                         </tbody>
                     </table>
-
-                    {/* Pagination Controls */}
-                    <div className="flex flex-shrink-0 items-center justify-between border-t border-[var(--color-hex-1a1a1a)] bg-[var(--color-hex-0f0f0f)] px-6 py-4">
-                        <div className="text-[10px] tracking-[0.1em] text-[var(--color-hex-666666)]">
-                            PAGE {page} OF {totalPages}
-                        </div>
-                        <div className="flex gap-2">
-                            <button
-                                className="font-inherit cursor-pointer rounded-[2px] border-none bg-[var(--color-hex-111111)] px-[12px] py-[6px] text-[9px] font-semibold tracking-[0.16em] text-[var(--color-hex-f2f2f2)] transition-colors duration-100 hover:bg-[var(--color-hex-222222)] disabled:opacity-50"
-                                onClick={() => setPage((p) => Math.max(1, p - 1))}
-                                disabled={page === 1}
-                            >
-                                PREV
-                            </button>
-                            <button
-                                className="font-inherit cursor-pointer rounded-[2px] border-none bg-[var(--color-hex-111111)] px-[12px] py-[6px] text-[9px] font-semibold tracking-[0.16em] text-[var(--color-hex-f2f2f2)] transition-colors duration-100 hover:bg-[var(--color-hex-222222)] disabled:opacity-50"
-                                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                                disabled={page === totalPages}
-                            >
-                                NEXT
-                            </button>
-                        </div>
-                    </div>
                 </div>
 
                 {/* Detail drawer */}
