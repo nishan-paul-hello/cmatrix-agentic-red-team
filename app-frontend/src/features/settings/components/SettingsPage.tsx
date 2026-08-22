@@ -1,3 +1,3 @@
-import SettingsPageContainer from "@/features/settings/components/SettingsPageContainer";
+import SettingsPageContainer from "./SettingsPageContainer";
 
 export default SettingsPageContainer;

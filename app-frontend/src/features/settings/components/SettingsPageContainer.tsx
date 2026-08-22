@@ -1,10 +1,10 @@
-import { useState } from "react";
+import React from "react";
 
-import SettingsPageView, {
-    type SettingsTab,
-} from "@/features/settings/components/SettingsPageView";
+import { useSettingsData } from "@/features/settings/hooks/useSettingsData";
+
+import SettingsPageView from "./SettingsPageView";
 
 export default function SettingsPageContainer() {
-    const [tab, setTab] = useState<SettingsTab>("GENERAL");
-    return <SettingsPageView tab={tab} setTab={setTab} />;
+    const data = useSettingsData();
+    return <SettingsPageView data={data} />;
 }
