@@ -2,11 +2,10 @@ import { useCallback, useEffect, useReducer, useRef, useState } from "react";
 
 import MissionWorkspaceView from "@/features/missions/components/workspace/MissionWorkspaceView";
 import {
-    INITIAL_LOG,
-    STREAM_EVENTS,
     type LogEntry,
     type MissionSubNav,
-} from "@/features/missions/data/workspaceMockData";
+} from "@/features/missions/data/fixtures/workspaceMockData";
+import { WorkspaceRepository } from "@/features/missions/data/WorkspaceRepository";
 import {
     MissionOrchestratorModel,
     type WorkerSpecialist,
@@ -26,6 +25,7 @@ interface WorkspaceState {
 export type WorkspaceAction =
     | { type: "SET_SUB_NAV"; payload: MissionSubNav }
     | { type: "ADD_LOG_ENTRY"; payload: LogEntry }
+    | { type: "SET_LOG"; payload: LogEntry[] }
     | { type: "SET_PAUSED"; payload: boolean | ((p: boolean) => boolean) }
     | { type: "SET_TERMINATED"; payload: boolean };
 
@@ -35,6 +35,8 @@ function workspaceReducer(state: WorkspaceState, action: WorkspaceAction): Works
             return { ...state, subNav: action.payload };
         case "ADD_LOG_ENTRY":
             return { ...state, log: [action.payload, ...state.log].slice(0, 60) };
+        case "SET_LOG":
+            return { ...state, log: action.payload };
         case "SET_PAUSED":
             return {
                 ...state,
@@ -76,34 +78,54 @@ export default function MissionWorkspaceContainer({
 
     const [state, rawDispatch] = useReducer(workspaceReducer, {
         subNav: "overview",
-        log: INITIAL_LOG,
+        log: [],
         paused: false,
         terminated: false,
     });
     const { subNav, log, paused, terminated } = state;
 
+    const pausedRef = useRef(paused);
+    useEffect(() => {
+        pausedRef.current = paused;
+    }, [paused]);
+
     const dispatch = useCallback(
         (action: WorkspaceAction) => {
             if (action.type === "SET_PAUSED") {
                 const willPause =
-                    typeof action.payload === "function" ? action.payload(paused) : action.payload;
+                    typeof action.payload === "function"
+                        ? action.payload(pausedRef.current)
+                        : action.payload;
                 logEvent(willPause ? "MISSION_PAUSED" : "MISSION_RESUMED", { missionId });
             } else if (action.type === "SET_TERMINATED") {
                 logEvent("MISSION_TERMINATED", { missionId });
             }
             rawDispatch(action);
         },
-        [logEvent, missionId, paused],
+        [logEvent, missionId],
     );
 
-    const nextId = useRef(INITIAL_LOG.length + 1);
-    const queue = useRef([...STREAM_EVENTS]);
+    const nextId = useRef(0);
+    const queue = useRef<Omit<LogEntry, "id">[]>([]);
+    const [dataLoaded, setDataLoaded] = useState(false);
+
+    useEffect(() => {
+        void Promise.all([
+            WorkspaceRepository.getInitialLog(),
+            WorkspaceRepository.getStreamEvents(),
+        ]).then(([initialLog, streamEvents]) => {
+            dispatch({ type: "SET_LOG", payload: initialLog });
+            nextId.current = initialLog.length + 1;
+            queue.current = [...streamEvents];
+            setDataLoaded(true);
+        });
+    }, [dispatch]);
+
     const time = useElapsed(0);
-    const pausedRef = useRef(paused);
     useEffect(() => {
-        pausedRef.current = paused;
-    }, [paused]);
-    useEffect(() => {
+        if (!dataLoaded) {
+            return;
+        }
         const iv = setInterval(() => {
             if (pausedRef.current) {
                 return;
@@ -121,7 +143,12 @@ export default function MissionWorkspaceContainer({
             });
         }, 3200);
         return () => clearInterval(iv);
-    }, [dispatch]);
+    }, [dispatch, dataLoaded]);
+
+    if (!dataLoaded) {
+        return null;
+    }
+
     return (
         <MissionWorkspaceView
             missionId={missionId}

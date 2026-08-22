@@ -4,7 +4,8 @@ import { type WorkspaceAction } from "@/features/missions/components/workspace/M
 import nodeStyle from "@/features/missions/components/workspace/NodeStyle";
 import Stat from "@/features/missions/components/workspace/Stat";
 import statusBadge from "@/features/missions/components/workspace/StatusBadge";
-import { VDG_NODES, type LogEntry } from "@/features/missions/data/workspaceMockData";
+import { type LogEntry } from "@/features/missions/data/fixtures/workspaceMockData";
+import { useWorkspaceData } from "@/features/missions/hooks/useWorkspaceData";
 
 export default function MissionOverview({
     log,
@@ -13,6 +14,8 @@ export default function MissionOverview({
     log: LogEntry[];
     dispatch: React.Dispatch<WorkspaceAction>;
 }) {
+    const { nodes } = useWorkspaceData();
+
     return (
         <>
             {/* CENTER TOP: attack graph canvas */}
@@ -66,7 +69,7 @@ export default function MissionOverview({
                             gap: 0,
                         }}
                     >
-                        {VDG_NODES.map((node, i) => {
+                        {nodes.map((node, i) => {
                             const s = nodeStyle(node.status);
                             const badge = statusBadge(node.status);
                             return (

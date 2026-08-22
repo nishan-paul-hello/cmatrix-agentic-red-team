@@ -1,5 +1,11 @@
 import React from "react";
 
+import { PanelErrorBoundary } from "@/components/PanelErrorBoundary";
+import {
+    NODE_STYLE,
+    STATUS_FILTERS,
+    VULN_FILTERS,
+} from "@/features/missions/components/workspace/AttackGraphCanvasConstants";
 import { AttackGraphEdge } from "@/features/missions/components/workspace/AttackGraphEdge";
 import { AttackGraphLegend } from "@/features/missions/components/workspace/AttackGraphLegend";
 import { AttackGraphNode } from "@/features/missions/components/workspace/AttackGraphNode";
@@ -8,94 +14,9 @@ import VDGNodeDrawer from "@/features/missions/components/workspace/VDGNodeDrawe
 import {
     type Edge,
     type FilterStatus,
-    type NodeStatus,
     type VDGNode,
     type VulnFilter,
 } from "@/features/missions/data/fixtures/attackGraphMockData";
-
-const NODE_STYLE: Record<
-    NodeStatus,
-    {
-        border: string;
-        bg: string;
-        labelColor: string;
-        typeColor: string;
-        badgeColor: string;
-        badgeBg: string;
-    }
-> = {
-    EXPLOITED: {
-        border: "var(--color-hex-9e1118)",
-        bg: "var(--color-hex-130508)",
-        labelColor: "var(--color-hex-e31b23)",
-        typeColor: "var(--color-hex-6f171b)",
-        badgeColor: "var(--color-hex-e31b23)",
-        badgeBg: "var(--color-hex-1a0608)",
-    },
-    ELIGIBLE: {
-        border: "var(--color-hex-e31b23)",
-        bg: "var(--color-hex-120608)",
-        labelColor: "var(--color-hex-ff2a32)",
-        typeColor: "var(--color-hex-9e1118)",
-        badgeColor: "var(--color-hex-ff2a32)",
-        badgeBg: "var(--color-hex-1a0608)",
-    },
-    IN_PROGRESS: {
-        border: "var(--color-hex-ff2a32)",
-        bg: "var(--color-hex-180a0b)",
-        labelColor: "var(--color-hex-ff2a32)",
-        typeColor: "var(--color-hex-9e1118)",
-        badgeColor: "var(--color-hex-ff2a32)",
-        badgeBg: "var(--color-hex-200a0b)",
-    },
-    BLOCKED: {
-        border: "var(--color-hex-2a1010)",
-        bg: "var(--color-hex-0d0808)",
-        labelColor: "var(--color-hex-4a1a1a)",
-        typeColor: "var(--color-hex-2a1010)",
-        badgeColor: "var(--color-hex-4a1a1a)",
-        badgeBg: "var(--color-hex-0d0808)",
-    },
-    INFEASIBLE: {
-        border: "var(--color-hex-1e1e1e)",
-        bg: "var(--color-hex-0a0a0a)",
-        labelColor: "var(--color-hex-2a2a2a)",
-        typeColor: "var(--color-hex-1e1e1e)",
-        badgeColor: "var(--color-hex-2a2a2a)",
-        badgeBg: "transparent",
-    },
-    DEPRIORITIZED: {
-        border: "var(--color-hex-252525)",
-        bg: "var(--color-hex-0c0c0c)",
-        labelColor: "var(--color-hex-363636)",
-        typeColor: "var(--color-hex-252525)",
-        badgeColor: "var(--color-hex-363636)",
-        badgeBg: "transparent",
-    },
-};
-
-const STATUS_FILTERS: FilterStatus[] = [
-    "ALL",
-    "ELIGIBLE",
-    "IN_PROGRESS",
-    "EXPLOITED",
-    "BLOCKED",
-    "INFEASIBLE",
-    "DEPRIORITIZED",
-];
-const VULN_FILTERS: VulnFilter[] = [
-    "ALL",
-    "SQLi",
-    "XSS",
-    "CSRF",
-    "SSRF",
-    "SSTI",
-    "IDOR",
-    "RCE",
-    "AUTH",
-    "GRAPHQL",
-    "LATERAL",
-];
 
 const LOGIC_W = 1000,
     LOGIC_H = 560,
@@ -109,7 +30,28 @@ function ly(y: number, ch: number) {
     return (y / LOGIC_H) * ch;
 }
 
-export default function AttackGraphCanvasView({
+export default function AttackGraphCanvasView(props: {
+    nodes: VDGNode[];
+    edges: Edge[];
+    statusFilter: FilterStatus;
+    setStatusFilter: (v: FilterStatus) => void;
+    vulnFilter: VulnFilter;
+    setVulnFilter: (v: VulnFilter) => void;
+    hovered: string | null;
+    setHovered: (v: string | null) => void;
+    drawerNode: VDGNode | null;
+    setDrawerNode: (v: VDGNode | null) => void;
+    containerRef: React.RefObject<HTMLDivElement | null>;
+    dims: { w: number; h: number };
+}) {
+    return (
+        <PanelErrorBoundary>
+            <AttackGraphCanvasViewInner {...props} />
+        </PanelErrorBoundary>
+    );
+}
+
+const AttackGraphCanvasViewInner = React.memo(function ({
     nodes,
     edges,
     statusFilter,
@@ -295,4 +237,5 @@ export default function AttackGraphCanvasView({
             </div>
         </div>
     );
-}
+});
+AttackGraphCanvasViewInner.displayName = "AttackGraphCanvasViewInner";

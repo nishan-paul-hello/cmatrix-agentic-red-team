@@ -2,9 +2,12 @@ import React from "react";
 
 import SpecBadge from "@/features/missions/components/workspace/SpecBadge";
 import specialistStatusDot from "@/features/missions/components/workspace/SpecialistStatusDot";
-import { SPECIALISTS } from "@/features/missions/data/workspaceMockData";
+import { useWorkspaceData } from "@/features/missions/hooks/useWorkspaceData";
+import { SPEC_STATUS } from "@/types/domain-types";
 
-export default function MissionLiveState({ time }: { time: string }) {
+const MissionLiveState = React.memo(function ({ time }: { time: string }) {
+    const { specialists } = useWorkspaceData();
+
     return (
         <div
             className="flex w-[256px] flex-shrink-0 flex-col overflow-hidden bg-[var(--color-hex-0b0b0b)]"
@@ -116,7 +119,7 @@ export default function MissionLiveState({ time }: { time: string }) {
                     </span>
                 </div>
                 <div className="flex-1 overflow-y-auto">
-                    {SPECIALISTS.map((spec) => (
+                    {specialists.map((spec) => (
                         <div
                             key={spec.id}
                             className="px-4 py-3"
@@ -129,11 +132,12 @@ export default function MissionLiveState({ time }: { time: string }) {
                                     <div
                                         className="h-[6px] shrink-0"
                                         style={{
-                                            width: spec.status === "IDLE" ? 6 : 6,
+                                            width: spec.status === SPEC_STATUS.IDLE ? 6 : 6,
                                             borderRadius: "50%",
                                             border: `1px solid ${specialistStatusDot(spec.status)}`,
                                             background:
-                                                spec.status !== "IDLE" && spec.status !== "WAITING"
+                                                spec.status !== SPEC_STATUS.IDLE &&
+                                                spec.status !== SPEC_STATUS.WAITING
                                                     ? specialistStatusDot(spec.status)
                                                     : "transparent",
                                         }}
@@ -142,7 +146,7 @@ export default function MissionLiveState({ time }: { time: string }) {
                                         className="text-[9.5px] font-semibold tracking-[0.08em]"
                                         style={{
                                             color:
-                                                spec.status === "IDLE"
+                                                spec.status === SPEC_STATUS.IDLE
                                                     ? "var(--color-hex-444444)"
                                                     : "var(--color-hex-a0a0a0)",
                                         }}
@@ -178,4 +182,7 @@ export default function MissionLiveState({ time }: { time: string }) {
             </div>
         </div>
     );
-}
+});
+
+export default MissionLiveState;
+MissionLiveState.displayName = "MissionLiveState";

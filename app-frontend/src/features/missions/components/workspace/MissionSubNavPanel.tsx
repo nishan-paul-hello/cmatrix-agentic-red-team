@@ -1,7 +1,8 @@
 import React from "react";
 
 import { type WorkspaceAction } from "@/features/missions/components/workspace/MissionWorkspaceContainer";
-import { SUB_NAV, type MissionSubNav } from "@/features/missions/data/workspaceMockData";
+import { type MissionSubNav } from "@/features/missions/data/fixtures/workspaceMockData";
+import { useWorkspaceData } from "@/features/missions/hooks/useWorkspaceData";
 import { useTelemetry } from "@/hooks/useTelemetry";
 
 export default function MissionSubNavPanel({
@@ -18,6 +19,8 @@ export default function MissionSubNavPanel({
     dispatch: React.Dispatch<WorkspaceAction>;
 }) {
     const { logEvent } = useTelemetry();
+    const { subNav: subNavItems } = useWorkspaceData();
+
     return (
         <div
             className="flex w-[168px] flex-shrink-0 flex-col overflow-y-auto bg-[var(--color-hex-0b0b0b)]"
@@ -26,7 +29,7 @@ export default function MissionSubNavPanel({
             }}
         >
             <div className="flex-1 py-2">
-                {SUB_NAV.map((item) => {
+                {subNavItems.map((item) => {
                     const active = subNav === item.id;
                     return (
                         <button

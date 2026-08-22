@@ -12,7 +12,10 @@ import MissionOverview from "@/features/missions/components/workspace/MissionOve
 import MissionStatusStrip from "@/features/missions/components/workspace/MissionStatusStrip";
 import MissionSubNavPanel from "@/features/missions/components/workspace/MissionSubNavPanel";
 import { type WorkspaceAction } from "@/features/missions/components/workspace/MissionWorkspaceContainer";
-import { type LogEntry, type MissionSubNav } from "@/features/missions/data/workspaceMockData";
+import {
+    type LogEntry,
+    type MissionSubNav,
+} from "@/features/missions/data/fixtures/workspaceMockData";
 import { type MissionOrchestratorModel } from "@/features/missions/domain/Orchestrator";
 import Specialists from "@/features/specialists/components/Specialists";
 import TeamManagerDashboard from "@/features/specialists/components/TeamManagerDashboard";
