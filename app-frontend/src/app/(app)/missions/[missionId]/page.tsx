@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { useParams } from "next/navigation";
 
+import { PanelErrorBoundary } from "@/components/PanelErrorBoundary";
 import MissionWorkspace from "@/features/missions/components/workspace/MissionWorkspace";
 import { useMission } from "@/lib/mission-context";
 
@@ -16,5 +17,9 @@ export default function MissionWorkspaceRoute() {
         setActiveMissionId(params.missionId);
     }, [params.missionId, setActiveMissionId]);
 
-    return <MissionWorkspace missionId={params.missionId} />;
+    return (
+        <PanelErrorBoundary>
+            <MissionWorkspace missionId={params.missionId} />
+        </PanelErrorBoundary>
+    );
 }

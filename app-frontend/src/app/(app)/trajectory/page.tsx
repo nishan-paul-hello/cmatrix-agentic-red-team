@@ -1,7 +1,12 @@
 "use client";
 
+import { PanelErrorBoundary } from "@/components/PanelErrorBoundary";
 import TrajectoryBrowser from "@/features/trajectory/components/TrajectoryBrowser";
 
 export default function Trajectory() {
-    return <TrajectoryBrowser />;
+    return (
+        <PanelErrorBoundary>
+            <TrajectoryBrowser />
+        </PanelErrorBoundary>
+    );
 }

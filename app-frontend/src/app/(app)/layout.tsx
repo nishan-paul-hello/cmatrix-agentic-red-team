@@ -3,6 +3,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 
+import { PanelErrorBoundary } from "@/components/PanelErrorBoundary";
 import CommandPalette from "@/features/core/components/CommandPalette";
 import Shell, { type NavItem } from "@/features/core/components/Shell";
 import { useAuthGuard } from "@/lib/hooks/useAuthGuard";
@@ -82,7 +83,7 @@ function AppLayoutInner({ children }: { children: React.ReactNode }) {
                 onNavChange={handleNavChange}
                 missionId={activeMissionId}
             >
-                {children}
+                <PanelErrorBoundary>{children}</PanelErrorBoundary>
             </Shell>
 
             {paletteOpen && (

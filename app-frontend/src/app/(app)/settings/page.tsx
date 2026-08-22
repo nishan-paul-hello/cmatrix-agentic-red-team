@@ -1,7 +1,12 @@
 "use client";
 
+import { PanelErrorBoundary } from "@/components/PanelErrorBoundary";
 import SettingsPage from "@/features/settings/components/SettingsPage";
 
 export default function Settings() {
-    return <SettingsPage />;
+    return (
+        <PanelErrorBoundary>
+            <SettingsPage />
+        </PanelErrorBoundary>
+    );
 }

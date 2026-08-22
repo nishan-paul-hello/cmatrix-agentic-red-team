@@ -2,10 +2,16 @@
 
 import dynamic from "next/dynamic";
 
+import { PanelErrorBoundary } from "@/components/PanelErrorBoundary";
+
 const ResearchLab = dynamic(() => import("@/features/research/components/ResearchLab"), {
     ssr: false,
 });
 
 export default function FailureAnalysis() {
-    return <ResearchLab initialTab="FAILURE ANALYSIS" />;
+    return (
+        <PanelErrorBoundary>
+            <ResearchLab initialTab="FAILURE ANALYSIS" />
+        </PanelErrorBoundary>
+    );
 }
