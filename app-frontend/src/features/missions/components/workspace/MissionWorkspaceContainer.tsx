@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useRef, useState } from "react";
+import { useCallback, useEffect, useReducer, useRef, useState } from "react";
 
 import MissionWorkspaceView from "@/features/missions/components/workspace/MissionWorkspaceView";
 import {
@@ -12,6 +12,7 @@ import {
     type WorkerSpecialist,
 } from "@/features/missions/domain/Orchestrator";
 import { useElapsed } from "@/features/missions/hooks/useElapsed";
+import { useTelemetry } from "@/hooks/useTelemetry";
 import { MissionRepository } from "@/repositories/MissionRepository";
 import { SpecialistRepository } from "@/repositories/SpecialistRepository";
 
@@ -54,6 +55,7 @@ export default function MissionWorkspaceContainer({
 }: {
     missionId?: string;
 }) {
+    const { logEvent } = useTelemetry();
     const [orchestrator, setOrchestrator] = useState<MissionOrchestratorModel | null>(null);
 
     useEffect(() => {
@@ -72,13 +74,27 @@ export default function MissionWorkspaceContainer({
         );
     }, [missionId]);
 
-    const [state, dispatch] = useReducer(workspaceReducer, {
+    const [state, rawDispatch] = useReducer(workspaceReducer, {
         subNav: "overview",
         log: INITIAL_LOG,
         paused: false,
         terminated: false,
     });
     const { subNav, log, paused, terminated } = state;
+
+    const dispatch = useCallback(
+        (action: WorkspaceAction) => {
+            if (action.type === "SET_PAUSED") {
+                const willPause =
+                    typeof action.payload === "function" ? action.payload(paused) : action.payload;
+                logEvent(willPause ? "MISSION_PAUSED" : "MISSION_RESUMED", { missionId });
+            } else if (action.type === "SET_TERMINATED") {
+                logEvent("MISSION_TERMINATED", { missionId });
+            }
+            rawDispatch(action);
+        },
+        [logEvent, missionId, paused],
+    );
 
     const nextId = useRef(INITIAL_LOG.length + 1);
     const queue = useRef([...STREAM_EVENTS]);
@@ -105,7 +121,7 @@ export default function MissionWorkspaceContainer({
             });
         }, 3200);
         return () => clearInterval(iv);
-    }, []);
+    }, [dispatch]);
     return (
         <MissionWorkspaceView
             missionId={missionId}

@@ -2,6 +2,9 @@ import React from "react";
 
 import VDGNodeDrawer from "@/features/missions/components/workspace/VDGNodeDrawer";
 
+import { FilterChip } from "./FilterChip";
+import { NodeStat } from "./NodeStat";
+
 type NodeStatus =
     "EXPLOITED" | "ELIGIBLE" | "IN_PROGRESS" | "BLOCKED" | "INFEASIBLE" | "DEPRIORITIZED";
 type FilterStatus = "ALL" | NodeStatus;
@@ -675,90 +678,6 @@ export default function AttackGraphCanvasView({
                     <VDGNodeDrawer node={drawerNode} onClose={() => setDrawerNode(null)} />
                 )}
             </div>
-        </div>
-    );
-}
-function FilterChip({
-    label,
-    active,
-    onClick,
-    red,
-    dim,
-}: {
-    label: string;
-    active: boolean;
-    onClick: () => void;
-    red?: boolean;
-    dim?: boolean;
-}) {
-    return (
-        <button
-            onClick={onClick}
-            className="font-inherit cursor-pointer rounded-[2px] px-[7px] py-[2px] text-[8.5px] tracking-[0.12em]"
-            style={{
-                color: (() => {
-                    if (active && red) {
-                        return "var(--color-hex-ff2a32)";
-                    }
-                    if (active) {
-                        return "var(--color-hex-f2f2f2)";
-                    }
-                    if (dim) {
-                        return "var(--color-hex-383838)";
-                    }
-                    return "var(--color-hex-555555)";
-                })(),
-                background: (() => {
-                    if (active && red) {
-                        return "var(--color-hex-1a0608)";
-                    }
-                    if (active) {
-                        return "var(--color-hex-191919)";
-                    }
-                    return "transparent";
-                })(),
-                border: `1px solid ${(() => {
-                    if (active && red) {
-                        return "var(--color-hex-6f171b)";
-                    }
-                    if (active) {
-                        return "var(--color-hex-333333)";
-                    }
-                    return "var(--color-hex-1e1e1e)";
-                })()}`,
-                whiteSpace: "nowrap" as const,
-            }}
-            onMouseEnter={(e) => {
-                if (!active) {
-                    e.currentTarget.style.color = "var(--color-hex-888888)";
-                }
-            }}
-            onMouseLeave={(e) => {
-                if (!active) {
-                    e.currentTarget.style.color = dim
-                        ? "var(--color-hex-383838)"
-                        : "var(--color-hex-555555)";
-                }
-            }}
-        >
-            {label}
-        </button>
-    );
-}
-function NodeStat({ label, value, color }: { label: string; value: string; color: string }) {
-    return (
-        <div className="flex flex-col gap-0.5">
-            <span className="text-[6.5px] tracking-[0.16em] text-[var(--color-hex-333333)]">
-                {label}
-            </span>
-            <span
-                className="text-[9px] font-bold tracking-[0.04em]"
-                style={{
-                    color,
-                }}
-            >
-                {value}
-            </span>
         </div>
     );
 }
