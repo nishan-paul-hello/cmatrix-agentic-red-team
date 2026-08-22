@@ -1,8 +1,16 @@
-import { PATTERNS, type MemoryPattern } from "@/features/memory/data/mockData";
+import {
+    ACTIONS,
+    BRANCHES,
+    CTX_SPECS,
+    FAILURES,
+    PATTERNS,
+    SKILLS,
+    type MemoryPattern,
+} from "@/features/memory/data/mockData";
 import { type DataSource } from "@/types/adapters";
 
-export class MemoryRepository implements DataSource<MemoryPattern> {
-    private static mockData: MemoryPattern[] = [...PATTERNS];
+export class MemoryRepository implements DataSource<Record<string, unknown>> {
+    private static mockData: Record<string, unknown>[] = [...PATTERNS];
 
     static seed(data: MemoryPattern[]) {
         this.mockData = data;
@@ -14,7 +22,7 @@ export class MemoryRepository implements DataSource<MemoryPattern> {
                 const item = MemoryRepository.mockData.find((m) => m.id === id);
                 if (item) {
                     // VALIDATION SEAM: insert schema.parse(data) here once a real backend replaces mock data
-                    resolve(item);
+                    resolve(item as MemoryPattern);
                 } else {
                     reject(new Error("Not found"));
                 }
@@ -22,14 +30,42 @@ export class MemoryRepository implements DataSource<MemoryPattern> {
         });
     }
 
-    async fetchAll(options?: { page?: number; limit?: number }): Promise<MemoryPattern[]> {
+    async fetchAll<U = Record<string, unknown>>(options?: {
+        page?: number;
+        limit?: number;
+        collection?: string;
+    }): Promise<U[]> {
         return new Promise((resolve) => {
             setTimeout(() => {
                 const { page = 1, limit = 50 } = options ?? {};
+                let dataSource = MemoryRepository.mockData;
+                const collection = options?.collection ?? "PATTERNS";
+                switch (collection) {
+                    case "PATTERNS":
+                        dataSource = PATTERNS;
+                        break;
+                    case "BRANCHES":
+                        dataSource = BRANCHES;
+                        break;
+                    case "ACTIONS":
+                        dataSource = ACTIONS;
+                        break;
+                    case "FAILURES":
+                        dataSource = FAILURES;
+                        break;
+                    case "SKILLS":
+                        dataSource = SKILLS;
+                        break;
+                    case "CTX_SPECS":
+                        dataSource = CTX_SPECS;
+                        break;
+                    default:
+                        break;
+                }
                 const start = (page - 1) * limit;
-                const data = MemoryRepository.mockData.slice(start, start + limit);
+                const data = dataSource.slice(start, start + limit);
                 // VALIDATION SEAM: insert schema.parse(data) here once a real backend replaces mock data
-                resolve(data);
+                resolve(data as unknown as U[]);
             }, 300);
         });
     }
@@ -49,8 +85,11 @@ export class MemoryRepository implements DataSource<MemoryPattern> {
             setTimeout(() => {
                 const idx = MemoryRepository.mockData.findIndex((m) => m.id === id);
                 if (idx >= 0) {
-                    MemoryRepository.mockData[idx] = { ...MemoryRepository.mockData[idx], ...data };
-                    resolve(MemoryRepository.mockData[idx]);
+                    MemoryRepository.mockData[idx] = {
+                        ...(MemoryRepository.mockData[idx] as MemoryPattern),
+                        ...data,
+                    };
+                    resolve(MemoryRepository.mockData[idx] as MemoryPattern);
                 } else {
                     reject(new Error("Not found"));
                 }
@@ -70,6 +109,6 @@ export class MemoryRepository implements DataSource<MemoryPattern> {
 
     static async getAll(): Promise<MemoryPattern[]> {
         const repo = new MemoryRepository();
-        return repo.fetchAll({ limit: 1000 });
+        return repo.fetchAll<MemoryPattern>({ limit: 1000 });
     }
 }
