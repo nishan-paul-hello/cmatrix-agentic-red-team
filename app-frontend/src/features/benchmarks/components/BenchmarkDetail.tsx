@@ -1,24 +1,11 @@
 import { useState } from "react";
 
-import { TASK_DATA, TYPE_C, type Bench } from "@/features/benchmarks/data/benchmarksMockData";
+import { TYPE_C, type Bench } from "@/features/benchmarks/data/benchmarksMockData";
+import { useBenchmarkDetailData } from "@/features/benchmarks/hooks/useBenchmarkDetailData";
 
 export default function BenchmarkDetail({ bench, onBack }: { bench: Bench; onBack: () => void }) {
     const [tab, setTab] = useState<"OVERVIEW" | "TASKS" | "CATEGORIES">("OVERVIEW");
-    const cats = [
-        "SQL INJECTION",
-        "AUTH",
-        "RCE",
-        "ACCESS CTRL",
-        "XSS",
-        "SSRF",
-        "XXE",
-        "PATH TRAVERSAL",
-    ];
-    const catStats = cats.map((c) => ({
-        cat: c,
-        tasks: TASK_DATA.filter((t) => t.category === c),
-        solved: TASK_DATA.filter((t) => t.category === c && t.solved).length,
-    }));
+    const { tasks, catStats } = useBenchmarkDetailData();
     return (
         <div className="flex h-full min-h-[0px] flex-col">
             <div
@@ -255,7 +242,7 @@ export default function BenchmarkDetail({ bench, onBack }: { bench: Bench; onBac
                             </tr>
                         </thead>
                         <tbody>
-                            {TASK_DATA.map((t, i) => (
+                            {tasks.map((t, i) => (
                                 <tr
                                     key={t.id}
                                     style={{

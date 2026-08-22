@@ -1,16 +1,36 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
-import { BENCHMARKS, TYPE_C, type Bench } from "@/features/benchmarks/data/benchmarksMockData";
+import { TYPE_C, type Bench } from "@/features/benchmarks/data/benchmarksMockData";
+import { BenchmarksRepository } from "@/features/benchmarks/data/BenchmarksRepository";
 import { BENCHMARK_STATUS } from "@/types/domain-types";
 
 export default function BenchmarkList({ onSelect }: { onSelect: (b: Bench) => void }) {
     const [filter, setFilter] = useState<string>("ALL");
+    const [benchmarks, setBenchmarks] = useState<Bench[]>([]);
+
+    useEffect(() => {
+        void BenchmarksRepository.getAll().then(setBenchmarks);
+    }, []);
+
     const types = ["ALL", "CVE-BENCH", "PREDIQL", "MHBENCH"];
-    const filtered = filter === "ALL" ? BENCHMARKS : BENCHMARKS.filter((b) => b.type === filter);
-    const best = BENCHMARKS.filter((b) => b.status === "COMPLETE").reduce(
-        (a, b) => (b.score > a.score ? b : a),
-        BENCHMARKS[0],
+    const filtered = useMemo(
+        () => (filter === "ALL" ? benchmarks : benchmarks.filter((b) => b.type === filter)),
+        [filter, benchmarks],
     );
+    const completed = useMemo(
+        () => benchmarks.filter((b) => b.status === "COMPLETE"),
+        [benchmarks],
+    );
+    const best = useMemo(
+        () =>
+            completed.reduce((a, b) => (b.score > a.score ? b : a), completed[0] || benchmarks[0]),
+        [completed, benchmarks],
+    );
+
+    if (!benchmarks.length) {
+        return null;
+    } // Wait for load
+
     return (
         <div className="flex h-full min-h-[0px] flex-col">
             <div
@@ -71,20 +91,15 @@ export default function BenchmarkList({ onSelect }: { onSelect: (b: Bench) => vo
                         },
                         {
                             k: "BENCHMARKS RUN",
-                            v: String(BENCHMARKS.filter((b) => b.status === "COMPLETE").length),
+                            v: String(completed.length),
                         },
                         {
                             k: "TOTAL TASKS",
-                            v: String(
-                                BENCHMARKS.filter((b) => b.status === "COMPLETE").reduce(
-                                    (s, b) => s + b.tasks,
-                                    0,
-                                ),
-                            ),
+                            v: String(completed.reduce((s, b) => s + b.tasks, 0)),
                         },
                         {
                             k: "AVG SOLVE RATE",
-                            v: `${Math.round((BENCHMARKS.filter((b) => b.status === "COMPLETE").reduce((s, b) => s + b.solved / b.tasks, 0) / BENCHMARKS.filter((b) => b.status === "COMPLETE").length) * 100)}%`,
+                            v: `${completed.length > 0 ? Math.round((completed.reduce((s, b) => s + b.solved / b.tasks, 0) / completed.length) * 100) : 0}%`,
                         },
                     ] as {
                         k: string;
