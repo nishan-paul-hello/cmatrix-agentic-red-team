@@ -1,7 +1,7 @@
 # Gap Remediation Prompt — AI Multi-Agent Platform Frontend
 
 **Purpose of this file:** This is a follow-up prompt for an agentic code editor. The
-codebase was already refactored once against `design-patterns-implementation-prompt.md`
+codebase was already refactored once against `/home/nishan/Documents/cmatrix-agentic-red-team/docs/design-patterns-implementation-prompt.md`
 and largely passed — the feature-based structure, repositories, FSM, strategy/command/
 circuit-breaker/event-bus patterns, virtualization, and telemetry/sanitize/audit
 utilities all exist and the project builds and lints clean. This prompt targets the
