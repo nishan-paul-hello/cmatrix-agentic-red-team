@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 
 import { type VFinding } from "@/features/validation/data/validationMockData";
+import { TASK_STATUS } from "@/types/domain-types";
 
 export default function StateMachineModal({
     onClose,
@@ -72,7 +73,7 @@ export default function StateMachineModal({
             border: "var(--color-hex-e31b23)",
         },
         {
-            id: "SUCCESS",
+            id: TASK_STATUS.SUCCESS,
             x: 60,
             y: 190,
             w: 100,
@@ -92,7 +93,7 @@ export default function StateMachineModal({
             border: "var(--color-hex-3fb95066)",
         },
         {
-            id: "FAILURE",
+            id: TASK_STATUS.FAILED,
             x: 340,
             y: 190,
             w: 100,
@@ -175,14 +176,14 @@ export default function StateMachineModal({
             y1: 132,
             x2: 110,
             y2: 190,
-            label: "SUCCESS",
+            label: TASK_STATUS.SUCCESS,
         },
         {
             x1: 260,
             y1: 132,
             x2: 390,
             y2: 190,
-            label: "FAILURE",
+            label: TASK_STATUS.FAILED,
         },
         {
             x1: 110,

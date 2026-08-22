@@ -1,10 +1,12 @@
 import Btn from "@/features/validation/components/Btn";
 import OraclePanel from "@/features/validation/components/OraclePanel";
 import StateMachineModal from "@/features/validation/components/StateMachineModal";
-import { FINDINGS, SB } from "@/features/validation/data/validationMockData";
+import { SB } from "@/features/validation/data/validationMockData";
 import { useValidationData } from "@/features/validation/hooks/useValidationData";
+import { useTelemetry } from "@/hooks/useTelemetry";
 
 export default function ValidationCenter() {
+    const { logEvent } = useTelemetry();
     const {
         modal,
         setModal,
@@ -14,6 +16,10 @@ export default function ValidationCenter() {
         setSelected,
         stateMachineFinding,
         setStateMachineFinding,
+        findings,
+        updateFindingStatus,
+        addGuardrailResult,
+        guardrails,
     } = useValidationData();
     const metrics = [
         {
@@ -124,7 +130,7 @@ export default function ValidationCenter() {
                             </tr>
                         </thead>
                         <tbody>
-                            {FINDINGS.map((f) => {
+                            {findings.map((f) => {
                                 const sb = SB[f.status];
                                 const isSelected = selected?.id === f.id;
                                 return (
@@ -277,6 +283,61 @@ export default function ValidationCenter() {
                                     </div>
                                 </div>
                             ))}
+
+                            {selected.id in guardrails && (
+                                <div className="mt-4 rounded-[2px] border-[1px] border-solid border-[var(--color-hex-333333)] bg-[var(--color-hex-0a0a0a)] px-[12px] py-[10px]">
+                                    <div className="mb-2 text-[8px] tracking-[0.2em] text-[var(--color-hex-444444)]">
+                                        SUPERVISOR GUARDRAIL
+                                    </div>
+                                    <div
+                                        className="text-[10px] font-bold"
+                                        style={{
+                                            color:
+                                                guardrails[selected.id].verdict === "PASS"
+                                                    ? "var(--color-hex-3fb950)"
+                                                    : "var(--color-hex-ff2a32)",
+                                        }}
+                                    >
+                                        {guardrails[selected.id].verdict}
+                                    </div>
+                                </div>
+                            )}
+                            <div className="mt-5 flex gap-3">
+                                <button
+                                    onClick={() => {
+                                        if (updateFindingStatus(selected, "VALIDATED")) {
+                                            addGuardrailResult({
+                                                findingId: selected.id,
+                                                verifiedBy: "SUPERVISOR",
+                                                verdict: "PASS",
+                                            });
+                                            logEvent("FINDING_VERIFIED", {
+                                                findingId: selected.id,
+                                            });
+                                        }
+                                    }}
+                                    className="font-inherit cursor-pointer rounded-[2px] border-[1px] border-solid border-[var(--color-hex-3fb95044)] bg-[transparent] px-[16px] py-[6px] text-[9.5px] tracking-[0.14em] text-[var(--color-hex-3fb950)] hover:border-[var(--color-hex-3fb950)] hover:bg-[var(--color-hex-0a1a0c)]"
+                                >
+                                    VERIFY
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        if (updateFindingStatus(selected, "RULED_OUT")) {
+                                            addGuardrailResult({
+                                                findingId: selected.id,
+                                                verifiedBy: "SUPERVISOR",
+                                                verdict: "FAIL",
+                                            });
+                                            logEvent("FINDING_REJECTED", {
+                                                findingId: selected.id,
+                                            });
+                                        }
+                                    }}
+                                    className="font-inherit cursor-pointer rounded-[2px] border-[1px] border-solid border-[var(--color-hex-ff2a3244)] bg-[transparent] px-[16px] py-[6px] text-[9.5px] tracking-[0.14em] text-[var(--color-hex-ff2a32)] hover:border-[var(--color-hex-ff2a32)] hover:bg-[var(--color-hex-130408)]"
+                                >
+                                    REJECT
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
