@@ -4,8 +4,9 @@ export interface MetricTileProps {
     label: string;
     value: string | React.ReactNode;
     valueColor?: string;
-    variant?: "dashboard" | "card";
+    variant?: "dashboard" | "card" | "inline";
     borderRight?: boolean;
+    sub?: string;
 }
 
 export function MetricTile({
@@ -14,7 +15,34 @@ export function MetricTile({
     valueColor = "var(--color-hex-f2f2f2)",
     variant = "card",
     borderRight = false,
+    sub,
 }: MetricTileProps) {
+    if (variant === "inline") {
+        return (
+            <div
+                className="flex items-center gap-2 px-4 py-1.5"
+                style={{
+                    borderRight: borderRight ? "1px solid var(--color-hex-151515)" : "none",
+                }}
+            >
+                <span className="text-[8px] tracking-[0.2em] text-[var(--color-hex-444444)]">
+                    {label}
+                </span>
+                <span
+                    className="text-[11px] font-bold tracking-[0.06em]"
+                    style={{ color: valueColor }}
+                >
+                    {value}
+                </span>
+                {sub && (
+                    <span className="text-[11px] tracking-[0.06em] text-[var(--color-hex-333333)]">
+                        {sub}
+                    </span>
+                )}
+            </div>
+        );
+    }
+
     if (variant === "dashboard") {
         return (
             <div
@@ -32,6 +60,11 @@ export function MetricTile({
                 >
                     {value}
                 </div>
+                {sub && (
+                    <div className="mt-[2px] text-[8px] tracking-[0.1em] text-[var(--color-hex-333333)]">
+                        {sub}
+                    </div>
+                )}
             </div>
         );
     }
@@ -44,6 +77,11 @@ export function MetricTile({
             <div className="text-[18px] font-bold" style={{ color: valueColor }}>
                 {value}
             </div>
+            {sub && (
+                <div className="mt-[2px] text-[8px] tracking-[0.1em] text-[var(--color-hex-333333)]">
+                    {sub}
+                </div>
+            )}
         </div>
     );
 }
