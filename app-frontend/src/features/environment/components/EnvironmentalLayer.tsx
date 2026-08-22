@@ -1,3 +1,4 @@
+import { PanelErrorBoundary } from "@/components/PanelErrorBoundary";
 import AuthStatesPanel from "@/features/environment/components/AuthStatesPanel";
 import CredentialsPanel from "@/features/environment/components/CredentialsPanel";
 import CVECandidatesPanel from "@/features/environment/components/CVECandidatesPanel";
@@ -12,6 +13,14 @@ import { TABS } from "@/features/environment/data/mockData";
 import { useEnvironmentalData } from "@/features/environment/hooks/useEnvironmentalData";
 
 export default function EnvironmentalLayer() {
+    return (
+        <PanelErrorBoundary>
+            <EnvironmentalLayerInner />
+        </PanelErrorBoundary>
+    );
+}
+
+function EnvironmentalLayerInner() {
     const { activeTab, setActiveTab } = useEnvironmentalData();
     return (
         <div className="flex h-full min-h-[0px] flex-col">
