@@ -1,9 +1,14 @@
-import React, { useCallback, useMemo, useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
 
 import { useAuditFeed } from "@/features/audit/hooks/useAuditFeed";
-import { useDebounce } from "@/hooks/useDebounce";
-import { type AuditEntry, type AuditEventType, type AuditResultValue } from "@/types/domain-types";
+import { useAuditFilters } from "@/features/audit/hooks/useAuditFilters";
+import {
+    AUDIT_RESULT,
+    type AuditEntry,
+    type AuditEventType,
+    type AuditResultValue,
+} from "@/types/domain-types";
 
 // ─── Static data ──────────────────────────────────────────────────────────────
 
@@ -40,10 +45,13 @@ const TYPE_FILTERS = [
     "SYSTEM",
     "CONFIG",
 ] as const;
-type TypeFilter = (typeof TYPE_FILTERS)[number];
 
-const RESULT_FILTERS = ["ALL", "SUCCESS", "FAILURE", "WARNING"] as const;
-type ResultFilter = (typeof RESULT_FILTERS)[number];
+const RESULT_FILTERS = [
+    "ALL",
+    AUDIT_RESULT.SUCCESS,
+    AUDIT_RESULT.FAILURE,
+    AUDIT_RESULT.WARNING,
+] as const;
 
 const TABLE_HEADERS = ["ID", "TIMESTAMP", "TYPE", "ACTOR", "ACTION", "RESOURCE", "RESULT"] as const;
 
@@ -126,23 +134,9 @@ const AuditLogRow = React.memo(function AuditLogRowInner({
 
 export default function AuditLogPage() {
     const entries = useAuditFeed();
-    const [typeFilter, setTypeFilter] = useState<TypeFilter>("ALL");
-    const [resultFilter, setResultFilter] = useState<ResultFilter>("ALL");
+    const { typeFilter, setTypeFilter, resultFilter, setResultFilter, search, setSearch, visible } =
+        useAuditFilters(entries);
     const [sel, setSel] = useState<AuditEntry | null>(null);
-    const [search, setSearch] = useState("");
-    const debouncedSearch = useDebounce(search, 300);
-
-    const visible = useMemo(() => {
-        return entries.filter(
-            (e) =>
-                (typeFilter === "ALL" || e.type === typeFilter) &&
-                (resultFilter === "ALL" || e.result === resultFilter) &&
-                (!debouncedSearch ||
-                    e.action.includes(debouncedSearch.toUpperCase()) ||
-                    e.actor.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
-                    e.resource.toLowerCase().includes(debouncedSearch.toLowerCase())),
-        );
-    }, [typeFilter, resultFilter, debouncedSearch, entries]);
 
     const toggleSel = useCallback((entry: AuditEntry) => {
         setSel((prev) => (prev?.id === entry.id ? null : entry));
