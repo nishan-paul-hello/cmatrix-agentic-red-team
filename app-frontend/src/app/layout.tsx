@@ -1,9 +1,10 @@
+import React from "react";
 import { type Metadata, type Viewport } from "next";
 
 import { AuthProvider } from "@/lib/auth-context";
 import { ServicesProvider } from "@/lib/services-context";
 
-import "./globals.css";
+import "@/app/globals.css";
 
 export const metadata: Metadata = {
     title: {
