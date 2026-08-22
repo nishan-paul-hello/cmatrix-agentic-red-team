@@ -2,8 +2,8 @@ import React from "react";
 
 import { EmptyState } from "@/components/ui/EmptyState";
 import { MetricTile } from "@/components/ui/MetricTile";
-import { type CostTimeline, type SpecialistCost } from "@/features/cost/data/costMockData";
 import { CostRepository } from "@/features/cost/data/CostRepository";
+import { type CostTimeline, type SpecialistCost } from "@/features/cost/data/fixtures/costMockData";
 
 export default function CostUsage() {
     const [costData, setCostData] = React.useState<{

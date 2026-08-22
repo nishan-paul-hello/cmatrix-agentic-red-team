@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 
 import { EmptyState } from "@/components/ui/EmptyState";
 import { MetricTile } from "@/components/ui/MetricTile";
-import { type ContextEntry } from "@/features/cost/data/costMockData";
 import { CostRepository } from "@/features/cost/data/CostRepository";
+import { type ContextEntry } from "@/features/cost/data/fixtures/costMockData";
 
 export default function ContextState() {
     const [entries, setEntries] = useState<ContextEntry[]>([]);

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 
 import { EmptyState } from "@/components/ui/EmptyState";
-import { type ModelRow } from "@/features/cost/data/costMockData";
 import { CostRepository } from "@/features/cost/data/CostRepository";
+import { type ModelRow } from "@/features/cost/data/fixtures/costMockData";
 
 export default function ModelBreakdown() {
     const [models, setModels] = useState<ModelRow[]>([]);

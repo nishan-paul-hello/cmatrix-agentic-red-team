@@ -4,8 +4,8 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import ContextState from "@/features/cost/components/ContextState";
 import CostUsage from "@/features/cost/components/CostUsage";
 import ModelBreakdown from "@/features/cost/components/ModelBreakdown";
-import { type CostTab } from "@/features/cost/data/costMockData";
 import { CostRepository } from "@/features/cost/data/CostRepository";
+import { type CostTab } from "@/features/cost/data/fixtures/costMockData";
 import { useCostData } from "@/features/cost/hooks/useCostData";
 
 export default function CostDashboard() {
