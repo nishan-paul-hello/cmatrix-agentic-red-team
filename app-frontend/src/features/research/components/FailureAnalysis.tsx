@@ -1,6 +1,9 @@
 import { useState } from "react";
 
-import { FAILURE_CLUSTERS, FAILURE_TIMELINE } from "@/features/research/data/researchMockData";
+import {
+    FAILURE_CLUSTERS,
+    FAILURE_TIMELINE,
+} from "@/features/research/data/fixtures/researchMockData";
 
 export default function FailureAnalysis() {
     const [sel, setSel] = useState<(typeof FAILURE_CLUSTERS)[0] | null>(null);

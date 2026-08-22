@@ -1,7 +1,7 @@
 import AblationLab from "@/features/research/components/AblationLab";
 import FailureAnalysis from "@/features/research/components/FailureAnalysis";
 import StatisticalEval from "@/features/research/components/StatisticalEval";
-import { type LabTab } from "@/features/research/data/researchMockData";
+import { type LabTab } from "@/features/research/data/fixtures/researchMockData";
 import { useResearchData } from "@/features/research/hooks/useResearchData";
 
 export default function ResearchLab({ initialTab }: { initialTab?: LabTab }) {
