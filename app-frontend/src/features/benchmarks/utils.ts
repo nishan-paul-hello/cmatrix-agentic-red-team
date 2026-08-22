@@ -1,4 +1,4 @@
-import { type Bench, type Task } from "@/features/benchmarks/data/benchmarksMockData";
+import { type Bench, type Task } from "@/features/benchmarks/data/fixtures/benchmarksMockData";
 
 export function computeBenchmarkStats(benchmarks: Bench[], filter: string) {
     const filtered = filter === "ALL" ? benchmarks : benchmarks.filter((b) => b.type === filter);
@@ -10,7 +10,13 @@ export function computeBenchmarkStats(benchmarks: Bench[], filter: string) {
     return { filtered, best };
 }
 
-export function computeCategoryStats(tasks: Task[]) {
+export interface CategoryStat {
+    cat: string;
+    tasks: Task[];
+    solved: number;
+}
+
+export function computeCategoryStats(tasks: Task[]): CategoryStat[] {
     const cats = [
         "SQL INJECTION",
         "AUTH",
