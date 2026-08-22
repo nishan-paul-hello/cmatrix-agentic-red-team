@@ -98,6 +98,7 @@ export const TYPE_C: Record<Bench["type"], string> = {
     PREDIQL: "var(--color-hex-d29922)",
     MHBENCH: "var(--color-hex-3fb950)",
 };
+export type Task = (typeof TASK_DATA)[0];
 export const TASK_DATA = [
     {
         id: "T-001",
