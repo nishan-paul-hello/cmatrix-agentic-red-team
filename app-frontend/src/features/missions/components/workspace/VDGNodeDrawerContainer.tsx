@@ -1,6 +1,5 @@
-import VDGNodeDrawerView, {
-    type DrawerNode,
-} from "@/features/missions/components/workspace/VDGNodeDrawerView";
+import { type DrawerNode } from "@/features/missions/components/workspace/VDGNodeDrawerContext";
+import VDGNodeDrawerView from "@/features/missions/components/workspace/VDGNodeDrawerView";
 
 export default function VDGNodeDrawerContainer({
     node,

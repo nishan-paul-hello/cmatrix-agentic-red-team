@@ -2,7 +2,8 @@ import React from "react";
 
 import VDGNodeDrawer from "@/features/missions/components/workspace/VDGNodeDrawer";
 
-import { FilterChip } from "./FilterChip";
+import { AttackGraphLegend } from "./AttackGraphLegend";
+import { AttackGraphToolbar } from "./AttackGraphToolbar";
 import { NodeStat } from "./NodeStat";
 
 type NodeStatus =
@@ -333,67 +334,24 @@ export default function AttackGraphCanvasView({
     return (
         <div className="flex h-full min-h-[0px] flex-col">
             {/* Toolbar */}
-            <div
-                className="flex flex-shrink-0 flex-col gap-2 bg-[var(--color-hex-0b0b0b)] px-4 py-3"
-                style={{
-                    borderBottom: "1px solid var(--color-hex-1e1e1e)",
+            <AttackGraphToolbar
+                nodeCount={NODES.length}
+                edgeCount={EDGES.length}
+                statusFilter={statusFilter}
+                setStatusFilter={setStatusFilter as (v: string) => void}
+                vulnFilter={vulnFilter}
+                setVulnFilter={setVulnFilter as (v: string) => void}
+                statusFilters={STATUS_FILTERS}
+                vulnFilters={VULN_FILTERS}
+                onFocusHighestScore={() => {
+                    const top = [...NODES]
+                        .filter((n) => n.status === "ELIGIBLE")
+                        .sort((a, b) => b.ucb - a.ucb)[0] as VDGNode | undefined;
+                    setStatusFilter("ALL");
+                    setVulnFilter("ALL");
+                    setDrawerNode(top ?? null);
                 }}
-            >
-                <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                        <span className="text-[9px] tracking-[0.2em] text-[var(--color-hex-444444)]">
-                            ATTACK GRAPH
-                        </span>
-                        <span className="text-[8.5px] tracking-[0.12em] text-[var(--color-hex-292929)]">
-                            VDG / CVE-001 · {NODES.length} NODES · {EDGES.length} EDGES
-                        </span>
-                    </div>
-                    <button
-                        className="font-inherit cursor-pointer rounded-[2px] border-[1px] border-solid border-[var(--color-hex-333333)] bg-[var(--color-hex-151515)] px-[12px] py-[4px] text-[9px] tracking-[0.14em] text-[var(--color-hex-a0a0a0)]"
-                        onClick={() => {
-                            const top: VDGNode | undefined = [...NODES]
-                                .filter((n) => n.status === "ELIGIBLE")
-                                .sort((a, b) => b.ucb - a.ucb)[0];
-                            setStatusFilter("ALL");
-                            setVulnFilter("ALL");
-                            setDrawerNode(top);
-                        }}
-                        onMouseEnter={(e) =>
-                            (e.currentTarget.style.borderColor = "var(--color-hex-e31b23)")
-                        }
-                        onMouseLeave={(e) =>
-                            (e.currentTarget.style.borderColor = "var(--color-hex-333333)")
-                        }
-                    >
-                        ◈ FOCUS HIGHEST-SCORE PATH
-                    </button>
-                </div>
-                <div className="flex flex-wrap items-center gap-4">
-                    <div className="flex items-center gap-1">
-                        {STATUS_FILTERS.map((f) => (
-                            <FilterChip
-                                key={f}
-                                label={f === "IN_PROGRESS" ? "IN PROGRESS" : f}
-                                active={statusFilter === f}
-                                onClick={() => setStatusFilter(f)}
-                                red={f !== "ALL"}
-                            />
-                        ))}
-                    </div>
-                    <div className="h-[16px] w-[1px] bg-[var(--color-hex-222222)]" />
-                    <div className="flex flex-wrap items-center gap-1">
-                        {VULN_FILTERS.map((f) => (
-                            <FilterChip
-                                key={f}
-                                label={f}
-                                active={vulnFilter === f}
-                                onClick={() => setVulnFilter(f)}
-                                dim
-                            />
-                        ))}
-                    </div>
-                </div>
-            </div>
+            />
 
             {/* Canvas row */}
             <div className="flex min-h-[0px] flex-1 overflow-hidden">
@@ -630,42 +588,17 @@ export default function AttackGraphCanvasView({
                     })}
 
                     {/* Legend */}
-                    <div className="absolute right-4 bottom-4 flex flex-col gap-1.5 rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)] bg-[var(--color-hex-0d0d0d)] px-[12px] py-[10px]">
-                        <div className="mb-[4px] text-[7.5px] tracking-[0.18em] text-[var(--color-hex-333333)]">
-                            LEGEND
-                        </div>
-                        {(
-                            [
-                                "ELIGIBLE",
-                                "IN_PROGRESS",
-                                "EXPLOITED",
-                                "BLOCKED",
-                                "INFEASIBLE",
-                                "DEPRIORITIZED",
-                            ] as NodeStatus[]
-                        ).map((st) => {
-                            const s = NODE_STYLE[st];
-                            return (
-                                <div key={st} className="flex items-center gap-2">
-                                    <div
-                                        className="h-[8px] w-[8px] shrink-0 rounded-[1px]"
-                                        style={{
-                                            border: `1px solid ${s.border}`,
-                                            background: s.bg,
-                                        }}
-                                    />
-                                    <span
-                                        className="text-[7.5px] tracking-[0.1em]"
-                                        style={{
-                                            color: s.labelColor,
-                                        }}
-                                    >
-                                        {st === "IN_PROGRESS" ? "IN PROGRESS" : st}
-                                    </span>
-                                </div>
-                            );
-                        })}
-                    </div>
+                    <AttackGraphLegend
+                        nodeStatuses={[
+                            "ELIGIBLE",
+                            "IN_PROGRESS",
+                            "EXPLOITED",
+                            "BLOCKED",
+                            "INFEASIBLE",
+                            "DEPRIORITIZED",
+                        ]}
+                        nodeStyles={NODE_STYLE}
+                    />
 
                     <style>{`
             @keyframes nodeRing { 0%,100%{opacity:.5;transform:scale(1)} 50%{opacity:.1;transform:scale(1.03)} }
