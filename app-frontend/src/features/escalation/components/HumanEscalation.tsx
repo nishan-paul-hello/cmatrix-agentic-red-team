@@ -1,47 +1,62 @@
 import { useState } from "react";
 
-import { AUDIT_EVENT } from "@/features/audit/hooks/useAuditFeed";
+import { emitAuditEvent } from "@/features/audit/emitAuditEvent";
 import {
     ESCALATION_CATEGORIES,
     globalEscalationManager,
+    shouldEscalate,
     type EscalationReason,
 } from "@/features/escalation/domain/EscalationManager";
 import { useEscalationData } from "@/features/escalation/hooks/useEscalationData";
 import { useTelemetry } from "@/hooks/useTelemetry";
+import { useAuth } from "@/lib/auth-context";
 import { useServices } from "@/lib/services-context";
-import { type AuditEntry } from "@/types/domain-types";
+import { type RiskAssessment } from "@/types/domain-types";
 
 export default function HumanEscalation() {
     const [activeReason, setActiveReason] = useState<EscalationReason>("HIGH_RISK_ACTION");
     const [response, setResponse] = useState("");
     const [submitted, setSubmitted] = useState(false);
+    const [, setError] = useState<string | null>(null);
     const { logEvent } = useTelemetry();
     const { eventBus } = useServices();
+    const { canApprove } = useAuth();
     const reason = ESCALATION_CATEGORIES.find((r) => r.id === activeReason);
     const history = globalEscalationManager.getHistory();
 
     const { contextBlocks } = useEscalationData();
 
+    const [assessment] = useState<RiskAssessment>({ score: 85, threshold: 80 });
+
+    if (!shouldEscalate(assessment)) {
+        return null;
+    }
+
     const handleSubmit = (type: "RESPONSE" | "AUTHORIZE_ALL" | "HALT") => {
         setSubmitted(true);
-        logEvent("ESCALATION_APPROVED", { reason: activeReason, type, response });
+        setError(null);
 
-        eventBus.publish<AuditEntry>(AUDIT_EVENT, {
-            id: `EV-${Date.now().toString().slice(-6)}`,
-            ts: new Date().toLocaleTimeString("en-US", {
-                hour12: false,
-                hour: "2-digit",
-                minute: "2-digit",
-                second: "2-digit",
-            }),
-            type: "ESCALATION",
-            actor: "user",
-            action: type,
-            resource: `escalation/${activeReason}`,
-            result: type === "HALT" ? "FAILURE" : "SUCCESS",
-            ip: "127.0.0.1",
-            detail: `Human escalation resolved via ${type}`,
-        });
+        // Optimistic update wrapper
+        Promise.resolve()
+            .then(() => {
+                // Mock network delay
+                return new Promise((resolve) => setTimeout(resolve, 500));
+            })
+            .then(() => {
+                logEvent("ESCALATION_APPROVED", { reason: activeReason, type, response });
+                emitAuditEvent(eventBus, {
+                    type: "ESCALATION",
+                    actor: "user",
+                    action: type,
+                    resource: `escalation/${activeReason}`,
+                    result: type === "HALT" ? "FAILURE" : "SUCCESS",
+                    detail: `Human escalation resolved via ${type}`,
+                });
+            })
+            .catch((_err) => {
+                setSubmitted(false);
+                setError("Failed to apply decision. Please try again.");
+            });
     };
 
     if (!reason) {
@@ -259,8 +274,8 @@ export default function HumanEscalation() {
                     />
                     <div className="mt-4 flex gap-3">
                         <button
-                            disabled={!response.trim()}
                             onClick={() => response.trim() && handleSubmit("RESPONSE")}
+                            disabled={!response.trim() || !canApprove("RESPONSE")}
                             className="font-inherit rounded-[2px] border-none px-[20px] py-[8px] text-[9.5px] tracking-[0.14em] text-[var(--color-hex-f2f2f2)]"
                             style={{
                                 background: response.trim()
@@ -282,6 +297,7 @@ export default function HumanEscalation() {
                         </button>
                         <button
                             onClick={() => handleSubmit("AUTHORIZE_ALL")}
+                            disabled={!canApprove("AUTHORIZE_ALL")}
                             className="font-inherit cursor-pointer rounded-[2px] border-[1px] border-solid border-[var(--color-hex-3fb95044)] bg-[transparent] px-[18px] py-[8px] text-[9.5px] tracking-[0.14em] text-[var(--color-hex-3fb950)]"
                             onMouseEnter={(e) => {
                                 e.currentTarget.style.borderColor = "var(--color-hex-3fb950)";
@@ -296,6 +312,7 @@ export default function HumanEscalation() {
                         </button>
                         <button
                             onClick={() => handleSubmit("HALT")}
+                            disabled={!canApprove("HALT")}
                             className="font-inherit cursor-pointer rounded-[2px] border-[1px] border-solid border-[var(--color-hex-ff2a3244)] bg-[transparent] px-[18px] py-[8px] text-[9.5px] tracking-[0.14em] text-[var(--color-hex-ff2a32)]"
                             onMouseEnter={(e) => {
                                 e.currentTarget.style.borderColor = "var(--color-hex-ff2a32)";
