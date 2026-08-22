@@ -29,10 +29,14 @@ export class CostRepository implements DataSource<CostTimeline> {
         });
     }
 
-    async fetchAll(_options?: { page?: number; limit?: number }): Promise<CostTimeline[]> {
+    async fetchAll<U = CostTimeline>(_options?: {
+        page?: number;
+        limit?: number;
+        collection?: string;
+    }): Promise<U[]> {
         return new Promise((resolve) => {
             setTimeout(() => {
-                resolve(CostRepository.mockData);
+                resolve(CostRepository.mockData as unknown as U[]);
             }, 300);
         });
     }
