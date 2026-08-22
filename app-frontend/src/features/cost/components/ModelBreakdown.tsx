@@ -1,7 +1,15 @@
-import { MODEL_ROWS } from "@/features/cost/data/costMockData";
+import { useEffect, useState } from "react";
+
+import { type ModelRow } from "@/features/cost/data/costMockData";
+import { CostRepository } from "@/features/cost/data/CostRepository";
 
 export default function ModelBreakdown() {
-    const MODEL_C: Record<string, string> = {
+    const [models, setModels] = useState<ModelRow[]>([]);
+    useEffect(() => {
+        void CostRepository.getModels().then((data) => setModels(data));
+    }, []);
+
+    const MODEL_C: Record<string, string | undefined> = {
         "claude-sonnet-5": "var(--color-hex-e31b23)",
         "claude-haiku-4-5": "var(--color-hex-d29922)",
         "claude-opus-5": "var(--color-hex-3fb950)",
@@ -10,7 +18,7 @@ export default function ModelBreakdown() {
         <div className="flex-1 overflow-y-auto px-6 py-5">
             {/* Model cards */}
             <div className="mb-6 flex flex-col gap-4">
-                {MODEL_ROWS.map((m) => (
+                {models.map((m) => (
                     <div
                         key={m.model}
                         className="overflow-hidden rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)]"

@@ -1,10 +1,9 @@
 import React from "react";
 
-import {
-    getCostData,
-    type CostTimeline,
-    type SpecialistCost,
-} from "@/features/cost/data/costMockData";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { MetricTile } from "@/components/ui/MetricTile";
+import { type CostTimeline, type SpecialistCost } from "@/features/cost/data/costMockData";
+import { CostRepository } from "@/features/cost/data/CostRepository";
 
 export default function CostUsage() {
     const [costData, setCostData] = React.useState<{
@@ -15,11 +14,15 @@ export default function CostUsage() {
     } | null>(null);
 
     React.useEffect(() => {
-        void getCostData().then(setCostData);
+        void CostRepository.getCostData().then(setCostData);
     }, []);
 
     if (!costData) {
-        return null;
+        return (
+            <div className="flex h-full flex-1 items-center justify-center">
+                <EmptyState message="LOADING COST DATA..." />
+            </div>
+        );
     }
     const { TOTAL, CEILING, TIMELINE, SPECIALISTS_COST } = costData;
 
@@ -50,31 +53,15 @@ export default function CostUsage() {
                         sub: "input + output",
                     },
                 ].map((m, i, a) => (
-                    <div
+                    <MetricTile
                         key={m.k}
-                        className="bg-[var(--color-hex-0d0d0d)] px-[18px] py-[14px]"
-                        style={{
-                            borderRight:
-                                i < a.length - 1 ? "1px solid var(--color-hex-1a1a1a)" : "none",
-                        }}
-                    >
-                        <div className="mb-[6px] text-[7.5px] tracking-[0.18em] text-[var(--color-hex-444444)]">
-                            {m.k}
-                        </div>
-                        <div
-                            className="mb-[2px] text-[22px] font-bold"
-                            style={{
-                                color: m.red
-                                    ? "var(--color-hex-e31b23)"
-                                    : "var(--color-hex-f2f2f2)",
-                            }}
-                        >
-                            {m.v}
-                        </div>
-                        <div className="text-[8px] tracking-[0.1em] text-[var(--color-hex-333333)]">
-                            {m.sub}
-                        </div>
-                    </div>
+                        label={m.k}
+                        value={m.v}
+                        sub={m.sub}
+                        valueColor={m.red ? "var(--color-hex-e31b23)" : "var(--color-hex-f2f2f2)"}
+                        variant="dashboard"
+                        borderRight={i < a.length - 1}
+                    />
                 ))}
             </div>
 
@@ -135,69 +122,73 @@ export default function CostUsage() {
                         ),
                     )}
                 </div>
-                {SPECIALISTS_COST.map((s, i) => (
-                    <div
-                        key={s.id}
-                        className="flex items-center"
-                        style={{
-                            borderBottom:
-                                i < SPECIALISTS_COST.length - 1
-                                    ? "1px solid var(--color-hex-111111)"
-                                    : "none",
-                            background: i % 2 ? "var(--color-hex-0b0b0b)" : "transparent",
-                        }}
-                    >
+                {SPECIALISTS_COST.length === 0 ? (
+                    <EmptyState message="NO SPECIALIST COST DATA" />
+                ) : (
+                    SPECIALISTS_COST.map((s, i) => (
                         <div
-                            className="px-[12px] py-[8px] text-[10px] font-bold tracking-[0.06em] text-[var(--color-hex-e31b23)]"
+                            key={s.id}
+                            className="flex items-center"
                             style={{
-                                flex: 2,
+                                borderBottom:
+                                    i < SPECIALISTS_COST.length - 1
+                                        ? "1px solid var(--color-hex-111111)"
+                                        : "none",
+                                background: i % 2 ? "var(--color-hex-0b0b0b)" : "transparent",
                             }}
                         >
-                            {s.role}
-                        </div>
-                        <div
-                            className="px-[12px] py-[8px] text-[9px] text-[var(--color-hex-444444)]"
-                            style={{
-                                flex: 2,
-                            }}
-                        >
-                            {s.model}
-                        </div>
-                        <div className="flex-1 px-[12px] py-[8px] text-right text-[9px] text-[var(--color-hex-666666)]">
-                            {s.calls}
-                        </div>
-                        <div className="flex-1 px-[12px] py-[8px] text-right text-[9px] text-[var(--color-hex-555555)]">
-                            {(s.inputTok / 1000).toFixed(0)}K
-                        </div>
-                        <div className="flex-1 px-[12px] py-[8px] text-right text-[9px] text-[var(--color-hex-555555)]">
-                            {(s.outputTok / 1000).toFixed(0)}K
-                        </div>
-                        <div className="flex-1 px-[12px] py-[8px] text-right text-[10px] font-bold text-[var(--color-hex-f2f2f2)]">
-                            ${s.cost.toFixed(4)}
-                        </div>
-                        <div className="flex-1 px-[12px] py-[8px] text-right">
                             <div
+                                className="px-[12px] py-[8px] text-[10px] font-bold tracking-[0.06em] text-[var(--color-hex-e31b23)]"
                                 style={{
-                                    display: "inline-flex",
-                                    alignItems: "center",
-                                    gap: 6,
+                                    flex: 2,
                                 }}
                             >
-                                <div className="h-[3px] w-[40px] overflow-hidden rounded-[2px] bg-[var(--color-hex-1a1a1a)]">
-                                    <div
-                                        className="h-full bg-[var(--color-hex-e31b23)]"
-                                        style={{
-                                            width: `${s.pct}%`,
-                                        }}
-                                    />
+                                {s.role}
+                            </div>
+                            <div
+                                className="px-[12px] py-[8px] text-[9px] text-[var(--color-hex-444444)]"
+                                style={{
+                                    flex: 2,
+                                }}
+                            >
+                                {s.model}
+                            </div>
+                            <div className="flex-1 px-[12px] py-[8px] text-right text-[9px] text-[var(--color-hex-666666)]">
+                                {s.calls}
+                            </div>
+                            <div className="flex-1 px-[12px] py-[8px] text-right text-[9px] text-[var(--color-hex-555555)]">
+                                {(s.inputTok / 1000).toFixed(0)}K
+                            </div>
+                            <div className="flex-1 px-[12px] py-[8px] text-right text-[9px] text-[var(--color-hex-555555)]">
+                                {(s.outputTok / 1000).toFixed(0)}K
+                            </div>
+                            <div className="flex-1 px-[12px] py-[8px] text-right text-[10px] font-bold text-[var(--color-hex-f2f2f2)]">
+                                ${s.cost.toFixed(4)}
+                            </div>
+                            <div className="flex-1 px-[12px] py-[8px] text-right">
+                                <div
+                                    style={{
+                                        display: "inline-flex",
+                                        alignItems: "center",
+                                        gap: 6,
+                                    }}
+                                >
+                                    <div className="h-[3px] w-[40px] overflow-hidden rounded-[2px] bg-[var(--color-hex-1a1a1a)]">
+                                        <div
+                                            className="h-full bg-[var(--color-hex-e31b23)]"
+                                            style={{
+                                                width: `${s.pct}%`,
+                                            }}
+                                        />
+                                    </div>
+                                    <span className="text-[8.5px] text-[var(--color-hex-555555)]">
+                                        {s.pct}%
+                                    </span>
                                 </div>
-                                <span className="text-[8.5px] text-[var(--color-hex-555555)]">
-                                    {s.pct}%
-                                </span>
                             </div>
                         </div>
-                    </div>
-                ))}
+                    ))
+                )}
             </div>
 
             {/* Cost timeline */}
@@ -206,31 +197,43 @@ export default function CostUsage() {
             </div>
             <div className="relative mb-[4px] h-[80px] overflow-hidden rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1a1a1a)] bg-[var(--color-hex-0a0a0a)]">
                 {/* Bar chart */}
-                {TIMELINE.map((t, i) => {
-                    const maxCost = Math.max(...TIMELINE.map((x) => x.cost));
-                    const barH = maxCost > 0 ? Math.round((t.cost / maxCost) * 60) : 0;
-                    return (
-                        <div
-                            key={`timeline-${t.ts}-${t.event}`}
-                            title={`${t.ts} · ${t.event} · $${t.cost.toFixed(4)}`}
-                            className="absolute bottom-0 cursor-default"
-                            style={{
-                                left: `${(i / TIMELINE.length) * 100}%`,
-                                width: `${(1 / TIMELINE.length) * 100 - 1}%`,
-                                height: barH > 0 ? `${barH}px` : "1px",
-                                background:
-                                    barH > 0
-                                        ? "var(--color-hex-e31b23)"
-                                        : "var(--color-hex-292929)",
-                                borderRadius: "1px 1px 0 0",
-                            }}
-                        />
-                    );
-                })}
+                {TIMELINE.length === 0 ? (
+                    <div className="flex h-full items-center justify-center">
+                        <EmptyState message="NO TIMELINE DATA" />
+                    </div>
+                ) : (
+                    (() => {
+                        const maxCost = Math.max(...TIMELINE.map((x) => x.cost));
+                        return TIMELINE.map((t, i) => {
+                            const barH = maxCost > 0 ? Math.round((t.cost / maxCost) * 60) : 0;
+                            return (
+                                <div
+                                    key={`timeline-${t.ts}-${t.event}`}
+                                    title={`${t.ts} · ${t.event} · $${t.cost.toFixed(4)}`}
+                                    className="absolute bottom-0 cursor-default"
+                                    style={{
+                                        left: `${(i / TIMELINE.length) * 100}%`,
+                                        width: `${(1 / TIMELINE.length) * 100 - 1}%`,
+                                        height: barH > 0 ? `${barH}px` : "1px",
+                                        background:
+                                            barH > 0
+                                                ? "var(--color-hex-e31b23)"
+                                                : "var(--color-hex-292929)",
+                                        borderRadius: "1px 1px 0 0",
+                                    }}
+                                />
+                            );
+                        });
+                    })()
+                )}
             </div>
             <div className="flex justify-between text-[7.5px] text-[var(--color-hex-333333)]">
-                <span>{TIMELINE[0].ts}</span>
-                <span>{TIMELINE[TIMELINE.length - 1].ts}</span>
+                {TIMELINE.length > 0 ? (
+                    <>
+                        <span>{TIMELINE[0].ts}</span>
+                        <span>{TIMELINE[TIMELINE.length - 1].ts}</span>
+                    </>
+                ) : null}
             </div>
         </div>
     );

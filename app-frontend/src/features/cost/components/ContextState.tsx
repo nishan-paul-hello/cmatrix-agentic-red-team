@@ -1,14 +1,35 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-import { CTX_ENTRIES } from "@/features/cost/data/costMockData";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { MetricTile } from "@/components/ui/MetricTile";
+import { type ContextEntry } from "@/features/cost/data/costMockData";
+import { CostRepository } from "@/features/cost/data/CostRepository";
 
 export default function ContextState() {
-    const [sel, setSel] = useState(CTX_ENTRIES[2]);
-    const stc: Record<string, string> = {
+    const [entries, setEntries] = useState<ContextEntry[]>([]);
+    const [sel, setSel] = useState<ContextEntry | null>(null);
+
+    useEffect(() => {
+        void CostRepository.getContextEntries().then((data) => {
+            setEntries(data);
+            setSel(data[2]);
+        });
+    }, []);
+
+    const stc: Record<string, string | undefined> = {
         COMPACTED: "var(--color-hex-d29922)",
         ACTIVE: "var(--color-hex-3fb950)",
         IDLE: "var(--color-hex-444444)",
     };
+
+    if (!sel) {
+        return (
+            <div className="flex h-full flex-1 items-center justify-center">
+                <EmptyState message="LOADING COST DATA..." />
+            </div>
+        );
+    }
+
     return (
         <div className="flex min-h-[0px] flex-1 overflow-hidden">
             <div className="flex-1 overflow-y-auto px-6 py-5">
@@ -31,27 +52,19 @@ export default function ContextState() {
                             sub: "via compaction",
                         },
                     ].map((m, i, a) => (
-                        <div
+                        <MetricTile
                             key={m.k}
-                            className="bg-[var(--color-hex-0d0d0d)] px-[18px] py-[14px]"
-                            style={{
-                                borderRight:
-                                    i < a.length - 1 ? "1px solid var(--color-hex-1a1a1a)" : "none",
-                            }}
-                        >
-                            <div className="mb-[6px] text-[7.5px] tracking-[0.18em] text-[var(--color-hex-444444)]">
-                                {m.k}
-                            </div>
-                            <div className="mb-[2px] text-[22px] font-bold text-[var(--color-hex-f2f2f2)]">
-                                {m.v}
-                            </div>
-                            <div className="text-[8px] text-[var(--color-hex-333333)]">{m.sub}</div>
-                        </div>
+                            label={m.k}
+                            value={m.v}
+                            sub={m.sub}
+                            variant="dashboard"
+                            borderRight={i < a.length - 1}
+                        />
                     ))}
                 </div>
 
                 {/* Context bars */}
-                {CTX_ENTRIES.map((s) => {
+                {entries.map((s) => {
                     const pct = Math.round((s.used / s.max) * 100);
                     const bc = (() => {
                         if (pct > 85) {
