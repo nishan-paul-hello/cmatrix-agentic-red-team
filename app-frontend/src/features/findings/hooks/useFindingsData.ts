@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 
-import { type Tab } from "@/features/findings/data/findingsMockData";
 import { FindingsRepository } from "@/features/findings/data/FindingsRepository";
+import { type Tab } from "@/features/findings/data/fixtures/findingsMockData";
 import { computeFindingCounts } from "@/features/findings/utils";
 import { type Finding } from "@/types/domain-types";
 
