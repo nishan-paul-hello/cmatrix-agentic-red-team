@@ -1,4 +1,9 @@
-import { SPEC_STATUS, type Specialist } from "@/types/domain-types";
+import {
+    SPEC_STATUS,
+    VDG_NODE_STATUS,
+    type Specialist,
+    type VdgNodeStatus,
+} from "@/types/domain-types";
 
 /* ── Types ─────────────────────────────────────────────── */
 export type MissionSubNav =
@@ -15,12 +20,11 @@ export type MissionSubNav =
     | "cost"
     | "team-manager"
     | "escalation";
-export type NodeStatus =
-    "COMPLETED" | "EXPLOITED" | "ELIGIBLE" | "IN_PROGRESS" | "DEPENDENT" | "INFEASIBLE";
+
 export interface VDGNode {
     id: string;
     type: string;
-    status: NodeStatus;
+    status: VdgNodeStatus;
     ucb?: number;
     eord?: number;
     eordMax?: number;
@@ -41,21 +45,21 @@ export const VDG_NODES: VDGNode[] = [
     {
         id: "RECON-001",
         type: "RECONNAISSANCE",
-        status: "COMPLETED",
+        status: VDG_NODE_STATUS.COMPLETED,
         x: 0,
         y: 0,
     },
     {
         id: "AUTH-001",
         type: "AUTHENTICATION",
-        status: "EXPLOITED",
+        status: VDG_NODE_STATUS.EXPLOITED,
         x: 0,
         y: 1,
     },
     {
         id: "SQLI-001",
         type: "SQL INJECTION",
-        status: "ELIGIBLE",
+        status: VDG_NODE_STATUS.ELIGIBLE,
         ucb: 0.824,
         eord: 3,
         eordMax: 5,
@@ -65,7 +69,7 @@ export const VDG_NODES: VDGNode[] = [
     {
         id: "DB-ACCESS-002",
         type: "DATABASE ACCESS",
-        status: "DEPENDENT",
+        status: VDG_NODE_STATUS.DEPENDENT,
         x: 0,
         y: 3,
     },
