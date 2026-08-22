@@ -1,4 +1,5 @@
-import { SURFACE_OPTIONS, type SurfaceType } from "@/features/missions/data/wizardMockData";
+import { type SurfaceType } from "@/features/missions/data/fixtures/wizardMockData";
+import { useWizardData } from "@/features/missions/hooks/useWizardData";
 
 export default function SurfaceCards({
     value,
@@ -7,6 +8,8 @@ export default function SurfaceCards({
     value: SurfaceType;
     onChange: (v: SurfaceType) => void;
 }) {
+    const { surfaceOptions } = useWizardData();
+
     return (
         <div
             className="flex gap-4"
@@ -14,7 +17,7 @@ export default function SurfaceCards({
                 alignItems: "stretch",
             }}
         >
-            {SURFACE_OPTIONS.map((opt) => {
+            {surfaceOptions.map((opt) => {
                 const selected = value === opt.value;
                 return (
                     <button
@@ -88,7 +91,7 @@ export default function SurfaceCards({
 
                         {/* Vuln class tags */}
                         <div className="mb-4 flex flex-wrap gap-1">
-                            {opt.tags.map((tag) => (
+                            {opt.tags.map((tag: string) => (
                                 <span
                                     key={tag}
                                     className="rounded-[2px] px-[5px] py-[1px] text-[8.5px] tracking-[0.1em] whitespace-nowrap"
@@ -123,7 +126,7 @@ export default function SurfaceCards({
                                 SPECIALISTS
                             </div>
                             <div className="flex flex-wrap gap-1">
-                                {opt.specialists.map((s) => (
+                                {opt.specialists.map((s: string) => (
                                     <span
                                         key={s}
                                         className="text-[8px] tracking-[0.12em]"

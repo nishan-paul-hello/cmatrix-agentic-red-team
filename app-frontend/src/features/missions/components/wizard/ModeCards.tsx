@@ -1,4 +1,5 @@
-import { MODE_OPTIONS, type ModeType } from "@/features/missions/data/wizardMockData";
+import { type ModeType } from "@/features/missions/data/fixtures/wizardMockData";
+import { useWizardData } from "@/features/missions/hooks/useWizardData";
 
 export default function ModeCards({
     value,
@@ -7,6 +8,8 @@ export default function ModeCards({
     value: ModeType;
     onChange: (v: ModeType) => void;
 }) {
+    const { modeOptions } = useWizardData();
+
     return (
         <div
             className="flex gap-5"
@@ -14,7 +17,7 @@ export default function ModeCards({
                 alignItems: "stretch",
             }}
         >
-            {MODE_OPTIONS.map((opt) => {
+            {modeOptions.map((opt) => {
                 const selected = value === opt.value;
                 return (
                     <button
@@ -113,7 +116,7 @@ export default function ModeCards({
 
                         {/* Implications list */}
                         <div className="flex flex-col gap-2">
-                            {opt.implications.map((imp) => (
+                            {opt.implications.map((imp: { label: string; detail: string }) => (
                                 <div key={imp.label} className="flex items-start gap-2">
                                     <span
                                         className="min-w-[96px] shrink-0 text-[8.5px] font-semibold tracking-[0.16em]"

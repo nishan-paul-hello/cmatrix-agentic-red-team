@@ -6,7 +6,7 @@ import RadioGroup from "@/features/missions/components/wizard/RadioGroup";
 import StepHeading from "@/features/missions/components/wizard/StepHeading";
 import TextInput from "@/features/missions/components/wizard/TextInput";
 import { useWizardContext } from "@/features/missions/components/wizard/WizardContext";
-import { type TargetType } from "@/features/missions/data/wizardMockData";
+import { type TargetType } from "@/features/missions/data/fixtures/wizardMockData";
 
 export function Step1() {
     const {

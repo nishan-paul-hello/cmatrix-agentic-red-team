@@ -4,7 +4,7 @@ import {
     type ModeType,
     type SurfaceType,
     type TargetType,
-} from "@/features/missions/data/wizardMockData";
+} from "@/features/missions/data/fixtures/wizardMockData";
 import { type TelemetryEventName } from "@/hooks/useTelemetry";
 import { type EventBus } from "@/utils/EventBus";
 

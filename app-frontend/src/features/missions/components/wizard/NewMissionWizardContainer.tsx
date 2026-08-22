@@ -1,5 +1,5 @@
 import NewMissionWizardView from "@/features/missions/components/wizard/NewMissionWizardView";
-import { type WizardProps } from "@/features/missions/data/wizardMockData";
+import { type WizardProps } from "@/features/missions/data/fixtures/wizardMockData";
 import { useNewMissionWizard } from "@/features/missions/hooks/useNewMissionWizard";
 import { useTelemetry } from "@/hooks/useTelemetry";
 import { useServices } from "@/lib/services-context";
