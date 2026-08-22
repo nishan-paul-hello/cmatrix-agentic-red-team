@@ -4,6 +4,7 @@ import {
     type FailureRecord,
     type SkillRecord,
 } from "@/features/memory/data/mockData";
+import { type MemoryTier } from "@/types/domain-types";
 
 /**
  * Blackboard Pattern
@@ -18,9 +19,10 @@ export interface ContextRecord {
 }
 
 export interface Blackboard {
-    readSkills(): SkillRecord[];
-    readFailures(): FailureRecord[];
-    readContext(key: string): ContextRecord | undefined;
+    readSkills(): (SkillRecord & { tier: MemoryTier })[];
+    readFailures(): (FailureRecord & { tier: MemoryTier })[];
+    readContext(key: string): (ContextRecord & { tier: MemoryTier }) | undefined;
+    readAllContexts(): (ContextRecord & { tier: MemoryTier })[];
     writeSkill(skill: SkillRecord): void;
     writeFailure(failure: FailureRecord): void;
     writeContext(context: ContextRecord): void;
@@ -31,16 +33,24 @@ class InMemoryBlackboard implements Blackboard {
     private failures: FailureRecord[] = [...FAILURES];
     private contexts: Map<string, ContextRecord> = new Map();
 
-    readSkills(): SkillRecord[] {
-        return this.skills;
+    readSkills(): (SkillRecord & { tier: MemoryTier })[] {
+        return this.skills.map((s) => ({ ...s, tier: "LONG_TERM" }));
     }
 
-    readFailures(): FailureRecord[] {
-        return this.failures;
+    readFailures(): (FailureRecord & { tier: MemoryTier })[] {
+        return this.failures.map((f) => ({ ...f, tier: "LONG_TERM" }));
     }
 
-    readContext(key: string): ContextRecord | undefined {
-        return this.contexts.get(key);
+    readContext(key: string): (ContextRecord & { tier: MemoryTier }) | undefined {
+        const ctx = this.contexts.get(key);
+        if (!ctx) {
+            return undefined;
+        }
+        return { ...ctx, tier: "SHORT_TERM" as MemoryTier };
+    }
+
+    readAllContexts(): (ContextRecord & { tier: MemoryTier })[] {
+        return Array.from(this.contexts.values()).map((ctx) => ({ ...ctx, tier: "SHORT_TERM" }));
     }
 
     writeSkill(skill: SkillRecord): void {
