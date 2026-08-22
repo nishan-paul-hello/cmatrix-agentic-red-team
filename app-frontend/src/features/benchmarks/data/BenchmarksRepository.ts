@@ -1,4 +1,8 @@
-import { BENCHMARKS, TASK_DATA, type Bench } from "@/features/benchmarks/data/benchmarksMockData";
+import {
+    BENCHMARKS,
+    TASK_DATA,
+    type Bench,
+} from "@/features/benchmarks/data/fixtures/benchmarksMockData";
 import { type DataSource } from "@/types/adapters";
 
 export class BenchmarksRepository implements DataSource<Bench> {
