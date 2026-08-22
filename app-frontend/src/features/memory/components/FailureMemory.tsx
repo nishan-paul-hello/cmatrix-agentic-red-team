@@ -2,10 +2,11 @@ import { useState } from "react";
 
 import { MetricTile } from "@/components/ui/MetricTile";
 import { type FailureRecord } from "@/features/memory/data/mockData";
-import { globalBlackboard } from "@/features/memory/domain/Blackboard";
+import { useServices } from "@/lib/services-context";
 
 export default function FailureMemory() {
-    const failures = globalBlackboard.readFailures();
+    const { blackboard } = useServices();
+    const failures = blackboard.readFailures();
     const [sel, setSel] = useState<FailureRecord | null>(failures[0] || null);
     const tc: Record<string, string> = {
         TIMEOUT: "var(--color-hex-d29922)",

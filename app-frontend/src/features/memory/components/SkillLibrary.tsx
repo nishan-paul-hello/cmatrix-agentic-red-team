@@ -1,10 +1,11 @@
 import { useState } from "react";
 
 import Sub from "@/features/memory/components/Sub";
-import { globalBlackboard } from "@/features/memory/domain/Blackboard";
+import { useServices } from "@/lib/services-context";
 
 export default function SkillLibrary() {
-    const skills = globalBlackboard.readSkills();
+    const { blackboard } = useServices();
+    const skills = blackboard.readSkills();
     const [sel, setSel] = useState(skills[0]);
     const [filter, setFilter] = useState("");
     const q = filter.toLowerCase();

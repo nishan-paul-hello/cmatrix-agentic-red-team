@@ -1,8 +1,13 @@
 import { useState } from "react";
 
 import { CTX_SPECS } from "@/features/memory/data/mockData";
+import { useServices } from "@/lib/services-context";
 
 export default function ContextUtilization() {
+    const { blackboard } = useServices();
+    const shortTerm = blackboard.readAllContexts();
+    const longTermSkills = blackboard.readSkills();
+    const longTermFailures = blackboard.readFailures();
     const [sel, setSel] = useState(CTX_SPECS[2]);
     const stc: Record<string, string> = {
         COMPACTED: "var(--color-hex-d29922)",
@@ -127,7 +132,28 @@ export default function ContextUtilization() {
                         </div>
                     );
                 })}
-                {}
+
+                <div className="mt-8 mb-4 border-b border-solid border-[var(--color-hex-1e1e1e)] pb-2 text-[10px] tracking-[0.16em] text-[var(--color-hex-a0a0a0)]">
+                    MEMORY TIERS (BLACKBOARD)
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                    <div className="rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)] bg-[var(--color-hex-0d0d0d)] p-4">
+                        <div className="mb-2 text-[8.5px] tracking-[0.14em] text-[var(--color-hex-444444)]">
+                            SHORT_TERM
+                        </div>
+                        <div className="text-[14px] font-bold text-[var(--color-hex-f2f2f2)]">
+                            {shortTerm.length} Contexts Active
+                        </div>
+                    </div>
+                    <div className="rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)] bg-[var(--color-hex-0d0d0d)] p-4">
+                        <div className="mb-2 text-[8.5px] tracking-[0.14em] text-[var(--color-hex-444444)]">
+                            LONG_TERM
+                        </div>
+                        <div className="text-[14px] font-bold text-[var(--color-hex-f2f2f2)]">
+                            {longTermSkills.length} Skills · {longTermFailures.length} Failures
+                        </div>
+                    </div>
+                </div>
             </div>
             <div
                 className="flex w-[280px] flex-shrink-0 flex-col overflow-y-auto p-[16px]"
