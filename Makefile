@@ -1,10 +1,8 @@
 .PHONY: help install dev build clean paper ppt clean-paper format format-check lint typecheck
 
-# Global Environment Variables
 ROOT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 LATEXMK := latexmk -f -cd -pdf -pdflatex="pdflatex -interaction=nonstopmode -halt-on-error %O %S"
 
-# Default target
 help:
 	@echo "RedGrid - Full Stack Development Commands"
 	@echo "=========================================="
@@ -21,27 +19,23 @@ help:
 	@echo "  make ppt                    Build the Presentation PPTX"
 	@echo "  make clean-paper            Clean Research Paper artifacts"
 
-# Installation
 install:
 	@echo "📦 Installing dependencies..."
 	cd app-frontend && npm install
 
-# Development servers
 dev:
 	@echo "🚀 Starting dev server..."
 	cd app-frontend && npm run dev
 
-# Build
 build:
 	@echo "🏗️  Building production assets..."
 	cd app-frontend && npm run build
 
-# Code Quality & Formatting
 format:
 	@echo "✨ Formatting frontend code with Prettier..."
 	cd app-frontend && npm run format
 
-lint:
+lint-fix:
 	@echo "🔍 Linting and fixing frontend code with ESLint..."
 	cd app-frontend && npm run lint:fix
 
@@ -99,7 +93,6 @@ ppt:
 	@cd $(PPT_DIR) && python3 src/build.py "output/$(SAFE_PPT_NAME)"
 	@rm -rf $(PPT_DIR)/src/__pycache__
 
-# Cleanup
 clean: clean-paper
 	@echo "🧹 Cleaning app artifacts..."
 	rm -rf app-frontend/node_modules app-frontend/dist
