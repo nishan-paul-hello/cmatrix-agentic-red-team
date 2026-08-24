@@ -176,12 +176,6 @@ A curated list of state-of-the-art AI agents that share a similar vision of agen
     - 📂 **GitHub**: [vxcontrol/pentagi](https://github.com/vxcontrol/pentagi)
     - 🎥 **Demo**: [Watch on YouTube](https://www.youtube.com/watch?v=R70x5Ddzs1o)
 
-- **Shannon**
-    > *An AI-powered "proof-by-exploitation" security agent that validates vulnerabilities through real-world attack simulations.*
-    - 🌐 **Website**: [keygraph.io](https://keygraph.io/)
-    - 📂 **GitHub**: [KeygraphHQ/shannon](https://github.com/KeygraphHQ/shannon)
-    - 🎥 **Demo**: [Watch on YouTube](https://www.youtube.com/watch?v=H7Xh-x_TVdQ)
-
 ### ⚔️ MCP Server
 
 - **HexStrike AI**
@@ -192,24 +186,9 @@ A curated list of state-of-the-art AI agents that share a similar vision of agen
 
 ---
 
-## 📖 Relevant Resources
-
-### 📄 Key Academic Papers
-- [Incalmo: Autonomous LLM-assisted System for Red Teaming](docs/paper-research/downloaded-paper-professor/06-incalmo-autonomous-llm-assisted-system-for-red-teaming.pdf)
-- [PentestGPT: Evaluating and Harnessing Large Language Models for Automated Penetration Testing](docs/paper-research/downloaded-paper-professor/26-pentestgpt-evaluating-and-harnessing-large-language-models-for-automated-penetration-testing.pdf)
-- [Veritas: A Semantically Grounded Agentic Framework for Memory Corruption Vulnerability Detection in Binaries](docs/paper-research/downloaded-paper-professor/04-veritas-semantically-grounded-agentic-framework-for.pdf)
-- [CVE-Genie: LLM Multi-Agent Framework for Automated CVE Reproducing](docs/paper-research/downloaded-paper-professor/18-cve-genie-llm-multi-agent-framework-for-automated-cve.pdf)
-
 ### 🔗 External Resources
 - [LLM4Pentest Framework](https://github.com/simon-p-j-r/LLM4Pentest) - Reference for blog and paper on LLMOrch-VAPT.
 - [Security Conference Deadlines](https://sec-deadlines.github.io/) - For tracking upcoming conference deadlines.
-
-### PAPERS
-- [PentestAgent: Incorporating LLM Agents to Automated Penetration Testing](docs/paper-research/md-downloaded-paper-curated/18-pentestagent-incorporating-llm-agents-to-automated-penetration-testing.md)
-- [VulnBot: Autonomous Penetration Testing for a Multi-Agent Collaborative Framework](docs/paper-research/md-downloaded-paper-curated/21-vulnbot-autonomous-penetration-testing-for-a-multi-agent-collaborative-framework.md)
-- [Teams of LLM Agents Can Exploit Zero-Day Vulnerabilities](docs/paper-research/md-downloaded-paper-curated/54-teams-of-llm-agents-can-exploit-zero-day-vulnerabilities.md)
-- [AutoAttacker: A Large Language Model-Guided System to Implement Automatic Cyber Attacks](docs/paper-research/md-downloaded-paper-curated/56-autoattacker-a-large-language-model-guided-system-to-implement-automatic-cyber-attacks.md)
-- [PentestGPT: Evaluating and Harnessing Large Language Models for Automated Penetration Testing](docs/paper-research/md-downloaded-paper-professor/26-pentestgpt-evaluating-and-harnessing-large-language-models-for-automated-penetration-testing.md)
 
 ---
 
