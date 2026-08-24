@@ -164,9 +164,7 @@ make paper
 ---
 
 
-## 🌐 Contemporary Works
-
-A curated list of state-of-the-art AI agents that share a similar vision of agentic red teaming.
+### 🔗 External Resources
 
 - **Hermes Agent**
     > *An open-source, autonomous AI agent designed to run persistently and improve over time.*
@@ -183,12 +181,12 @@ A curated list of state-of-the-art AI agents that share a similar vision of agen
     - 🌐 **Website**: [hexstrike.com](https://www.hexstrike.com/)
     - 📂 **GitHub**: [0x4m4/hexstrike-ai](https://github.com/0x4m4/hexstrike-ai)
     - 🎥 **Demo**: [Watch on YouTube](https://www.youtube.com/watch?v=PQOwpjZXzMo)
-
----
-
-### 🔗 External Resources
-- [LLM4Pentest Framework](https://github.com/simon-p-j-r/LLM4Pentest) - Reference for blog and paper on LLMOrch-VAPT.
-- [Security Conference Deadlines](https://sec-deadlines.github.io/) - For tracking upcoming conference deadlines.
+- **LLM4Pentest Framework**
+    > *A curated list of resources on the application of LLMs in automated penetration testing, including academic papers, tools, and benchmarks.*
+    - 📂 **GitHub**: [simon-p-j-r/LLM4Pentest](https://github.com/simon-p-j-r/LLM4Pentest)
+- **Security Conference Deadlines**
+    > *An open-source tracker for upcoming security and privacy academic conference deadlines and Call for Papers (CFPs).*
+    - 🌐 **Website**: [sec-deadlines.github.io](https://sec-deadlines.github.io/)
 
 ---
 
