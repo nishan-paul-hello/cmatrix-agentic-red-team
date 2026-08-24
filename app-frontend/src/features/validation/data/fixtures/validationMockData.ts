@@ -1,5 +1,5 @@
 export type VStatus =
-    "PENDING" | "RETRY" | "VALIDATED" | "RULED_OUT" | "ORACLE_CONFIRMED" | "ORACLE CONFIRMED";
+    "PENDING" | "RETRY" | "VALIDATED" | "RULED_OUT" | "ORACLE_CONFIRMED";
 export interface VFinding {
     id: string;
     type: string;
@@ -103,11 +103,6 @@ export const SB: Record<
         border: "var(--color-hex-33333344)",
     },
     ORACLE_CONFIRMED: {
-        color: "var(--color-hex-a371f7)",
-        bg: "var(--color-hex-1a0f2e)",
-        border: "var(--color-hex-a371f744)",
-    },
-    "ORACLE CONFIRMED": {
         color: "var(--color-hex-a371f7)",
         bg: "var(--color-hex-1a0f2e)",
         border: "var(--color-hex-a371f744)",

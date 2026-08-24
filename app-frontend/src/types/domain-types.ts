@@ -26,6 +26,7 @@ export const FINDING_STATUS = {
     VALIDATED: "VALIDATED",
     ORACLE_CONFIRMED: "ORACLE_CONFIRMED",
     RULED_OUT: "RULED_OUT",
+    RETRY: "RETRY",
 } as const;
 
 export type FindingStatus = (typeof FINDING_STATUS)[keyof typeof FINDING_STATUS];
