@@ -30,12 +30,25 @@ CMATRIX is an advanced, AI-powered security orchestration platform utilizing a m
 ## 📸 Application Preview
 
 <div align="center">
-  <img src="docs/assets/preview-1.gif" alt="CMATRIX Overview" width="100%" />
-  <img src="docs/assets/preview-2.gif" alt="CMATRIX Overview" width="100%" />
-  <img src="docs/assets/preview-3.gif" alt="CMATRIX Overview" width="100%" />
-  <img src="docs/assets/preview-4.gif" alt="CMATRIX Overview" width="100%" />
-  <img src="docs/assets/preview-5.gif" alt="CMATRIX Overview" width="100%" />
-  <img src="docs/assets/preview-6.gif" alt="CMATRIX Overview" width="100%" />
+  <!-- Main Overview -->
+  <img src="docs/assets/preview-1.gif" alt="CMATRIX Overview" width="100%" style="border-radius:10px; margin-bottom:15px;" />
+
+  <!-- Collapsible Gallery for more previews -->
+  <details>
+    <summary><b>✨ Click to expand more application previews</b></summary>
+    <br>
+    <p align="center">
+      <img src="docs/assets/preview-2.gif" alt="Feature Preview 2" width="49%" style="border-radius:8px;" />
+      <img src="docs/assets/preview-3.gif" alt="Feature Preview 3" width="49%" style="border-radius:8px;" />
+    </p>
+    <p align="center">
+      <img src="docs/assets/preview-4.gif" alt="Feature Preview 4" width="49%" style="border-radius:8px;" />
+      <img src="docs/assets/preview-5.gif" alt="Feature Preview 5" width="49%" style="border-radius:8px;" />
+    </p>
+    <p align="center">
+      <img src="docs/assets/preview-6.gif" alt="Feature Preview 6" width="99%" style="border-radius:8px;" />
+    </p>
+  </details>
 </div>
 
 ---
