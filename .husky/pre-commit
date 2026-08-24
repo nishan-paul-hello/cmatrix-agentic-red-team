@@ -1,4 +1,5 @@
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
+echo "✨ Running format before commit..."
+make format
 
-npx lint-staged
+echo "🔍 Running lint fix before commit..."
+make lint-fix

@@ -46,7 +46,7 @@ export default tseslint.config(
         settings: {
             react: { version: "detect" },
             next: {
-                rootDir: "app-frontend/",
+                rootDir: __dirname,
             },
             "import/resolver": {
                 typescript: {
