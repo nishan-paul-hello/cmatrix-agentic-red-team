@@ -18,7 +18,7 @@ This sub-step finalized the empirical and narrative sections of the research man
 - Honest assessment of **Limitations** (Context pollution in deep chains).
 
 ### 2.3 Finalized Conclusion (§7)
-- Summarized the CMatrix contribution and its primary impacts (SR: 97.4%, TE: 2.42x).
+- Summarized the RedGrid contribution and its primary impacts (SR: 97.4%, TE: 2.42x).
 - Stated the final vision for trustworthy and scalable autonomous security agents.
 
 ## 3) Key Decisions Made

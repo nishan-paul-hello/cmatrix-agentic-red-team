@@ -19,7 +19,7 @@ This sub-step finalized the technical core of the manuscript by expanding the Me
 - Integrated `figure-02`, `figure-03`, and `algorithm-01`.
 
 ## 3) Key Decisions Made
-- **Symbolic Variable Emphasis**: Highlighted symbolic execution in ReWOO to differentiate CMatrix from simpler ReAct-based planners.
+- **Symbolic Variable Emphasis**: Highlighted symbolic execution in ReWOO to differentiate RedGrid from simpler ReAct-based planners.
 - **Section Splitting**: Decided to split Threat Model and Methodology into separate sections to improve readability and adhere to standard security conference structure.
 - **Reproducibility Focus**: Added specific details about the LangGraph DAG and Redis/PostgreSQL state management to ensure the system architecture is replicable.
 

@@ -17,7 +17,7 @@
 
 **Speciality:** AI safety & security for agentic systems, autonomous LLM agents in cybersecurity, prompt injection defenses, LLM privilege control, CyberGym benchmark
 
-**Work alignment:** Runs CyberGym — a benchmark where AI agents discover real zero-days and solve real bug bounties. BountyBench (2025) measures dollar-impact of AI agent attackers vs defenders. ICLR 2025 keynote: "Towards Building Safe and Secure Agentic AI." Progent (2025): programmable privilege control for LLM agents. CMatrix is exactly what she studies.
+**Work alignment:** Runs CyberGym — a benchmark where AI agents discover real zero-days and solve real bug bounties. BountyBench (2025) measures dollar-impact of AI agent attackers vs defenders. ICLR 2025 keynote: "Towards Building Safe and Secure Agentic AI." Progent (2025): programmable privilege control for LLM agents. RedGrid is exactly what she studies.
 
 **Student friendliness:** ACM Fellow, IEEE Fellow, AAAS Member (2025). Runs open Agentic AI MOOC (32K+ enrolled), AgentX competition ($1M+ prizes). Hosts undergrads and international researchers directly.
 
@@ -93,7 +93,7 @@
 
 **Speciality:** Digital privacy, computer security, security and privacy of machine learning, adversarial ML, multi-agent system security
 
-**Work alignment:** 2025 COLM paper: demonstrates adversarial content can hijack control in multi-agent LLM systems — causing complete security breaches including arbitrary malicious code execution. This is the most direct published attack model for CMatrix's own infrastructure security. Research on LLM router vulnerabilities, membership inference attacks, and "control-flow hijacking" in agentic systems.
+**Work alignment:** 2025 COLM paper: demonstrates adversarial content can hijack control in multi-agent LLM systems — causing complete security breaches including arbitrary malicious code execution. This is the most direct published attack model for RedGrid's own infrastructure security. Research on LLM router vulnerabilities, membership inference attacks, and "control-flow hijacking" in agentic systems.
 
 **Student friendliness:** Caspar Bowden PET Award three times (2008, 2014, 2018). Multiple Best Practical Paper and Best Student Paper Awards from IEEE S&P and NDSS. PhD from Stanford. Collaborative, internationally connected research group.
 
@@ -112,7 +112,7 @@
 
 **Speciality:** Security of ML systems, autonomous cyberattack/defense, software vulnerability identification, access control
 
-**Work alignment:** Directs CMU CyLab's Cyber Autonomy Research Center. Co-authored the 2025 publication showing LLMs autonomously executing real-world enterprise cyberattacks — the closest published academic peer for CMatrix.
+**Work alignment:** Directs CMU CyLab's Cyber Autonomy Research Center. Co-authored the 2025 publication showing LLMs autonomously executing real-world enterprise cyberattacks — the closest published academic peer for RedGrid.
 
 **Student friendliness:** 2025 ACM Fellow. Open lab culture within CyLab. CyLab Venture Network helps students commercialize research.
 
@@ -131,7 +131,7 @@
 
 **Speciality:** Autonomous cyber reasoning systems, binary analysis, automated exploit generation, vulnerability discovery at scale, AI for software security, competitive hacking (PPP)
 
-**Work alignment:** Creator of **Mayhem** — the autonomous AI system that won the 2016 DARPA Cyber Grand Challenge (CGC), the direct predecessor of DARPA AIxCC. Mayhem performs the same loop CMatrix automates: find vulnerability → generate exploit → verify → patch. ForAllSecure (Brumley's company) now uses Mayhem in production for autonomous VAPT of federal systems. He is an AIxCC Scoring Advisor. His PPP team are world-champion CTF players — the exact adversarial skill set CMatrix aims to automate.
+**Work alignment:** Creator of **Mayhem** — the autonomous AI system that won the 2016 DARPA Cyber Grand Challenge (CGC), the direct predecessor of DARPA AIxCC. Mayhem performs the same loop RedGrid automates: find vulnerability → generate exploit → verify → patch. ForAllSecure (Brumley's company) now uses Mayhem in production for autonomous VAPT of federal systems. He is an AIxCC Scoring Advisor. His PPP team are world-champion CTF players — the exact adversarial skill set RedGrid aims to automate.
 
 **Student friendliness:** Former Director of CMU CyLab. Has mentored dozens of PhD students who went on to lead security startups and research labs. Strong connection to DoD-funded PhD fellowships at CyLab. Known as a highly engaged advisor for students interested in systems security and autonomous hacking.
 
@@ -150,7 +150,7 @@
 
 **Speciality:** LLM security and adversarial attacks, training data extraction from LLMs, model inversion, privacy leakage in ML, universal adversarial suffixes for LLMs, representation engineering
 
-**Work alignment:** Co-author of the **universal adversarial attacks on aligned LLMs** (2023) — the foundational paper showing that LLMs like GPT-4 can be made to ignore safety guardrails via suffix injection, directly relevant to CMatrix's agent prompt injection surface. Research on **training data extraction from fine-tuned LLMs** (2024): demonstrates how LLMs memorize and leak sensitive data — exactly the post-exploitation data harvesting CMatrix automates. CATCH MURI: multi-university DARPA project on trustworthy autonomous AI systems for cyber operations.
+**Work alignment:** Co-author of the **universal adversarial attacks on aligned LLMs** (2023) — the foundational paper showing that LLMs like GPT-4 can be made to ignore safety guardrails via suffix injection, directly relevant to RedGrid's agent prompt injection surface. Research on **training data extraction from fine-tuned LLMs** (2024): demonstrates how LLMs memorize and leak sensitive data — exactly the post-exploitation data harvesting RedGrid automates. CATCH MURI: multi-university DARPA project on trustworthy autonomous AI systems for cyber operations.
 
 **Student friendliness:** Associate Professor actively advising multiple PhD students in ML security. CyLab fellowship programs provide stipend + tuition. DARPA MURI projects bring exceptional research funding. Known for clear and patient mentorship style.
 
@@ -245,7 +245,7 @@
 
 **Speciality:** Fuzz testing (founder of field, 1988), software vulnerability assessment, binary instrumentation, AI-assisted vulnerability detection
 
-**Work alignment:** Founder of fuzzing — the original creator of automated vulnerability discovery. Leads Dyninst, the most widely used binary instrumentation toolkit. 2025 work: fine-tuning LLMs for multi-language code vulnerability detection. CMatrix can integrate Dyninst as a grey-box analysis backend.
+**Work alignment:** Founder of fuzzing — the original creator of automated vulnerability discovery. Leads Dyninst, the most widely used binary instrumentation toolkit. 2025 work: fine-tuning LLMs for multi-language code vulnerability detection. RedGrid can integrate Dyninst as a grey-box analysis backend.
 
 **Student friendliness:** ACM Fellow, Jean-Claude Laprie Award. Runs annual Scalable Tools Workshop. Publishes all tools and bug reports publicly.
 
@@ -264,7 +264,7 @@
 
 **Speciality:** IoT/CPS security, AI agent security, LLM jailbreak evaluation, autonomous systems security
 
-**Work alignment:** "Rethinking How to Evaluate Language Model Jailbreak" (AISEC 2025). Evaluates LLM agents from an adversary perspective — directly aligned with CMatrix's offensive agent evaluation.
+**Work alignment:** "Rethinking How to Evaluate Language Model Jailbreak" (AISEC 2025). Evaluates LLM agents from an adversary perspective — directly aligned with RedGrid's offensive agent evaluation.
 
 **Student friendliness:** Selected "most influential professor" by Purdue CS Graduate Student Board in 2024 and 2020. Active on LinkedIn, encourages PhD applicants.
 
@@ -321,7 +321,7 @@
 
 **Speciality:** Malware analysis, vulnerability analysis, web security, LLM-based exploit automation
 
-**Work alignment:** Co-authored CVE-GENIE (2025): LLM multi-agent framework auto-reproducing ~51% of 2024-2025 CVEs with verifiable exploits at $2.77 avg cost. The most directly overlapping academic publication to CMatrix's exploit pipeline. Co-founded Lastline (acquired VMware 2020).
+**Work alignment:** Co-authored CVE-GENIE (2025): LLM multi-agent framework auto-reproducing ~51% of 2024-2025 CVEs with verifiable exploits at $2.77 avg cost. The most directly overlapping academic publication to RedGrid's exploit pipeline. Co-founded Lastline (acquired VMware 2020).
 
 **Student friendliness:** Outstanding Graduate Mentor Award from UCSB Academic Senate. NSF CAREER, MIT TR-35 Award. Runs ERSP undergraduate research program.
 
@@ -378,7 +378,7 @@
 
 **Speciality:** Social network security, cybercrime, malware analysis, threat intelligence, automated abuse detection, exploit analysis
 
-**Work alignment:** 2025 paper: co-author of the CVE-GENIE multi-agent framework (with Kruegel, Vigna, UCSB) for automated CVE reproduction. Research on automated abuse detection and threat intelligence — natural downstream consumers of CMatrix's scan outputs. NSF CAREER Award for cybercrime measurement.
+**Work alignment:** 2025 paper: co-author of the CVE-GENIE multi-agent framework (with Kruegel, Vigna, UCSB) for automated CVE reproduction. Research on automated abuse detection and threat intelligence — natural downstream consumers of RedGrid's scan outputs. NSF CAREER Award for cybercrime measurement.
 
 **Student friendliness:** NSF CAREER Award. Collaborative EU + US research style. Strong international student mentorship history. BU SecLab participates in competitions and has active student community.
 
@@ -397,7 +397,7 @@
 
 **Speciality:** Binary analysis and automated vulnerability mitigation, OS security, control-flow integrity, taint analysis, honeypots, shadow execution
 
-**Work alignment:** **F-detector/F-blocker** (2024–2025): automated system to identify and surgically disable vulnerability-triggering functionality in binaries without source code — the exact capability CMatrix's binary analysis agent targets when assessing patch-resistant systems. Shadow execution and taint analysis research provides CMatrix's information-flow tracking layer for post-exploitation data attribution.
+**Work alignment:** **F-detector/F-blocker** (2024–2025): automated system to identify and surgically disable vulnerability-triggering functionality in binaries without source code — the exact capability RedGrid's binary analysis agent targets when assessing patch-resistant systems. Shadow execution and taint analysis research provides RedGrid's information-flow tracking layer for post-exploitation data attribution.
 
 **Student friendliness:** Research Professor with active student mentoring across Stevens and IMDEA. Stevens is a small, research-intensive school — exceptional student-faculty collaboration. EU Horizon grants create opportunities for international student involvement.
 
@@ -435,7 +435,7 @@
 
 **Speciality:** Cyber-physical systems security, AI-driven attack/defense, malware detection, intrusion prevention
 
-**Work alignment:** Senior cybersecurity chair at Penn State. Penn State IST hosts national CPTC penetration testing competitions (placed 3rd globally in 2025). AI-driven malware analysis and CPS security — extending CMatrix's scope to OT/ICS.
+**Work alignment:** Senior cybersecurity chair at Penn State. Penn State IST hosts national CPTC penetration testing competitions (placed 3rd globally in 2025). AI-driven malware analysis and CPS security — extending RedGrid's scope to OT/ICS.
 
 **Student friendliness:** Highly active multi-institution collaborator. Strong career placement at government agencies, national labs, and major security firms.
 
@@ -454,7 +454,7 @@
 
 **Speciality:** Trustworthy AI, adversarial machine learning, LLM security, prompt injection, backdoor attacks
 
-**Work alignment:** Research on adversarial attacks against LLMs, prompt injection defenses, and AI agent security. ALPS Lab works on ensuring AI systems remain secure when deployed as autonomous agents — directly relevant to CMatrix's agent orchestration trust model.
+**Work alignment:** Research on adversarial attacks against LLMs, prompt injection defenses, and AI agent security. ALPS Lab works on ensuring AI systems remain secure when deployed as autonomous agents — directly relevant to RedGrid's agent orchestration trust model.
 
 **Student friendliness:** Known for active mentorship culture. ALPS Lab has multiple PhD students with strong publications. Encourages international student applications.
 
@@ -473,7 +473,7 @@
 
 **Speciality:** Network and systems security, malware/APT defense, AI security, SDN/NFV/5G security, Web3 security, AI agent framework vulnerabilities
 
-**Work alignment:** 2025 taxonomy paper on 190 advisories against OpenClaw AI agent runtime — identifying architectural vulnerabilities in AI agent frameworks (identity spoofing, policy bypass, prompt injection, supply-chain escalation). Directly applicable to CMatrix's own framework security.
+**Work alignment:** 2025 taxonomy paper on 190 advisories against OpenClaw AI agent runtime — identifying architectural vulnerabilities in AI agent frameworks (identity spoofing, policy bypass, prompt injection, supply-chain escalation). Directly applicable to RedGrid's own framework security.
 
 **Student friendliness:** IEEE Fellow, ACM Distinguished Member. DSN Test of Time Award 2025, ACSAC Test of Time Award 2023. Strong student placement record.
 
@@ -511,7 +511,7 @@
 
 **Speciality:** Cyber autonomy, automated binary analysis, game-theoretic exploit strategy, autonomous vulnerability patching
 
-**Work alignment:** Research focuses explicitly on "cyber autonomy." Built ARVO dataset (5,000+ memory vulnerabilities with triggering inputs and verified patches) — natural evaluation corpus for CMatrix's scan modes.
+**Work alignment:** Research focuses explicitly on "cyber autonomy." Built ARVO dataset (5,000+ memory vulnerabilities with triggering inputs and verified patches) — natural evaluation corpus for RedGrid's scan modes.
 
 **Student friendliness:** Associate Director of Research Acceleration, ASU Center for Cybersecurity. Known for strong mentorship culture.
 
@@ -549,7 +549,7 @@
 
 **Speciality:** Systems security, network security, agentic AI for cybersecurity, AI safety and security, provenance-based intrusion detection
 
-**Work alignment:** NSF CAREER Award (Oct 2025) specifically for research on using LLMs to help security analysts identify and respond to threats faster — directly aligned with CMatrix's autonomous threat modeling. PhD from Princeton, postdoc at UC Berkeley under Dawn Song — bridges Berkeley RDI network to Virginia Tech.
+**Work alignment:** NSF CAREER Award (Oct 2025) specifically for research on using LLMs to help security analysts identify and respond to threats faster — directly aligned with RedGrid's autonomous threat modeling. PhD from Princeton, postdoc at UC Berkeley under Dawn Song — bridges Berkeley RDI network to Virginia Tech.
 
 **Student friendliness:** CCI Faculty Fellow — active in Virginia's cybersecurity research network. Lab-page actively discusses student research opportunities.
 
@@ -568,7 +568,7 @@
 
 **Speciality:** Binary exploitation, vulnerability research, malware analysis, software security, system introspection
 
-**Work alignment:** Co-director of Northeastern SecLab. Works on automated vulnerability research and binary exploitation — exact alignment with CMatrix's exploit chain automation. Co-authored PANDA (whole-system dynamic analysis platform) with Brendan Dolan-Gavitt. Works extensively on LAVA (Large-scale Automated Vulnerability Addition) for benchmarking bug finders.
+**Work alignment:** Co-director of Northeastern SecLab. Works on automated vulnerability research and binary exploitation — exact alignment with RedGrid's exploit chain automation. Co-authored PANDA (whole-system dynamic analysis platform) with Brendan Dolan-Gavitt. Works extensively on LAVA (Large-scale Automated Vulnerability Addition) for benchmarking bug finders.
 
 **Student friendliness:** Known for hands-on, collaborative lab culture within the SSL ecosystem. Active international collaborator through the ISSL network.
 
@@ -587,7 +587,7 @@
 
 **Speciality:** LLM evaluation for cybersecurity (CTIBench), cyber threat intelligence automation, knowledge graphs for security, AI agent security benchmarking
 
-**Work alignment:** CTIBench (2025): comprehensive benchmark for evaluating LLMs on real-world cybersecurity tasks — measures whether LLMs hallucinate when acting as security assistants, directly relevant to CMatrix's LLM reliability layer. SECURE benchmark (ACSAC 2024): evaluates LLMs in industrial control system security. Develops TINKER knowledge-graph framework for automated threat intelligence — a natural enrichment layer for CMatrix's reconnaissance output.
+**Work alignment:** CTIBench (2025): comprehensive benchmark for evaluating LLMs on real-world cybersecurity tasks — measures whether LLMs hallucinate when acting as security assistants, directly relevant to RedGrid's LLM reliability layer. SECURE benchmark (ACSAC 2024): evaluates LLMs in industrial control system security. Develops TINKER knowledge-graph framework for automated threat intelligence — a natural enrichment layer for RedGrid's reconnaissance output.
 
 **Student friendliness:** AI4SEC Lab actively recruits PhD students. RIT GCI provides strong funding pipelines and industry connections. Known advocate for women and international students in cybersecurity research.
 
@@ -606,7 +606,7 @@
 
 **Speciality:** Binary analysis, malware analysis, dynamic taint analysis, symbolic execution, software security
 
-**Work alignment:** Creator of DECAF (Dynamic Executable Code Analysis Framework) — a widely used whole-system dynamic analysis platform. Expert on automated binary analysis and malware reverse engineering. Research on dynamic taint analysis provides a foundation for CMatrix's grey-box binary scan module.
+**Work alignment:** Creator of DECAF (Dynamic Executable Code Analysis Framework) — a widely used whole-system dynamic analysis platform. Expert on automated binary analysis and malware reverse engineering. Research on dynamic taint analysis provides a foundation for RedGrid's grey-box binary scan module.
 
 **Student friendliness:** NSF CAREER Award. Active PhD advisor with strong international student intake. Known for rigorous but encouraging mentoring.
 
@@ -625,7 +625,7 @@
 
 **Speciality:** LLM security vulnerabilities, AI-generated insecure code, privacy/trust in AI systems, mobile security
 
-**Work alignment:** USENIX Security 2025 paper on how LLMs frequently generate insecure code (package hallucination attacks). Research on detecting and mitigating LLM-generated security vulnerabilities is directly relevant to CMatrix's post-exploit analysis phase.
+**Work alignment:** USENIX Security 2025 paper on how LLMs frequently generate insecure code (package hallucination attacks). Research on detecting and mitigating LLM-generated security vulnerabilities is directly relevant to RedGrid's post-exploit analysis phase.
 
 **Student friendliness:** Director of SPriTELab. UTSA is a Hispanic-Serving Institution — particularly welcoming of international students.
 

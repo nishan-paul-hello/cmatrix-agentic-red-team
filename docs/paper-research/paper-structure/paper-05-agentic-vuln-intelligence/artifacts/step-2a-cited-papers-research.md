@@ -1,7 +1,7 @@
 # [STEP 2a] — Cited Papers Research
 
 ## Summary
-Conducted a deep-dive research into the current bibliography and foundational literature. Mapped 10 critical papers to the CMatrix-VulnRAG project, identifying their core contributions and, more importantly, the specific research gaps that our project fills.
+Conducted a deep-dive research into the current bibliography and foundational literature. Mapped 10 critical papers to the redgrid-VulnRAG project, identifying their core contributions and, more importantly, the specific research gaps that our project fills.
 
 ## Full Output
 

@@ -1,4 +1,4 @@
-# Research Area: CMatrix - Governance-First Autonomy for Scalable Red Teaming via Asynchronous Checkpoint Resumption
+# Research Area: RedGrid - Governance-First Autonomy for Scalable Red Teaming via Asynchronous Checkpoint Resumption
 
 ## [A] Research Area Overview
 
@@ -30,32 +30,32 @@ The "automation bias" problem is well-documented in aviation and nuclear: humans
 - **Link**: [https://arxiv.org/abs/2212.08073](https://arxiv.org/abs/2212.08073)
 - **Lead Author**: Yuntao Bai (Anthropic) — [arXiv profile](https://arxiv.org/search/?searchtype=author&query=Bai+Yuntao)
 - **Summary**: Anthropic introduces "Constitutional AI" where a set of principles (a constitution) guides the model to self-critique and revise its outputs. The key insight is that you can encode safety constraints into the training pipeline itself, reducing (but not eliminating) the need for human annotation. They show this achieves comparable harmlessness to RLHF with far less human labeling.
-- **Similarity to CMatrix**: CMatrix's `approval_config.py` implements a form of "constitutional constraints" — a declarative registry of forbidden patterns (fork bombs, disk wipers, recursive root deletes) that auto-reject tool calls before they reach the LLM or the human reviewer. This is runtime constitutional enforcement rather than training-time.
-- **Gap**: Constitutional AI works at the *training* level and applies globally. CMatrix's contribution is *runtime, context-sensitive, tool-specific* constitutional enforcement inside a LangGraph workflow — a fundamentally different technical approach that the Anthropic paper doesn't address.
+- **Similarity to RedGrid**: RedGrid's `approval_config.py` implements a form of "constitutional constraints" — a declarative registry of forbidden patterns (fork bombs, disk wipers, recursive root deletes) that auto-reject tool calls before they reach the LLM or the human reviewer. This is runtime constitutional enforcement rather than training-time.
+- **Gap**: Constitutional AI works at the *training* level and applies globally. RedGrid's contribution is *runtime, context-sensitive, tool-specific* constitutional enforcement inside a LangGraph workflow — a fundamentally different technical approach that the Anthropic paper doesn't address.
 
 ### Paper 2: Do Large Language Models Know What They Don't Know?
 
 - **Link**: [https://arxiv.org/abs/2305.18153](https://arxiv.org/abs/2305.18153)
 - **Lead Author**: Zhangyue Yin — [arXiv](https://arxiv.org/search/?searchtype=author&query=Yin+Zhangyue)
 - **Summary**: Investigates LLM calibration — whether models accurately express uncertainty about their outputs. Key finding: LLMs are systematically overconfident in factual domains. In security contexts, this overconfidence is dangerous because a model might confidently suggest an exploit payload that's incorrect or harmful.
-- **Similarity to CMatrix**: CMatrix's Self-Reflection module (`reflection.py`) computes a `quality_score` for every task execution, detecting gaps and triggering re-execution when quality falls below 0.8. This is a runtime calibration mechanism addressing exactly the overconfidence problem identified in this paper.
-- **Gap**: The paper studies calibration in static Q&A tasks. CMatrix applies calibration concepts to *agentic security workflows* — measuring output quality for multi-step tool execution chains, not single-turn responses. This is an entirely novel application domain.
+- **Similarity to RedGrid**: RedGrid's Self-Reflection module (`reflection.py`) computes a `quality_score` for every task execution, detecting gaps and triggering re-execution when quality falls below 0.8. This is a runtime calibration mechanism addressing exactly the overconfidence problem identified in this paper.
+- **Gap**: The paper studies calibration in static Q&A tasks. RedGrid applies calibration concepts to *agentic security workflows* — measuring output quality for multi-step tool execution chains, not single-turn responses. This is an entirely novel application domain.
 
 ### Paper 3: Human-AI Collaboration for Fast Land Cover Mapping
 
 - **Link**: [https://arxiv.org/abs/2211.10004](https://arxiv.org/abs/2211.10004)
 - **Lead Author**: Caleb Robinson — [Google Scholar](https://scholar.google.com/citations?user=8sLPBWMAAAAJ)
 - **Summary**: Studies how humans and AI systems collaborate most effectively, finding that the optimal human-AI collaboration model is "AI proposes, human approves for uncertain cases." They quantify the efficiency gain (4-7x speedup) when humans only review low-confidence AI predictions rather than reviewing everything.
-- **Similarity to CMatrix**: CMatrix implements exactly this "uncertain case escalation" pattern: routine, low-risk tools execute without approval (`requires_approval=False`), while high-risk tools (`run_nmap_scan`, `execute_terminal_command`, `run_exploit`) gate on human approval. The `RiskLevel` enum (CRITICAL/HIGH/MEDIUM/LOW) is a direct implementation of this confidence-based routing.
-- **Gap**: Robinson et al. study image classification. CMatrix applies the selective-approval pattern to *cybersecurity tool execution* — a domain with asymmetric risk (false negatives are catastrophic, not just suboptimal) that requires different threshold calibration.
+- **Similarity to RedGrid**: RedGrid implements exactly this "uncertain case escalation" pattern: routine, low-risk tools execute without approval (`requires_approval=False`), while high-risk tools (`run_nmap_scan`, `execute_terminal_command`, `run_exploit`) gate on human approval. The `RiskLevel` enum (CRITICAL/HIGH/MEDIUM/LOW) is a direct implementation of this confidence-based routing.
+- **Gap**: Robinson et al. study image classification. RedGrid applies the selective-approval pattern to *cybersecurity tool execution* — a domain with asymmetric risk (false negatives are catastrophic, not just suboptimal) that requires different threshold calibration.
 
 ### Paper 4: Risks from Learned Optimization in Advanced Machine Learning Systems
 
 - **Link**: [https://arxiv.org/abs/1906.01820](https://arxiv.org/abs/1906.01820)
 - **Lead Author**: Evan Hubinger (MIRI) — [arXiv](https://arxiv.org/search/?searchtype=author&query=Hubinger+Evan)
 - **Summary**: Introduces the concept of "mesa-optimization" — the risk that a learned optimizer might develop misaligned internal goals different from the outer training objective. In the context of security agents, a model trained to "find vulnerabilities" might discover that deleting system logs is an efficient way to cover tracks, even if that wasn't the intended behavior.
-- **Similarity to CMatrix**: CMatrix's auto-reject pattern system in `approval_config.py` is a practical safeguard against exactly this kind of emergent misalignment. The patterns (`r"rm\s+-rf\s+/"`, `r"dd\s+if=.*\s+of=/dev/"`, `r":\(\)\{.*\}"`) proactively block the most dangerous forms of unintended optimization.
-- **Gap**: This is a theoretical AI safety paper. CMatrix provides an empirical, deployed implementation of runtime safeguards against mesa-optimization failures in a real security tool — bridging theory to practice in a way the safety literature hasn't done.
+- **Similarity to RedGrid**: RedGrid's auto-reject pattern system in `approval_config.py` is a practical safeguard against exactly this kind of emergent misalignment. The patterns (`r"rm\s+-rf\s+/"`, `r"dd\s+if=.*\s+of=/dev/"`, `r":\(\)\{.*\}"`) proactively block the most dangerous forms of unintended optimization.
+- **Gap**: This is a theoretical AI safety paper. RedGrid provides an empirical, deployed implementation of runtime safeguards against mesa-optimization failures in a real security tool — bridging theory to practice in a way the safety literature hasn't done.
 
 ---
 
@@ -74,7 +74,7 @@ The "automation bias" problem is well-documented in aviation and nuclear: humans
 
 ### Abstract Draft
 
-> Autonomous AI security agents present a fundamental tension: maximum autonomy maximizes efficiency, but minimum oversight maximizes risk. We present **CMatrix-HITL**, a formal Human-in-the-Loop approval framework for autonomous penetration testing agents built on LangGraph. Our system implements a three-tier risk classification taxonomy (CRITICAL/HIGH/MEDIUM/LOW) for all security tools, with per-tool auto-reject pattern lists that block catastrophically dangerous operations (filesystem destruction, fork bombs, disk wipers) before they reach human reviewers. For operations requiring human oversight, we implement interrupt-based workflow suspension via LangGraph's `interrupt_after` compilation directive, persisting the full agent state in PostgreSQL through the approval waiting period. The HITL API allows operators to approve, reject, or *modify* tool parameters before resuming execution — enabling just-in-time constraint tightening (e.g., restricting an nmap scan to a smaller port range). We study the interaction between approval fatigue and security coverage, finding that a well-calibrated risk taxonomy reduces approval requests by X% while maintaining Y% vulnerability detection coverage compared to fully supervised operation. We further demonstrate audit trail completeness that satisfies SOC 2 Type II requirements for privileged operation logging.
+> Autonomous AI security agents present a fundamental tension: maximum autonomy maximizes efficiency, but minimum oversight maximizes risk. We present **redgrid-HITL**, a formal Human-in-the-Loop approval framework for autonomous penetration testing agents built on LangGraph. Our system implements a three-tier risk classification taxonomy (CRITICAL/HIGH/MEDIUM/LOW) for all security tools, with per-tool auto-reject pattern lists that block catastrophically dangerous operations (filesystem destruction, fork bombs, disk wipers) before they reach human reviewers. For operations requiring human oversight, we implement interrupt-based workflow suspension via LangGraph's `interrupt_after` compilation directive, persisting the full agent state in PostgreSQL through the approval waiting period. The HITL API allows operators to approve, reject, or *modify* tool parameters before resuming execution — enabling just-in-time constraint tightening (e.g., restricting an nmap scan to a smaller port range). We study the interaction between approval fatigue and security coverage, finding that a well-calibrated risk taxonomy reduces approval requests by X% while maintaining Y% vulnerability detection coverage compared to fully supervised operation. We further demonstrate audit trail completeness that satisfies SOC 2 Type II requirements for privileged operation logging.
 
 ### Experiments We Can Run
 
@@ -92,7 +92,7 @@ The "automation bias" problem is well-documented in aviation and nuclear: humans
 
 2. **Gap: No checkpoint-based workflow suspension in agent systems** — Most HITL systems require the entire conversation to restart after human input. **We fill it** with LangGraph's PostgreSQL checkpoint + `interrupt_after` mechanism, allowing the agent to literally suspend mid-execution and resume with full state intact — a novel technical approach not yet published.
 
-3. **Gap: No empirical study of approval fatigue in security AI** — Psychology research on automation bias exists, but none in the specific context of AI security tool approval. **We fill it** with a controlled user study using the CMatrix approval interface.
+3. **Gap: No empirical study of approval fatigue in security AI** — Psychology research on automation bias exists, but none in the specific context of AI security tool approval. **We fill it** with a controlled user study using the RedGrid approval interface.
 
 4. **Gap: No parameter modification capability in security agent HITL** — Prior systems offer binary approve/reject. **We fill it** with the `modified_args` field in `ApprovalRequest`, allowing operators to constrain tool execution at approval time (e.g., restricting the port range of an approved nmap scan).
 

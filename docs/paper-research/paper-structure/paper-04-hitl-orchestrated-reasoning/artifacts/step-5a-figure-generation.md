@@ -10,16 +10,16 @@ This sub-step involved the generation of three high-quality LaTeX assets (Figure
 | ID | Title | Description | Logic / Data Source |
 | :--- | :--- | :--- | :--- |
 | **Figure 03** | Reasoning Flow | TikZ diagram showing the strategy-plan-execute-reflect loop. | §3.3 Composite Reasoning. |
-| **Figure 04** | Success Rate Chart | Pgfplots bar chart comparing CMatrix vs. ReAct/CoT baselines. | Table 04 (Simulated results). |
+| **Figure 04** | Success Rate Chart | Pgfplots bar chart comparing RedGrid vs. ReAct/CoT baselines. | Table 04 (Simulated results). |
 | **Figure 05** | Efficiency Chart | Pgfplots bar chart showing 58-64% reduction in token usage. | Table 04 (Efficiency $\eta$). |
 
 ### 2.2 Key Visual Design Decisions
-- **Consistency**: All figures use a consistent color palette (Blue for ToT/Baselines, Green for CMatrix, Red for safety/veto).
+- **Consistency**: All figures use a consistent color palette (Blue for ToT/Baselines, Green for RedGrid, Red for safety/veto).
 - **Readability**: Charts include `nodes near coords` to ensure precise performance values are visible even in black-and-white print.
 - **Scientific Rigor**: Figure 03 explicitly includes the "Corrective Actions" loop back to ReWOO, visually defining our "executable reflection" novelty.
 
 ## 3) Key Decisions Made
-- **Token Usage Visualization**: Chose a bar chart for Figure 05 to clearly contrast the "Step Function" reduction in costs between standard ReAct and CMatrix.
+- **Token Usage Visualization**: Chose a bar chart for Figure 05 to clearly contrast the "Step Function" reduction in costs between standard ReAct and RedGrid.
 - **Complexity Tiers**: Standardized the X-axis across Figures 04 and 05 to emphasize the system's robustness as complexity increases.
 
 ## 4) Open Questions

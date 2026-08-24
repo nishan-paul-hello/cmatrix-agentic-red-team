@@ -1,7 +1,7 @@
 # [STEP 6e] — Evaluation & Results — OUTPUT ARTIFACT
 
 ## 1) Summary
-This sub-step finalized the Evaluation and Results sections (§5) of the manuscript. We expanded the section to include detailed hardware/software environment specifications, formal baseline definitions, and explicit data-driven analysis for all four Research Questions (RQs). We integrated all five tables and two performance charts planned in Step 5, providing a comprehensive empirical validation of the CMatrix framework.
+This sub-step finalized the Evaluation and Results sections (§5) of the manuscript. We expanded the section to include detailed hardware/software environment specifications, formal baseline definitions, and explicit data-driven analysis for all four Research Questions (RQs). We integrated all five tables and two performance charts planned in Step 5, providing a comprehensive empirical validation of the RedGrid framework.
 
 ## 2) Full Output
 
@@ -15,7 +15,7 @@ This sub-step finalized the Evaluation and Results sections (§5) of the manuscr
 - **RQ1 (Efficiency)**: Validated 2.42x token gain via ReWOO planning.
 - **RQ2 (Thoroughness)**: Validated 97.4% SR and 94.2% TH via Reflexion engine.
 - **RQ3 (Safety)**: Validated 0% violation rate via HITL safety gate.
-- **RQ4 (Generalization)**: Demonstrated that CMatrix reasoning patterns bridge the gap for 70B models (Llama-3).
+- **RQ4 (Generalization)**: Demonstrated that RedGrid reasoning patterns bridge the gap for 70B models (Llama-3).
 
 ### 2.3 Qualitative Case Study (§5.3)
 - Trace of a multi-stage attack on CorpLab-AD showing a successful "Path Traversal to SQLi" pivot triggered by the Reflexion loop.

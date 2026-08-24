@@ -20,7 +20,7 @@
 
     % Nodes
     \node (user) [box] {Security Operator \\ (Human-in-the-Loop)};
-    \node (orch) [agent, below of=user, yshift=-0.5cm] {\textbf{CMatrix Orchestrator} \\ (Reasoning Suite)};
+    \node (orch) [agent, below of=user, yshift=-0.5cm] {\textbf{RedGrid Orchestrator} \\ (Reasoning Suite)};
     \node (gate) [gate, right of=orch, xshift=2.5cm] {HITL \\ Safety Gate};
     \node (tools) [box, below of=gate, yshift=-0.5cm] {Security Tool Registry \\ (Nmap, Metasploit, etc.)};
     \node (target) [target, right of=gate, xshift=2.5cm] {Target Infrastructure \\ (Enterprise Network)};
@@ -48,6 +48,6 @@
     };
 
   \end{tikzpicture}
-  \caption{Formal threat model of CMatrix. The security operator defines objectives for the autonomous orchestrator, while the HITL safety gate provides a hard trust boundary between the reasoning suite and the target infrastructure.}
+  \caption{Formal threat model of RedGrid. The security operator defines objectives for the autonomous orchestrator, while the HITL safety gate provides a hard trust boundary between the reasoning suite and the target infrastructure.}
   \label{fig:threat-model}
 \end{figure*}

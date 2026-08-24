@@ -1,16 +1,4 @@
-#!/usr/bin/env sh
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
 
-echo "🔍 Running high-performance pre-commit checks..."
-
-# Run lint-staged for both frontend and backend
-# These only run on the files changed in the current commit
 npx lint-staged
-EXIT_CODE=$?
-
-if [ $EXIT_CODE -ne 0 ]; then
-  echo "❌ Pre-commit checks failed. Please fix issues before committing."
-  exit 1
-fi
-
-echo "🚀 Fast-flight checks green! Backend tests and security scans will run on push in CI."
-echo "✅ Proceeding with commit."

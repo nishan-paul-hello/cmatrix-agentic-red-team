@@ -12,7 +12,7 @@ This sub-step implemented all Critical and Major revisions identified in the Hos
 - **Notation Alignment**: Unified the use of $\mathcal{E}$ for symbolic observations across the methodology and evaluation.
 
 ### 2.2 Evaluation Revisions (§5)
-- **Statistical Significance**: Added a one-tailed t-test comparison between CMatrix and Baseline A, reporting $p < 0.01$.
+- **Statistical Significance**: Added a one-tailed t-test comparison between RedGrid and Baseline A, reporting $p < 0.01$.
 - **Baseline Parity**: Explicitly stated that all baselines utilized the same GPT-4o backend and registry to ensure a fair comparison of reasoning patterns.
 - **Latency Categorization**: Distinguished between System Latency and Operational Latency (avg. 42.5s wait time) to provide a realistic assessment of HITL performance.
 - **Scenario Scope**: Clarified that 80 representative scenarios were selected from a larger pool.

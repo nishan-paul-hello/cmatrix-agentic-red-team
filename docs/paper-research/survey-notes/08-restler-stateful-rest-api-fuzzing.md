@@ -1,4 +1,4 @@
-# RESTler: Stateful REST API Fuzzing — Deep Survey Notes for CMatrix
+# RESTler: Stateful REST API Fuzzing — Deep Survey Notes for RedGrid
 
 | Field | Details |
 |-------|---------|
@@ -6,7 +6,7 @@
 | **Venue** | IEEE/ACM ICSE 2019 (International Conference on Software Engineering) |
 | **Published** | 2019 (foundational work; RESTler is now deployed at Microsoft) |
 | **Repository** | https://github.com/microsoft/restler-fuzzer |
-| **Relevance** | ⭐⭐⭐☆☆ — Foundational REST API fuzzing paper. Two core techniques (producer-consumer dependency inference + dynamic feedback pruning) are directly relevant to CMatrix's REST API attack surface. The three search strategies (BFS / BFS-Fast / RandomWalk) and the garbage collector design are immediately applicable to CMatrix's REST specialist agent. |
+| **Relevance** | ⭐⭐⭐☆☆ — Foundational REST API fuzzing paper. Two core techniques (producer-consumer dependency inference + dynamic feedback pruning) are directly relevant to RedGrid's REST API attack surface. The three search strategies (BFS / BFS-Fast / RandomWalk) and the garbage collector design are immediately applicable to RedGrid's REST specialist agent. |
 | **Key Claim** | Two techniques are necessary for effective stateful REST API fuzzing: (1) inferring producer-consumer dependencies from the Swagger/OpenAPI spec to generate valid request sequences, and (2) using dynamic response feedback to prune invalid sequences. Together they reduce test cases needed to reach full coverage by 6× (179s vs 1750s, <800 vs 4600 tests). RandomWalk strategy finds most bugs (21/22) despite lower coverage than BFS. RESTler found 28 confirmed bugs in GitLab and multiple bugs in Azure/Office365. |
 
 ---
@@ -17,7 +17,7 @@ Most API fuzzers treat REST APIs as isolated endpoints and fuzz them with random
 
 RESTler's insight: the **Swagger/OpenAPI specification** already encodes which request produces which resource (producer) and which request requires that resource (consumer). Parse these dependencies statically, use dynamic response codes to prune dead sequences at runtime, and you can explore stateful API behavior automatically.
 
-**For CMatrix:** Every modern web target exposes a REST API documented with OpenAPI/Swagger. CMatrix's REST specialist agent must implement RESTler's two core techniques to discover server-side logic bugs invisible to HTTP-only scanners.
+**For RedGrid:** Every modern web target exposes a REST API documented with OpenAPI/Swagger. RedGrid's REST specialist agent must implement RESTler's two core techniques to discover server-side logic bugs invisible to HTTP-only scanners.
 
 ---
 
@@ -172,11 +172,11 @@ flowchart LR
 
 ---
 
-## 🔑 Key Takeaways for CMatrix (Ranked by Impact)
+## 🔑 Key Takeaways for RedGrid (Ranked by Impact)
 
 ### 🔴 Critical
 
-#### 1. CMatrix's REST Specialist Must Implement Producer-Consumer Dependency Inference
+#### 1. RedGrid's REST Specialist Must Implement Producer-Consumer Dependency Inference
 HTTP-only agents send isolated requests. A REST specialist must:
 1. Download the target's OpenAPI/Swagger spec (or infer it from traffic)
 2. Parse `PRODUCES(req)` and `CONSUMES(req)` for every endpoint
@@ -186,49 +186,49 @@ HTTP-only agents send isolated requests. A REST specialist must:
 Without this, the agent will never reach deep service states where logic bugs hide.
 
 #### 2. Dynamic Feedback Pruning is the Context Budget Saver
-RESTler's rule: if a sequence returns a non-2xx response, discard it and do not extend it further. This keeps the `seqSet` manageable and focuses budget on productive paths. CMatrix's REST specialist must implement this: after each request, check the response code. 4xx/5xx from a non-target endpoint → prune and pivot. Only 2xx responses advance the sequence.
+RESTler's rule: if a sequence returns a non-2xx response, discard it and do not extend it further. This keeps the `seqSet` manageable and focuses budget on productive paths. RedGrid's REST specialist must implement this: after each request, check the response code. 4xx/5xx from a non-target endpoint → prune and pivot. Only 2xx responses advance the sequence.
 
 #### 3. Use RandomWalk as the Default Strategy — Not BFS
-BFS explores exhaustively and gets stuck at depth 3 on complex APIs within a 5-hour budget. RandomWalk reaches depth 13–22 in the same time and finds more bugs. For CMatrix's REST specialist:
+BFS explores exhaustively and gets stuck at depth 3 on complex APIs within a 5-hour budget. RandomWalk reaches depth 13–22 in the same time and finds more bugs. For RedGrid's REST specialist:
 - **Start:** RandomWalk for initial deep exploration (first N minutes)
 - **Escalate:** BFS-Fast for grammar coverage if RandomWalk stalls
 - **Never:** Full BFS on large APIs (seqSet explodes to 79K+ sequences)
 
 #### 4. Bug Oracle = HTTP 500 — Implement This as the REST Specialist's Primary Signal
-RESTler's bug detector is simple: any `500 Internal Server Error` = a server-side bug. CMatrix's REST specialist should log every 500 response with its full triggering sequence as a confirmed finding. This is the REST equivalent of the CTF flag oracle — objective, automatic, no human needed.
+RESTler's bug detector is simple: any `500 Internal Server Error` = a server-side bug. RedGrid's REST specialist should log every 500 response with its full triggering sequence as a confirmed finding. This is the REST equivalent of the CTF flag oracle — objective, automatic, no human needed.
 
 #### 5. Garbage Collector is Required for Any Long-Running Mission
-APIs have resource quotas. If CMatrix creates 1000 test resources and never cleans up, the API will start returning 429/403 for all subsequent requests. Implement a GC thread that periodically DELETEs aging resources created during a mission.
+APIs have resource quotas. If RedGrid creates 1000 test resources and never cleans up, the API will start returning 429/403 for all subsequent requests. Implement a GC thread that periodically DELETEs aging resources created during a mission.
 
 ### 🟡 Important
 
 #### 6. Short-Lived Auth Tokens Need an Auth Refresh Hook
-Modern REST APIs use OAuth/JWT with short-lived tokens (15–60 min). CMatrix's REST specialist must implement an auth hook that periodically runs a token-refresh script and propagates the new token to all pending requests. Without this, the agent will silently fail after the token expires mid-mission.
+Modern REST APIs use OAuth/JWT with short-lived tokens (15–60 min). RedGrid's REST specialist must implement an auth hook that periodically runs a token-refresh script and propagates the new token to all pending requests. Without this, the agent will silently fail after the token expires mid-mission.
 
 #### 7. Bug Bucketization — Deduplication by Shortest Suffix Match
-When fuzzing finds the same bug via 5 different request sequences, you don't want 5 separate reports. RESTler's bucketization: compare the non-rendered suffix of each bug-triggering sequence; if a suffix matches a previously recorded sequence, add to the same bucket. CMatrix's Validation Agent should implement this to avoid duplicate findings in reports.
+When fuzzing finds the same bug via 5 different request sequences, you don't want 5 separate reports. RESTler's bucketization: compare the non-rendered suffix of each bug-triggering sequence; if a suffix matches a previously recorded sequence, add to the same bucket. RedGrid's Validation Agent should implement this to avoid duplicate findings in reports.
 
 #### 8. Annotations for Non-Standard Dependencies
-Some APIs use `PUT` to create resources with user-provided names in the URL path — not standard REST. RESTler supports Swagger extension annotations to declare these manually. CMatrix's REST specialist needs a mechanism to accept manual dependency hints for non-standard APIs.
+Some APIs use `PUT` to create resources with user-provided names in the URL path — not standard REST. RESTler supports Swagger extension annotations to declare these manually. RedGrid's REST specialist needs a mechanism to accept manual dependency hints for non-standard APIs.
 
 ### 🟢 Nice-to-have
 
-#### 9. RESTler + PrediQL = Complete API Fuzzing Stack for CMatrix
+#### 9. RESTler + PrediQL = Complete API Fuzzing Stack for RedGrid
 - **RESTler** → stateful REST API fuzzing (sequence-based, 500-error oracle)
 - **PrediQL (Paper 07)** → GraphQL fuzzing (schema-aware, LLM-guided)
-- Together: **complete API attack coverage** for CMatrix
+- Together: **complete API attack coverage** for RedGrid
 
 #### 10. Brute-Force is Intractable — Always Use Dependency Pruning
 For GitLab's Commits API (11 request types, avg 4 render combinations), all possible sequences of length 4 = **164 million**. Even with RESTler's pruning, seqSet reaches 20K at depth 5. This confirms that naive brute-force REST fuzzing is computationally infeasible — dependency inference is non-negotiable.
 
 ---
 
-## 📐 RESTler Core Algorithm — Formal Reference for CMatrix
+## 📐 RESTler Core Algorithm — Formal Reference for RedGrid
 
-The full RESTler algorithm (simplified for CMatrix implementation):
+The full RESTler algorithm (simplified for RedGrid implementation):
 
 ```python
-# CMatrix REST Specialist — RESTler-style Algorithm
+# RedGrid REST Specialist — RESTler-style Algorithm
 def rest_specialist(swagger_spec, max_depth=5, strategy="RandomWalk"):
     req_set = parse_swagger(swagger_spec)       # Extract request types + dependencies
     seq_set = [[] ]                             # Start with empty sequence
@@ -260,7 +260,7 @@ def rest_specialist(swagger_spec, max_depth=5, strategy="RandomWalk"):
 
 ---
 
-## 📊 RESTler Benchmark for CMatrix
+## 📊 RESTler Benchmark for RedGrid
 
 | Target | Size | API Groups | Bugs Found | Notes |
 |--------|------|-----------|-----------|-------|

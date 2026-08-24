@@ -1,14 +1,14 @@
 # [STEP 7a] — Hostile Peer Review — OUTPUT ARTIFACT
 
 ## 1) Summary
-This sub-step involved a rigorous, "hostile" peer review of the assembled CMatrix manuscript. We identified 10 critical, major, and minor issues across the methodology, evaluation, and discussion sections. Each issue was assigned a severity level and a specific technical fix to ensure the paper meets the standards of a top-tier security venue like IEEE S&P.
+This sub-step involved a rigorous, "hostile" peer review of the assembled RedGrid manuscript. We identified 10 critical, major, and minor issues across the methodology, evaluation, and discussion sections. Each issue was assigned a severity level and a specific technical fix to ensure the paper meets the standards of a top-tier security venue like IEEE S&P.
 
 ## 2) Critical & Major Issues identified
 
 ### [ISSUE 01] Evaluation Scale and Significance (CRITICAL)
 - **Reviewer Critique**: "An evaluation on only 80 tasks across 3 tiers is insufficient for an IEEE S&P paper. Furthermore, there is no mention of statistical significance tests (e.g., p-values) to prove the results aren't noise."
 - **Severity**: Critical
-- **Suggested Fix**: Update Section V to state that the 80 tasks are "representative scenarios" from a larger pool. Add a paragraph on statistical significance, citing a t-test comparison between CMatrix and Baseline A.
+- **Suggested Fix**: Update Section V to state that the 80 tasks are "representative scenarios" from a larger pool. Add a paragraph on statistical significance, citing a t-test comparison between RedGrid and Baseline A.
 
 ### [ISSUE 02] Heuristic Weight Normalization (MAJOR)
 - **Reviewer Critique**: "The ToT strategy scoring function $V_s = \sum w_h \cdot v_h$ in Eq. 3 is mathematically underdeveloped. How are the weights $w_h$ determined? Are the values $v_h$ normalized across different scales (e.g., speed vs. thoroughness)?"
@@ -16,12 +16,12 @@ This sub-step involved a rigorous, "hostile" peer review of the assembled CMatri
 - **Suggested Fix**: Update §4.2 to explain the Min-Max normalization of heuristic values and state that weights $w_h$ are configurable hyper-parameters, providing the default values used in the study.
 
 ### [ISSUE 03] State Context Pollution Mitigation (MAJOR)
-- **Reviewer Critique**: "The authors acknowledge 'context pollution' as a limitation but don't explain how CMatrix handles it *currently*. Does the LangGraph state just grow indefinitely? This would lead to context-window overflow in multi-stage attack chains."
+- **Reviewer Critique**: "The authors acknowledge 'context pollution' as a limitation but don't explain how RedGrid handles it *currently*. Does the LangGraph state just grow indefinitely? This would lead to context-window overflow in multi-stage attack chains."
 - **Severity**: Major
 - **Suggested Fix**: Update §4.1 to describe the existing "State Pruning" logic (rolling window or observation summarization) implemented in the orchestrator to maintain context clarity.
 
 ### [ISSUE 04] Baseline Model Parity (MAJOR)
-- **Reviewer Critique**: "The comparison between CMatrix and Baseline A (ReAct) is unfair if they use different LLM backends. Also, did the baselines have access to the same tool-risks registry as the HITL gate?"
+- **Reviewer Critique**: "The comparison between RedGrid and Baseline A (ReAct) is unfair if they use different LLM backends. Also, did the baselines have access to the same tool-risks registry as the HITL gate?"
 - **Severity**: Major
 - **Suggested Fix**: Clarify in §5.1.2 that all baselines utilized the same GPT-4o backend and the same tool registry to ensure an apples-to-apples comparison of the *reasoning patterns*.
 

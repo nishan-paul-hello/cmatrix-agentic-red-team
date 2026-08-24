@@ -9,7 +9,7 @@
 - **Authors:** Zhun Wang, Tianneng Shi, Jingxuan He, Matthew Cai, Jialin Zhang, **Dawn Song** (UC Berkeley)
 - **Institution:** UC Berkeley (USNWR #4)
 - **Venue:** **ICLR 2026 (CCF-A)**
-- **Relevance:** 1,507 task instances across 188 real OSS projects — 7.5× larger than any prior cybersecurity benchmark. GPT-5 discovered 22 confirmed zero-days autonomously. The gold-standard evaluation benchmark for CMatrix. Prof. Song is the single highest-priority contact.
+- **Relevance:** 1,507 task instances across 188 real OSS projects — 7.5× larger than any prior cybersecurity benchmark. GPT-5 discovered 22 confirmed zero-days autonomously. The gold-standard evaluation benchmark for RedGrid. Prof. Song is the single highest-priority contact.
 ---
 ## 2. Prof. Xinyu Xing
 ### 2. PatchAgent: Practical Program Repair Agent Mimicking Human Expertise
@@ -19,7 +19,7 @@
 - **Authors:** Zheng Yu, Ziyi Guo, Yuhang Wu, Jiahao Yu, Meng Xu, Dongliang Mu, Yan Chen, **Xinyu Xing** (Northwestern)
 - **Institution:** Northwestern University (USNWR #9)
 - **Venue:** **USENIX Security 2025 (CCF-A)**
-- **Relevance:** End-to-end LLM agent integrating fault localization, patch generation, and validation — fixes bugs without breaking existing tests. CMatrix post-exploit remediation module follows this design.
+- **Relevance:** End-to-end LLM agent integrating fault localization, patch generation, and validation — fixes bugs without breaking existing tests. RedGrid post-exploit remediation module follows this design.
 ---
 ## 3. Prof. Yinzhi Cao
 ### 3. Effective Command-line Interface Fuzzing with Path-Aware Large Language Model Orchestration
@@ -29,7 +29,7 @@
 - **Authors:** Momoko Shiraishi (The University of Tokyo), **Yinzhi Cao** (Johns Hopkins University), Takahiro Shinagawa (The University of Tokyo)
 - **Institution:** Johns Hopkins University (USNWR #9) + The University of Tokyo
 - **Venue:** **IEEE S&P 2026 (CCF-A)**
-- **Relevance:** Path-guided iterative LLM-orchestrated testing for CLI applications — LLM semantic understanding of CLI options to expose deep vulnerabilities. Direct CMatrix fuzzing pipeline component.
+- **Relevance:** Path-guided iterative LLM-orchestrated testing for CLI applications — LLM semantic understanding of CLI options to expose deep vulnerabilities. Direct RedGrid fuzzing pipeline component.
 ---
 ## 4. Prof. Suman Jana
 ### 4. Veritas: A Semantically Grounded Agentic Framework for Memory Corruption Vulnerability Detection in Binaries
@@ -38,7 +38,7 @@
 - **Authors:** **Suman Jana** (Columbia) et al.
 - **Institution:** Columbia University (USNWR #12)
 - **Venue:** **arXiv 2026**
-- **Relevance:** Unifies static LLVM-IR analysis and multi-agent dynamic validation using debugger artifacts. Solves deep path-feasible constraints to augment traditional fuzzing in CMatrix with agentic confirmation.
+- **Relevance:** Unifies static LLVM-IR analysis and multi-agent dynamic validation using debugger artifacts. Solves deep path-feasible constraints to augment traditional fuzzing in RedGrid with agentic confirmation.
 ---
 ## 5. Prof. Vitaly Shmatikov
 ### 5. Multi-Agent Systems Execute Arbitrary Malicious Code
@@ -48,7 +48,7 @@
 - **Authors:** Harold Triedman, Rishi Jha, **Vitaly Shmatikov** (Cornell Tech)
 - **Institution:** Cornell University (USNWR #17)
 - **Venue:** **COLM 2025**
-- **Relevance:** Demonstrates adversarial content (a single malicious webpage, image, or audio) can hijack multi-agent LLM systems — executing arbitrary code and exfiltrating data. The most direct attack model for CMatrix own infrastructure security. CMatrix must be hardened against MAS hijacking.
+- **Relevance:** Demonstrates adversarial content (a single malicious webpage, image, or audio) can hijack multi-agent LLM systems — executing arbitrary code and exfiltrating data. The most direct attack model for RedGrid own infrastructure security. RedGrid must be hardened against MAS hijacking.
 ---
 ## 6. Prof. Lujo Bauer
 ### 6. Incalmo: Autonomous LLM-Assisted System for Red Teaming Multi-Host Networks
@@ -58,7 +58,7 @@
 - **Authors:** Brian Singer, Keane Lucas, Lakshmi Adiga, Meghna Jain, **Lujo Bauer**, **Vyas Sekar** (CMU CyLab + Anthropic)
 - **Institution:** Carnegie Mellon University (USNWR #22)
 - **Venue:** **arXiv, January 2025 (v4: November 2025) — co-published with Anthropic**
-- **Relevance:** The closest published academic work to CMatrix. LLMs autonomously plan and execute real-world multi-host enterprise attacks via MHBench (10 realistic emulated networks, 25–50 hosts). State-of-the-art LLMs alone CANNOT execute multi-host attacks — Incalmo's abstraction layer makes even small LLMs succeed. CMatrix must replicate and exceed these results.
+- **Relevance:** The closest published academic work to RedGrid. LLMs autonomously plan and execute real-world multi-host enterprise attacks via MHBench (10 realistic emulated networks, 25–50 hosts). State-of-the-art LLMs alone CANNOT execute multi-host attacks — Incalmo's abstraction layer makes even small LLMs succeed. RedGrid must replicate and exceed these results.
 ---
 ## 7. Prof. David Brumley
 ### 7. Unleashing Mayhem on Binary Code: Autonomous Cyber Reasoning System
@@ -67,7 +67,7 @@
 - **Authors:** Sang Kil Cha, Thanassis Avgerinos, Alexandre Rebert, **David Brumley** (CMU)
 - **Institution:** Carnegie Mellon University (USNWR #22)
 - **Venue:** **IEEE S&P 2012 (CCF-A); DARPA Cyber Grand Challenge Grand Prize Winner 2016 ($2M)**
-- **Relevance:** Mayhem performs the exact CMatrix loop: discover vulnerability → generate exploit → verify → patch, fully automated without source code. The direct predecessor of DARPA AIxCC and the canonical academic ancestor of autonomous VAPT. CMatrix is the LLM-era evolution of Mayhem — this paper must be cited.
+- **Relevance:** Mayhem performs the exact RedGrid loop: discover vulnerability → generate exploit → verify → patch, fully automated without source code. The direct predecessor of DARPA AIxCC and the canonical academic ancestor of autonomous VAPT. RedGrid is the LLM-era evolution of Mayhem — this paper must be cited.
 ---
 ## 8. Prof. Matthew Fredrikson
 ### 8. Universal and Transferable Adversarial Attacks on Aligned Language Models (GCG Attack)
@@ -77,7 +77,7 @@
 - **Authors:** Andy Zou, Zifan Wang, J. Zico Kolter, **Matthew Fredrikson** (CMU)
 - **Institution:** Carnegie Mellon University (USNWR #22)
 - **Venue:** **arXiv 2023 (4,000+ citations; presented at NeurIPS, ICLR workshops)**
-- **Relevance:** The foundational GCG attack — demonstrates that LLMs like GPT-4 can be made to ignore safety guardrails via adversarial suffix injection. Directly relevant to CMatrix agent jailbreak surface: CMatrix orchestrator must be hardened against GCG-class prompt injection attacks targeting its worker agents.
+- **Relevance:** The foundational GCG attack — demonstrates that LLMs like GPT-4 can be made to ignore safety guardrails via adversarial suffix injection. Directly relevant to RedGrid agent jailbreak surface: RedGrid orchestrator must be hardened against GCG-class prompt injection attacks targeting its worker agents.
 ---
 ## 9. Prof. Taesoo Kim
 ### 9. ATLANTIS: The DARPA AIxCC Winning Cyber Reasoning System
@@ -87,7 +87,7 @@
 - **Authors:** Team Atlanta — **Taesoo Kim** et al. (Georgia Tech, Samsung Research, KAIST, POSTECH)
 - **Institution:** Georgia Institute of Technology (USNWR #33)
 - **Venue:** **DARPA AIxCC Final Competition, DEF CON 33, August 2025 — 1st place, $4M prize**
-- **Relevance:** The winning autonomous CRS combining LLMs + symbolic execution + directed fuzzing + static analysis. Discovered the most zero-days of any AIxCC finalist. Atlantis-Multilang: 69.2% of all POV submissions in finals. CMatrix should position itself as the penetration testing operational evolution of ATLANTIS.
+- **Relevance:** The winning autonomous CRS combining LLMs + symbolic execution + directed fuzzing + static analysis. Discovered the most zero-days of any AIxCC finalist. Atlantis-Multilang: 69.2% of all POV submissions in finals. RedGrid should position itself as the penetration testing operational evolution of ATLANTIS.
 ---
 ## 10. Prof. Wenke Lee
 ### 10. Systems Security Foundations for Agentic Computing
@@ -96,7 +96,7 @@
 - **Authors:** Mihai Christodorescu, Earlence Fernandes, Ashish Hooda, Somesh Jha, Johann Rehberger, Khawaja Shams — **Wenke Lee** (co-organizer + expanded SoK version)
 - **Institution:** Georgia Institute of Technology (USNWR #33)
 - **Venue:** **IEEE SAGAI Workshop @ IEEE S&P 2025 (report published December 2025)**
-- **Relevance:** Defines the "systems security approach to AI agents" — how decades of security research (access control, sandboxing, privilege separation, audit logging) applies to LLM agents. The theoretical context for CMatrix security model.
+- **Relevance:** Defines the "systems security approach to AI agents" — how decades of security research (access control, sandboxing, privilege separation, audit logging) applies to LLM agents. The theoretical context for RedGrid security model.
 ---
 ## 11. Prof. Gang Wang
 ### 11. SoK: Towards Effective Automated Vulnerability Repair
@@ -105,7 +105,7 @@
 - **Authors:** Ying Li, Faysal Hossain Shezan, Bomin Wei, **Gang Wang** (UIUC), Yuan Tian
 - **Institution:** University of Illinois Urbana-Champaign (USNWR #35)
 - **Venue:** **USENIX Security 2025 (CCF-A)**
-- **Relevance:** Comprehensive SoK on automated vulnerability repair — taxonomy, tools, benchmarks, limitations. Essential for designing CMatrix remediation module (CyberMend).
+- **Relevance:** Comprehensive SoK on automated vulnerability repair — taxonomy, tools, benchmarks, limitations. Essential for designing RedGrid remediation module (CyberMend).
 ---
 ## 12. Prof. Daniel Kang
 ### 12. LLM Agents Can Autonomously Exploit One-day Vulnerabilities
@@ -124,7 +124,7 @@
 - **Authors:** Elisa Heymann, **Barton P. Miller** (UW-Madison)
 - **Institution:** University of Wisconsin–Madison (USNWR #42)
 - **Venue:** **Foundational Methodology (MIST Project)**
-- **Relevance:** Analyst-centric methodology focusing on architectural analysis, resource identification, and privilege separation. Informs the architectural design and attack surface mapping of CMatrix.
+- **Relevance:** Analyst-centric methodology focusing on architectural analysis, resource identification, and privilege separation. Informs the architectural design and attack surface mapping of RedGrid.
 ---
 ## 14. Prof. Z. Berkay Celik
 ### 14. Rethinking How to Evaluate Language Model Jailbreak
@@ -134,7 +134,7 @@
 - **Authors:** Hongyu Cai, Arjun Arunasalam, Leo Y. Lin, Antonio Bianchi, **Z. Berkay Celik** (Purdue)
 - **Institution:** Purdue University (USNWR #53)
 - **Venue:** **AISEC @ ACM CCS 2024 / arXiv 2024**
-- **Relevance:** Rigorous evaluation framework for LLM jailbreak resistance from an adversary perspective. Directly aligned with CMatrix offensive agent evaluation methodology.
+- **Relevance:** Rigorous evaluation framework for LLM jailbreak resistance from an adversary perspective. Directly aligned with RedGrid offensive agent evaluation methodology.
 ---
 ## 15. Prof. Brendan Dolan-Gavitt
 ### 15. EnIGMA: Interactive Tools Substantially Assist LM Agents in Finding Security Vulnerabilities
@@ -144,7 +144,7 @@
 - **Authors:** Talor Abramovich, Meet Udeshi, Minghao Shao, Kilian Lieret, Haoran Xi, Kimberly Milner, Sofija Jancheska, John Yang, Carlos E. Jimenez, Farshad Khorrami, Prashanth Krishnamurthy, **Brendan Dolan-Gavitt** (NYU), Muhammad Shafique, Karthik Narasimhan, Ramesh Karri, Ofir Press
 - **Institution:** NYU Tandon (USNWR #53)
 - **Venue:** **ICML 2025 (CCF-A) — Vancouver, July 2025**
-- **Relevance:** Interactive tools (shells, file viewers, hex viewers) substantially improve LLM agent performance on CTF security challenges — SOTA on CyBench (13.5%). Directly relevant to CMatrix HITL module and interactive tool integration strategy.
+- **Relevance:** Interactive tools (shells, file viewers, hex viewers) substantially improve LLM agent performance on CTF security challenges — SOTA on CyBench (13.5%). Directly relevant to RedGrid HITL module and interactive tool integration strategy.
 ---
 ### 16. ELFuzz: Efficient Input Generation via LLM-Driven Synthesis
 - **Website:** [🌐 Link](https://arxiv.org/abs/2506.10323)
@@ -153,7 +153,7 @@
 - **Authors:** Chuyang Chen, **Brendan Dolan-Gavitt** (NYU), **Zhiqiang Lin** (OSU)
 - **Institution:** Ohio State University (USNWR #41) + NYU Tandon (USNWR #53)
 - **Venue:** **USENIX Security 2025 (CCF-A)**
-- **Relevance:** LLM-driven synthesis to efficiently generate inputs across the fuzzer space — CMatrix automated test case generation module. Cross-institutional OSU + NYU paper.
+- **Relevance:** LLM-driven synthesis to efficiently generate inputs across the fuzzer space — RedGrid automated test case generation module. Cross-institutional OSU + NYU paper.
 ---
 ## 16. Prof. Antonio Bianchi
 ### 17. LEMIX: Enabling Testing of Embedded Applications as Linux Applications
@@ -162,7 +162,7 @@
 - **Authors:** Sai Ritvik Tanksalkar, Siddharth Muralee, Srihari Danduri, Paschal Amusuo, **Antonio Bianchi** (Purdue), James C. Davis, Aravind Kumar Machiry
 - **Institution:** Purdue University (USNWR #53)
 - **Venue:** **USENIX Security 2025 (CCF-A)**
-- **Relevance:** LEMIX enables testing embedded firmware as native Linux applications — dramatically simplifies CMatrix IoT/embedded VAPT by enabling standard Linux fuzzing and analysis tools on embedded targets.
+- **Relevance:** LEMIX enables testing embedded firmware as native Linux applications — dramatically simplifies RedGrid IoT/embedded VAPT by enabling standard Linux fuzzing and analysis tools on embedded targets.
 ---
 ## 17. Prof. Christopher Kruegel
 ### 18. CVE-GENIE: LLM Multi-Agent Framework for Automated CVE Reproduction
@@ -171,7 +171,7 @@
 - **Authors:** Saad Ullah, Praneeth Balasubramanian, **Wenbo Guo**, Amanda Burnett, Hammond Pearce, **Christopher Kruegel**, **Giovanni Vigna** (UCSB), Gianluca Stringhini (BU)
 - **Institution:** UC Santa Barbara (USNWR #65) + Boston University (USNWR #65)
 - **Venue:** **arXiv, September 2025**
-- **Relevance:** Four-module pipeline (Knowledge Builder → Vulnerability Analyzer → Exploit Generator → Verifier) reproducing ~51% of 2024–2025 CVEs at $2.77 avg API cost. The most directly overlapping academic paper to CMatrix exploit pipeline. Kruegel is a co-PI on NSF ACTION Institute ($20M).
+- **Relevance:** Four-module pipeline (Knowledge Builder → Vulnerability Analyzer → Exploit Generator → Verifier) reproducing ~51% of 2024–2025 CVEs at $2.77 avg API cost. The most directly overlapping academic paper to RedGrid exploit pipeline. Kruegel is a co-PI on NSF ACTION Institute ($20M).
 ---
 ## 18. Prof. Giovanni Vigna
 ### 19. OSS-CRS: Liberating AIxCC Cyber Reasoning Systems for Real-World Open-Source Security
@@ -181,7 +181,7 @@
 - **Authors:** **Giovanni Vigna**, **Christopher Kruegel**, **Yan Shoshitaishvili** et al. (Georgia Tech SSLab / UCSB / Shellphish)
 - **Institution:** UC Santa Barbara (USNWR #65) + Georgia Tech (USNWR #33)
 - **Venue:** **USENIX Security 2026**
-- **Relevance:** An open-source, platform-agnostic Cyber Reasoning System (CRS) orchestration framework that runs and manages LLM-based autonomous bug-finding and patching agents. Serves as the core architectural pipeline and local deployment harness for CMatrix campaigns.
+- **Relevance:** An open-source, platform-agnostic Cyber Reasoning System (CRS) orchestration framework that runs and manages LLM-based autonomous bug-finding and patching agents. Serves as the core architectural pipeline and local deployment harness for RedGrid campaigns.
 ---
 ### 20. ACM CCS 2025 Keynote: Autonomous Vulnerability Analysis, Triaging, and Repair: A Historical Perspective
 - **Website:** [🌐 Link](https://sites.cs.ucsb.edu/~vigna/)
@@ -189,7 +189,7 @@
 - **Authors:** **Giovanni Vigna** (UCSB)
 - **Institution:** UC Santa Barbara (USNWR #65)
 - **Venue:** **ACM CCS 2025 Keynote (CCF-A)**
-- **Relevance:** Vigna's keynote surveying the state of autonomous vulnerability analysis with LLMs — the single highest-profile talk framing the exact research space CMatrix operates in.
+- **Relevance:** Vigna's keynote surveying the state of autonomous vulnerability analysis with LLMs — the single highest-profile talk framing the exact research space RedGrid operates in.
 ---
 ## 19. Prof. Wenbo Guo
 ### 21. LeakAgent: An RL-Based Red-Teaming Framework for LLM Privacy Leakage
@@ -199,7 +199,7 @@
 - **Authors:** **Wenbo Guo** et al. (UCSB ML Security Lab)
 - **Institution:** UC Santa Barbara (USNWR #65)
 - **Venue:** **COLM 2025**
-- **Relevance:** An RL-powered red-teaming agent that autonomously orchestrates attacks to extract system prompts and private training data from LLM systems. Informs the privacy scan capabilities of CMatrix.
+- **Relevance:** An RL-powered red-teaming agent that autonomously orchestrates attacks to extract system prompts and private training data from LLM systems. Informs the privacy scan capabilities of RedGrid.
 ---
 ### 22. BlueCodeAgent: Blue-Team Agent Enabled by Automated Red Teaming
 - **Website:** [🌐 Link](https://henrygwb.github.io)
@@ -207,7 +207,7 @@
 - **Authors:** **Wenbo Guo** et al. (UCSB ML Security Lab)
 - **Institution:** UC Santa Barbara (USNWR #65)
 - **Venue:** **arXiv (October 2025) / ICLR 2026 Workshop**
-- **Relevance:** Blue-team agent powered by automated red-team testing — CMatrix offensive scan outputs directly enable this defensive feedback loop. Bridges CMatrix (red) → BlueCodeAgent (blue) in one automated cycle.
+- **Relevance:** Blue-team agent powered by automated red-team testing — RedGrid offensive scan outputs directly enable this defensive feedback loop. Bridges RedGrid (red) → BlueCodeAgent (blue) in one automated cycle.
 ---
 ## 20. Prof. Gianluca Stringhini
 ### 23. LLMs Cannot Reliably Identify and Reason About Security Vulnerabilities (Yet?): A Comprehensive Evaluation
@@ -216,7 +216,7 @@
 - **Authors:** **Gianluca Stringhini** et al. (Boston University)
 - **Institution:** Boston University (USNWR #65)
 - **Venue:** **IEEE S&P 2024 (CCF-A)**
-- **Relevance:** Landmark comprehensive evaluation detailing the boundaries, reasoning errors, and unfaithful outputs of LLMs on program security tasks. Defines the reasoning verification loops built into CMatrix.
+- **Relevance:** Landmark comprehensive evaluation detailing the boundaries, reasoning errors, and unfaithful outputs of LLMs on program security tasks. Defines the reasoning verification loops built into RedGrid.
 ---
 ## 21. Prof. Georgios Portokalidis
 ### 24. Eliminating Vulnerabilities by Disabling Unwanted Functionality in Binary Programs
@@ -225,7 +225,7 @@
 - **Authors:** Mohamad Mansouri, Jun Xu, **Georgios Portokalidis** (Stevens Institute of Technology)
 - **Institution:** Stevens Institute of Technology (USNWR #76)
 - **Venue:** **ACM ASIA CCS 2023**
-- **Relevance:** Automatically identifies and surgically disables vulnerability-triggering functionality in binaries without source code — the exact capability CMatrix binary analysis agent targets when assessing patch-resistant systems. Taint analysis and shadow execution provide CMatrix information-flow tracking layer for post-exploitation attribution.
+- **Relevance:** Automatically identifies and surgically disables vulnerability-triggering functionality in binaries without source code — the exact capability RedGrid binary analysis agent targets when assessing patch-resistant systems. Taint analysis and shadow execution provide RedGrid information-flow tracking layer for post-exploitation attribution.
 ---
 ## 22. Prof. Yizheng Chen
 ### 25. Locus: Agentic Predicate Synthesis for Directed Fuzzing
@@ -235,7 +235,7 @@
 - **Authors:** Jie Zhu, Chihao Shen, Ziyang Li, Jiahao Yu, **Yizheng Chen** (UMD), Kexin Pei (UChicago)
 - **Institution:** University of Maryland, College Park (USNWR #93)
 - **Venue:** **ICSE 2026 (CCF-A) — Rio de Janeiro, April 2026**
-- **Relevance:** LLM agent synthesizes predicates to guide directed fuzzers toward deep target states — dramatically reduces time-to-exploit. CMatrix fuzzing pipeline should integrate Locus.
+- **Relevance:** LLM agent synthesizes predicates to guide directed fuzzers toward deep target states — dramatically reduces time-to-exploit. RedGrid fuzzing pipeline should integrate Locus.
 ---
 ## 23. Prof. Peng Liu
 ### 26. PentestGPT: Evaluating and Harnessing Large Language Models for Automated Penetration Testing
@@ -273,7 +273,7 @@
 - **Authors:** Zion Leonahenahe Basque, Samuele Doria, Ananta Soneji, Wil Gibbs, **Adam Doupé**, **Yan Shoshitaishvili** (ASU), Eleonora Losiouk (U Padua), Ruoyu Wang (ASU), Simone Aonzo (EURECOM)
 - **Institution:** Arizona State University (USNWR #147) + University of Padua + EURECOM
 - **Venue:** **NDSS 2026 (CCF-A) — Distinguished Paper Award · Surveyed 153 practitioners**
-- **Relevance:** First systematic study of LLM+human collaboration during software reverse engineering — LLM assistance demonstrably narrows the expertise gap. Directly informs CMatrix HITL module design and democratization argument.
+- **Relevance:** First systematic study of LLM+human collaboration during software reverse engineering — LLM assistance demonstrably narrows the expertise gap. Directly informs RedGrid HITL module design and democratization argument.
 ---
 ## 27. Prof. Tiffany Bao
 ### 30. ARVO: Atlas of Reproducible Vulnerabilities for Open Source Software
@@ -283,7 +283,7 @@
 - **Authors:** Xiang Mei, Pulkit Singh Singaria, Jordi Del Castillo, Haoran Xi, Abdelouahab Benchikh, **Tiffany Bao**, Ruoyu Wang, **Yan Shoshitaishvili**, **Adam Doupé** (ASU), Hammond Pearce, **Brendan Dolan-Gavitt** (NYU)
 - **Institution:** Arizona State University (USNWR #147) + NYU Tandon (USNWR #53)
 - **Venue:** **arXiv, August 2024**
-- **Relevance:** 5,000+ memory vulnerabilities with triggering inputs and verified patches — the largest open-source vulnerability dataset with reproducible exploits. Natural evaluation corpus for CMatrix memory vulnerability scan modes.
+- **Relevance:** 5,000+ memory vulnerabilities with triggering inputs and verified patches — the largest open-source vulnerability dataset with reproducible exploits. Natural evaluation corpus for RedGrid memory vulnerability scan modes.
 ---
 ## 28. Prof. Adam Doupé
 ### 31. Ahoy SAILR! There is No Need to DREAM of C: A Compiler-Aware Structuring Algorithm for Binary Decompilation
@@ -293,7 +293,7 @@
 - **Authors:** Zion Leonahenahe Basque, Ati Priya Bajaj, **Adam Doupé**, **Yan Shoshitaishvili**, Ruoyu Wang (ASU)
 - **Institution:** Arizona State University (USNWR #147)
 - **Venue:** **USENIX Security 2024 (CCF-A)**
-- **Relevance:** Compiler-aware structuring algorithm for binary decompilation. Integrates with the `angr` analysis framework used in CMatrix's binary analysis pipeline to extract readable, structured C code from raw binaries, enabling precise control-flow and vulnerability tracing.
+- **Relevance:** Compiler-aware structuring algorithm for binary decompilation. Integrates with the `angr` analysis framework used in RedGrid's binary analysis pipeline to extract readable, structured C code from raw binaries, enabling precise control-flow and vulnerability tracing.
 ---
 ## 29. Prof. Peng Gao
 ### 32. CTINexus: Automatic Cyber Threat Intelligence Knowledge Graph Construction Using LLMs
@@ -313,7 +313,7 @@
 - **Authors:** Brendan Dolan-Gavitt (NYU), Patrick Hulin, Engin Kirda, Tim Leek, Andrea Mambretti, **William K. Robertson** (Northeastern), Frederick Ulrich, Ryan Whelan
 - **Institution:** Northeastern University (USNWR #179) + NYU Tandon (USNWR #53)
 - **Venue:** **IEEE S&P 2016 (CCF-A) — Cited by 600+ papers**
-- **Relevance:** Foundational research on automated vulnerability injection (LAVA-M dataset). Enables standardizing benchmark environments to evaluate the detection and exploit generation capabilities of CMatrix.
+- **Relevance:** Foundational research on automated vulnerability injection (LAVA-M dataset). Enables standardizing benchmark environments to evaluate the detection and exploit generation capabilities of RedGrid.
 ---
 ## 31. Prof. Nidhi Rastogi
 ### 34. CTIBench: Evaluating LLMs on Real-World Cyber Threat Intelligence Tasks
@@ -323,7 +323,7 @@
 - **Authors:** **Nidhi Rastogi** et al. (Rochester Institute of Technology)
 - **Institution:** Rochester Institute of Technology (USNWR #320)
 - **Venue:** **ACSAC 2024 / arXiv 2024**
-- **Relevance:** CTIBench benchmark for evaluating LLMs on cybersecurity tasks — measures LLM hallucinations, relevant to CMatrix's reliability layer.
+- **Relevance:** CTIBench benchmark for evaluating LLMs on cybersecurity tasks — measures LLM hallucinations, relevant to RedGrid's reliability layer.
 ---
 ## 32. Prof. Heng Yin
 ### 35. DECAF: A Platform-Neutral Whole-System Dynamic Binary Analysis Platform
@@ -333,7 +333,7 @@
 - **Authors:** **Heng Yin** et al. (UC Riverside)
 - **Institution:** UC Riverside (USNWR #405)
 - **Venue:** **IEEE Transactions on Software Engineering 2017**
-- **Relevance:** Creator of DECAF — whole-system dynamic analysis platform. DECAF's dynamic taint analysis provides the foundation for CMatrix's grey-box binary scan.
+- **Relevance:** Creator of DECAF — whole-system dynamic analysis platform. DECAF's dynamic taint analysis provides the foundation for RedGrid's grey-box binary scan.
 ---
 ## 33. Prof. Murtuza Jadliwala
 ### 36. We Have a Package for You! A Comprehensive Analysis of Package Hallucinations by Code Generating LLMs
@@ -343,6 +343,6 @@
 - **Authors:** Joseph Spracklen, Raveen Wijewickrama, A H M Nazmus Sakib, Anindya Maiti, Bimal Viswanath, **Murtuza Jadliwala** (University of Texas at San Antonio)
 - **Institution:** UT San Antonio (USNWR #411)
 - **Venue:** **USENIX Security 2025 (CCF-A)**
-- **Relevance:** LLM package hallucination attacks; directly relevant to CMatrix's post-exploit analysis phase when analyzing LLM-generated payloads.
+- **Relevance:** LLM package hallucination attacks; directly relevant to RedGrid's post-exploit analysis phase when analyzing LLM-generated payloads.
 
 ---

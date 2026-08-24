@@ -20,7 +20,7 @@ This sub-step analyzed the synthesized results from Step 5a and 5b to extract th
     - *Mapping*: Directly addresses **RQ3**.
 
 4.  **The Scaling Law of Agentic Efficiency.**
-    - *Insight*: The $2.42\times$ token efficiency gain is not static. As attack chains increase in depth, the cost-savings of decoupled ReWOO planning over interleaved ReAct planning grows exponentially, making CMatrix increasingly viable for large-scale enterprise assessments.
+    - *Insight*: The $2.42\times$ token efficiency gain is not static. As attack chains increase in depth, the cost-savings of decoupled ReWOO planning over interleaved ReAct planning grows exponentially, making RedGrid increasingly viable for large-scale enterprise assessments.
     - *Mapping*: Directly addresses **RQ1**.
 
 ### 2.2 Limitations & Future Work

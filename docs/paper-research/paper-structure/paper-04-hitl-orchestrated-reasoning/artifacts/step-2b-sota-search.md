@@ -11,9 +11,9 @@ This sub-step involved an extensive search for State-of-the-Art (SOTA) research 
 | :--- | :--- | :--- |
 | **Cloak, Honey, Trap**<br>Ayzenshteyn et al., USENIX Security 2025 | Proposes proactive defenses like honey-tokens and deceptive environments to neutralize malicious LLM agents. | Most defenses are reactive. Our work implements **HITL safety gates** that prevent the execution of the attack before it touches the "trap." |
 | **Make Agent Defeat Agent**<br>Liu et al., USENIX Security 2025 | Detects taint-style vulnerabilities where agents are tricked into executing sensitive operations via malicious data. | Focuses on detection. Our work focuses on **autonomous generation** of these complex attack chains using composite reasoning. |
-| **AgentSentinel**<br>ACM CCS 2025 | A real-time defense framework specifically for "computer-use" agents (those interacting with OS/Tools). | Sentinel is a monitor. CMatrix is a **controlled execution environment** with built-in risk-based gating (approval_config.py). |
+| **AgentSentinel**<br>ACM CCS 2025 | A real-time defense framework specifically for "computer-use" agents (those interacting with OS/Tools). | Sentinel is a monitor. RedGrid is a **controlled execution environment** with built-in risk-based gating (approval_config.py). |
 | **Genesis**<br>arXiv 2026 (Recent) | Uses genetic algorithms to evolve attack strategies against web-based LLM agents. | Genesis focuses on web agents. Our suite (ToT + ReWOO) targets **general system/network VAPT** with a broader toolset. |
-| **DREAM: Dynamic Red-Teaming**<br>arXiv 2026 | Evaluates long-horizon, multi-turn attack chains against LLM agents in dynamic environments. | DREAM is an evaluation framework. CMatrix is a **production-ready system** for *executing* those long-horizon chains. |
+| **DREAM: Dynamic Red-Teaming**<br>arXiv 2026 | Evaluates long-horizon, multi-turn attack chains against LLM agents in dynamic environments. | DREAM is an evaluation framework. RedGrid is a **production-ready system** for *executing* those long-horizon chains. |
 | **CheckMate**<br>arXiv 2025 | Proposes a Planner-Executor-Perceptor (PEP) design to mitigate context drift in agent interactions. | PEP is a structural paradigm. We implement the **Reasoning Suite (ToT/ReWOO)** which is a more advanced planning realization. |
 
 ### 2.2 Adversarial Benchmarking & Jailbreaking
@@ -31,7 +31,7 @@ This sub-step involved an extensive search for State-of-the-Art (SOTA) research 
 | Paper Detail | Summary | Gap Addressed by Our Work |
 | :--- | :--- | :--- |
 | **Red-Teaming Multi-Agent Systems**<br>He et al., 2025 | Introduces communication attacks where one agent in a system is compromised to poison others. | Focuses on internal sabotage. Our **Supervisor Pattern** adds a layer of centralized audit/policy that is harder to bypass. |
-| **Agent-in-the-Middle (AiTM)**<br>2025 | Targets inter-agent messages to hijack tasks or steal credentials in multi-agent workflows. | CMatrix uses a **checkpointed state** that allows for centralized auditing of the entire "message bus" via the UI. |
+| **Agent-in-the-Middle (AiTM)**<br>2025 | Targets inter-agent messages to hijack tasks or steal credentials in multi-agent workflows. | RedGrid uses a **checkpointed state** that allows for centralized auditing of the entire "message bus" via the UI. |
 | **SafeSearch**<br>2024 | Evaluates the safety of agents that utilize web search and browsing tools. | Restricted to search tools. We cover a **full pentesting toolset** (nmap, metasploit-equivalent tools, etc.). |
 
 ### 2.4 Systematization & Surveys
@@ -60,7 +60,7 @@ This sub-step involved an extensive search for State-of-the-Art (SOTA) research 
 
 ## 6) Input for Next Step (Step 2c)
 - **Categorization**: Use the 4 categories (Reasoning, Security, Adversarial, Multi-Agent) for the Related Work map.
-- **Table Dimensions**: The "Related Work Comparison Table" (Table 01) should compare CMatrix against: *PentestGPT, AutoAttacker, Genesis, ReAct, and ToT (Standard).*
+- **Table Dimensions**: The "Related Work Comparison Table" (Table 01) should compare RedGrid against: *PentestGPT, AutoAttacker, Genesis, ReAct, and ToT (Standard).*
 
 ## 7) Asset Files Created
 - None (Literature research only).

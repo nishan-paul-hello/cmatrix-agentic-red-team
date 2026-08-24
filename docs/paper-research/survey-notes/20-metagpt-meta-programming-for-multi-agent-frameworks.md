@@ -1,4 +1,4 @@
-# MetaGPT: Meta-Programming for a Multi-Agent Collaborative Framework — Deep Survey Notes for CMatrix
+# MetaGPT: Meta-Programming for a Multi-Agent Collaborative Framework — Deep Survey Notes for RedGrid
 
 | Field | Details |
 |-------|---------|
@@ -6,7 +6,7 @@
 | **Venue** | ICLR 2024 (arXiv:2308.00352v7) |
 | **Published** | November 2024 (v7); originally August 2023 |
 | **Repository** | https://github.com/geekan/MetaGPT |
-| **Relevance** | ⭐⭐⭐⭐☆ — MetaGPT is the canonical proof that encoding human workflows as **Standardized Operating Procedures (SOPs)** into multi-agent systems eliminates cascading hallucinations from freeform LLM chaining. Its structured communication protocol (global message pool + subscription filtering) and executable feedback loop are directly applicable to CMatrix's inter-agent handoffs and Validation Agent design. |
+| **Relevance** | ⭐⭐⭐⭐☆ — MetaGPT is the canonical proof that encoding human workflows as **Standardized Operating Procedures (SOPs)** into multi-agent systems eliminates cascading hallucinations from freeform LLM chaining. Its structured communication protocol (global message pool + subscription filtering) and executable feedback loop are directly applicable to RedGrid's inter-agent handoffs and Validation Agent design. |
 | **Key Claim** | SOPs encoded into prompt sequences + structured intermediate outputs (not freeform chat) reduce hallucinations and human revision cost by 3× (0.83 vs 2.5 revisions). MetaGPT achieves 85.9%/87.7% Pass@1 on HumanEval/MBPP (SOTA at time of publication) and executability score of 3.9/4.0 vs ChatDev's 2.1 and AutoGPT's 1.0 on the SoftwareDev benchmark. |
 
 ---
@@ -15,7 +15,7 @@
 
 When multiple LLMs collaborate without structure, they hallucinate — not just individually but *cascadingly*: one agent's hallucinated output becomes the next agent's incorrect premise. The resulting cascade amplifies errors through the chain. MetaGPT's fix is to encode **human Standardized Operating Procedures (SOPs)** into the agent system: each role produces a structured, schema-constrained intermediate artifact (PRD, design doc, task list, code, test report) that the next role consumes. Freeform chat between agents is eliminated.
 
-**The insight for CMatrix:** The same cascading hallucination problem exists in pentest pipelines. When a Recon Agent delivers a freeform text summary to a Specialist Agent, the Specialist inherits any errors or ambiguities. MetaGPT's answer — structured handoff artifacts between every agent transition — is exactly what CMatrix needs between its FSM states.
+**The insight for RedGrid:** The same cascading hallucination problem exists in pentest pipelines. When a Recon Agent delivers a freeform text summary to a Specialist Agent, the Specialist inherits any errors or ambiguities. MetaGPT's answer — structured handoff artifacts between every agent transition — is exactly what RedGrid needs between its FSM states.
 
 ---
 
@@ -150,14 +150,14 @@ flowchart TD
 
 ---
 
-## 🔑 Key Takeaways for CMatrix (Ranked by Impact)
+## 🔑 Key Takeaways for RedGrid (Ranked by Impact)
 
 ### 🔴 Critical
 
-#### 1. Every CMatrix Agent Transition Must Produce a Structured Handoff Artifact — Not a Chat Message
+#### 1. Every RedGrid Agent Transition Must Produce a Structured Handoff Artifact — Not a Chat Message
 MetaGPT's #1 result: replacing freeform agent-to-agent chat with schema-constrained structured documents eliminates cascading hallucinations and reduces human correction cost by 3×.
 
-**CMatrix implementation — the 5 mandatory handoff artifacts:**
+**RedGrid implementation — the 5 mandatory handoff artifacts:**
 
 | FSM Transition | Producing Agent | Artifact Schema | Consuming Agent |
 |---------------|-----------------|-----------------|-----------------|
@@ -172,29 +172,29 @@ Every schema field must be explicitly validated before the next agent reads it. 
 #### 2. Global Message Pool + Role Subscription Eliminates Context Flooding
 MetaGPT's publish-subscribe mechanism: all agent outputs go to a shared append-only pool; each agent subscribes only to message types relevant to its role. An Engineer never sees the PRD competitive analysis. A QA engineer never sees the business requirement.
 
-**CMatrix adaptation:** The Environment State Service (ESS from Paper 16) IS the CMatrix global message pool. Every specialist writes its structured finding to the ESS; the Team Manager subscribes to ESS updates; specialists subscribe only to their task context. The Team Manager must NEVER forward raw tool output to another specialist — only ESS-mediated structured updates.
+**RedGrid adaptation:** The Environment State Service (ESS from Paper 16) IS the RedGrid global message pool. Every specialist writes its structured finding to the ESS; the Team Manager subscribes to ESS updates; specialists subscribe only to their task context. The Team Manager must NEVER forward raw tool output to another specialist — only ESS-mediated structured updates.
 
 #### 3. Executable Feedback Loop is the Validation Agent's Core Mechanism
 MetaGPT's self-correction: run the code → if exception, inject `(code, traceback)` into next Engineer prompt → re-generate → repeat until pass. +4.2%/+5.4% on HumanEval/MBPP from this loop.
 
-**CMatrix adaptation:** The Validation Agent runs the PoC → if oracle not triggered, inject `(payload, response_diff, oracle_string)` into next Specialist prompt → re-generate attack → repeat up to N_max rounds. This is the executable feedback loop applied to exploit validation, not code compilation.
+**RedGrid adaptation:** The Validation Agent runs the PoC → if oracle not triggered, inject `(payload, response_diff, oracle_string)` into next Specialist prompt → re-generate attack → repeat up to N_max rounds. This is the executable feedback loop applied to exploit validation, not code compilation.
 
 #### 4. Role Decomposition Must Be Maximal — More Roles = Better Output (Up to a Point)
 MetaGPT's ablation shows: 4-role system (Engineer+PM+Architect+ProjMgr) executability=4.0 vs 3-role (Engineer+PM+Architect) executability=2.5. Splitting Project Manager from Architect alone gives +1.5 executability.
 
-**CMatrix implication:** The current 4-layer architecture (Planner → Team Manager → Specialist → Validator) should NOT be compressed. Do not merge Team Manager and Specialist to save tokens — the ablation proves that each handoff boundary catches a class of errors the previous role couldn't. The Summarizer Bridge is the CMatrix "Project Manager" — the translation layer that makes structured output parseable by the next role.
+**RedGrid implication:** The current 4-layer architecture (Planner → Team Manager → Specialist → Validator) should NOT be compressed. Do not merge Team Manager and Specialist to save tokens — the ablation proves that each handoff boundary catches a class of errors the previous role couldn't. The Summarizer Bridge is the RedGrid "Project Manager" — the translation layer that makes structured output parseable by the next role.
 
 ### 🟡 Important
 
 #### 5. Structured Intermediate Outputs are the Anti-Hallucination Mechanism
 MetaGPT's PRDs, design docs, and task lists force each agent to produce a machine-readable artifact that the *next* agent validates structurally before acting on it. Freeform text that "sounds correct" but contains wrong API names/endpoints is caught at schema validation time, not at execution time.
 
-**CMatrix:** Every Specialist's output must be schema-validated by the Summarizer Bridge before entering the Team Manager's context. A `{vuln_type: "xss", endpoint: null}` output should be rejected and returned to the Specialist for completion — not forwarded.
+**RedGrid:** Every Specialist's output must be schema-validated by the Summarizer Bridge before entering the Team Manager's context. A `{vuln_type: "xss", endpoint: null}` output should be rejected and returned to the Specialist for completion — not forwarded.
 
 #### 6. SOP Encoding Separates Domain Knowledge from Execution Logic
 MetaGPT's roles embed domain SOPs: the Product Manager "knows" to produce a PRD with competitive analysis and user stories — this knowledge is in the role's system prompt, not re-derived each time. Similarly, the Architect "knows" to produce class diagrams and sequence flows.
 
-**CMatrix:** Each Specialist's system prompt should encode the SOP for its vulnerability class:
+**RedGrid:** Each Specialist's system prompt should encode the SOP for its vulnerability class:
 - **XSS Specialist SOP:** `[canary injection → context analysis → filter probe → LLM mutation → Playwright verify]`
 - **SQLi Specialist SOP:** `[baseline timing → SLEEP probe → bit extraction → data exfil]`
 - **REST Specialist SOP:** `[spec parse → dependency graph → RandomWalk sequence → 500 oracle]`
@@ -204,12 +204,12 @@ The SOP is not generated per-mission — it is fixed in the specialist's system 
 #### 7. Token Cost Increases With More Structure — Budget Accordingly
 MetaGPT (full) uses 31,255 tokens vs ChatDev's 19,292 (+62%). The extra tokens buy a 3× reduction in human revision cost and a 1.75× executability improvement. Structure is not free.
 
-**CMatrix budget implication:** Expect ~1.5–2× token cost vs a naive ReAct loop. This is acceptable given the reduction in false positives and re-runs. Track "cost per confirmed finding" not "cost per run" — MetaGPT's model is more expensive per token but cheaper per correct output.
+**RedGrid budget implication:** Expect ~1.5–2× token cost vs a naive ReAct loop. This is acceptable given the reduction in false positives and re-runs. Track "cost per confirmed finding" not "cost per run" — MetaGPT's model is more expensive per token but cheaper per correct output.
 
 #### 8. Role-Specific Interests for Subscription Filtering = Context Relevance Gate
 MetaGPT's subscription mechanism: agents declare `_watch = [SomeAction, AnotherAction]` — they only receive messages of types they've subscribed to. The Engineer never gets distracted by competitive analysis; the QA agent never debates product requirements.
 
-**CMatrix implementation:** Add an explicit `interested_in` field to each agent's config:
+**RedGrid implementation:** Add an explicit `interested_in` field to each agent's config:
 - Team Manager: `interested_in = [ReconSummary, SpecialistFinding, ValidationResult]`
 - XSS Specialist: `interested_in = [TaskContext, XSSSubtask]`
 - Validation Agent: `interested_in = [ExploitPayload, OracleSpec]`
@@ -218,24 +218,24 @@ Any message not in the agent's `interested_in` list must not enter its context.
 
 ### 🟢 Nice-to-have
 
-#### 9. Self-Referential SOP Improvement (A.1) — CMatrix Memory Write-Back
+#### 9. Self-Referential SOP Improvement (A.1) — RedGrid Memory Write-Back
 MetaGPT's Appendix A describes a self-improvement mechanism: after each project, agents retrospectively modify their own constraint prompts based on what they observed worked and failed. This is MetaGPT's version of the Three-Tier Long-Term Memory (Paper 18).
 
-**CMatrix:** After each mission, run a Reflection Agent that: reads all specialist findings and tool call logs → identifies which SOP steps were skipped or caused failures → writes updated SOP variants to the Tier-2 Strategy Memory Store → next mission uses updated SOPs.
+**RedGrid:** After each mission, run a Reflection Agent that: reads all specialist findings and tool call logs → identifies which SOP steps were skipped or caused failures → writes updated SOP variants to the Tier-2 Strategy Memory Store → next mission uses updated SOPs.
 
 #### 10. High-Level Prompts Work Almost as Well as Detailed Ones (When SOPs Are in Place)
 MetaGPT Table 6: high-level prompt (13 words) achieves executability 3.8 vs detailed prompt (42 words) executability 4.0. With SOPs, the system itself expands ambiguous requirements into structured specs.
 
-**CMatrix:** A user can say "pentest this web app at http://target.com" and CMatrix's Recon Agent + Planner SOP should expand this into a full structured attack plan. The user does not need to specify vuln classes, tools, or methodology.
+**RedGrid:** A user can say "pentest this web app at http://target.com" and RedGrid's Recon Agent + Planner SOP should expand this into a full structured attack plan. The user does not need to specify vuln classes, tools, or methodology.
 
 ---
 
-## 📐 CMatrix SOP Template (from MetaGPT)
+## 📐 RedGrid SOP Template (from MetaGPT)
 
-The MetaGPT pattern, translated to CMatrix's pentest domain:
+The MetaGPT pattern, translated to RedGrid's pentest domain:
 
 ```
-MetaGPT Role       → CMatrix Equivalent      → Structured Output Artifact
+MetaGPT Role       → RedGrid Equivalent      → Structured Output Artifact
 ─────────────────────────────────────────────────────────────────────────
 Product Manager    → Recon Agent              → AttackSurfaceDoc (JSON)
 Architect          → Team Manager (Plan)       → AttackPlan (PTG/DAG JSON)
@@ -244,7 +244,7 @@ Engineer           → Specialist Agent          → SpecialistReport (JSON)
 QA Engineer        → Validation Agent          → ValidatedFinding (JSON)
 ```
 
-Each artifact is schema-validated at the boundary. Invalid artifacts are rejected and returned for correction. No freeform chat between roles. The Global Message Pool is the CMatrix ESS. Subscription filtering is the CMatrix `interested_in` field.
+Each artifact is schema-validated at the boundary. Invalid artifacts are rejected and returned for correction. No freeform chat between roles. The Global Message Pool is the RedGrid ESS. Subscription filtering is the RedGrid `interested_in` field.
 
 ---
 

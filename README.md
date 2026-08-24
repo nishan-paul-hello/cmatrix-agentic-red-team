@@ -1,14 +1,14 @@
 <div align="center">
-  <img src="docs/assets/logo-brand-3.svg" alt="CMatrix Logo" width="400" height="400" />
-  <h1>CMatrix</h1>
+  <img src="docs/assets/logo-brand.svg" alt="RedGrid Logo" width="200" height="200" />
+  <h1>RedGrid</h1>
   <p>AI-Powered Multi-Agent Security Orchestration & VAPT Platform</p>
 
-  <a href="https://cmatrix.kaiofficial.xyz" target="_blank">
-    <img src="https://img.shields.io/badge/Live_App-cmatrix.kaiofficial.xyz-0070f3?style=for-the-badge&logo=next.js&logoColor=white" alt="Live App" />
+  <a href="https://redgrid.kaiofficial.xyz" target="_blank">
+    <img src="https://img.shields.io/badge/Live_App-redgrid.kaiofficial.xyz-0070f3?style=for-the-badge&logo=next.js&logoColor=white" alt="Live App" />
   </a>
 </div>
 
-CMatrix is an advanced, AI-powered security orchestration platform utilizing a multi-agent architecture to automate security assessments, vulnerability scanning, and threat intelligence. Powered by **LangGraph** and **FastAPI** with a **Next.js** frontend, CMatrix acts as an autonomous security operations center.
+RedGrid is an advanced, AI-powered security orchestration platform utilizing a multi-agent architecture to automate security assessments, vulnerability scanning, and threat intelligence. Powered by **LangGraph** and **FastAPI** with a **Next.js** frontend, RedGrid acts as an autonomous security operations center.
 
 ---
 
@@ -30,7 +30,25 @@ CMatrix is an advanced, AI-powered security orchestration platform utilizing a m
 ## 📸 Application Preview
 
 <div align="center">
-  <img src="assets/preview.gif" alt="CMatrix Overview" width="100%" />
+  <!-- Main Overview -->
+  <img src="docs/assets/preview-1.gif" alt="RedGrid Overview" width="100%" style="border-radius:10px; margin-bottom:15px;" />
+
+  <!-- Collapsible Gallery for more previews -->
+  <details>
+    <summary><b>✨ Click to expand more application previews</b></summary>
+    <br>
+    <p align="center">
+      <img src="docs/assets/preview-2.gif" alt="Feature Preview 2" width="49%" style="border-radius:8px;" />
+      <img src="docs/assets/preview-3.gif" alt="Feature Preview 3" width="49%" style="border-radius:8px;" />
+    </p>
+    <p align="center">
+      <img src="docs/assets/preview-4.gif" alt="Feature Preview 4" width="49%" style="border-radius:8px;" />
+      <img src="docs/assets/preview-5.gif" alt="Feature Preview 5" width="49%" style="border-radius:8px;" />
+    </p>
+    <p align="center">
+      <img src="docs/assets/preview-6.gif" alt="Feature Preview 6" width="99%" style="border-radius:8px;" />
+    </p>
+  </details>
 </div>
 
 ---
@@ -50,7 +68,7 @@ CMatrix is an advanced, AI-powered security orchestration platform utilizing a m
 
 ## 🚀 Installation
 
-CMatrix supports both local development workflows and a fully containerized Docker approach. 
+RedGrid supports both local development workflows and a fully containerized Docker approach. 
 
 ### 1. Prerequisites
 
@@ -62,8 +80,8 @@ Ensure you have the following installed:
 ### 2. Clone the Repository
 
 ```bash
-git clone https://github.com/nishan-paul-2022/cmatrix-agentic-red-team.git
-cd cmatrix-agentic-red-team
+git clone https://github.com/nishan-paul-2022/redgrid-agentic-red-team.git
+cd redgrid-agentic-red-team
 ```
 
 ### 3. Configuration
@@ -107,7 +125,7 @@ Allows you to run infrastructure (DBs/Redis) in Docker, while running the Fronte
 
 **Pre-requisite mapping:** Map local host to Docker containers to mock networking:
 ```bash
-echo "127.0.0.1 cmatrix-postgres cmatrix-redis cmatrix-qdrant" | sudo tee -a /etc/hosts
+echo "127.0.0.1 redgrid-postgres redgrid-redis redgrid-qdrant" | sudo tee -a /etc/hosts
 ```
 
 **Terminal 1 — Core Infrastructure**:
@@ -141,7 +159,7 @@ npm run dev
 
 ## 📜 Research Works
 
-CMatrix includes a professional, independent LaTeX build system for documenting research findings. We have five specialized research papers (formatted for **IEEE S&P**) covering different aspects of agentic security.
+RedGrid includes a professional, independent LaTeX build system for documenting research findings. We have five specialized research papers (formatted for **IEEE S&P**) covering different aspects of agentic security.
 
 ### 📚 Available Research Papers
 
@@ -164,52 +182,29 @@ make paper
 ---
 
 
-## 🌐 Contemporary Works
+### 🔗 External Resources
 
-A curated list of state-of-the-art AI agents that share a similar vision of agentic red teaming.
-
-### 🛡️ Penetration Testing
-
+- **Hermes Agent**
+    > *An open-source, autonomous AI agent designed to run persistently and improve over time.*
+    - 🌐 **Website**: [hermes-agent.nousresearch.com](https://hermes-agent.nousresearch.com/)
+    - 📂 **GitHub**: [nousresearch/hermes-agent](https://github.com/nousresearch/hermes-agent)
+    - 🎥 **Demo**: [Watch on YouTube](https://www.youtube.com/watch?v=9GpWELm3_XI)
 - **PentAGI**
     > *A self-hosted, multi-agent AI system designed for autonomous end-to-end penetration testing using sandboxed tools.*
     - 🌐 **Website**: [pentagi.com](https://pentagi.com/)
     - 📂 **GitHub**: [vxcontrol/pentagi](https://github.com/vxcontrol/pentagi)
     - 🎥 **Demo**: [Watch on YouTube](https://www.youtube.com/watch?v=R70x5Ddzs1o)
-
-- **Shannon**
-    > *An AI-powered "proof-by-exploitation" security agent that validates vulnerabilities through real-world attack simulations.*
-    - 🌐 **Website**: [keygraph.io](https://keygraph.io/)
-    - 📂 **GitHub**: [KeygraphHQ/shannon](https://github.com/KeygraphHQ/shannon)
-    - 🎥 **Demo**: [Watch on YouTube](https://www.youtube.com/watch?v=H7Xh-x_TVdQ)
-
-### ⚔️ MCP Server
-
 - **HexStrike AI**
     > *A Model Context Protocol (MCP) server that empowers LLMs with 150+ professional security tools for autonomous offensive workflows.*
     - 🌐 **Website**: [hexstrike.com](https://www.hexstrike.com/)
     - 📂 **GitHub**: [0x4m4/hexstrike-ai](https://github.com/0x4m4/hexstrike-ai)
     - 🎥 **Demo**: [Watch on YouTube](https://www.youtube.com/watch?v=PQOwpjZXzMo)
-
----
-
-## 📖 Relevant Resources
-
-### 📄 Key Academic Papers
-- [Incalmo: Autonomous LLM-assisted System for Red Teaming](docs/paper-research/downloaded-paper-professor/06-incalmo-autonomous-llm-assisted-system-for-red-teaming.pdf)
-- [PentestGPT: Evaluating and Harnessing Large Language Models for Automated Penetration Testing](docs/paper-research/downloaded-paper-professor/26-pentestgpt-evaluating-and-harnessing-large-language-models-for-automated-penetration-testing.pdf)
-- [Veritas: A Semantically Grounded Agentic Framework for Memory Corruption Vulnerability Detection in Binaries](docs/paper-research/downloaded-paper-professor/04-veritas-semantically-grounded-agentic-framework-for.pdf)
-- [CVE-Genie: LLM Multi-Agent Framework for Automated CVE Reproducing](docs/paper-research/downloaded-paper-professor/18-cve-genie-llm-multi-agent-framework-for-automated-cve.pdf)
-
-### 🔗 External Resources
-- [LLM4Pentest Framework](https://github.com/simon-p-j-r/LLM4Pentest) - Reference for blog and paper on LLMOrch-VAPT.
-- [Security Conference Deadlines](https://sec-deadlines.github.io/) - For tracking upcoming conference deadlines.
-
-### PAPERS
-- [PentestAgent: Incorporating LLM Agents to Automated Penetration Testing](docs/paper-research/md-downloaded-paper-curated/18-pentestagent-incorporating-llm-agents-to-automated-penetration-testing.md)
-- [VulnBot: Autonomous Penetration Testing for a Multi-Agent Collaborative Framework](docs/paper-research/md-downloaded-paper-curated/21-vulnbot-autonomous-penetration-testing-for-a-multi-agent-collaborative-framework.md)
-- [Teams of LLM Agents Can Exploit Zero-Day Vulnerabilities](docs/paper-research/md-downloaded-paper-curated/54-teams-of-llm-agents-can-exploit-zero-day-vulnerabilities.md)
-- [AutoAttacker: A Large Language Model-Guided System to Implement Automatic Cyber Attacks](docs/paper-research/md-downloaded-paper-curated/56-autoattacker-a-large-language-model-guided-system-to-implement-automatic-cyber-attacks.md)
-- [PentestGPT: Evaluating and Harnessing Large Language Models for Automated Penetration Testing](docs/paper-research/md-downloaded-paper-professor/26-pentestgpt-evaluating-and-harnessing-large-language-models-for-automated-penetration-testing.md)
+- **LLM4Pentest Framework**
+    > *A curated list of resources on the application of LLMs in automated penetration testing, including academic papers, tools, and benchmarks.*
+    - 📂 **GitHub**: [simon-p-j-r/LLM4Pentest](https://github.com/simon-p-j-r/LLM4Pentest)
+- **Security Conference Deadlines**
+    > *An open-source tracker for upcoming security and privacy academic conference deadlines and Call for Papers (CFPs).*
+    - 🌐 **Website**: [sec-deadlines.github.io](https://sec-deadlines.github.io/)
 
 ---
 

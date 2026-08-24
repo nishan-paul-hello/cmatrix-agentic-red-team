@@ -1,7 +1,7 @@
 # [STEP 2c] — Related Work Map — OUTPUT ARTIFACT
 
 ## 1) Summary
-This sub-step synthesized the research findings from [STEP 2a] and [STEP 2b] into a structured taxonomy of the current LLM security landscape. We categorized the research into four thematic pillars: Autonomous VAPT Agents, Advanced Reasoning Patterns, Adversarial Benchmarking, and Agentic Defensive Frameworks. We created the first LaTeX asset, `table-01-related-work-comparison.tex`, which positions CMatrix as the first system to integrate composite reasoning (ToT + ReWOO + Reflexion) with a formal HITL safety gate for end-to-end security assessment.
+This sub-step synthesized the research findings from [STEP 2a] and [STEP 2b] into a structured taxonomy of the current LLM security landscape. We categorized the research into four thematic pillars: Autonomous VAPT Agents, Advanced Reasoning Patterns, Adversarial Benchmarking, and Agentic Defensive Frameworks. We created the first LaTeX asset, `table-01-related-work-comparison.tex`, which positions RedGrid as the first system to integrate composite reasoning (ToT + ReWOO + Reflexion) with a formal HITL safety gate for end-to-end security assessment.
 
 ## 2) Full Output
 
@@ -28,10 +28,10 @@ This sub-step synthesized the research findings from [STEP 2a] and [STEP 2b] int
 - **Shortcomings:** They treat agents as potential threats to be trapped rather than as internal tools to be formally governed via risk-based authorization.
 
 ### 2.2 Clear Positioning Statement
-CMatrix occupies the intersection of **Autonomous VAPT** and **Advanced Reasoning**. While prior VAPT tools focus on context maintenance, CMatrix is the first to apply a **composite reasoning suite** (ToT + ReWOO + Reflexion) specifically to security attack chains. Furthermore, we bridge the gap between "Red Teaming" and "Safety" by integrating a **formal risk-based HITL safety gate** directly into the stateful orchestration loop, a feature currently absent in all identified autonomous attack frameworks.
+RedGrid occupies the intersection of **Autonomous VAPT** and **Advanced Reasoning**. While prior VAPT tools focus on context maintenance, RedGrid is the first to apply a **composite reasoning suite** (ToT + ReWOO + Reflexion) specifically to security attack chains. Furthermore, we bridge the gap between "Red Teaming" and "Safety" by integrating a **formal risk-based HITL safety gate** directly into the stateful orchestration loop, a feature currently absent in all identified autonomous attack frameworks.
 
 ### 2.3 Comparison Table Draft (LaTeX Asset)
-The comparison table compares CMatrix against 5 top competitors across 6 dimensions:
+The comparison table compares RedGrid against 5 top competitors across 6 dimensions:
 - **Autonomy**: Level of human intervention required.
 - **Planning**: Mechanism for multi-step task decomposition (ReWOO vs. Static vs. None).
 - **Reasoning**: Specific pattern used (ToT vs. ReAct vs. CoT).
@@ -45,7 +45,7 @@ The comparison table compares CMatrix against 5 top competitors across 6 dimensi
 - **Table Formatting**: Used `booktabs` (`\toprule`, `\midrule`, `\bottomrule`) to ensure submission-ready LaTeX quality from the start.
 
 ## 4) Open Questions
-- **Benchmark Realism**: How should we justify the "End-to-End" scope of CMatrix in the evaluation section compared to the narrower scopes of competitors?
+- **Benchmark Realism**: How should we justify the "End-to-End" scope of RedGrid in the evaluation section compared to the narrower scopes of competitors?
 - **Safety Metric**: Is there a published metric for "safety gate effectiveness" that we can use to compare against AgentSentinel?
 
 ## 5) Checklist Results (PASS/FAIL)

@@ -29,32 +29,32 @@ When you build a security AI system, you make a bet: you choose OpenAI, or Gemin
 - **Link**: [https://github.com/BerriAI/litellm](https://github.com/BerriAI/litellm) (technical report available)
 - **Lead Author**: BerriAI team — [GitHub](https://github.com/BerriAI)
 - **Summary**: LiteLLM provides a unified Python interface that translates calls to 100+ LLM providers into a consistent format. Their key finding is that provider-agnostic systems reduce integration time by 70%+ and enable cost optimization through automatic provider routing.
-- **Similarity to CMatrix**: CMatrix implements its own provider abstraction layer (`app/services/llm/providers/`) with dedicated modules for Gemini (`gemini.py`), Ollama (`ollama.py`), OpenRouter (`openrouter.py`), HuggingFace (`huggingface.py`), and Cerebras (`cerebras.py`), all implementing a common `LLMProvider` protocol defined in `base.py`. The `LangChainAdapter` in `base.py` bridges the provider interface with LangChain's `BaseChatModel`, enabling compatibility with the reasoning modules.
-- **Gap**: LiteLLM is a general-purpose tool without security-domain awareness. CMatrix's provider layer includes security-specific design choices: the `LangChainAdapter` enables LangGraph's stateful workflows, security-relevant system prompts are automatically injected, and provider selection is integrated with user-level LLM configuration stored in PostgreSQL.
+- **Similarity to RedGrid**: RedGrid implements its own provider abstraction layer (`app/services/llm/providers/`) with dedicated modules for Gemini (`gemini.py`), Ollama (`ollama.py`), OpenRouter (`openrouter.py`), HuggingFace (`huggingface.py`), and Cerebras (`cerebras.py`), all implementing a common `LLMProvider` protocol defined in `base.py`. The `LangChainAdapter` in `base.py` bridges the provider interface with LangChain's `BaseChatModel`, enabling compatibility with the reasoning modules.
+- **Gap**: LiteLLM is a general-purpose tool without security-domain awareness. RedGrid's provider layer includes security-specific design choices: the `LangChainAdapter` enables LangGraph's stateful workflows, security-relevant system prompts are automatically injected, and provider selection is integrated with user-level LLM configuration stored in PostgreSQL.
 
 ### Paper 2: Efficient LLM Inference at Cloud Scale
 
 - **Link**: [https://arxiv.org/abs/2401.08671](https://arxiv.org/abs/2401.08671)
 - **Lead Author**: Zhuohan Li (UC Berkeley) — [Google Scholar](https://scholar.google.com/citations?user=Pq_EtecAAAAJ)
 - **Summary**: Studies LLM serving infrastructure at scale, finding that batching strategies, speculative decoding, and model parallelism dramatically reduce inference costs. Key insight: different tasks (short prompts vs. long reasoning) have radically different optimal serving configurations.
-- **Similarity to CMatrix**: CMatrix's `pool.py` implements LLM instance pooling for agent resource management — analogous to the batching strategies this paper discusses. The LLM pool ensures that when the supervisor delegates to 3 parallel agents, each gets an LLM instance without contention.
-- **Gap**: This paper focuses on model serving infrastructure. CMatrix's contribution is at the *application layer*: how to pool and reuse LLM provider instances across multiple concurrent security agent tasks, with per-user configuration management via the database.
+- **Similarity to RedGrid**: RedGrid's `pool.py` implements LLM instance pooling for agent resource management — analogous to the batching strategies this paper discusses. The LLM pool ensures that when the supervisor delegates to 3 parallel agents, each gets an LLM instance without contention.
+- **Gap**: This paper focuses on model serving infrastructure. RedGrid's contribution is at the *application layer*: how to pool and reuse LLM provider instances across multiple concurrent security agent tasks, with per-user configuration management via the database.
 
 ### Paper 3: RouteLLM: Learning to Route LLMs with Preference Data
 
 - **Link**: [https://arxiv.org/abs/2406.18665](https://arxiv.org/abs/2406.18665)
 - **Lead Author**: Isaac Ong (LMSYS) — [arXiv](https://arxiv.org/search/?searchtype=author&query=Ong+Isaac)
 - **Summary**: RouteLLM trains a router that learns to send easy queries to cheap models and hard queries to capable models based on human preference data. They achieve GPT-4 quality at 40% of the cost by routing only the hardest 30% of queries to GPT-4. The router uses a BERT-based classifier trained on Chatbot Arena data.
-- **Similarity to CMatrix**: CMatrix's user-level LLM profile management (`config_profile_service.py`, `db_factory.py`) and the supervisor's task complexity analysis (`complexity = "simple"/"moderate"/"complex"` in `analyze_task()`) form the foundation of a task-complexity-based routing system, even if automated routing isn't fully implemented yet.
-- **Gap**: RouteLLM requires training data and learns general routing. **CMatrix provides a novel opportunity**: task-complexity signals in the security domain (CVE research = complex, port scan = simple) could train a domain-specific security task router — a specialized extension of RouteLLM never studied for security AI.
+- **Similarity to RedGrid**: RedGrid's user-level LLM profile management (`config_profile_service.py`, `db_factory.py`) and the supervisor's task complexity analysis (`complexity = "simple"/"moderate"/"complex"` in `analyze_task()`) form the foundation of a task-complexity-based routing system, even if automated routing isn't fully implemented yet.
+- **Gap**: RouteLLM requires training data and learns general routing. **RedGrid provides a novel opportunity**: task-complexity signals in the security domain (CVE research = complex, port scan = simple) could train a domain-specific security task router — a specialized extension of RouteLLM never studied for security AI.
 
 ### Paper 4: API Pricing and Model Selection for Large Language Models
 
 - **Link**: [https://arxiv.org/abs/2307.07987](https://arxiv.org/abs/2307.07987)
 - **Lead Author**: Jonas Gehring — [arXiv](https://arxiv.org/search/?searchtype=author&query=Gehring+Jonas)
 - **Summary**: Studies the economic tradeoffs of LLM API selection, finding that for many enterprise workloads, switching from GPT-4 to smaller models reduces costs by 5-10x with less than 10% quality degradation. The key is identifying which tasks require the most capable models.
-- **Similarity to CMatrix**: CMatrix's support for Cerebras (ultra-fast inference), HuggingFace (open-source models), and Ollama (local deployment) alongside premium APIs (Gemini, OpenAI via OpenRouter) creates exactly the multi-tier model architecture this paper recommends.
-- **Gap**: The paper analyzes costs statically. CMatrix's architecture enables **dynamic per-task provider selection** based on security task type — a real-world deployment of the paper's theoretical framework that hasn't been empirically studied.
+- **Similarity to RedGrid**: RedGrid's support for Cerebras (ultra-fast inference), HuggingFace (open-source models), and Ollama (local deployment) alongside premium APIs (Gemini, OpenAI via OpenRouter) creates exactly the multi-tier model architecture this paper recommends.
+- **Gap**: The paper analyzes costs statically. RedGrid's architecture enables **dynamic per-task provider selection** based on security task type — a real-world deployment of the paper's theoretical framework that hasn't been empirically studied.
 
 ---
 
@@ -78,7 +78,7 @@ When you build a security AI system, you make a bet: you choose OpenAI, or Gemin
 
 ### Abstract Draft
 
-> Enterprise deployment of AI-powered security assessment systems faces a fundamental challenge: no single LLM provider is optimal for all security tasks — reconnaissance requires fast, cheap models; deep vulnerability analysis requires powerful reasoning models; air-gapped environments require local deployment. We present **CMatrix-LLMOrch**, a provider-agnostic LLM orchestration layer for security AI systems that provides a unified `LLMProvider` interface across six distinct provider backends (Google Gemini, Anthropic Claude via OpenRouter, Ollama local deployment, HuggingFace Inference API, Cerebras, and OpenAI). Each provider implements a consistent `invoke(messages) -> str` contract with automatic message format translation, error handling, and retry logic. A `LangChainAdapter` bridges providers to LangChain's `BaseChatModel`, enabling full compatibility with LangGraph's stateful agentic workflows and advanced reasoning modules (ToT, ReWOO, Reflexion). Per-user provider configuration is stored in PostgreSQL with active profile selection, enabling different users to use different models within the same deployment. We study the performance, cost, and quality tradeoffs of using different providers for security-specific tasks (port scan interpretation, CVE analysis, authentication flow assessment), developing the first empirical benchmark for LLM provider selection in the security AI domain.
+> Enterprise deployment of AI-powered security assessment systems faces a fundamental challenge: no single LLM provider is optimal for all security tasks — reconnaissance requires fast, cheap models; deep vulnerability analysis requires powerful reasoning models; air-gapped environments require local deployment. We present **redgrid-LLMOrch**, a provider-agnostic LLM orchestration layer for security AI systems that provides a unified `LLMProvider` interface across six distinct provider backends (Google Gemini, Anthropic Claude via OpenRouter, Ollama local deployment, HuggingFace Inference API, Cerebras, and OpenAI). Each provider implements a consistent `invoke(messages) -> str` contract with automatic message format translation, error handling, and retry logic. A `LangChainAdapter` bridges providers to LangChain's `BaseChatModel`, enabling full compatibility with LangGraph's stateful agentic workflows and advanced reasoning modules (ToT, ReWOO, Reflexion). Per-user provider configuration is stored in PostgreSQL with active profile selection, enabling different users to use different models within the same deployment. We study the performance, cost, and quality tradeoffs of using different providers for security-specific tasks (port scan interpretation, CVE analysis, authentication flow assessment), developing the first empirical benchmark for LLM provider selection in the security AI domain.
 
 ### Experiments We Can Run
 
@@ -96,7 +96,7 @@ When you build a security AI system, you make a bet: you choose OpenAI, or Gemin
 
 2. **Gap: No study of local vs. cloud LLMs for security AI** — Privacy-sensitive security operations cannot use cloud APIs. **We fill it** by empirically comparing Ollama local deployment (Llama-3, Mistral) vs. cloud providers on security assessment quality, giving CISOs evidence for their deployment decisions.
 
-3. **Gap: No per-user multi-tenant LLM configuration in security platforms** — Enterprise platforms need different users to use different LLMs. **We fill it** with CMatrix's database-backed per-user LLM profile system that enables this at runtime.
+3. **Gap: No per-user multi-tenant LLM configuration in security platforms** — Enterprise platforms need different users to use different LLMs. **We fill it** with RedGrid's database-backed per-user LLM profile system that enables this at runtime.
 
 4. **Gap: No LangGraph-compatible provider abstraction for security agents** — LangGraph requires `BaseChatModel`, but most providers use their own APIs. **We fill it** with the `LangChainAdapter` pattern that bridges arbitrary providers to LangChain's interface — a reusable pattern for the agentic security community.
 

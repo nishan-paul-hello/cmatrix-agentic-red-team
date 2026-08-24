@@ -69,7 +69,7 @@ The current draft is fundamentally misaligned with the codebase. The "Routing" a
 
 ## 7) Input for Next Step (Step 2a)
 - **Literature Search focus**: Search for the 4 core reasoning papers mentioned in `discussion.md` (ToT, ReWOO, Reflexion, Self-Refine) to ground the new methodology section.
-- **Gap to find in SOTA**: Look for the absence of these patterns in *applied cybersecurity* contexts to justify the novelty of the CMatrix implementation.
+- **Gap to find in SOTA**: Look for the absence of these patterns in *applied cybersecurity* contexts to justify the novelty of the RedGrid implementation.
 - **Target Venues**: Focus research on papers from IEEE S&P and ACM CCS to match the recommended venue.
 
 ## 8) Asset Files Created

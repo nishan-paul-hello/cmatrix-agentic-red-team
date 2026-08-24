@@ -9,7 +9,7 @@ This sub-step finalized all quantitative and qualitative data tables for the pap
 
 | Table ID | Title | Key Findings | Data Source |
 | :--- | :--- | :--- | :--- |
-| **Table 04** | Main Evaluation Results | Full CMatrix pipeline achieves **97.4% SR** and **2.42x TE**, significantly outperforming baselines and ablated versions. | Step 5 Data Synthesis. |
+| **Table 04** | Main Evaluation Results | Full RedGrid pipeline achieves **97.4% SR** and **2.42x TE**, significantly outperforming baselines and ablated versions. | Step 5 Data Synthesis. |
 | **Table 05** | Case Study: Attack Chain | Detailed trace of a "Path Traversal to SQLi" pivot on *CorpLab-AD*, demonstrating the Reflexion loop. | Raw Orchestration Logs. |
 
 ### 2.2 Key Performance Insights

@@ -1,24 +1,12 @@
 {
-  "name": "cmatrix-agentic-red-team",
+  "name": "RedGrid",
   "private": true,
+  "version": "1.1.1",
   "scripts": {
     "prepare": "husky"
   },
   "devDependencies": {
-    "husky": "^9.1.7",
-    "lint-staged": "^15.5.1"
-  },
-  "lint-staged": {
-    "app-frontend/**/*.{ts,tsx}": [
-      "npm --prefix app-frontend run lint:fix --",
-      "npm --prefix app-frontend run format --"
-    ],
-    "app-frontend/**/*.{css,json,mjs}": [
-      "npm --prefix app-frontend run format --"
-    ],
-    "app-backend/**/*.py": [
-      "app-backend/venv/bin/ruff check --fix",
-      "app-backend/venv/bin/ruff format"
-    ]
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.2"
   }
 }

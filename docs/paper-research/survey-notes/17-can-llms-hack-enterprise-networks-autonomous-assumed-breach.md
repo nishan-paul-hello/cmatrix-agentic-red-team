@@ -1,4 +1,4 @@
-# Can LLMs Hack Enterprise Networks? Autonomous Assumed Breach Penetration-Testing Active Directory Networks — Deep Survey Notes for CMatrix
+# Can LLMs Hack Enterprise Networks? Autonomous Assumed Breach Penetration-Testing Active Directory Networks — Deep Survey Notes for RedGrid
 
 | Field | Details |
 |-------|---------|
@@ -6,14 +6,14 @@
 | **Venue** | ACM Transactions on Software Engineering and Methodology (TOSEM), Vol. 1, No. 1, Article 1, January 2025; arXiv:2502.04227v3 |
 | **DOI** | https://doi.org/10.1145/3766895 |
 | **Repository** | [https://github.com/andreashappe/cochise](https://github.com/andreashappe/cochise) |
-| **Relevance** | ⭐⭐⭐⭐ — Provides the clearest real-world (non-synthetic benchmark) validation of Planner/Executor separation on a live Active Directory network; first paper to study Reasoning LLMs (o1) for pentest; rich failure analysis of information transfer between Planner and Executor; strong signal on PTT state management and Executor self-repair as mandatory CMatrix patterns. Focus is network/AD rather than web apps, but architectural signals apply directly. |
+| **Relevance** | ⭐⭐⭐⭐ — Provides the clearest real-world (non-synthetic benchmark) validation of Planner/Executor separation on a live Active Directory network; first paper to study Reasoning LLMs (o1) for pentest; rich failure analysis of information transfer between Planner and Executor; strong signal on PTT state management and Executor self-repair as mandatory RedGrid patterns. Focus is network/AD rather than web apps, but architectural signals apply directly. |
 | **Key Claim** | The *cochise* prototype is the **first fully autonomous LLM-driven system to compromise AD user accounts on a real live enterprise network (GOAD)** without human interaction. Reasoning LLMs (o1+GPT-4o) compromised 5.5× more accounts than non-reasoning LLMs at an average cost of **$17.56 per compromised AD account** — substantially lower than a human pentester ($180/h × 7 days = $10,080). DeepSeek-V3 (open-weight) achieves comparable qualitative performance to GPT-4o at **$0.26/compromised account** — 67× cheaper. |
 
 ---
 
 ## 2. Core Thesis
 
-*cochise* is an empirical proof-of-concept that LLMs can perform **Assumed Breach penetration-testing** — starting from inside an enterprise network and autonomously enumerating, attacking, and compromising Active Directory user accounts — without human assistance. The paper's most important contributions for CMatrix are:
+*cochise* is an empirical proof-of-concept that LLMs can perform **Assumed Breach penetration-testing** — starting from inside an enterprise network and autonomously enumerating, attacking, and compromising Active Directory user accounts — without human assistance. The paper's most important contributions for RedGrid are:
 
 1. **Pentest Task Tree (PTT) as the canonical Planner state structure** — a hierarchical Markdown-style todo-list that the Planner updates after every Executor report, containing both action items and findings
 2. **Three-tier control loop architecture** — Planner rounds (strategy), Executor rounds (ReAct), parallel command execution — with clear data flow between them
@@ -102,7 +102,7 @@ The PTT is the critical state artifact. It is a hierarchical numbered Markdown t
                - Verified valid domain credentials (essos.local\missandei:fr3edom)
 ```
 
-This shows three PTT patterns critical for CMatrix:
+This shows three PTT patterns critical for RedGrid:
 1. **Findings sub-nodes** — Executor results are embedded as `Findings:` sub-items under the task that produced them
 2. **Failure-recovery pattern** — when 3.2 fails (hash format wrong), the Planner generates 3.3 with corrected instructions; the entire failure-recovery cycle is documented in the tree
 3. **Credential propagation** — discovered credentials appear in the PTT and are passed as `task_context` to subsequent tasks
@@ -159,7 +159,7 @@ sequenceDiagram
 - Error message quality determines repair success: `ldapsearch` showing help page enables self-correction; "network connection error" for invalid credentials does not
 - Missing tools are automatically installed via `apt`, `pip`, or `git clone`
 - Round limit of 10 means unresolved errors eventually surface to Planner (high-level self-repair)
-- Executor lacks persistent memory: each invocation must re-learn correct tool parameters from scratch (CMatrix signal: Executor tool knowledge should be embedded in task_context)
+- Executor lacks persistent memory: each invocation must re-learn correct tool parameters from scratch (RedGrid signal: Executor tool knowledge should be embedded in task_context)
 - Custom Python/C#/PowerShell scripts generated on-demand when needed
 
 ### 3.5 GOAD Testbed
@@ -284,12 +284,12 @@ flowchart TB
 
 ---
 
-## 6. Key Takeaways for CMatrix
+## 6. Key Takeaways for RedGrid
 
-### 🔴 Critical — Must-Have in CMatrix v1
+### 🔴 Critical — Must-Have in RedGrid v1
 
 **1. Pentest Task Tree (PTT) as Team Manager State**
-The PTT is the most important structural finding. CMatrix's Team Manager must maintain a hierarchical todo-list that:
+The PTT is the most important structural finding. RedGrid's Team Manager must maintain a hierarchical todo-list that:
 - Embeds findings as sub-nodes under the task that produced them
 - Records failure-recovery cycles in-tree (task 3.2 → failed → task 3.3 with fix)
 - Propagates discovered credentials/endpoints as `context` for subsequent tasks
@@ -325,14 +325,14 @@ The paper validates the split-role model pairing more directly than any prior pa
 - GPT-4o alone (both roles): 0.33 compromised accounts per run — 5.5× worse
 - Gemini-2.5-Flash (integrated reasoning, both roles): 0.83 — middle ground
 
-For CMatrix: Use o1/Sonnet 4 with extended thinking for Team Manager's `update-plan` and `select-next-task` calls; use GPT-4o/Sonnet 3.5/Haiku for Specialist Executor calls (tool calling, lower latency, cheaper).
+For RedGrid: Use o1/Sonnet 4 with extended thinking for Team Manager's `update-plan` and `select-next-task` calls; use GPT-4o/Sonnet 3.5/Haiku for Specialist Executor calls (tool calling, lower latency, cheaper).
 
 **3. Self-Sufficient Task Context (Executor Memory Compensation)**
-Since Executor has no local memory between invocations, the Planner must pack all needed information into the `task_context` struct. For CMatrix web context:
+Since Executor has no local memory between invocations, the Planner must pack all needed information into the `task_context` struct. For RedGrid web context:
 
 ```python
 class SpecialistTask:
-    """CMatrix equivalent of cochise's Planner → Executor task + context"""
+    """RedGrid equivalent of cochise's Planner → Executor task + context"""
     task_description: str          # "Test XSS on /search endpoint"
     vuln_class: str                # "xss"
     target_endpoint: str           # "https://target.com/search"
@@ -344,7 +344,7 @@ class SpecialistTask:
 ```
 
 **4. PTT-Update Quality as LLM Selection Gate**
-The paper's starkest finding: **a model that cannot update the PTT cannot pentest, regardless of its attack knowledge**. Qwen3 knew all the attack techniques but failed because it couldn't integrate Executor results into the tree. This is a fundamentally different capability from "knowing how to hack." For CMatrix model selection:
+The paper's starkest finding: **a model that cannot update the PTT cannot pentest, regardless of its attack knowledge**. Qwen3 knew all the attack techniques but failed because it couldn't integrate Executor results into the tree. This is a fundamentally different capability from "knowing how to hack." For RedGrid model selection:
 - Run a PTT-update quality check before any model is selected for the Team Manager role
 - Test prompt: given a PTT + Executor summary, the model must produce a correctly updated PTT with findings embedded as sub-nodes and at least one new corrective task
 - Reject any model that cannot do this reliably
@@ -381,7 +381,7 @@ class ExecutorLoop:
         )
 ```
 
-### 🟡 Important — CMatrix v2 Improvements
+### 🟡 Important — RedGrid v2 Improvements
 
 **6. Reasoning LLM for Planner: Anti-"Rabbit-Hole" Mechanism**
 The paper explicitly identifies "rabbit-hole" behavior (hyper-focusing on one attack vector while ignoring other leads) as a key failure mode. Mitigation: the Team Manager's `select-next-task` prompt must include a **lead inventory check** — it should scan the PTT for all open leads before selecting the next task, weighted by estimated yield:
@@ -399,16 +399,16 @@ switch to the highest-yield alternative lead. Do not pursue a single thread for 
 ```
 
 **7. Inter-Context Attack Pattern (Emergent Multi-Modal)**
-GPT-4o spontaneously discovered web application endpoints and credential files on file shares without being prompted — cross-domain reasoning from network recon context. For CMatrix web apps: the Team Manager must be capable of recognizing that a web app finding (e.g., a SQL injection that leaks database credentials) enables a new attack class (e.g., auth bypass) not originally in the task list, and should spawn a new PTT branch dynamically.
+GPT-4o spontaneously discovered web application endpoints and credential files on file shares without being prompted — cross-domain reasoning from network recon context. For RedGrid web apps: the Team Manager must be capable of recognizing that a web app finding (e.g., a SQL injection that leaks database credentials) enables a new attack class (e.g., auth bypass) not originally in the task list, and should spawn a new PTT branch dynamically.
 
 **8. Tool-Specific Function Wrapping for High-Error Tools**
-hashcat's 94% failure rate (wrong hash format) is the clearest CMatrix signal: any tool with >50% semantic error rate should be wrapped as a high-level function call. CMatrix equivalents:
+hashcat's 94% failure rate (wrong hash format) is the clearest RedGrid signal: any tool with >50% semantic error rate should be wrapped as a high-level function call. RedGrid equivalents:
 - `crack_password_hash(hash_value, wordlist)` → wraps hashcat + john, detects format, retries
 - `run_sqli_test(endpoint, param)` → wraps sqlmap with correct flags for web context
 - `test_xss(endpoint, param, sink_type)` → wraps payload selection + verification
 
 **9. Monetary Circuit Breaker**
-The paper implemented a 100,000-byte shell history limit as a monetary fail-safe (removing shell history from Planner calls when exceeded, relying only on Executor summary). CMatrix should implement:
+The paper implemented a 100,000-byte shell history limit as a monetary fail-safe (removing shell history from Planner calls when exceeded, relying only on Executor summary). RedGrid should implement:
 - Token budget per Specialist invocation (e.g., max 8K tokens for Executor context)
 - Monetary cap per engagement ($X per target)
 - Round cap per PTT branch (circuit breaker for rabbit-hole detection)
@@ -416,10 +416,10 @@ The paper implemented a 100,000-byte shell history limit as a monetary fail-safe
 ### 🟢 Nice-to-Have — Future Work
 
 **10. Reasoning LLM "Boomer Prompt" Avoidance**
-The paper notes OpenAI's guidance that o1/o-series models should not receive few-shot examples, chain-of-thought instructions, or verbose step-by-step guides — these are "Boomer Prompts" that reduce instruction-following in reasoning models. For CMatrix's Team Manager prompt when using reasoning LLMs: provide goals and constraints only, not procedural instructions. The reasoning model generates the procedure internally.
+The paper notes OpenAI's guidance that o1/o-series models should not receive few-shot examples, chain-of-thought instructions, or verbose step-by-step guides — these are "Boomer Prompts" that reduce instruction-following in reasoning models. For RedGrid's Team Manager prompt when using reasoning LLMs: provide goals and constraints only, not procedural instructions. The reasoning model generates the procedure internally.
 
 **11. Windows VM Integration for AD-Specific Tools**
-For future CMatrix red-team capability (beyond web apps): many powerful AD attack tools (Rubeus, PowerView, BloodHound) require a Windows attacker VM. Cochise's Linux-only setup limits these. CMatrix should plan for a dual-attacker-VM architecture (Kali + Windows) for enterprise network engagements.
+For future RedGrid red-team capability (beyond web apps): many powerful AD attack tools (Rubeus, PowerView, BloodHound) require a Windows attacker VM. Cochise's Linux-only setup limits these. RedGrid should plan for a dual-attacker-VM architecture (Kali + Windows) for enterprise network engagements.
 
 ---
 
@@ -427,13 +427,13 @@ For future CMatrix red-team capability (beyond web apps): many powerful AD attac
 
 | This Paper's Concept | Connected Paper | Mechanism of Connection |
 |----------------------|-----------------|------------------------|
-| **Pentest Task Tree (PTT) as Planner state** | Paper 13 (PentestAgent): "Five entity types in ESS"; Paper 16 (Incalmo): Environment State Service | All three papers converge on the same solution to context bloat: a structured, queryable state store external to the LLM's rolling context. PTT is tree-structured (hierarchical); ESS is object-DB (flat with relationships). CMatrix should hybridize: PTT as the task/planning state, ESS as the vulnerability/credential object store |
+| **Pentest Task Tree (PTT) as Planner state** | Paper 13 (PentestAgent): "Five entity types in ESS"; Paper 16 (Incalmo): Environment State Service | All three papers converge on the same solution to context bloat: a structured, queryable state store external to the LLM's rolling context. PTT is tree-structured (hierarchical); ESS is object-DB (flat with relationships). RedGrid should hybridize: PTT as the task/planning state, ESS as the vulnerability/credential object store |
 | **Reasoning LLM (o1) for Planner + tool-call LLM (GPT-4o) for Executor** | Paper 15 (D-CIPHER): Planner+Executor; Papers 04, 07, 11: architecture > model | This paper provides the clearest direct comparison: 5.5× improvement from splitting reasoning budget by role. D-CIPHER showed similar results with fresh-history Executors. Resolution: use reasoning LLM for Team Manager strategy calls, standard LLM for Specialist tool calls |
 | **PTT-update failure = total system failure** | Paper 11 (EGATS): branch abandonment after TDA threshold; Paper 09 (Rabbit-Hole Counter) | If the state integration mechanism fails, the entire system regresses to irrelevant task repetition. Cochise proves this with Qwen3 (no PTT updates → same scan repeated infinitely). Paper 09's command-diversity check is the lightweight detection mechanism; Paper 11's TDA is the branch health metric. Combine all three |
-| **Executor self-repair via error message parsing** | Paper 14 (CHECKMATE): Dual Perceptor (rule-based parser for structured output); Papers 04, 05: deterministic pipelines | CHECKMATE's rule-based Perceptor is the structural version of cochise's error-driven self-repair. Both eliminate LLM hallucination about tool output by parsing error messages deterministically. CMatrix: deterministic parsers for structured tool output, LLM-driven repair only for unstructured error messages |
-| **Tool-specific function wrapping (hashcat 94% failure)** | Paper 16 (Incalmo): "Convert complex CLI to bespoke function calls"; Paper 14: predefined action library | All three papers independently validate: complex CLI tools need wrapper functions. Cochise quantifies the problem (hashcat: 94% error rate). Incalmo's solution: declarative task API. CHECKMATE's solution: predefined action templates. CMatrix: tool-specific Specialist sub-functions |
-| **Inter-context attacks (emergent web + social engineering)** | Paper 04 (Fang et al.): web app hacking; Paper 11 (EGATS): attack surface expansion | GPT-4o spontaneously discovered web endpoints and credential files without being prompted — exactly the attack surface expansion Paper 11's attack tree was designed to capture. CMatrix's VDG should include inter-domain edges (web SQLi → credential reuse → API bypass) to formalize these emergent attack paths |
-| **Reasoning LLM provides more leads (6.66 vs 3.25 avg)** | Paper 15 (D-CIPHER): strong Executor requirement; Paper 16 (Incalmo): architecture > model | D-CIPHER: strong model needed for execution. Cochise: strong (reasoning) model needed for planning. Paper 16: strong architecture (Incalmo) > strong model (Sonnet 4 without architecture). Synthesis for CMatrix: architecture (PTT + ESS + VDG + declarative tasks) is the primary lever; within architecture, use reasoning models for strategy, standard models for execution |
+| **Executor self-repair via error message parsing** | Paper 14 (CHECKMATE): Dual Perceptor (rule-based parser for structured output); Papers 04, 05: deterministic pipelines | CHECKMATE's rule-based Perceptor is the structural version of cochise's error-driven self-repair. Both eliminate LLM hallucination about tool output by parsing error messages deterministically. RedGrid: deterministic parsers for structured tool output, LLM-driven repair only for unstructured error messages |
+| **Tool-specific function wrapping (hashcat 94% failure)** | Paper 16 (Incalmo): "Convert complex CLI to bespoke function calls"; Paper 14: predefined action library | All three papers independently validate: complex CLI tools need wrapper functions. Cochise quantifies the problem (hashcat: 94% error rate). Incalmo's solution: declarative task API. CHECKMATE's solution: predefined action templates. RedGrid: tool-specific Specialist sub-functions |
+| **Inter-context attacks (emergent web + social engineering)** | Paper 04 (Fang et al.): web app hacking; Paper 11 (EGATS): attack surface expansion | GPT-4o spontaneously discovered web endpoints and credential files without being prompted — exactly the attack surface expansion Paper 11's attack tree was designed to capture. RedGrid's VDG should include inter-domain edges (web SQLi → credential reuse → API bypass) to formalize these emergent attack paths |
+| **Reasoning LLM provides more leads (6.66 vs 3.25 avg)** | Paper 15 (D-CIPHER): strong Executor requirement; Paper 16 (Incalmo): architecture > model | D-CIPHER: strong model needed for execution. Cochise: strong (reasoning) model needed for planning. Paper 16: strong architecture (Incalmo) > strong model (Sonnet 4 without architecture). Synthesis for RedGrid: architecture (PTT + ESS + VDG + declarative tasks) is the primary lever; within architecture, use reasoning models for strategy, standard models for execution |
 
 ---
 
