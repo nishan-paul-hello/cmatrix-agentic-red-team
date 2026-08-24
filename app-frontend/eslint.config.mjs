@@ -45,6 +45,9 @@ export default tseslint.config(
         },
         settings: {
             react: { version: "detect" },
+            next: {
+                rootDir: "app-frontend/",
+            },
             "import/resolver": {
                 typescript: {
                     alwaysTryTypes: true,
