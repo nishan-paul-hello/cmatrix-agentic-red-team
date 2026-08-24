@@ -1,11 +1,13 @@
-name: redgrid
+name: cmatrix
 
 services:
   frontend:
     image: ghcr.io/nishan-paul-2022/cmatrix-agentic-red-team/frontend:latest
     ports:
-      - "3000:3000"
+      - "${FRONTEND_PORT:-3011}:3000"
     restart: unless-stopped
+    env_file:
+      - .env
     networks:
       - main_network
 
