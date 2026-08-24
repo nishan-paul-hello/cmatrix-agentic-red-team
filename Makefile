@@ -1,4 +1,4 @@
-.PHONY: help install dev build clean paper ppt clean-paper format format-check lint typecheck
+.PHONY: help install dev build clean paper ppt clean-paper format format-check lint lint-fix audit typecheck
 
 ROOT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 LATEXMK := latexmk -f -cd -pdf -pdflatex="pdflatex -interaction=nonstopmode -halt-on-error %O %S"
@@ -13,6 +13,7 @@ help:
 	@echo "  make build                  Build for production"
 	@echo "  make format                 Format codebase with Prettier"
 	@echo "  make lint                   Lint codebase with ESLint"
+	@echo "  make audit                  Audit codebase dependencies"
 	@echo "  make typecheck              Typecheck codebase with TypeScript"
 	@echo "  make clean                  Clean all build artifacts and caches"
 	@echo "  make paper                  Build the Research Paper PDF"
@@ -38,6 +39,10 @@ format:
 lint-fix:
 	@echo "🔍 Linting and fixing frontend code with ESLint..."
 	cd app-frontend && npm run lint:fix
+
+audit:
+	@echo "🛡️  Auditing frontend dependencies..."
+	cd app-frontend && npm run audit
 
 typecheck:
 	@echo "🩺 Typechecking frontend code..."

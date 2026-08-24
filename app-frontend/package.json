@@ -8,6 +8,7 @@
         "start": "next start",
         "lint": "eslint src --max-warnings 0",
         "lint:fix": "eslint src --fix",
+        "audit": "npm audit",
         "format": "prettier --write .",
         "format:check": "prettier --check ."
     },
