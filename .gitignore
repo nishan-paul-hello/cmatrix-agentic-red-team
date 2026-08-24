@@ -1,12 +1,48 @@
-**/build/
-.docker_pkg_hash
-.env
-.env.production
-.vscode/
-.ruff_cache/
-.mypy_cache/
-node_modules/
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 
-# Python
-__pycache__/
-*.py[cod]
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Testing
+/coverage
+
+# Production
+build/
+dist/
+.next/
+out/
+
+# Environment Variables
+.env
+.env.*
+!.env.example
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Next.js
+.vercel
+*.tsbuildinfo
+next-env.d.ts
+
+# Misc
+*.pem
+
+# Project Specific
+.docker_pkg_hash
