@@ -8,6 +8,3 @@ services:
     ports:
       - "3000:3000"
     restart: unless-stopped
-    # Environment variables can be added here if needed in the future
-    # environment:
-    #   - NODE_ENV=production

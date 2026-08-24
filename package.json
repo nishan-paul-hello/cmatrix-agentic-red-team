@@ -1,6 +1,7 @@
 {
-  "name": "redgrid-monorepo",
+  "name": "RedGrid",
   "private": true,
+  "version": "1.1.1",
   "scripts": {
     "prepare": "husky"
   },
