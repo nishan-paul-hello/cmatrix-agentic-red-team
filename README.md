@@ -168,16 +168,16 @@ make paper
 
 A curated list of state-of-the-art AI agents that share a similar vision of agentic red teaming.
 
-### 🛡️ Penetration Testing
-
+- **Hermes Agent**
+    > *An open-source, autonomous AI agent designed to run persistently and improve over time.*
+    - 🌐 **Website**: [hermes-agent.nousresearch.com](https://hermes-agent.nousresearch.com/)
+    - 📂 **GitHub**: [nousresearch/hermes-agent](https://github.com/nousresearch/hermes-agent)
+    - 🎥 **Demo**: [Watch on YouTube](https://www.youtube.com/watch?v=9GpWELm3_XI)
 - **PentAGI**
     > *A self-hosted, multi-agent AI system designed for autonomous end-to-end penetration testing using sandboxed tools.*
     - 🌐 **Website**: [pentagi.com](https://pentagi.com/)
     - 📂 **GitHub**: [vxcontrol/pentagi](https://github.com/vxcontrol/pentagi)
     - 🎥 **Demo**: [Watch on YouTube](https://www.youtube.com/watch?v=R70x5Ddzs1o)
-
-### ⚔️ MCP Server
-
 - **HexStrike AI**
     > *A Model Context Protocol (MCP) server that empowers LLMs with 150+ professional security tools for autonomous offensive workflows.*
     - 🌐 **Website**: [hexstrike.com](https://www.hexstrike.com/)
