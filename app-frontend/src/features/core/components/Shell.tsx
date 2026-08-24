@@ -176,7 +176,7 @@ export default function Shell({
                                         onClick={() => onNavChange(item.id)}
                                         aria-current={active ? "page" : undefined}
                                         className={[
-                                            "flex w-full cursor-pointer items-center gap-2 px-4 py-1.5 text-left text-[10.5px] tracking-[0.02em]",
+                                            "flex w-full cursor-pointer items-center gap-2 px-4 py-1.5 text-left text-[10.5px] tracking-[0.02em] uppercase",
                                             "border-l-2 transition-colors duration-100",
                                             active
                                                 ? "border-[var(--color-hex-e31b23)] bg-[var(--color-hex-1a0a0b)] text-[var(--color-hex-f2f2f2)]"

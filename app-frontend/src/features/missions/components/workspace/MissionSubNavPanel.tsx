@@ -35,7 +35,7 @@ export default function MissionSubNavPanel({
                         <button
                             key={item.id}
                             onClick={() => dispatch({ type: "SET_SUB_NAV", payload: item.id })}
-                            className="font-inherit flex w-full cursor-pointer items-center px-4 py-2 text-left text-[10.5px] tracking-[0.06em]"
+                            className="font-inherit flex w-full cursor-pointer items-center px-4 py-2 text-left text-[10.5px] tracking-[0.06em] uppercase"
                             style={{
                                 background: active ? "var(--color-hex-160809)" : "transparent",
                                 borderLeft: active
