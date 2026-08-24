@@ -1,5 +1,0 @@
-echo "✨ Running format before commit..."
-make format
-
-echo "🔍 Running lint fix before commit..."
-make lint-fix

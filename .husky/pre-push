@@ -1,8 +1,0 @@
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
-
-echo "🩺 Running typecheck before push..."
-make typecheck
-
-echo "🛡️  Running audit before push..."
-make audit

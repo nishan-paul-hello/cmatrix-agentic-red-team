@@ -46,3 +46,6 @@ next-env.d.ts
 
 # Project Specific
 .docker_pkg_hash
+
+# Temproray
+husky/
