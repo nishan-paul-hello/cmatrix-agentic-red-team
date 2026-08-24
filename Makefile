@@ -1,4 +1,4 @@
-.PHONY: help install dev build clean paper ppt clean-paper format format-check lint lint-fix audit typecheck
+.PHONY: help install dev build docker-build up down clean paper ppt clean-paper format format-check lint lint-fix audit typecheck
 
 ROOT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 LATEXMK := latexmk -f -cd -pdf -pdflatex="pdflatex -interaction=nonstopmode -halt-on-error %O %S"
@@ -15,6 +15,9 @@ help:
 	@echo "  make lint                   Lint codebase with ESLint"
 	@echo "  make audit                  Audit codebase dependencies"
 	@echo "  make typecheck              Typecheck codebase with TypeScript"
+	@echo "  make docker-build           Build Docker images"
+	@echo "  make up                     Start Docker containers"
+	@echo "  make down                   Stop Docker containers"
 	@echo "  make clean                  Clean all build artifacts and caches"
 	@echo "  make paper                  Build the Research Paper PDF"
 	@echo "  make ppt                    Build the Presentation PPTX"
@@ -47,6 +50,18 @@ audit:
 typecheck:
 	@echo "🩺 Typechecking frontend code..."
 	cd app-frontend && npx tsc --noEmit
+
+docker-build:
+	@echo "🐳 Building Docker images..."
+	docker compose build
+
+up:
+	@echo "🐳 Starting Docker containers..."
+	docker compose up -d
+
+down:
+	@echo "🐳 Stopping Docker containers..."
+	docker compose down
 
 # Paper Build Directories
 PAPER_DIR_01 := docs/paper-research/paper-structure/paper-01-llm-orch-vapt
