@@ -150,7 +150,7 @@ export default function Shell({
                             RedGrid
                         </span>
                         <span className="text-[7px] tracking-[0.2em] text-[var(--color-hex-666666)]">
-                            AGENTIC RED TEAM
+                            Agentic Red Team
                         </span>
                     </div>
                 </div>
