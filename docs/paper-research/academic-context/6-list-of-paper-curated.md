@@ -17,7 +17,7 @@
 - **Authors:** **Richard Fang**, Rohan Bindu, Akul Gupta, Daniel Kang
 - **Institution:** University of Illinois Urbana-Champaign (USNWR #35)
 - **Venue:** **arXiv (Apr 2024) — University of Illinois**
-- **Relevance:** The landmark paper proving GPT-4 agents can exploit 87% of real CVEs. Zero-shot capability on real-world vulnerabilities. CMatrix's core use case validated here first.
+- **Relevance:** The landmark paper proving GPT-4 agents can exploit 87% of real CVEs. Zero-shot capability on real-world vulnerabilities. RedGrid's core use case validated here first.
 
 ---
 
@@ -27,7 +27,7 @@
 - **Authors:** **Yuxuan Zhu**, Antony Kellermann, Akul Gupta, Philip Li, Richard Fang, Rohan Bindu, Daniel Kang
 - **Institution:** University of Illinois Urbana-Champaign (USNWR #35)
 - **Venue:** **arXiv (Jun 2024) — University of Illinois**
-- **Relevance:** **Critical paper** — first proof that multi-agent LLM teams can exploit zero-day vulnerabilities with no prior knowledge. Hierarchical Planning and Task-Specific Agents (HPTSA) architecture is a direct ancestor of CMatrix's multi-agent design.
+- **Relevance:** **Critical paper** — first proof that multi-agent LLM teams can exploit zero-day vulnerabilities with no prior knowledge. Hierarchical Planning and Task-Specific Agents (HPTSA) architecture is a direct ancestor of RedGrid's multi-agent design.
 
 ---
 
@@ -37,7 +37,7 @@
 - **Authors:** **Isaac David**, Arthur Gervais
 - **Institution:** University College London (USNWR #7)
 - **Venue:** **arXiv (Aug 2025)**
-- **Relevance:** Web-specific multi-agent pentest — CMatrix's primary initial attack surface. Detailed agent decomposition for web recon, injection, exploitation.
+- **Relevance:** Web-specific multi-agent pentest — RedGrid's primary initial attack surface. Detailed agent decomposition for web recon, injection, exploitation.
 
 ---
 
@@ -48,7 +48,7 @@
 - **Authors:** **Akshat Singh Jaswal**, Ashish Baghel
 - **Institution:** Stux Labs
 - **Venue:** **NDSS 2026**
-- **Relevance:** Adaptive agents designed specifically for dynamic web penetration testing — highly relevant to CMatrix's web agent architecture.
+- **Relevance:** Adaptive agents designed specifically for dynamic web penetration testing — highly relevant to RedGrid's web agent architecture.
 
 ---
 
@@ -58,7 +58,7 @@
 - **Authors:** **Benlong Wu**, Guoqiang Chen, Kejiang Chen, Xiuwei Shang, Jiapeng Han, Yanru He, Weiming Zhang, Nenghai Yu
 - **Institution:** University of Science and Technology of China (USNWR #71)
 - **Venue:** **arXiv (Nov 2024)**
-- **Relevance:** Defines the gap between current LLM-based approaches and true end-to-end web pentest automation. Direct roadmap for what CMatrix aims to close.
+- **Relevance:** Defines the gap between current LLM-based approaches and true end-to-end web pentest automation. Direct roadmap for what RedGrid aims to close.
 
 ---
 
@@ -69,7 +69,7 @@
 - **Authors:** **Xiaoxue Ren**, Penghao Jiang, Kaixin Li, Zhiyong Huang, Xiaoning Du, Jiaojiao Jiang, Zhenchang Xing, Jiamou Sun, Terry Yue Zhuo
 - **Institution:** Zhejiang University (USNWR #45)
 - **Venue:** **ICLR 2026**
-- **Relevance:** Evaluates GUI/computer-use LLM agents autonomously attacking real web application vulnerabilities — directly maps to CMatrix's black-box scan mode and web vuln pipeline. Uses the same agent-environment loop that CMatrix's VS Code-style terminal UI embodies.
+- **Relevance:** Evaluates GUI/computer-use LLM agents autonomously attacking real web application vulnerabilities — directly maps to RedGrid's black-box scan mode and web vuln pipeline. Uses the same agent-environment loop that RedGrid's VS Code-style terminal UI embodies.
 
 ---
 
@@ -79,7 +79,7 @@
 - **Authors:** **Zhenyu Cheng**, Linxi Fan, Anima Anandkumar
 - **Institution:** Chinese Academy of Sciences
 - **Venue:** **WWW 2026**
-- **Relevance:** GraphQL LLM Fuzzing: Essential API testing foundation for CMatrix's API scanning capabilities.
+- **Relevance:** GraphQL LLM Fuzzing: Essential API testing foundation for RedGrid's API scanning capabilities.
 
 ---
 
@@ -89,7 +89,7 @@
 - **Authors:** **Vaggelis Atlidakis**, Patrice Godefroid, Marina Polishchuk
 - **Institution:** Columbia University / Microsoft
 - **Venue:** **ICSE 2019**
-- **Relevance:** Stateful REST API Fuzzing: Provides baseline methodology and strategies for the REST API module in CMatrix's API penetration testing capabilities.
+- **Relevance:** Stateful REST API Fuzzing: Provides baseline methodology and strategies for the REST API module in RedGrid's API penetration testing capabilities.
 
 ---
 
@@ -112,7 +112,7 @@
 - **Authors:** **Gelei Deng**, Yi Liu, Víctor Mayoral-Vilches, Peng Liu, Yuekang Li, Yuan Xu, Tianwei Zhang, Yang Liu, Martin Ochoa, Stefan Savage
 - **Institution:** Nanyang Technological University (USNWR #28)
 - **Venue:** **USENIX Security 2024**
-- **Relevance:** Defines the canonical three-module (Reasoning · Generation · Parsing) LLM pentesting architecture. The highest-impact published paper in the field; every subsequent network pentesting agent cites or differentiates from it. CMatrix's Commander-Specialist pattern is a direct evolution of this decomposition.
+- **Relevance:** Defines the canonical three-module (Reasoning · Generation · Parsing) LLM pentesting architecture. The highest-impact published paper in the field; every subsequent network pentesting agent cites or differentiates from it. RedGrid's Commander-Specialist pattern is a direct evolution of this decomposition.
 
 ---
 
@@ -122,7 +122,7 @@
 - **Authors:** **Gelei Deng**, Yi Liu, Yuekang Li, Ruozhao Yang, Xiaofei Xie, Jie Zhang, Han Qiu, Tianwei Zhang
 - **Institution:** Nanyang Technological University (USNWR #28)
 - **Venue:** **arXiv (Feb 2026)**
-- **Relevance:** PentestGPT V2 paper — empirically identifies what agent properties (planning, memory, tool use) matter most for real-world pentest. Achieves 76.9% (10/13 machines) on HackTheBox. Directly comparable to CMatrix's evaluation framework design.
+- **Relevance:** PentestGPT V2 paper — empirically identifies what agent properties (planning, memory, tool use) matter most for real-world pentest. Achieves 76.9% (10/13 machines) on HackTheBox. Directly comparable to RedGrid's evaluation framework design.
 
 ---
 
@@ -133,7 +133,7 @@
 - **Authors:** **He Kong**, Die Hu, Jingguo Ge, Liangxiong Li, Tong Li, Bingzhen Wu
 - **Institution:** Institute of Information Engineering, Chinese Academy of Sciences
 - **Venue:** **arXiv (Jan 2025)**
-- **Relevance:** Role-specialized multi-agent framework (recon, scan, exploit) with penetration task graph (PTG) for logical execution — the closest existing architectural match to CMatrix's LangGraph pipeline design.
+- **Relevance:** Role-specialized multi-agent framework (recon, scan, exploit) with penetration task graph (PTG) for logical execution — the closest existing architectural match to RedGrid's LangGraph pipeline design.
 
 ---
 
@@ -144,7 +144,7 @@
 - **Authors:** **Xiangmin Shen**, Lingzhi Wang, Zhenyuan Li, Yan Chen, Wencheng Zhao, Dawei Sun, Jiashui Wang
 - **Institution:** Northwestern University (USNWR #9)
 - **Venue:** **AsiaCCS 2025**
-- **Relevance:** Fully autonomous multi-agent pentesting, competes directly with CMatrix. Evaluated against VulHub + HackTheBox. Strongest direct architectural competitor.
+- **Relevance:** Fully autonomous multi-agent pentesting, competes directly with RedGrid. Evaluated against VulHub + HackTheBox. Strongest direct architectural competitor.
 
 ---
 
@@ -154,7 +154,7 @@
 - **Authors:** **Lingzhi Wang**, Xinyi Shi, Ziyu Li, Yi Jiang, Shiyu Tan, Yuhao Jiang, Junjie Cheng, Wenyuan Chen, Xiangmin Shen, Zhenyuan Li, Yan Chen
 - **Institution:** Northwestern University (USNWR #9)
 - **Venue:** **arXiv (Dec 2025)**
-- **Relevance:** Combines classical planning (symbolic AI) with LLM agents for structured pentest execution — hybrid approach that CMatrix could adopt to reduce hallucination in multi-step exploit chains.
+- **Relevance:** Combines classical planning (symbolic AI) with LLM agents for structured pentest execution — hybrid approach that RedGrid could adopt to reduce hallucination in multi-step exploit chains.
 
 ---
 
@@ -164,7 +164,7 @@
 - **Authors:** **Meet Udeshi**, Minghao Shao, Haoran Xi, Kimberly Milner, Venkata Sai Charan Putrevu, Brendan Dolan-Gavitt, Prashanth Krishnamurthy, Farshad Khorrami, Ramesh Karri, Muhammad Shafique, Nanda Rani, Sandeep K. Shukla
 - **Institution:** NYU Tandon (USNWR #53)
 - **Venue:** **arXiv (Feb 2025)**
-- **Relevance:** Planner-executor multi-agent system with heterogeneous specialized agents for CTF — directly informs CMatrix's agent role decomposition and inter-agent communication protocol.
+- **Relevance:** Planner-executor multi-agent system with heterogeneous specialized agents for CTF — directly informs RedGrid's agent role decomposition and inter-agent communication protocol.
 
 ---
 
@@ -175,7 +175,7 @@
 - **Authors:** **Brian Singer**, Keane Lucas, Lakshmi Adiga, Meghna Jain, Lujo Bauer, Vyas Sekar
 - **Institution:** Carnegie Mellon University (USNWR #22)
 - **Venue:** **arXiv (Jan 2025, multiple revisions through Nov 2025)**
-- **Relevance:** Multi-host red teaming with abstract action layer — compromised 9/10 mobile-core testbeds (25–50 hosts). Directly comparable to CMatrix's multi-target scan mode.
+- **Relevance:** Multi-host red teaming with abstract action layer — compromised 9/10 mobile-core testbeds (25–50 hosts). Directly comparable to RedGrid's multi-target scan mode.
 
 ---
 
@@ -186,7 +186,7 @@
 - **Authors:** **Andreas Happe**, Jürgen Cito
 - **Institution:** TU Wien (USNWR #334)
 - **Venue:** **TOSEM 2025 (ACM Transactions on Software Engineering and Methodology)**
-- **Relevance:** Enterprise AD network pentest — closest to CMatrix's grey-box scan mode and multi-host lateral movement scenarios. Top journal publication.
+- **Relevance:** Enterprise AD network pentest — closest to RedGrid's grey-box scan mode and multi-host lateral movement scenarios. Top journal publication.
 
 ---
 
@@ -196,7 +196,7 @@
 - **Authors:** **Pengfei He**, Ash Fox, Lesly Miculicich, Stefan Friedli, Daniel Fabian, Burak Gokturk, Jiliang Tang, Chen-Yu Lee, Tomas Pfister, Long T. Le
 - **Institution:** Google Cloud AI Research
 - **Venue:** **arXiv (Feb 2026) — Google Cloud AI Research**
-- **Relevance:** Multi-agent red team with specialized roles (discovery agent, exploitation agent, critic agent) and structured interaction — architecturally almost identical to CMatrix's reconnaissance-scan-exploit pipeline. Google-authored.
+- **Relevance:** Multi-agent red team with specialized roles (discovery agent, exploitation agent, critic agent) and structured interaction — architecturally almost identical to RedGrid's reconnaissance-scan-exploit pipeline. Google-authored.
 
 ---
 
@@ -206,7 +206,7 @@
 - **Authors:** **Qingyun Wu**, Gagan Bansal, Jieyu Zhang, Yiran Wu, Beibin Li, Erkang Zhu, Li Jiang, Xiaoyun Zhang, Shaokun Zhang, Jiale Liu, Ahmed Awadallah, Ryen W. White, Doug Burger, Chi Wang
 - **Institution:** Penn State University (USNWR #130)
 - **Venue:** **arXiv (Aug 2023 / 2024)**
-- **Relevance:** Foundational multi-agent conversation framework. CMatrix's Master-Worker hierarchy is directly inspired by AutoGen agent orchestration and cooperation patterns.
+- **Relevance:** Foundational multi-agent conversation framework. RedGrid's Master-Worker hierarchy is directly inspired by AutoGen agent orchestration and cooperation patterns.
 
 ---
 
@@ -216,7 +216,7 @@
 - **Authors:** **Sirui Hong**, Mingchen Zhuge, Jiaqi Chen, Xiawu Zheng, Yuheng Cheng, Ceyao Zhang, Jinlin Wang, Zili Wang, Steven Ka Shing Yau, Zijuan Lin, Liyang Zhou, Chenyu Ran, Lingfeng Xiao, Chenglin Wu, Jürgen Schmidhuber
 - **Institution:** DeepWisdom
 - **Venue:** **ICLR 2024**
-- **Relevance:** Role-playing multi-agent architecture. Establishes SOPs for agent collaborations, which maps directly to specialized VAPT agent roles (Recon, Scan, Exploit) in CMatrix.
+- **Relevance:** Role-playing multi-agent architecture. Establishes SOPs for agent collaborations, which maps directly to specialized VAPT agent roles (Recon, Scan, Exploit) in RedGrid.
 
 ---
 
@@ -226,7 +226,7 @@
 - **Authors:** **Guanzhi Wang**, Yuqi Xie, Yunfan Jiang, Ajay Mandlekar, Chaowei Xiao, Yuke Zhu, Linxi Fan, Anima Anandkumar
 - **Institution:** NVIDIA / Caltech / Stanford
 - **Venue:** **NeurIPS 2023**
-- **Relevance:** Attack Strategy Library: Voyager's persistent, ever-growing skill library — where completed tasks are crystallized into reusable code skills stored in a vector DB and retrieved at task-start — is the direct conceptual ancestor of CMatrix's technology-fingerprint-indexed attack strategy crystallization.
+- **Relevance:** Attack Strategy Library: Voyager's persistent, ever-growing skill library — where completed tasks are crystallized into reusable code skills stored in a vector DB and retrieved at task-start — is the direct conceptual ancestor of RedGrid's technology-fingerprint-indexed attack strategy crystallization.
 
 ---
 
@@ -247,7 +247,7 @@
 - **Authors:** **Andy K. Zhang**, Neil Perry, Riya Dulepet, Joey Ji, Celeste Menders, Justin W. Lin, Eliot Jones, Gashon Hussein, Samantha Liu, Donovan Jasper, Pura Peetathawatchai, Ari Glenn, Vikram Sivashankar, Daniel Zamoshchin, Leo Glikbarg, Derek Askaryar, Mike Yang, Teddy Zhang, Rishi Alluri, Nathan Tran, Rinnara Sangpisit, Polycarpos Yiorkadjis, Kenny Osele, Gautham Raghupathi, Dan Boneh, Daniel E. Ho, Percy Liang
 - **Institution:** Stanford University (USNWR #3)
 - **Venue:** **arXiv (Aug 2024)**
-- **Relevance:** 40-challenge CTF benchmark with step-by-step subtasks — the de facto evaluation framework. CMatrix must report Cybench numbers in any published evaluation.
+- **Relevance:** 40-challenge CTF benchmark with step-by-step subtasks — the de facto evaluation framework. RedGrid must report Cybench numbers in any published evaluation.
 
 ---
 
@@ -268,7 +268,7 @@
 - **Authors:** **Andy K. Zhang**, Joey Ji, Celeste Menders, Riya Dulepet, Thomas Qin, Ron Y. Wang, Junrong Wu, Kyleen Liao, Jiliang Li, Jinghan Hu, Sara Hong, Nardos Demilew, Shivatmica Murgai, Jason Tran, Nishka Kacheria, Ethan Ho, Denis Liu, Lauren McLane, Olivia Bruvik, Dai-Rong Han, Seungwoo Kim, Akhil Vyas, Cuiyuanxiu Chen, Ryan Li, Weiran Xu, Jonathan Z. Ye, Prerit Choudhary, Siddharth M. Bhatia, Vikram Sivashankar, Yuxuan Bao, Dawn Song, Dan Boneh, Daniel E. Ho, Percy Liang
 - **Institution:** Stanford University (USNWR #3)
 - **Venue:** **NeurIPS 2025 (Datasets and Benchmarks Track) — Stanford / UC Berkeley**
-- **Relevance:** First benchmark to quantify AI agent cyber-capability in real dollar terms. 25 production systems, 40 bounties ($10–$30,485), covering 9 OWASP Top 10 risks. Defines Detect/Exploit/Patch task taxonomy — precisely the three phases CMatrix automates. Evaluated DeepSeek-R1 among 10 agents, giving CMatrix a direct reference point for its backbone model.
+- **Relevance:** First benchmark to quantify AI agent cyber-capability in real dollar terms. 25 production systems, 40 bounties ($10–$30,485), covering 9 OWASP Top 10 risks. Defines Detect/Exploit/Patch task taxonomy — precisely the three phases RedGrid automates. Evaluated DeepSeek-R1 among 10 agents, giving RedGrid a direct reference point for its backbone model.
 
 ---
 
@@ -278,7 +278,7 @@
 - **Authors:** **Minrui Xu**, Jiani Fan, Xinyu Huang, Conghao Zhou, Jiawen Kang, Dusit Niyato, Shiwen Mao, Zhu Han, Xuemin (Sherman) Shen, Kwok-Yan Lam
 - **Institution:** Nanyang Technological University (USNWR #28)
 - **Venue:** **arXiv (May 2025)**
-- **Relevance:** Comprehensive survey on offensive LLM agent capabilities across all attack stages. The reference survey most aligned with CMatrix's scope. Covers recon, exploitation, lateral movement, persistence.
+- **Relevance:** Comprehensive survey on offensive LLM agent capabilities across all attack stages. The reference survey most aligned with RedGrid's scope. Covers recon, exploitation, lateral movement, persistence.
 
 ---
 

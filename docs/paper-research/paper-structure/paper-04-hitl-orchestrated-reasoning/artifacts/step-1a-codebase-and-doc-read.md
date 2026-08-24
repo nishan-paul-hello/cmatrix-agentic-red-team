@@ -1,7 +1,7 @@
 # [STEP 1a] — Codebase & Documentation Read — OUTPUT ARTIFACT
 
 ## 1) Summary
-This sub-step audited the CMatrix repository’s implementation and documentation, focusing on the **end-to-end data flow** (frontend → backend → agents/tools/LLMs → persistence) and the **research-relevant components** (multi-agent supervision, HITL approvals, advanced reasoning patterns, and memory/RAG). It also verified where the target paper directory actually lives and initialized the required asset index for the agent-reasoning paper.
+This sub-step audited the RedGrid repository’s implementation and documentation, focusing on the **end-to-end data flow** (frontend → backend → agents/tools/LLMs → persistence) and the **research-relevant components** (multi-agent supervision, HITL approvals, advanced reasoning patterns, and memory/RAG). It also verified where the target paper directory actually lives and initialized the required asset index for the agent-reasoning paper.
 
 ## 2) Full Output
 
@@ -11,7 +11,7 @@ This sub-step audited the CMatrix repository’s implementation and documentatio
 - **LaTeX build system**: root `Makefile` builds papers via `make paper-03`, using `docs/paper-research/paper-04-agent-reasoning/content/main.tex` and emitting `docs/paper-research/paper-04-agent-reasoning/paper.pdf`.
 
 ### 2.2 System architecture overview (implementation-grounded)
-**CMatrix is a full-stack system** composed of:
+**RedGrid is a full-stack system** composed of:
 - **Frontend**: `app-frontend/` (Next.js App Router, TypeScript, Tailwind/Radix/shadcn).
 - **Backend API**: `app-backend/` (FastAPI, LangGraph/LangChain, SQLAlchemy async).
 - **Async job execution**: Celery + Redis (background “scan” jobs).

@@ -38,8 +38,6 @@ export default function StateMachineModal({
                 return "RULED_OUT";
             case "ORACLE_CONFIRMED":
                 return "ORACLE_CONFIRMED";
-            case "ORACLE CONFIRMED":
-                return "ORACLE_CONFIRMED";
             default:
                 return null;
         }

@@ -17,7 +17,7 @@ All files are saved in the `/assets/` directory:
 This table is the heart of the "Efficiency" contribution. It compares flagship models (GPT-4o, Gemini Pro) against Flash models (Gemini Flash, Llama-3). It highlights our **DCAT** framework as a "Dynamic" tier that matches flagship success (97.4%) while maintaining Flash-like costs ($0.19).
 
 #### Table 2: Agent Specialization
-Provides a technical deep-dive into the 7 worker agents implemented in the CMatrix codebase. It maps each agent to its "Default Tier" (e.g., Network to Flash, Command Exec to Reasoning), grounding the architectural claims in §IV.
+Provides a technical deep-dive into the 7 worker agents implemented in the RedGrid codebase. It maps each agent to its "Default Tier" (e.g., Network to Flash, Command Exec to Reasoning), grounding the architectural claims in §IV.
 
 #### Table 3: SOTA Comparison
 A strategic competitive map. It shows that while other tools (PentestGPT, PentestMCP) offer autonomy or safety, **LLMOrch-VAPT** is the only framework providing **Resilient Failover**, **Cost-Aware Tiering**, and **Semantic Caching**.

@@ -74,7 +74,11 @@ const FINDING_TRANSITIONS: Record<FindingStatus, Set<FindingStatus>> = {
     ]),
     [FINDING_STATUS.RULED_OUT]: new Set([FINDING_STATUS.VALIDATED]),
     [FINDING_STATUS.ORACLE_CONFIRMED]: new Set([]),
-    [FINDING_STATUS.RETRY]: new Set([FINDING_STATUS.VALIDATED, FINDING_STATUS.RULED_OUT, FINDING_STATUS.PENDING]),
+    [FINDING_STATUS.RETRY]: new Set([
+        FINDING_STATUS.VALIDATED,
+        FINDING_STATUS.RULED_OUT,
+        FINDING_STATUS.PENDING,
+    ]),
 };
 
 export function canTransitionMission(from: MissionStatus, to: MissionStatus): boolean {

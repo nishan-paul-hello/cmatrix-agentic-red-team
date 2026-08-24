@@ -5,8 +5,8 @@ The increasing complexity of modern cloud-native infrastructures has outpaced th
 \subsection{The Challenge of Long-Horizon Security Reasoning}
 Despite their potential, current LLM-driven security agents face critical operational hurdles when applied to enterprise-scale environments. First, standard interleaved reasoning patterns like ReAct suffer from \textit{reasoning drift} and high latency during long-horizon tasks, where each tool observation necessitates a full model re-invocation. Second, existing agents often lack a \textit{self-correction loop} that translates verbal reflection into actionable tool re-execution, leading to missed vulnerabilities in complex attack surfaces. Finally, the autonomous nature of these agents introduces significant \textit{operational risk}, necessitating a formal governance model that can intercept dangerous commands without disrupting the overall assessment flow.
 
-\subsection{Our Contribution: Governed Autonomy in CMatrix}
-To address these challenges, we introduce \textbf{CMatrix}, a stateful, multi-agent orchestration framework designed for resilient and efficient autonomous red teaming. Our framework moves beyond simple agentic loops by implementing a property we define as \textbf{Governed Autonomy}: an architectural paradigm where reasoning and strategic planning are fully autonomous, yet all network-side tool executions are subject to verifiable security policies and human authorization gates. 
+\subsection{Our Contribution: Governed Autonomy in RedGrid}
+To address these challenges, we introduce \textbf{RedGrid}, a stateful, multi-agent orchestration framework designed for resilient and efficient autonomous red teaming. Our framework moves beyond simple agentic loops by implementing a property we define as \textbf{Governed Autonomy}: an architectural paradigm where reasoning and strategic planning are fully autonomous, yet all network-side tool executions are subject to verifiable security policies and human authorization gates. 
 
 The core contributions of this work are as follows:
 \begin{itemize}
@@ -16,4 +16,4 @@ The core contributions of this work are as follows:
     \item \textbf{Empirical Evaluation:} We provide the first systematic study of advanced reasoning pattern composition in applied cybersecurity, demonstrating a 97.4\% success rate and a 2.42$\times$ reduction in token overhead across 80 representative security scenarios.
 \end{itemize}
 
-The remainder of this paper is organized as follows: Section II discusses related work. Section III defines our formal threat model. Section IV details the CMatrix architecture and methodology. Section V presents our experimental results, followed by a discussion in Section VI and conclusion in Section VII.
+The remainder of this paper is organized as follows: Section II discusses related work. Section III defines our formal threat model. Section IV details the RedGrid architecture and methodology. Section V presents our experimental results, followed by a discussion in Section VI and conclusion in Section VII.

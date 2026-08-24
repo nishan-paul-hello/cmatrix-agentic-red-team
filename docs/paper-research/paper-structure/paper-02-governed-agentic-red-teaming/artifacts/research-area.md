@@ -1,4 +1,4 @@
-# Research Area: CMatrix - A Production-Safe Multi-Agent Framework for Autonomous Red Teaming and Vulnerability Assessment
+# Research Area: RedGrid - A Production-Safe Multi-Agent Framework for Autonomous Red Teaming and Vulnerability Assessment
 
 ## [A] Research Area Overview
 
@@ -30,32 +30,32 @@ No existing system fully solves all four constraints together.
 - **Link**: [https://arxiv.org/abs/2308.06782](https://arxiv.org/abs/2308.06782)
 - **Lead Author**: Gelei Deng — [Google Scholar](https://scholar.google.com/citations?user=P5g3fh4AAAAJ)
 - **Summary**: PentestGPT uses GPT-4 to guide penetration testing by maintaining a hierarchical task tree. It can autonomously plan attacks, interpret tool outputs, and suggest next steps. They found GPT-4 achieves 228.6% better performance than GPT-3.5 on pentest tasks, but struggles with privilege escalation and lateral movement.
-- **Similarity to CMatrix**: Both systems use an LLM as an orchestrator that interprets tool outputs and plans subsequent steps. CMatrix's `OrchestratorService._should_continue()` and `_call_model()` are architecturally analogous to PentestGPT's reasoning-planning loop.
-- **Gap**: PentestGPT uses a single LLM planner without specialized sub-agents. CMatrix's **supervisor pattern** with specialized agents (network, web, auth, config, vuln_intel) addresses the gap of domain-specific expertise that a monolithic planner lacks.
+- **Similarity to RedGrid**: Both systems use an LLM as an orchestrator that interprets tool outputs and plans subsequent steps. RedGrid's `OrchestratorService._should_continue()` and `_call_model()` are architecturally analogous to PentestGPT's reasoning-planning loop.
+- **Gap**: PentestGPT uses a single LLM planner without specialized sub-agents. RedGrid's **supervisor pattern** with specialized agents (network, web, auth, config, vuln_intel) addresses the gap of domain-specific expertise that a monolithic planner lacks.
 
 ### Paper 2: HackingBuddyGPT: Towards Benchmarking LLMs on Linux Privilege Escalation
 
 - **Link**: [https://arxiv.org/abs/2310.05227](https://arxiv.org/abs/2310.05227)
 - **Lead Author**: Andreas Happe — [GitHub](https://github.com/andreashappe)
 - **Summary**: They created a benchmark where LLMs autonomously attempt Linux privilege escalation on real VMs. GPT-4 achieved root access in 35% of scenarios while GPT-3.5 failed entirely. Key insight: LLMs can reason about system state but struggle with chained exploit sequences.
-- **Similarity to CMatrix**: CMatrix's `execute_terminal_command` tool and `command_executor.py` service implement exactly this capability — executing system commands in a sandboxed fashion. The `approval_config.py` adds safety gates not present in HackingBuddyGPT.
-- **Gap**: HackingBuddyGPT has no safety constraints — it's purely offensive. CMatrix uniquely adds **Human-in-the-Loop (HITL) approval gates** (implemented in `approval_config.py` + `approvals.py` API) for dangerous commands, making it deployable in production enterprise environments.
+- **Similarity to RedGrid**: RedGrid's `execute_terminal_command` tool and `command_executor.py` service implement exactly this capability — executing system commands in a sandboxed fashion. The `approval_config.py` adds safety gates not present in HackingBuddyGPT.
+- **Gap**: HackingBuddyGPT has no safety constraints — it's purely offensive. RedGrid uniquely adds **Human-in-the-Loop (HITL) approval gates** (implemented in `approval_config.py` + `approvals.py` API) for dangerous commands, making it deployable in production enterprise environments.
 
 ### Paper 3: AutoAttacker: A Large Language Model Guided System to Implement Automatic Cyber-attacks
 
 - **Link**: [https://arxiv.org/abs/2403.01038](https://arxiv.org/abs/2403.01038)
 - **Lead Author**: Jiacen Xu — NeurIPS 2024
 - **Summary**: AutoAttacker automates the full attack kill chain — reconnaissance through exfiltration — using a "summarizer-attacker" LLM pair. They demonstrate successful attacks on 10 CTF challenges and 2 real-world scenarios. The summarizer maintains a compressed attack state to keep prompts tractable.
-- **Similarity to CMatrix**: CMatrix's vector memory system (`vector_store.py` with Qdrant + BGE embeddings + CrossEncoder reranking) provides exactly this "compressed attack state memory" capability but with far more sophistication: semantic search, cross-encoder reranking, chunking, and Redis caching.
-- **Gap**: AutoAttacker's memory is a simple text buffer. CMatrix's **Agentic RAG memory** with semantic search and reranking represents a significant architectural improvement for maintaining context across long attack campaigns.
+- **Similarity to RedGrid**: RedGrid's vector memory system (`vector_store.py` with Qdrant + BGE embeddings + CrossEncoder reranking) provides exactly this "compressed attack state memory" capability but with far more sophistication: semantic search, cross-encoder reranking, chunking, and Redis caching.
+- **Gap**: AutoAttacker's memory is a simple text buffer. RedGrid's **Agentic RAG memory** with semantic search and reranking represents a significant architectural improvement for maintaining context across long attack campaigns.
 
 ### Paper 4: Cybench: A Framework for Evaluating Cybersecurity Capabilities and Risk
 
 - **Link**: [https://arxiv.org/abs/2408.08926](https://arxiv.org/abs/2408.08926)
 - **Lead Author**: Andy K. Zhang — [arXiv](https://arxiv.org/search/?searchtype=author&query=Zhang+Andy)
 - **Summary**: Cybench introduces 40 professional-grade CTF challenges as a benchmark for evaluating LLM cybersecurity capabilities. Frontier models solve only 4.4% of tasks without assistance. They document specific capability gaps in binary exploitation and web vulnerabilities.
-- **Similarity to CMatrix**: CMatrix implements many of the tool categories Cybench benchmarks against (network scanning, web security, authentication testing). Running CMatrix against Cybench challenges would be a natural experimental setup.
-- **Gap**: Cybench evaluates single-turn LLM attempts. CMatrix's multi-agent architecture with self-reflection loops and ReWOO pre-planning represents a fundamentally different paradigm that has not been benchmarked on these tasks.
+- **Similarity to RedGrid**: RedGrid implements many of the tool categories Cybench benchmarks against (network scanning, web security, authentication testing). Running RedGrid against Cybench challenges would be a natural experimental setup.
+- **Gap**: Cybench evaluates single-turn LLM attempts. RedGrid's multi-agent architecture with self-reflection loops and ReWOO pre-planning represents a fundamentally different paradigm that has not been benchmarked on these tasks.
 
 ---
 
@@ -74,7 +74,7 @@ No existing system fully solves all four constraints together.
 
 ### Abstract Draft
 
-> We present **CMatrix**, an open-source multi-agent penetration testing orchestration platform that addresses the gap between purely academic LLM-based security agents and production-deployable autonomous VAPT systems. CMatrix implements a hierarchical supervisor architecture built on LangGraph that coordinates five specialized sub-agents (Network, Web, Authentication, Configuration, Vulnerability Intelligence) through keyword-confidence routing, with three delegation strategies (single, sequential, parallel) adapted to task complexity. A key differentiator is CMatrix's **Human-in-the-Loop approval framework**: dangerous tool invocations (terminal commands, nmap scans, exploits) are intercepted at runtime, classified by risk level, checked against auto-reject pattern lists, and—when not automatically rejected—paused pending explicit user approval. Workflow state is persisted via PostgreSQL-backed LangGraph checkpointing, enabling workflow resumption post-approval with full conversational context. We integrate advanced reasoning patterns (Tree of Thoughts for strategy selection, ReWOO for upfront planning, Self-Reflection for gap detection) with Qdrant-backed vector memory for cross-session knowledge persistence. We demonstrate CMatrix on standard network, web, and authentication security assessments and evaluate the efficiency gains of ReWOO planning vs. reactive execution, and the safety improvements of HITL gates vs. unconstrained execution.
+> We present **RedGrid**, an open-source multi-agent penetration testing orchestration platform that addresses the gap between purely academic LLM-based security agents and production-deployable autonomous VAPT systems. RedGrid implements a hierarchical supervisor architecture built on LangGraph that coordinates five specialized sub-agents (Network, Web, Authentication, Configuration, Vulnerability Intelligence) through keyword-confidence routing, with three delegation strategies (single, sequential, parallel) adapted to task complexity. A key differentiator is RedGrid's **Human-in-the-Loop approval framework**: dangerous tool invocations (terminal commands, nmap scans, exploits) are intercepted at runtime, classified by risk level, checked against auto-reject pattern lists, and—when not automatically rejected—paused pending explicit user approval. Workflow state is persisted via PostgreSQL-backed LangGraph checkpointing, enabling workflow resumption post-approval with full conversational context. We integrate advanced reasoning patterns (Tree of Thoughts for strategy selection, ReWOO for upfront planning, Self-Reflection for gap detection) with Qdrant-backed vector memory for cross-session knowledge persistence. We demonstrate RedGrid on standard network, web, and authentication security assessments and evaluate the efficiency gains of ReWOO planning vs. reactive execution, and the safety improvements of HITL gates vs. unconstrained execution.
 
 ### Experiments We Can Run
 

@@ -1,4 +1,4 @@
-# D-CIPHER: Dynamic Collaborative Intelligent Multi-Agent System with Planner and Heterogeneous Executors for Offensive Security — Deep Survey Notes for CMatrix
+# D-CIPHER: Dynamic Collaborative Intelligent Multi-Agent System with Planner and Heterogeneous Executors for Offensive Security — Deep Survey Notes for RedGrid
 
 | Field | Details |
 |-------|---------|
@@ -6,7 +6,7 @@
 | **Venue** | arXiv preprint (NYU-LLM-CTF group) |
 | **Published** | 2025 |
 | **Repository** | [https://github.com/NYU-LLM-CTF/nyuctf_agents](https://github.com/NYU-LLM-CTF/nyuctf_agents) (`nyuctf_multiagent` branch) |
-| **Relevance** | ⭐⭐⭐⭐☆ — D-CIPHER provides a production-grade blueprint for CMatrix's Planner–Team Manager–Specialist architecture with validated heterogeneous executors, Auto-prompter as a pre-flight recon agent, and the first MITRE ATT&CK–grounded capability evaluation methodology for LLM pentest agents. |
+| **Relevance** | ⭐⭐⭐⭐☆ — D-CIPHER provides a production-grade blueprint for RedGrid's Planner–Team Manager–Specialist architecture with validated heterogeneous executors, Auto-prompter as a pre-flight recon agent, and the first MITRE ATT&CK–grounded capability evaluation methodology for LLM pentest agents. |
 | **Key Claim** | D-CIPHER with Claude 3.5 Sonnet achieves **44% on HackTheBox** (vs. EnIGMA's 26%), **22.5% on Cybench** (vs. 20%), and **22% on NYU CTF Bench** (vs. 13.5%) — 2.5%–8.5% absolute SOTA improvement across all three benchmarks while simultaneously covering **65% more MITRE ATT&CK techniques** than any prior agent. |
 
 ---
@@ -15,9 +15,9 @@
 
 D-CIPHER addresses the fundamental scaling failure of single-agent LLM systems in complex, multi-step offensive security tasks. Single-agent CTF solvers suffer from context exhaustion, hallucination feedback loops, and loss of focus as the task horizon grows. Real-world CTF teams solve this with role specialization and knowledge handoff — D-CIPHER operationalizes this team dynamic in software: a **Planner** drives global strategy, **heterogeneous Executors** are each launched fresh for a single delegated task, and an **Auto-prompter** performs environment reconnaissance before the Planner even sees the problem.
 
-The key insight is that the information bottleneck in single-agent systems is not a model-capability gap — it's an architectural one. By giving each Executor a clean conversation history containing only its specific task, D-CIPHER eliminates the context-flooding pathology where accumulated shell output and failed attempts crowd out reasoning. The Planner never sees raw tool output; it only sees Executor summary messages. This is the same principle as CMatrix's Summarizer Bridge (Paper 12) but generalized to the full Planner level.
+The key insight is that the information bottleneck in single-agent systems is not a model-capability gap — it's an architectural one. By giving each Executor a clean conversation history containing only its specific task, D-CIPHER eliminates the context-flooding pathology where accumulated shell output and failed attempts crowd out reasoning. The Planner never sees raw tool output; it only sees Executor summary messages. This is the same principle as RedGrid's Summarizer Bridge (Paper 12) but generalized to the full Planner level.
 
-For CMatrix specifically, D-CIPHER matters because: (1) it empirically validates the Planner→Executor delegation pattern on 290 real CTF challenges, not toy examples; (2) it provides the first data on how model strength affects Executor vs. Planner separately (spoiler: you need strong models for both); and (3) its MITRE ATT&CK analysis gives CMatrix a principled taxonomy for classifying what offensive capabilities a pentest agent has mastered, not just what percentage of tasks it solved.
+For RedGrid specifically, D-CIPHER matters because: (1) it empirically validates the Planner→Executor delegation pattern on 290 real CTF challenges, not toy examples; (2) it provides the first data on how model strength affects Executor vs. Planner separately (spoiler: you need strong models for both); and (3) its MITRE ATT&CK analysis gives RedGrid a principled taxonomy for classifying what offensive capabilities a pentest agent has mastered, not just what percentage of tasks it solved.
 
 ---
 
@@ -236,12 +236,12 @@ D-CIPHER operates on CTF challenges spanning:
 
 ---
 
-## 6. Key Takeaways for CMatrix
+## 6. Key Takeaways for RedGrid
 
-### 🔴 Critical — Must-Have in CMatrix v1
+### 🔴 Critical — Must-Have in RedGrid v1
 
 **1. Enforce Role-Specific Tool Restrictions at the API Level**
-The Planner's inability to execute code (no `CreateFile`, no `Disassemble`) is not a limitation — it's the forcing function that makes the Planner genuinely plan. In CMatrix, the Team Manager's function call list must exclude all specialist execution tools. If Team Manager can run `sqlmap`, it will try to run `sqlmap` instead of delegating:
+The Planner's inability to execute code (no `CreateFile`, no `Disassemble`) is not a limitation — it's the forcing function that makes the Planner genuinely plan. In RedGrid, the Team Manager's function call list must exclude all specialist execution tools. If Team Manager can run `sqlmap`, it will try to run `sqlmap` instead of delegating:
 ```python
 TEAM_MANAGER_TOOLS = ["delegate_specialist", "submit_finding", "request_escalation", "mission_complete"]
 SPECIALIST_TOOLS = ["run_command", "http_request", "create_file", "run_sqlmap", "run_nuclei"]
@@ -284,7 +284,7 @@ TECHNIQUE_MAP = {
 # After each mission, log: techniques_attempted, techniques_succeeded
 ```
 
-### 🟡 Important — CMatrix v2 Improvements
+### 🟡 Important — RedGrid v2 Improvements
 
 **5. Hybrid Auto-prompt + Hard-coded Guidelines**
 D-CIPHER's main failure mode on pwn challenges is Auto-prompter early-stage errors that mislead the Planner. Fix: inject both the dynamically generated context AND a fixed guideline section:
@@ -301,7 +301,7 @@ D-CIPHER's main failure mode on pwn challenges is Auto-prompter early-stage erro
 Successful challenges resolve in <100 total rounds; failures spread to 200+. If total rounds exceed 60% of budget with no high-confidence finding from any Specialist, trigger a "strategy reconsideration" prompt to Team Manager before the hard limit fires.
 
 **7. Temperature=1.0 as Default**
-D-CIPHER confirms: pentest tasks are creative search problems. Default all CMatrix LLM calls to T=1.0 except structured output generation (T=0.0 for JSON schema compliance).
+D-CIPHER confirms: pentest tasks are creative search problems. Default all RedGrid LLM calls to T=1.0 except structured output generation (T=0.0 for JSON schema compliance).
 
 ### 🟢 Nice-to-Have — Future Work
 
@@ -321,12 +321,12 @@ Create a `technique_map.yaml` mapping each OWASP Top 10 class to ATT&CK techniqu
 | This Paper's Concept | Connected Paper | Mechanism of Connection |
 |----------------------|-----------------|------------------------|
 | **Planner → Executor delegation with fresh history** | Paper 10 (PentestGPT): Session A (Reasoning) + Session B (Generation, fresh per sub-task) | Same principle of context isolation between planning and execution levels; D-CIPHER operationalizes it as distinct agent instances rather than dual LLM sessions |
-| **Auto-prompter as environment-grounded initial context** | Paper 05 (AutoPT): Recon phase produces structured JSON that seeds FSM's first State | AutoPT's recon → FSM seed is rule-based; D-CIPHER's Auto-prompter is LLM-grounded exploration. CMatrix should use Auto-prompter for unstructured initial assessment, then AutoPT-style rule extraction to feed the PSM FSM |
-| **Heterogeneous Executors (fresh history per task)** | Paper 12 (VulnBot): Summarizer Bridge compresses specialist output before Planner re-ingestion | Both papers solve Planner context pollution differently: D-CIPHER prevents it by not sending raw output; VulnBot compresses before Planner sees it. D-CIPHER's approach is cheaper; VulnBot's preserves more detail. CMatrix should use D-CIPHER's pattern for simple delegation and VulnBot's Summarizer for complex specialist outputs |
+| **Auto-prompter as environment-grounded initial context** | Paper 05 (AutoPT): Recon phase produces structured JSON that seeds FSM's first State | AutoPT's recon → FSM seed is rule-based; D-CIPHER's Auto-prompter is LLM-grounded exploration. RedGrid should use Auto-prompter for unstructured initial assessment, then AutoPT-style rule extraction to feed the PSM FSM |
+| **Heterogeneous Executors (fresh history per task)** | Paper 12 (VulnBot): Summarizer Bridge compresses specialist output before Planner re-ingestion | Both papers solve Planner context pollution differently: D-CIPHER prevents it by not sending raw output; VulnBot compresses before Planner sees it. D-CIPHER's approach is cheaper; VulnBot's preserves more detail. RedGrid should use D-CIPHER's pattern for simple delegation and VulnBot's Summarizer for complex specialist outputs |
 | **Strong + weak model pairing underperforms** | Papers 04, 05, 07, 11: "pipeline architecture dominates model size" | D-CIPHER provides a counter-example: weak Executor completely breaks performance (LLaMa 405B + LLaMa 70B → 0% solve). The nuanced signal: architecture matters for planning, but execution quality gates on model strength |
-| **MITRE ATT&CK technique coverage as capability metric** | Paper 09 (MITRE seed in Planner prompt) + Paper 11 (EGATS attack tree with typed attack nodes) | Paper 09 injects ATT&CK IDs as priors; D-CIPHER measures ATT&CK coverage post-hoc as evaluation metric; Paper 11's attack tree nodes correspond to ATT&CK techniques. CMatrix should do all three |
-| **Tool restriction as delegation enforcer** | Paper 14 (CHECKMATE): Anti-drift action de-registration + Predefined Action Library | Both papers use tool availability to enforce desired agent behavior. CHECKMATE restricts which invocations are legal after prior actions; D-CIPHER restricts by agent role. CMatrix should combine both: role-based tool whitelists (D-CIPHER) + action de-registration after execution (Paper 14) |
-| **Fallback prompt on Auto-prompter failure** | Paper 11 (Human Escalation): TDI > 0.8 → escalate + provide hint | Both papers recognize failure modes requiring a higher-authority fallback. D-CIPHER uses static template; Paper 11 escalates to operator. CMatrix should tier: static template first, then operator escalation only if both fail |
+| **MITRE ATT&CK technique coverage as capability metric** | Paper 09 (MITRE seed in Planner prompt) + Paper 11 (EGATS attack tree with typed attack nodes) | Paper 09 injects ATT&CK IDs as priors; D-CIPHER measures ATT&CK coverage post-hoc as evaluation metric; Paper 11's attack tree nodes correspond to ATT&CK techniques. RedGrid should do all three |
+| **Tool restriction as delegation enforcer** | Paper 14 (CHECKMATE): Anti-drift action de-registration + Predefined Action Library | Both papers use tool availability to enforce desired agent behavior. CHECKMATE restricts which invocations are legal after prior actions; D-CIPHER restricts by agent role. RedGrid should combine both: role-based tool whitelists (D-CIPHER) + action de-registration after execution (Paper 14) |
+| **Fallback prompt on Auto-prompter failure** | Paper 11 (Human Escalation): TDI > 0.8 → escalate + provide hint | Both papers recognize failure modes requiring a higher-authority fallback. D-CIPHER uses static template; Paper 11 escalates to operator. RedGrid should tier: static template first, then operator escalation only if both fail |
 
 ---
 

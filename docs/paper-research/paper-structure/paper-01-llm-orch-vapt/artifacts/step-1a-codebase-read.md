@@ -1,7 +1,7 @@
 # [STEP 1a] — Codebase & Documentation Read
 
 ## Summary
-Completed a comprehensive end-to-end audit of the CMatrix codebase and documentation. Identified the core components of the LLM orchestration layer, including the provider abstraction system, instance pooling mechanism, and per-user configuration management. Mapped the data flow from user input through the orchestrator and supervisor to specialized agents and tool execution.
+Completed a comprehensive end-to-end audit of the RedGrid codebase and documentation. Identified the core components of the LLM orchestration layer, including the provider abstraction system, instance pooling mechanism, and per-user configuration management. Mapped the data flow from user input through the orchestrator and supervisor to specialized agents and tool execution.
 
 ## Full Output
 
@@ -45,7 +45,7 @@ The system follows a modular multi-agent architecture integrated into a modern w
 ### Notable Implementation Details
 - **LangChainAdapter**: A critical bridge that allows the custom `LLMProvider` ecosystem to work seamlessly with LangChain's standard agentic components.
 - **Task Complexity Signaling**: The supervisor implicitly calculates task complexity (simple/moderate/complex), providing a foundation for future cost-aware routing.
-- **Multi-Tenant LLM Support**: Unlike most AI systems that use a global API key, CMatrix enables per-user provider settings, which is essential for enterprise security environments.
+- **Multi-Tenant LLM Support**: Unlike most AI systems that use a global API key, RedGrid enables per-user provider settings, which is essential for enterprise security environments.
 
 ## Key Decisions Made
 - Focused on the `app/services/llm/` directory as the primary source for research claims related to model orchestration.
@@ -71,4 +71,4 @@ The system follows a modular multi-agent architecture integrated into a modern w
 - `assets/ASSET-INDEX.md`: Empty template for tracking paper assets.
 
 ## Input for Next Step
-Comprehensive map of the CMatrix LLM orchestration codebase, including the provider interface, pooling mechanism, and multi-tenant configuration system. This will be used to cross-reference against the claims in the existing research paper draft.
+Comprehensive map of the RedGrid LLM orchestration codebase, including the provider interface, pooling mechanism, and multi-tenant configuration system. This will be used to cross-reference against the claims in the existing research paper draft.

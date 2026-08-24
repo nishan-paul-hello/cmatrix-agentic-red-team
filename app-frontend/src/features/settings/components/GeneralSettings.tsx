@@ -21,7 +21,7 @@ export function GeneralSettings({ data }: { data: SettingsData["general"] }) {
                 <TextInput value="Security Researcher" />
             </Field>
             <Field label="ORGANIZATION">
-                <TextInput value="CMatrix Research Lab" />
+                <TextInput value="RedGrid Research Lab" />
             </Field>
             <SectionHead label="INTERFACE" />
             {[

@@ -41,7 +41,7 @@ export default function Login({ onLogin }: LoginProps) {
                     <GeometricMark size={28} />
                     <div className="flex flex-col">
                         <span className="text-[22px] font-bold tracking-[0.22em] text-[var(--color-hex-f2f2f2)]">
-                            CMATRIX
+                            RedGrid
                         </span>
                         <span className="text-[9px] font-normal tracking-[0.28em] text-[var(--color-hex-666666)]">
                             AGENTIC RED TEAM

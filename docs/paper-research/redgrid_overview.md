@@ -1,6 +1,6 @@
-# CMatrix — High-Level Overview
+# RedGrid — High-Level Overview
 
-**One-liner:** CMatrix is a four-layer autonomous **VAPT** (Vulnerability Assessment and Penetration Testing) framework built around a **VDG** (Vulnerability Dependency Graph) — it explores attack surfaces the way a human penetration tester does: track what's confirmed, track what attack ideas depend on what, and always attempt the next most promising *reachable* step.
+**One-liner:** RedGrid is a four-layer autonomous **VAPT** (Vulnerability Assessment and Penetration Testing) framework built around a **VDG** (Vulnerability Dependency Graph) — it explores attack surfaces the way a human penetration tester does: track what's confirmed, track what attack ideas depend on what, and always attempt the next most promising *reachable* step.
 
 ---
 
@@ -42,13 +42,13 @@ flowchart TD
 5. Wins and failures are remembered, so the next similar target benefits from what was learned.
 6. It stops when there's nothing reachable left to try — not when it hits a timer.
 
-**Why this is different:** most prior agents either explore broadly with no sense of prerequisites (they get stuck retrying dead ends), or reason carefully about dependencies but only on small, hand-curated problems. CMatrix does both at once, at open-ended scale.
+**Why this is different:** most prior agents either explore broadly with no sense of prerequisites (they get stuck retrying dead ends), or reason carefully about dependencies but only on small, hand-curated problems. RedGrid does both at once, at open-ended scale.
 
 ---
 
 ## 2. Target Attack Surface
 
-| Surface | What CMatrix attacks | Why included |
+| Surface | What RedGrid attacks | Why included |
 |---|---|---|
 | **Web applications (HTTP/HTML)** | **SQLi** (SQL — Structured Query Language — Injection), **XSS** (Cross-Site Scripting), **CSRF** (Cross-Site Request Forgery), **SSRF** (Server-Side Request Forgery), **SSTI** (Server-Side Template Injection), **LFI** (Local File Inclusion), file-upload **RCE** (Remote Code Execution), **IDOR** (Insecure Direct Object Reference), auth bypass, **JWT** (JSON Web Token) forgery | Largest, best-benchmarked surface. HTTP = HyperText Transfer Protocol; HTML = HyperText Markup Language |
 | **GraphQL APIs** | Schema abuse, producer→consumer chains, batched-auth bypass, IDOR, injection, **DoS** (Denial of Service) via nesting | Fast-growing, under-tested surface. **API** = Application Programming Interface. GraphQL = Graph Query Language |

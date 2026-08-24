@@ -1,6 +1,6 @@
-# CMatrix — Survey Paper Summary (29 Papers)
+# RedGrid — Survey Paper Summary (29 Papers)
 
-For each paper: **core method** (with a diagram), **benchmark/target used**, **vulnerability/scope**, and the specific takeaway **CMatrix** (the research project — no formal acronym, name only) adopts. All acronyms are expanded on first use in each entry; a full glossary is at the end.
+For each paper: **core method** (with a diagram), **benchmark/target used**, **vulnerability/scope**, and the specific takeaway **RedGrid** (the research project — no formal acronym, name only) adopts. All acronyms are expanded on first use in each entry; a full glossary is at the end.
 
 ---
 
@@ -18,7 +18,7 @@ flowchart LR
 
 - **Benchmark / Vuln:** 15-vulnerability Docker sandbox suite (SQLi [SQL — Structured Query Language — Injection], XSS [Cross-Site Scripting], CSRF [Cross-Site Request Forgery], SSRF [Server-Side Request Forgery], SSTI [Server-Side Template Injection], file upload, auth bypass, etc.); real-world test on 50 live sites.
 - **Key result:** 87% success with CVE description, 0% without it. Domain-knowledge docs are structurally necessary (ablation: 42.7%→17% without docs).
-- **CMatrix takeaway:** This 15-vuln suite is CMatrix's Tier-0 fast regression benchmark. Static (not lazy-**RAG** [Retrieval-Augmented Generation]) knowledge-doc injection per specialist is mandatory. The 4 classes GPT-4 fails (AuthBypass, JS [JavaScript] attacks, Hard SQLi, XSS+CSRF) are CMatrix's explicit differentiation targets — all four share a root cause (multi-turn session state), addressed by the Auth/Session Specialist + **SPS** (Session Persistence Service).
+- **RedGrid takeaway:** This 15-vuln suite is RedGrid's Tier-0 fast regression benchmark. Static (not lazy-**RAG** [Retrieval-Augmented Generation]) knowledge-doc injection per specialist is mandatory. The 4 classes GPT-4 fails (AuthBypass, JS [JavaScript] attacks, Hard SQLi, XSS+CSRF) are RedGrid's explicit differentiation targets — all four share a root cause (multi-turn session state), addressed by the Auth/Session Specialist + **SPS** (Session Persistence Service).
 
 ---
 
@@ -41,7 +41,7 @@ flowchart TD
 
 - **Benchmark / Vuln:** 14 zero-day CVEs (Common Vulnerabilities and Exposures), web apps.
 - **Key result:** 42% pass@5, 4.3× better than single-agent with no vuln hint.
-- **CMatrix takeaway:** Validates the 3(→4)-layer hierarchy as the correct backbone; CMatrix's Layer 1/2/3 split (Orchestrator / Team Manager / Specialists) is a direct descendant. HPTSA's exploration-breadth strength (without dependency modeling) is exactly the gap C1 (Contribution 1, the VDG [Vulnerability Dependency Graph]) closes.
+- **RedGrid takeaway:** Validates the 3(→4)-layer hierarchy as the correct backbone; RedGrid's Layer 1/2/3 split (Orchestrator / Team Manager / Specialists) is a direct descendant. HPTSA's exploration-breadth strength (without dependency modeling) is exactly the gap C1 (Contribution 1, the VDG [Vulnerability Dependency Graph]) closes.
 
 ---
 
@@ -58,7 +58,7 @@ flowchart LR
 
 - **Benchmark / Vuln:** XBOW (104 web challenges).
 - **Key result:** 76.9% success, $0.073 median cost per success; success strongly anticorrelates with resource use.
-- **CMatrix takeaway:** Confirms mandatory independent PoC validation (adopted as CMatrix's Validation Agent) and rigorous cost accounting (Usage Tracker, cost-per-exploit metric).
+- **RedGrid takeaway:** Confirms mandatory independent PoC validation (adopted as RedGrid's Validation Agent) and rigorous cost accounting (Usage Tracker, cost-per-exploit metric).
 
 ---
 
@@ -75,7 +75,7 @@ flowchart LR
 
 - **Benchmark / Vuln:** XSS, blind SQLi (SQL — Structured Query Language — Injection).
 - **Key result:** Claude Sonnet 4 + structured pipeline beats GPT-5 (Generative Pre-trained Transformer 5) general reasoning by +30% (XSS) / +67% (blind SQLi) at 98% fewer tokens.
-- **CMatrix takeaway:** AWE's 5-phase XSS FSM (Finite State Machine) is adopted verbatim as CMatrix's XSS Specialist, including WAF-adaptive branching to event-handler payloads — this is the concrete example of the "conditional branching" that distinguishes CMatrix's memory from Voyager's linear skills.
+- **RedGrid takeaway:** AWE's 5-phase XSS FSM (Finite State Machine) is adopted verbatim as RedGrid's XSS Specialist, including WAF-adaptive branching to event-handler payloads — this is the concrete example of the "conditional branching" that distinguishes RedGrid's memory from Voyager's linear skills.
 
 ---
 
@@ -94,7 +94,7 @@ flowchart LR
 
 - **Benchmark / Vuln:** General web pentest targets, 20-target cost comparison.
 - **Key result:** Task completion 22%→41% vs. ReAct; 50% less execution time; 71.6% less API (Application Programming Interface) cost; $0.99 vs $310 human.
-- **CMatrix takeaway:** Confirms FSM-based control flow (adopted inside SQLi/XSS/Auth specialists as explicit sub-state machines) prevents loop-traps and controls cost far better than freeform reasoning.
+- **RedGrid takeaway:** Confirms FSM-based control flow (adopted inside SQLi/XSS/Auth specialists as explicit sub-state machines) prevents loop-traps and controls cost far better than freeform reasoning.
 
 ---
 
@@ -112,7 +112,7 @@ flowchart LR
 
 - **Benchmark / Vuln:** 36 CTF-style challenges.
 - **Key result:** <12% success for SOTA (State-Of-The-Art) CUAs; bigger/newer models are not better; bottleneck is strategic reasoning/tool orchestration, not perception.
-- **CMatrix takeaway:** Full-surface recon (not top-1000-port default scans) is mandated in the Recon Specialist because default-scan depth is a top-4 documented failure mode here. General lesson: architecture > model scale, reinforcing CMatrix's core thesis.
+- **RedGrid takeaway:** Full-surface recon (not top-1000-port default scans) is mandated in the Recon Specialist because default-scan depth is a top-4 documented failure mode here. General lesson: architecture > model scale, reinforcing RedGrid's core thesis.
 
 ---
 
@@ -131,7 +131,7 @@ flowchart TD
 
 - **Benchmark / Vuln:** 6-API GraphQL suite (UserWallet, Countries, Rick&Morty, GraphQLZero, EHRI, TCGDex); schema abuse, IDOR (Insecure Direct Object Reference), injection, nested-query DoS (Denial of Service).
 - **Key result:** +16% avg (max +50%) schema coverage over best baseline; small models + good pipeline rival GPT-5 Mini.
-- **CMatrix takeaway:** Adopted wholesale as the GraphQL Specialist's internal algorithm (bandit arm selection + RAG grounding + self-correction), including its output schema for direct comparability to published numbers.
+- **RedGrid takeaway:** Adopted wholesale as the GraphQL Specialist's internal algorithm (bandit arm selection + RAG grounding + self-correction), including its output schema for direct comparability to published numbers.
 
 ---
 
@@ -150,7 +150,7 @@ flowchart LR
 
 - **Benchmark / Vuln:** GitLab, Azure, Office365 (real-world case studies, not a standardized benchmark).
 - **Key result:** 6× fewer test cases to reach coverage; found 28 confirmed GitLab bugs.
-- **CMatrix takeaway:** Techniques reused internally (dependency inference feeds GraphQL Specialist and Team Manager dependency logic) but REST API exploitation is explicitly **not claimed or evaluated** — no reusable oracle-backed REST benchmark exists in the corpus.
+- **RedGrid takeaway:** Techniques reused internally (dependency inference feeds GraphQL Specialist and Team Manager dependency logic) but REST API exploitation is explicitly **not claimed or evaluated** — no reusable oracle-backed REST benchmark exists in the corpus.
 
 ---
 
@@ -166,7 +166,7 @@ flowchart LR
 
 - **Benchmark / Vuln:** `lin.security` vulnerable VM (Virtual Machine) — privilege escalation, SUID (Set-owner-User-ID) exploitation.
 - **Key result:** Root escalation achievable but unstable; multi-step chains consistently fail.
-- **CMatrix takeaway:** Establishes the unstructured feedback-loop baseline CMatrix's FSM (Finite State Machine)/specialist architecture must and does surpass; documents hallucination, rabbit-holing, and context-truncation as concrete failure modes CMatrix's structured memory targets.
+- **RedGrid takeaway:** Establishes the unstructured feedback-loop baseline RedGrid's FSM (Finite State Machine)/specialist architecture must and does surpass; documents hallucination, rabbit-holing, and context-truncation as concrete failure modes RedGrid's structured memory targets.
 
 ---
 
@@ -183,7 +183,7 @@ flowchart TD
 
 - **Benchmark / Vuln:** 13-machine HackTheBox (HTB) + VulnHub set, 182 sub-tasks.
 - **Key result:** +228.6% over GPT-3.5, +58.6% over raw GPT-4; solves 5/10 active HTB machines; root cause of failure is context/session loss (74 occurrences), not tool inability.
-- **CMatrix takeaway:** PTT maps directly onto CMatrix's Planner→Team Manager→Specialist hierarchy. Session/context loss finding directly motivates fresh-context-per-Specialist + FullCompact context reconstruction.
+- **RedGrid takeaway:** PTT maps directly onto RedGrid's Planner→Team Manager→Specialist hierarchy. Session/context loss finding directly motivates fresh-context-per-Specialist + FullCompact context reconstruction.
 
 ---
 
@@ -201,7 +201,7 @@ flowchart TD
 
 - **Benchmark / Vuln:** XBOW, 13-machine HTB (Hack The Box), 5-host GOAD (Game Of Active Directory) Active Directory.
 - **Key result:** 91% XBOW (49% relative improvement), 4/5 GOAD hosts, top 100/8,036 in live HTB Season 8; TDA alone cuts Type-B failure rate 58%→27%.
-- **CMatrix takeaway:** EGATS is the direct architectural ancestor of the VDG (Vulnerability Dependency Graph) — UCB-guided attack-tree exploration with evidence scoring. CMatrix's key differentiation: EGATS lacks formal *prerequisite* edges, which the VDG adds.
+- **RedGrid takeaway:** EGATS is the direct architectural ancestor of the VDG (Vulnerability Dependency Graph) — UCB-guided attack-tree exploration with evidence scoring. RedGrid's key differentiation: EGATS lacks formal *prerequisite* edges, which the VDG adds.
 
 ---
 
@@ -218,7 +218,7 @@ flowchart LR
 
 - **Benchmark / Vuln:** AUTOPENBENCH.
 - **Key result:** 30.3% task completion / 69.05% subtask completion (vs. 9.09%/49.05% base); RAG boosts real-world subtask completion to 1.00 on WestWild.
-- **CMatrix takeaway:** PTG and phase-scoped comms inform CMatrix's FSM (Finite State Machine) state design; Summarizer pattern validates the Structured Handoff Bridge; strong empirical case for the FAISS (Facebook AI Similarity Search)-backed 3-tier memory.
+- **RedGrid takeaway:** PTG and phase-scoped comms inform RedGrid's FSM (Finite State Machine) state design; Summarizer pattern validates the Structured Handoff Bridge; strong empirical case for the FAISS (Facebook AI Similarity Search)-backed 3-tier memory.
 
 ---
 
@@ -235,7 +235,7 @@ flowchart TD
 
 - **Benchmark / Vuln:** 67 VulHub CVE (Common Vulnerabilities and Exposures) targets; HackTheBox.
 - **Key result:** 74.2% overall success (vs. PentestGPT much lower); completes 6/11 HTB (Hack The Box) machines vs. 3/11; 3× faster intelligence gathering.
-- **CMatrix takeaway:** Shapes CMatrix's specialist knowledge-injection pipeline and structured-prompt discipline; hierarchical RAG informs the Strategy/Skill memory split.
+- **RedGrid takeaway:** Shapes RedGrid's specialist knowledge-injection pipeline and structured-prompt discipline; hierarchical RAG informs the Strategy/Skill memory split.
 
 ---
 
@@ -253,7 +253,7 @@ flowchart LR
 
 - **Benchmark / Vuln:** Vulhub, 120 targets, 11-milestone (M7) evaluation.
 - **Key result:** 88% M7 milestone rate vs. Claude Code's ~65%; 61% cheaper; 42% faster; 100% stability vs. 75%.
-- **CMatrix takeaway:** Strongest evidence for structure > freeform LLM planning, reinforcing declarative task dispatch. However, its PDDL approach cannot handle open-ended zero-day discovery — this is explicitly why CMatrix's "Hybrid Classical-Planning + VDG (Vulnerability Dependency Graph)" idea was **removed** as not evaluable (no operator library exists for zero-day targets).
+- **RedGrid takeaway:** Strongest evidence for structure > freeform LLM planning, reinforcing declarative task dispatch. However, its PDDL approach cannot handle open-ended zero-day discovery — this is explicitly why RedGrid's "Hybrid Classical-Planning + VDG (Vulnerability Dependency Graph)" idea was **removed** as not evaluable (no operator library exists for zero-day targets).
 
 ---
 
@@ -274,7 +274,7 @@ flowchart TD
 
 - **Benchmark / Vuln:** HackTheBox, Cybench, NYU (New York University) CTF (Capture The Flag) Bench.
 - **Key result:** 44% HTB (Hack The Box) (vs. EnIGMA 26%), 22.5% Cybench, 22% NYU CTF Bench — SOTA (State-Of-The-Art) across all three, plus 65% more MITRE ATT&CK technique coverage.
-- **CMatrix takeaway:** Blueprint for the Planner→Team Manager→Specialist hierarchy with heterogeneous executors; the "Auto-prompter" is adopted directly as CMatrix's unstructured initial-recon step that seeds the Environmental Layer.
+- **RedGrid takeaway:** Blueprint for the Planner→Team Manager→Specialist hierarchy with heterogeneous executors; the "Auto-prompter" is adopted directly as RedGrid's unstructured initial-recon step that seeds the Environmental Layer.
 
 ---
 
@@ -294,7 +294,7 @@ flowchart TD
 
 - **Benchmark / Vuln:** MHBench (Multi-Host Benchmark), 40 multi-host red-team environments (lateral movement, credential theft, privesc [privilege escalation]).
 - **Key result:** 37/40 success vs. 3/40 for the best prior LLM system — a 12× improvement; works even with Haiku 3.5 (a smaller/cheaper Anthropic model).
-- **CMatrix takeaway:** Adopted wholesale as the multi-host attack surface handler — the Lateral-Movement Specialist implements Incalmo's exact 5-verb API at the same abstraction level as web-surface verbs, so one VDG (Vulnerability Dependency Graph)/Team Manager drives both surface types. This is the single strongest empirical proof in the whole corpus for "declarative task dispatch beats raw command generation."
+- **RedGrid takeaway:** Adopted wholesale as the multi-host attack surface handler — the Lateral-Movement Specialist implements Incalmo's exact 5-verb API at the same abstraction level as web-surface verbs, so one VDG (Vulnerability Dependency Graph)/Team Manager drives both surface types. This is the single strongest empirical proof in the whole corpus for "declarative task dispatch beats raw command generation."
 
 ---
 
@@ -311,7 +311,7 @@ flowchart LR
 
 - **Benchmark / Vuln:** Live enterprise AD (Active Directory) network — user account compromise.
 - **Key result:** First fully autonomous AD compromise on a real network; reasoning LLMs compromise 5.5× more accounts than non-reasoning; $17.56/account (vs. $10,080 human); DeepSeek-V3 hits $0.26/account.
-- **CMatrix takeaway:** Reinforces Planner/Executor separation and Executor self-repair as mandatory patterns; real-network (non-synthetic) validation signal for the multi-host/AD surface, alongside Incalmo's MHBench (Multi-Host Benchmark).
+- **RedGrid takeaway:** Reinforces Planner/Executor separation and Executor self-repair as mandatory patterns; real-network (non-synthetic) validation signal for the multi-host/AD surface, alongside Incalmo's MHBench (Multi-Host Benchmark).
 
 ---
 
@@ -330,7 +330,7 @@ flowchart TD
 
 - **Benchmark / Vuln:** CyBench, BountyBench, CyberGym.
 - **Key result:** 63.7% ASR (Attack Success Rate) (CyBench), 65.0% (BountyBench), 37.3% (CyberGym) — beats best baseline by +15.9/+17.5/+15.8pp (percentage points); removing execution feedback costs −41.6pp.
-- **CMatrix takeaway:** Direct reference implementation for CMatrix's Layer 2–4 loop and its 3-tier memory subsystem; the execution-feedback ablation justifies mandatory Execution→Evaluation→Validation as a closed loop, not an optional check.
+- **RedGrid takeaway:** Direct reference implementation for RedGrid's Layer 2–4 loop and its 3-tier memory subsystem; the execution-feedback ablation justifies mandatory Execution→Evaluation→Validation as a closed loop, not an optional check.
 
 ---
 
@@ -346,7 +346,7 @@ flowchart LR
 
 - **Benchmark / Vuln:** MATH dataset, ALFWorld, OptiGuide, unsafe-code detection — none security-specific.
 - **Key result:** 69.48% MATH (vs. 55.18% GPT-4 alone); +15pp (percentage points) on ALFWorld with a 3rd grounding agent; 4× code reduction; +35pp F1 (harmonic mean of precision and recall) on unsafe-code detection.
-- **CMatrix takeaway:** Foundational infra pattern underlying several surveyed VAPT (Vulnerability Assessment and Penetration Testing) systems; informs CMatrix's orchestration/human-in-the-loop layer conceptually, but not security-specific — treated as infrastructure, not an architectural source of novelty.
+- **RedGrid takeaway:** Foundational infra pattern underlying several surveyed VAPT (Vulnerability Assessment and Penetration Testing) systems; informs RedGrid's orchestration/human-in-the-loop layer conceptually, but not security-specific — treated as infrastructure, not an architectural source of novelty.
 
 ---
 
@@ -364,7 +364,7 @@ flowchart TD
 
 - **Benchmark / Vuln:** HumanEval, MBPP (Mostly Basic Python Problems), SoftwareDev (software engineering, not security).
 - **Key result:** 85.9%/87.7% Pass@1; 3× fewer human revisions; executability 3.9/4.0 vs. ChatDev 2.1, AutoGPT 1.0.
-- **CMatrix takeaway:** Validates SOPs-as-prompts (CMatrix's per-specialist knowledge-injection documents) and structured (not freeform chat) inter-agent handoffs — directly informs the Structured Handoff Bridge and Validation Agent's structured critique format.
+- **RedGrid takeaway:** Validates SOPs-as-prompts (RedGrid's per-specialist knowledge-injection documents) and structured (not freeform chat) inter-agent handoffs — directly informs the Structured Handoff Bridge and Validation Agent's structured critique format.
 
 ---
 
@@ -382,7 +382,7 @@ flowchart LR
 
 - **Benchmark / Vuln:** Minecraft open-world tasks (non-security).
 - **Key result:** 3.3× more unique items discovered, 15.3× faster tech-tree unlock, 100% zero-shot task solve vs. 0% for baselines, using only the learned skill library.
-- **CMatrix takeaway:** Direct prior art for CMatrix's Skill Library / cross-mission memory. Key adaptation: Voyager's skills are deterministic and linear; CMatrix's Strategy Memory must add **conditional branching** (e.g., WAF [Web Application Firewall]-adaptive payload switching) that game-world skills never require — this is C2's (Contribution 2's) specific security-domain contribution.
+- **RedGrid takeaway:** Direct prior art for RedGrid's Skill Library / cross-mission memory. Key adaptation: Voyager's skills are deterministic and linear; RedGrid's Strategy Memory must add **conditional branching** (e.g., WAF [Web Application Firewall]-adaptive payload switching) that game-world skills never require — this is C2's (Contribution 2's) specific security-domain contribution.
 
 ---
 
@@ -400,7 +400,7 @@ flowchart LR
 
 - **Benchmark / Vuln:** HumanEval, AlfWorld, HotPotQA (non-security).
 - **Key result:** 91% pass@1 HumanEval (vs. 80% GPT-4); +22pp (percentage points) AlfWorld over 12 trials; +20pp HotPotQA.
-- **CMatrix takeaway:** Formal basis for CMatrix's Episodic Failure Memory — the Validation Agent's Diagnosis-Adapt-Cap loop and the "reflection_text" field in FailureReflection are Reflexion's verbal self-reflection loop applied to exploit attempts.
+- **RedGrid takeaway:** Formal basis for RedGrid's Episodic Failure Memory — the Validation Agent's Diagnosis-Adapt-Cap loop and the "reflection_text" field in FailureReflection are Reflexion's verbal self-reflection loop applied to exploit attempts.
 
 ---
 
@@ -418,7 +418,7 @@ flowchart LR
 
 - **Benchmark / Vuln:** 40 professional-level CTF tasks, 6 vulnerability categories.
 - **Key result:** Claude 3.5 Sonnet solves 17.5% unguided / 43.9% subtask completion; hard ceiling at FST > 11 min unguided.
-- **CMatrix takeaway:** Adopted as Tier 2b cross-benchmark generalization check; the FST-ceiling finding supports the Early Stopping Heuristic design (diminishing returns past a time threshold).
+- **RedGrid takeaway:** Adopted as Tier 2b cross-benchmark generalization check; the FST-ceiling finding supports the Early Stopping Heuristic design (diminishing returns past a time threshold).
 
 ---
 
@@ -436,7 +436,7 @@ flowchart LR
 
 - **Benchmark / Vuln:** 9 LLMs × 346 tasks across 12 real web-app scenarios (ThinkPHP, Struts2, Flask, Spring, Jenkins).
 - **Key result:** ADM (0.25) and EG-Functional (0.26) are the hardest stages; fully autonomous agents fail catastrophically (PentestAgent 3%, VulnBot 6%); ground-truth-ADM injection lifts SMP (Sequential Modular Pipeline) to 67% (2× vanilla).
-- **CMatrix takeaway:** This is the paper CMatrix's central metric is validated against — Tier 1 benchmark and the direct source of the "Dependency-Reasoning Gap" (Failure Mode 2) that motivates the VDG's (Vulnerability Dependency Graph's) prerequisite/enables edges in the first place.
+- **RedGrid takeaway:** This is the paper RedGrid's central metric is validated against — Tier 1 benchmark and the direct source of the "Dependency-Reasoning Gap" (Failure Mode 2) that motivates the VDG's (Vulnerability Dependency Graph's) prerequisite/enables edges in the first place.
 
 ---
 
@@ -452,7 +452,7 @@ flowchart LR
 
 - **Benchmark / Vuln:** 25 real production systems (mlflow, langchain, FastAPI, gradio, curl, django, etc.), 27 CWEs (Common Weakness Enumerations), $10–$30,485 awards.
 - **Key result:** Best Detect 12.5%, best Exploit 67.5% (Claude 3.7 Thinking, via self-verification), best Patch 90% (Codex CLI); zero-day detection is hard for everyone.
-- **CMatrix takeaway:** Tier 5 (hardest tier) benchmark — real production systems, not sandboxes; dollar-value and cost-per-exploit reporting adopted as a co-primary metric category.
+- **RedGrid takeaway:** Tier 5 (hardest tier) benchmark — real production systems, not sandboxes; dollar-value and cost-per-exploit reporting adopted as a co-primary metric category.
 
 ---
 
@@ -467,7 +467,7 @@ flowchart TD
 
 - **Benchmark / Vuln:** N/A (meta-survey covering 40+ frameworks).
 - **Key result:** Frames "Cyber Threat Inflation" — falling attack cost + rising attack scale/accessibility; all 8 cyberattack categories need all 5 capabilities at high intensity.
-- **CMatrix takeaway:** Positioning/framing tool for CMatrix's motivation section, not an architectural source — used to argue why rigorous, benchmarked evaluation (C3, Contribution 3) matters for the field.
+- **RedGrid takeaway:** Positioning/framing tool for RedGrid's motivation section, not an architectural source — used to argue why rigorous, benchmarked evaluation (C3, Contribution 3) matters for the field.
 
 ---
 
@@ -484,7 +484,7 @@ flowchart LR
 
 - **Benchmark / Vuln:** N/A (surveys ReAct [Reason + Act], Reflexion, Voyager, MetaGPT, AutoGen, etc.).
 - **Key result:** Maps 30+ agent systems onto the 4-component taxonomy; identifies 6 open challenges (role-playing, alignment, prompt robustness, hallucination, knowledge boundary, efficiency).
-- **CMatrix takeaway:** Architecture-validation checklist only — confirms CMatrix's four layers map cleanly onto Profile/Memory/Planning/Action; no new mechanism adopted.
+- **RedGrid takeaway:** Architecture-validation checklist only — confirms RedGrid's four layers map cleanly onto Profile/Memory/Planning/Action; no new mechanism adopted.
 
 ---
 
@@ -501,7 +501,7 @@ flowchart LR
 
 - **Benchmark / Vuln:** 40 critical CVEs (Common Vulnerabilities and Exposures, CVSS [Common Vulnerability Scoring System] ≥ 9.0); 8-attack-type oracle (DoS [Denial of Service], File Access/Creation, DB [Database] Mod/Access, Unauthorized Admin Login, Privesc [Privilege Escalation], SSRF [Server-Side Request Forgery]).
 - **Key result:** Best agent exploits 13% one-day / 10% zero-day; ZAP (Zed Attack Proxy) scanner and Llama 3.1 both 0%; insufficient exploration is the dominant failure mode (55–80% of failures).
-- **CMatrix takeaway:** **CMatrix's primary evaluation benchmark (Tier 2)** and the direct source of Failure Mode 1 ("Insufficient Exploration") that the VDG's (Vulnerability Dependency Graph's) dependency-constrained frontier + full-surface recon defaults are architected to fix.
+- **RedGrid takeaway:** **RedGrid's primary evaluation benchmark (Tier 2)** and the direct source of Failure Mode 1 ("Insufficient Exploration") that the VDG's (Vulnerability Dependency Graph's) dependency-constrained frontier + full-surface recon defaults are architected to fix.
 
 ---
 
@@ -519,19 +519,19 @@ flowchart LR
 
 - **Benchmark / Vuln:** Same 15-vulnerability sandbox as Paper 1, plus 50-site real-world test.
 - **Key result:** 73.3% pass@5 / 42.7% pass@1 sandboxed; only 8× cheaper than human ($9.81 vs $80); real-world drops to 2% (1/50 sites); 4 vuln classes (AuthBypass, JS [JavaScript] Attacks, Hard SQLi [SQL — Structured Query Language — Injection], XSS [Cross-Site Scripting]+CSRF [Cross-Site Request Forgery]) never solved.
-- **CMatrix takeaway:** Confirms Paper 1's 15-vuln suite as CMatrix's Tier-0 benchmark and pass@5 (not pass@1) as the right capability metric for "one success is enough" real engagements; the same 4 unsolved vuln classes anchor CMatrix's differentiation targets, addressed via Session Persistence Service + multi-agent coordination.
+- **RedGrid takeaway:** Confirms Paper 1's 15-vuln suite as RedGrid's Tier-0 benchmark and pass@5 (not pass@1) as the right capability metric for "one success is enough" real engagements; the same 4 unsolved vuln classes anchor RedGrid's differentiation targets, addressed via Session Persistence Service + multi-agent coordination.
 
 ---
 
 ## Cross-Cutting Pattern (what all 29 papers converge on)
 
-| Recurring finding | CMatrix component that answers it |
+| Recurring finding | RedGrid component that answers it |
 |---|---|
 | Architecture beats model scale | Four-layer hierarchy + declarative task dispatch |
 | Flat/freeform planning loses to structure (FSM [Finite State Machine], SOPs [Standardized Operating Procedures], PTT [Pentesting Task Tree]) | Per-specialist sub-FSMs + knowledge-doc injection |
 | Session/context loss is a top failure cause | Fresh context per Specialist + FullCompact + Session Persistence Service |
 | Self-graded success produces false positives | Mandatory independent Validation Agent + oracle per surface |
-| No system models attack prerequisites at scale | Vulnerability Dependency Graph (VDG) — CMatrix's core novelty |
+| No system models attack prerequisites at scale | Vulnerability Dependency Graph (VDG) — RedGrid's core novelty |
 | No system evaluates one architecture across multiple surfaces | Tier 0–6 suite spanning web, GraphQL, multi-host |
 
 ---

@@ -1,7 +1,7 @@
 # [STEP 4b] — Experimental Protocol — OUTPUT ARTIFACT
 
 ## 1) Summary
-This sub-step defined the formal experimental protocol for validating the CMatrix platform. We established three distinct dataset tiers (Synthetic, Web, Enterprise) and defined five core metrics (Success Rate, Token Efficiency, Thoroughness, Safety Violation, Planning Latency) mapped to the Research Questions. We also designed a comprehensive ablation study and identified three baseline agents for comparison. Finally, we created two LaTeX assets: `table-02-experimental-benchmarks.tex` and `table-03-metrics-definitions.tex`.
+This sub-step defined the formal experimental protocol for validating the RedGrid platform. We established three distinct dataset tiers (Synthetic, Web, Enterprise) and defined five core metrics (Success Rate, Token Efficiency, Thoroughness, Safety Violation, Planning Latency) mapped to the Research Questions. We also designed a comprehensive ablation study and identified three baseline agents for comparison. Finally, we created two LaTeX assets: `table-02-experimental-benchmarks.tex` and `table-03-metrics-definitions.tex`.
 
 ## 2) Full Output
 
@@ -16,7 +16,7 @@ Evaluation is conducted across 80 distinct security tasks categorized into three
 | Metric | Definition | RQ |
 | :--- | :--- | :--- |
 | **Success Rate (SR)** | Percentage of tasks where the vulnerability is correctly identified and validated. | RQ2, RQ4 |
-| **Token Efficiency (TE)** | Ratio of baseline tokens to CMatrix tokens for the same task. | RQ1 |
+| **Token Efficiency (TE)** | Ratio of baseline tokens to RedGrid tokens for the same task. | RQ1 |
 | **Thoroughness (TH)** | Percentage of ground-truth vulnerabilities discovered during assessment. | RQ2 |
 | **Safety Violation (SVR)** | Count of unauthorized "high-risk" tool executions reaching the target infrastructure. | RQ3 |
 | **Planning Latency (PL)** | Time from objective input to the first actionable tool execution. | RQ1 |

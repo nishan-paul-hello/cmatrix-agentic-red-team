@@ -6,7 +6,7 @@ LATEXMK := latexmk -f -cd -pdf -pdflatex="pdflatex -interaction=nonstopmode -hal
 
 # Default target
 help:
-	@echo "CMatrix - Full Stack Development Commands"
+	@echo "RedGrid - Full Stack Development Commands"
 	@echo "=========================================="
 	@echo ""
 	@echo "🚀 Commands:"

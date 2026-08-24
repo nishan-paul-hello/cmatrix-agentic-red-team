@@ -16,7 +16,7 @@ This sub-step finalized the Discussion and Limitations sections (§6) of the man
 3. **Exploit Generation**: Constraints on 0-day discovery. *Future Work*: Integration of symbolic execution worker agents.
 
 ## 3) Key Decisions Made
-- **Avoidance of Overclaiming**: Explicitly stated that CMatrix is still constrained by the underlying LLM's binary exploit generation capabilities, ensuring the paper remains defensible at top-tier security venues.
+- **Avoidance of Overclaiming**: Explicitly stated that RedGrid is still constrained by the underlying LLM's binary exploit generation capabilities, ensuring the paper remains defensible at top-tier security venues.
 - **"Governed Autonomy" Terminology**: Coined this term to describe our contribution #3, providing a punchy conceptual hook for the conclusion.
 - **Link to Contributions**: Ensured that each discussion subsection directly validates one or more of the 4 core contributions from 3b.
 

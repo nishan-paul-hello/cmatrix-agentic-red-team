@@ -1,4 +1,4 @@
-# LLM Agents Can Autonomously Hack Websites — Deep Survey Notes for CMatrix
+# LLM Agents Can Autonomously Hack Websites — Deep Survey Notes for RedGrid
 
 | Field | Details |
 |-------|---------|
@@ -6,7 +6,7 @@
 | **Venue** | arXiv:2402.06664v3 [cs.CR] |
 | **Published** | February 2024 |
 | **Repository** | Not publicly released (prompts/docs withheld by responsible disclosure) |
-| **Relevance** | ⭐⭐⭐⭐☆ — This is the first empirical proof that a single GPT-4 agent can autonomously exploit real websites end-to-end, without being told the vulnerability type. It establishes the capability baseline that CMatrix must exceed, defines the 15-vulnerability benchmark that is directly usable as a CMatrix evaluation suite, and quantifies the exact cost-per-hack economics ($9.81 GPT-4 vs $80 human). The ablation study is the most important section: docs + prompt are both necessary — removing either collapses performance to GPT-3.5 levels. |
+| **Relevance** | ⭐⭐⭐⭐☆ — This is the first empirical proof that a single GPT-4 agent can autonomously exploit real websites end-to-end, without being told the vulnerability type. It establishes the capability baseline that RedGrid must exceed, defines the 15-vulnerability benchmark that is directly usable as a RedGrid evaluation suite, and quantifies the exact cost-per-hack economics ($9.81 GPT-4 vs $80 human). The ablation study is the most important section: docs + prompt are both necessary — removing either collapses performance to GPT-3.5 levels. |
 | **Key Claim** | GPT-4 autonomously exploits 73.3% (11/15, pass@5) of sandboxed web vulnerabilities at $9.81/successful hack — 8× cheaper than a human analyst. GPT-3.5 = 6.7%. All 8 open-source models tested = 0%. Removing domain docs drops success from 42.7% to 20%; removing both docs and detailed prompt drops to 7% — confirming that knowledge grounding and agentic planning are independently necessary. |
 
 ---
@@ -15,7 +15,7 @@
 
 This paper answers a simple question empirically: *can a single LLM agent, given only a target URL and access to standard tools, autonomously find and exploit web vulnerabilities?* The answer is yes — but only for GPT-4. Everything below GPT-4 fails entirely (all 8 open-source models tested = 0%). This is the clearest capability threshold paper in the survey: GPT-4's combination of tool use, long-context retention, and adaptive multi-step planning is necessary; no open-source model as of early 2024 crosses this threshold.
 
-**For CMatrix:** This paper sets the performance floor. CMatrix's single-specialist benchmark should be able to replicate or exceed the 73.3% pass@5 on this exact 15-vulnerability suite. More importantly, the ablation study tells us the two components that must not be removed from any CMatrix specialist: (1) domain knowledge documents, and (2) a planning-oriented system prompt. These are not optional enhancements — they are the minimum necessary conditions for any hard-class vulnerability exploitation.
+**For RedGrid:** This paper sets the performance floor. RedGrid's single-specialist benchmark should be able to replicate or exceed the 73.3% pass@5 on this exact 15-vulnerability suite. More importantly, the ablation study tells us the two components that must not be removed from any RedGrid specialist: (1) domain knowledge documents, and (2) a planning-oriented system prompt. These are not optional enhancements — they are the minimum necessary conditions for any hard-class vulnerability exploitation.
 
 ---
 
@@ -116,7 +116,7 @@ flowchart LR
 | Hard SQL Injection | Hard | **0%** | — |
 | XSS + CSRF | Hard | **0%** | — |
 
-> GPT-4 **fails** on multi-component chains requiring coordinated browser session state (Authorization Bypass, XSS+CSRF). These are the exact gaps CMatrix's multi-turn session management (Paper 06) and Playwright verification (Papers 02, 04) are designed to close.
+> GPT-4 **fails** on multi-component chains requiring coordinated browser session state (Authorization Bypass, XSS+CSRF). These are the exact gaps RedGrid's multi-turn session management (Paper 06) and Playwright verification (Papers 02, 04) are designed to close.
 
 ### Ablation Study — What Actually Drives Success
 
@@ -140,12 +140,12 @@ flowchart LR
 
 ---
 
-## 🔑 Key Takeaways for CMatrix (Ranked by Impact)
+## 🔑 Key Takeaways for RedGrid (Ranked by Impact)
 
 ### 🔴 Critical
 
-#### 1. The 15-Vulnerability Benchmark is CMatrix's Minimum Web Evaluation Suite
-This paper provides the clearest, most replicable web-focused benchmark in the survey. Every CMatrix evaluation run should include these 15 vulnerabilities in Docker sandboxes:
+#### 1. The 15-Vulnerability Benchmark is RedGrid's Minimum Web Evaluation Suite
+This paper provides the clearest, most replicable web-focused benchmark in the survey. Every RedGrid evaluation run should include these 15 vulnerabilities in Docker sandboxes:
 
 ```
 Easy:   LFI, CSRF, XSS, SQL Injection
@@ -155,13 +155,13 @@ Hard:   SSRF, JavaScript Attacks, Hard SQL Injection, Hard SQL Union, XSS+CSRF
 
 Target: pass@5 ≥ 73.3% (match GPT-4 baseline). Stretch: pass@1 ≥ 42.7%.
 
-GPT-4 fails on 4 vulns (Authorization Bypass, JavaScript Attacks, Hard SQLi, XSS+CSRF) — these 4 are CMatrix's differentiation targets. Solve them and CMatrix demonstrably outperforms a single GPT-4 ReAct agent.
+GPT-4 fails on 4 vulns (Authorization Bypass, JavaScript Attacks, Hard SQLi, XSS+CSRF) — these 4 are RedGrid's differentiation targets. Solve them and RedGrid demonstrably outperforms a single GPT-4 ReAct agent.
 
 #### 2. Domain Knowledge Documents are Not Optional — They Are Structural
 The ablation is unambiguous: removing docs drops success from 42.7% to 17%, eliminating all hard-class and most medium-class successes. This directly validates Papers 02 and 07's domain document injection design.
 
-**CMatrix implementation — minimum document set per specialist:**
-- XSS Specialist: 2 XSS guides + CMatrix XSS SOP + filter bypass cheat sheet
+**RedGrid implementation — minimum document set per specialist:**
+- XSS Specialist: 2 XSS guides + RedGrid XSS SOP + filter bypass cheat sheet
 - SQLi Specialist: 2 SQLi guides + timing oracle guide + UNION extraction procedure
 - SSRF Specialist: 1 SSRF guide + internal endpoint enumeration procedure
 - SSTI Specialist: 1 SSTI guide + Jinja2/Twig/Freemarker sandbox escape catalog
@@ -169,38 +169,38 @@ The ablation is unambiguous: removing docs drops success from 42.7% to 17%, elim
 
 Documents must be injected at task start — not retrieved lazily via RAG. Static injection outperforms RAG-on-demand for small, curated sets.
 
-#### 3. Pass@5 is the Right Evaluation Metric for CMatrix — Not Pass@1
-This paper formalizes why: in real security engagements, **one successful exploit is enough**. Pass@1 measures average reliability; pass@5 measures whether the agent can *eventually* find and exploit a vulnerability given multiple tries. CMatrix should report both, but pass@5 is the primary capability metric.
+#### 3. Pass@5 is the Right Evaluation Metric for RedGrid — Not Pass@1
+This paper formalizes why: in real security engagements, **one successful exploit is enough**. Pass@1 measures average reliability; pass@5 measures whether the agent can *eventually* find and exploit a vulnerability given multiple tries. RedGrid should report both, but pass@5 is the primary capability metric.
 
-**Implication for budget:** 5 trials × $4.19/trial = $20.95 per vulnerability. For a 15-vuln benchmark: ~$314. Acceptable for evaluation; too expensive for production (→ CMatrix should maximize pass@1 with better architecture).
+**Implication for budget:** 5 trials × $4.19/trial = $20.95 per vulnerability. For a 15-vuln benchmark: ~$314. Acceptable for evaluation; too expensive for production (→ RedGrid should maximize pass@1 with better architecture).
 
-#### 4. GPT-4's 4 Failures Define CMatrix's Architecture Goals
+#### 4. GPT-4's 4 Failures Define RedGrid's Architecture Goals
 The 4 vulnerabilities GPT-4 fails on share a common root cause: they require **coordinated multi-turn session state across multiple browser interactions**:
 - **Authorization Bypass** — requires stealing session token then reusing it in a different request context
 - **JavaScript Attacks** — requires injecting JS and then observing a different user's browser behavior
 - **Hard SQLi** — requires maintaining exact payload state across many retries with no error signals
 - **XSS+CSRF** — requires XSS execution to trigger a CSRF in the admin's browser session
 
-CMatrix's Session Management (Paper 06) + Playwright DOM verification (Papers 02, 04) + multi-agent coordination (Paper 02 Team Manager) directly address all 4. A CMatrix run on this benchmark should solve these 4 where GPT-4 fails.
+RedGrid's Session Management (Paper 06) + Playwright DOM verification (Papers 02, 04) + multi-agent coordination (Paper 02 Team Manager) directly address all 4. A RedGrid run on this benchmark should solve these 4 where GPT-4 fails.
 
 #### 5. 38 Tool Calls is the Deep Reasoning Ceiling for Single-Agent GPT-4
-The Hard SQL Union required 38 sequential tool calls from a single agent maintaining full context. At ~$4.19/run, this is near the practical context and cost limit for a single ReAct agent. CMatrix's FSM-based architecture (Paper 05 PSM) handles this correctly: distribute the 38 steps across Recon Agent (steps 1–5), SQLi Specialist (steps 6–34), Validation Agent (steps 35–38) — each with fresh context.
+The Hard SQL Union required 38 sequential tool calls from a single agent maintaining full context. At ~$4.19/run, this is near the practical context and cost limit for a single ReAct agent. RedGrid's FSM-based architecture (Paper 05 PSM) handles this correctly: distribute the 38 steps across Recon Agent (steps 1–5), SQLi Specialist (steps 6–34), Validation Agent (steps 35–38) — each with fresh context.
 
 ### 🟡 Important
 
 #### 6. The 10-Minute Timeout is the Right Hard Stop — Use It
-Every CMatrix mission against a single vulnerability should have a hard wall-clock timeout (10 minutes per this paper, 300s in Paper 05, ~$0.30 cost cap in Paper 03). The exact value matters less than having one. An agent that keeps trying without a timeout will hallucinate progress and burn budget.
+Every RedGrid mission against a single vulnerability should have a hard wall-clock timeout (10 minutes per this paper, 300s in Paper 05, ~$0.30 cost cap in Paper 03). The exact value matters less than having one. An agent that keeps trying without a timeout will hallucinate progress and burn budget.
 
-#### 7. Cost-Per-Successful-Exploit is the Primary CMatrix Business Metric
-$9.81 per successful exploit vs $80 human. CMatrix should report this as its primary commercial metric alongside technical pass rates. Track: `cost_per_run × (1 / pass@1_rate)` = cost per successful finding.
+#### 7. Cost-Per-Successful-Exploit is the Primary RedGrid Business Metric
+$9.81 per successful exploit vs $80 human. RedGrid should report this as its primary commercial metric alongside technical pass rates. Track: `cost_per_run × (1 / pass@1_rate)` = cost per successful finding.
 
-As pass@1 improves from 42.7% → 70% (CMatrix target), cost per successful exploit drops from $9.81 → ~$6.00 at same inference cost — and inference costs are falling.
+As pass@1 improves from 42.7% → 70% (RedGrid target), cost per successful exploit drops from $9.81 → ~$6.00 at same inference cost — and inference costs are falling.
 
 #### 8. Real-World Test: 1/50 Websites Had XSS — Expect Low Base Rates in the Wild
-The real-world experiment found 1 XSS in 50 candidate sites (2%). This is lower than the sandboxed benchmark (73.3%) because real sites have variable defenses, mod_security, WAFs, and patchedness. CMatrix's real-world pass rate will be lower than benchmark pass rate — calibrate expectations accordingly.
+The real-world experiment found 1 XSS in 50 candidate sites (2%). This is lower than the sandboxed benchmark (73.3%) because real sites have variable defenses, mod_security, WAFs, and patchedness. RedGrid's real-world pass rate will be lower than benchmark pass rate — calibrate expectations accordingly.
 
 #### 9. Detection ≠ Exploitation — Measure Both Separately
-OpenChat-3.5 correctly identifies the vulnerability class 25.3% of the time but completes 0% of exploits. CMatrix should report two separate metrics per benchmark run:
+OpenChat-3.5 correctly identifies the vulnerability class 25.3% of the time but completes 0% of exploits. RedGrid should report two separate metrics per benchmark run:
 - **Detection rate** — did the agent correctly identify the vulnerability type?
 - **Exploitation rate** (pass@1, pass@5) — did the agent produce a working PoC?
 
@@ -208,19 +208,19 @@ A system with high detection + low exploitation has good analysis agents but wea
 
 ### 🟢 Nice-to-have
 
-#### 10. 85 Lines of Code — CMatrix's Minimal Specialist Template
-The entire agent is implementable in 85 lines using OpenAI Assistants API + LangChain. CMatrix's Specialist base class should be similarly minimal — complex behavior comes from the SOP documents and prompt structure, not from elaborate code. Keep the scaffolding thin.
+#### 10. 85 Lines of Code — RedGrid's Minimal Specialist Template
+The entire agent is implementable in 85 lines using OpenAI Assistants API + LangChain. RedGrid's Specialist base class should be similarly minimal — complex behavior comes from the SOP documents and prompt structure, not from elaborate code. Keep the scaffolding thin.
 
 #### 11. Webhook XSS Requires External Listener — Add to Tool Suite
-Webhook XSS (48 avg tool calls, 20% success) requires exfiltrating admin DOM to an external endpoint. CMatrix needs a webhook listener tool (e.g., `start_webhook_listener(port)` → returns URL) as part of the XSS specialist's tool suite. Without this, the entire Webhook XSS vuln class is unreachable.
+Webhook XSS (48 avg tool calls, 20% success) requires exfiltrating admin DOM to an external endpoint. RedGrid needs a webhook listener tool (e.g., `start_webhook_listener(port)` → returns URL) as part of the XSS specialist's tool suite. Without this, the entire Webhook XSS vuln class is unreachable.
 
 ---
 
-## 📐 The 15-Vulnerability Suite as a CMatrix Benchmark Template
+## 📐 The 15-Vulnerability Suite as a RedGrid Benchmark Template
 
 ```mermaid
 flowchart TD
-    subgraph Bench["CMatrix 15-Vulnerability Evaluation Suite"]
+    subgraph Bench["RedGrid 15-Vulnerability Evaluation Suite"]
         subgraph Easy["Easy (GPT-4: 80-100%)"]
             E1["SQL Injection\n100% target → pass@1"]
             E2["CSRF\n100% target → pass@1"]
@@ -234,22 +234,22 @@ flowchart TD
             M3["File Upload\n40% → pass@3"]
             M4["SSTI\n40% → pass@3"]
             M5["Webhook XSS\n20% → pass@5 + webhook listener"]
-            M6["Authorization Bypass\n0% → CMatrix target"]
+            M6["Authorization Bypass\n0% → RedGrid target"]
         end
 
         subgraph Hard["Hard (GPT-4: 0-20%)"]
             H1["Hard SQL Union\n20% → pass@5"]
             H2["SSRF\n20% → pass@5"]
-            H3["Hard SQL Injection\n0% → CMatrix target"]
-            H4["JavaScript Attacks\n0% → CMatrix target"]
-            H5["XSS + CSRF chain\n0% → CMatrix target"]
+            H3["Hard SQL Injection\n0% → RedGrid target"]
+            H4["JavaScript Attacks\n0% → RedGrid target"]
+            H5["XSS + CSRF chain\n0% → RedGrid target"]
         end
     end
 
     GPT4["GPT-4 Single Agent Baseline: 73.3% pass@5"]
-    CMatrix["CMatrix Target: 80%+ pass@5, solve 3/4 GPT-4 failures"]
+    RedGrid["RedGrid Target: 80%+ pass@5, solve 3/4 GPT-4 failures"]
     Bench --> GPT4
-    Bench --> CMatrix
+    Bench --> RedGrid
 ```
 
 ---

@@ -1,6 +1,6 @@
 \section{System Design and Methodology}
 
-The CMatrix framework is engineered to address the operational fragility of standard agentic loops in security contexts. Our methodology centers on the property of \textbf{Governed Autonomy}, which we define as the architectural state where reasoning and planning are fully autonomous, yet all network-side effects are mediated by a verifiable security policy. We achieve this through the composition of three advanced reasoning patterns—ToT, ReWOO, and Reflexion—into a unified, stateful orchestration pipeline.
+The RedGrid framework is engineered to address the operational fragility of standard agentic loops in security contexts. Our methodology centers on the property of \textbf{Governed Autonomy}, which we define as the architectural state where reasoning and planning are fully autonomous, yet all network-side effects are mediated by a verifiable security policy. We achieve this through the composition of three advanced reasoning patterns—ToT, ReWOO, and Reflexion—into a unified, stateful orchestration pipeline.
 
 \subsection{Stateful Multi-Agent Orchestration}
 We implement the framework as a stateful directed acyclic graph (DAG) using LangGraph. The \textbf{Master Orchestrator} maintains the global state $S_t$, which includes the original objective, the current strategy, and the execution history. 

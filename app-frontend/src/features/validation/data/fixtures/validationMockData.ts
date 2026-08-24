@@ -1,5 +1,4 @@
-export type VStatus =
-    "PENDING" | "RETRY" | "VALIDATED" | "RULED_OUT" | "ORACLE_CONFIRMED";
+export type VStatus = "PENDING" | "RETRY" | "VALIDATED" | "RULED_OUT" | "ORACLE_CONFIRMED";
 export interface VFinding {
     id: string;
     type: string;

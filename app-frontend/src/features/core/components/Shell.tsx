@@ -147,7 +147,7 @@ export default function Shell({
                     <GeometricMark size={20} />
                     <div className="flex flex-col">
                         <span className="text-[12px] font-bold tracking-[0.2em] text-[var(--color-hex-f2f2f2)]">
-                            CMATRIX
+                            RedGrid
                         </span>
                         <span className="text-[7px] tracking-[0.2em] text-[var(--color-hex-666666)]">
                             AGENTIC RED TEAM

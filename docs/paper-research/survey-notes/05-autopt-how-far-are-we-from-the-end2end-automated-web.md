@@ -1,4 +1,4 @@
-# AutoPT: How Far Are We from the End2End Automated Web Penetration Testing? — Deep Survey Notes for CMatrix
+# AutoPT: How Far Are We from the End2End Automated Web Penetration Testing? — Deep Survey Notes for RedGrid
 
 | Field | Details |
 |-------|---------|
@@ -6,7 +6,7 @@
 | **Venue** | ACM Transactions on Software Engineering and Methodology (TOSEM) / Conference Proceedings |
 | **Published** | November 2024 |
 | **Repository** | https://github.com/Dizzy-K/AutoPT |
-| **Relevance** | ⭐⭐⭐⭐☆ — Introduces the Penetration Testing State Machine (PSM), the clearest solution to the agent loop-trap and context-overflow problems. The FSM architecture is the control-flow backbone CMatrix needs to prevent agents from wasting budget on dead-ends. |
+| **Relevance** | ⭐⭐⭐⭐☆ — Introduces the Penetration Testing State Machine (PSM), the clearest solution to the agent loop-trap and context-overflow problems. The FSM architecture is the control-flow backbone RedGrid needs to prevent agents from wasting budget on dead-ends. |
 | **Key Claim** | PSM raises task completion from 22% (ReAct) to 41% (AutoPT), cuts execution time by 50%, cuts API cost by 71.6%, and operates at 99.6% lower cost than human testers ($0.99 vs $310 for 20 targets). |
 
 ---
@@ -205,7 +205,7 @@ sequenceDiagram
 
 ---
 
-## 📊 Benchmark Analysis for CMatrix
+## 📊 Benchmark Analysis for RedGrid
 
 ### What the AutoPT Benchmark Is
 
@@ -214,37 +214,37 @@ sequenceDiagram
 - **Explicit verification strings** (e.g., `cat /etc/passwd` output) as ground-truth oracle
 - **Standardized Docker deployment** — no manual setup per run
 
-This is the only benchmark in the survey so far with **difficulty stratification by step count** — making it ideal for measuring whether CMatrix can handle multi-stage exploit chains.
+This is the only benchmark in the survey so far with **difficulty stratification by step count** — making it ideal for measuring whether RedGrid can handle multi-stage exploit chains.
 
-### How CMatrix Can Adopt This Benchmark
+### How RedGrid Can Adopt This Benchmark
 
-| Dimension | AutoPT Benchmark | CMatrix Adaptation |
+| Dimension | AutoPT Benchmark | RedGrid Adaptation |
 |-----------|-----------------|-------------------|
 | **Challenge count** | 20 CVE targets | Combine with XBOW (104) + Paper 01 (15) + Paper 02 (14) = 153 total |
 | **Difficulty stratification** | Simple vs Complex (step count) | Adopt this classification; add a "Chain" tier for multi-host lateral movement |
-| **Success oracle** | Expected verification string (e.g., `/etc/passwd` contents) | CMatrix: generalize oracle to any extractable artifact (token, file, flag, DB row) |
-| **Source** | Vulhub Docker images | All publicly available — add to CMatrix CI pipeline |
+| **Success oracle** | Expected verification string (e.g., `/etc/passwd` contents) | RedGrid: generalize oracle to any extractable artifact (token, file, flag, DB row) |
+| **Source** | Vulhub Docker images | All publicly available — add to RedGrid CI pipeline |
 | **Coverage** | RCE, LFI, SQLi, SSRF, Deserialization, Auth Bypass | Missing: XSS, blind SQLi (covered by XBOW/AWE) |
-| **Tool** | Xray scanner + Kali terminal | CMatrix recon agent runs nmap + ffuf + Xray as alternatives |
+| **Tool** | Xray scanner + Kali terminal | RedGrid recon agent runs nmap + ffuf + Xray as alternatives |
 
 ### Benchmark Gaps
 
 1. **Web-only application-layer** — no infrastructure, cloud, or network layer
 2. **No multi-application chains** — each CVE is a single isolated target
-3. **Low overall solve rate (41% best)** — 59% of targets unsolved by current SOTA; these are the research frontier for CMatrix
-4. **0% on many critical CVEs** — Nginx (CVE-2021-23017), Tomcat (CVE-2017-12615), WebLogic (CVE-2020-14750, CVE-2017-10271), TeamCity (CVE-2023-42793) — these should be priority targets for CMatrix improvement
+3. **Low overall solve rate (41% best)** — 59% of targets unsolved by current SOTA; these are the research frontier for RedGrid
+4. **0% on many critical CVEs** — Nginx (CVE-2021-23017), Tomcat (CVE-2017-12615), WebLogic (CVE-2020-14750, CVE-2017-10271), TeamCity (CVE-2023-42793) — these should be priority targets for RedGrid improvement
 
 ---
 
-## 🔑 Key Takeaways for CMatrix (Ranked by Impact)
+## 🔑 Key Takeaways for RedGrid (Ranked by Impact)
 
-### 🔴 Critical — Must-have in CMatrix v1
+### 🔴 Critical — Must-have in RedGrid v1
 
 #### 1. Replace Freeform ReAct Loop with a State Machine at the Top Level
-The PSM is the control-flow backbone that prevents loop-trapping. CMatrix must not use an unconstrained ReAct loop as its top-level orchestration. Instead:
+The PSM is the control-flow backbone that prevents loop-trapping. RedGrid must not use an unconstrained ReAct loop as its top-level orchestration. Instead:
 
 ```
-CMatrix State Flow (PSM-inspired):
+RedGrid State Flow (PSM-inspired):
 Initialization
   → Recon State (Agent)          [ffuf, nmap, tech fingerprint]
   → Vuln Prioritization (Rule)   [rank candidates, zero LLM cost]
@@ -256,7 +256,7 @@ Initialization
 ```
 
 #### 2. Context Must Be Partitioned Between States, Not Accumulated
-This is the most operationally critical finding. CMatrix must pass **summary outputs** between states, not full conversation history. Each state's LLM context should contain only:
+This is the most operationally critical finding. RedGrid must pass **summary outputs** between states, not full conversation history. Each state's LLM context should contain only:
 - Its role-specific system prompt
 - The essential output from the immediately preceding state
 - Any relevant memory from SQLite (AWE-style filter/payload history)
@@ -264,35 +264,35 @@ This is the most operationally critical finding. CMatrix must pass **summary out
 Full context accumulation is the primary cause of 128k token limit failures.
 
 #### 3. Rule States Are Free — Use Them for Deterministic Filtering
-Vulnerability selection and target verification must be Rule States (no LLM call). This is a pure engineering optimization with zero cost. CMatrix's orchestration layer should classify every step as either "LLM reasoning needed" or "deterministic matching" — and only invoke the LLM for the former.
+Vulnerability selection and target verification must be Rule States (no LLM call). This is a pure engineering optimization with zero cost. RedGrid's orchestration layer should classify every step as either "LLM reasoning needed" or "deterministic matching" — and only invoke the LLM for the former.
 
 #### 4. Enforce Retry Thresholds — Hard Stop and State Jump
 When the exploitation state fails N times (suggested: N=3 based on AutoPT), the PSM must jump back to the Vuln Prioritization state and pick the next candidate. Never let an agent exhaust its budget on one PoC variant. This is a simple but extremely impactful rule.
 
 #### 5. Premature Give-Up is the Dominant Failure Mode
-75.6% of ReAct failures are premature give-up. CMatrix must explicitly prompt specialist agents with: "You must attempt at least N distinct strategies before reporting failure." The PSM's retry enforcement is the architectural fix, but the prompt must also reinforce it.
+75.6% of ReAct failures are premature give-up. RedGrid must explicitly prompt specialist agents with: "You must attempt at least N distinct strategies before reporting failure." The PSM's retry enforcement is the architectural fix, but the prompt must also reinforce it.
 
-### 🟡 Important — CMatrix v2
+### 🟡 Important — RedGrid v2
 
 #### 6. GPT-4o mini Outperforms GPT-4o on This Benchmark
-GPT-4o mini AutoPT = 41% vs GPT-4o AutoPT = 36%. The smaller model wins because the PSM reduces task difficulty enough that reasoning capacity is no longer the bottleneck — execution structure is. CMatrix should test with smaller/cheaper models after PSM is implemented; results may surprise.
+GPT-4o mini AutoPT = 41% vs GPT-4o AutoPT = 36%. The smaller model wins because the PSM reduces task difficulty enough that reasoning capacity is no longer the bottleneck — execution structure is. RedGrid should test with smaller/cheaper models after PSM is implemented; results may surprise.
 
 #### 7. Complex Tasks (≥3 Steps) Are the Real Frontier
-Most 0% failures are on Complex tasks. Simple tasks are largely solved. CMatrix's research contribution is specifically the multi-step complex exploit scenario — Drupalgeddon2 (80%), Rocket.Chat NoSQLi (100%), and TeamCity auth bypass (0%) define the gradient.
+Most 0% failures are on Complex tasks. Simple tasks are largely solved. RedGrid's research contribution is specifically the multi-step complex exploit scenario — Drupalgeddon2 (80%), Rocket.Chat NoSQLi (100%), and TeamCity auth bypass (0%) define the gradient.
 
-#### 8. Vulhub is the Infrastructure Source for CMatrix's CVE Test Suite
-Vulhub (https://vulhub.org/) provides pre-built vulnerable Docker environments for hundreds of CVEs. CMatrix should adopt Vulhub as the standard way to spin up CVE test targets — dramatically reducing benchmark maintenance overhead.
+#### 8. Vulhub is the Infrastructure Source for RedGrid's CVE Test Suite
+Vulhub (https://vulhub.org/) provides pre-built vulnerable Docker environments for hundreds of CVEs. RedGrid should adopt Vulhub as the standard way to spin up CVE test targets — dramatically reducing benchmark maintenance overhead.
 
 ### 🟢 Nice-to-have
 
 #### 9. TOSEM Publication Adds Academic Credibility
-AutoPT is published in ACM TOSEM — a top-tier SE venue. This makes it the most academically credible system in the survey (alongside Paper 01). CMatrix should cite this work when claiming the PSM architecture.
+AutoPT is published in ACM TOSEM — a top-tier SE venue. This makes it the most academically credible system in the survey (alongside Paper 01). RedGrid should cite this work when claiming the PSM architecture.
 
 ---
 
 ## 📐 PSM vs Prior Architectures — Positioning in the Survey
 
-| Design Dimension | ReAct (Papers 01, 03) | HPTSA (Paper 02) | MAPTA (Paper 03) | AWE (Paper 04) | AutoPT PSM (Paper 05) | CMatrix Recommendation |
+| Design Dimension | ReAct (Papers 01, 03) | HPTSA (Paper 02) | MAPTA (Paper 03) | AWE (Paper 04) | AutoPT PSM (Paper 05) | RedGrid Recommendation |
 |-----------------|:---------------------:|:----------------:|:----------------:|:--------------:|:--------------------:|----------------------|
 | Control flow | Freeform loop | 3-layer hierarchy | 4-phase loop | 3-layer + pipelines | FSM with deterministic transitions | PSM control flow + HPTSA hierarchy |
 | Context management | Accumulated history | Fresh per specialist | Fresh per sandbox | SQLite memory | State-partitioned outputs | State-partitioned + SQLite memory |
@@ -312,4 +312,4 @@ AutoPT is published in ACM TOSEM — a top-tier SE venue. This makes it the most
 | **Paper 04** (AWE) | SQLite memory + specialist pipelines | AWE's memory system is the per-state memory layer inside PSM's Agent States |
 | **Paper 10** (PentestGPT) | Multi-stage workflow with human oversight | AutoPT explicitly automates what PentestGPT does manually — compare architectures |
 | **Paper 22** (Reflexion) | Verbal self-reflection for agent improvement | Could Reflexion-style retry in the Exploitation State replace AutoPT's fixed retry threshold? |
-| **Paper 19** (AutoGen) | Multi-agent conversation framework | Is AutoGen's conversation model compatible with PSM state transitions for CMatrix? |
+| **Paper 19** (AutoGen) | Multi-agent conversation framework | Is AutoGen's conversation model compatible with PSM state transitions for RedGrid? |

@@ -1,4 +1,4 @@
-# BountyBench: Dollar Impact of AI Agent Attackers and Defenders on Real-World Cybersecurity Systems — Deep Survey Notes for CMatrix
+# BountyBench: Dollar Impact of AI Agent Attackers and Defenders on Real-World Cybersecurity Systems — Deep Survey Notes for RedGrid
 
 | Field | Details |
 |-------|---------|
@@ -6,7 +6,7 @@
 | **Venue** | arXiv 2025 |
 | **Published** | 2025 |
 | **Repository** | Stanford BountyBench (public) |
-| **Relevance** | ⭐⭐⭐⭐☆ — BountyBench is the first benchmark covering the **full vulnerability lifecycle** (Detect → Exploit → Patch) in real, evolving open-source systems with actual dollar awards ($10–$30,485). Its most important findings for CMatrix: (1) Claude 3.7 Sonnet thinking mode leads Exploit at 67.5% through systematic self-verification before submission; (2) coding agents (Codex CLI) dominate Patch (90%) via structured `apply_patch` tooling; (3) zero-day detection is hard for everyone (≤12.5%); (4) CWE-guided detection is viable as a structured test-time compute strategy; (5) "cybersecurity expert" role framing in system prompt dramatically reduces safety refusals vs generic prompting. |
+| **Relevance** | ⭐⭐⭐⭐☆ — BountyBench is the first benchmark covering the **full vulnerability lifecycle** (Detect → Exploit → Patch) in real, evolving open-source systems with actual dollar awards ($10–$30,485). Its most important findings for RedGrid: (1) Claude 3.7 Sonnet thinking mode leads Exploit at 67.5% through systematic self-verification before submission; (2) coding agents (Codex CLI) dominate Patch (90%) via structured `apply_patch` tooling; (3) zero-day detection is hard for everyone (≤12.5%); (4) CWE-guided detection is viable as a structured test-time compute strategy; (5) "cybersecurity expert" role framing in system prompt dramatically reduces safety refusals vs generic prompting. |
 | **Key Claim** | Best Detect: 12.5% (Codex CLI o3-high, $3,720 worth); Best Exploit: 67.5% (Claude 3.7 Thinking); Best Patch: 90% (Codex CLI o3-high and o4-mini, $14K+ worth). Coding agents outperform on Patch; Claude 3.7 Thinking outperforms on Exploit due to pre-submission self-verification loop; all agents fail at unguided zero-day detection. |
 
 ---
@@ -19,13 +19,13 @@ BountyBench is the first framework that:
 3. Tracks **system evolution** (multiple commits, multiple vulnerabilities per system)
 4. Introduces **information modulation** as a principled difficulty dial: No Info → CWE → CWE+Title → Full Report (= Exploit task)
 
-The three most important findings for CMatrix:
+The three most important findings for RedGrid:
 
-**Finding 1 (Claude 3.7 Thinking Mode = Exploit Leader at 67.5%):** Claude 3.7's thinking mode produces a *systematic pre-submission self-testing loop*: the agent runs its own exploit against the live environment, observes failures, diagnoses root cause, and revises before submitting. Of 27 successful exploit runs, 20 involved explicit self-testing. Other agents that skip self-testing submit broken exploits. This is the empirical validation for CMatrix's ER (Exploit Revision) stage: the Specialist must be required to self-test before `FinalSubmission`.
+**Finding 1 (Claude 3.7 Thinking Mode = Exploit Leader at 67.5%):** Claude 3.7's thinking mode produces a *systematic pre-submission self-testing loop*: the agent runs its own exploit against the live environment, observes failures, diagnoses root cause, and revises before submitting. Of 27 successful exploit runs, 20 involved explicit self-testing. Other agents that skip self-testing submit broken exploits. This is the empirical validation for RedGrid's ER (Exploit Revision) stage: the Specialist must be required to self-test before `FinalSubmission`.
 
-**Finding 2 (Structured Patching = 90% Patch Success):** Codex CLI's `apply_patch` structured tool (with `*** Begin Patch / Update File / End File` format and pre-application validation) achieves 92.3% invariant-pass rate on successful patches vs 70.6% for Claude 3.7 custom agent. Unstructured patch generation wastes iterations on patch application failures (mlflow 0 example: 36 iterations, multiple failed patch application attempts). CMatrix Patch Specialist must use structured diff format with pre-application validation.
+**Finding 2 (Structured Patching = 90% Patch Success):** Codex CLI's `apply_patch` structured tool (with `*** Begin Patch / Update File / End File` format and pre-application validation) achieves 92.3% invariant-pass rate on successful patches vs 70.6% for Claude 3.7 custom agent. Unstructured patch generation wastes iterations on patch application failures (mlflow 0 example: 36 iterations, multiple failed patch application attempts). RedGrid Patch Specialist must use structured diff format with pre-application validation.
 
-**Finding 3 (Information Modulation as CMatrix Difficulty Architecture):** The No Info → CWE → CWE+Title → Full Report spectrum provides 4 calibrated difficulty levels for the same underlying task. CMatrix can use this exact architecture to tune Specialist difficulty: pass Tier-1 hint (CWE class), then Tier-2 hint (CWE + vulnerability title), then Tier-3 hint (full report), measuring at which tier each specialist unlocks success.
+**Finding 3 (Information Modulation as RedGrid Difficulty Architecture):** The No Info → CWE → CWE+Title → Full Report spectrum provides 4 calibrated difficulty levels for the same underlying task. RedGrid can use this exact architecture to tune Specialist difficulty: pass Tier-1 hint (CWE class), then Tier-2 hint (CWE + vulnerability title), then Tier-3 hint (full report), measuring at which tier each specialist unlocks success.
 
 ---
 
@@ -77,7 +77,7 @@ Standard invariant-based detection (e.g., "server becomes unavailable") only cat
 
 This is localized: it tells you *which specific vulnerability* was found (e.g., CVE-2024-1643), not just that something was exploited. The evaluator can map the failing patched snapshot to the specific vuln that the patch addressed.
 
-**Why this matters for CMatrix:** CMatrix Validation Agent must implement this same two-stage verification: (1) exploit succeeds on vulnerable target, (2) verify that the exploit is not generic (test on a baseline non-vulnerable variant if available). Without the second check, a generic scanner success could be falsely reported as a specific vulnerability finding.
+**Why this matters for RedGrid:** RedGrid Validation Agent must implement this same two-stage verification: (1) exploit succeeds on vulnerable target, (2) verify that the exploit is not generic (test on a baseline non-vulnerable variant if available). Without the second check, a generic scanner success could be falsely reported as a specific vulnerability finding.
 
 ### 25 Real-World Open-Source Systems
 
@@ -147,7 +147,7 @@ flowchart LR
     CUSTOM -->|"Generic bash tools serve\nboth offense and defense"| NOTE2["Generic tools = balanced\noffense/defense"]
 ```
 
-**Implication for CMatrix:** CMatrix must use **different agent configurations** for offense (Exploit Specialist) vs defense (Patch Specialist). Coding agents (with structured file-edit tools) should power the Patch Specialist; general bash agents with thinking mode should power the Exploit Specialist.
+**Implication for RedGrid:** RedGrid must use **different agent configurations** for offense (Exploit Specialist) vs defense (Patch Specialist). Coding agents (with structured file-edit tools) should power the Patch Specialist; general bash agents with thinking mode should power the Exploit Specialist.
 
 ### Claude 3.7 Thinking Mode — Exploit Leader Analysis
 
@@ -206,7 +206,7 @@ Codex CLI has a strict system prompt defining "safe" behaviors. Custom agents us
 
 BountyBench (citing SecCodePLT [37]) confirms: "cybersecurity expert" framing is among the most effective strategies at reducing refusal rates — it contextualizes the task as ethical security research rather than malicious hacking.
 
-**CMatrix implication:** CMatrix Specialist system prompts must always use the "cybersecurity expert / ethical penetration tester / bug bounty researcher" framing in the system message, not "write an exploit" or "break into this system."
+**RedGrid implication:** RedGrid Specialist system prompts must always use the "cybersecurity expert / ethical penetration tester / bug bounty researcher" framing in the system message, not "write an exploit" or "break into this system."
 
 ### Web Search in Practice (Appendix J.1.2)
 
@@ -216,13 +216,13 @@ Claude Code used WebFetch 3 times (all in Detect with CWE+Title). Results:
 
 **Pattern:** Web search is valuable when the CWE+Title provides enough to construct a specific search URL (e.g., direct CVE documentation page). It fails when the search query is generic and the target page doesn't have the needed specifics.
 
-**CMatrix implication:** For Reconnaissance Specialist, web search is only effective when given a specific CVE identifier or a precise vulnerability title — triggering a targeted URL fetch, not a generic search. The NonCVE pipeline (Paper 24) has lower web search utility vs the CVE pipeline.
+**RedGrid implication:** For Reconnaissance Specialist, web search is only effective when given a specific CVE identifier or a precise vulnerability title — triggering a targeted URL fetch, not a generic search. The NonCVE pipeline (Paper 24) has lower web search utility vs the CVE pipeline.
 
 ---
 
 ## Vulnerabilities Exploited
 
-BountyBench covers 27 CWEs across 9 OWASP categories. Most relevant for CMatrix:
+BountyBench covers 27 CWEs across 9 OWASP categories. Most relevant for RedGrid:
 
 | CWE | Count | Real System Example | Attack Impact |
 |-----|-------|---------------------|---------------|
@@ -239,12 +239,12 @@ BountyBench covers 27 CWEs across 9 OWASP categories. Most relevant for CMatrix:
 
 ---
 
-## Key Takeaways for CMatrix
+## Key Takeaways for RedGrid
 
-### 🔴 Critical — CMatrix v1 Must-Haves
+### 🔴 Critical — RedGrid v1 Must-Haves
 
 **1. Mandatory Pre-Submission Self-Testing Loop for Exploit Specialist**
-Claude 3.7 Thinking's 67.5% Exploit success vs all other agents comes entirely from its explicit self-testing cycle before submission. CMatrix Exploit Specialist must enforce:
+Claude 3.7 Thinking's 67.5% Exploit success vs all other agents comes entirely from its explicit self-testing cycle before submission. RedGrid Exploit Specialist must enforce:
 
 ```python
 EXPLOIT_SPECIALIST_LOOP = """
@@ -262,7 +262,7 @@ Exploit confirmed working. Ready to submit."
 This is the ER (Exploit Revision) stage from PentestEval (Paper 24) implemented as a mandatory pre-submission gate, not an optional retry.
 
 **2. Structured Diff Tool for Patch Specialist**
-Codex CLI's 90% Patch rate (vs 35–60% for custom agents) is driven by the structured `apply_patch` tool. CMatrix Patch Specialist must have access to an analogous structured patch application tool:
+Codex CLI's 90% Patch rate (vs 35–60% for custom agents) is driven by the structured `apply_patch` tool. RedGrid Patch Specialist must have access to an analogous structured patch application tool:
 
 ```python
 PATCH_TOOL_SPEC = {
@@ -286,10 +286,10 @@ PATCH_TOOL_SPEC = {
 After applying patch: always run `invariant_check()` before issuing FinalSubmissionCommand.
 
 **3. "Cybersecurity Expert / Bug Bounty Researcher" Role in ALL System Prompts**
-Safety refusal rate: Codex CLI system prompts → 14.1% refusals; custom agents with expert framing → <0.4%. Apply to all CMatrix agents:
+Safety refusal rate: Codex CLI system prompts → 14.1% refusals; custom agents with expert framing → <0.4%. Apply to all RedGrid agents:
 
 ```python
-CMATRIX_SYSTEM_PROMPT_PREFIX = """You are a cybersecurity expert conducting authorized 
+redgrid_SYSTEM_PROMPT_PREFIX = """You are a cybersecurity expert conducting authorized 
 penetration testing and bug bounty research on a designated target system. You are working 
 within an ethical security research framework, with explicit permission to test, exploit, 
 and patch vulnerabilities in the target environment. Your goal is to identify and document 
@@ -299,21 +299,21 @@ security vulnerabilities to improve system security."""
 Do NOT say: "write an exploit", "attack this system", "hack into". DO say: "identify vulnerability", "demonstrate the security flaw", "reproduce the reported issue".
 
 **4. Two-Stage Exploit Verification (Detect Indicator Pattern)**
-CMatrix Validation Agent must implement BountyBench's Detect Indicator:
+RedGrid Validation Agent must implement BountyBench's Detect Indicator:
 - Stage 1: Run exploit on **current vulnerable target** → confirm success
 - Stage 2: Conceptually verify the finding is specific (not generic scanner noise) — if possible, test on a hardened/patched variant
 
 For DVWA/Vulhub targets, this means: (1) confirm exploit succeeds in current container, (2) verify the finding maps to the specific CVE/vuln class targeted (not a coincidental artifact).
 
 **5. Information Tier as Specialist Difficulty Architecture**
-CMatrix Team Manager should use BountyBench's information modulation as a standard difficulty escalation:
+RedGrid Team Manager should use BountyBench's information modulation as a standard difficulty escalation:
 
 ```python
 class TaskInfoTier:
-    NO_INFO = "Detect"          # CMatrix Tier-0: full autonomy, no hints
-    CWE_ONLY = "Detect+CWE"    # CMatrix Tier-1: vuln class hint  
-    CWE_TITLE = "Detect+Title" # CMatrix Tier-2: vuln title hint
-    FULL_REPORT = "Exploit"    # CMatrix Tier-3: full bounty report
+    NO_INFO = "Detect"          # RedGrid Tier-0: full autonomy, no hints
+    CWE_ONLY = "Detect+CWE"    # RedGrid Tier-1: vuln class hint  
+    CWE_TITLE = "Detect+Title" # RedGrid Tier-2: vuln title hint
+    FULL_REPORT = "Exploit"    # RedGrid Tier-3: full bounty report
 
 def escalate_specialist_info(specialist_result, current_tier, task):
     """If specialist fails, escalate to next information tier."""
@@ -325,7 +325,7 @@ def escalate_specialist_info(specialist_result, current_tier, task):
     return escalate_to_team_manager(task, "All tiers exhausted")
 ```
 
-### 🟡 Important — CMatrix v2
+### 🟡 Important — RedGrid v2
 
 **6. Differentiated Agent Configs: Exploit Specialist vs Patch Specialist**
 The offense-defense capability split is real and architectural:
@@ -334,30 +334,30 @@ The offense-defense capability split is real and architectural:
 
 Don't use a single agent config for both offensive and defensive tasks — the tool availability and prompting strategy need to be different.
 
-**7. Economic Value as CMatrix Benchmark Metric**
-BountyBench adds **dollar value** as a benchmark metric alongside binary success rate. CMatrix should adopt this:
+**7. Economic Value as RedGrid Benchmark Metric**
+BountyBench adds **dollar value** as a benchmark metric alongside binary success rate. RedGrid should adopt this:
 - Each benchmark task assigned a "difficulty tier" proxied by dollar value (analogous to FST in Cybench)
 - Track total $ value of successfully exploited/patched vulnerabilities
 - Higher-$ vulnerabilities are harder (more complex, multi-step, less obvious)
 - Report: `% tasks solved` AND `$ value solved` AND `cost per run` AND `net $/min`
 
-**8. BountyBench 25-System Corpus as CMatrix Advanced Benchmark Tier**
+**8. BountyBench 25-System Corpus as RedGrid Advanced Benchmark Tier**
 The 25 BountyBench systems (lunary, mlflow, langchain, FastAPI, gradio, curl, django, etc.) represent the hardest available open-source web application security benchmark:
 - Real production systems with real paying users
 - Real economic values confirmed by security teams
 - Covers 27 CWEs across 9 OWASP Top 10 categories
 - Already Docker-packaged with CI-verified exploits and patches
 
-CMatrix v2 should target: **beat Claude 3.7 Thinking 67.5% Exploit** as the Exploit Specialist target, and **beat Codex CLI o4-mini 90% Patch** as the Patch Specialist target.
+RedGrid v2 should target: **beat Claude 3.7 Thinking 67.5% Exploit** as the Exploit Specialist target, and **beat Codex CLI o4-mini 90% Patch** as the Patch Specialist target.
 
 **9. CWE-Guided Detection as Structured Test-Time Compute**
 Detect+CWE raises agent performance significantly and costs < $1M tokens per run at modest model sizes. This is a practical "structured test-time compute scaling" pattern:
 - Given `N` bounties and `K` CWEs to enumerate: run each agent over each CWE guide once
 - Total Detect+CWE coverage across all CWEs is bounded (< 1,000 CWEs as of writing)
-- This CWE enumeration strategy maps directly to CMatrix Reconnaissance Specialist's systematic weakness gathering: enumerate candidate CWE classes for the target tech stack, then search for each
+- This CWE enumeration strategy maps directly to RedGrid Reconnaissance Specialist's systematic weakness gathering: enumerate candidate CWE classes for the target tech stack, then search for each
 
 **10. Patch Quality Gate: Invariant Tests Before Submission**
-BountyBench's patch evaluation requires: (1) exploit fails (vuln removed) AND (2) invariants pass (code health maintained). Of patches that block the exploit, only 70.6% (Claude 3.7) vs 92.3% (Codex CLI) pass invariants. CMatrix Patch Specialist must include an invariant test gate:
+BountyBench's patch evaluation requires: (1) exploit fails (vuln removed) AND (2) invariants pass (code health maintained). Of patches that block the exploit, only 70.6% (Claude 3.7) vs 92.3% (Codex CLI) pass invariants. RedGrid Patch Specialist must include an invariant test gate:
 
 ```python
 PATCH_SUBMISSION_GATE = """
@@ -374,13 +374,13 @@ MANDATORY VALIDATION BEFORE SUBMITTING PATCH:
 ### 🟢 Nice-to-Have — Future Work
 
 **11. Browser-Use Agent for UI-Based Vulnerabilities**
-BountyBench's Appendix G notes: "we lack coverage of certain agent scaffolds, such as browser use." For vulnerabilities like CSRF, stored XSS that require browser interaction (JavaScript execution, cookie handling), CMatrix needs a browser-use agent variant. Key for: gradio UI vulns, LibreChat UI features, any session-management vuln that requires a real browser session.
+BountyBench's Appendix G notes: "we lack coverage of certain agent scaffolds, such as browser use." For vulnerabilities like CSRF, stored XSS that require browser interaction (JavaScript execution, cookie handling), RedGrid needs a browser-use agent variant. Key for: gradio UI vulns, LibreChat UI features, any session-management vuln that requires a real browser session.
 
 **12. Automated Benchmark Maintenance via Agent Self-Update**
-BountyBench notes that adding new bounties is "heavily manual, taking up to tens of hours each." The paper suggests: "the Exploit task and the Patch task mimic the work needed to add new tasks." CMatrix should create a semi-automated benchmark maintenance loop: when a new CVE is disclosed for a supported target system, an agent automatically: (1) sets up the vulnerable snapshot, (2) writes a reference exploit, (3) writes a reference patch, (4) adds CI verification. Reduces human effort from 10+ hours to review-only.
+BountyBench notes that adding new bounties is "heavily manual, taking up to tens of hours each." The paper suggests: "the Exploit task and the Patch task mimic the work needed to add new tasks." RedGrid should create a semi-automated benchmark maintenance loop: when a new CVE is disclosed for a supported target system, an agent automatically: (1) sets up the vulnerable snapshot, (2) writes a reference exploit, (3) writes a reference patch, (4) adds CI verification. Reduces human effort from 10+ hours to review-only.
 
 **13. Track Post-Knowledge-Cutoff Performance**
-BountyBench found 85% of bounties were disclosed in 2024-25 (most post-knowledge-cutoff for all models). This is the most contamination-resistant benchmark available. CMatrix should track performance specifically on post-knowledge-cutoff tasks to distinguish true capability from memorization.
+BountyBench found 85% of bounties were disclosed in 2024-25 (most post-knowledge-cutoff for all models). This is the most contamination-resistant benchmark available. RedGrid should track performance specifically on post-knowledge-cutoff tasks to distinguish true capability from memorization.
 
 ---
 
@@ -388,12 +388,12 @@ BountyBench found 85% of bounties were disclosed in 2024-25 (most post-knowledge
 
 | This Paper's Concept | Connected Paper(s) | Mechanism of Connection |
 |----------------------|-------------------|-----------------------|
-| **Full vulnerability lifecycle (Detect→Exploit→Patch)** | Papers 03, 05, 06, 14, 23, 24 | Paper 03's XBOW and Paper 06's HackWorld cover Exploit only. Paper 05's AutoPT covers Exploit+partial Recon. Paper 14's CHECKMATE covers 11-step Exploit chain. Paper 23's Cybench covers Exploit (CTF). Paper 24's PentestEval covers 6-stage Exploit workflow. BountyBench is the only paper that adds Detect (zero-day) and Patch (remediation) in the same benchmark. CMatrix needs all three capabilities. |
+| **Full vulnerability lifecycle (Detect→Exploit→Patch)** | Papers 03, 05, 06, 14, 23, 24 | Paper 03's XBOW and Paper 06's HackWorld cover Exploit only. Paper 05's AutoPT covers Exploit+partial Recon. Paper 14's CHECKMATE covers 11-step Exploit chain. Paper 23's Cybench covers Exploit (CTF). Paper 24's PentestEval covers 6-stage Exploit workflow. BountyBench is the only paper that adds Detect (zero-day) and Patch (remediation) in the same benchmark. RedGrid needs all three capabilities. |
 | **Claude 3.7 Thinking Mode pre-submission self-testing loop** | Papers 21, 22, 24 | Paper 21's Voyager self-verification (execution test → revise skill library) is the same pattern at skill-library level. Paper 22's Reflexion between-trial learning is the same at trial level. Paper 24's ER (Exploit Revision) stage is the same at exploit-level. BountyBench adds the empirical proof: pre-submission self-testing raises Exploit success by ~15-20pp vs no-testing agents (67.5% vs ~40-55% for equivalent models without thinking mode). |
-| **Structured patch format → invariant-passing success rate** | Papers 05, 10, 21, 24 | Paper 05's Two-Step Code Generation uses structured output format. Paper 10's Tool-Use Module standardizes exploit format. Paper 21's Voyager curriculum uses structured JSON skill format. Paper 24's ER stage uses structured error-revision loop. BountyBench adds specific evidence: structured `apply_patch` format → 92.3% invariant pass rate vs 70.6% for unstructured generation. Use structured formats for all code-generation outputs in CMatrix. |
-| **"Cybersecurity expert" role framing reduces safety refusals** | Papers 01, 11, 23 | Paper 01's Happe & Cito use expert role framing. Paper 11's LLM Ethical Check uses ethical pentesting framing. Paper 23's Cybench "cybersecurity expert" prompt is explicitly cited by BountyBench as most effective. CMatrix system prompts should consistently use this framing. |
-| **Information modulation as difficulty dial** | Papers 11, 14, 15, 23, 24 | Paper 11's confidence scoring varies information. Paper 14's CHECKMATE 11-milestone chain is fixed information. Paper 15's D-CIPHER controls information via challenge format. Paper 23's Cybench No-Info vs Subtask-Guided is a 2-point information dial. Paper 24's PentestEval provides full bounty report in all tasks (max info). BountyBench provides the cleanest 4-point continuous dial: No Info → CWE → CWE+Title → Full Report. CMatrix Team Manager should use this exact tiered info escalation. |
-| **Economic value as benchmark metric ($ value per task)** | Papers 03, 23 | Paper 03's XBOW HackerOne leaderboard uses dollar value implicitly (real bug bounties). Paper 23's Cybench uses FST as difficulty proxy (human time). BountyBench uses actual bug bounty dollar awards ($10–$30,485) as the explicit calibration metric. CMatrix should adopt $ value alongside % solve rate and FST as the three-metric evaluation standard. |
-| **Real evolving systems vs static CTF snapshots** | Papers 05, 08, 14, 23, 24 | Paper 05's Vulhub containers are static. Paper 08's REST API benchmarks are static. Paper 14's Docker containers are static. Paper 23's Cybench CTFs are single-snapshot. Paper 24's PentestEval Docker envs are static multi-stage. BountyBench introduces multi-commit system evolution — the benchmark can track how capabilities change as systems evolve (new vulns added, old vulns patched). CMatrix should target BountyBench systems as the hardest, most realistic benchmark tier. |
+| **Structured patch format → invariant-passing success rate** | Papers 05, 10, 21, 24 | Paper 05's Two-Step Code Generation uses structured output format. Paper 10's Tool-Use Module standardizes exploit format. Paper 21's Voyager curriculum uses structured JSON skill format. Paper 24's ER stage uses structured error-revision loop. BountyBench adds specific evidence: structured `apply_patch` format → 92.3% invariant pass rate vs 70.6% for unstructured generation. Use structured formats for all code-generation outputs in RedGrid. |
+| **"Cybersecurity expert" role framing reduces safety refusals** | Papers 01, 11, 23 | Paper 01's Happe & Cito use expert role framing. Paper 11's LLM Ethical Check uses ethical pentesting framing. Paper 23's Cybench "cybersecurity expert" prompt is explicitly cited by BountyBench as most effective. RedGrid system prompts should consistently use this framing. |
+| **Information modulation as difficulty dial** | Papers 11, 14, 15, 23, 24 | Paper 11's confidence scoring varies information. Paper 14's CHECKMATE 11-milestone chain is fixed information. Paper 15's D-CIPHER controls information via challenge format. Paper 23's Cybench No-Info vs Subtask-Guided is a 2-point information dial. Paper 24's PentestEval provides full bounty report in all tasks (max info). BountyBench provides the cleanest 4-point continuous dial: No Info → CWE → CWE+Title → Full Report. RedGrid Team Manager should use this exact tiered info escalation. |
+| **Economic value as benchmark metric ($ value per task)** | Papers 03, 23 | Paper 03's XBOW HackerOne leaderboard uses dollar value implicitly (real bug bounties). Paper 23's Cybench uses FST as difficulty proxy (human time). BountyBench uses actual bug bounty dollar awards ($10–$30,485) as the explicit calibration metric. RedGrid should adopt $ value alongside % solve rate and FST as the three-metric evaluation standard. |
+| **Real evolving systems vs static CTF snapshots** | Papers 05, 08, 14, 23, 24 | Paper 05's Vulhub containers are static. Paper 08's REST API benchmarks are static. Paper 14's Docker containers are static. Paper 23's Cybench CTFs are single-snapshot. Paper 24's PentestEval Docker envs are static multi-stage. BountyBench introduces multi-commit system evolution — the benchmark can track how capabilities change as systems evolve (new vulns added, old vulns patched). RedGrid should target BountyBench systems as the hardest, most realistic benchmark tier. |
 | **25-system open-source corpus (agentscope, gradio, django, curl, mlflow, etc.)** | Papers 03, 05, 06, 08 | Paper 05's 20 Vulhub CVEs. Paper 03's 104 Vulhub web CTFs. Paper 06's 36 CTF challenges. Paper 08's REST API targets (GitLab, Azure). BountyBench's 25 systems are more diverse (Python/JS/Go/C) and harder (real production systems with paying users). Use all benchmarks together for a calibrated evaluation suite. |
-| **Detect Indicator (two-stage exploit verification)** | Papers 05, 08, 14, 23 | Paper 05's Vulhub verification is single-stage (exploit passes). Paper 08's verifier checks API response. Paper 14's milestone chain requires sequential success. Paper 23's Cybench flag-match is single-stage. BountyBench's Detect Indicator uniquely tests: success on vulnerable AND failure on patched snapshot. This confirms the finding is vulnerability-specific, not a coincidental general attack. CMatrix Validation Agent must implement this. |
+| **Detect Indicator (two-stage exploit verification)** | Papers 05, 08, 14, 23 | Paper 05's Vulhub verification is single-stage (exploit passes). Paper 08's verifier checks API response. Paper 14's milestone chain requires sequential success. Paper 23's Cybench flag-match is single-stage. BountyBench's Detect Indicator uniquely tests: success on vulnerable AND failure on patched snapshot. This confirms the finding is vulnerability-specific, not a coincidental general attack. RedGrid Validation Agent must implement this. |

@@ -22,7 +22,7 @@ export function useValidationData() {
     };
 
     const updateFindingStatus = (finding: VFinding, newStatus: FindingStatus) => {
-        if (!canTransitionFinding(finding.status as FindingStatus, newStatus)) {
+        if (!canTransitionFinding(finding.status, newStatus)) {
             console.warn(
                 `Cannot transition finding ${finding.id} from ${finding.status} to ${newStatus}`,
             );

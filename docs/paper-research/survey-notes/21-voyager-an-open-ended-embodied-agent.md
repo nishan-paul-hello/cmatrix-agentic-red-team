@@ -1,4 +1,4 @@
-# Voyager: An Open-Ended Embodied Agent with Large Language Models — Deep Survey Notes for CMatrix
+# Voyager: An Open-Ended Embodied Agent with Large Language Models — Deep Survey Notes for RedGrid
 
 | Field | Details |
 |-------|---------|
@@ -6,7 +6,7 @@
 | **Venue** | NeurIPS 2023 / arXiv:2305.16291 |
 | **Published** | 2023 (May) |
 | **Repository** | https://github.com/MineDojo/Voyager |
-| **Relevance** | ⭐⭐⭐⭐☆ — Voyager's three-part lifelong-learning loop (curriculum → skill library → iterative refinement with self-verification) is the cleanest prior art for CMatrix's Specialist skill accumulation and automatic attack-surface curriculum generation across multi-session engagements. |
+| **Relevance** | ⭐⭐⭐⭐☆ — Voyager's three-part lifelong-learning loop (curriculum → skill library → iterative refinement with self-verification) is the cleanest prior art for RedGrid's Specialist skill accumulation and automatic attack-surface curriculum generation across multi-session engagements. |
 | **Key Claim** | VOYAGER discovers **3.3× more unique items** than best baseline, unlocks tech tree **15.3× faster**, traverses **2.3× longer distances**, and achieves **100% zero-shot task solve rate** vs 0% for all baselines (ReAct, Reflexion, AutoGPT) in a new world using only the learned skill library. |
 
 ---
@@ -15,9 +15,9 @@
 
 Voyager tackles the fundamental problem of **lifelong open-ended learning**: how can an agent operating in an unbounded environment continuously acquire new skills, avoid forgetting old ones, and generalize to novel tasks — all without gradient updates or human labels? The key insight is that **code is the ideal action space** for an LLM agent: programs are temporally extended (one function call can encode hundreds of low-level actions), compositional (complex skills are built from simpler subroutines), and interpretable (humans and the LLM itself can read them). Storing verified programs in a vector-indexed library and retrieving relevant ones at task time solves catastrophic forgetting cheaply — no continual learning math required.
 
-For CMatrix, this is directly analogous to: each successful exploit chain is a "skill" (e.g., `exploit_sqlmap_auth_bypass()`, `chain_idor_to_privilege_escalation()`). The library grows across missions, and when a new target is encountered the CMatrix planner retrieves the top-K relevant past exploit programs and injects them as in-context examples for the current specialist. The key CMatrix translation is: **Minecraft's automatic curriculum ≡ CMatrix's attack-surface curriculum** (what vulnerability class to probe next given current ESS state); **Minecraft's code execution feedback ≡ CMatrix's tool stdout/stderr + HTTP response codes**.
+For RedGrid, this is directly analogous to: each successful exploit chain is a "skill" (e.g., `exploit_sqlmap_auth_bypass()`, `chain_idor_to_privilege_escalation()`). The library grows across missions, and when a new target is encountered the RedGrid planner retrieves the top-K relevant past exploit programs and injects them as in-context examples for the current specialist. The key RedGrid translation is: **Minecraft's automatic curriculum ≡ RedGrid's attack-surface curriculum** (what vulnerability class to probe next given current ESS state); **Minecraft's code execution feedback ≡ RedGrid's tool stdout/stderr + HTTP response codes**.
 
-What makes Voyager critical for CMatrix is the **iterative prompting loop with three feedback types**: environment feedback (what happened mid-execution), execution errors (stack traces), and self-verification (LLM critic checking success postcondition against observed state). This is architecturally superior to single-shot Reflexion because it triggers refinement *within* a task attempt, not just *between* task attempts. The 4-round limit before advancing prevents rabbit-hole behavior — directly confirmed as correct by CMatrix's own rabbit-hole counter (Paper 09).
+What makes Voyager critical for RedGrid is the **iterative prompting loop with three feedback types**: environment feedback (what happened mid-execution), execution errors (stack traces), and self-verification (LLM critic checking success postcondition against observed state). This is architecturally superior to single-shot Reflexion because it triggers refinement *within* a task attempt, not just *between* task attempts. The 4-round limit before advancing prevents rabbit-hole behavior — directly confirmed as correct by RedGrid's own rabbit-hole counter (Paper 09).
 
 ---
 
@@ -55,7 +55,7 @@ The curriculum agent takes: (1) agent state (inventory, biome, position, health,
 
 Output: a single concrete task sentence such as "Mine 5 coal ore" or "Craft a stone pickaxe". The **warm-up schedule** is critical — context fields are gated by tasks-completed count (biome only after 10 tasks, health/hunger after 15) so the agent is not confused by irrelevant information early on.
 
-**CMatrix equivalent:** The Team Manager's dispatch-priority queue is the curriculum. Rather than a free-text task sentence, CMatrix uses a structured `{vuln_class, target_endpoint, priority_score, preconditions}` object. The adaptive element is identical: base next-task selection on current ESS state (what has been found), not a fixed script.
+**RedGrid equivalent:** The Team Manager's dispatch-priority queue is the curriculum. Rather than a free-text task sentence, RedGrid uses a structured `{vuln_class, target_endpoint, priority_score, preconditions}` object. The adaptive element is identical: base next-task selection on current ESS state (what has been found), not a fixed script.
 
 ### Skill Library — Executable Code + Semantic Index
 
@@ -83,7 +83,7 @@ Each skill is stored as: embedding of description → executable code. The descr
 
 **Retrieval accuracy** (Table A.4, n=309 samples): Top-1=80.2%, Top-3=93.2%, **Top-5=96.5%**. This validates the semantic indexing — the right skills are almost always in the retrieved set.
 
-**CMatrix implementation:** Skill library maps to the **Tier-3 Technical Action memory** (Paper 18) plus the **FAISS store of (task, exploit_code) pairs** (Papers 01, 04, 07, 12). The key Voyager improvement: generate a natural-language description of the code first, embed that description, and retrieve by embedding a generated description of the *new task*. This description-to-description matching is semantically richer than embedding raw code or tool outputs. CMatrix should use GPT-4o-mini to generate a `{vuln_class, target_context, technique_summary}` description of each successful exploit, embed that, and retrieve by embedding a generated description of the current attack sub-task.
+**RedGrid implementation:** Skill library maps to the **Tier-3 Technical Action memory** (Paper 18) plus the **FAISS store of (task, exploit_code) pairs** (Papers 01, 04, 07, 12). The key Voyager improvement: generate a natural-language description of the code first, embed that description, and retrieve by embedding a generated description of the *new task*. This description-to-description matching is semantically richer than embedding raw code or tool outputs. RedGrid should use GPT-4o-mini to generate a `{vuln_class, target_context, technique_summary}` description of each successful exploit, embed that, and retrieve by embedding a generated description of the current attack sub-task.
 
 ### Iterative Prompting Mechanism — Three Feedback Channels
 
@@ -109,9 +109,9 @@ flowchart TD
     GEN -->|"4th failure"| SKIP["Skip to next task\nadd to failed list"]
 ```
 
-The **self-verification critic** is the most important component: it gets current agent state + task description and outputs `{reasoning, success: bool, critique}`. Removing it causes a **73% drop** in discovered items. The critic uses few-shot examples covering edge cases: "Mining iron_ore gives raw_iron — inventory shows raw_iron, therefore success=True despite not having iron_ore in inventory." This pattern of *verifying postcondition by proxy evidence* (not just direct oracle match) is exactly what CMatrix's Validation Agent needs for non-obvious success signals (e.g., blind injection timing delays as proxy for successful SQLi).
+The **self-verification critic** is the most important component: it gets current agent state + task description and outputs `{reasoning, success: bool, critique}`. Removing it causes a **73% drop** in discovered items. The critic uses few-shot examples covering edge cases: "Mining iron_ore gives raw_iron — inventory shows raw_iron, therefore success=True despite not having iron_ore in inventory." This pattern of *verifying postcondition by proxy evidence* (not just direct oracle match) is exactly what RedGrid's Validation Agent needs for non-obvious success signals (e.g., blind injection timing delays as proxy for successful SQLi).
 
-**Prompt discipline for Action Agent:** (1) Explain — what is missing or wrong, (2) Plan — numbered step decomposition, (3) Code — complete async function. This maps directly to CMatrix's Two-Step CoT (Paper 10) and Four-Technique Prompt Discipline (Paper 13).
+**Prompt discipline for Action Agent:** (1) Explain — what is missing or wrong, (2) Plan — numbered step decomposition, (3) Code — complete async function. This maps directly to RedGrid's Two-Step CoT (Paper 10) and Four-Technique Prompt Discipline (Paper 13).
 
 **4-round hard limit:** After 4 refinement rounds with continued failure, task is marked failed and system advances. This is the rabbit-hole counter (Paper 09) implemented at the loop boundary.
 
@@ -149,14 +149,14 @@ def voyager(environment, curriculum_agent, action_agent, critic_agent, skill_man
             curriculum_agent.add_failed_task(task) # informs future curriculum proposals
 ```
 
-**CMatrix mapping:**
+**RedGrid mapping:**
 
-| Voyager Component | CMatrix Equivalent |
+| Voyager Component | RedGrid Equivalent |
 |-------------------|--------------------|
 | `curriculum_agent.propose_next_task()` | Team Manager `select_next_task()` via EGATS UCB or PTT priority |
 | `skill_manager.retrieve_skills()` | Two-Stage RAG on Tier-3 Technical Action memory (Paper 12) |
 | `action_agent.generate_code()` | Specialist Two-Step CoT: plan → command (Paper 10) |
-| `environment.step(code)` | CMatrix tool executor with stdout/stderr capture |
+| `environment.step(code)` | RedGrid tool executor with stdout/stderr capture |
 | `critic_agent.check_task_success()` | Validation Agent with structured JSON output (Papers 03, 05) |
 | `skill_manager.add_skill(code)` | Write-back to Tier-3 memory + FAISS index update |
 | `curriculum_agent.add_failed_task()` | Mark PTG node failed; feed into Team Manager lead inventory |
@@ -165,7 +165,7 @@ def voyager(environment, curriculum_agent, action_agent, critic_agent, skill_man
 
 ## Vulnerabilities Exploited
 
-Not applicable — Voyager is a Minecraft embodied-agent paper. No CVEs, attack types, or security targets. All CMatrix relevance is extracted from architectural patterns, not domain content.
+Not applicable — Voyager is a Minecraft embodied-agent paper. No CVEs, attack types, or security targets. All RedGrid relevance is extracted from architectural patterns, not domain content.
 
 ---
 
@@ -202,13 +202,13 @@ Not applicable — Voyager is a Minecraft embodied-agent paper. No CVEs, attack 
 | Execution errors | Partial degradation |
 | GPT-4 → GPT-3.5 for code gen | **5.7× fewer unique items** |
 
-> **Note:** Self-verification is the single most critical component (−73%), followed by code model quality (5.7× degradation with GPT-3.5). This validates CMatrix Validation Agent as non-optional and confirms Strong Executor Requirement from Papers 04, 05, 11, 15.
+> **Note:** Self-verification is the single most critical component (−73%), followed by code model quality (5.7× degradation with GPT-3.5). This validates RedGrid Validation Agent as non-optional and confirms Strong Executor Requirement from Papers 04, 05, 11, 15.
 
 ---
 
-## Key Takeaways for CMatrix
+## Key Takeaways for RedGrid
 
-### 🔴 Critical — CMatrix v1 Must-Haves
+### 🔴 Critical — RedGrid v1 Must-Haves
 
 **1. Skill Library as Executable Exploit Code Store**
 Store every successful exploit chain as a Python/Bash function with: (a) natural-language description, (b) embedding of description, (c) function body. On new task, retrieve top-5 by embedding similarity to a GPT-4o-mini-generated description of the current sub-task. Inject top-5 as in-context examples into Specialist prompt.
@@ -262,7 +262,7 @@ Do not embed raw exploit code or raw tool output. Always:
 
 Description-to-description matching is more semantically stable than code embedding or output embedding.
 
-### 🟡 Important — CMatrix v2
+### 🟡 Important — RedGrid v2
 
 **6. Adaptive Attack Curriculum from ESS State**
 Implement `propose_next_attack(ess_state, completed_attacks, failed_attacks)` at Team Manager level:
@@ -286,12 +286,12 @@ Persist failed exploits with error signatures alongside successes. Team Manager'
 **10. Skill Composition for Multi-Step Attack Chains**
 Compose atomic skills into complex chains and store the composition as a new skill entry:
 - `scan_endpoint()` + `extract_form_params()` + `test_xss_canary()` + `verify_xss_execution()` → `exploit_reflected_xss(endpoint, param)`
-- Composite skills become library entries retrievable as single units — compounds CMatrix capabilities over time.
+- Composite skills become library entries retrievable as single units — compounds RedGrid capabilities over time.
 
 ### 🟢 Nice-to-Have — Future Work
 
 **11. Mid-Execution Progress Events from Tool Wrappers**
-Voyager instruments game API with `bot.chat()` progress reporting inside primitive actions. CMatrix equivalent: tool wrappers emit structured mid-execution progress JSON (not just final stdout). E.g., sqlmap emits stage-completion events (crawling done, union-based tested, time-based confirmed) that Specialist can process incrementally.
+Voyager instruments game API with `bot.chat()` progress reporting inside primitive actions. RedGrid equivalent: tool wrappers emit structured mid-execution progress JSON (not just final stdout). E.g., sqlmap emits stage-completion events (crawling done, union-based tested, time-based confirmed) that Specialist can process incrementally.
 
 **12. Human-as-Critic / Human-as-Curriculum for Consistently Failing Chains**
 When TDI > 0.8 on all branches (Paper 11 Human Escalation Protocol), human operator can:
@@ -299,7 +299,7 @@ When TDI > 0.8 on all branches (Paper 11 Human Escalation Protocol), human opera
 - Break complex chain into smaller milestones → human-as-curriculum
 
 **13. Curriculum Diversity Constraint**
-Voyager's curriculum actively avoids repeating already-discovered items. CMatrix equivalent: Team Manager must actively avoid re-testing already-confirmed-negative attack surfaces. Track `tested_surfaces` in ESS and exclude from next-task proposals.
+Voyager's curriculum actively avoids repeating already-discovered items. RedGrid equivalent: Team Manager must actively avoid re-testing already-confirmed-negative attack surfaces. Track `tested_surfaces` in ESS and exclude from next-task proposals.
 
 ---
 
@@ -311,7 +311,7 @@ Voyager's curriculum actively avoids repeating already-discovered items. CMatrix
 | **Iterative prompting with 3 feedback types** | Papers 09, 10, 14, 18 | Paper 09's Reflection Filter is Voyager's "environment feedback" channel formalized as structured JSON extractor. Paper 10's Two-Step CoT is the "Explain + Plan + Code" structure from Voyager's Action Agent prompt. Paper 18's Evaluation Agent 3-Part Output is Voyager's self-verification critic with richer structure. Paper 14's Dual Perceptor is Voyager's execution-error vs environment-feedback split made explicit. |
 | **Hard attempt limit (4 rounds) + failed task history** | Papers 09, 11, 17 | Paper 09's Rabbit-Hole Counter (K=5 same-resource calls → FSM transition) is the same mechanism triggered by diversity. Paper 11's TDI > 0.8 → human escalation is the same safety valve generalized. Paper 17's circuit breaker (>3 rounds without progress → switch lead) is 4-round limit with progress signal substituted for count. |
 | **Self-verification critic (LLM checks own success)** | Papers 03, 05, 11, 14 | Papers 03/05 Validation Agent is Voyager's critic applied to VAPT — checking exploit oracle instead of inventory state. Paper 11's Evidence Confidence scoring (verified=1.0, confirmed=0.8, plausible=0.5) extends Voyager's binary success/fail to probabilistic evidence quality. Paper 14's Pre-Execution Validation Gate is the Voyager critic inverted: applied before execution (syntax/precondition) rather than after (postcondition). |
-| **Automatic curriculum (state-adaptive task proposal)** | Papers 05, 11, 14, 16 | Paper 05's PSM FSM is a deterministic curriculum. Paper 11's EGATS UCB is a learned curriculum. Paper 14's Classical Planning+ is a precondition-based curriculum. Paper 16's VDG-gated dispatch is a dependency-constrained curriculum. Voyager's GPT-4-driven curriculum is the most open-ended variant — most suitable for novel target classes CMatrix has not seen before. |
-| **Code as action space** | Papers 11, 14, 16 | Paper 14's Predefined Action Library is Voyager's code-as-action with templates replacing free-form code. Paper 16's Declarative Task Vocabulary is Voyager's code-as-action with a fixed 5-verb API. Paper 11's Typed Tool Interfaces are Voyager's control primitives formalized with input/output schemas. CMatrix should use templates for known tool patterns and free-form for novel LLM-generated scripts. |
+| **Automatic curriculum (state-adaptive task proposal)** | Papers 05, 11, 14, 16 | Paper 05's PSM FSM is a deterministic curriculum. Paper 11's EGATS UCB is a learned curriculum. Paper 14's Classical Planning+ is a precondition-based curriculum. Paper 16's VDG-gated dispatch is a dependency-constrained curriculum. Voyager's GPT-4-driven curriculum is the most open-ended variant — most suitable for novel target classes RedGrid has not seen before. |
+| **Code as action space** | Papers 11, 14, 16 | Paper 14's Predefined Action Library is Voyager's code-as-action with templates replacing free-form code. Paper 16's Declarative Task Vocabulary is Voyager's code-as-action with a fixed 5-verb API. Paper 11's Typed Tool Interfaces are Voyager's control primitives formalized with input/output schemas. RedGrid should use templates for known tool patterns and free-form for novel LLM-generated scripts. |
 | **GPT-4 for complex reasoning, GPT-3.5 for cheap sub-tasks** | Papers 04, 05, 07, 11, 15, 17 | Voyager quantifies it most cleanly: GPT-3.5 code gen → 5.7× degradation. Paper 17's Split Reasoning Budget (reasoning LLM for planner, standard LLM for executor) is Voyager's GPT-4/GPT-3.5 role split formalized with role names. Strong Executor Requirement confirmed across 6 papers. |
-| **Zero-shot generalization via carried skill library** | Papers 01, 02, 13, 18 | Papers 01/02 domain knowledge injection and Paper 13's Two-Tier Knowledge DB are domain analogues of Voyager's skill library for VAPT. Paper 18's Warm-Start+Evolving memory (pre-populated + updated after every mission) is Voyager's skill-library-at-mission-start pattern. Voyager's 100% zero-shot transfer is the strongest prior-art argument for CMatrix cross-target exploit library. |
+| **Zero-shot generalization via carried skill library** | Papers 01, 02, 13, 18 | Papers 01/02 domain knowledge injection and Paper 13's Two-Tier Knowledge DB are domain analogues of Voyager's skill library for VAPT. Paper 18's Warm-Start+Evolving memory (pre-populated + updated after every mission) is Voyager's skill-library-at-mission-start pattern. Voyager's 100% zero-shot transfer is the strongest prior-art argument for RedGrid cross-target exploit library. |

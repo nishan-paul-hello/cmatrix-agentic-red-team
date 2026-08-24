@@ -1,12 +1,12 @@
 # [STEP 1a] — Codebase & Documentation Read
 
 ## Summary
-Performed a comprehensive audit of the CMatrix Agentic RAG codebase and associated documentation. Identified the core modules responsible for semantic CVE retrieval, query reformulation, cross-encoder reranking, and graph traversal. Mapped the end-to-end data flow from user query to self-corrected ranked results.
+Performed a comprehensive audit of the RedGrid Agentic RAG codebase and associated documentation. Identified the core modules responsible for semantic CVE retrieval, query reformulation, cross-encoder reranking, and graph traversal. Mapped the end-to-end data flow from user query to self-corrected ranked results.
 
 ## Full Output
 
 ### System Architecture Overview
-The CMatrix Vulnerability Intelligence system is an agentic RAG pipeline built on a modular microservices-inspired architecture within the `app-backend`. It leverages a specialized vector store for CVEs, an LLM-powered query expansion engine, and a sophisticated reranking layer that combines semantic similarity with domain-specific metrics (CVSS, exploits, recency). The system is designed for high precision and self-correction, ensuring that even vague user queries result in operationally relevant intelligence.
+The RedGrid Vulnerability Intelligence system is an agentic RAG pipeline built on a modular microservices-inspired architecture within the `app-backend`. It leverages a specialized vector store for CVEs, an LLM-powered query expansion engine, and a sophisticated reranking layer that combines semantic similarity with domain-specific metrics (CVSS, exploits, recency). The system is designed for high precision and self-correction, ensuring that even vague user queries result in operationally relevant intelligence.
 
 ### Key Modules
 | Module | Location | Purpose |
@@ -70,4 +70,4 @@ The CMatrix Vulnerability Intelligence system is an agentic RAG pipeline built o
 - `assets/ASSET-INDEX.md`: Empty template for tracking paper assets.
 
 ## Input for Next Step
-A comprehensive understanding of the CMatrix RAG codebase, focusing on the `VulnRAG` pipeline (Query Reformulation -> Semantic Retrieval -> Cross-Encoder Reranking -> Self-Correction). This will be used to audit the existing paper draft in Sub-step 1b.
+A comprehensive understanding of the RedGrid RAG codebase, focusing on the `VulnRAG` pipeline (Query Reformulation -> Semantic Retrieval -> Cross-Encoder Reranking -> Self-Correction). This will be used to audit the existing paper draft in Sub-step 1b.

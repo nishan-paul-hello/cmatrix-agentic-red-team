@@ -27,7 +27,7 @@ We provide a comprehensive empirical evaluation of VulnRAG against keyword-based
 
 ## Open Questions
 - Should we explicitly mention the "Master-Worker" hierarchy here, or save that for the System Design section? (Decision: Save for System Design; keep contributions focused on RAG innovations).
-- How do we frame the "CMatrix" branding? (Decision: Focus on **VulnRAG** as the research artifact name).
+- How do we frame the "RedGrid" branding? (Decision: Focus on **VulnRAG** as the research artifact name).
 
 ## Checklist Results
 - [PASS] `artifacts/step-3a-novelty-identification.md` read first

@@ -1,4 +1,4 @@
-# Reflexion: Language Agents with Verbal Reinforcement Learning — Deep Survey Notes for CMatrix
+# Reflexion: Language Agents with Verbal Reinforcement Learning — Deep Survey Notes for RedGrid
 
 | Field | Details |
 |-------|---------|
@@ -6,7 +6,7 @@
 | **Venue** | NeurIPS 2023 / arXiv:2303.11366 |
 | **Published** | 2023 (March) |
 | **Repository** | https://github.com/noahshinn024/reflexion |
-| **Relevance** | ⭐⭐⭐⭐☆ — Reflexion formalizes the inter-episode verbal self-reflection loop that underlies CMatrix's between-attempt failure analysis: converting a binary success/fail oracle into a natural-language "lesson learned" that persists in episodic memory and improves the next attempt — without any gradient updates. |
+| **Relevance** | ⭐⭐⭐⭐☆ — Reflexion formalizes the inter-episode verbal self-reflection loop that underlies RedGrid's between-attempt failure analysis: converting a binary success/fail oracle into a natural-language "lesson learned" that persists in episodic memory and improves the next attempt — without any gradient updates. |
 | **Key Claim** | Reflexion achieves **91% pass@1 on HumanEval** (vs GPT-4 baseline 80%), **+22pp absolute on AlfWorld** decision-making over 12 trials, and **+20pp on HotPotQA reasoning** — all without fine-tuning, using only verbal self-reflection stored in a sliding-window episodic memory. |
 
 ---
@@ -15,9 +15,9 @@
 
 Reflexion asks a deceptively simple question: if an agent fails a task, can it *describe what went wrong in words* and use that description to do better next time — without changing any model weights? The answer is yes, and the mechanism is called **verbal reinforcement**: convert any feedback signal (binary success/fail, heuristic score, test output) into a first-person natural-language "lesson" stored in a sliding-window episodic memory buffer (Ω ≤ 3 entries). On the next attempt, this buffer is prepended to the agent's context. The agent effectively "remembers" its own failures as prose summaries and reasons about them during planning.
 
-This contrasts with standard RL (weight updates, expensive, black-box) and with single-shot self-refinement (no episodic memory, only within-trial feedback). Reflexion operates *between* episodes: it is a between-trial mechanism, not a within-trial one. This distinction is critical for CMatrix: Voyager (Paper 21) handles within-trial refinement (3 feedback types, up to 4 rounds); Reflexion handles between-trial learning (what did I learn from the last attempt that I should remember for the next attempt?). Both mechanisms are needed and they are orthogonal.
+This contrasts with standard RL (weight updates, expensive, black-box) and with single-shot self-refinement (no episodic memory, only within-trial feedback). Reflexion operates *between* episodes: it is a between-trial mechanism, not a within-trial one. This distinction is critical for RedGrid: Voyager (Paper 21) handles within-trial refinement (3 feedback types, up to 4 rounds); Reflexion handles between-trial learning (what did I learn from the last attempt that I should remember for the next attempt?). Both mechanisms are needed and they are orthogonal.
 
-For CMatrix, Reflexion maps to: when a Specialist exhausts its 4-round limit on a sub-task without success, the Team Manager does not simply move on — it invokes a Self-Reflection step that generates a `{lesson_learned, failed_approach_summary, suggested_alternative}` JSON. This gets stored in the mission's episodic memory and injected into the *next* Specialist's context when that same vuln class is attempted again (possibly on a different endpoint, or in a later session against the same target). This eliminates repeated identical failures — the single most common failure mode in all pentest agent systems (Papers 09, 10, 11, 12).
+For RedGrid, Reflexion maps to: when a Specialist exhausts its 4-round limit on a sub-task without success, the Team Manager does not simply move on — it invokes a Self-Reflection step that generates a `{lesson_learned, failed_approach_summary, suggested_alternative}` JSON. This gets stored in the mission's episodic memory and injected into the *next* Specialist's context when that same vuln class is attempted again (possibly on a different endpoint, or in a later session against the same target). This eliminates repeated identical failures — the single most common failure mode in all pentest agent systems (Papers 09, 10, 11, 12).
 
 ---
 
@@ -71,7 +71,7 @@ flowchart TD
 
 ### Three Evaluator Types
 
-| Evaluator Type | Domain | Mechanism | CMatrix Equivalent |
+| Evaluator Type | Domain | Mechanism | RedGrid Equivalent |
 |----------------|--------|-----------|-------------------|
 | **Binary environment signal** | AlfWorld (task complete?) | True/False from environment | HTTP 500 oracle / flag match |
 | **Heuristic function** | AlfWorld (stuck detection) | If same action repeated ≥3 times OR >30 actions: reflect | Rabbit-Hole Counter + attempt limit |
@@ -88,7 +88,7 @@ The Self-Reflection model takes: `{trajectory, reward, current_mem}` → generat
 **HotPotQA example:**
 > "I searched the wrong title for the show, \"'Allo 'Allo!\", which resulted in no results. I should have searched the show's main character, Gorden Kaye, to find the role he was best known for."
 
-**CMatrix equivalent:**
+**RedGrid equivalent:**
 > "I attempted time-based blind SQLi on /api/login using `SLEEP(5)` injected into the `username` field with a 5s baseline threshold. The server responded with 200 in 0.8s for all payloads — either WAF stripping the payload or parameterized queries. In the next attempt I should test error-based SQLi using `'` to trigger a syntax error banner, or target the `id` GET parameter which appears unvalidated. Avoid the `username` field entirely."
 
 ### Programming Domain: Test-Driven Self-Reflection
@@ -116,7 +116,7 @@ flowchart LR
 
 **Critical finding:** False positives (tests pass, code wrong) are the main failure mode — MBPP Python has 16.3% FP rate vs HumanEval Python 1.4%, explaining MBPP's lower accuracy despite similar base model performance.
 
-**CMatrix implication:** When CMatrix generates a PoC exploit script and runs it, if the script exits 0 but actual exploitation failed (e.g., the tool ran but didn't extract data), this is the exact false-positive problem. Validation Agent must go beyond `exit 0` checking — it must verify the *postcondition* of exploitation, not just the execution success.
+**RedGrid implication:** When RedGrid generates a PoC exploit script and runs it, if the script exits 0 but actual exploitation failed (e.g., the tool ran but didn't extract data), this is the exact false-positive problem. Validation Agent must go beyond `exit 0` checking — it must verify the *postcondition* of exploitation, not just the execution success.
 
 ### AlfWorld Stuck Detection Heuristic
 
@@ -135,13 +135,13 @@ def should_reflect(trajectory):
     return False
 ```
 
-**CMatrix direct implementation:** This heuristic maps to the Rabbit-Hole Counter (Paper 09) already in CMatrix architecture, now with an additional formalization: when the counter triggers, the Self-Reflection step generates a verbal analysis of *why* the loop occurred, not just a forced FSM transition.
+**RedGrid direct implementation:** This heuristic maps to the Rabbit-Hole Counter (Paper 09) already in RedGrid architecture, now with an additional formalization: when the counter triggers, the Self-Reflection step generates a verbal analysis of *why* the loop occurred, not just a forced FSM transition.
 
 ---
 
 ## Vulnerabilities Exploited
 
-Not applicable — Reflexion is a general agent learning framework, not a security paper. No CVEs or attack types. All CMatrix relevance is architectural.
+Not applicable — Reflexion is a general agent learning framework, not a security paper. No CVEs or attack types. All RedGrid relevance is architectural.
 
 ---
 
@@ -168,7 +168,7 @@ Not applicable — Reflexion is a general agent learning framework, not a securi
 | gpt-3.5-turbo ReAct | 0.26 | **0.38** | +12pp |
 | gpt-4 ReAct | 0.39 | **0.51** | +12pp |
 
-> **Note:** Reflexion helps across ALL model sizes, but **smaller models gain MORE** from verbal reflection (+25pp for text-davinci-003 ReAct vs +12pp for GPT-4). This is critical for CMatrix: cheap models with Reflexion can approach expensive models without Reflexion. However, starchat-beta (Table 4) shows 0% gain — reflection is an **emergent capability** requiring a minimum model quality threshold (roughly GPT-3.5-turbo class).
+> **Note:** Reflexion helps across ALL model sizes, but **smaller models gain MORE** from verbal reflection (+25pp for text-davinci-003 ReAct vs +12pp for GPT-4). This is critical for RedGrid: cheap models with Reflexion can approach expensive models without Reflexion. However, starchat-beta (Table 4) shows 0% gain — reflection is an **emergent capability** requiring a minimum model quality threshold (roughly GPT-3.5-turbo class).
 
 ### Ablation Study (HumanEval Rust, 50 hardest)
 
@@ -179,17 +179,17 @@ Not applicable — Reflexion is a general agent learning framework, not a securi
 | Self-reflection omission | ✅ | ❌ | 0.60 (no improvement) |
 | **Reflexion** | ✅ | ✅ | **0.68** |
 
-> **Critical Note:** Test generation WITHOUT self-reflection is **worse than baseline** (0.52 vs 0.60). The agent receives failure signals but cannot synthesize actionable lessons — it makes random edits that degrade the implementation. Self-reflection WITHOUT test generation shows no improvement (0.60). Both components are required; neither works alone. This validates CMatrix's requirement for Validation Agent critique feeding into Team Manager's Self-Reflection step.
+> **Critical Note:** Test generation WITHOUT self-reflection is **worse than baseline** (0.52 vs 0.60). The agent receives failure signals but cannot synthesize actionable lessons — it makes random edits that degrade the implementation. Self-reflection WITHOUT test generation shows no improvement (0.60). Both components are required; neither works alone. This validates RedGrid's requirement for Validation Agent critique feeding into Team Manager's Self-Reflection step.
 
 ### WebShop Failure Analysis
 
-Reflexion **fails on WebShop** (e-commerce product search): no improvement over baseline after 4 trials. Root cause: Reflexion cannot escape local minima requiring high *diversity* of search strategies. The agent's reflections converge to the same search approach. **CMatrix implication:** Reflexion works for tasks with clear error identification (wrong order of operations, wrong parameter) but fails for tasks requiring random exploration (fuzz parameter space, try random payloads). For those, CMatrix needs Thompson Sampling bandit (Paper 07), not Reflexion alone.
+Reflexion **fails on WebShop** (e-commerce product search): no improvement over baseline after 4 trials. Root cause: Reflexion cannot escape local minima requiring high *diversity* of search strategies. The agent's reflections converge to the same search approach. **RedGrid implication:** Reflexion works for tasks with clear error identification (wrong order of operations, wrong parameter) but fails for tasks requiring random exploration (fuzz parameter space, try random payloads). For those, RedGrid needs Thompson Sampling bandit (Paper 07), not Reflexion alone.
 
 ---
 
-## Key Takeaways for CMatrix
+## Key Takeaways for RedGrid
 
-### 🔴 Critical — CMatrix v1 Must-Haves
+### 🔴 Critical — RedGrid v1 Must-Haves
 
 **1. Between-Trial Self-Reflection Step (distinct from within-trial Three-Type Feedback)**
 When a Specialist exhausts its 4-round within-trial limit (Paper 21 hard limit) without success, the Team Manager MUST invoke a Self-Reflection step before either: (a) retrying the same sub-task later, or (b) moving to a different attack vector. The Self-Reflection step generates:
@@ -218,7 +218,7 @@ episodic_memory = episodic_memory[-3:]  # keep last Ω=3 entries
 ```
 
 **2. Episodic Memory Sliding Window (Ω=3) Injected Into Specialist Context**
-Every Specialist launched for the same vuln class / same target MUST receive the current episodic memory as part of its context. The episodic memory contains past Self-Reflections from previous attempts. This is the mechanism by which CMatrix avoids repeating identical failures:
+Every Specialist launched for the same vuln class / same target MUST receive the current episodic memory as part of its context. The episodic memory contains past Self-Reflections from previous attempts. This is the mechanism by which RedGrid avoids repeating identical failures:
 ```python
 specialist_prompt = f"""
 {role_description}
@@ -257,9 +257,9 @@ These are orthogonal mechanisms at different time scales:
 - **Within trial (Voyager Paper 21):** 3 feedback types (tool output, exec errors, validation critique) → up to 4 refinement rounds → one attempt
 - **Between trials (Reflexion Paper 22):** Self-reflection on complete failed attempt → lesson stored in Ω=3 episodic memory → injected into next attempt
 
-CMatrix needs both. Missing either one is a correctness gap, not just a performance gap.
+RedGrid needs both. Missing either one is a correctness gap, not just a performance gap.
 
-### 🟡 Important — CMatrix v2
+### 🟡 Important — RedGrid v2
 
 **6. Self-Generated Exploit Verification Test Suite**
 Adapt Reflexion's self-generated unit test pattern to VAPT: before executing an exploit, the Specialist generates 3–5 "verification predicates" describing what exploitation success looks like, filtered for validity:
@@ -292,7 +292,7 @@ failure_taxonomy = {
 New attempts consult this taxonomy before generating the first exploit attempt — preventing the failure from occurring rather than learning from it after the fact.
 
 **9. Reflexion Failure Condition: High-Diversity Search Tasks**
-Reflexion fails when the search space is high-diversity and requires random exploration (WebShop: −0% improvement). For CMatrix sub-tasks requiring broad surface scanning (parameter fuzzing, endpoint enumeration), use Thompson Sampling bandit (Paper 07) instead of Reflexion. Reflexion is appropriate only for tasks with identifiable causal failures (wrong endpoint, wrong injection point, wrong encoding, wrong authentication method).
+Reflexion fails when the search space is high-diversity and requires random exploration (WebShop: −0% improvement). For RedGrid sub-tasks requiring broad surface scanning (parameter fuzzing, endpoint enumeration), use Thompson Sampling bandit (Paper 07) instead of Reflexion. Reflexion is appropriate only for tasks with identifiable causal failures (wrong endpoint, wrong injection point, wrong encoding, wrong authentication method).
 
 **10. Memory Capacity: Sliding Window vs Full Retention**
 Use Ω=3 as the default sliding window (Reflexion default). For high-value, long-running engagements: store all reflections in FAISS (Tier-1 Vulnerability Pattern memory) and use semantic retrieval to inject the top-3 *most relevant* past reflections (not just the most recent 3). More recent ≠ more relevant for exploit failure lessons.
@@ -300,10 +300,10 @@ Use Ω=3 as the default sliding window (Reflexion default). For high-value, long
 ### 🟢 Nice-to-Have — Future Work
 
 **11. Value Learning in Natural Language**
-Reflexion authors explicitly suggest future work on "value learning in natural language" — assigning numerical priority scores to reflection-stored lessons based on how many subsequent attempts they helped. CMatrix: assign a `utility_score` to each episodic memory entry, updated after each mission where it was retrieved; decay utility over time; retire low-utility entries.
+Reflexion authors explicitly suggest future work on "value learning in natural language" — assigning numerical priority scores to reflection-stored lessons based on how many subsequent attempts they helped. RedGrid: assign a `utility_score` to each episodic memory entry, updated after each mission where it was retrieved; decay utility over time; retire low-utility entries.
 
 **12. Verbal Reflection as Interpretability Layer**
-Reflexion's self-reflections are human-readable explanations of agent failures. CMatrix should expose the episodic memory in the mission report as a "failure analysis" section, giving human operators direct insight into *why* each attack vector was abandoned — significantly better than raw tool output logs.
+Reflexion's self-reflections are human-readable explanations of agent failures. RedGrid should expose the episodic memory in the mission report as a "failure analysis" section, giving human operators direct insight into *why* each attack vector was abandoned — significantly better than raw tool output logs.
 
 **13. Off-Policy Exploration via Reflexion**
 Use reflections from previous missions on *different* targets to inform current mission planning. E.g., a reflection from target A ("the login endpoint validates token length before processing — tried to inject before token is consumed, should inject in token body instead") may be relevant for target B with similar tech stack. This requires cross-mission episodic memory retrieval by tech-stack similarity.
@@ -315,10 +315,10 @@ Use reflections from previous missions on *different* targets to inform current 
 | This Paper's Concept | Connected Paper(s) | Mechanism of Connection |
 |----------------------|-------------------|------------------------|
 | **Between-trial verbal self-reflection (episodic memory)** | Papers 09, 10, 12, 17, 18 | Paper 09's Reflection Filter (within-trial) is orthogonal — Reflexion operates between trials. Paper 10's PTT failure recovery (3.2 fails → 3.3 corrective sub-task) is Reflexion instantiated in the PTT data structure. Paper 12's Summarizer Bridge is the Evaluator step in Reflexion — distilling trajectory to compact JSON before reflection. Paper 18's Explicit Exploit Plan marking `BLOCKED` steps is Reflexion's memory update applied to plan objects rather than episodic text. |
-| **Sliding-window episodic memory (Ω=3)** | Papers 01, 18, 21 | Paper 01's RAG retrieval over CVE descriptions is long-term memory (semantic). Paper 18's Three-Tier Long-Term Memory is structured Reflexion memory. Paper 21's skill library is procedural long-term memory. Reflexion adds *episodic* memory (failure traces) as a fourth memory type. All four types are now identified for CMatrix: (1) semantic CVE/technique knowledge, (2) procedural skill library, (3) strategic plan library, (4) episodic failure reflections. |
+| **Sliding-window episodic memory (Ω=3)** | Papers 01, 18, 21 | Paper 01's RAG retrieval over CVE descriptions is long-term memory (semantic). Paper 18's Three-Tier Long-Term Memory is structured Reflexion memory. Paper 21's skill library is procedural long-term memory. Reflexion adds *episodic* memory (failure traces) as a fourth memory type. All four types are now identified for RedGrid: (1) semantic CVE/technique knowledge, (2) procedural skill library, (3) strategic plan library, (4) episodic failure reflections. |
 | **AlfWorld stuck detection heuristic** | Papers 09, 11, 17, 21 | Paper 09's Rabbit-Hole Counter (K=5 same-resource calls) is the same heuristic with a diversity trigger. Paper 11's TDI > 0.8 branch pruning is the same heuristic generalized to a probabilistic score. Paper 17's circuit breaker (>3 rounds no progress) is the same with a progress signal. Paper 21's 4-round hard limit is the same as a fixed count boundary. Reflexion adds: when the heuristic fires, generate a verbal lesson rather than just transitioning state. |
 | **Self-generated test suite evaluation** | Papers 03, 05, 11, 14, 21 | Papers 03/05 Validation Agent with oracle/verification string is Reflexion's external binary evaluator applied to VAPT. Paper 11's Evidence Confidence scoring extends the binary evaluator to a probabilistic scale. Paper 21's Validation Agent critic uses the same LLM-judge pattern as Reflexion's LLM evaluator. Paper 14's Dual Perceptor (rule-based vs LLM) is Reflexion's evaluator type selection (heuristic vs LLM evaluator) made explicit. |
 | **Verbal RL vs weight-based RL** | Papers 04, 07, 11 | Paper 04's Thompson Sampling bandit is gradient-free optimization (like Reflexion) but operates over discrete strategy space rather than verbal memory. Paper 07's adaptive strategy selection is the same gradient-free optimization. Paper 11's EGATS UCB is gradient-free over attack tree nodes. Reflexion is gradient-free over episodic memory — all four are alternatives to gradient descent that work with frozen LLMs. |
-| **Reflexion fails on high-diversity search** | Papers 07, 08 | Paper 07's Thompson Sampling bandit excels exactly where Reflexion fails: tasks requiring diverse random exploration of a large strategy space (fuzzing parameter spaces). Paper 08's RandomWalk REST fuzzing strategy is the same high-diversity search pattern. CMatrix should use bandit/random strategies for exploration phases and Reflexion for exploitation phases where failure has clear causal structure. |
-| **First-person lesson generation** | Papers 09, 10, 13, 17 | Paper 09's Verification Prompt Framing (audit/verification language) is the same prompt framing discipline applied to output format. Paper 10's Two-Step CoT requires explicit Step 1 (expand) → Step 2 (execute) reasoning before action. Paper 17's Reasoning LLM Prompt Hygiene (no few-shot for reasoning models) conflicts with Reflexion's few-shot examples for reflection — CMatrix should ablate whether reasoning models (o1, Sonnet extended thinking) need few-shot reflection examples or benefit from zero-shot goal-and-constraint prompting. |
+| **Reflexion fails on high-diversity search** | Papers 07, 08 | Paper 07's Thompson Sampling bandit excels exactly where Reflexion fails: tasks requiring diverse random exploration of a large strategy space (fuzzing parameter spaces). Paper 08's RandomWalk REST fuzzing strategy is the same high-diversity search pattern. RedGrid should use bandit/random strategies for exploration phases and Reflexion for exploitation phases where failure has clear causal structure. |
+| **First-person lesson generation** | Papers 09, 10, 13, 17 | Paper 09's Verification Prompt Framing (audit/verification language) is the same prompt framing discipline applied to output format. Paper 10's Two-Step CoT requires explicit Step 1 (expand) → Step 2 (execute) reasoning before action. Paper 17's Reasoning LLM Prompt Hygiene (no few-shot for reasoning models) conflicts with Reflexion's few-shot examples for reflection — RedGrid should ablate whether reasoning models (o1, Sonnet extended thinking) need few-shot reflection examples or benefit from zero-shot goal-and-constraint prompting. |
 | **Emergent self-reflection quality threshold** | Papers 04, 05, 15, 17 | Papers 04/05 model selection empiricism. Paper 15's Strong Executor Requirement. Paper 17's PTT-Update Quality Gate (model must update PTT correctly before selection). Reflexion adds: model must generate specific, actionable reflections before being used as Team Manager — a separate self-reflection quality gate distinct from PTT-update quality. |

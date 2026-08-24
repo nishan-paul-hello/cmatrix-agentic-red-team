@@ -68,7 +68,7 @@ export function ReportPreviewPane({
                                 {/* Report cover block */}
                                 <div className="mb-[24px] rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)] bg-[var(--color-hex-0d0d0d)] px-[24px] py-[20px]">
                                     <div className="mb-[6px] text-[8.5px] tracking-[0.2em] text-[var(--color-hex-444444)]">
-                                        CMATRIX REPORT
+                                        RedGrid REPORT
                                     </div>
                                     <div className="mb-[4px] text-[18px] font-bold tracking-[0.1em] text-[var(--color-hex-f2f2f2)]">
                                         {sel.type}

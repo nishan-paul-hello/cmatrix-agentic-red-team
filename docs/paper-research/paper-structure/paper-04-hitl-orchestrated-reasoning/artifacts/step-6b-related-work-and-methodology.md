@@ -8,7 +8,7 @@ This sub-step finalized the academic and technical heart of the manuscript. We d
 ### 2.1 Finalized Related Work
 - §2.1: LLM Reasoning Patterns (Grounded in ToT, ReWOO, Reflexion).
 - §2.2: Autonomous VAPT Agents (Positioned against PentestGPT and AutoAttacker).
-- §2.3: Agentic Security (Distinguished CMatrix as internal governance vs. external defense).
+- §2.3: Agentic Security (Distinguished RedGrid as internal governance vs. external defense).
 - Integrated `table-01-related-work-comparison.tex`.
 
 ### 2.2 Finalized Methodology

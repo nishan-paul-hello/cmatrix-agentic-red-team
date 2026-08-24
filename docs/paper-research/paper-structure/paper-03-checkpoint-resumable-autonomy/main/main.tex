@@ -22,7 +22,7 @@
 
 \begin{document}
 
-\title{CMatrix: Governance-First Autonomy for Scalable Red Teaming via Asynchronous Checkpoint Resumption}
+\title{RedGrid: Governance-First Autonomy for Scalable Red Teaming via Asynchronous Checkpoint Resumption}
 
 \author{\IEEEauthorblockN{Nishan Paul}
 \IEEEauthorblockA{\textit{Department of Computer Science} \\
@@ -34,7 +34,7 @@ nishan.paul@nyu.edu}
 \maketitle
 
 \begin{abstract}
-The rapid advancement of Large Language Model (LLM) agents has catalyzed a paradigm shift in offensive security, transitioning from manually-driven tools to autonomous red teaming frameworks. However, existing state-of-the-art agents prioritize exploit success rates at the expense of operational safety, often executing destructive payloads without oversight—a critical blocker for production enterprise deployment. We present \textbf{CMatrix}, a multi-agent penetration testing orchestration platform that introduces the concept of \textit{Governance-First Autonomy}. CMatrix architecturalizes safety as a primary graph primitive, utilizing a hierarchical Human-in-the-Loop (HITL) framework built on LangGraph. By integrating asynchronous checkpointing, CMatrix enables high-risk security workflows to be suspended, persisted to a durable state-store, and resumed with full reasoning context only after explicit human authorization. Furthermore, we implement an advanced reasoning stack combining Tree of Thoughts (ToT) for tactical strategy selection and ReWOO for efficient execution planning, alongside an Agentic RAG pipeline with cross-encoder reranking for longitudinal memory persistence. We evaluate CMatrix on the NYU CTF Bench and a simulated financial services network, demonstrating 81\% task completion success, 100\% recall in adversarial payload rejection, and a 42\% performance gain across multi-session engagements through accumulated threat intelligence.
+The rapid advancement of Large Language Model (LLM) agents has catalyzed a paradigm shift in offensive security, transitioning from manually-driven tools to autonomous red teaming frameworks. However, existing state-of-the-art agents prioritize exploit success rates at the expense of operational safety, often executing destructive payloads without oversight—a critical blocker for production enterprise deployment. We present \textbf{RedGrid}, a multi-agent penetration testing orchestration platform that introduces the concept of \textit{Governance-First Autonomy}. RedGrid architecturalizes safety as a primary graph primitive, utilizing a hierarchical Human-in-the-Loop (HITL) framework built on LangGraph. By integrating asynchronous checkpointing, RedGrid enables high-risk security workflows to be suspended, persisted to a durable state-store, and resumed with full reasoning context only after explicit human authorization. Furthermore, we implement an advanced reasoning stack combining Tree of Thoughts (ToT) for tactical strategy selection and ReWOO for efficient execution planning, alongside an Agentic RAG pipeline with cross-encoder reranking for longitudinal memory persistence. We evaluate RedGrid on the NYU CTF Bench and a simulated financial services network, demonstrating 81\% task completion success, 100\% recall in adversarial payload rejection, and a 42\% performance gain across multi-session engagements through accumulated threat intelligence.
 \end{abstract}
 
 \section{Introduction}
@@ -44,7 +44,7 @@ Autonomous red teaming represents the next frontier in proactive cyber defense. 
 
 Existing frameworks such as PentestGPT \cite{pentestgpt} and CHECKMATE \cite{checkmate2025} have demonstrated impressive results in Capture-The-Flag (CTF) environments, but their "unconstrained" execution models pose prohibitive risks for enterprise deployment. A single hallucinated command (e.g., recursive deletion or heavy-load service flooding) can lead to catastrophic operational outages. Furthermore, these systems often lack the ability to preserve state across long-duration assessments, leading to context fragility and redundant reconnaissance costs.
 
-We introduce \textbf{CMatrix}, a hierarchical multi-agent framework designed to bridge the gap between autonomous offensive capability and operational safety. CMatrix architecturalizes governance as a first-class citizen through a \textbf{Hierarchical HITL Safety Framework}. By decoupling reasoning from execution and implementing mandatory asynchronous checkpointing for high-risk operations, CMatrix ensures that every potentially destructive action is governed by a human operator without losing the agent's complex reasoning state.
+We introduce \textbf{RedGrid}, a hierarchical multi-agent framework designed to bridge the gap between autonomous offensive capability and operational safety. RedGrid architecturalizes governance as a first-class citizen through a \textbf{Hierarchical HITL Safety Framework}. By decoupling reasoning from execution and implementing mandatory asynchronous checkpointing for high-risk operations, RedGrid ensures that every potentially destructive action is governed by a human operator without losing the agent's complex reasoning state.
 
 \textbf{Our primary contributions are:}
 \begin{itemize}
@@ -57,7 +57,7 @@ We introduce \textbf{CMatrix}, a hierarchical multi-agent framework designed to 
 \section{Background and Related Work}
 \label{sec:background}
 
-The evolution of autonomous penetration testing has progressed from simple rule-based scripts to sophisticated multi-agent reasoning systems. In this section, we contextualize CMatrix within the current state-of-the-art.
+The evolution of autonomous penetration testing has progressed from simple rule-based scripts to sophisticated multi-agent reasoning systems. In this section, we contextualize RedGrid within the current state-of-the-art.
 
 \subsection{LLM-Driven Offensive Security}
 Early efforts in this domain, such as PentestGPT \cite{pentestgpt} and HackingBuddyGPT \cite{hackingbuddygpt}, demonstrated that frontier models like GPT-4 could reason about high-level penetration testing goals and generate corresponding tool commands. However, these systems were largely monolithic and suffered from context window limitations during long engagements. Recent work, such as AutoAttacker \cite{autoattacker} and Cybench \cite{cybench}, has focused on benchmarking these capabilities across Capture-The-Flag (CTF) environments, revealing significant gaps in privilege escalation and lateral movement.
@@ -66,10 +66,10 @@ Early efforts in this domain, such as PentestGPT \cite{pentestgpt} and HackingBu
 To overcome the limitations of monolithic planners, researchers have proposed multi-agent frameworks. CHECKMATE \cite{checkmate2025} and xOffense \cite{xoffense2025} represent the current SOTA, utilizing hierarchical supervisor patterns to delegate specialized tasks to sub-agents. While these frameworks improve task completion rates, they operate in an "unconstrained" mode, where the orchestrator has full authority to execute any tool without safety governance.
 
 \subsection{Safety Guardrails in Agentic AI}
-The AI safety community has introduced concepts like Constitutional AI \cite{constitutionalai} and Red Teaming with LLMs \cite{perez2022red} to mitigate model toxicity. However, these guardrails are primarily linguistic and do not address the operational risks of executing security tools on a live network. CMatrix extends these concepts into the operational domain by implementing a formal safety gate for tool-invocation.
+The AI safety community has introduced concepts like Constitutional AI \cite{constitutionalai} and Red Teaming with LLMs \cite{perez2022red} to mitigate model toxicity. However, these guardrails are primarily linguistic and do not address the operational risks of executing security tools on a live network. RedGrid extends these concepts into the operational domain by implementing a formal safety gate for tool-invocation.
 
 \subsection{Retrieval-Augmented Generation (RAG) for Security}
-RAG \cite{rag} has been widely adopted to ground LLMs in technical documentation. In the security domain, Agentic RAG \cite{selfrag} has emerged to maintain state across long conversations. CMatrix improves upon this by integrating two-stage reranking (BGE + Cross-Encoder), enabling longitudinal memory persistence that survives across disparate assessment phases.
+RAG \cite{rag} has been widely adopted to ground LLMs in technical documentation. In the security domain, Agentic RAG \cite{selfrag} has emerged to maintain state across long conversations. RedGrid improves upon this by integrating two-stage reranking (BGE + Cross-Encoder), enabling longitudinal memory persistence that survives across disparate assessment phases.
 
 \begin{table}[h]
 \centering
@@ -99,7 +99,7 @@ We consider two primary adversaries that threaten the safety of the red teaming 
 2.  \textbf{Adversary $\beta$ (Execution Hallucination)}: An internal reasoning failure where the agent misinterprets a destructive utility (e.g., a "wipe-disk" tool) as a benign tactical step (e.g., a "log-cleanup" tool), leading to unintended operational harm.
 
 \subsection{Safety Invariants}
-To mitigate these threats, CMatrix enforces four core safety properties ($P$):
+To mitigate these threats, RedGrid enforces four core safety properties ($P$):
 \begin{itemize}
     \item \textbf{$P_1$: Pattern Integrity (Auto-Reject)}: No tool invocation $\Theta$ shall execute if it matches the prohibited pattern registry $\mathcal{P}_{reject}$ (e.g., recursive deletion, fork bombs).
     \item \textbf{$P_2$: Semantic Gating (HITL)}: No high-risk action (where $L_{risk} \geq \text{High}$) shall execute without asynchronous human authorization.
@@ -110,20 +110,20 @@ To mitigate these threats, CMatrix enforces four core safety properties ($P$):
 \section{System Architecture and Methodology}
 \label{sec:methodology}
 
-CMatrix is implemented as a stateful, hierarchical multi-agent system. In this section, we detail the orchestration logic, reasoning patterns, and the "Governance-First" safety gate.
+RedGrid is implemented as a stateful, hierarchical multi-agent system. In this section, we detail the orchestration logic, reasoning patterns, and the "Governance-First" safety gate.
 
 \subsection{Hierarchical Orchestration and Specialized Agents}
-The CMatrix architecture (Fig. \ref{fig:architecture}) follows a hierarchical supervisor pattern. A Master Orchestrator, built on LangGraph, manages the global state and delegates domain-specific tasks to seven specialized worker subgraphs. Each worker is isolated with a domain-specific lexicon $\mathcal{L}_A$ and a targeted toolset.
+The RedGrid architecture (Fig. \ref{fig:architecture}) follows a hierarchical supervisor pattern. A Master Orchestrator, built on LangGraph, manages the global state and delegates domain-specific tasks to seven specialized worker subgraphs. Each worker is isolated with a domain-specific lexicon $\mathcal{L}_A$ and a targeted toolset.
 
 \begin{figure*}[t]
 \centering
 \input{../assets/figure-01-architecture.tex}
-\caption{CMatrix System Architecture: High-level overview of the Master Orchestrator, Advanced Reasoning nodes, and the specialized worker layer.}
+\caption{RedGrid System Architecture: High-level overview of the Master Orchestrator, Advanced Reasoning nodes, and the specialized worker layer.}
 \label{fig:architecture}
 \end{figure*}
 
 \subsection{Stateful Orchestration via LangGraph}
-CMatrix utilizes a cyclic state graph implemented in LangGraph. The global \textit{AgentState} $\mathcal{S}$ is a 17-field tuple that persists the core engagement context, including: (1) Conversation History, (2) Tool Execution Logs, (3) Discovered Findings, (4) Cached Credentials, (5) Pending Approvals, (6) Strategic Objectives, and (7) Multi-Agent Delegation Metadata. The transition function $\delta$ manages the flow between nodes while ensuring every state change is atomically persisted.
+RedGrid utilizes a cyclic state graph implemented in LangGraph. The global \textit{AgentState} $\mathcal{S}$ is a 17-field tuple that persists the core engagement context, including: (1) Conversation History, (2) Tool Execution Logs, (3) Discovered Findings, (4) Cached Credentials, (5) Pending Approvals, (6) Strategic Objectives, and (7) Multi-Agent Delegation Metadata. The transition function $\delta$ manages the flow between nodes while ensuring every state change is atomically persisted.
 
 \begin{equation} \label{eq:safety_gate}
 f_{safe}(T, \Theta) = 
@@ -153,13 +153,13 @@ S_{final}(q, d) = \Phi_{ce}(q, d) \text{ for } d \in \text{top-}k(\arg \max S_{s
 \section{Advanced Reasoning and Memory}
 \label{sec:reasoning}
 
-CMatrix achieves superior tactical performance through integrated reasoning patterns.
+RedGrid achieves superior tactical performance through integrated reasoning patterns.
 
 \subsection{Tree of Thoughts and ReWOO Planning}
 For complex strategy selection, the orchestrator utilizes Tree of Thoughts (ToT). It generates multiple exploit branches and evaluates them against criteria like stealth and success probability. For predictable toolchains, ReWOO Planning is used to decouple planning from execution, reducing token overhead by 40\%.
 
 \subsection{Hierarchical Safety Gate}
-The core contribution of CMatrix is its ability to enforce safety without context loss. This is achieved through the Approval Gate node (Fig. \ref{fig:hitl_flow}).
+The core contribution of RedGrid is its ability to enforce safety without context loss. This is achieved through the Approval Gate node (Fig. \ref{fig:hitl_flow}).
 
 \begin{figure}[h]
 \centering
@@ -169,7 +169,7 @@ The core contribution of CMatrix is its ability to enforce safety without contex
 \end{figure}
 
 \subsection{Agentic RAG and Memory Pipeline}
-To solve the "Context Fragility" problem, CMatrix implements a two-stage RAG pipeline (Fig. \ref{fig:rag_pipeline}). Queries are embedded using BGE-large and reranked via a cross-encoder to produce high-fidelity context.
+To solve the "Context Fragility" problem, RedGrid implements a two-stage RAG pipeline (Fig. \ref{fig:rag_pipeline}). Queries are embedded using BGE-large and reranked via a cross-encoder to produce high-fidelity context.
 
 \begin{figure}[h]
 \centering
@@ -181,7 +181,7 @@ To solve the "Context Fragility" problem, CMatrix implements a two-stage RAG pip
 \section{Experimental Evaluation}
 \label{sec:evaluation}
 
-We evaluate CMatrix against five Research Questions (RQs) designed to measure safety, capability, efficiency, memory, and cost-effectiveness.
+We evaluate RedGrid against five Research Questions (RQs) designed to measure safety, capability, efficiency, memory, and cost-effectiveness.
 
 \subsection{Evaluation Setup}
 We utilize two primary benchmarks:
@@ -195,15 +195,15 @@ We use \textbf{PentestGPT} \cite{pentestgpt} and \textbf{CHECKMATE} \cite{checkm
 \label{sec:results}
 
 \subsection{RQ1: Safety Recall and Gating Integrity}
-Against 100 adversarial payloads, CMatrix achieved \textbf{100\% safety recall}. No prohibited command bypassed the auto-reject registry ($P_1$) or the HITL semantic gate ($P_2$). Crucially, the system maintained a \textbf{False Suspend Rate of $<$5\%} for benign reconnaissance tools.
+Against 100 adversarial payloads, RedGrid achieved \textbf{100\% safety recall}. No prohibited command bypassed the auto-reject registry ($P_1$) or the HITL semantic gate ($P_2$). Crucially, the system maintained a \textbf{False Suspend Rate of $<$5\%} for benign reconnaissance tools.
 
 \subsection{RQ2: Task Completion Success}
-On the NYU CTF Bench, CMatrix achieved an overall success rate of \textbf{81\% ($\pm$3.4\%)}. As shown in Fig. \ref{fig:success_bar}, CMatrix significantly outperformed PentestGPT (52\%) and matched the performance of CHECKMATE (79\%) while strictly adhering to safety guardrails.
+On the NYU CTF Bench, RedGrid achieved an overall success rate of \textbf{81\% ($\pm$3.4\%)}. As shown in Fig. \ref{fig:success_bar}, RedGrid significantly outperformed PentestGPT (52\%) and matched the performance of CHECKMATE (79\%) while strictly adhering to safety guardrails.
 
 \begin{figure}[h]
 \centering
 \input{../assets/figure-04-success-bar.tex}
-\caption{Task Success Rate comparison between CMatrix and state-of-the-art baselines across security domains.}
+\caption{Task Success Rate comparison between RedGrid and state-of-the-art baselines across security domains.}
 \label{fig:success_bar}
 \end{figure}
 
@@ -213,20 +213,20 @@ We observed a significant "Learning Effect": success rates improved from 64\% in
 \begin{figure}[h]
 \centering
 \input{../assets/figure-05-memory-gain.tex}
-\caption{Longitudinal success rate progression over five sequential sessions: CMatrix (Persistent) vs. Memoryless Baseline.}
+\caption{Longitudinal success rate progression over five sequential sessions: RedGrid (Persistent) vs. Memoryless Baseline.}
 \label{fig:memory_gain}
 \end{figure}
 
 \section{Discussion and Limitations}
 \label{sec:discussion}
 
-The results presented in Section \ref{sec:results} demonstrate that CMatrix effectively bridges the gap between offensive capability and production safety.
+The results presented in Section \ref{sec:results} demonstrate that RedGrid effectively bridges the gap between offensive capability and production safety.
 
 \subsection{The Latency--Trust Tradeoff}
 Integrating a hierarchical safety framework introduces a non-trivial latency overhead. In our SEE experiments, the HITL gate added an average of 42 seconds of "waiting time" per high-risk action. We argue that this "Latency for Legitimacy" tradeoff is essential for enterprise adoption, where safety is prioritized over raw speed.
 
 \subsection{Robustness to Adversarial Prompting}
-While CMatrix achieved 100\% safety recall against direct adversarial payloads, the risk of sophisticated "jailbreaking" remains. Future iterations will incorporate a \textbf{Semantic Intent Classifier} and "Consensus-based Safety." To address potential \textbf{Operator Notification Fatigue}, we propose \textbf{Risk-Based Thresholding}.
+While RedGrid achieved 100\% safety recall against direct adversarial payloads, the risk of sophisticated "jailbreaking" remains. Future iterations will incorporate a \textbf{Semantic Intent Classifier} and "Consensus-based Safety." To address potential \textbf{Operator Notification Fatigue}, we propose \textbf{Risk-Based Thresholding}.
 
 \subsection{Ethical Considerations}
 The release of high-capability autonomous red teaming frameworks raises significant ethical concerns. We emphasize "Responsible Autonomy" by open-sourcing the safety framework alongside the orchestration logic.
@@ -234,7 +234,7 @@ The release of high-capability autonomous red teaming frameworks raises signific
 \section{Conclusion}
 \label{sec:conclusion}
 
-In this paper, we introduced \textbf{CMatrix}, a multi-agent orchestration platform that architecturalizes safety as a first-class citizen in autonomous red teaming. By implementing a hierarchical safety control graph and asynchronous checkpoint resumption, CMatrix solves the \textit{Safety-Capability Paradox}. Our evaluation demonstrates that CMatrix achieves state-of-the-art task completion success (81\%) while maintaining absolute safety recall for destructive payloads.
+In this paper, we introduced \textbf{RedGrid}, a multi-agent orchestration platform that architecturalizes safety as a first-class citizen in autonomous red teaming. By implementing a hierarchical safety control graph and asynchronous checkpoint resumption, RedGrid solves the \textit{Safety-Capability Paradox}. Our evaluation demonstrates that RedGrid achieves state-of-the-art task completion success (81\%) while maintaining absolute safety recall for destructive payloads.
 
 \bibliographystyle{IEEEtran}
 \bibliography{references}

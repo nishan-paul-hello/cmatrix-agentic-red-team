@@ -1,8 +1,8 @@
-# CMatrix: Dependency-Constrained UCB Exploration for Autonomous Penetration Testing
+# RedGrid: Dependency-Constrained UCB Exploration for Autonomous Penetration Testing
 
 **Status:** Final architecture — synthesized from a 29-paper systematic survey, four independent AI agent proposals, and expert adjudication. Defines target attack surface, system architecture, methodology, contribution claims, and evaluation plan.
 
-**Scoping rule applied throughout:** CMatrix targets **only attack surfaces for which a dedicated, reusable, oracle-backed benchmark already exists in the surveyed literature.** Every claimed capability maps to a benchmark in §2.
+**Scoping rule applied throughout:** RedGrid targets **only attack surfaces for which a dedicated, reusable, oracle-backed benchmark already exists in the surveyed literature.** Every claimed capability maps to a benchmark in §2.
 
 **Evidence discipline applied throughout:** Claims are classified as **Established** (29-paper corpus), **Reasonable Hypothesis** (to be empirically tested), or **Speculative** (not presented as expected results).
 
@@ -48,7 +48,7 @@ PentestEval's stage-level decomposition shows the opposite bottleneck at the pla
 | + GT Weakness Filtering (WF) | 0.53 | +0.03 |
 | + GT Attack Decision-Making (ADM) | 0.67 | **+0.14** |
 
-ADM delivers the **largest single-stage marginal increment** (+0.14) of the three tested — measured on top of an already ground-truthed WG+WF pipeline, not in isolation. CMatrix's dynamically-grown dependency graph is a weaker approximation than ground-truth ADM, so its ceiling must be reported as less than 0.67 and bounded by the quality of the LLM-inferred edges (§7.3).
+ADM delivers the **largest single-stage marginal increment** (+0.14) of the three tested — measured on top of an already ground-truthed WG+WF pipeline, not in isolation. RedGrid's dynamically-grown dependency graph is a weaker approximation than ground-truth ADM, so its ceiling must be reported as less than 0.67 and bounded by the quality of the LLM-inferred edges (§7.3).
 
 **The Gap No Surveyed System Closes**
 
@@ -56,7 +56,7 @@ ADM delivers the **largest single-stage marginal increment** (+0.14) of the thre
 - Systems that solve **dependency reasoning** (PentestEval SMP, CHECKMATE Classical Planning+) are evaluated on curated scenarios with pre-enumerated weakness sets and cannot scale to open-ended, wide-surface exploration.
 - No system combines **UCB-guided exploration over a dependency-constrained frontier**, **explicit prerequisite/enables edges grown dynamically from Specialist discovery**, **cross-session verified skill accumulation**, and **evaluation across three independently-benchmarked attack-surface families** in one architecture.
 
-**CMatrix's thesis:** A four-layer orchestration framework driven by a *Vulnerability Dependency Graph* (VDG) — formalized as a scored DAG with explicit prerequisite/enables edges, UCB-guided node selection over a dependency-constrained frontier, path-level impact optimization, and ordinal evidence backpropagation — combined with a dual-layer world model that separates confirmed environmental facts from inferred attack hypotheses.
+**RedGrid's thesis:** A four-layer orchestration framework driven by a *Vulnerability Dependency Graph* (VDG) — formalized as a scored DAG with explicit prerequisite/enables edges, UCB-guided node selection over a dependency-constrained frontier, path-level impact optimization, and ordinal evidence backpropagation — combined with a dual-layer world model that separates confirmed environmental facts from inferred attack hypotheses.
 
 ---
 
@@ -64,7 +64,7 @@ ADM delivers the **largest single-stage marginal increment** (+0.14) of the thre
 
 ### 2.1 Selection Rule and Explicit Exclusion
 
-Every attack surface below is included **only because it has a dedicated, reusable, oracle-backed benchmark in the surveyed corpus.** No benchmark will be built; CMatrix's evaluation is fully constrained to what already exists.
+Every attack surface below is included **only because it has a dedicated, reusable, oracle-backed benchmark in the surveyed corpus.** No benchmark will be built; RedGrid's evaluation is fully constrained to what already exists.
 
 **Explicitly excluded: general REST API attack surface.** RESTler's evaluation targets (self-hosted GitLab, Microsoft Azure services, Office365) are one-off real-world case studies, not a standardized, reusable target set. There is no "RESTBench" equivalent in the survey. RESTler's core techniques (producer–consumer dependency inference, response-feedback pruning) are methodologically reusable and are adopted internally by the GraphQL Specialist and the dependency-inference logic in the Team Manager (§9.3), but REST API exploitation is **not evaluated and not claimed** — no REST-API-specific pass rates are reported anywhere in this paper.
 
@@ -77,17 +77,17 @@ Every attack surface below is included **only because it has a dedicated, reusab
 | **Multi-host / Active Directory networks** | Incalmo MHBench (40 multi-host red-team environments) | Lateral movement, credential reuse/theft across hosts, privilege escalation, multi-host stepping-stone attacks |
 | **Production system corpus (cross-cutting hard tier)** | BountyBench (25 real production systems: mlflow, langchain, FastAPI, gradio, curl, django, etc.; 27 CWEs across 9 OWASP Top-10 categories) | Economic/adversarial evaluation layer on top of web surface — not a separate attack-surface family, but a harder, real-money-validated version of the same web/app surface |
 
-Everything CMatrix claims to do is bounded by this table. Binary exploitation, physical/network-layer attacks, social engineering, and general REST API fuzzing are **not evaluated and not claimed.**
+Everything RedGrid claims to do is bounded by this table. Binary exploitation, physical/network-layer attacks, social engineering, and general REST API fuzzing are **not evaluated and not claimed.**
 
 ---
 
 ## 3. Scientific Contributions (Three Only)
 
-> **Design principle:** A paper with seven contributions invites a reviewer to conclude "bundle of incremental integrations." CMatrix makes exactly three primary claims, each bounded by a precise experimental test. All other mechanisms are supporting infrastructure.
+> **Design principle:** A paper with seven contributions invites a reviewer to conclude "bundle of incremental integrations." RedGrid makes exactly three primary claims, each bounded by a precise experimental test. All other mechanisms are supporting infrastructure.
 
 ### C1 — Dependency-Aware Attack Graph Exploration
 
-CMatrix introduces a dynamically constructed **Vulnerability Dependency Graph (VDG)** combining:
+RedGrid introduces a dynamically constructed **Vulnerability Dependency Graph (VDG)** combining:
 - UCB-guided node selection over a **dependency-constrained frontier** (only nodes whose prerequisites are satisfied are eligible)
 - **Path-level impact scoring** (a path of three medium-scoring nodes leading to RCE is more valuable than a single high-scoring node leading to information disclosure — node-level scoring alone cannot capture this)
 - **Explicit prerequisite/enables edges grown dynamically from Specialist discovery** (solving PentestEval's pre-enumeration scalability gap)
@@ -101,9 +101,9 @@ CMatrix introduces a dynamically constructed **Vulnerability Dependency Graph (V
 
 ### C2 — Cross-Mission Memory with Verified Skill Promotion
 
-CMatrix adapts CO-REDTEAM's 3-tier memory and Voyager's description-embedding retrieval for the security domain.
+RedGrid adapts CO-REDTEAM's 3-tier memory and Voyager's description-embedding retrieval for the security domain.
 
-*Precise security-specific difference:* Security exploit chains require **conditional branching** (e.g., "if WAF detects `<script>`, switch to event-handler payloads") that Voyager's deterministic game-world skills do not. CMatrix's Strategy Memory tier explicitly represents these conditional workflows as parameterized procedures with branch points — not just linear exploit sequences.
+*Precise security-specific difference:* Security exploit chains require **conditional branching** (e.g., "if WAF detects `<script>`, switch to event-handler payloads") that Voyager's deterministic game-world skills do not. RedGrid's Strategy Memory tier explicitly represents these conditional workflows as parameterized procedures with branch points — not just linear exploit sequences.
 
 **Validation requirement:** Must show measurable improvement on a "seen technology" subset of benchmarks (e.g., improved performance on ThinkPHP CVEs after encountering other ThinkPHP CVEs in prior missions). Measured by strategy hit rate computed from Engagement Trajectory logs.
 
@@ -138,7 +138,7 @@ The following items are retained as supporting infrastructure but are **not clai
 
 ## 5. System Architecture — Overview
 
-CMatrix uses a **four-layer hierarchy** — the structural pattern every high-performing surveyed system independently converges on (HPTSA, PentestGPT, D-CIPHER, VulnBot, Incalmo, CO-REDTEAM).
+RedGrid uses a **four-layer hierarchy** — the structural pattern every high-performing surveyed system independently converges on (HPTSA, PentestGPT, D-CIPHER, VulnBot, Incalmo, CO-REDTEAM).
 
 - The single-structure VDG is replaced by a **Dual-Layer World Model** (§6): an **Environmental Layer (EL)** containing only confirmed discovered facts (written exclusively by Specialists), and an **Attack Layer (AL / VDG)** containing only UCB-scored attack hypotheses with prerequisite/enables edges (written exclusively by the Team Manager). This eliminates fact/hypothesis conflation and makes discovery quality ablatable independently from planning quality.
 
@@ -223,11 +223,11 @@ flowchart TD
 
 ## 6. The Dual-Layer World Model
 
-> CMatrix separates confirmed environmental facts from inferred attack hypotheses into two strictly-separated layers. Write-ownership enforcement ensures that only Specialists can write facts and only the Team Manager can write attack hypotheses — preventing the fact/hypothesis conflation common in single-structure world models.
+> RedGrid separates confirmed environmental facts from inferred attack hypotheses into two strictly-separated layers. Write-ownership enforcement ensures that only Specialists can write facts and only the Team Manager can write attack hypotheses — preventing the fact/hypothesis conflation common in single-structure world models.
 
 ### 6.1 Environmental Layer (EL) — Confirmed Facts Only
 
-The EL is CMatrix's persistent store of **all confirmed discovered facts**. Every Specialist action that produces a finding writes to the EL. No hypothesis ever enters the EL. No Team Manager reasoning ever writes to the EL.
+The EL is RedGrid's persistent store of **all confirmed discovered facts**. Every Specialist action that produces a finding writes to the EL. No hypothesis ever enters the EL. No Team Manager reasoning ever writes to the EL.
 
 **Write ownership:** Specialists only. Read access: all agents.
 
@@ -652,7 +652,7 @@ Phase W: Webhook-XSS class — launch webhook listener (start_webhook_listener(p
 ```
 **Knowledge injection:** XSS payload patterns, CSP bypass techniques, DOM vs. reflected vs. stored distinction, event-handler payload library for WAF evasion.
 
-**WAF response adaptive branching:** If Phase 3 detects a WAF filtering `<script>`, Phase 4 branches to the event-handler payload track (e.g., `onmouseover`, `onerror`) without re-entering Phase 3 — this is the conditional branching pattern that distinguishes CMatrix's security-domain memory from Voyager's game-world skills (C2 security-specific difference).
+**WAF response adaptive branching:** If Phase 3 detects a WAF filtering `<script>`, Phase 4 branches to the event-handler payload track (e.g., `onmouseover`, `onerror`) without re-entering Phase 3 — this is the conditional branching pattern that distinguishes RedGrid's security-domain memory from Voyager's game-world skills (C2 security-specific difference).
 
 ### 9.4 GraphQL Specialist
 
@@ -716,7 +716,7 @@ State (compromised hosts, harvested credentials, active sessions) is tracked in 
 
 ### 10.1 Environmental Layer (EL) as Primary External Store
 
-The EL (§6.1) is the canonical structured store outside any LLM's context window. Every mature surveyed system independently converges on a similar construct (Incalmo's ESS, PentestAgent's Env Info DB, cochise's PTT, VulnBot's PTG). CMatrix's EL unifies multi-host fields (`hosts`, `credentials`) with strict write-ownership enforcement — Specialists write facts, the Team Manager writes attack hypotheses, and no agent crosses these boundaries.
+The EL (§6.1) is the canonical structured store outside any LLM's context window. Every mature surveyed system independently converges on a similar construct (Incalmo's ESS, PentestAgent's Env Info DB, cochise's PTT, VulnBot's PTG). RedGrid's EL unifies multi-host fields (`hosts`, `credentials`) with strict write-ownership enforcement — Specialists write facts, the Team Manager writes attack hypotheses, and no agent crosses these boundaries.
 
 The EL is not a blackboard. It has enforced write ownership, a versioned schema, and is queryable by all agents with read access. No LLM ever receives the full EL — only a scoped snapshot relevant to the current task.
 
@@ -806,7 +806,7 @@ If no new VDG nodes are added in the last N=5 Specialist invocations **AND** the
 
 ## 11. Prior Work Gap Table
 
-| Gap in prior work | Papers exhibiting the gap | CMatrix's fix |
+| Gap in prior work | Papers exhibiting the gap | RedGrid's fix |
 |---|---|---|
 | Flat task dispatch with no formal prerequisite modeling | HPTSA, MAPTA, AWE, T-Agent, CVE-Bench systems | VDG: UCB-guided node selection over a dependency-constrained frontier (§7) |
 | Dependency-aware planning evaluated only on pre-curated weakness sets, not scalable to open-ended discovery | PentestEval SMP, CHECKMATE | VDG grows dynamically from Specialist discovery via `VDG_AddNode` (not pre-annotated) |
@@ -835,7 +835,7 @@ Assembled entirely from existing published benchmarks. No benchmark is construct
 
 | Tier | Benchmark | Surface | Size | Role |
 |---|---|---|---|---|
-| **Tier 0** | Fang et al. 15-vulnerability sandbox suite | Web | 15 | Fast CI regression; floor: GPT-4's 73.3% pass@5. CMatrix must not regress and must close the 4 GPT-4 failure classes (AuthBypass, JS attacks, Hard SQLi, XSS+CSRF) |
+| **Tier 0** | Fang et al. 15-vulnerability sandbox suite | Web | 15 | Fast CI regression; floor: GPT-4's 73.3% pass@5. RedGrid must not regress and must close the 4 GPT-4 failure classes (AuthBypass, JS attacks, Hard SQLi, XSS+CSRF) |
 | **Tier 0b** | HPTSA 14-CVE zero-day suite | Web | 14 | Zero-day mode validation; floor: HPTSA's 42% pass@5 |
 | **Tier 1** | PentestEval 12 real-world scenarios (346 tasks) | Web | 12 / 346 | Stage-level (IC/WG/WF/ADM/EG/ER) diagnosis; UCB hyperparameter tuning (§7.2) |
 | **Tier 2** | CVE-Bench | Web | 40 critical CVEs | **Primary metric** — pass@1 and pass@5, one-day and zero-day, 8-attack-type oracle, 10 runs |
@@ -882,7 +882,7 @@ These are **targets for the hypothesis**, not guaranteed outcomes. If targets ar
 - Failure distribution across classes is reported as a secondary result (this tells the research community where to improve next).
 
 **Baseline re-run policy:**
-- All baselines re-run under the same model, compute budget, and evaluation harness as CMatrix — not taken from published numbers, which may use different models or compute budgets. Published numbers are reported as a second column for reference.
+- All baselines re-run under the same model, compute budget, and evaluation harness as RedGrid — not taken from published numbers, which may use different models or compute budgets. Published numbers are reported as a second column for reference.
 
 ---
 
@@ -963,7 +963,7 @@ Measure: distinct paths attempted per mission; time-to-recovery after a failure;
 - With vs. without early stopping. Measure: cost-per-exploit and pass@1 (should be unchanged). If pass@1 decreases, N=5 is too aggressive and must be increased.
 
 **A8 — VAPT Protocol Prompt (methodology-as-configuration)**:
-- Same CMatrix architecture, different VAPT Protocol Prompt versions (OWASP Testing Guide vs. PTES vs. CMatrix default). Measure: does methodology choice independently affect pass@1? This directly answers an open research question without requiring a separate paper.
+- Same RedGrid architecture, different VAPT Protocol Prompt versions (OWASP Testing Guide vs. PTES vs. RedGrid default). Measure: does methodology choice independently affect pass@1? This directly answers an open research question without requiring a separate paper.
 
 ### 13.3 Ablations NOT Required
 
@@ -989,7 +989,7 @@ For each ablation to be causally interpretable:
 
 ## 14. Model Configuration and Cost Policy
 
-Six independent papers (AWE, AutoPT, PrediQL, VulnBot, D-CIPHER, Incalmo) independently show architecture dominates raw model capability — Incalmo with Haiku 3.5 beats a strong baseline with Sonnet 4; AutoPT's GPT-4o-mini beats GPT-4o once the FSM is in place. CMatrix formalizes this into a tiering rule rather than a fixed model choice, and benchmarks across at least three backbone families to substantiate model-swappability.
+Six independent papers (AWE, AutoPT, PrediQL, VulnBot, D-CIPHER, Incalmo) independently show architecture dominates raw model capability — Incalmo with Haiku 3.5 beats a strong baseline with Sonnet 4; AutoPT's GPT-4o-mini beats GPT-4o once the FSM is in place. RedGrid formalizes this into a tiering rule rather than a fixed model choice, and benchmarks across at least three backbone families to substantiate model-swappability.
 
 | Component | Default tier | Rationale |
 |---|---|---|
@@ -1005,7 +1005,7 @@ Six independent papers (AWE, AutoPT, PrediQL, VulnBot, D-CIPHER, Incalmo) indepe
 - Cost ceiling: USD threshold with automatic escalation-to-human when exhausted — never an indefinite retry loop
 - Early Stopping Heuristic fires before the hard ceiling if N=5 invocations produce no new VDG nodes and the frontier is empty (§10.7)
 
-**Model-swappability validation:** CMatrix is benchmarked with ≥3 backbone families (GPT-4o class, Claude Sonnet class, open-weight Llama/Qwen class) at Tier 2 (CVE-Bench) to substantiate the architecture-over-model claim. Per-backbone results are reported separately.
+**Model-swappability validation:** RedGrid is benchmarked with ≥3 backbone families (GPT-4o class, Claude Sonnet class, open-weight Llama/Qwen class) at Tier 2 (CVE-Bench) to substantiate the architecture-over-model claim. Per-backbone results are reported separately.
 
 ---
 
@@ -1021,7 +1021,7 @@ This is the single most important pre-evaluation risk. No architectural decision
 
 ### 15.2 Real-World Pass Rates Will Be Materially Lower Than Sandboxed
 
-Fang et al. found 1 exploitable XSS in 50 candidate real-world sites (2%) vs. 73.3% in the matched sandbox. WAFs, patch levels, and defensive tooling are not represented in most benchmark environments. CMatrix should report both sandbox and a small real-world/bug-bounty validation sample (BountyBench, HTB Season 8), with the gap stated explicitly. Do not extrapolate sandbox results to real-world deployment.
+Fang et al. found 1 exploitable XSS in 50 candidate real-world sites (2%) vs. 73.3% in the matched sandbox. WAFs, patch levels, and defensive tooling are not represented in most benchmark environments. RedGrid should report both sandbox and a small real-world/bug-bounty validation sample (BountyBench, HTB Season 8), with the gap stated explicitly. Do not extrapolate sandbox results to real-world deployment.
 
 ### 15.3 GraphQL Evaluation Is Narrower Than Web Evaluation
 
@@ -1029,7 +1029,7 @@ PrediQL's 6-API suite is real and standardized, but it is not remotely the size 
 
 ### 15.4 REST API Exploitation Is Out of Scope
 
-CMatrix may exercise RESTler-style dependency inference internally during a mission (§9.4), but no REST-API-specific pass rates are reported and no REST-API capability is claimed. This must not be implied or inferred from the architecture.
+RedGrid may exercise RESTler-style dependency inference internally during a mission (§9.4), but no REST-API-specific pass rates are reported and no REST-API capability is claimed. This must not be implied or inferred from the architecture.
 
 ### 15.5 Cost-Per-Exploit Is Backbone-Price-Sensitive
 
@@ -1055,7 +1055,7 @@ VDG edge inference (§7.3) uses batched LLM prompts (2 calls per new node) rathe
 
 ## 16. Summary of Contribution Claims
 
-CMatrix makes **exactly three primary contribution claims**, each bounded by a precisely specified experimental test:
+RedGrid makes **exactly three primary contribution claims**, each bounded by a precisely specified experimental test:
 
 ### C1 — Dependency-Aware Attack Graph Exploration (Primary)
 

@@ -8,16 +8,16 @@ import "@/app/globals.css";
 
 export const metadata: Metadata = {
     title: {
-        default: "CMATRIX - Agentic Red Team",
-        template: "%s | CMATRIX",
+        default: "RedGrid - Agentic Red Team",
+        template: "%s | RedGrid",
     },
     description:
-        "CMATRIX is an LLM-orchestrated multi-agent framework designed for autonomous vulnerability assessment and penetration testing.",
-    metadataBase: new URL("https://cmatrix.internal"),
+        "RedGrid is an LLM-orchestrated multi-agent framework designed for autonomous vulnerability assessment and penetration testing.",
+    metadataBase: new URL("https://redgrid.internal"),
     openGraph: {
-        title: "CMATRIX - Agentic Red Team",
+        title: "RedGrid - Agentic Red Team",
         description: "Autonomous vulnerability assessment and penetration testing.",
-        siteName: "CMATRIX",
+        siteName: "RedGrid",
         type: "website",
     },
     robots: {

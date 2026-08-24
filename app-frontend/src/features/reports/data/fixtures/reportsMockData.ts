@@ -76,7 +76,7 @@ export const PREVIEW_SECTIONS = [
     {
         title: "EXECUTIVE SUMMARY",
         content:
-            "CMATRIX completed mission CVE-001 against target app.targetcorp.com. 7 vulnerabilities identified, 3 oracle-confirmed. Critical finding: time-based SQL injection in /api/users endpoint grants full database read access.",
+            "RedGrid completed mission CVE-001 against target app.targetcorp.com. 7 vulnerabilities identified, 3 oracle-confirmed. Critical finding: time-based SQL injection in /api/users endpoint grants full database read access.",
     },
     {
         title: "CRITICAL FINDINGS",

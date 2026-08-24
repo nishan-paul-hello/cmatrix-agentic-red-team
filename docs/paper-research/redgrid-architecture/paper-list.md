@@ -1,4 +1,4 @@
-# CMatrix — Final Definitive Paper List
+# RedGrid — Final Definitive Paper List
 **Research:** LLM-Orchestrated Multi-Agent Framework for Autonomous VAPT  
 **Attack Surfaces:** Web · API · Network  
 **Total: 27 papers**
@@ -29,7 +29,7 @@
 | # | File | Paper | arXiv / Venue | Surface | Unique Contribution |
 |---|---|---|---|---|---|
 | 7 | [📄 `07-prediql-automated-testing-of-graphql-apis-with-llms.pdf`](paper-research/downloaded-paper-curated/07-prediql-automated-testing-of-graphql-apis-with-llms.pdf) | **PrediQL: Automated Testing of GraphQL APIs with LLMs** — Liu et al., **The Web Conference (WWW) 2026** | WWW 2026 | 🔌 API (GraphQL) | **Only peer-reviewed paper targeting GraphQL API security with LLMs.** LLM + RAG + multi-armed bandit for adaptive fuzzing. Access-control bypass, injection, info disclosure in GraphQL. |
-| 8 | [📄 `08-restler-stateful-rest-api-fuzzing.pdf`](paper-research/downloaded-paper-curated/08-restler-stateful-rest-api-fuzzing.pdf) | **RESTler: Stateful REST API Fuzzing** — Atlidakis et al. (Microsoft), ICSE 2019 | ICSE 2019 (ACM) | 🔌 API (REST) | **The foundational REST API fuzzing baseline.** Producer-consumer dependency inference from OpenAPI spec. Bugs found in Azure, Office 365, GitLab. Cite as the pre-LLM baseline that CMatrix supersedes. |
+| 8 | [📄 `08-restler-stateful-rest-api-fuzzing.pdf`](paper-research/downloaded-paper-curated/08-restler-stateful-rest-api-fuzzing.pdf) | **RESTler: Stateful REST API Fuzzing** — Atlidakis et al. (Microsoft), ICSE 2019 | ICSE 2019 (ACM) | 🔌 API (REST) | **The foundational REST API fuzzing baseline.** Producer-consumer dependency inference from OpenAPI spec. Bugs found in Azure, Office 365, GitLab. Cite as the pre-LLM baseline that RedGrid supersedes. |
 
 
 
@@ -37,7 +37,7 @@
 ---
 
 ## SECTION 3 — NETWORK PENTESTING
-*The VAPT agent papers focused on network infrastructure: reconnaissance, service exploitation, CVE chaining, lateral movement, shell acquisition. This is where all prior LLM-agent VAPT research has concentrated — CMatrix builds on and differentiates from all of these.*
+*The VAPT agent papers focused on network infrastructure: reconnaissance, service exploitation, CVE chaining, lateral movement, shell acquisition. This is where all prior LLM-agent VAPT research has concentrated — RedGrid builds on and differentiates from all of these.*
 
 | # | File | Paper | Surface | Unique Contribution |
 |---|---|---|---|---|
@@ -65,11 +65,11 @@
 ---
 
 ## SECTION 5 — AGENT REASONING FOUNDATIONS
-*Papers whose mechanisms are directly implemented inside CMatrix's agent architecture.*
+*Papers whose mechanisms are directly implemented inside RedGrid's agent architecture.*
 
-| # | File | Paper | Venue | Maps To CMatrix |
+| # | File | Paper | Venue | Maps To RedGrid |
 |---|---|---|---|---|
-| 21 | [📄 `21-voyager-an-open-ended-embodied-agent.pdf`](paper-research/downloaded-paper-curated/21-voyager-an-open-ended-embodied-agent.pdf) | **Voyager: An Open-Ended Embodied Agent with Large Language Models** — Wang et al. (NVIDIA/Stanford/UT Austin), 2023 | **NeurIPS 2023** | **Attack Strategy Library** (§6, C11): Voyager's persistent, ever-growing skill library — where completed tasks are crystallized into reusable code skills stored in a vector DB and retrieved at task-start — is the direct conceptual ancestor of CMatrix's technology-fingerprint-indexed attack strategy crystallization. CMatrix domain-constrains the mechanism to security exploitation procedures with confidence scoring. |
+| 21 | [📄 `21-voyager-an-open-ended-embodied-agent.pdf`](paper-research/downloaded-paper-curated/21-voyager-an-open-ended-embodied-agent.pdf) | **Voyager: An Open-Ended Embodied Agent with Large Language Models** — Wang et al. (NVIDIA/Stanford/UT Austin), 2023 | **NeurIPS 2023** | **Attack Strategy Library** (§6, C11): Voyager's persistent, ever-growing skill library — where completed tasks are crystallized into reusable code skills stored in a vector DB and retrieved at task-start — is the direct conceptual ancestor of RedGrid's technology-fingerprint-indexed attack strategy crystallization. RedGrid domain-constrains the mechanism to security exploitation procedures with confidence scoring. |
 | 22 | [📄 `22-reflexion-language-agents-with-verbal-rl.pdf`](paper-research/downloaded-paper-curated/22-reflexion-language-agents-with-verbal-rl.pdf) | **Reflexion: Language Agents with Verbal Reinforcement Learning** — Shinn et al. (Northeastern/Princeton), 2023 | **NeurIPS 2023** | **Validation Agent self-debugging loop** (§6: diagnose→contextualize→adapt→retry→cap) + **Cycle Guard/Reflector** (§10): both are direct implementations of Reflexion's verbal reinforcement pattern — the agent critiques its own failed attempts, stores the reflection, and adapts before retrying. Every agent paper cites this; not listing it as primary when two contributions implement it looks like an oversight. |
 
 ---
@@ -91,7 +91,7 @@
 
 | # | File | Paper | Scope | Why This One |
 |---|---|---|---|---|
-| 26 | [📄 `26-forewarned-is-forearmed-a-survey-on-llm-based-agents-in.pdf`](paper-research/downloaded-paper-curated/26-forewarned-is-forearmed-a-survey-on-llm-based-agents-in.pdf) | **"Forewarned is Forearmed": Survey on LLM-Based Agents in Autonomous Cyberattacks** — Xu et al. (NTU/Waterloo), IEEE 2025 | **VAPT-specific** | 150+ papers on LLM agents for offensive cybersecurity. Covers network, web, enterprise, multi-agent, defensive implications. NTU/Waterloo/IEEE authorship. The canonical reference for positioning CMatrix in the security literature. |
+| 26 | [📄 `26-forewarned-is-forearmed-a-survey-on-llm-based-agents-in.pdf`](paper-research/downloaded-paper-curated/26-forewarned-is-forearmed-a-survey-on-llm-based-agents-in.pdf) | **"Forewarned is Forearmed": Survey on LLM-Based Agents in Autonomous Cyberattacks** — Xu et al. (NTU/Waterloo), IEEE 2025 | **VAPT-specific** | 150+ papers on LLM agents for offensive cybersecurity. Covers network, web, enterprise, multi-agent, defensive implications. NTU/Waterloo/IEEE authorship. The canonical reference for positioning RedGrid in the security literature. |
 | 27 | [📄 `27-a-survey-on-large-language-model-based-autonomous-agents.pdf`](paper-research/downloaded-paper-curated/27-a-survey-on-large-language-model-based-autonomous-agents.pdf) | **A Survey on Large Language Model based Autonomous Agents** — Wang et al., Frontiers of Computer Science 2024 | **General agent architecture** | 3,200+ citations. Establishes the canonical 4-module agent taxonomy (Profile · Memory · Planning · Action) used as background vocabulary in every agent paper. Needed once in your Background section to ground the agent architecture framework your Commander/Agent design implements. No agent paper skips this citation. |
 
 ---

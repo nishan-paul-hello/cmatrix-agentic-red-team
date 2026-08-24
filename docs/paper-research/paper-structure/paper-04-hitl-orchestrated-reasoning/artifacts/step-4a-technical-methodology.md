@@ -1,7 +1,7 @@
 # [STEP 4a] — Technical Methodology — OUTPUT ARTIFACT
 
 ## 1) Summary
-This sub-step defined the formal technical methodology for CMatrix, describing the internal logic of the Composite Reasoning Pipeline. We provided modular descriptions and formal algorithms for the five core components: Tree of Thoughts (ToT), ReWOO Planner, Worker Execution, Reflexion Engine, and HITL Safety Gate. We created two major LaTeX assets: `figure-02-system-architecture.tex` (technical architecture) and `algorithm-01-composite-reasoning.tex` (formal orchestration flow).
+This sub-step defined the formal technical methodology for RedGrid, describing the internal logic of the Composite Reasoning Pipeline. We provided modular descriptions and formal algorithms for the five core components: Tree of Thoughts (ToT), ReWOO Planner, Worker Execution, Reflexion Engine, and HITL Safety Gate. We created two major LaTeX assets: `figure-02-system-architecture.tex` (technical architecture) and `algorithm-01-composite-reasoning.tex` (formal orchestration flow).
 
 ## 2) Full Output
 
@@ -33,7 +33,7 @@ This sub-step defined the formal technical methodology for CMatrix, describing t
 - **Output**: Corrective Actions ($I$).
 
 ### 2.2 Composite Reasoning Pipeline
-The novelty of CMatrix lies in the **composition** of these patterns:
+The novelty of RedGrid lies in the **composition** of these patterns:
 1.  **ToT** provides the "Strategic Lookahead" (which approach to take).
 2.  **ReWOO** provides the "Efficiency" (parallelizable/decoupled planning).
 3.  **Reflexion** provides the "Quality Control" (identifying and fixing mistakes).

@@ -1,11 +1,11 @@
-# Automated Penetration Testing with LLM Agents and Classical Planning — Deep Survey Notes for CMatrix
+# Automated Penetration Testing with LLM Agents and Classical Planning — Deep Survey Notes for RedGrid
 
 | Field | Details |
 |-------|---------|
 | **Authors** | Lingzhi Wang*, Xinyi Shi*, Ziyu Li* (Northwestern University), Yi Jiang†, Shiyu Tan†, Junjie Cheng†, Wenyuan Chen†, Zhenyuan Li† (Zhejiang University), Yuhao Jiang*, Yan Chen* (Northwestern University), Xiangmin Shen‡ (Hofstra University) |
 | **Venue** | arXiv:2512.11143v1 [cs.CR], December 11, 2025 |
 | **Key System** | CHECKMATE — Classical Planning+ integrated with LLM agents |
-| **Relevance** | ⭐⭐⭐⭐⭐ — This paper is the most architecturally rigorous of all surveyed so far. It delivers (1) the PEP paradigm as a unified design framework applicable directly to CMatrix, (2) Classical Planning+ as a concrete, implementation-ready replacement for LLM-only planning, (3) empirical proof that classical planning beats RAG-augmented LLM by 35% on cost and outperforms Claude Code+Sonnet 4.5 on milestone success with 100% stability vs 75%, and (4) the definitive teardown of Claude Code's three failure modes that CMatrix must explicitly guard against. |
+| **Relevance** | ⭐⭐⭐⭐⭐ — This paper is the most architecturally rigorous of all surveyed so far. It delivers (1) the PEP paradigm as a unified design framework applicable directly to RedGrid, (2) Classical Planning+ as a concrete, implementation-ready replacement for LLM-only planning, (3) empirical proof that classical planning beats RAG-augmented LLM by 35% on cost and outperforms Claude Code+Sonnet 4.5 on milestone success with 100% stability vs 75%, and (4) the definitive teardown of Claude Code's three failure modes that RedGrid must explicitly guard against. |
 | **Key Claim** | CHECKMATE achieves **88% M7 milestone rate** on Vulhub (120 targets), vs Claude Code ~65%; costs **$0.56 median** vs Claude Code's **$1.43** (61% cheaper); time **6.9 min** vs **11.8 min** (42% faster); stability **100%** vs **75%** success across repeated runs; all three improvements from classical planning+ alone. |
 
 ---
@@ -16,7 +16,7 @@ This paper's central claim is that **LLMs are structurally incapable of long-hor
 
 The paper also delivers the first large-scale (120-target) head-to-head evaluation of all major LLM pentest systems on the same dataset, with an explicit minimal-human-intervention policy. This is the most methodologically clean benchmark in the entire field.
 
-For CMatrix, this paper forces a critical architectural question: **Is the Team Manager's current LLM-based planning layer sufficient, or should CMatrix replace it with Classical Planning+?** The evidence strongly suggests a hybrid: keep LLM for reconnaissance summarization and output parsing, but replace the core planning strategy with a predefined action graph guided by Classical Planning+.
+For RedGrid, this paper forces a critical architectural question: **Is the Team Manager's current LLM-based planning layer sufficient, or should RedGrid replace it with Classical Planning+?** The evidence strongly suggests a hybrid: keep LLM for reconnaissance summarization and output parsing, but replace the core planning strategy with a predefined action graph guided by Classical Planning+.
 
 ---
 
@@ -60,9 +60,9 @@ flowchart LR
 | CAI | LLM (multi-agent) | Tool Agents | — |
 | AutoPentester | LLM + Modified PTT | LLM + RAG (articles) + Agents | LLM |
 | **CHECKMATE** | **Classical Planning+** | **LLM + Predefined Actions + Agents** | **LLM** |
-| **CMatrix (target)** | **LLM + PTG (Papers 11–12) + Classical Planning+ (this paper)** | **Specialists + RAG** | **LLM (Summarizer Bridge)** | 
+| **RedGrid (target)** | **LLM + PTG (Papers 11–12) + Classical Planning+ (this paper)** | **Specialists + RAG** | **LLM (Summarizer Bridge)** | 
 
-> **CMatrix implication:** CMatrix's Planner (Layer 2 Team Manager) should implement the hybrid: Classical Planning+ for known action sequences (recon → surface → exploit), LLM for dynamic updates when non-deterministic effects (exploit outcome, discovered service) update the state graph.
+> **RedGrid implication:** RedGrid's Planner (Layer 2 Team Manager) should implement the hybrid: Classical Planning+ for known action sequences (recon → surface → exploit), LLM for dynamic updates when non-deterministic effects (exploit outcome, discovered service) update the state graph.
 
 ---
 
@@ -149,7 +149,7 @@ The action library covers:
 
 ### 4.3 Three LLM Failure Modes in Pentesting
 
-The paper's analysis of Claude Code + Sonnet 4.5 (strongest baseline) identifies three structural LLM failure modes that CMatrix must explicitly address:
+The paper's analysis of Claude Code + Sonnet 4.5 (strongest baseline) identifies three structural LLM failure modes that RedGrid must explicitly address:
 
 ```mermaid
 flowchart TD
@@ -277,17 +277,17 @@ flowchart TD
 
 ---
 
-## 6. Key Takeaways for CMatrix
+## 6. Key Takeaways for RedGrid
 
-### 🔴 Critical — Must-Have in CMatrix v1
+### 🔴 Critical — Must-Have in RedGrid v1
 
-**1. Adopt the PEP Paradigm as CMatrix's Canonical Design Language**
-CMatrix must formally identify every component as Planner, Executor, or Perceptor:
+**1. Adopt the PEP Paradigm as RedGrid's Canonical Design Language**
+RedGrid must formally identify every component as Planner, Executor, or Perceptor:
 - **Layer 2 Team Manager = Planner:** Decides what specialists to invoke and in what order
 - **Layer 3 Specialists = Executor:** Translates plan step into tool commands, executes them
 - **Summarizer Bridge (Papers 05, 12) = Perceptor:** Converts tool output to structured state handoff
 
-All future CMatrix architecture decisions should be evaluated against these three roles. A component that tries to be both Planner and Executor is a design flaw.
+All future RedGrid architecture decisions should be evaluated against these three roles. A component that tries to be both Planner and Executor is a design flaw.
 
 **2. Classical Planning+ as the Team Manager Core**
 Replace the Team Manager's LLM-only planning with a Classical Planning+ hybrid:
@@ -298,7 +298,7 @@ State: Set of predicates updated by Perceptor after each action
 Planner: Enumerate all actions with satisfied preconditions → LLM ranks → execute best
 ```
 
-Concrete example preconditions for CMatrix:
+Concrete example preconditions for RedGrid:
 ```
 Action: web-fingerprint(url)
   Preconditions: [url-accessible(url)]
@@ -318,7 +318,7 @@ Action: execute-exploit(cve_id, repo_path, target_ip)
 ```
 
 **3. Predefined Action Library with Parameter Templates**
-Build CMatrix's action library as a YAML/JSON registry with command templates:
+Build RedGrid's action library as a YAML/JSON registry with command templates:
 ```yaml
 - id: nmap_full_scan
   description: "Full TCP port scan with service detection"
@@ -342,7 +342,7 @@ Build CMatrix's action library as a YAML/JSON registry with command templates:
 Never let an LLM generate the command flags/structure — only inject the `{parameter}` values from current state predicates. This alone eliminates a major class of hallucination errors.
 
 **4. Dual Perceptor: Rule-Based + LLM**
-CMatrix Summarizer Bridge should distinguish output types:
+RedGrid Summarizer Bridge should distinguish output types:
 - Structured outputs (JSON, nmap XML, MSF module list) → **rule-based parser** → predicates
 - Unstructured outputs (banner text, web page HTML, error messages) → **LLM perceptor** → predicates
 Use LLM perceptor only when necessary; deterministic parsing is always preferred for reliability. This directly reduces the token consumption that makes Claude Code expensive.
@@ -350,51 +350,51 @@ Use LLM perceptor only when necessary; deterministic parsing is always preferred
 **5. Anti-Drift: Executed Action De-registration**
 Once an action is executed (regardless of outcome), remove it from the applicable action set. Never re-execute the same action in the same session unless the LLM explicitly re-adds it with a fresh justification. This eliminates "port scan loops" and "repeated tool invocations" — the most visible failure mode in Claude Code's 26-step trace.
 
-**6. 11-Milestone Progress Metric for CMatrix Evaluation**
-Adopt this paper's M1–M11 milestone framework for CMatrix's own benchmarking. It is strictly better than:
+**6. 11-Milestone Progress Metric for RedGrid Evaluation**
+Adopt this paper's M1–M11 milestone framework for RedGrid's own benchmarking. It is strictly better than:
 - Sub-task completion (paper 12's metric) — doesn't show meaningful progress
 - Binary success/failure — too coarse
 - Stage completion (papers 11, 13) — only 3 stages, misses intermediate progress
 
-Report CMatrix performance as: "% of targets reaching each milestone M1–M11."
+Report RedGrid performance as: "% of targets reaching each milestone M1–M11."
 
 ---
 
-### 🟡 Important — CMatrix v2
+### 🟡 Important — RedGrid v2
 
 **7. Explicit Causal Relationship Encoding**
-CMatrix's planning layer must explicitly encode: "discovering web app X with version Y is a **precondition** of searching for CVEs for X@Y." Do not leave this to LLM inference. Concrete causal chain:
+RedGrid's planning layer must explicitly encode: "discovering web app X with version Y is a **precondition** of searching for CVEs for X@Y." Do not leave this to LLM inference. Concrete causal chain:
 ```
 target-ip → port-scan → open-ports → service-detection → app-version → CVE-search → exploit-fetch → exploit-exec → shell
 ```
 Each arrow is a predefined causal edge, not an LLM inference. Once an edge is traversed, its effect predicate is added to the state — never inferred twice.
 
 **8. Parallel Action Execution where Preconditions Independent**
-When multiple actions have satisfied preconditions and no mutual dependencies, CHECKMATE's DAG structure naturally identifies them. CMatrix should execute these in parallel:
+When multiple actions have satisfied preconditions and no mutual dependencies, CHECKMATE's DAG structure naturally identifies them. RedGrid should execute these in parallel:
 - Port scan + credential search (if previous creds found) can run simultaneously
 - Nuclei template scan + MSF module search can run simultaneously
 - Multiple CVE exploit attempts can be parallelized if they don't conflict
 
-This is Claude Code's "parallel multitasking" strength — CMatrix must implement it systematically via the DAG structure rather than ad-hoc LLM decisions.
+This is Claude Code's "parallel multitasking" strength — RedGrid must implement it systematically via the DAG structure rather than ad-hoc LLM decisions.
 
 **9. Guard Against Tool Preference Bias**
 Explicitly block the LLM from writing custom scripts when a specialized tool already exists for the task. Implement as a precondition check: before any "write-custom-script" action is added to the applicable set, verify that no predefined tool action covers the same preconditions. If one exists, that predefined action takes priority. This addresses Claude Code's "writes curl instead of Nuclei" failure.
 
 **10. Claude Code + Sonnet 4.5 as Executor Backend**
-The paper proves Claude Code + Sonnet 4.5 is the strongest available executor. CMatrix's Specialist (Executor) role should use Sonnet 4.5 as the LLM backbone. The key insight is: Claude Code's **execution capabilities** are excellent; its **planning** is bad. CMatrix uses Classical Planning+ for planning and Claude Code for execution — best of both worlds.
+The paper proves Claude Code + Sonnet 4.5 is the strongest available executor. RedGrid's Specialist (Executor) role should use Sonnet 4.5 as the LLM backbone. The key insight is: Claude Code's **execution capabilities** are excellent; its **planning** is bad. RedGrid uses Classical Planning+ for planning and Claude Code for execution — best of both worlds.
 
 ---
 
 ### 🟢 Nice-to-Have — Future Work
 
 **11. Multimodal Perceptor for GUI-Based Attacks**
-The paper identifies "no existing system handles visual pentesting" as a gap. CMatrix's Browser/Playwright agent (already planned for XSS verification) should be extended with screenshot analysis: take screenshot → GPT-4o/Gemini Pro 2.5 vision → extract form fields, button labels, error messages → add to predicate state. This enables CSRF, clickjacking, and file-upload exploit vectors that CLI tools miss.
+The paper identifies "no existing system handles visual pentesting" as a gap. RedGrid's Browser/Playwright agent (already planned for XSS verification) should be extended with screenshot analysis: take screenshot → GPT-4o/Gemini Pro 2.5 vision → extract form fields, button labels, error messages → add to predicate state. This enables CSRF, clickjacking, and file-upload exploit vectors that CLI tools miss.
 
-**12. PDDL Domain File as CMatrix Knowledge Base**
-Classical Planning+ uses a domain file (PDDL-compatible) that defines all actions, preconditions, and effects. CMatrix should maintain this as a structured YAML/JSON file that is version-controlled and extendable. New attack techniques = new action entries. New vulnerability classes = new predicate types. This makes CMatrix's knowledge base explicit, auditable, and improvable without retraining any LLM.
+**12. PDDL Domain File as RedGrid Knowledge Base**
+Classical Planning+ uses a domain file (PDDL-compatible) that defines all actions, preconditions, and effects. RedGrid should maintain this as a structured YAML/JSON file that is version-controlled and extendable. New attack techniques = new action entries. New vulnerability classes = new predicate types. This makes RedGrid's knowledge base explicit, auditable, and improvable without retraining any LLM.
 
 **13. Automatic Causal Extraction from Attack Writeups**
-Future: given a HackTheBox/VulnHub writeup, automatically extract the action sequence and predicate transitions, then add new predicate types and action templates to the domain file. This would make CMatrix's knowledge base self-expanding from successful pentest history — combining PentestAgent's live search with CHECKMATE's explicit causal encoding.
+Future: given a HackTheBox/VulnHub writeup, automatically extract the action sequence and predicate transitions, then add new predicate types and action templates to the domain file. This would make RedGrid's knowledge base self-expanding from successful pentest history — combining PentestAgent's live search with CHECKMATE's explicit causal encoding.
 
 ---
 
@@ -402,11 +402,11 @@ Future: given a HackTheBox/VulnHub writeup, automatically extract the action seq
 
 | This Paper's Concept | Related Paper | Connection |
 |---------------------|---------------|-----------|
-| **PEP Paradigm** | All prior papers | PEP provides the unified lens for evaluating every prior design. Paper 10 (PentestGPT): Planner=LLM+PTT, Executor=LLM+Human, Perceptor=LLM. Paper 12 (VulnBot): Planner=LLM+PTG, Executor=LLM+RAG+Agents, Perceptor=LLM. CMatrix target: Planner=Classical Planning+, Executor=Specialists+RAG, Perceptor=Summarizer Bridge. |
-| **Classical Planning+** | Paper 05 (AutoPT FSM) | AutoPT uses a Finite State Machine to constrain planning — same motivation (prevent LLM drift), different implementation (FSM is linear; Classical Planning+ is DAG with arbitrary preconditions). CMatrix should use Classical Planning+ over FSM because DAG handles parallel attack paths and partial observability. |
-| **Predefined Action Library** | Paper 13 (Two-Tier Knowledge DB) | Paper 13's Procedure DB stores exploit repos; this paper's action library stores tool commands. Both are structured alternatives to RAG for knowledge retrieval. CMatrix needs both: action library for tool commands (this paper) + Procedure DB for CVE-specific exploit code (Paper 13). |
-| **Anti-Drift De-registration** | Paper 11 (EGATS branch pruning) | Paper 11 prunes high-TDI branches; this paper de-registers executed actions. Both prevent the agent from revisiting failed paths. CMatrix should implement both: TDI threshold for exploit abandonment (Paper 11) + action de-registration for completed steps (this paper). |
-| **Dual Rule+LLM Perceptor** | Paper 12 (Summarizer Bridge) | Paper 12's Summarizer distills raw outputs into JSON handoff; this paper's Perceptor translates to symbolic predicates. Both implement the same idea: do not pass raw tool output to the planner. CMatrix should chain them: rule-based parse → LLM summarize → predicate state update. |
-| **11-Milestone Evaluation** | Paper 12 (AUTOPENBENCH subtasks) | AUTOPENBENCH uses 210 subtasks; this paper uses 11 milestones. Milestones are preferred because they measure *meaningful impact* not task completion. CMatrix should adopt M1–M11 milestones as its primary metric, supplemented by subtask completion for granular debugging. |
-| **Tool Preference Bias** | Paper 09 (Getting Pwnd by AI) | Paper 09 notes LLMs default to familiar tools; this paper shows Claude Code writes curl instead of Nuclei. Both papers independently identify the same bias. CMatrix's predefined action library is the fix — specialized tools are first-class citizens enumerated by the planner, not discovered by LLM search. |
-| **Stability as a First-Class Metric** | All prior papers | No prior paper measured CoV of cost/time across repeated runs. 25% of Claude Code runs fail inconsistently. CMatrix must measure stability (all-3-runs success rate + CoV) alongside accuracy. A system that succeeds 75% of the time but fails randomly is unacceptable for production VAPT. |
+| **PEP Paradigm** | All prior papers | PEP provides the unified lens for evaluating every prior design. Paper 10 (PentestGPT): Planner=LLM+PTT, Executor=LLM+Human, Perceptor=LLM. Paper 12 (VulnBot): Planner=LLM+PTG, Executor=LLM+RAG+Agents, Perceptor=LLM. RedGrid target: Planner=Classical Planning+, Executor=Specialists+RAG, Perceptor=Summarizer Bridge. |
+| **Classical Planning+** | Paper 05 (AutoPT FSM) | AutoPT uses a Finite State Machine to constrain planning — same motivation (prevent LLM drift), different implementation (FSM is linear; Classical Planning+ is DAG with arbitrary preconditions). RedGrid should use Classical Planning+ over FSM because DAG handles parallel attack paths and partial observability. |
+| **Predefined Action Library** | Paper 13 (Two-Tier Knowledge DB) | Paper 13's Procedure DB stores exploit repos; this paper's action library stores tool commands. Both are structured alternatives to RAG for knowledge retrieval. RedGrid needs both: action library for tool commands (this paper) + Procedure DB for CVE-specific exploit code (Paper 13). |
+| **Anti-Drift De-registration** | Paper 11 (EGATS branch pruning) | Paper 11 prunes high-TDI branches; this paper de-registers executed actions. Both prevent the agent from revisiting failed paths. RedGrid should implement both: TDI threshold for exploit abandonment (Paper 11) + action de-registration for completed steps (this paper). |
+| **Dual Rule+LLM Perceptor** | Paper 12 (Summarizer Bridge) | Paper 12's Summarizer distills raw outputs into JSON handoff; this paper's Perceptor translates to symbolic predicates. Both implement the same idea: do not pass raw tool output to the planner. RedGrid should chain them: rule-based parse → LLM summarize → predicate state update. |
+| **11-Milestone Evaluation** | Paper 12 (AUTOPENBENCH subtasks) | AUTOPENBENCH uses 210 subtasks; this paper uses 11 milestones. Milestones are preferred because they measure *meaningful impact* not task completion. RedGrid should adopt M1–M11 milestones as its primary metric, supplemented by subtask completion for granular debugging. |
+| **Tool Preference Bias** | Paper 09 (Getting Pwnd by AI) | Paper 09 notes LLMs default to familiar tools; this paper shows Claude Code writes curl instead of Nuclei. Both papers independently identify the same bias. RedGrid's predefined action library is the fix — specialized tools are first-class citizens enumerated by the planner, not discovered by LLM search. |
+| **Stability as a First-Class Metric** | All prior papers | No prior paper measured CoV of cost/time across repeated runs. 25% of Claude Code runs fail inconsistently. RedGrid must measure stability (all-3-runs success rate + CoV) alongside accuracy. A system that succeeds 75% of the time but fails randomly is unacceptable for production VAPT. |

@@ -28,12 +28,12 @@
       \addplot[fill=blue!30] coordinates {(SynthNet-50, 78.4) (WebApp-20, 52.1) (CorpLab-10, 32.5)};
       % Baseline B (CoT)
       \addplot[fill=red!30] coordinates {(SynthNet-50, 65.2) (WebApp-20, 38.4) (CorpLab-10, 18.2)};
-      % CMatrix (Full)
+      % RedGrid (Full)
       \addplot[fill=green!30] coordinates {(SynthNet-50, 98.2) (WebApp-20, 96.5) (CorpLab-10, 88.4)};
 
-      \legend{Baseline A (ReAct), Baseline B (CoT), \textbf{CMatrix (Ours)}}
+      \legend{Baseline A (ReAct), Baseline B (CoT), \textbf{RedGrid (Ours)}}
     \end{axis}
   \end{tikzpicture}
-  \caption{Task Success Rate across complexity tiers. CMatrix maintains high performance even as task complexity increases, significantly outperforming standard ReAct and CoT baselines in enterprise-scale environments.}
+  \caption{Task Success Rate across complexity tiers. RedGrid maintains high performance even as task complexity increases, significantly outperforming standard ReAct and CoT baselines in enterprise-scale environments.}
   \label{fig:performance-chart}
 \end{figure*}

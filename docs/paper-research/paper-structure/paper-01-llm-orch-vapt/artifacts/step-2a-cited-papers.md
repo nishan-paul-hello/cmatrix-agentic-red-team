@@ -41,7 +41,7 @@ Performed a deep-dive research into the top 6 foundational papers cited in the L
 - Decided to focus on "Token Efficiency" (ReWOO) and "Search Accuracy" (ToT) as the two primary technical benchmarks for the LLMOrch-VAPT reasoning layer.
 
 ## Open Questions
-- How does FrugalGPT's "Judger" approach compare to the "Keyword-based Complexity" approach currently in the CMatrix code?
+- How does FrugalGPT's "Judger" approach compare to the "Keyword-based Complexity" approach currently in the RedGrid code?
 - Can we adapt RouteLLM's Matrix Factorization approach to security task embeddings?
 
 ## Checklist Results

@@ -1,4 +1,4 @@
-# Incalmo: An Autonomous LLM-assisted System for Red Teaming Multi-Host Networks — Deep Survey Notes for CMatrix
+# Incalmo: An Autonomous LLM-assisted System for Red Teaming Multi-Host Networks — Deep Survey Notes for RedGrid
 
 | Field | Details |
 |-------|---------|
@@ -6,7 +6,7 @@
 | **Venue** | arXiv:2501.16466v4 [cs.CR] (Nov 2025) |
 | **Published** | 2025 |
 | **Repository** | [https://github.com/bsinger98/Incalmo](https://github.com/bsinger98/Incalmo) |
-| **Relevance** | ⭐⭐⭐⭐⭐ — Incalmo is the most important paper yet for CMatrix architecture: it is the first system to empirically prove that decoupling planning from execution (via high-level declarative tasks → deterministic domain-specific agents) is the critical gap between 3/40 and 37/40 success on multi-host red team exercises, and it introduces three auxiliary services (Environment State, Attack Graph, C&C Server) that CMatrix must adopt wholesale. |
+| **Relevance** | ⭐⭐⭐⭐⭐ — Incalmo is the most important paper yet for RedGrid architecture: it is the first system to empirically prove that decoupling planning from execution (via high-level declarative tasks → deterministic domain-specific agents) is the critical gap between 3/40 and 37/40 success on multi-host red team exercises, and it introduces three auxiliary services (Environment State, Attack Graph, C&C Server) that RedGrid must adopt wholesale. |
 | **Key Claim** | Incalmo succeeds in **37 out of 40** multi-host MHBench environments while the best prior LLM system (ExpertPromptShell + Sonnet 4) succeeds in only **3 out of 40** — a **12× improvement** — in 12–54 minutes at ≤$15 per exercise, using Haiku 3.5 (cheapest Anthropic model) as effectively as Sonnet 4. |
 
 ---
@@ -15,9 +15,9 @@
 
 Incalmo makes a deceptively simple but empirically devastating argument: **the reason all prior LLM pentest systems fail in multi-host environments is not that LLMs lack cybersecurity knowledge — it is that they are operating at the wrong level of abstraction.** Prior systems ask LLMs to generate shell commands. Incalmo asks LLMs to declare high-level tasks (Scan, LateralMove, EscalatePrivilege, FindInformation, ExfiltrateData) that are then executed by deterministic, expert-designed, non-LLM agents.
 
-The failure analysis in Section 3 is the paper's most important contribution for CMatrix. Incalmo's authors tested PentestGPT, CyberSecEval3, CAI, and a custom ExpertPromptShell against 10 multi-host environments and found four failure modes: (1) 47–90% of commands are irrelevant to the attack goal; (2) 6–41% of relevant commands are implemented incorrectly; (3) post-exploitation relies on brittle SSH/reverse-shell techniques that break across firewalls; and (4) context bloat (one run reached 54K tokens from a single file listing) destroys long-horizon coherence. All four failure modes are architectural — they are unresolvable by better prompting or larger models.
+The failure analysis in Section 3 is the paper's most important contribution for RedGrid. Incalmo's authors tested PentestGPT, CyberSecEval3, CAI, and a custom ExpertPromptShell against 10 multi-host environments and found four failure modes: (1) 47–90% of commands are irrelevant to the attack goal; (2) 6–41% of relevant commands are implemented incorrectly; (3) post-exploitation relies on brittle SSH/reverse-shell techniques that break across firewalls; and (4) context bloat (one run reached 54K tokens from a single file listing) destroys long-horizon coherence. All four failure modes are architectural — they are unresolvable by better prompting or larger models.
 
-For CMatrix, the most important insight is that the LLM's role must be restricted to **planning** (what to do) while **execution** (how to do it) is handled by deterministic agents backed by auxiliary services. This is not a theoretical preference — Incalmo demonstrates empirically that Haiku 3.5 with this architecture beats Sonnet 4 running low-level shell commands. The architecture is the moat, not the model.
+For RedGrid, the most important insight is that the LLM's role must be restricted to **planning** (what to do) while **execution** (how to do it) is handled by deterministic agents backed by auxiliary services. This is not a theoretical preference — Incalmo demonstrates empirically that Haiku 3.5 with this architecture beats Sonnet 4 running low-level shell commands. The architecture is the moat, not the model.
 
 ---
 
@@ -288,16 +288,16 @@ Incalmo operates on multi-host enterprise networks with known vulnerabilities:
 
 ---
 
-## 6. Key Takeaways for CMatrix
+## 6. Key Takeaways for RedGrid
 
-### 🔴 Critical — Must-Have in CMatrix v1
+### 🔴 Critical — Must-Have in RedGrid v1
 
 **1. Replace Shell-Command Generation with Declarative Task API**
-The single most important finding in this survey: LLMs must NOT generate shell commands. Define a fixed task API (5–10 high-level functions) and have the LLM output Python calls to that API. Every web-specific task in CMatrix maps to this pattern:
+The single most important finding in this survey: LLMs must NOT generate shell commands. Define a fixed task API (5–10 high-level functions) and have the LLM output Python calls to that API. Every web-specific task in RedGrid maps to this pattern:
 
 ```python
-# CMatrix Task API (analogous to Incalmo)
-CMATRIX_TASK_API = {
+# RedGrid Task API (analogous to Incalmo)
+redgrid_TASK_API = {
     "recon_target(url, depth)":        "ffuf + WhatWeb + Nikto + GraphQL introspect",
     "test_xss(endpoint, params)":      "XSS Specialist (5-phase pipeline from Paper 04)",
     "test_sqli(endpoint, params)":     "SQLi Specialist (timing-oracle from Paper 04)",
@@ -330,7 +330,7 @@ class EngagementStateService:
 Every Specialist writes to ESS on completion. Team Manager reads from ESS for planning. Raw tool output NEVER enters Team Manager's context.
 
 **3. Attack Graph Service for Web (Vulnerability Dependency Graph)**
-Incalmo's AGS tracks host reachability. CMatrix needs the web equivalent: a **Vulnerability Dependency Graph** tracking which vulnerabilities unlock others. Example: authenticated SQLi requires auth bypass first; SSRF to internal endpoint requires knowing internal IP range from earlier recon:
+Incalmo's AGS tracks host reachability. RedGrid needs the web equivalent: a **Vulnerability Dependency Graph** tracking which vulnerabilities unlock others. Example: authenticated SQLi requires auth bypass first; SSRF to internal endpoint requires knowing internal IP range from earlier recon:
 
 ```python
 class VulnDependencyGraph:
@@ -344,7 +344,7 @@ class VulnDependencyGraph:
 ```
 
 **4. Non-LLM Deterministic Agents for Standard Attack Tasks**
-The Incalmo ablation proves it decisively: LLM-based task agents fail even when given the same task descriptions. Deterministic agents (code + Metasploit/sqlmap/nuclei) succeed. CMatrix Specialists must be deterministic pipelines, not freeform LLM agents:
+The Incalmo ablation proves it decisively: LLM-based task agents fail even when given the same task descriptions. Deterministic agents (code + Metasploit/sqlmap/nuclei) succeed. RedGrid Specialists must be deterministic pipelines, not freeform LLM agents:
 
 ```python
 class XSSSpecialist:  # Deterministic, not LLM-driven
@@ -357,7 +357,7 @@ class XSSSpecialist:  # Deterministic, not LLM-driven
 ```
 
 **5. C&C Server Equivalent: Session Persistence Layer**
-Incalmo's C&C server maintains reliable command execution across hosts throughout the attack. CMatrix needs the equivalent for web: a **Session Persistence Layer** that maintains authenticated HTTP sessions, CSRF tokens, JWTs, and cookie jars across all Specialist invocations, available via service API:
+Incalmo's C&C server maintains reliable command execution across hosts throughout the attack. RedGrid needs the equivalent for web: a **Session Persistence Layer** that maintains authenticated HTTP sessions, CSRF tokens, JWTs, and cookie jars across all Specialist invocations, available via service API:
 
 ```python
 class SessionPersistenceService:
@@ -371,7 +371,7 @@ class SessionPersistenceService:
 ```
 (This formalizes Paper 06's session management signal into a service interface.)
 
-### 🟡 Important — CMatrix v2 Improvements
+### 🟡 Important — RedGrid v2 Improvements
 
 **6. Irrelevant Task Detection Gate**
 Incalmo's failure analysis shows 47–90% of prior-system commands were irrelevant. Implement a pre-execution relevance check: before any Specialist runs, Team Manager must map the task to a node in the Vulnerability Dependency Graph. If no node matches, the task is rejected and Team Manager must re-plan:
@@ -387,18 +387,18 @@ def validate_task_relevance(task: TaskCall, vdg: VulnDependencyGraph) -> bool:
 ```
 
 **7. MHBench-Style Multi-Target Evaluation**
-CMatrix's benchmark needs multi-target scenarios analogous to MHBench's multi-host environments. Specifically: a single engagement with multiple applications (e.g., a microservices cluster with 5 services) where finding a SQLi in one service enables credential theft that unlocks a second service. This is the web-application equivalent of multi-host stepping-stone attacks.
+RedGrid's benchmark needs multi-target scenarios analogous to MHBench's multi-host environments. Specifically: a single engagement with multiple applications (e.g., a microservices cluster with 5 services) where finding a SQLi in one service enables credential theft that unlocks a second service. This is the web-application equivalent of multi-host stepping-stone attacks.
 
 **8. Architecture-First Model Selection**
-Incalmo with Haiku 3.5 > ExpertPromptShell with Sonnet 4. This is the most direct evidence in the survey that architecture dominates model size. CMatrix should test with the cheapest available model first, then upgrade only if task decomposition and ESS/AGS cannot compensate.
+Incalmo with Haiku 3.5 > ExpertPromptShell with Sonnet 4. This is the most direct evidence in the survey that architecture dominates model size. RedGrid should test with the cheapest available model first, then upgrade only if task decomposition and ESS/AGS cannot compensate.
 
 ### 🟢 Nice-to-Have — Future Work
 
 **9. Defender-Aware Execution**
-Incalmo explicitly excludes defender capabilities (IDS, WAF, rate limiting). CMatrix for web applications faces active defenses (WAF, rate limiting, bot detection). Future work: add a WAF bypass agent that detects blocking responses and selects alternative payload encodings.
+Incalmo explicitly excludes defender capabilities (IDS, WAF, rate limiting). RedGrid for web applications faces active defenses (WAF, rate limiting, bot detection). Future work: add a WAF bypass agent that detects blocking responses and selects alternative payload encodings.
 
 **10. LLM Agent as Extensibility Escape Hatch**
-Incalmo's extensibility case study shows that replacing a single non-LLM agent with an LLM agent (for lateral move) works fine, while replacing all agents fails. CMatrix can use the same pattern: keep Specialists deterministic for known vuln classes; add LLM-based Specialists only for novel vuln classes not yet covered by the library, bounded by a maximum interaction limit.
+Incalmo's extensibility case study shows that replacing a single non-LLM agent with an LLM agent (for lateral move) works fine, while replacing all agents fails. RedGrid can use the same pattern: keep Specialists deterministic for known vuln classes; add LLM-based Specialists only for novel vuln classes not yet covered by the library, bounded by a maximum interaction limit.
 
 ---
 
@@ -406,12 +406,12 @@ Incalmo's extensibility case study shows that replacing a single non-LLM agent w
 
 | This Paper's Concept | Connected Paper | Mechanism of Connection |
 |----------------------|-----------------|------------------------|
-| **Declarative task API (5 tasks: Scan, LateralMove, EscalatePrivilege, FindInfo, Exfiltrate)** | Paper 14 (CHECKMATE): Predefined Action Library as YAML/JSON templates; LLM injects parameters only | Both papers eliminate LLM-generated shell commands by providing a fixed action vocabulary. Incalmo operates at higher abstraction (5 task types vs. 14K+ Metasploit modules). CMatrix should use Incalmo's high-level task layer as the Team Manager interface and CHECKMATE's predefined action library as the Specialist's internal implementation |
-| **Environment State Service (queryable structured DB)** | Papers 11, 12, 13: "Environmental Info DB / State Store / Five Entity Types" | All papers converge on the same pattern: a queryable persistent state store outside LLM context. Incalmo's ESS with Python objects is the cleanest implementation. CMatrix should adopt ESS as the canonical design, mapping Paper 11's five entity types (hosts, services, credentials, sessions, vulnerabilities) to the web domain (endpoints, auth_states, findings, sessions, cve_candidates) |
-| **Attack Graph Service (dynamic, query-driven)** | Paper 11 (EGATS): UCB-guided attack tree node selection | Paper 11's EGATS is an in-context tree structure; Incalmo's AGS is an external service. Both solve the same problem: constrain LLM planning to reachable/applicable actions. CMatrix should implement AGS as a Vulnerability Dependency Graph service (external, queryable) with UCB selection borrowed from Paper 11 |
-| **C&C Server for reliable post-exploitation** | Paper 06 (HackWorld): Session Persistence Layer (cookies, CSRF, JWT) | Incalmo's C&C abstracts reliable command execution on infected hosts; HackWorld's session persistence abstracts reliable authenticated HTTP execution. Both are service-layer solutions to the same problem (brittle one-shot execution). CMatrix's SessionPersistenceService should expose a similar API: exec(endpoint, method, payload, session_id) |
-| **Non-LLM deterministic agents outperform LLM agents** | Papers 04, 05, 08, 14: "pipeline architecture dominates model size"; "deterministic parser reduces token cost 61%" | Incalmo provides the sharpest proof: full LLM agent replacement → 0/3 success; single LLM agent replacement → success maintained. Papers 04 (XSS pipeline), 05 (PSM FSM), 08 (RESTler state machine), 14 (Dual Perceptor) all implement deterministic execution for the same reason. CMatrix Specialists must be deterministic |
-| **Failure mode analysis (irrelevant tasks 47–90%, incorrect impl 6–41%)** | Paper 09 (Rabbit-Hole Counter), Paper 11 (TDA / Task Difficulty Index) | Paper 09 prevents tunnel-vision (same URL repeatedly = irrelevant); Paper 11's TDA measures how stuck a branch is; Incalmo quantifies the irrelevant-task pathology at 47–90%. CMatrix should combine: Incalmo's VDG gate (pre-execution relevance check) + Paper 09's command-diversity check (same-URL loop detection) + Paper 11's TDA (global branch health) |
+| **Declarative task API (5 tasks: Scan, LateralMove, EscalatePrivilege, FindInfo, Exfiltrate)** | Paper 14 (CHECKMATE): Predefined Action Library as YAML/JSON templates; LLM injects parameters only | Both papers eliminate LLM-generated shell commands by providing a fixed action vocabulary. Incalmo operates at higher abstraction (5 task types vs. 14K+ Metasploit modules). RedGrid should use Incalmo's high-level task layer as the Team Manager interface and CHECKMATE's predefined action library as the Specialist's internal implementation |
+| **Environment State Service (queryable structured DB)** | Papers 11, 12, 13: "Environmental Info DB / State Store / Five Entity Types" | All papers converge on the same pattern: a queryable persistent state store outside LLM context. Incalmo's ESS with Python objects is the cleanest implementation. RedGrid should adopt ESS as the canonical design, mapping Paper 11's five entity types (hosts, services, credentials, sessions, vulnerabilities) to the web domain (endpoints, auth_states, findings, sessions, cve_candidates) |
+| **Attack Graph Service (dynamic, query-driven)** | Paper 11 (EGATS): UCB-guided attack tree node selection | Paper 11's EGATS is an in-context tree structure; Incalmo's AGS is an external service. Both solve the same problem: constrain LLM planning to reachable/applicable actions. RedGrid should implement AGS as a Vulnerability Dependency Graph service (external, queryable) with UCB selection borrowed from Paper 11 |
+| **C&C Server for reliable post-exploitation** | Paper 06 (HackWorld): Session Persistence Layer (cookies, CSRF, JWT) | Incalmo's C&C abstracts reliable command execution on infected hosts; HackWorld's session persistence abstracts reliable authenticated HTTP execution. Both are service-layer solutions to the same problem (brittle one-shot execution). RedGrid's SessionPersistenceService should expose a similar API: exec(endpoint, method, payload, session_id) |
+| **Non-LLM deterministic agents outperform LLM agents** | Papers 04, 05, 08, 14: "pipeline architecture dominates model size"; "deterministic parser reduces token cost 61%" | Incalmo provides the sharpest proof: full LLM agent replacement → 0/3 success; single LLM agent replacement → success maintained. Papers 04 (XSS pipeline), 05 (PSM FSM), 08 (RESTler state machine), 14 (Dual Perceptor) all implement deterministic execution for the same reason. RedGrid Specialists must be deterministic |
+| **Failure mode analysis (irrelevant tasks 47–90%, incorrect impl 6–41%)** | Paper 09 (Rabbit-Hole Counter), Paper 11 (TDA / Task Difficulty Index) | Paper 09 prevents tunnel-vision (same URL repeatedly = irrelevant); Paper 11's TDA measures how stuck a branch is; Incalmo quantifies the irrelevant-task pathology at 47–90%. RedGrid should combine: Incalmo's VDG gate (pre-execution relevance check) + Paper 09's command-diversity check (same-URL loop detection) + Paper 11's TDA (global branch health) |
 | **Small model + architecture > large model alone** | Papers 04, 05, 07, 15: "model selection" signals | Papers 04/05/07/15 showed architecture matters more than model for pentest tasks; Incalmo is the sharpest demonstration: Haiku 3.5 with architecture > Sonnet 4 without. But Paper 15 (D-CIPHER) showed weak Executor models break performance for execution tasks. Resolution: architecture dominates for PLANNING; strong models still needed for EXECUTION (complex scripting, payload generation) |
 
 ---

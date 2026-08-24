@@ -9,7 +9,7 @@ This sub-step defined the formal mathematical foundations and the data presentat
 
 #### 1. Token Efficiency ($\eta$)
 Measures the reduction in LLM API overhead achieved by the ReWOO planner.
-$$\eta = \frac{\sum_{i \in T} \text{Tokens}_{\text{baseline}}(i)}{\sum_{i \in T} \text{Tokens}_{\text{cmatrix}}(i)}$$
+$$\eta = \frac{\sum_{i \in T} \text{Tokens}_{\text{baseline}}(i)}{\sum_{i \in T} \text{Tokens}_{\text{RedGrid}}(i)}$$
 - *Variables*: $T$ is the set of evaluation tasks; $\text{Tokens}(i)$ is the total input+output tokens for task $i$.
 - *Relevance*: Directly answers **RQ1**.
 
@@ -34,7 +34,7 @@ $$TH = \frac{|V_{\text{discovered}} \cap V_{gt}|}{|V_{gt}|}$$
 
 | Table ID | Title | Purpose | Data Source |
 | :--- | :--- | :--- | :--- |
-| **Table 01** | Related Work Comparison | Position CMatrix in the SOTA. | Step 2a/b Research. |
+| **Table 01** | Related Work Comparison | Position RedGrid in the SOTA. | Step 2a/b Research. |
 | **Table 02** | Experimental Benchmarks | Describe the 80 test tasks. | Step 4b Protocol. |
 | **Table 03** | Metrics Definitions | Formalize the evaluation criteria. | Step 4c Equations. |
 | **Table 04** | Main Evaluation Results | Present SR, TE, TH, and PL data. | Step 5 Results. |

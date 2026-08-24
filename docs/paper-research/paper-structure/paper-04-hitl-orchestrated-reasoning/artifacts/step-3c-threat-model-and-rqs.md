@@ -55,7 +55,7 @@ This sub-step defined the formal threat model and research questions (RQs) that 
 
 ## 6) Input for Next Step (Step 4a)
 - **Experimental Design**: Step 4a must design four distinct experiments, one to answer each of the four RQs.
-- **Tool Mapping**: Map the "Security Tool Registry" from the figure to the actual tools implemented in CMatrix (Nmap, etc.).
+- **Tool Mapping**: Map the "Security Tool Registry" from the figure to the actual tools implemented in RedGrid (Nmap, etc.).
 
 ## 7) Asset Files Created
 - `docs/paper-research/paper-04-agent-reasoning/assets/figure-01-threat-model.tex`: Threat model diagram.
