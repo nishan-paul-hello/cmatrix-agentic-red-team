@@ -34,6 +34,7 @@ CMATRIX is an advanced, AI-powered security orchestration platform utilizing a m
   <img src="docs/assets/preview-2.gif" alt="CMATRIX Overview" width="100%" />
   <img src="docs/assets/preview-3.gif" alt="CMATRIX Overview" width="100%" />
   <img src="docs/assets/preview-4.gif" alt="CMATRIX Overview" width="100%" />
+  <img src="docs/assets/preview-5.gif" alt="CMATRIX Overview" width="100%" />
 </div>
 
 ---
