@@ -1,7 +1,7 @@
 <div align="center">
   <img src="docs/assets/logo-brand.svg" alt="RedGrid Logo" width="200" height="200" />
-  <h1>RedGrid</h1>
-  <p>AI-Powered Multi-Agent Security Orchestration & VAPT Platform</p>
+  <h1>RedGrid - Agentci Red Team</h1>
+  <p>LLM-Orchestrated Multi-Agent Framework for Autonomous Vulnerability Assessment and Penetration Testing</p>
 
   <a href="https://redgrid.kaiofficial.xyz" target="_blank">
     <img src="https://img.shields.io/badge/Live_App-redgrid.kaiofficial.xyz-0070f3?style=for-the-badge&logo=next.js&logoColor=white" alt="Live App" />
