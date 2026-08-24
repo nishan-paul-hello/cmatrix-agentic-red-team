@@ -1,0 +1,14 @@
+name: redgrid
+
+services:
+  frontend:
+    image: ghcr.io/nishan-paul-2022/cmatrix-agentic-red-team/frontend:latest
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    networks:
+      - main_network
+
+networks:
+  main_network:
+    external: true
