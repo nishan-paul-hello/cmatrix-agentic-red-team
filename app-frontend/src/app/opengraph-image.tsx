@@ -10,7 +10,16 @@ export const size = {
 
 export const contentType = "image/png";
 
-export default function Image() {
+export default async function Image() {
+    // Fetch JetBrains Mono fonts (Regular and Bold)
+    const jetbrainsMonoRegular = await fetch(
+        new URL("https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-400-normal.ttf")
+    ).then((res) => res.arrayBuffer());
+    
+    const jetbrainsMonoBold = await fetch(
+        new URL("https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-700-normal.ttf")
+    ).then((res) => res.arrayBuffer());
+
     return new ImageResponse(
         <div
             style={{
@@ -21,8 +30,7 @@ export default function Image() {
                 alignItems: "center",
                 justifyContent: "center",
                 backgroundColor: "#080808",
-                backgroundImage: "linear-gradient(to bottom right, #080808, #1a1a1a)",
-                fontFamily: "system-ui, sans-serif",
+                fontFamily: '"JetBrains Mono"',
                 padding: "40px",
             }}
         >
@@ -35,8 +43,8 @@ export default function Image() {
                     right: 0,
                     bottom: 0,
                     backgroundImage:
-                        "linear-gradient(rgba(255,0,0,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,0,0,0.05) 1px, transparent 1px)",
-                    backgroundSize: "60px 60px",
+                        "linear-gradient(rgba(41, 41, 41, 0.18) 1px, transparent 1px), linear-gradient(90deg, rgba(41, 41, 41, 0.18) 1px, transparent 1px)",
+                    backgroundSize: "48px 48px",
                 }}
             />
 
@@ -70,7 +78,7 @@ export default function Image() {
                             y="0.5"
                             width="11"
                             height="11"
-                            stroke="#FF0000"
+                            stroke="#e31b23"
                             strokeWidth="1"
                             fill="none"
                         />
@@ -79,7 +87,7 @@ export default function Image() {
                             y="8.5"
                             width="11"
                             height="11"
-                            stroke="#FF0000"
+                            stroke="#e31b23"
                             strokeWidth="1"
                             fill="none"
                         />
@@ -88,48 +96,57 @@ export default function Image() {
                             y="16.5"
                             width="11"
                             height="11"
-                            stroke="#FF0000"
+                            stroke="#e31b23"
                             strokeWidth="1"
                             fill="none"
                         />
-                        <line x1="6" y1="6" x2="22" y2="22" stroke="#FF0000" strokeWidth="0.75" />
+                        <line x1="6" y1="6" x2="22" y2="22" stroke="#e31b23" strokeWidth="0.75" />
                     </svg>
                 </div>
 
                 {/* Title */}
                 <div
                     style={{
-                        display: "flex",
-                        color: "#ffffff",
+                        color: "#f2f2f2",
                         fontSize: "72px",
-                        fontWeight: 800,
-                        letterSpacing: "-0.025em",
+                        fontWeight: 700,
+                        letterSpacing: "-0.05em",
                         marginBottom: "24px",
                     }}
                 >
-                    RedGrid - Agentic Red Team
+                    RedGrid
                 </div>
 
                 {/* Description */}
                 <div
                     style={{
-                        display: "flex",
-                        color: "#a1a1aa",
-                        fontSize: "36px",
-                        fontWeight: 500,
+                        color: "#888888",
+                        fontSize: "32px",
+                        fontWeight: 400,
                         textAlign: "center",
-                        maxWidth: "900px",
-                        lineHeight: 1.4,
+                        lineHeight: 1.5,
                     }}
                 >
-                    LLM-orchestrated multi-agent framework for autonomous vulnerability assessment and penetration testing (VAPT)
+                    LLM-orchestrated multi-agent framework for autonomous VAPT
                 </div>
-
-
             </div>
         </div>,
         {
             ...size,
+            fonts: [
+                {
+                    name: "JetBrains Mono",
+                    data: jetbrainsMonoRegular,
+                    weight: 400,
+                    style: "normal",
+                },
+                {
+                    name: "JetBrains Mono",
+                    data: jetbrainsMonoBold,
+                    weight: 700,
+                    style: "normal",
+                },
+            ],
         },
     );
 }
