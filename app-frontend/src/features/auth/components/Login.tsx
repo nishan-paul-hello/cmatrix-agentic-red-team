@@ -43,9 +43,6 @@ export default function Login({ onLogin }: LoginProps) {
                         <span className="text-[22px] font-bold tracking-[0.22em] text-[var(--color-hex-f2f2f2)]">
                             RedGrid
                         </span>
-                        <span className="text-[9px] font-normal tracking-[0.28em] text-[var(--color-hex-666666)]">
-                            Agentic Red Team
-                        </span>
                     </div>
                 </div>
 
