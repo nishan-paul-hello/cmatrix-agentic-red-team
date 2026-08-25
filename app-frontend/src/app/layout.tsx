@@ -12,12 +12,12 @@ export const metadata: Metadata = {
         template: "%s | RedGrid",
     },
     description:
-        "LLM-orchestrated multi-agent framework for autonomous VAPT",
+        "A secure research environment to run autonomous VAPT on hosted benchmarks.",
     metadataBase: new URL("https://cmatrix.kaiofficial.xyz"),
     openGraph: {
         title: "RedGrid - Agentic Red Team",
         description:
-            "LLM-orchestrated multi-agent framework for autonomous VAPT",
+            "A secure research environment to run autonomous VAPT on hosted benchmarks.",
         siteName: "RedGrid",
         url: "https://cmatrix.kaiofficial.xyz",
         type: "website",
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
         card: "summary_large_image",
         title: "RedGrid - Agentic Red Team",
         description:
-            "LLM-orchestrated multi-agent framework for autonomous VAPT",
+            "A secure research environment to run autonomous VAPT on hosted benchmarks.",
     },
     robots: {
         index: true,
