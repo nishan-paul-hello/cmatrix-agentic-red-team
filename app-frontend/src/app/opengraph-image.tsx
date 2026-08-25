@@ -56,10 +56,6 @@ export default function Image() {
                         alignItems: "center",
                         justifyContent: "center",
                         marginBottom: "40px",
-                        backgroundColor: "rgba(255, 0, 0, 0.05)",
-                        borderRadius: "32px",
-                        padding: "32px",
-                        border: "1px solid rgba(255,0,0,0.1)",
                     }}
                 >
                     <svg
@@ -109,10 +105,9 @@ export default function Image() {
                         fontWeight: 800,
                         letterSpacing: "-0.025em",
                         marginBottom: "24px",
-                        textShadow: "0px 4px 20px rgba(255, 0, 0, 0.3)",
                     }}
                 >
-                    RedGrid
+                    RedGrid - Agentic Red Team
                 </div>
 
                 {/* Description */}
@@ -127,23 +122,10 @@ export default function Image() {
                         lineHeight: 1.4,
                     }}
                 >
-                    Autonomous vulnerability assessment and penetration testing.
+                    LLM-orchestrated multi-agent framework for autonomous vulnerability assessment and penetration testing (VAPT)
                 </div>
 
-                {/* URL */}
-                <div
-                    style={{
-                        display: "flex",
-                        alignItems: "center",
-                        marginTop: "60px",
-                        color: "#ef4444",
-                        fontSize: "28px",
-                        fontWeight: 700,
-                        letterSpacing: "0.1em",
-                    }}
-                >
-                    CMATRIX.KAIOFFICIAL.XYZ
-                </div>
+
             </div>
         </div>,
         {

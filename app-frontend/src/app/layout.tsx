@@ -12,11 +12,11 @@ export const metadata: Metadata = {
         template: "%s | RedGrid",
     },
     description:
-        "RedGrid is an LLM-orchestrated multi-agent framework designed for autonomous vulnerability assessment and penetration testing.",
+        "LLM-orchestrated multi-agent framework for autonomous vulnerability assessment and penetration testing (VAPT)",
     metadataBase: new URL("https://cmatrix.kaiofficial.xyz"),
     openGraph: {
         title: "RedGrid - Agentic Red Team",
-        description: "Autonomous vulnerability assessment and penetration testing.",
+        description: "LLM-orchestrated multi-agent framework for autonomous vulnerability assessment and penetration testing (VAPT)",
         siteName: "RedGrid",
         url: "https://cmatrix.kaiofficial.xyz",
         type: "website",
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     twitter: {
         card: "summary_large_image",
         title: "RedGrid - Agentic Red Team",
-        description: "Autonomous vulnerability assessment and penetration testing.",
+        description: "LLM-orchestrated multi-agent framework for autonomous vulnerability assessment and penetration testing (VAPT)",
     },
     robots: {
         index: true,
