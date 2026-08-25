@@ -130,6 +130,21 @@ export default async function Image() {
                     LLM-orchestrated multi-agent framework for autonomous VAPT
                 </div>
             </div>
+
+            {/* Subtle Watermark */}
+            <div
+                style={{
+                    position: "absolute",
+                    top: "40px",
+                    right: "40px",
+                    color: "#666666",
+                    fontSize: "20px",
+                    fontWeight: 500,
+                    letterSpacing: "0.05em",
+                }}
+            >
+                cmatrix.kaiofficial.xyz
+            </div>
         </div>,
         {
             ...size,
