@@ -1269,19 +1269,23 @@ flowchart TD
 
 The authors thank the anonymous reviewers and the Github AI Accelerator 2024 for OpenAI credits used during experiments.
 
-## References (partial)
+## References
 
-1. Alamri & Mooney (2025). *Dragos Industrial Ransomware Analysis: Q1 2025.*
-2. Alford, Lawrence & Kouremetis (2022). *Caldera: A red-blue cyber operations automation platform.* MITRE.
-3. Binduf et al. (2018). *Active Directory and Related Aspects of Security.* NCC 2018.
-4. Braun & Clarke (2006). *Using thematic analysis in psychology.* Qualitative Research in Psychology.
-5. Charmaz (2006). *Constructing grounded theory: A practical guide through qualitative analysis.* Sage.
-6. dair.ai (2025). *Reasoning LLMs Guide.*
-7. Deng et al. (2024). *PentestGPT: An LLM-empowered Automatic Penetration Testing Tool.* arXiv:2308.06782.
-8. Denzin (2017). *Sociological methods: A sourcebook.* Routledge.
+[1] Abdulrahman Alamri and Lexie Mooney. 2025. *Dragos Industrial Ransomware Analysis: Q1 2025*. https://www.dragos.com/blog/dragos-industrial-ransomware-analysis-q1-2025/. Accessed: 2025-06-02.
 
+[2] Ron Alford, Dean Lawrence, and Michael Kouremetis. 2022. *Caldera: A red-blue cyber operations automation platform*. MITRE: Bedford, MA, USA.
 
-## 📚 References
+[3] Afnan Binduf, Hanan Othman Alamoudi, Hanan Balahmar, Shatha Alshamrani, Haifa Al-Omar, and Naya Nagy. 2018. *Active Directory and Related Aspects of Security*. 2018 21st Saudi Computer Society National Computer Conference (NCC), 4474–4479. doi:10.1109/NCG.2018.8593188
+
+[4] Virginia Braun and Victoria Clarke. 2006. *Using thematic analysis in psychology*. Qualitative Research in Psychology 3, 2, 77–101.
+
+[5] Kathy Charmaz. 2006. *Constructing grounded theory: A practical guide through qualitative analysis*. Sage.
+
+[6] dair ai. 2025. *Reasoning LLMs Guide*. https://www.promptingguide.ai/guides/reasoning-llms. Accessed: 2025-06-11.
+
+[7] Gelei Deng, Yi Liu, Víctor Mayoral-Vilches, Peng Liu, Yuekang Li, Yuan Xu, Tianwei Zhang, Yang Liu, Martin Pinzger, and Stefan Rass. 2024. *PentestGPT: An LLM-empowered Automatic Penetration Testing Tool*. arXiv:2308.06782 [cs.SE]
+
+[8] Norman K Denzin. 2017. *Sociological methods: A sourcebook*. Routledge.
 
 [9] Richard Fang, Rohan Bindu, Akul Gupta, and Daniel Kang. 2024. *LLM Agents can Autonomously Exploit One-day Vulnerabilities*. arXiv:2404.08144 [cs.CR]
 
@@ -1303,9 +1307,9 @@ The authors thank the anonymous reviewers and the Github AI Accelerator 2024 for
 
 [18] Andreas Happe, Aaron Kaplan, and Juergen Cito. 2024. *LLMs as hackers: Autonomous linux privilege escalation attacks*. arXiv:2310.11409
 
-[19] Fred Heiding, Simon Lermen, Andrew Kao, Bruce Schneier, and Arun Vishwanath. 2024. *Evaluating Large Language Models' Capability to Launch Fully Automated Spear Phishing Campaigns: Validated on Human Subjects*. arXiv:2412.00586
+[19] Fred Heiding, Simon Lermen, Andrew Kao, Bruce Schneier, and Arun Vishwanath. 2024. *Evaluating Large Language Models' Capability to Launch Fully Automated Spear Phishing Campaigns: Validated on Human Subjects*. arXiv:2412.00586 [cs.CR]
 
-[20] *(duplicate entry of [19])* — arXiv:2412.00586 [cs.CR]
+[20] Fred Heiding, Simon Lermen, Andrew Kao, Bruce Schneier, and Arun Vishwanath. 2024. *Evaluating Large Language Models' Capability to Launch Fully Automated Spear Phishing Campaigns: Validated on Human Subjects*. arXiv:2412.00586 [cs.CR]
 
 [21] Monique Hennink and Bonnie N Kaiser. 2022. *Sample sizes for saturation in qualitative research: A systematic review of empirical tests*. Social science & medicine 292, 114523.
 
