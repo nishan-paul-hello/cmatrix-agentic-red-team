@@ -316,29 +316,29 @@ Evaluated on **NYU CTF Bench**, **Cybench**, and **HackTheBox** — 290 CTFs tot
   - **T1203 (Exploitation for Client Execution)** and **T1574 (Hijack Execution Flow)** — common in binary exploitation CTFs.
 
 
-## V. Results
+## 5. Results
 
 ### A. Comparison of % solved
 
 > 📊 **Table III** compares D-CIPHER against other LLM agents across NYU CTF Bench, Cybench, and HackTheBox, run with five different LLMs (same LLM used for Planner, Executor, and Auto-prompter in each run). The NYU CTF baseline agent was also rerun with three LLMs to capture the effect of recent model updates. EnIGMA's numbers are taken directly from Abramovich et al.
 
-| Agent / Model | NYU CTF % solved | NYU CTF $ cost | Cybench % solved | Cybench $ cost | HackTheBox % solved | HackTheBox $ cost |
-|---|---|---|---|---|---|---|
-| **NYU CTF baseline** – Claude 3.5 Sonnet | 13.0 | – | – | – | 38.0 | – |
-| NYU CTF baseline – GPT 4o | 6.0 | – | – | – | 16.0 | – |
-| NYU CTF baseline – GPT 4 Turbo | 6.0 | – | – | – | 10.0 | – |
-| **EnIGMA** – Claude 3.5 Sonnet | 13.5 | 0.35 | 20.0 | 0.91 | 26.0 | 0.53 |
-| EnIGMA – GPT 4o | 9.5 | 0.62 | 12.5 | 0.61 | 16.3 | 1.71 |
-| EnIGMA – GPT 4 Turbo | 7.0 | 0.79 | 17.5 | 1.60 | 18.4 | 1.35 |
-| **D-CIPHER** – Claude 3.5 Sonnet | 19.0 | 0.52 | 22.5 | 0.30 | 44.0 | 0.49 |
-| D-CIPHER – GPT 4o | 10.5 | 0.22 | 12.5 | 0.08 | 16.0 | 0.16 |
-| D-CIPHER – GPT 4 Turbo | 6.5 | 0.46 | – | – | – | – |
-| D-CIPHER – LLaMA 3.1 405B | 3.0 | 0.01 | – | – | – | – |
-| D-CIPHER – Gemini 1.5 Flash | 2.5 | 0.001 | – | – | – | – |
-| D-CIPHER w/o auto-prompter – Claude 3.5 Sonnet | 22.0 | 0.74 | 20.0 | 0.33 | 44.0 | 0.62 |
-| D-CIPHER w/o auto-prompter – GPT 4o | 9.5 | 0.23 | – | – | – | – |
-| D-CIPHER w/o planner – Claude 3.5 Sonnet | 14.0 | 0.36 | – | – | – | – |
-| D-CIPHER w/o planner – GPT 4o | 9.0 | 0.11 | – | – | – | – |
+| Agent / Model | NYU CTF % solved | NYU CTF $ cost | NYU crypto | NYU foren | NYU pwn | NYU rev | NYU web | NYU misc | Cybench % solved | Cybench $ cost | HackTheBox % solved | HackTheBox $ cost |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| **NYU CTF baseline** – Claude 3.5 Sonnet | 13.0 | – | 7.7 | 20.0 | 7.7 | 21.6 | 5.3 | 16.7 | 15.0 | – | 38.0 | – |
+| NYU CTF baseline – GPT 4o | 6.0 | – | 3.8 | 0.0 | 5.1 | 9.8 | 0.0 | 12.5 | 12.5 | – | 16.0 | – |
+| NYU CTF baseline – GPT 4 Turbo | 6.0 | – | 1.9 | 0.0 | 5.1 | 9.8 | 0.0 | 16.7 | 12.5 | – | 10.0 | – |
+| **EnIGMA** – Claude 3.5 Sonnet | 13.5 | 0.35 | 7.7 | 20.0 | 18.0 | 17.7 | 0.0 | 16.7 | 20.0 | 0.91 | 26.0 | 0.53 |
+| EnIGMA – GPT 4o | 9.5 | 0.62 | 3.9 | 13.3 | 7.7 | 13.7 | 5.3 | 16.7 | 12.5 | 0.61 | 16.3 | 1.71 |
+| EnIGMA – GPT 4 Turbo | 7.0 | 0.79 | 1.9 | 13.3 | 5.1 | 9.8 | 0.0 | 16.7 | 17.5 | 1.60 | 18.4 | 1.35 |
+| **D-CIPHER** – Claude 3.5 Sonnet | 19.0 | 0.52 | 15.4 | 20.0 | 12.8 | 29.4 | 5.3 | 25.0 | 22.5 | 0.30 | 44.0 | 0.49 |
+| D-CIPHER – GPT 4o | 10.5 | 0.22 | 5.8 | 13.3 | 7.7 | 13.7 | 10.5 | 16.7 | 12.5 | 0.08 | 16.0 | 0.16 |
+| D-CIPHER – GPT 4 Turbo | 6.5 | 0.46 | 1.9 | 13.3 | 5.1 | 7.8 | 5.3 | 12.5 | – | – | – | – |
+| D-CIPHER – LLaMA 3.1 405B | 3.0 | 0.01 | 1.9 | 0.0 | 0.0 | 3.9 | 0.0 | 12.5 | – | – | – | – |
+| D-CIPHER – Gemini 1.5 Flash | 2.5 | 0.001 | 1.9 | 0.0 | 0.0 | 3.9 | 0.0 | 8.3 | – | – | – | – |
+| D-CIPHER w/o auto-prompter – Claude 3.5 Sonnet | 22.0 | 0.74 | 15.4 | 20.0 | 28.2 | 27.5 | 10.5 | 25.0 | 20.0 | 0.33 | 44.0 | 0.62 |
+| D-CIPHER w/o auto-prompter – GPT 4o | 9.5 | 0.23 | 1.9 | 6.7 | 5.1 | 17.6 | 10.5 | 16.7 | – | – | – | – |
+| D-CIPHER w/o planner – Claude 3.5 Sonnet | 14.0 | 0.36 | 9.6 | 6.7 | 7.7 | 25.5 | 5.3 | 20.8 | – | – | – | – |
+| D-CIPHER w/o planner – GPT 4o | 9.0 | 0.11 | 3.8 | 6.7 | 5.1 | 13.7 | 5.3 | 20.8 | – | – | – | – |
 
 📌 **Key findings**
 
@@ -470,7 +470,7 @@ All 200 CTFs in NYU CTF Bench were labeled with MITRE ATT&CK techniques (per §I
 
 > 📊 **Table VII** — Number of CTFs (#CTFs) labeled per technique, and how many each agent/LLM combination solved. Selected notable rows:
 
-| ID | Technique | #CTFs | D-CIPHER Sonnet | D-CIPHER GPT4o | D-CIPHER GPT4 Turbo | D-CIPHER w/o autoprompt (Sonnet) | NYUCTF Baseline Sonnet | NYUCTF Baseline GPT4o | NYUCTF Baseline GPT4 Turbo | EnIGMA Sonnet | EnIGMA GPT4o |
+| ID | Technique | #CTFs | D-CIPHER Sonnet 3.5 | D-CIPHER GPT4o | D-CIPHER GPT4 Turbo | D-CIPHER w/o autoprompt (Sonnet 3.5) | NYUCTF Baseline Sonnet 3.5 | NYUCTF Baseline GPT4o | NYUCTF Baseline GPT4 Turbo | EnIGMA Sonnet 3.5 | EnIGMA GPT4o |
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | T1203 | Exploitation for Client Execution | 36 | 4 | 2 | 1 | 10 | 2 | 1 | 1 | 6 | 2 |
 | T1574 | Hijack Execution Flow | 24 | 2 | 1 | 0 | 5 | 0 | 0 | 0 | 3 | 1 |
@@ -481,9 +481,43 @@ All 200 CTFs in NYU CTF Bench were labeled with MITRE ATT&CK techniques (per §I
 | T1600 | Weaken Encryption | 9 | 2 | 0 | 0 | 2 | 2 | 0 | 0 | 1 | 1 |
 | T1140 | Deobfuscate/Decode Files or Information | 9 | 1 | 0 | 0 | 2 | 1 | 0 | 0 | 1 | 1 |
 | T1055 | Process Injection | 7 | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 1 | 0 |
+| T1212 | Exploitation for Credential Access | 6 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| T1027 | Obfuscated Files or Information | 6 | 1 | 0 | 0 | 2 | 1 | 0 | 0 | 2 | 1 |
+| T1083 | File and Directory Discovery | 5 | 2 | 2 | 1 | 2 | 1 | 0 | 0 | 1 | 2 |
+| T1071 | Application Layer Protocol | 4 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| T1539 | Steal Web Session Cookie | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| T1001 | Data Obfuscation | 3 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| T1213 | Data from Information Repositories | 3 | 1 | 0 | 0 | 1 | 1 | 0 | 0 | 1 | 0 |
+| T1040 | Network Sniffing | 3 | 1 | 1 | 1 | 1 | 1 | 0 | 0 | 1 | 1 |
+| T1068 | Exploitation for Privilege Escalation | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| T1497 | Virtualization/Sandbox Evasion | 2 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 |
+| T1005 | Data from Local System | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| T1606 | Forge Web Credentials | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| T1006 | Direct Volume Access | 2 | 1 | 0 | 1 | 1 | 1 | 0 | 0 | 1 | 1 |
+| T1505 | Server Software Component | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| T1102 | Web Service | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| T1556 | Modify Authentication Process | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| T1078 | Valid Accounts | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| T1614 | System Location Discovery | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| T1082 | System Information Discovery | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| T1649 | Steal or Forge Authentication Certificates | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| T1565 | Data Manipulation | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| T1033 | System Owner/User Discovery | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| T1048 | Exfiltration Over Alternative Protocol | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| T1555 | Credentials from Password Stores | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| T1120 | Peripheral Device Discovery | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| T1087 | Account Discovery | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| T1106 | Native API | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| T1593 | Search Open Websites/Domains | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| T1542 | Pre-OS Boot | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| T1486 | Data Encrypted for Impact | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| T1003 | OS Credential Dumping | 1 | 1 | 1 | 0 | 1 | 1 | 0 | 1 | 1 | 0 |
+| T1553 | Subvert Trust Controls | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| T1185 | Browser Session Hijacking | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| T1036 | Masquerading | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| T1133 | External Remote Services | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| T1221 | Template Injection | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | **Total** | | **211** | **27** | **14** | **8** | **43** | **21** | **4** | **8** | **26** | **16** |
-
-*(Remaining low-count techniques, mostly 1–6 CTFs each with 0–2 solves across agents, omitted here for brevity — see original table for full 45-technique breakdown.)*
 
 📌 **Key findings:**
 
@@ -548,7 +582,7 @@ Example trace showing an agent hallucinating connection details during a CTF att
 
 ---
 
-## C. Ethics
+### C. Ethics
 
 - LLM advances bring cybersecurity benefits but also risks, including misuse in adversarial scenarios where safeguards are bypassed.
 - CTFs act as **controlled environments** to safely study LLM agent strengths and vulnerabilities in offensive security.
@@ -589,55 +623,55 @@ Example trace showing an agent hallucinating connection details during a CTF att
 
 ## References
 
-1. Abramovich et al. Interactive tools substantially assist LM agents in finding security vulnerabilities, 2025.
-2. Akuthota et al. Vulnerability detection and monitoring using LLM. *Women in Engineering Conference on Electrical and Computer Engineering*, 2023.
-3. Bhatt et al. CyberSecEval 2: A wide-ranging cybersecurity evaluation suite for LLMs, 2024.
-4. Bianou & Batogna. Pentest-ai: an LLM-powered multi-agents framework for penetration testing automation leveraging MITRE ATT&CK. *IEEE CSR*, 2024.
-5. Bouzenia, Devanbu & Pradel. RepairAgent: An autonomous, LLM-based agent for program repair, 2024.
-6. Chahal. AI-enhanced cyber incident response and recovery. *Intl. Journal of Science and Research*, 2023.
-7. Chang, Yoon, Wuthier & Zhang. Capture the flag for team construction in cybersecurity, 2022.
-8. Charan, Chunduri, Anand & Shukla. From text to MITRE techniques: exploring malicious use of LLMs for generating cyber attack payloads, 2023.
-9. Chicone & Ferebee. Using Facebook's open source Capture the Flag platform as a hands-on learning and assessment tool for cybersecurity education, 2018.
-10. Cuevas, Hogan, Hibshi & Christin. Observations from an online security competition and its implications on crowdsourced security, 2022.
-11. Dabbagh et al. AI ethics should be mandatory for schoolchildren. *AI and Ethics*, 2024.
-12. DARPA. DARPA Cyber Grand Challenge, 2016.
-13. DARPA. DARPA AIxCC, 2024.
-14. Dorri, Kanhere & Jurdak. Multi-agent systems: A survey. *IEEE Access*, 2018.
-15. Guo et al. Large language model based multi-agents: A survey of progress and challenges, 2024.
-16. Guo, Patsakis, Hu, Tang & Casino. Outside the comfort zone: Analysing LLM capabilities in software vulnerability detection. *ESORICS*, 2024.
-17. HackTheBox. Cybersecurity training and penetration testing labs, 2024.
-18. Jackson, Matei & Bertino. Artificial intelligence ethics education in cybersecurity: Challenges and opportunities, 2023.
-19. Le Goues, Dewey-Vogt, Forrest & Weimer. A systematic study of automated program repair: Fixing 55 out of 105 bugs for $8 each. *ICSE*, 2012.
-20. Li, Zhang, Yu, Fu & Ye. More agents is all you need, 2024.
-21. Li et al. Attention is all you need for LLM-based code vulnerability localization, 2024.
-22. Liu. Multi-agent collaboration in incident response with large language models, 2024.
-23. Lu, Ju, Chen, Pei & Cai. GRACE: Empowering LLM-based software vulnerability detection with graph structure and in-context learning. *Journal of Systems and Software*, 2024.
-24. MITRE. MITRE ATT&CK framework (accessed 2025-04-28).
-25. Muzsai, Imolai & Lukács. HackSynth: LLM agent and evaluation framework for autonomous penetration testing, 2024.
-26. Nunez, Islam, Jha & Najafirad. AutoSafeCoder: A multi-agent framework for securing LLM code generation through static analysis and fuzz testing, 2024.
-27. Pieterse. Friend or foe – the impact of ChatGPT on Capture the Flag competitions. *ICCWS*, 2024.
-28. Porsdam Mann et al. Generative AI entails a credit–blame asymmetry, 2023.
-29. Savin et al. Battle ground: Data collection and labeling of CTF games to understand human cyber operators. *CSET Workshop*, 2023.
-30. Shao et al. An empirical evaluation of LLMs for solving offensive security challenges, 2024.
-31. Shao et al. NYU CTF Bench: A scalable open-source benchmark dataset for evaluating LLMs in offensive security. *NeurIPS Datasets and Benchmarks*, 2024.
-32. Shen et al. PentestAgent: Incorporating LLM agents to automated penetration testing, 2024.
-33. Shin, Razeghi, Logan IV, Wallace & Singh. AutoPrompt: Eliciting knowledge from language models with automatically generated prompts. *EMNLP*, 2020.
-34. Song, Ma, Zheng, Liao, Kuang & Yang. Audit-LLM: Multi-agent collaboration for log-based insider threat detection, 2024.
-35. Tann, Liu, Sim, Seah & Chang. Using large language models for cybersecurity capture-the-flag challenges and certification questions, 2023.
-36. Turtayev, Petrov, Volkov & Volk. Hacking CTFs with plain agents, 2024.
-37. Vykopal, Švábenský & Chang. Benefits and pitfalls of using capture the flag games in university courses. *SIGCSE*, 2020.
-38. Wan et al. CYBERSECEVAL 3: Advancing the evaluation of cybersecurity risks and capabilities in large language models, 2024.
-39. Wang et al. Plan-and-solve prompting: Improving zero-shot chain-of-thought reasoning by large language models. *ACL*, 2023.
-40. Wang et al. A survey on large language model based autonomous agents. *Frontiers of Computer Science*, 2024.
-41. Wu, Duan & Ni. Unveiling security, privacy, and ethical concerns of ChatGPT. *Journal of Information and Intelligence*, 2024.
-42. Xia & Zhang. Automated program repair via conversation: Fixing 162 out of 337 bugs for $0.42 each using ChatGPT. *ISSTA*, 2024.
-43. Xu et al. ReWOO: Decoupling reasoning from observations for efficient augmented language models, 2023.
-44. Xu, Chen, Lin, Lin & Wang. Autopwn: Artifact-assisted heap exploit generation for CTF pwn competitions. *IEEE TIFS*, 2024.
-45. Yang, Prabhakar, Narasimhan & Yao. Intercode: Standardizing and benchmarking interactive coding with execution feedback. *NeurIPS Datasets and Benchmarks*, 2023.
-46. Yang, Prabhakar, Yao, Pei & Narasimhan. Language agents as hackers: Evaluating cybersecurity skills with capture the flag, 2023.
-47. Yang et al. SWE-agent: Agent-computer interfaces enable automated software engineering. *NeurIPS*, 2024.
-48. Yao et al. ReAct: Synergizing reasoning and acting in language models, 2022.
-49. Zhang et al. Cybench: A framework for evaluating cybersecurity capabilities and risks of language models. *ICLR*, 2025.
-50. Zhang, Wang, Li, Sun, Zhang, Ma & Liu. An empirical study of automated vulnerability localization with large language models, 2024.
-51. Zhang, Zhang, Li & Smola. Automatic chain of thought prompting in large language models. *ICLR*, 2023.
-52. Zhou, Zhao, Shumailov, Mullins & Gal. Revisiting automated prompting: Are we actually doing better? *ACL*, 2023.
+1. Talor Abramovich, Meet Udeshi, Minghao Shao, Kilian Lieret, Haoran Xi, Kimberly Milner, Sofija Jancheska, John Yang, Carlos E. Jimenez, Farshad Khorrami, Prashanth Krishnamurthy, Brendan Dolan-Gavitt, Muhammad Shafique, Karthik Narasimhan, Ramesh Karri, and Ofir Press. Interactive tools substantially assist LM agents in finding security vulnerabilities, 2025. URL https://arxiv.org/abs/2409.16165v2.
+2. Vishwanath Akuthota, Raghunandan Kasula, Sabiha T. Sumona, Masud Mohiuddin, Md Tanzim Reza, and Md Mizanur Rahman. Vulnerability detection and monitoring using LLM. In *Women in Engineering Conference on Electrical and Computer Engineering*, pages 309–314. IEEE, 2023.
+3. Manish Bhatt, Sahana Chennabasappa, Yue Li, Cyrus Nikolaidis, Daniel Song, Shengye Wan, Faizan Ahmad, Cornelius Aschermann, Yaohui Chen, Dhaval Kapil, David Molnar, Spencer Whitman, and Joshua Saxe. CyberSecEval 2: A wide-ranging cybersecurity evaluation suite for large language models, 2024. URL https://arxiv.org/abs/2404.13161v1.
+4. Stanislas G. Bianou and Rodrigue G. Batogna. Pentest-ai, an llm-powered multi-agents framework for penetration testing automation leveraging mitre attack. In *2024 IEEE International Conference on Cyber Security and Resilience (CSR)*, pages 763–770, 2024. doi: 10.1109/CSR61664.2024.10679480.
+5. Islem Bouzenia, Premkumar Devanbu, and Michael Pradel. RepairAgent: An autonomous, LLM-based agent for program repair, 2024. URL https://arxiv.org/abs/2403.17134v2.
+6. Sunil Chahal. AI-enhanced cyber incident response and recovery. *International Journal of Science and Research*, 12(3):1795–1801, 2023.
+7. Sang-Yoon Chang, Kay Yoon, Simeon Wuthier, and Kelei Zhang. Capture the flag for team construction in cybersecurity, 2022. URL https://arxiv.org/abs/2206.08971v1.
+8. P. V. Sai Charan, Hrushikesh Chunduri, P. Mohan Anand, and Sandeep K Shukla. From text to mitre techniques: Exploring the malicious use of large language models for generating cyber attack payloads, 2023.
+9. Rhonda Chicone and Susan Ferebee. Using facebook's open source capture the flag platform as a hands-on learning and assessment tool for cybersecurity education. *International Journal of Conceptual Structures and Smart Applications*, 6(1):18–32, 2018.
+10. Alejandro Cuevas, Emma Hogan, Hanan Hibshi, and Nicolas Christin. Observations from an online security competition and its implications on crowdsourced security, 2022. URL https://arxiv.org/abs/2204.12601v1.
+11. Hossein Dabbagh, Brian D. Earp, Sebastian P. Mann, Monika Plozza, Sabine Salloch, and Julian Savulescu. AI ethics should be mandatory for schoolchildren. *AI and Ethics*, 2024. doi: 10.1007/s43681-024-00462-1. URL https://doi.org/10.1007/s43681-024-00462-1.
+12. DARPA. DARPA cyber grand challenge. https://www.darpa.mil/program/cyber-grand-challenge, 2016. URL https://www.darpa.mil/program/cyber-grand-challenge.
+13. DARPA. DARPA AIxCC. https://aicyberchallenge.com/about/, 2024. URL https://aicyberchallenge.com/about/.
+14. Ali Dorri, Salil S. Kanhere, and Raja Jurdak. Multi-agent systems: A survey. *IEEE Access*, 6:28573–28593, 2018.
+15. Taicheng Guo, Xiuying Chen, Yaqi Wang, Ruidi Chang, Shichao Pei, Nitesh V. Chawla, Olaf Wiest, and Xiangliang Zhang. Large language model based multi-agents: A survey of progress and challenges, 2024. URL https://arxiv.org/abs/2402.01680.
+16. Yuejun Guo, Constantinos Patsakis, Qiang Hu, Qiang Tang, and Fran Casino. Outside the comfort zone: Analysing LLM capabilities in software vulnerability detection. In *European Symposium on Research in Computer Security*, pages 271–289. Springer, 2024.
+17. HackTheBox. HackTheBox: Cybersecurity training and penetration testing labs. https://www.hackthebox.com, 2024.
+18. Diane Jackson, Sorin A. Matei, and Elisa Bertino. Artificial intelligence ethics education in cybersecurity: Challenges and opportunities: a focus group report, 2023.
+19. Claire Le Goues, Michael Dewey-Vogt, Stephanie Forrest, and Westley Weimer. A systematic study of automated program repair: Fixing 55 out of 105 bugs for $8 each. In *International Conference on Software Engineering*, pages 3–13. IEEE, 2012.
+20. Junyou Li, Qin Zhang, Yangbin Yu, Qiang Fu, and Deheng Ye. More agents is all you need, 2024. URL https://arxiv.org/abs/2402.05120v2.
+21. Yue Li, Xiao Li, Hao Wu, Yue Zhang, Xiuzhen Cheng, Sheng Zhong, and Fengyuan Xu. Attention is all you need for LLM-based code vulnerability localization, 2024. URL https://arxiv.org/abs/2410.15288v1.
+22. Zefang Liu. Multi-agent collaboration in incident response with large language models, 2024. URL https://arxiv.org/abs/2412.00652v2.
+23. Guilong Lu, Xiaolin Ju, Xiang Chen, Wenlong Pei, and Zhilong Cai. GRACE: Empowering LLM-based software vulnerability detection with graph structure and in-context learning. *Journal of Systems and Software*, 212:112031, 2024.
+24. MITRE. MITRE ATT&CK framework. https://attack.mitre.org/. Accessed 04-28-2025.
+25. Lajos Muzsai, David Imolai, and András Lukács. HackSynth: LLM agent and evaluation framework for autonomous penetration testing, 2024. URL https://arxiv.org/abs/2412.01778v1.
+26. Ana Nunez, Nafis T. Islam, Sumit Kumar Jha, and Peyman Najafirad. AutoSafeCoder: A multi-agent framework for securing LLM code generation through static analysis and fuzz testing, 2024. URL https://arxiv.org/abs/2409.10737v1.
+27. Heloise Pieterse. Friend or foe – the impact of ChatGPT on capture the flag competitions. In *International Conference on Cyber Warfare and Security*, volume 19, pages 268–276, 2024.
+28. Sebastian Porsdam Mann, Brian D. Earp, Sven Nyholm, John Danaher, Nikolaj Møller, Hilary Bowman-Smart, Joshua Hatherley, Julian Koplin, Monika Plozza, Daniel Rodger, Peter V. Treit, Gregory Renard, John McMillan, and Julian Savulescu. Generative AI entails a credit–blame asymmetry, 2023.
+29. Georgel M. Savin, Ammar Asseri, Josiah Dykstra, Jonathan Goohs, Anthony Melaragno, and William Casey. Battle ground: Data collection and labeling of CTF games to understand human cyber operators. In *Cyber Security Experimentation and Test Workshop*, pages 32–40. ACM, 2023.
+30. Minghao Shao, Boyuan Chen, Sofija Jancheska, Brendan Dolan-Gavitt, Siddharth Garg, Ramesh Karri, and Muhammad Shafique. An empirical evaluation of LLMs for solving offensive security challenges, 2024. URL https://arxiv.org/abs/2402.11814v1.
+31. Minghao Shao, Sofija Jancheska, Meet Udeshi, Brendan Dolan-Gavitt, Haoran Xi, Kimberly Milner, Boyuan Chen, Max Yin, Siddharth Garg, Prashanth Krishnamurthy, Farshad Khorrami, Ramesh Karri, and Muhammad Shafique. NYU CTF Bench: A scalable open-source benchmark dataset for evaluating LLMs in offensive security. In *Conference on Neural Information Processing Systems Datasets and Benchmarks Track*, 2024. URL https://openreview.net/forum?id=itBDglVylS.
+32. Xiangmin Shen, Lingzhi Wang, Zhenyuan Li, Yan Chen, Wencheng Zhao, Dawei Sun, Jiashui Wang, and Wei Ruan. PentestAgent: Incorporating LLM agents to automated penetration testing, 2024. URL https://arxiv.org/abs/2411.05185v1.
+33. Taylor Shin, Yasaman Razeghi, Robert L. Logan IV, Eric Wallace, and Sameer Singh. AutoPrompt: Eliciting knowledge from language models with automatically generated prompts. In *Conference on Empirical Methods in Natural Language Processing*, pages 4222–4235. Association for Computational Linguistics, November 2020. doi: 10.18653/v1/2020.emnlp-main.346. URL https://aclanthology.org/2020.emnlp-main.346/.
+34. Chengyu Song, Linru Ma, Jianming Zheng, Jinzhi Liao, Hongyu Kuang, and Lin Yang. Audit-LLM: Multi-agent collaboration for log-based insider threat detection, 2024. URL https://arxiv.org/abs/2408.08902v1.
+35. Wesley Tann, Yuancheng Liu, Jun Heng Sim, Choon M. Seah, and Ee-Chien Chang. Using large language models for cybersecurity capture-the-flag challenges and certification questions, 2023. URL https://arxiv.org/abs/2308.10443.
+36. Rustem Turtayev, Artem Petrov, Dmitrii Volkov, and Denis Volk. Hacking CTFs with plain agents, 2024. URL https://arxiv.org/abs/2412.02776v1.
+37. Jan Vykopal, Valdemar Švábenský, and Ee-Chien Chang. Benefits and pitfalls of using capture the flag games in university courses. In *Technical Symposium on Computer Science Education*, page 752–758. ACM, 2020. doi: 10.1145/3328778.3366893. URL https://doi.org/10.1145/3328778.3366893.
+38. Shengye Wan, Cyrus Nikolaidis, Daniel Song, David Molnar, James Crnkovich, Jayson Grace, Manish Bhatt, Sahana Chennabasappa, Spencer Whitman, Stephanie Ding, Vlad Ionescu, Yue Li, and Joshua Saxe. CYBERSECEVAL 3: Advancing the evaluation of cybersecurity risks and capabilities in large language models, 2024. URL https://arxiv.org/abs/2408.01605v2.
+39. Lei Wang, Wanyu Xu, Yihuai Lan, Zhiqiang Hu, Yunshi Lan, Roy Ka-Wei Lee, and Ee-Peng Lim. Plan-and-solve prompting: Improving zero-shot chain-of-thought reasoning by large language models. In *Annual Meeting of the Association for Computational Linguistics*, pages 2609–2634. ACL, July 2023. doi: 10.18653/v1/2023.acl-long.147. URL https://aclanthology.org/2023.acl-long.147/.
+40. Lei Wang, Chen Ma, Xueyang Feng, Zeyu Zhang, Hao Yang, Jingsen Zhang, Zhiyuan Chen, Jiakai Tang, Xu Chen, Yankai Lin, Wayne Xin Zhao, Zhewei Wei, and Jirong Wen. A survey on large language model based autonomous agents. *Frontiers of Computer Science*, 18(6):186345, 2024.
+41. Xiaodong Wu, Ran Duan, and Jianbing Ni. Unveiling security, privacy, and ethical concerns of ChatGPT. *Journal of Information and Intelligence*, 2(2):102–115, 2024. doi: https://doi.org/10.1016/j.jiixd.2023.10.007. URL https://www.sciencedirect.com/science/article/pii/S2949715923000707.
+42. Chunqiu Steven Xia and Lingming Zhang. Automated program repair via conversation: Fixing 162 out of 337 bugs for $0.42 each using ChatGPT. In *International Symposium on Software Testing and Analysis*, pages 819–831. ACM, 2024.
+43. Binfeng Xu, Zhiyuan Peng, Bowen Lei, Subhabrata Mukherjee, Yuchen Liu, and Dongkuan Xu. ReWOO: Decoupling reasoning from observations for efficient augmented language models, 2023. URL https://arxiv.org/abs/2305.18323v1.
+44. Dandan Xu, Kai Chen, Miaoqian Lin, Chaoyang Lin, and Xiaofeng Wang. Autopwn: Artifact-assisted heap exploit generation for ctf pwn competitions. *IEEE Transactions on Information Forensics and Security*, 19:293–306, 2024. doi: 10.1109/TIFS.2023.3322319.
+45. John Yang, Akshara Prabhakar, Karthik R. Narasimhan, and Shunyu Yao. Intercode: Standardizing and benchmarking interactive coding with execution feedback. In *Conference on Neural Information Processing Systems Datasets and Benchmarks Track*, 2023. URL https://openreview.net/forum?id=fvKaLF1ns8.
+46. John Yang, Akshara Prabhakar, Shunyu Yao, Kexin Pei, and Karthik R. Narasimhan. Language agents as hackers: Evaluating cybersecurity skills with capture the flag, 2023. URL https://openreview.net/forum?id=KOZwk7BFc3.
+47. John Yang, Carlos E. Jimenez, Alexander Wettig, Kilian Lieret, Shunyu Yao, Karthik R. Narasimhan, and Ofir Press. SWE-agent: Agent-computer interfaces enable automated software engineering. In *Conference on Neural Information Processing Systems*, 2024. URL https://openreview.net/forum?id=mXpq6ut8J3.
+48. Shunyu Yao, Jeffrey Zhao, Dian Yu, Izhak Shafran, Karthik R. Narasimhan, and Yuan Cao. ReAct: Synergizing reasoning and acting in language models, 2022. URL https://openreview.net/forum?id=tvI4u1ylcqs.
+49. Andy K Zhang, Neil Perry, Riya Dulepet, Joey Ji, Celeste Menders, Justin W Lin, Eliot Jones, Gashon Hussein, Samantha Liu, Donovan Julian Jasper, Pura Peetathawatchai, Ari Glenn, Vikram Sivashankar, Daniel Zamoshchin, Leo Glikbarg, Derek Askaryar, Haoxiang Yang, Aolin Zhang, Rishi Alluri, Nathan Tran, Rinnara Sangpisit, Kenny O Oseleononmen, Dan Boneh, Daniel E. Ho, and Percy Liang. Cybench: A framework for evaluating cybersecurity capabilities and risks of language models. In *The Thirteenth International Conference on Learning Representations*, 2025. URL https://openreview.net/forum?id=tc90LV0yRL.
+50. Jian Zhang, Chong Wang, Anran Li, Weisong Sun, Cen Zhang, Wei Ma, and Yang Liu. An empirical study of automated vulnerability localization with large language models, 2024. URL https://arxiv.org/abs/2404.00287v1.
+51. Zhuosheng Zhang, Aston Zhang, Mu Li, and Alex Smola. Automatic chain of thought prompting in large language models. In *International Conference on Learning Representations*. OpenReview.net, 2023. URL https://openreview.net/forum?id=5NTt8GFjUHkr.
+52. Yulin Zhou, Yiren Zhao, Ilia Shumailov, Robert Mullins, and Yarin Gal. Revisiting automated prompting: Are we actually doing better? In *Annual Meeting of the Association for Computational Linguistics*, pages 1822–1832. Association for Computational Linguistics, July 2023. doi: 10.18653/v1/2023.acl-short.155. URL https://aclanthology.org/2023.acl-short.155/.

@@ -592,6 +592,8 @@ $$C_{a,e} = \left|\bigcup_{t=1}^{T} G_{a,e,t}\right| / |C_e|$$
 
 - Incalmo obtained **100% of critical assets** in 9 of the 40 environments.
 
+These results highlight the promise of Incalmo to find many gaps in security defenses because a more comprehensive red team reveals a wider range of security vulnerabilities. In Sec. 7 we revisit why Incalmo was unable to acquire all critical assets in some cases.
+
 
 ## 6.2 Factor Analysis
 
@@ -755,6 +757,8 @@ This study serves two purposes:
   - Escalate privileges
   - Exfiltrate data
 - 📌 Believed to represent a significant advance in understanding LLM-assisted red-teaming capabilities, and to help defenders proactively protect networks (against both human and AI-based attacks) by lowering the barrier to running red-team exercises quickly, cheaply, and often.
+
+We hope our work spurs further advances in the "science of security" in the use of AI-assisted autonomous cyber defense and offense capabilities.
 
 ---
 
@@ -971,6 +975,8 @@ MHBench algorithmically generates 30 environments modeling small enterprises:
 | Dumbbell B | Same topology as Dumbbell A; webserver credentials and database data both require privileged access. | Exfiltrate data from 15 databases. | 30 |
 
 ### 📌 Equifax-Inspired Environment (Detailed)
+
+Table 4 details the 10 manually created environments based on real attacks and network topologies. The Equifax-inspired environment is described in further detail below. Remaining details and specifications about environments can be found in the open-source repository.
 
 - Two web servers run a vulnerable version of **Apache Struts (CVE-2017-5638)** — matching the real breach.
 - During the real Equifax breach, the attacker found a plaintext file on a web server containing credentials to 48 separate database hosts on another network.
