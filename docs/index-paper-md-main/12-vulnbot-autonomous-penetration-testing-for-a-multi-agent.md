@@ -79,6 +79,8 @@ Per the **OWASP Testing Guide**, pentesting has five key phases:
 
 Traditional pentesting is time-intensive and costly. Current LLM-based approaches have notable inefficiencies (see Figure 1 comparison below):
 
+### 🔬 Figure 1: Workflow Comparison of Three Approaches to Automated Penetration Testing
+
 ```mermaid
 flowchart TB
     subgraph A["(a) LLM Assistant-Guided Pentest Agent"]
@@ -108,6 +110,8 @@ flowchart TB
         C3 -.->|"🙂 Good"| C3
     end
 ```
+
+> **Figure 1:** The workflow comparison of three approaches to automated penetration testing: (a) LLM Assistant-Guided Pentest Agent, which requires assistance due to inefficiency; (b) Conventional Automated Pentest Agent, which struggles with information overload and context loss; and (c) Collaborative Multi-Agent system, which employs a phased and modular approach, enhancing the overall efficiency and autonomy of the penetration testing process through multi-agent coordination.
 
 - **(a) LLM Assistant-Guided Pentest Agent** — lacks autonomy, needs frequent human clarification → inefficient.
 - **(b) Conventional Automated Pentest Agent** — generates excessive unstructured data without actionable next steps → context loss, command failures.
@@ -281,7 +285,7 @@ flowchart TB
     Scan -.-> ScanAgent
 ```
 
-> The **Memory Retriever** module stores embeddings of successful tasks and prior penetration knowledge in a vector database. When generating or updating plans, the current plan is converted into embedding vectors and compared against stored vectors via a text embedding model. The top *k* most similar vectors are retrieved, then re-ranked to select the optimal option — letting the system leverage past experience to improve planning decisions (detailed further in §5.4).
+> **Figure 2:** Overview of VulnBot. The **Memory Retriever** module stores embeddings of successful tasks and prior penetration knowledge in a vector database. When generating or updating plans, the current plan is converted into embedding vectors and compared against stored vectors via a text embedding model. The top *k* most similar vectors are retrieved, then re-ranked to select the optimal option — letting the system leverage past experience to improve planning decisions (detailed further in §5.4).
 
 ---
 
@@ -293,7 +297,7 @@ The task-driven mechanism centers on the **Penetration Testing Task Graph (PTG)*
 
 A PTG is a directed acyclic graph $G = (V, E)$ where:
 
-- **$V$** — the set of nodes, each an individual task with attributes:
+- **$V$** — the set of nodes, each an individual task ($v \in V$) with unique identifier and attributes:
   - **Instruction** — the primary task directive (e.g. *"enumerate open ports on the target machine"*)
   - **Action** — operation type: `shell` or `manual`
   - **Dependencies** — other task IDs that must complete first
@@ -312,14 +316,15 @@ Example task list (abridged):
 { "id": "1", "dependencies": [], "action": "Shell",
   "instruction": "Use the credentials (wavex:door+open) to SSH into the target machine (IP: 192.168.1.104, Port: 22)." },
 { "id": "2", "dependencies": ["1"], "action": "Shell",
-  "instruction": "Search for writable directories using: find / -writable -type d 2>/dev/null" },
+  "instruction": "Search for writable directories on the target machine using the command: 'find / -writable -type d 2>/dev/null'." },
 { "id": "3", "dependencies": ["1"], "action": "Shell",
-  "instruction": "Enumerate running processes using: ps aux" },
+  "instruction": "Enumerate running processes on the target machine using the command: 'ps aux'." },
 { "id": "9", "dependencies": ["5", "8"], "action": "Shell",
-  "instruction": "Exploit the sudo permissions to escalate privileges to root using: sudo su" }
+  "instruction": "Exploit the sudo permissions to escalate privileges to root using the command 'sudo su'." }
+}
 ```
 
-Corresponding dependency graph (dark node = completed, green node = currently executing):
+Corresponding dependency graph:
 
 ```mermaid
 graph TD
@@ -334,6 +339,8 @@ graph TD
     T5 --> T9["Task 9"]
     T8 --> T9
 ```
+
+> **Figure 3:** The process of generating Penetration Task Graph (PTG). The green circle represents the current task being executed, while the dark circle indicates that the task has been successfully completed.
 
 The PTG structures tasks so each depends on one or more preceding tasks — e.g. Task 1 (SSH login) must succeed before Task 2 (writable-directory search) or Task 3 (process enumeration) can run — maintaining a logical, systematic execution order.
 
@@ -449,7 +456,7 @@ Guiding research questions:
 
 Evaluated on **AutoPenBench** across categories: Access Control (AC), Web Security (WS), Network Security (NS), Cryptography (CRPT), Real-world. Models: GPT-4o (`gpt-4o-2024-08-06`), Llama3.3-70B, Llama3.1-405B — base vs. VulnBot-integrated. GPT-4o step limits: 30 (in-vitro), 60 (real-world).
 
-**📊 Table 2 — Overall target completion rate**
+**📊 Table 2 — The performance of GPT-4o, Llama3.1-405B, and Llama3.3-70B on overall target completion**
 
 | Category | GPT-4o | Llama3.3-70B (Ours) | Llama3.1-405B (Ours) | Llama3.3-70B (Base) | Llama3.1-405B (Base) | Llama3.3-70B (PentestGPT) | Llama3.1-405B (PentestGPT) |
 |---|---|---|---|---|---|---|---|
@@ -460,7 +467,9 @@ Evaluated on **AutoPenBench** across categories: Access Control (AC), Web Securi
 | Real-world | 1 (9.09%) | 2 (18.18%) | 3 (27.27%) | 0 (0.00%) | 0 (0.00%) | 0 (0.00%) | 0 (0.00%) |
 | **ALL** | **7 (21.21%)** | **6 (18.18%)** | **10 (30.30%)** | **2 (6.06%)** | **3 (9.09%)** | **2 (6.06%)** | **3 (9.09%)** |
 
-**📊 Table 3 — Subtask completion rate**
+**📊 Table 3 — The performance of Llama3.1-405B, and Llama3.3-70B on subtask completion**
+
+> *Note:* **"1 Experiment"** refers to the overall subtask completion rate across five experiments, where a subtask is considered successful if it succeeds in at least one experiment. **"5 Experiments"** denotes the total number of subtasks completed in all five experiments combined (Total Subtasks: 1050).
 
 *1 Experiment (Total Subtasks: 210)*
 
@@ -499,6 +508,8 @@ xychart-beta
     bar "VulnBot-Llama3.1-405B" [9, 32, 105, 19]
 ```
 
+> **Figure 4:** The failure counts of VulnBot and baseline models across the Reconnaissance, Scanning, and Exploitation phases (and Finish completions).
+
 - VulnBot-Llama3.1-405B has the fewest failures in **Reconnaissance (9)** and **Scanning (32)**, driving smoother progression into later stages.
 - It also reaches **Finish** most often (19 completions vs. 7 for the baseline).
 - ⚠️ **Limitation:** Exploitation remains the hardest phase — VulnBot-Llama3.3-70B logs 93 failures and VulnBot-Llama3.1-405B logs 105, both higher than in other phases, reflecting the inherent complexity of the exploitation stage.
@@ -513,6 +524,8 @@ Impact of key architectural components, evaluated via ablation experiments on **
 > 2. **VulnBot-without PTG** — Penetration Task Graph removed; eliminates structured task planning and dependency management
 > 3. **VulnBot-without Summarizer** — Summarizer module disabled; prevents inter-agent communication and context summarization
 
+### 🔬 Figure 5: Ablation Study of VulnBot on AUTOPENBENCH
+
 ```mermaid
 xychart-beta
     title "Ablation Study on AUTOPENBENCH"
@@ -523,6 +536,8 @@ xychart-beta
     bar "VulnBot-without PTG" [37, 0]
     bar "VulnBot-without Summarizer" [27, 0]
 ```
+
+> **Figure 5:** Ablation study of VulnBot on AUTOPENBENCH. This figure demonstrates the impact of removing key components—role specialization, the PTG, and the Summarizer—on model performance.
 
 📊 **Results:**
 - Removing **role specialization**: subtask success rate drops 55 → 32
@@ -543,6 +558,8 @@ xychart-beta
 > - 5 experimental rounds per machine; best completion rate across the 5 runs reported
 > - Metric: subtask completion rate (1.0 = successful penetration)
 
+### 🔬 Figure 6: The Performance of VulnBot over the Real-World Machines
+
 ```mermaid
 xychart-beta
     title "Real-World Machine Performance (best completion rate)"
@@ -552,7 +569,18 @@ xychart-beta
     bar "VulnBot-DeepSeek-v3" [0.83, 0.20, 0.36, 0.71, 0.29, 0.44]
 ```
 
-🖼️ Figure 6 (full): compares six systems — VulnBot and PentestGPT and a plain Base model, each on both Llama3.1-405B and DeepSeek-v3 — across all six machines; only the two VulnBot variants are charted above for readability.
+> **Figure 6:** The performance of VulnBot over the real-world machines.
+
+**Full Breakdown across all 6 evaluated systems (Best subtask completion rate):**
+
+| Machine | VulnBot-Llama3.1-405B | PentestGPT-Llama3.1-405B | Base-Llama3.1-405B | VulnBot-DeepSeek-v3 | PentestGPT-DeepSeek-v3 | Base-DeepSeek-v3 |
+|---|---|---|---|---|---|---|
+| **Victim1** | **0.33** | 0.17 | 0.00 | **0.83** | 0.17 | 0.50 |
+| **Library2** | **0.40** | 0.20 | 0.20 | 0.20 | 0.20 | 0.20 |
+| **Sar** | 0.27 | 0.09 | 0.27 | **0.36** | 0.27 | 0.27 |
+| **WestWild** | 0.57 | 0.14 | 0.14 | **0.71** | 0.57 | 0.57 |
+| **Symfonos2** | **0.29** | 0.14 | 0.14 | **0.29** | 0.21 | 0.21 |
+| **Funbox** | 0.33 | 0.22 | 0.11 | **0.44** | 0.22 | **0.44** |
 
 📊 **Results:**
 - **VulnBot-Llama3.1-405B** best on: Victim1 (0.33), Library2 (0.40), WestWild (0.57)
@@ -570,6 +598,8 @@ xychart-beta
 > - Compared three systems: Llama3.1-405B+RAG, GPT-4o+Manual (human operator using PentestGPT), Llama3.1-405B+Manual (human operator)
 > - GPT-4o/Manual baseline data sourced from prior work [33]
 
+### 🔬 Figure 7: Performance Comparison of VulnBot with Memory Retriever Module
+
 ```mermaid
 xychart-beta
     title "RAG vs Manual Human-Operated Baselines"
@@ -579,6 +609,8 @@ xychart-beta
     bar "GPT-4o-with Manual" [0.33, 0.50, 0.55, 0.57, 0.43, 0.33]
     bar "Llama3.1-405B-with Manual" [0.67, 0.80, 0.73, 0.57, 0.43, 0.56]
 ```
+
+> **Figure 7:** Performance comparison of VulnBot with Memory Retriever module.
 
 📊 **Results:**
 - RAG integration significantly boosts performance, especially on **Victim1** and **WestWild**
@@ -611,40 +643,40 @@ xychart-beta
 
 ### 7.1 Vulnerability Detection and Exploitation
 
-- **Atropos** — snapshot-based, feedback-driven fuzzing integrated with the PHP interpreter, for server-side PHP vulnerabilities
-- **NAUTILUS** — RESTful API vulnerability detection via guided testing and parameter generation
-- *"Understanding Hackers' Work"* — empirical study of offensive security practitioners' operational methods
-- **Liu et al.** — ChatGPT for bug report analysis via a self-heuristic prompt template (few-shot > zero-shot)
-- **Fang et al.** — GPT-4 autonomously exploits **87%** of a benchmark of real-world one-day vulnerabilities given CVE descriptions
+- **Atropos** [25] — snapshot-based, feedback-driven fuzzing integrated directly with the PHP interpreter, for server-side vulnerabilities in PHP-based web applications
+- **NAUTILUS** [15] — automated RESTful API vulnerability detection via guided testing and parameter generation strategies, emphasizing complex API interactions and corner cases
+- *"Understanding Hackers' Work"* [28] — empirical study of offensive security practitioners' operational methods and challenges, underscoring the need for improved tooling
+- **Liu et al.** [36] — exploring ChatGPT for vulnerability management and bug report analysis via a self-heuristic prompt template (summarizing domain knowledge from examples; few-shot > zero-shot)
+- **Fang et al.** [19] — demonstrating that GPT-4 autonomously exploits **87%** of a benchmark set of real-world one-day vulnerabilities given CVE descriptions; highlights emergent capabilities and responsible deployment concerns
 
 ### 7.2 Automated Penetration Testing
 
 | System | Contribution |
 |---|---|
-| Al-Sinani & Mitchell | GPT-4 across ethical hacking phases (recon, post-exploitation) |
-| AUTOATTACKER | LLM-automated post-breach activities |
-| BreachSeek | LLM-simulated cyberattacks |
-| CIPHER | Structured augmentation to assist ethical researchers |
-| PTGroup, HPTSA | Multi-agent systems / hierarchical planning for zero-day exploitation |
-| HackSynth, Pentest Copilot | Crafted prompts + LLM integration for pentest sub-tasks |
-| Happe & Cito | Feedback loop: LLM actions executed on a VM via SSH; raises misuse concerns |
-| Happe et al. (Wintermute) | Automated privilege escalation; GPT-4-turbo highest success rate with sufficient context/state |
-| PenHeal (Huang & Zhu) | Two-stage framework (Planner, Executor, Estimator, Advisor, Evaluator) using counterfactual prompting + Group Knapsack Algorithm for remediation prioritization |
+| **Al-Sinani & Mitchell** [3] | AI-augmented ethical hacking; examining GPT-4 across ethical hacking phases (reconnaissance, manual exploitation, Linux privilege escalation) |
+| **AUTOATTACKER** [56] | LLM-automated post-breach ("keyboard-operated") activities via modular design, planning, summarization, and Metasploit |
+| **BreachSeek** [4] | Multi-agent automated penetration tester for simulating cyberattacks |
+| **CIPHER** [48] | Cybersecurity intelligent penetration-testing helper providing structured augmentation to assist ethical researchers |
+| **PTGroup** [55], **HPTSA** [20] | Multi-agent systems / multiple prompt chains / hierarchical planning for zero-day vulnerability exploitation |
+| **HackSynth** [41], **Pentest Copilot** [23] | Crafted prompts + LLM integration for automating penetration testing sub-tasks |
+| **Happe & Cito** [27] | Feedback loop where LLM actions are executed on a VM via SSH for high-level planning & low-level vulnerability hunting; raises misuse concerns |
+| **Happe et al. (Wintermute)** [29] | Automated Linux privilege escalation attacks in simulation; GPT-4-turbo achieves highest success rate with sufficient context & state mechanisms |
+| **PenHeal (Huang & Zhu)** [31] | Two-stage LLM framework (Planner, Executor, Estimator, Advisor, Evaluator) using counterfactual prompting + Group Knapsack Algorithm for optimal remediation prioritization |
 
 ⚠️ **Common limitations across prior approaches:**
-- Dependency on detailed vulnerability descriptions (e.g. CVE data)
-- Instability/variability across tasks and environments
-- Reliance on human intervention for complex/end-to-end scenarios
-- Weak long-term planning and adaptability in dynamic environments
+- Dependency on detailed vulnerability descriptions (e.g. CVE data) for effective exploitation
+- Instability and performance variability across different tasks and environments
+- Reliance on human intervention for complex or end-to-end penetration testing scenarios
+- Weak long-term planning and adaptability in dynamic environments; difficulty for fully autonomous agents in achieving consistent, reliable results
 
 ### 7.3 Application of LLM in Cybersecurity
 
-- **Cycle** — iterative self-refinement for code generation
-- **Guan et al.** — LLMs detecting model-optimization bugs in DL libraries
-- **Fang et al.** — LLMs exploiting recently disclosed vulnerabilities at high success rates
-- **SecurityBot** — LLM + reinforcement learning for cybersecurity operations
-- **AURORA** — automated orchestration of APT attack campaigns
-- **PTHelper** — integrates AI with state-of-the-art pentesting tools
+- **Cycle** [16] — learning to self-refine code generation through iterative refinement
+- **Guan et al.** [24] — leveraging LLMs with domain knowledge-aware prompts to explore model-optimization bugs in deep learning libraries
+- **Fang et al.** — LLMs exploiting recently disclosed vulnerabilities with high success rates
+- **SecurityBot** [57] — mentoring LLMs with reinforcement learning agents to become masters in cybersecurity games/operations
+- **AURORA** [52] — automated full-life-cycle cyberattack construction and orchestration of APT attack campaigns with LLMs
+- **PTHelper** [12] — open-source tool supporting penetration testing by integrating AI with state-of-the-art tools
 
 ---
 

@@ -204,7 +204,20 @@ Three representative architectural families: human-in-the-loop copilots (Pentest
 
 ### 3.2 Findings
 
-Table 2 summarizes task completion rates across all system-model-benchmark combinations (see below).
+Table 2 summarizes task completion rates across all system-model-benchmark combinations.
+
+**Table 2: Task completion rates across systems, models, and benchmarks**
+
+*XBOW: task completion (%); PentestGPT Benchmark: machines rooted (/13); GOAD: hosts compromised (/5).*
+
+| System | XBOW: GPT-4o | XBOW: GPT-5 | XBOW: Gem. | XBOW: Claude | Pentest-Ben: GPT-4o | Pentest-Ben: GPT-5 | Pentest-Ben: Gem. | Pentest-Ben: Claude | GOAD: GPT-4o | GOAD: GPT-5 | GOAD: Gem. | GOAD: Claude |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| PentestGPT | 27 | 42 | 36 | 39 | 5 | 7 | 6 | 6 | 0 | 1 | 1 | 1 |
+| AutoPT | 28 | 40 | 35 | 37 | 4 | 7 | 6 | 6 | 0 | 1 | 0 | 0 |
+| PentestAgent | 34 | 49 | 42 | 46 | 6 | 7 | 6 | 6 | 0 | 1 | 0 | 1 |
+| VulnBot | 39 | 45 | 44 | 46 | 6 | 8 | 6 | 7 | 0 | 1 | 0 | 1 |
+| Cochise | 34 | 43 | 39 | 39 | 4 | 4 | 4 | 4 | 1 | 2 | 2 | 2 |
+
 
 #### 3.2.1 Agent Architecture Convergence
 
@@ -312,7 +325,10 @@ An agent tracking these signals can decide when to persist, when to pivot, and w
 
 **Current systems uniformly lack this capability:**
 - PentestGPT's Penetration Testing Tree (PTT) tracks attack structure but provides no difficulty metrics to guide search
-- AutoPT's Pentesting State Machine (PSM) enforces phase transitions
+- AutoPT's Pentesting State Machine (PSM) enforces phase transitions but does not assess path complexity
+- TermiAgent's memory tree improves context management but does not inform exploration-exploitation decisions
+
+> None of these systems can answer the question that matters most: *is this path worth pursuing?*
 
 
 #### 3.3.2 Design Implications
