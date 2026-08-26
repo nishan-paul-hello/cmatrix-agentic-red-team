@@ -1,12 +1,13 @@
 
 # Automated Penetration Testing with LLM Agents and Classical Planning
 
-**Authors:** Lingzhi Wang, Xinyi Shi, Ziyu Li, Yi Jiang, Shiyu Tan, Yuhao Jiang, Junjie Cheng, Wenyuan Chen, Xiangmin Shen, Zhenyuan Li, Yan Chen
-**Affiliations:** Northwestern University, Zhejiang University, Hofstra University
+**Authors:** Lingzhi Wang\*, Xinyi Shi\*, Ziyu Li\*, Yi Jiang†, Shiyu Tan†, Yuhao Jiang\*, Junjie Cheng†, Wenyuan Chen†, Xiangmin Shen‡, Zhenyuan Li†, Yan Chen\*  
+**Affiliations:** \*Northwestern University, †Zhejiang University, ‡Hofstra University  
+**Preprint:** arXiv:2512.11143v1 [cs.CR] 11 Dec 2025  
 
 ## 📌 Abstract
 
-> Fully automated, "hands-off-the-keyboard" penetration testing remains an unsolved research challenge despite pentesting's central role in cybersecurity.
+> While penetration testing plays a vital role in cybersecurity, achieving fully automated, hands-off-the-keyboard execution remains a significant research challenge. In this paper, we introduce the "Planner-Executor-Perceptor (PEP)" design paradigm and use it to systematically review existing work and identify the key challenges in this area. We also evaluate existing penetration testing systems, with a particular focus on the use of Large Language Model (LLM) agents for this task. The results show that the out-of-the-box Claude Code and Sonnet 4.5 exhibit superior penetration capabilities observed to date, substantially outperforming all prior systems. However, a detailed analysis of their testing processes reveals specific strengths and limitations; notably, LLM agents struggle with maintaining coherent long-horizon plans, performing complex reasoning, and effectively utilizing specialized tools. These limitations significantly constrain its overall capability, efficiency, and stability. To address these limitations, we propose CHECKMATE, a framework that integrates enhanced classical planning with LLM agents, providing an external, structured "brain" that mitigates the inherent weaknesses of LLM agents. Our evaluation shows that CHECKMATE outperforms the state-of-the-art system (Claude Code) in penetration capability, improving benchmark success rates by over 20%. In addition, it delivers substantially greater stability, cutting both time and monetary costs by more than 50%.
 
 - Introduces the **Planner-Executor-Perceptor (PEP)** design paradigm to systematically review existing automated pentesting work.
 - Evaluates existing pentesting systems, focusing on **LLM agents**.
@@ -19,7 +20,7 @@
 
 ---
 
-## 1. Introduction
+## I. Introduction
 
 ### 🔬 Background & Motivation
 
@@ -90,9 +91,9 @@ flowchart LR
 
 ---
 
-## 2. The PEP Paradigm and Related Work
+## II. The PEP Paradigm and Related Work
 
-### 2.1 The PEP Design Paradigm
+### A. The PEP Designing Paradigm for Pentesting Systems
 
 Automated pentesting systems are decomposed into three cooperating components, enabling independent analysis, improvement, and benchmarking:
 
@@ -167,7 +168,7 @@ Automated pentesting systems are decomposed into three cooperating components, e
 | AutoPentester | LLM + Modified Penetration Tree | LLM + RAG (articles) + Agents | LLM |
 | **CheckMate** | **Classical Planning+** | **LLM + Predefined Actions + Agents** | **LLM** |
 
-### 2.2 Classical Planning
+### B. Classical Planning
 
 - Operates on state representations defined explicitly by **predicates**; every action has clear **preconditions** and **effects**, so the planner always knows which actions are applicable.
 - **Guarantees:**
@@ -185,9 +186,9 @@ Automated pentesting systems are decomposed into three cooperating components, e
 
 ---
 
-## 3. Evaluation of Existing Pentesting Systems
+## III. Evaluation of Existing Pentesting Systems
 
-### 3.1 Experimental Methodology & Setup
+### A. Experimental Methodology & Setup
 
 #### Benchmark Datasets
 
@@ -222,7 +223,7 @@ Automated pentesting systems are decomposed into three cooperating components, e
 - Excluded: AUTOATTACKER, PENHEAL, XBOW (no released code); CHAINREACTOR (open-source but narrowly scoped to privilege escalation only); other toolkits lacking autonomous planning modules; traditional automated pentesting work (not reproducible / no automation).
 - **Minimal Human Intervention principle:** for systems that can't run fully hands-off, only essential interactions allowed (selecting default options, executing provided commands, reporting outcomes) — no external knowledge or guidance given.
 
-### 3.2 Comparative Evaluation of Existing Systems
+### B. Comparative Evaluation of Existing Systems
 
 - Additional out-of-the-box LLM agents evaluated: **Claude Code + Sonnet 4.5**, **Codex + o4-mini**, **Gemini Code Assistant + Gemini Pro 2.5**.
 - Same initial prompt/task description given to all; agents could use any standard Kali Linux tool; no extra hints or intervention.
@@ -230,7 +231,23 @@ Automated pentesting systems are decomposed into three cooperating components, e
 - For PENTESTGPT, PENTESTAGENT, CAI: most powerful supported LLM used for each.
 - Metric: percentage of targets reaching each milestone.
 
-**🖼️ Figure 1:** Bar/line chart comparing percentage of targets reaching each milestone (M1–M11) across all evaluated systems.
+**🖼️ Fig. 1:** Comparison of penetration capabilities of existing automated pentesting systems on Vulhub benchmark.
+
+*Approximate values below were measured directly from the bar-chart pixels (the source gives no printed numbers for this figure), so treat each as ±2–3 percentage points:*
+
+| Milestone | PentestGPT+o4-mini | PentestAgent+o4-mini | CAI+o4-mini | Codex+o4-mini | Gemini Code Assist+Gemini Pro 2.5 | Claude Code+Sonnet 4.5 |
+|---|---|---|---|---|---|---|
+| M1 | ~99% | ~100% | ~100% | ~97% | ~100% | ~100% |
+| M2 | ~29% | ~89% | ~76% | ~91% | ~95% | ~100% |
+| M3 | ~5% | ~64% | ~27% | ~46% | ~33% | ~99% |
+| M4 | ~1% | ~64% | ~16% | ~15% | ~9% | ~96% |
+| M5 | 0% | ~17% | ~5% | ~3% | ~3% | ~85% |
+| M6 | 0% | ~14% | 0% | 0% | 0% | ~75% |
+| M7 | 0% | 0% | 0% | 0% | 0% | ~64% |
+| M8 | 0% | 0% | 0% | 0% | 0% | ~33% |
+| M9 | 0% | 0% | 0% | 0% | 0% | ~32% |
+| M10 | 0% | 0% | 0% | 0% | 0% | ~9% |
+| M11 | 0% | 0% | 0% | ~2% | ~2% | ~4% |
 
 **Key findings:**
 - **Claude Code + Sonnet 4.5** consistently outperforms all other systems across almost all milestones.
@@ -244,7 +261,7 @@ Automated pentesting systems are decomposed into three cooperating components, e
 1. Out-of-the-box Claude Code + Sonnet 4.5 substantially outperforms all prior automated pentesting systems evaluated.
 2. Capability is not uniform across LLM code agents — Codex and Gemini Code Assist stall at basic scanning/enumeration, while Claude Code reliably performs many successful follow-on actions after initial discovery.
 
-### 3.3 Discussion on Capabilities and Limitations
+### C. Discussion on Capabilities and Limitations
 
 #### Ablation Experiment
 
@@ -266,48 +283,22 @@ To isolate the source of Claude Code's strong performance, two modified configur
 - Among LLM agents, **Claude Code stands out**:
   1. Codex and Gemini Code Assist discover narrower attack surfaces and favor slower/less effective approaches (e.g., excessive brute-forcing, path enumeration); Claude Code discovers broader attack surfaces.
   2. Codex and Gemini Code Assist show limited self-reflection/adjustment — they often fail to recognize unproductive routes and can remain stalled on the same approach.
+  3. Despite being explicitly instructed not to request human input, Codex and Gemini Code Assist frequently paused to request user decisions or inputs. Claude Code continuously monitors command execution, detects potential deadlocks, and autonomously terminates stalled processes to pursue alternative actions. Claude Code is even capable of parallel multitasking: it can start a new task while another is still running, and if the new task produces more valuable findings, it will automatically kill the previous ones.
 
-
-## 📊 Penetration Capability of Existing Systems (Vulhub Benchmark)
-
-🖼️ Figure: Bar chart comparing six automated pentesting systems (PentestGPT+o4-mini, PentestAgent+o4-mini, CAI+o4-mini, Codex+o4-mini, Gemini Code Assist+Gemini Pro 2.5, Claude Code+Sonnet 4.5) across milestones M1–M11. Approximate percentages:
-
-| System | M1 | M2 | M3 | M4 | M5 | M6 | M7 | M8 | M9 | M10 | M11 |
-|---|---|---|---|---|---|---|---|---|---|---|---|
-| PentestGPT+o4-mini | ~100 | ~30 | ~10 | ~0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| PentestAgent+o4-mini | ~100 | ~90 | ~55 | ~15 | ~5 | 0 | 0 | 0 | 0 | 0 | 0 |
-| CAI+o4-mini | ~95 | ~75 | ~35 | ~10 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| Codex+o4-mini | ~100 | ~30 | ~40 | ~5 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| Gemini Code Assist+Gemini Pro 2.5 | ~100 | ~95 | ~65 | ~65 | ~15 | ~10 | 0 | 0 | 0 | 0 | 0 |
-| **Claude Code+Sonnet 4.5** | ~100 | ~100 | ~95 | ~90 | ~85 | ~75 | ~65 | ~35 | ~35 | ~5 | ~5 |
-
-> 📌 **Key Point:** Claude Code + Sonnet 4.5 substantially outperforms all other baseline systems, being the only one to make meaningful progress past milestone M7.
-
----
-
-## ⚠️ Limitations of Claude Code
+#### ⚠️ Limitations of Claude Code
 
 Despite leading performance, three limitations were identified (which also exist in other LLM agents):
 
-### 1. Fails to Maintain a Coherent Attack Plan
-- Does not follow a consistent, strategic sequence of actions
-- Leads to repeated work, abandoned partial attempts, and unstable performance
-- Decision-making executes whatever action comes to "mind" first
-- **Example:** After identifying vulnerable applications, may search Metasploit, then abruptly switch to GitHub; may abandon a downloaded exploit script mid-way to write a new exploit for a different target
-- Even basic tasks like port scanning are inconsistent — full port scan in one session, top-1000 in another, a custom "common ports" list in another
-- **Consequence:** Diverges from optimal methodology, overlooks viable attack vectors, wastes time
+**1. Fails to maintain a coherent attack plan:** Claude Code does not follow a consistent, strategic sequence of actions, leading to repeated work, abandoned partial attempts, and unstable performance. Decision-making executes whatever action comes to "mind" first.
+- **Example:** After identifying vulnerable applications, may search Metasploit, then abruptly switch to GitHub; may abandon a downloaded exploit script mid-way to write a new exploit for a different target.
+- Even basic tasks like port scanning are inconsistent — full port scan in one session, top-1000 in another, a custom "common ports" list in another.
+- **Consequence:** Diverges from optimal methodology, overlooks viable attack vectors, wastes time.
 
-### 2. Struggles with Long-Term and Experience-Driven Reasoning
-- Multi-step reasoning (enumerate → identify exploits → select best) is difficult for LLMs
-- May skip enumeration/investigation and jump directly to exploit generation from internal knowledge
-  - Occasionally faster, but increases risk of hallucinated steps, inconsistent performance, wasted tokens
-- Struggles with **experience-driven reasoning** — leveraging subtle cues
-  - **Example:** A URL pattern like `/node/{number}` hints at a Drupal backend; a human pentester would immediately pivot to Drupal-specific attacks, but LLMs often miss this implicit link
+**2. Struggles with long-term and experience-driven reasoning:** Multi-step reasoning (enumerate → identify exploits → select best) is difficult for LLMs. May skip enumeration/investigation steps and jump directly to exploit generation from internal knowledge — occasionally faster, but increases risk of hallucinated steps, inconsistent performance, and wasted tokens. Also struggles with **experience-driven reasoning** — e.g., a URL pattern like `/node/{number}` hints at a Drupal backend; a human pentester pivots immediately to Drupal-specific attacks, but LLMs often miss this implicit link.
 
-### 3. Difficulty Using Specialized Pentesting Tools
-- Favors crafting custom scripts over established, specialized tools
-- **Example:** Generates custom `curl` commands instead of using the thousands of existing Nuclei scanning templates (broader, faster, more reliable)
-- Likely cause: specialized tools appear less frequently in LLM training data
+**3. Difficulty using specialized pentesting tools:** Favors crafting custom scripts over established, specialized tools.
+- **Example:** Generates custom `curl` commands instead of using the thousands of existing Nuclei scanning templates (broader, faster, more reliable).
+- Likely cause: specialized tools appear less frequently in LLM training data.
 
 ---
 
@@ -354,7 +345,7 @@ flowchart TB
     PARSE -- "Update" --> CS
 ```
 
-> 📌 The orange update arrow in the original figure represents the iterative loop of classical planning+, which is initialized before planning starts.
+> 📌 **Fig. 2:** Overview of CHECKMATE. The orange arrow shows the iterative loop of classical planning+. The current state is initialized before the planning starts.
 
 ### B. Predefined Attack Actions
 
@@ -409,27 +400,29 @@ Addresses limitations of traditional classical planning in **dynamic, non-determ
 #### Algorithm 1: Iterative Planning for Penetration Testing under Partial Knowledge
 
 ```text
-Input: Domain D with predefined actions, initial knowledge I0
-Initialize: S ← I0                     # Initial state from known info (e.g., IP)
-
-while termination condition not met and actions remain:
-    applicableActions ← {}
-    for all action a in domain D:
-        if a is reachable from state S:
-            seq ← plan(S, a)
-            applicableActions.add(seq.first())
-
-    nextAction ← LLM_Select(applicableActions)
-    result ← Execute(nextAction)
-
-    if nextAction has deterministic effects:
-        S ← S ∪ effects(nextAction)
-    else:
-        preds ← Parse_NonDeterministic_Effects(result)
-        S ← S ∪ preds
-
-if goal is not achieved:
-    Report failure: challenge unsolvable.
+Algorithm 1 Iterative Planning for Penetration Testing under Partial Knowledge
+1:  Input: Domain D with predefined actions, initial knowledge I_0
+2:  Initialize: S ← I_0                     ▷ Initial state from known information (e.g., IP)
+3:  while termination condition not met and actions remain do
+4:      applicableActions ← {}
+5:      for all action a in domain D do
+6:          if a is reachable from state S then
+7:              seq ← plan(S, a)
+8:              applicableActions.add(seq.first())
+9:          end if
+10:     end for
+11:     nextAction ← LLM Select(applicableActions)
+12:     result ← Execute(nextAction)
+13:     if nextAction has deterministic effects then
+14:         S ← S ∪ effects(nextAction)
+15:     else
+16:         preds ← Parse NonDeterministic Effects(result)
+17:         S ← S ∪ preds
+18:     end if
+19: end while
+20: if goal is not achieved then
+21:     Report failure: challenge unsolvable.
+22: end if
 ```
 
 ### D. Executor
@@ -456,14 +449,30 @@ Bridges executor and planner — analyzes heterogeneous execution results and tr
 
 ### A. Penetration Capability
 
-Using the same benchmark, metrics, and setup as prior evaluation (Section 3):
+Using the same benchmark, metrics, and setup as prior evaluation (Section III):
 
 - CHECKMATE demonstrates substantially stronger penetration capability than all baselines across all milestones
 - **88%** of CHECKMATE's attempts reach milestone **M7**, whereas prior work (except Claude Code) rarely progresses beyond M4
 - CHECKMATE outperforms Claude Code at higher milestones, especially **M6** and **M7** (executing exploits, obtaining a shell)
 - Attributed to fine-grained predefined actions + structured planning that avoids unproductive branches
 
-🖼️ Figure 4: Bar chart comparing Claude Code vs. CheckMate across M1–M11 on the Vulhub benchmark — CheckMate maintains high success rates (~85%+) through M7 and remains non-trivial through M9, while Claude Code drops off sharply after M4–M5.
+🖼️ Fig. 4: Comparison of Claude Code with CHECKMATE on Vulhub benchmark. (Baselines PentestGPT, CAI, and PentestAgent are also plotted for reference.)
+
+*Approximate values below were measured directly from the bar-chart pixels (the source gives no printed numbers for this figure beyond the "88% reach M7" callout in the text), so treat each as ±2–3 percentage points:*
+
+| Milestone | PentestGPT | CAI | PentestAgent | ClaudeCode | CheckMate |
+|---|---|---|---|---|---|
+| M1 | ~95% | ~96% | ~96% | ~96% | ~96% |
+| M2 | ~29% | ~73% | ~80% | ~96% | ~96% |
+| M3 | ~5% | ~26% | ~66% | ~94% | ~96% |
+| M4 | ~1% | ~15% | ~61% | ~92% | ~94% |
+| M5 | 0% | ~5% | ~17% | ~81% | ~86% |
+| M6 | 0% | 0% | ~17% | ~72% | ~85% |
+| M7 | 0% | 0% | 0% | ~61% | ~85% (text states 88%) |
+| M8 | 0% | 0% | 0% | ~33% | ~39% |
+| M9 | 0% | 0% | 0% | ~31% | ~39% |
+| M10 | 0% | 0% | 0% | ~9% | ~9% |
+| M11 | 0% | 0% | 0% | ~4% | ~5% |
 
 ### B. Efficiency
 
@@ -511,7 +520,7 @@ flowchart TD
     A9 --> ROOT["root-shell"]
 ```
 
-> 📌 Blue predicates link actions across iterations; yellow ovals denote non-deterministic effects (not shown as distinct nodes above but represented as "undetermined-effect"); light-green actions are those chosen by the planner for execution in that iteration.
+> 📌 **Fig. 3:** A pentesting workflow driven by classical planning+. Each panel shows one planning-execution-perception iteration. Blue rounded ovals are predicates that link actions across iterations; yellow rounded ovals denote non-deterministic action effects. Rectangular boxes list feasible actions available during the engagement, and light-green rectangles indicate the actions chosen by the planner for execution in that iteration. Arrows show how actions are connected with predicates. (Represented above as "undetermined-effect" nodes; the light-green/chosen-action distinction is not visually rendered in this Markdown reproduction.)
 
 ### C. Stability
 
@@ -559,40 +568,38 @@ flowchart LR
 ```mermaid
 flowchart TB
     subgraph CC["Claude Code Workflow"]
-        R1["Ping Target IP"] -.-> R2["nc scan port 1-100"] -.-> R3["nc scan port 1-1000"]
-        R4["Python scan port 1-100"] -.-> R5["Python scan port 1-10000<br/>(Found ActiveMQ on 8981)"]
-        R3 -.-> R6["nc scan common port"]
-        R6 -.-> R5
-        R5 --> Y1["Access webpage on 8981<br/>(Found ActiveMQ on 8981)"]
-        Y1 --> Y2["Search ActiveMQ exploit<br/>on searchsploit"]
-        Y1 --> Y3["Access webpage to<br/>identify ActiveMQ version"]
-        Y1 --> Y4["Try default credentials"]
-        Y3 --> Y5["Search ActiveMQ exploit<br/>on Metasploit"]
-        Y5 --> G1["Use exploit/windows/http/<br/>apache_activemq_traversal_upload"]
+        direction TB
+        R1["Ping Target IP"] -.-> R2["Nmap Scan"] -.-> R3["nc scan port 1-100"] -.-> R4["nc scan port 1-1000"]
+        R4 -.-> R5["nc scan common port"] -.-> R6["Python scan port 1-100"] -.-> R7["Python scan port 1-10000<br/>(Found ActiveMQ on 8981)"]
+        R7 --> Y1["Access webpage on 8981<br/>(Found ActiveMQ on 8981)"]
+        Y1 --> Y2["Search ActiveMQ-related<br/>exploit on searchsploit"]
+        Y2 --> Y3["Access webpage to<br/>identify ActiveMQ version"]
+        Y3 --> Y4["Try default credentials"]
+        Y4 --> Y5["Access webpage to<br/>identify ActiveMQ version"]
+        Y5 --> Y6["Search ActiveMQ-related<br/>exploit on Metasploit"]
+        Y6 --> G1["Use exploit/windows/http/<br/>apache_activemq_traversal_upload<br/>in Metasploit"]
         G1 --> G2["Configure the exploit module"]
-        G2 --> G3["Use multi/http/apache_<br/>activemq_upload_jsp"]
-        Y2 --> G4["Try 40857 found<br/>by searchsploit"]
-        G3 --> G5["Upload JSP webshell<br/>using Metasploit exploit"]
-        G4 --> G6["Find other endpoints to<br/>upload JSP webshell"]
-        G6 --> G7["Use exploit/multi/http/<br/>apache_activemq_upload_jsp"]
-        G5 --> G8["Access uploaded webshell: Failed"]
-        G7 --> G8
-        G8 --> B1["Review Metasploit exploit code;<br/>implement streamlined Python exploit<br/>(Failed)"]
-        B1 --> B2["Analyze Metasploit exploit;<br/>develop minimal Python exploit<br/>replicating logic (Failed)"]
-        B2 --> B3["Read 42283 in searchsploit: Finished"]
-        B2 --> B4["Write exploit script based on that: Finished"]
-        B3 --> B5["Create reliable interactive<br/>shell wrapper in Python: Finished"]
-        B4 --> B5
-        B5 --> B6["Connect with the webshell: Success"]
+        G2 --> G3["Upload JSP webshell<br/>using Metasploit exploit"]
+        G3 --> G4["Try 40857 found<br/>by searchsploit"]
+        G4 --> G5["Use multi/http/<br/>apache_activemq_upload_jsp:"]
+        G5 --> G6["Find other endpoints to<br/>upload JSP webshell"]
+        G6 --> G7["Use exploit/multi/http/<br/>apache_activemq_upload_jsp<br/>in Metasploit"]
+        G7 --> G8["Access the uploaded webshell:<br/>Failed"]
+        G8 --> B1["Review the Metasploit exploit code to understand its file-upload<br/>mechanism; then implement a streamlined Python-based exploit following<br/>the same logic and establish a reverse shell. (Failed result)"]
+        B1 --> B2["Analyze the Metasploit exploit to understand its file-upload routine,<br/>then develop a minimal Python exploit that replicates this logic and<br/>spawns a reverse shell. (Failed)"]
+        B2 --> B3["Write an exploit script based on that:<br/>Finished"]
+        B3 --> B4["Read 42283 in searchsploit:<br/>Finished"]
+        B4 --> B5["Create a more reliable interactive shell<br/>wrapper in Python: Finished"]
+        B5 --> B6["Connect with the webshell:<br/>Success"]
     end
 ```
 
-> 📌 Color key from original figure: pink = reconnaissance, yellow = search/analysis, green = Metasploit/SearchSploit exploitation (failed), blue = autonomous exploitation (eventually succeeded).
+> 📌 **Fig. 6:** Top box: CHECKMATE's workflow. Bottom box: Claude Code's workflow. Colors show stages. Pink: reconnaissance, yellow: search/analysis, green: Metasploit/SearchSploit exploitation (failed), blue: autonomous exploitation.
 
 
 Claude Code also struggled to remain focused on a single attack path. While attempting to determine the ActiveMQ version, it would abruptly switch to trying the default-credential brute force. After selecting and spending a long time configuring a Metasploit module, it might suddenly divert to investigating another script found on Exploit-DB, creating needless context switches and time loss. Finally, because Claude Code lacked explicit, structured reasoning, it failed to map the discovered ActiveMQ version to the most appropriate CVE. As a result, it missed the more effective Metasploit module and wasted excessive time on two suboptimal exploits.
 
-## 🔬 E. Ablation Study
+### 🔬 E. Ablation Study
 
 CHECKMATE is compared against two commonly used strategies for enhancing LLM-based systems:
 
@@ -610,7 +617,7 @@ CHECKMATE is compared against two commonly used strategies for enhancing LLM-bas
 | ClaudeCode+Structured Plan | $1.11 [0.53, 1.39] | 10.6 [7.4, 17.2] |
 | ClaudeCode | $1.43 [1.02, 1.88] | 12.7 [10.5, 19.3] |
 
-*Fig. 7: Cost and time comparison. Error bars represent the interquartile range (25th–75th percentile).*
+*Fig. 7: Cost and time comparison. (a) Median API costs in USD. (b) Median execution time in minutes. Error bars represent the interquartile range (25th–75th percentile).*
 
 CHECKMATE achieves the lowest overall cost and shortest execution time, while delivering the most consistent and efficient performance across test cases. RAG and structured planning files can enhance LLM agent efficiency, but classical planning+ provides the most substantial gains in both efficiency and consistency.
 
@@ -651,56 +658,56 @@ Existing pentesting systems struggle with rich human-computer interaction, since
 
 ## 📚 References
 
-1. Cybersecurity and Infrastructure Security Agency, "Penetration testing services," U.S. Department of Homeland Security, 2023.
-2. MarketsandMarkets, "Penetration testing market size, growth & latest trends," 2024.
-3. MarketsandMarkets, "Penetration testing as a service market size & share analysis," 2024.
-4. Mayoral-Vilches et al., "Cai: An open, bug bounty-ready cybersecurity ai," arXiv:2504.06017, 2025.
-5. Wu et al., "Autopt: How far are we from the end2end automated web penetration testing?" arXiv:2411.01236, 2024.
-6. Sarraute, Buffet, Hoffmann, "Pomdps make better hackers: Accounting for uncertainty in penetration testing," AAAI, 2012.
-7. Hoffmann, "Simulated penetration testing: from 'dijkstra' to 'turing test++'," ICAPS, 2015.
-8. Mirzadeh et al., "Gsm-symbolic: Understanding the limitations of mathematical reasoning in large language models," arXiv:2410.05229, 2024.
-9. Lin et al., "Zebralogic: On the scaling limits of llms for logical reasoning," arXiv:2502.01100, 2025.
-10. Yamin et al., "Failure modes of llms for causal reasoning on narratives," arXiv:2410.23884, 2024.
-11. Chi et al., "Unveiling causal reasoning in large language models: Reality or mirage?" NeurIPS, 2024.
-12. Liu et al., "Large language model-based agents for software engineering: A survey," arXiv:2409.02977, 2024.
-13. Jin et al., "From llms to llm-based agents for software engineering: A survey of current, challenges and future," arXiv:2408.02479, 2024.
-14. Wang et al., "Agents in software engineering: Survey, landscape, and vision," Automated Software Engineering, 2025.
-15. Ullah et al., "Llms cannot reliably identify and reason about security vulnerabilities (yet?)," IEEE S&P, 2024.
-16. Guo et al., "Repoaudit: An autonomous llm-agent for repository-level code auditing," arXiv:2501.18160, 2025.
-17. Rahman et al., "Llm-based data science agents: A survey of capabilities, challenges, and future directions," arXiv:2510.04023, 2025.
-18. Anthropic, "Claude code," 2025.
-19. Ghallab, Nau, Traverso, *Automated Planning: theory and practice*, Elsevier, 2004.
-20. "Vulhub: Open-source vulnerable docker environments."
-21. Schwartz, Kurniawati, El-Mahassni, "Pomdp+ information-decay: Incorporating defender's behaviour in autonomous penetration testing," ICAPS, 2020.
-22. Sarraute, Buffet, Hoffmann, "Penetration testing== pomdp solving?" arXiv:1306.4714, 2013.
-23. Schwartz, Kurniawati, "Autonomous penetration testing using reinforcement learning," arXiv:1905.05965, 2019.
-24. Ghanem, Chen, Nepomuceno, "Hierarchical reinforcement learning for efficient and effective automated penetration testing of large networks," Journal of Intelligent Information Systems, 2023.
-25. Zhou et al., "Autonomous penetration testing based on improved deep q-network," Applied Sciences, 2021.
-26. De Pasquale et al., "ChainReactor: Automated privilege escalation chain discovery via AI planning," USENIX Security, 2024.
-27. Obes, Sarraute, Richarte, "Attack planning in the real world," arXiv:1306.4044, 2013.
-28. Chen et al., "A survey on penetration path planning in automated penetration testing," Applied Sciences, 2024.
-29. Wang et al., "An automatic planning-based attack path discovery approach from it to ot networks," Security and Communication Networks, 2021.
-30. Deng et al., "PentestGPT: Evaluating and harnessing large language models for automated penetration testing," USENIX Security, 2024.
-31. Armur-Ai, "Auto-pentest-gpt-ai: Llm powered pentesting for your software," 2025.
-32. Huang, Zhu, "Penheal: A two-stage llm framework for automated pentesting and optimal remediation," Workshop on Autonomous Cybersecurity, 2023.
-33. Xu et al., "Autoattacker: A large language model guided system to implement automatic cyber-attacks," arXiv:2403.01038, 2024.
-34. Kong et al., "Vulnbot: Autonomous penetration testing for a multi-agent collaborative framework," arXiv:2501.13411, 2025.
-35. GH05TCREW, "Pentestagent: All-in-one offensive security toolbox with ai agent and mcp architecture," 2025.
-36. Wang et al., "Opencua: Open foundations for computer-use agents," arXiv:2508.09123, 2025.
-37. Yang et al., "Gta1: Gui test-time scaling agent," arXiv:2507.05791, 2025.
-38. Blum, Furst, "Fast planning through planning graph analysis," Artificial Intelligence, 1997.
-39. Kambhampati et al., "Llms can't plan, but can help planning in llm-modulo frameworks," arXiv:2402.01817, 2024.
-40. Cao et al., "Large language models for planning: A comprehensive and systematic survey," arXiv:2505.19683, 2025.
-41. Zhang et al., "Mitigating spatial hallucination in large language models for path planning via prompt engineering," Scientific Reports, 2025.
-42. Ji et al., "Testing and understanding erroneous planning in llm agents through synthesized user inputs," arXiv:2404.17833, 2024.
-43. Yao et al., "Are reasoning models more prone to hallucination?" arXiv:2505.23646, 2025.
-44. Liu et al., "Lost in the middle: How language models use long contexts," TACL, 2024.
-45. Shen et al., "Pentestagent: Incorporating llm agents to automated penetration testing," ACM ASIACCS, 2025.
-46. "picoCTF."
-47. "Hack The Box."
-48. Shao et al., "Nyu ctf bench: A scalable open-source benchmark dataset for evaluating llms in offensive security," NeurIPS, 2024.
-49. Ginige et al., "Autopentester: An llm agent-based framework for automated pentesting," arXiv:2510.05605, 2025.
-50. "Xbow: Ai-powered penetration testing platform," XBOW USA Inc., 2025.
-51. 0x4m4, "Hexstrike ai mcp agents," 2025.
-52. OpenAI, "Openai codex," 2025.
-53. Google, "Code assist," 2025.
+1. Cybersecurity and Infrastructure Security Agency, "Penetration testing services," https://www.cisa.gov/resources-tools/services/penetration-testing, 2023, U.S. Department of Homeland Security.
+2. MarketsandMarkets, "Penetration testing market size, size, growth & latest trends," https://www.marketsandmarkets.com/Market-Reports/penetration-testing-market-13422019.html, 2024, accessed: 2025-10-03.
+3. MarketsandMarkets, "Penetration testing as a service market size & share analysis – global forecast to 2029," https://www.marketsandmarkets.com/Market-Reports/penetration-testing-as-a-service-market-36245315.html, 2024, accessed: 2025-10-03.
+4. V. Mayoral-Vilches, L. J. Navarrete-Lozano, M. Sanz-Gómez, L. S. Espejo, M. Crespo-Álvarez, F. Oca-Gonzalez, F. Balassone, A. Glera-Picón, U. Ayucar-Carbajo, J. A. Ruiz-Alcalde, S. Rass, M. Pinzger, and E. Gil-Uriarte, "Cai: An open, bug bounty-ready cybersecurity ai," 2025. [Online]. Available: https://arxiv.org/abs/2504.06017
+5. B. Wu, G. Chen, K. Chen, X. Shang, J. Han, Y. He, W. Zhang, and N. Yu, "Autopt: How far are we from the end2end automated web penetration testing?" arXiv preprint arXiv:2411.01236, 2024.
+6. C. Sarraute, O. Buffet, and J. Hoffmann, "Pomdps make better hackers: Accounting for uncertainty in penetration testing," in Proceedings of the AAAI Conference on Artificial Intelligence, vol. 26, no. 1, 2012, pp. 1816–1824.
+7. J. Hoffmann, "Simulated penetration testing: from 'dijkstra' to 'turing test++'," in Proceedings of the international conference on automated planning and scheduling, vol. 25, 2015, pp. 364–372.
+8. I. Mirzadeh, K. Alizadeh, H. Shahrokhi, O. Tuzel, S. Bengio, and M. Farajtabar, "Gsm-symbolic: Understanding the limitations of mathematical reasoning in large language models," arXiv preprint arXiv:2410.05229, 2024.
+9. B. Y. Lin, R. L. Bras, K. Richardson, A. Sabharwal, R. Poovendran, P. Clark, and Y. Choi, "Zebralogic: On the scaling limits of llms for logical reasoning," arXiv preprint arXiv:2502.01100, 2025.
+10. K. Yamin, S. Gupta, G. R. Ghosal, Z. C. Lipton, and B. Wilder, "Failure modes of llms for causal reasoning on narratives," arXiv preprint arXiv:2410.23884, 2024.
+11. H. Chi, H. Li, W. Yang, F. Liu, L. Lan, X. Ren, T. Liu, and B. Han, "Unveiling causal reasoning in large language models: Reality or mirage?" Advances in Neural Information Processing Systems, vol. 37, pp. 96 640–96 670, 2024.
+12. J. Liu, K. Wang, Y. Chen, X. Peng, Z. Chen, L. Zhang, and Y. Lou, "Large language model-based agents for software engineering: A survey," arXiv preprint arXiv:2409.02977, 2024.
+13. H. Jin, L. Huang, H. Cai, J. Yan, B. Li, and H. Chen, "From llms to llm-based agents for software engineering: A survey of current, challenges and future," arXiv preprint arXiv:2408.02479, 2024.
+14. Y. Wang, W. Zhong, Y. Huang, E. Shi, M. Yang, J. Chen, H. Li, Y. Ma, Q. Wang, and Z. Zheng, "Agents in software engineering: Survey, landscape, and vision," Automated Software Engineering, vol. 32, no. 2, pp. 1–36, 2025.
+15. S. Ullah, M. Han, S. Pujar, H. Pearce, A. Coskun, and G. Stringhini, "Llms cannot reliably identify and reason about security vulnerabilities (yet?): A comprehensive evaluation, framework, and benchmarks," in 2024 IEEE Symposium on Security and Privacy (SP). IEEE, 2024, pp. 862–880.
+16. J. Guo, C. Wang, X. Xu, Z. Su, and X. Zhang, "Repoaudit: An autonomous llm-agent for repository-level code auditing," arXiv preprint arXiv:2501.18160, 2025.
+17. M. Rahman, A. Bhuiyan, M. S. Islam, M. T. R. Laskar, R. Mahbub, A. Masry, S. Joty, and E. Hoque, "Llm-based data science agents: A survey of capabilities, challenges, and future directions," arXiv preprint arXiv:2510.04023, 2025.
+18. Anthropic, "Claude code," https://www.claude.com/product/claude-code, 2025, accessed: 2025-11-07.
+19. M. Ghallab, D. Nau, and P. Traverso, *Automated Planning: theory and practice*. Elsevier, 2004.
+20. "Vulhub: Open-source vulnerable docker environments," https://vulhub.org/, accessed: 2025-12-04.
+21. J. Schwartz, H. Kurniawati, and E. El-Mahassni, "Pomdp+ information-decay: Incorporating defender's behaviour in autonomous penetration testing," in Proceedings of the International Conference on Automated Planning and Scheduling, vol. 30, 2020, pp. 235–243.
+22. C. Sarraute, O. Buffet, and J. Hoffmann, "Penetration testing== pomdp solving?" arXiv preprint arXiv:1306.4714, 2013.
+23. J. Schwartz and H. Kurniawati, "Autonomous penetration testing using reinforcement learning," arXiv preprint arXiv:1905.05965, 2019.
+24. M. C. Ghanem, T. M. Chen, and E. G. Nepomuceno, "Hierarchical reinforcement learning for efficient and effective automated penetration testing of large networks," Journal of Intelligent Information Systems, vol. 60, no. 2, pp. 281–303, 2023.
+25. S. Zhou, J. Liu, D. Hou, X. Zhong, and Y. Zhang, "Autonomous penetration testing based on improved deep q-network," Applied Sciences, vol. 11, no. 19, p. 8823, 2021.
+26. G. D. Pasquale, I. Grishchenko, R. Iesari, G. Pizarro, L. Cavallaro, C. Kruegel, and G. Vigna, "ChainReactor: Automated privilege escalation chain discovery via AI planning," in 33rd USENIX Security Symposium (USENIX Security 24). Philadelphia, PA: USENIX Association, Aug. 2024, pp. 5913–5929. [Online]. Available: https://www.usenix.org/conference/usenixsecurity24/presentation/de-pasquale
+27. J. L. Obes, C. Sarraute, and G. Richarte, "Attack planning in the real world," arXiv preprint arXiv:1306.4044, 2013.
+28. Z. Chen, F. Kang, X. Xiong, and H. Shu, "A survey on penetration path planning in automated penetration testing," Applied Sciences, vol. 14, no. 18, p. 8355, 2024.
+29. Z. Wang, Y. Zhang, Z. Liu, X. Wei, Y. Chen, and B. Wang, "An automatic planning-based attack path discovery approach from it to ot networks," Security and Communication Networks, vol. 2021, no. 1, p. 1444182, 2021.
+30. G. Deng, Y. Liu, V. Mayoral-Vilches, P. Liu, Y. Li, Y. Xu, T. Zhang, Y. Liu, M. Pinzger, and S. Rass, "PentestGPT: Evaluating and harnessing large language models for automated penetration testing," in 33rd USENIX Security Symposium (USENIX Security 24), 2024, pp. 847–864.
+31. Armur-Ai, "Auto-pentest-gpt-ai: Llm powered pentesting for your software," https://github.com/Armur-Ai/Auto-Pentest-GPT-AI, 2025, accessed: 2025-10-16.
+32. J. Huang and Q. Zhu, "Penheal: A two-stage llm framework for automated pentesting and optimal remediation," in Proceedings of the workshop on autonomous cybersecurity, 2023, pp. 11–22.
+33. J. Xu, J. W. Stokes, G. McDonald, X. Bai, D. Marshall, S. Wang, A. Swaminathan, and Z. Li, "Autoattacker: A large language model guided system to implement automatic cyber-attacks," arXiv preprint arXiv:2403.01038, 2024.
+34. H. Kong, D. Hu, J. Ge, L. Li, T. Li, and B. Wu, "Vulnbot: Autonomous penetration testing for a multi-agent collaborative framework," arXiv preprint arXiv:2501.13411, 2025.
+35. GH05TCREW, "Pentestagent: All-in-one offensive security toolbox with ai agent and mcp architecture," https://github.com/GH05TCREW/PentestAgent, 2025, accessed: 2025-10-16.
+36. X. Wang, B. Wang, D. Lu, J. Yang, T. Xie, J. Wang, J. Deng, X. Guo, Y. Xu, C. H. Wu et al., "Opencua: Open foundations for computer-use agents," arXiv preprint arXiv:2508.09123, 2025.
+37. Y. Yang, D. Li, Y. Dai, Y. Yang, Z. Luo, Z. Zhao, Z. Hu, J. Huang, A. Saha, Z. Chen et al., "Gta1: Gui test-time scaling agent," arXiv preprint arXiv:2507.05791, 2025.
+38. A. L. Blum and M. L. Furst, "Fast planning through planning graph analysis," Artificial intelligence, vol. 90, no. 1-2, pp. 281–300, 1997.
+39. S. Kambhampati, K. Valmeekam, L. Guan, M. Verma, K. Stechly, S. Bhambri, L. Saldyt, and A. Murthy, "Llms can't plan, but can help planning in llm-modulo frameworks," arXiv preprint arXiv:2402.01817, 2024.
+40. P. Cao, T. Men, W. Liu, J. Zhang, X. Li, X. Lin, D. Sui, Y. Cao, K. Liu, and J. Zhao, "Large language models for planning: A comprehensive and systematic survey," arXiv preprint arXiv:2505.19683, 2025.
+41. H. Zhang, H. Deng, J. Ou, and C. Feng, "Mitigating spatial hallucination in large language models for path planning via prompt engineering," Scientific Reports, vol. 15, no. 1, p. 8881, 2025.
+42. Z. Ji, D. Wu, P. Ma, Z. Li, and S. Wang, "Testing and understanding erroneous planning in llm agents through synthesized user inputs," arXiv preprint arXiv:2404.17833, 2024.
+43. Z. Yao, Y. Liu, Y. Chen, J. Chen, J. Fang, L. Hou, J. Li, and T.-S. Chua, "Are reasoning models more prone to hallucination?" arXiv preprint arXiv:2505.23646, 2025.
+44. N. F. Liu, K. Lin, J. Hewitt, A. Paranjape, M. Bevilacqua, F. Petroni, and P. Liang, "Lost in the middle: How language models use long contexts," Transactions of the Association for Computational Linguistics, vol. 12, pp. 157–173, 2024.
+45. X. Shen, L. Wang, Z. Li, Y. Chen, W. Zhao, D. Sun, J. Wang, and W. Ruan, "Pentestagent: Incorporating llm agents to automated penetration testing," in Proceedings of the 20th ACM Asia Conference on Computer and Communications Security, 2025, pp. 375–391.
+46. "picoCTF," https://picoctf.org/, accessed: 2025-12-04.
+47. "Hack The Box," https://www.hackthebox.com/, accessed: 2025-12-04.
+48. M. Shao, S. Jancheska, M. Udeshi, B. Dolan-Gavitt, K. Milner, B. Chen, M. Yin, S. Garg, P. Krishnamurthy, F. Khorrami et al., "Nyu ctf bench: A scalable open-source benchmark dataset for evaluating llms in offensive security," Advances in Neural Information Processing Systems, vol. 37, pp. 57 472–57 498, 2024.
+49. Y. Ginige, A. Niroshan, S. Jain, and S. Seneviratne, "Autopentester: An llm agent-based framework for automated pentesting," arXiv preprint arXiv:2510.05605, 2025.
+50. "Xbow: Ai-powered penetration testing platform," https://xbow.com/, XBOW USA Inc., 2025, accessed: 2025-10-16.
+51. 0x4m4, "Hexstrike ai mcp agents," https://github.com/0x4m4/hexstrike-ai, 2025, accessed: 2025-10-16.
+52. OpenAI, "Openai codex," https://openai.com/codex/, 2025, accessed: 2025-11-07.
+53. Google, "Code assist," https://codeassist.google/, 2025, accessed: 2025-11-07.
