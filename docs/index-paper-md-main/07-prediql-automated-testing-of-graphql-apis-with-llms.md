@@ -208,7 +208,7 @@ Schema knowledge constrains the LLM → adaptive generation explores diverse que
 
 ## 4. Evaluation
 
-Implementation is open-source (repo linked in paper). Research questions:
+Implementation is open-source (https://github.com/SLL288/prediql). Research questions:
 
 - **RQ1.** Can LLMs be guided to synthesize valid yet adversarial GraphQL queries that systematically expand schema coverage vs. schema-only or random fuzzing?
 - **RQ2.** How do prompt engineering and context enrichment contribute to improved schema coverage?
@@ -269,7 +269,7 @@ Implementation is open-source (repo linked in paper). Research questions:
 
 ## 📊 4.2 Schema Coverage (RQ1)
 
-**Table 4: Coverage comparison — PrediQL vs. baselines**
+**Table 4: Coverage comparison — PrediQL vs. baselines** *(Tests that could not be executed are marked as FAILED.)*
 
 | API | ZAP | Burp | EvoMaster | GraphQLer | PrediQL |
 |---|---|---|---|---|---|
@@ -437,7 +437,7 @@ Ablation study isolating the contribution of each prompt enrichment component to
 20. Cavenaghi, E., et al. Non-stationary multi-armed bandit: empirical evaluation of f-discounted-sliding-window Thompson sampling. Entropy 23, 3 (2021), 380
 21. Chen, C., Dolan-Gavitt, B., and Lin, Z. Elfuzz: efficient input generation via LLM-driven synthesis over fuzzer space. USENIX Security (2025)
 22. Deng, Y., Xia, C. S., Peng, H., Yang, C., and Zhang, L. Large language models are zero-shot fuzzers. arXiv:2212.14834 (2022)
-23. Douze, M., et al. The FAISS library
+23. Douze, M., Guzhva, A., Deng, C., Johnson, J., Szilvasy, G., Mazaré, P.-E., Lomeli, M., Hosseini, L., and Jégou, H. The FAISS library
 24. Doyensec. CrackQL: GraphQL security testing tool. https://github.com/doyensec/CrackQL, 2021
 25. Escape. The state of GraphQL security 2024. Escape Technologies, 2024
 26. Escape Technologies. GraphQL-Cop: security scanner for GraphQL APIs. https://github.com/escape-technologies/graphql-cop, 2023
