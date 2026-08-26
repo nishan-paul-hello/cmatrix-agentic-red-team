@@ -1,9 +1,22 @@
 
 # MetaGPT: Meta Programming for a Multi-Agent Collaborative Framework
 
-**Authors:** Sirui Hong, Mingchen Zhuge, Jiaqi Chen, Xiawu Zheng, Yuheng Cheng, Ceyao Zhang, Jinlin Wang, Zili Wang, Steven Ka Shing Yau, Zijuan Lin, Liyang Zhou, Chenyu Ran, Lingfeng Xiao, Chenglin Wu, Jürgen Schmidhuber
+**Authors:** Sirui Hong¹\*, Mingchen Zhuge²\*, Jiaqi Chen¹, Xiawu Zheng³, Yuheng Cheng⁴, Ceyao Zhang⁴, Jinlin Wang¹, Zili Wang, Steven Ka Shing Yau⁵, Zijuan Lin⁴, Liyang Zhou⁶, Chenyu Ran¹, Lingfeng Xiao¹'⁷, Chenglin Wu¹†, Jürgen Schmidhuber²,⁸
 
-**Venue:** Published as a conference paper at ICLR 2024
+**Affiliations:**
+¹ DeepWisdom  
+² AI Initiative, King Abdullah University of Science and Technology  
+³ Xiamen University  
+⁴ The Chinese University of Hong Kong, Shenzhen  
+⁵ Nanjing University  
+⁶ University of Pennsylvania  
+⁷ University of California, Berkeley  
+⁸ The Swiss AI Lab IDSIA/USI/SUPSI  
+
+\* Equal contribution.  
+† Corresponding author: Chenglin Wu (`alexanderwu@fuzhi.ai`), affiliated with DeepWisdom.
+
+**Venue:** Published as a conference paper at ICLR 2024  
 **Project:** https://github.com/geekan/MetaGPT
 
 ## 📌 Abstract
@@ -30,8 +43,8 @@ Example given in the paper: in a software company, Product Managers analyze comp
 - Reduces the risk of unproductive "idle chatter" hallucinations between role-playing agents — the paper humorously contrasts this with agents having pointless small talk like *"Hi, hello and how are you?"* vs *"Great! Have you had lunch?"*
 
 ### Meta-programming framing
-- The paper defines **meta-programming** as "programming to program," distinct from meta-learning ("learning to learn").
-- Related meta-programming lineage: CodeBERT, CodeLlama, WizardCoder.
+- The paper defines **meta-programming** as "programming to program" ([Wikipedia](https://en.wikipedia.org/w/index.php?title=Metaprogramming)), distinct from the broader fields of meta-learning and "learning to learn" (Schmidhuber, 1987; 1993a; Hochreiter et al., 2001; Schmidhuber, 2006; Finn et al., 2017).
+- Related meta-programming lineage: CodeBERT (Feng et al., 2020), CodeLlama (Rozière et al., 2023), and WizardCoder (Luo et al., 2023).
 - MetaGPT's distinction: a well-organized group of **specialized agents**, each with a specific role/expertise following established standards, enabling automatic requirement analysis, system design, code generation, modification, execution, and runtime debugging.
 
 ### 📊 Headline Results
@@ -128,12 +141,9 @@ flowchart LR
 
 **Structured Communication Interfaces**
 - Most current LLM-based multi-agent frameworks rely on **unconstrained natural language** for communication.
-- ⚠️ Open question the paper raises: is pure natural language communication sufficient for solving complex tasks? The paper draws an analogy to the "telephone game" (message distortion through repeated relay) to motivate structured alternatives.
+- ⚠️ Open question the paper raises: is pure natural language communication sufficient for solving complex tasks? The paper draws an analogy to the "telephone game" (or [Chinese whispers](https://en.wikipedia.org/wiki/Chinese_whispers) where information distorts after several rounds) to motivate structured alternatives.
 
-
-## 3.2 Structured Communication (continued)
-
-> 📌 **Key Point:** Free-form dialogue between agents degrades information over multiple rounds — similar to the "Chinese whispers" effect — so MetaGPT instead uses structured, role-specific outputs.
+> 📌 **Key Point:** Free-form dialogue between agents degrades information over multiple rounds — so MetaGPT instead uses structured, role-specific outputs.
 
 Drawing on human organizational structures, MetaGPT formalizes agent-to-agent communication with a defined **schema and format per role**, so each agent produces outputs tailored to its responsibilities.
 
@@ -230,13 +240,26 @@ $$\text{Pass@}k = \mathbb{E}_{\text{Problems}}\left[1 - \frac{\binom{n-c}{k}}{\b
 - General-purpose LLMs: PaLM, GPT-4.
 - Some baseline numbers (e.g. Incoder, CodeGeeX) were taken from prior published work rather than re-run.
 - Prompts for HumanEval/MBPP were slightly adjusted to fit Python-specific response formatting.
-- On SoftwareDev, MetaGPT is compared against AutoGPT, LangChain (with a Python REPL tool), AgentVerse, and ChatDev.
+- On SoftwareDev, MetaGPT is compared against AutoGPT (Torantulino et al., 2023), LangChain (Chase, 2022) with Python [Read-Eval-Print Loop (REPL)](https://en.wikipedia.org/wiki/Read–eval–print_loop) tool, AgentVerse (Chen et al., 2023), and ChatDev (Qian et al., 2023).
 
 ---
 
 ### 4.2 Main Result
 
-🖼️ **Figure 4:** Bar chart comparing Pass@1 on MBPP and HumanEval across methods. Scores rise from AlphaCode (17.1% HumanEval) through Incoder, CodeGeeX variants, PaLM Coder, Codex, Codex+CodeT, and GPT-4 (67.0% HumanEval), up to **MetaGPT without feedback** (81.7% HumanEval / 82.3% MBPP) and **full MetaGPT** (85.9% HumanEval / 87.7% MBPP) — the highest scores shown.
+🖼️ **Figure 4:** Pass rates on the MBPP and HumanEval with a single attempt (Pass@1, %).
+
+| Model / Framework | HumanEval (%) | MBPP (%) |
+|---|---|---|
+| AlphaCode (1.1B) | 17.1 | — |
+| Incoder (6.7B) | 15.2 | 17.6 |
+| CodeGeeX (13B) | 18.9 | 26.9 |
+| CodeGeeX-Mono (16.1B) | 32.9 | 38.6 |
+| PaLM Coder (540B) | 36.0 | 47.0 |
+| Codex (175B) | 47.0 | 58.1 |
+| Codex + CodeT | 65.8 | 67.7 |
+| GPT-4 | 67.0 | — |
+| MetaGPT (w/o Feedback) | 81.7 | 82.3 |
+| **MetaGPT** | **85.9** | **87.7** |
 
 > 📌 MetaGPT outperforms every prior method on both benchmarks, and its combination with GPT-4 produces a large jump over plain GPT-4's Pass@1.
 
@@ -310,7 +333,7 @@ Two tasks (code generation + statistics calculation) were used to test how addin
 
 - Adding executable feedback raises Pass@1 by **+4.2%** (HumanEval) and **+5.4%** (MBPP).
 - It also improves SoftwareDev executability (3.67 → 3.75) and cuts human revision cost (2.25 → 0.83).
-- Additional quantitative detail is provided in Table 4 and Table 9 (not included in this chunk).
+- Additional quantitative detail is provided in [Table 4](#c2-additional-results) and [Table 9](#-additional-results--pure-metagpt-wo-feedback-on-softwaredev).
 
 ---
 
@@ -321,33 +344,40 @@ MetaGPT is a meta-programming framework that applies **Standard Operating Proced
 - Combines role specialization, workflow management, and efficient information sharing (message pools + subscriptions) into a flexible, portable multi-agent platform.
 - Uses an executable feedback loop to improve code quality at runtime.
 - Achieves state-of-the-art results across the benchmarks tested.
-- The authors frame human-inspired SOPs as a promising direction for future multi-agent research, and position this work as an early step toward **regulating** LLM-based multi-agent frameworks (see Appendix A, not included in this chunk).
+- The authors frame human-inspired SOPs as a promising direction for future multi-agent research, and position this work as an early step toward **regulating** LLM-based multi-agent frameworks (see also [Appendix A](#a-outlook)).
 
 ---
 
-## Acknowledgements
+## Acknowledgement
 
-The authors thank several individuals (from KAUST AI Initiative and DeepWisdom) for help polishing the text, drafting the outlook appendix, providing feedback, and supplying illustrative material.
+We thank Sarah Salhi, the Executive Secretary of KAUST AI Initiative, and Yuhui Wang, Postdoctoral Fellow at the KAUST AI Initiative, for helping to polish some of the text. We would like to express our gratitude to Wenyi Wang, a PhD student at the KAUST AI Initiative, for providing comprehensive feedback on the paper and for helping to draft the outlook (Appendix A) with Mingchen. We also thank Zongze Xu, the vice president of DeepWisdom, for providing illustrative materials for AgentStore.
 
 ## Author Contributions
 
-Contributions are broken out across the author list, covering: experiment execution and the executable feedback module design; the self-improvement module; MBPP and HumanEval experiments; evaluation metric design; comparisons to open-source baselines; figure creation; and overall project leadership/advising (including the CEO of DeepWisdom, who initiated the project and made the largest code contributions, and an academic advisor from KAUST/IDSIA).
+- **Sirui Hong** conducted most of the experiments and designed the executable feedback module. She also led the initial version of the write-up, supported by Ceyao Zhang, and also by Jinlin Wang and Zili Wang.
+- **Mingchen Zhuge** designed the self-improvement module, discussed additional experiments, and led the current write-up.
+- **Jiaqi Chen** helped with the MBPP experiments, outlined the methods section, and contributed to the current write-up.
+- **Xiawu Zheng** provided valuable guidance, reviewed and edited the paper.
+- **Yuheng Cheng** contributed to the evaluation metric design and HumanEval experiments.
+- **Steven Ka Shing Yau, Zijuan Lin, Liyang Zhou, Lingfeng Xiao** helped with the MBPP experiments and comparisons to open-source baseline methods.
+- **Chenyu Ran** created most of the illustrative figures.
+- **Chenglin Wu** is the CEO of DeepWisdom, initiated MetaGPT, made the most significant code contributions to it, and advised this project.
+- **Jürgen Schmidhuber**, Director of the AI Initiative at KAUST and Scientific Director of IDSIA, advised this project and helped with the write-up.
 
-## References (partial — as included in this chunk)
+---
 
-- Akata et al. — *Playing repeated games with large language models*, arXiv preprint, 2023.
-- Austin et al. — *Program synthesis with large language models*, 2021.
-- Bakhtin et al. — *Human-level play in the game of diplomacy by combining language models with strategic reasoning*, Science, 2022.
-- Balzer — *A 15 year perspective on automatic programming*, TSE, 1985.
-- Belbin — *Team Roles at Work*, Routledge, 2012.
-- Cai et al. — *Large language models as tool makers*, arXiv preprint, 2023.
-- Chase — *LangChain*, GitHub, 2022.
-- Chen, B. et al. — *CodeT: Code generation with generated tests*, 2022.
-- Chen, J. et al. — *S-agents: self-organizing agents in open-ended environment*, arXiv preprint, 2024.
-- Chen, M. et al. — *Evaluating large language models trained on code*, 2021.
+## 📚 References
 
-
-## 📚 References (continued)
+- Elif Akata, Lion Schulz, Julian Coda-Forno, Seong Joon Oh, Matthias Bethge, and Eric Schulz. *Playing repeated games with large language models*. arXiv preprint, 2023.
+- Jacob Austin, Augustus Odena, Maxwell Nye, Maarten Bosma, Henryk Michalewski, David Dohan, Ellen Jiang, Carrie Cai, Michael Terry, Quoc Le, and Charles Sutton. *Program synthesis with large language models*, 2021.
+- Anton Bakhtin, Noam Brown, Emily Dinan, Gabriele Farina, Colin Flaherty, Daniel Fried, Andrew Goff, Jonathan Gray, Hengyuan Hu, et al. *Human-level play in the game of diplomacy by combining language models with strategic reasoning*. Science, 2022.
+- Robert Balzer. *A 15 year perspective on automatic programming*. TSE, 1985.
+- R. M. Belbin. *Team Roles at Work*. Routledge, 2012. URL https://books.google.co.uk/books?id=MHIQBAAAQBAJ.
+- Tianle Cai, Xuezhi Wang, Tengyu Ma, Xinyun Chen, and Denny Zhou. *Large language models as tool makers*. arXiv preprint, 2023.
+- Harrison Chase. *LangChain*. https://github.com/hwchase17/langchain, 2022.
+- Bei Chen, Fengji Zhang, Anh Nguyen, Daoguang Zan, Zeqi Lin, Jian-Guang Lou, and Weizhu Chen. *CodeT: Code generation with generated tests*, 2022.
+- Jiaqi Chen, Yuxian Jiang, Jiachen Lu, and Li Zhang. *S-agents: self-organizing agents in open-ended environment*. arXiv preprint, 2024.
+- Mark Chen, Jerry Tworek, Heewoo Jun, Qiming Yuan, Henrique Ponde de Oliveira Pinto, Jared Kaplan, Harri Edwards, Yuri Burda, Nicholas Joseph, Greg Brockman, Alex Ray, Raul Puri, Gretchen Krueger, Michael Petrov, Heidy Khlaaf, Girish Sastry, Pamela Mishkin, Brooke Chan, Scott Gray, Nick Ryder, Mikhail Pavlov, Alethea Power, Lukasz Kaiser, Mohammad Bavarian, Clemens Winter, Philippe Tillet, Felipe Petroski Such, Dave Cummings, Matthias Plappert, Fotios Chantzis, Elizabeth Barnes, Ariel Herbert-Voss, William Hebgen Guss, Alex Nichol, Alex Paino, Nikolas Tezak, Jie Tang, Igor Babuschkin, Suchir Balaji, Shantanu Jain, William Saunders, Christopher Hesse, Andrew N. Carr, Jan Leike, Josh Achiam, Vedant Misra, Evan Morikawa, Alec Radford, Matthew Knight, Miles Brundage, Mira Murati, Katie Mayer, Peter Welinder, Bob McGrew, Dario Amodei, Sam McCandlish, Ilya Sutskever, and Wojciech Zaremba. *Evaluating large language models trained on code*, 2021a.
 
 - Weize Chen, Yusheng Su, Jingwei Zuo, Cheng Yang, Chenfei Yuan, Chen Qian, Chi-Min Chan, Yujia Qin, Yaxi Lu, Ruobing Xie, Zhiyuan Liu, Maosong Sun, and Jie Zhou. *Agentverse: Facilitating multi-agent collaboration and exploring emergent behaviors in agents*, 2023.
 - Xinyun Chen, Chang Liu, and Dawn Song. *Execution-guided neural program synthesis*. ICLR, 2018.
@@ -419,7 +449,7 @@ Contributions are broken out across the author list, covering: experiment execut
 
 ---
 
-## A. Outlook
+## Appendix A: Outlook
 
 ### A.1 Self-Improvement Mechanisms
 
@@ -471,22 +501,14 @@ One proposed mechanism for such self-organization is the **"Economy of Minds" (E
 
 #### 📊 Related Platform: AgentStore (DeepWisdom)
 
-- Compatible with the EOM credit-assignment concept.
+- Compatible with the EOM credit-assignment concept ([AgentStore](http://beta.deepwisdom.ai)).
 - Each agent lists its **services with associated costs**.
-- A public API lets human users or other agents **purchase services** from agents to accomplish tasks.
+- A convenient API lets human users or other agents **purchase services** from agents to accomplish tasks.
 - Individual developers can build and contribute new agents, enabling **community-driven collaborative development**.
-- Users can **subscribe to agents** based on their needs.
+- Users can **subscribe to agents** based on their needs and pay according to usage, or purchase additional capabilities to expand plug-and-play functions and gradually upgrade agents.
+- Within the MetaGPT framework, AgentStore supports multi-agent collaboration — users can combine multiple agents for complex projects, with all agents complying with MetaGPT development and communication protocols.
 
-🖼️ Figure 6: Screenshot of the AgentStore user interface, showcasing various agents with different skills available for use/subscription.
-
-*(Platform reference: http://beta.deepwisdom.ai)*
-
-
-## AgentStore
-
-Users can pay according to their usage, and can purchase additional capabilities to expand the plug-and-play functions of their existing agents, allowing them to gradually upgrade their agents. Within the MetaGPT framework, AgentStore supports collaboration between various agents — users can collect several agents together to carry out more complex tasks or projects, with all agents sharing and complying with the development and communication protocols defined in MetaGPT.
-
-🖼️ **Figure 6:** Screenshot of the AgentStore platform interface, showing a "Conversations" panel with various agent avatars (e.g., Marvin Minsky, ML Engineer, Comic Artist, Tutorial Assistant, Equity Analyst), an "Agents" marketplace panel with filter tabs (Official Selection, Western Celebrity, Historical Figure, Movie & TV) and agent cards showing usage stats, and a "Celebrities' Planet" panel with chat-style character cards.
+🖼️ **Figure 6:** AgentStore platform interface — dedicated to creating and developing agents within MetaGPT, providing an operational marketplace interface to manage agents with different emotions, personalities, and capabilities (e.g., Marvin Minsky, ML Engineer, Comic Artist, Tutorial Assistant, Equity Analyst). Panels include Conversations, Agents marketplace with filter tabs (Official Selection, Western Celebrity, Historical Figure, Movie & TV), and Celebrities' Planet.
 
 > 📌 **Key Point:** AgentStore is positioned as an operational marketplace layer on top of MetaGPT, letting users manage agents with different emotions, personalities, and capabilities for specific tasks.
 
@@ -620,10 +642,7 @@ The Project Manager breaks the project into a task list. Each code file is analy
 | `color_picker.py` | Implements the color selection interface |
 | `file_manager.py` | Implements the file saving and opening functionality |
 
-
-## 📌 Example: Product Requirement Document Output
-
-**Task list**
+**Task list:**
 ```python
 [
     "main.py",
@@ -720,19 +739,19 @@ if __name__ == '__main__':
 
 ---
 
-## C. Experiments
+## Appendix C: Experiments
 
 ### C.1 Details of the SoftwareDev Dataset
 
 - The **SoftwareDev dataset** includes **70 diverse software development tasks**.
-- Table 8 (not shown in this chunk) displays names/prompts for 11 of these tasks.
+- [Table 8](#-softwaredev-dataset--example-tasks) displays names and detailed prompts for 11 of these tasks.
 - The **first seven tasks** listed are used in the main experiments of this paper.
 
 ### C.2 Additional Results
 
 #### 📊 Quantitative Results of MetaGPT
 
-- MetaGPT achieves an **average score of 3.9**, surpassing ChatDev's score of **2.1**.
+- MetaGPT achieves an **average score of 3.9**, surpassing ChatDev's score of **2.1** (Zhao et al., 2023 / Qian et al., 2023).
 - General intelligent algorithms (AutoGPT, LangChain, AgentVerse) all score **1.0**, failing to generate executable code.
   - Generated code from these baselines is often short, lacks comprehensive logic, and fails to handle cross-file dependencies correctly.
 - **Key gap in baselines:** AutoGPT, Langchain, and AgentVerse show robust general problem-solving but lack systematic requirement deconstruction — essential for complex system development.
@@ -755,12 +774,12 @@ if __name__ == '__main__':
 
 #### 🔬 MetaGPT w/o Executable Feedback
 
-- Table 9 (not shown in this chunk) presents performance of MetaGPT with **GPT-4 32K** on 11 SoftwareDev tasks, plus average across all 70 tasks.
+- [Table 9](#-additional-results--pure-metagpt-wo-feedback-on-softwaredev) presents performance of MetaGPT with **GPT-4 32K** on 11 SoftwareDev tasks, plus average across all 70 tasks.
 - This version is the **basic version without the executable feedback mechanism**.
 
 #### 🔬 MetaGPT with Different LLM Backends
 
-- 5 SoftwareDev tasks were randomly selected to test **GPT-3.5** and **Deepseek Coder 33B** as backends.
+- 5 SoftwareDev tasks were randomly selected to test **GPT-3.5** and **[Deepseek Coder 33B](https://deepseekcoder.github.io)** as backends.
 - MetaGPT can complete tasks with these LLMs, but **GPT-4 yields superior performance**.
 
 **Table 5 — Performance of MetaGPT Using Different LLM Backends**
@@ -784,7 +803,7 @@ if __name__ == '__main__':
 **Table 6 — Impact of Instruction Levels**
 *(Executability scale: 1 = complete failure, 2 = runnable code, 3 = largely expected workflow, 4 = perfect match to expectations)*
 
-| Model | # Word | Time (s) | Token usage | # Lines | Executability | Productivity | Reversions |
+| Model | # Word | Time (s) | Token usage | # Lines | Executability | Productivity | Revisions |
 |---|---|---|---|---|---|---|---|
 | High-level | 13.2 | 552.9 | 28384.2 | 178.2 | 3.8 | 163.8 | 1.2 |
 | Detailed | 42.2 | 567.8 | 29657.0 | 257.0 | 4.0 | 118.0 | 1.6 |
@@ -818,14 +837,14 @@ if __name__ == '__main__':
 
 #### 🎨 Qualitative Results
 
-- Figures 11 and 12 (not included in this chunk) illustrate the Architect agent's design of a complex **recommender system**, showing system interface design and program call flow.
-- Program call flow is described as essential for creating sophisticated automated systems, emphasizing the importance of division of labor in an automated software framework.
+- [Figure 11](#figure-11-system-interface-design) and [Figure 12](#figure-12-program-call-flow) illustrate the outcomes of the Architect agent's efforts to design a complex **recommender system**, showcasing comprehensive system interface design (class diagram) and program call flow (sequence diagram).
+- Program call flow is essential for creating sophisticated automated systems, emphasizing the importance of this division of labor in developing an automated software framework.
 
 ---
 
-## D. Limitation and Ethics Concerns
+## Appendix D: Limitation and Ethics Concerns
 
-### D.1 ⚠️ Limitations
+### D.1 Limitations
 
 **System side:**
 - Cannot fully cater to specific scenarios such as **UI and frontend**, since UI/multimodal agents/tools have not yet been incorporated.
@@ -853,7 +872,9 @@ if __name__ == '__main__':
 - An **open-source LLM backend option** is also provided.
 
 
-🖼️ Figure 11: Class diagram for the "recommendation engine development" system, generated by the *architect* agent.
+### Figure 11: System Interface Design
+
+🖼️ **Figure 11:** The system interface design (class diagram) for "recommendation engine development" generated by the *architect* agent.
 
 ```mermaid
 classDiagram
@@ -943,8 +964,10 @@ classDiagram
     Recommender "1" -- "1" Advertising
     Recommender "1" -- "1" Privacy
 ```
+ 
+### Figure 12: Program Call Flow
 
-🖼️ Figure 12: Program call flow / sequence diagram for "recommendation engine development", generated by the *architect* agent.
+🖼️ **Figure 12:** The program call flow (sequence diagram) for "recommendation engine development" generated by the *architect* agent.
 
 ```mermaid
 sequenceDiagram
@@ -979,35 +1002,36 @@ sequenceDiagram
     Privacy->>Advertising: ensure_privacy()
 ```
 
-## 📌 Deep-Seated Challenges
+## Appendix E: More Discussions
 
-MetaGPT alleviates or solves several deep-seated challenges through its unique design choices.
+### E.1 Deep-Seated Challenges
 
-### Use Context Efficiently
+MetaGPT also alleviates or solves these deep-seated challenges with its unique designs:
 
-Two sub-challenges arise:
-
+**Use Context Efficiently**
+Two sub-challenges are present:
 1. **Unfolding short natural language descriptions accurately** — eliminating ambiguity from terse task specs.
 2. **Maintaining information validity in lengthy contexts** — enabling LLMs to concentrate on relevant data without distraction.
 
-### Reduce Hallucinations
-
+**Reduce Hallucinations**
 > Using LLMs to generate entire software programs faces **code hallucination** problems — including incomplete implementation of functions, missing dependencies, and potential undiscovered bugs, which may be more serious.
 
-LLMs often struggle with software generation due to vague task definitions. Focusing on granular tasks — like requirement analysis and package selection — offers guided thinking that LLMs otherwise lack when solving broad, unstructured tasks.
+LLMs often struggle with software generation due to vague task definitions. Focusing on granular tasks like requirement analysis and package selection offers guided thinking, which LLMs lack in broad task solving.
 
-## 📌 Information Overload
+### E.2 Information Overload
 
-MetaGPT addresses "information overload" (the problem of receiving excessive or irrelevant information) via two mechanisms:
+In MetaGPT, we use a global message pool and a subscription mechanism to address **"information overload,"** which refers to the problem of receiving excessive or irrelevant information. This issue is dependent on specific applications.
 
 - **Global message pool** — streamlines communication and ensures efficiency.
-- **Subscription mechanism** — filters out irrelevant contexts, enhancing the relevance and utility of information received by each agent.
+- **Subscription mechanism** — filters out irrelevant contexts, enhancing the relevance and utility of the information received by each agent.
 
-⚠️ This design is particularly important in software design scenarios and standard operating procedures (SOPs), where effective communication between agents is essential.
+⚠️ This design is particularly crucial in software design scenarios and standard operating procedures (SOPs) where effective communication between agents is essential.
+
+---
 
 ## 📊 SoftwareDev Dataset — Example Tasks
 
-Table 8 lists example tasks from the SoftwareDev dataset used for evaluation.
+Table 8 displays the names and detailed prompts of 11 tasks within the 70-task SoftwareDev dataset. (The first seven tasks listed are used in the main experiments of this paper).
 
 | Task ID | Task Name | Task Prompt |
 |---|---|---|
@@ -1016,28 +1040,30 @@ Table 8 lists example tasks from the SoftwareDev dataset used for evaluation.
 | 2 | 2048 game | Create a 2048 game for the web. |
 | 3 | Flappy bird game | Write p5.js code for Flappy Bird where you control a yellow bird continuously flying between a series of green pipes. The bird flaps every time you left click the mouse. If it falls to the ground or hits a pipe, you lose. This game goes on indefinitely until you lose; you get points the further you go. |
 | 4 | Tank battle game | Create a tank battle game. |
-| 5 | Excel data process | Write an excel data processing program based on streamlit and pandas. The screen first shows an excel file upload button. After the excel file is uploaded, use pandas to display its data content. The program is required to be concise, easy to maintain, and not over-designed. It uses streamlit for the web display, and pandas alone is sufficient for reading/displaying the excel file — no additional packages should be needed. |
-| 6 | CRUD manage | Write a management program based on CRUD (add/delete/modify/query) processing of a customer business entity. Store name, birthday, age, sex, and phone. Data is stored in `client.db`, checking whether the customer table exists first. Querying and deleting are done by name. The program should be concise, easy to maintain, and not over-designed, realized through streamlit and sqlite only. |
-| 7 | Music transcriber | Develop a program to transcribe sheet music into a digital format — providing error-free transcribed symbolized sheet music from audio through signal processing (pitch and time slicing), then training a neural net to run Onset Detected CWT transforming scalograms into chromagrams, decoded with a Recursive-Neural-Network-focused architecture. |
-| 8 | Custom press releases | Create custom press releases: a Python script that extracts relevant company-news information from external sources (e.g. social media), tracks an update interval for recent changes, and generates press releases with customizable options, exporting to PDFs, NYTimes API JSONs, and media-format styling with interlinked fixed-length metadata. |
-| 9 | Gomoku game | Implement a Gomoku game in Python, incorporating an AI opponent with varying difficulty levels. |
+| 5 | Excel data process | Write an excel data processing program based on streamlit and pandas. The screen first shows an excel file upload button. After the excel file is uploaded, use pandas to display its data content. The program is required to be concise, easy to maintain, and not over-designed. It uses streamlit to process web screen displays, and pandas is sufficient to process excel reading and display. Please make sure others can execute directly without introducing additional packages. |
+| 6 | CRUD manage | Write a management program based on the crud addition, deletion, modification and query processing of the customer business entity. The customer needs to save this information: name, birthday, age, sex, and phone. The data is stored in `client.db`, and there is a judgement whether the customer table exists. If it doesn't, it needs to be created first. Querying is done by name; same for deleting. The program is required to be concise, easy to maintain, and not over-designed. The screen is realized through streamlit and sqlite — no need to introduce other additional packages. |
+| 7 | Music transcriber | Develop a program to transcribe sheet music into a digital format; providing error-free transcribed symbolized sheet music intelligence from audio through signal processing involving pitch and time slicing then training a neural net to run Onset Detected CWT transforming scalograms to chromagrams decoded with Recursive Neural Network focused networks. |
+| 8 | Custom press releases | Create custom press releases; develop a Python script that extracts relevant information about company news from external sources, such as social media; extract update interval database for recent changes. The program should create press releases with customizable options and export writings to PDFs, NYTimes API JSONs, media format styled with interlink internal fixed character-length metadata. |
+| 9 | Gomoku game | Implement a Gomoku game using Python, incorporating an AI opponent with varying difficulty levels. |
 | 10 | Weather dashboard | Create a Python program to develop an interactive weather dashboard. |
+
+---
 
 ## 📊 Additional Results — Pure MetaGPT (w/o Feedback) on SoftwareDev
 
-Table 9 reports statistics for 10 randomly selected tasks plus the average (Avg.) across 70 tasks, covering code, documentation, and cost metrics, along with revision costs and code executability notes.
+**Table 9:** Additional results of pure MetaGPT w/o feedback on SoftwareDev. Averages (Avg.) of 70 tasks are calculated and 10 randomly selected tasks are included. (`#` denotes "The number of", `ID` denotes "Task ID").
 
-| ID | #Code Files | #Lines of Code | Lines/Code File | #Doc Files | #Lines of Doc | Lines/Doc File | Prompt Tokens | Completion Tokens | Time Cost (s) | Money Cost | Revision Issues | # Revisions |
+| ID | #Code Files | #Lines of Code | Lines/Code File | #Doc Files | #Lines of Doc | Lines/Doc File | #Prompt Tokens | #Completion Tokens | Time Cost (s) | Money Cost | Cost of Revision (Issues / Cost) | Code Executability |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
-| 0 | 5.00 | 196.00 | 39.20 | 3.00 | 210.00 | 70.00 | 24,087 | 6,157 | 582.04 | $1.09 | TypeError | 4 |
-| 1 | 6.00 | 191.00 | 31.83 | 3.00 | 230.00 | 76.67 | 32,517 | 6,238 | 566.30 | $1.35 | TypeError | 4 |
-| 2 | 3.00 | 198.00 | 66.00 | 3.00 | 235.00 | 78.33 | 21,934 | 6,316 | 553.11 | $1.04 | Missing `@app.route('/')` | 3 |
-| 3 | 5.00 | 164.00 | 32.80 | 3.00 | 202.00 | 67.33 | 22,951 | 5,312 | 481.34 | $1.01 | PNG file missing; compile bug fixes | 2 |
-| 4 | 6.00 | 203.00 | 33.83 | 3.00 | 210.00 | 70.00 | 30,087 | 6,567 | 599.58 | $1.30 | PNG file missing; compile bug fixes; `pygame.surface` not initialized | 3 |
-| 5 | 6.00 | 219.00 | 36.50 | 3.00 | 294.00 | 96.00 | 35,590 | 7,336 | 585.10 | $1.51 | Dependency error; `ModuleNotFoundError` | 4 |
-| 6 | 4.00 | 73.00 | 18.25 | 3.00 | 261.00 | 87.00 | 25,673 | 5,832 | 398.83 | $0.90 | — | 0 |
-| 7 | 4.00 | 316.00 | 79.00 | 3.00 | 332.00 | 110.67 | 29,139 | 7,104 | 435.83 | $0.92 | — | 0 |
-| 8 | 5.00 | 215.00 | 43.00 | 3.00 | 301.00 | 100.33 | 29,372 | 6,499 | 621.73 | $1.27 | TensorFlow version error; model training method not implemented | 2 |
-| 9 | 5.00 | 215.00 | 43.00 | 3.00 | 270.00 | 90.00 | 24,799 | 5,734 | 550.88 | $1.27 | Dependency error; URL 403 error | 3 |
-| 10 | 3.00 | 93.00 | 31.00 | 3.00 | 254.00 | 84.67 | 24,109 | 5,363 | 438.50 | $0.92 | Dependency error; missing main function | 4 |
-| **Avg.** | 4.71 | 191.57 | 42.98 | 3.00 | 240.00 | 80.00 | 26,626.86 | 6,218.00 | 516.71 | $1.12 | Executability score avg. (only items scored 2, 3, or 4): **0.51** | 3.36 |
+| 0 | 5.00 | 196.00 | 39.20 | 3.00 | 210.00 | 70.00 | 24,087.00 | 6,157.00 | 582.04 | $1.09 | 1. TypeError | 4 |
+| 1 | 6.00 | 191.00 | 31.83 | 3.00 | 230.00 | 76.67 | 32,517.00 | 6,238.00 | 566.30 | $1.35 | 1. TypeError | 4 |
+| 2 | 3.00 | 198.00 | 66.00 | 3.00 | 235.00 | 78.33 | 21,934.00 | 6,316.00 | 553.11 | $1.04 | 1. lack `@app.route('/')` | 3 |
+| 3 | 5.00 | 164.00 | 32.80 | 3.00 | 202.00 | 67.33 | 22,951.00 | 5,312.00 | 481.34 | $1.01 | 1. PNG file missing<br>2. Compile bug fixes | 2 |
+| 4 | 6.00 | 203.00 | 33.83 | 3.00 | 210.00 | 70.00 | 30,087.00 | 6,567.00 | 599.58 | $1.30 | 1. PNG file missing<br>2. Compile bug fixes<br>3. `pygame.surface` not initialize | 3 |
+| 5 | 6.00 | 219.00 | 36.50 | 3.00 | 294.00 | 96.00 | 35,590.00 | 7,336.00 | 585.10 | $1.51 | 1. dependency error<br>2. ModuleNotFoundError | 4 |
+| 6 | 4.00 | 73.00 | 18.25 | 3.00 | 261.00 | 87.00 | 25,673.00 | 5,832.00 | 398.83 | $0.90 | 0 | 4 |
+| 7 | 4.00 | 316.00 | 79.00 | 3.00 | 332.00 | 110.67 | 29,139.00 | 7,104.00 | 435.83 | $0.92 | 0 | 4 |
+| 8 | 5.00 | 215.00 | 43.00 | 3.00 | 301.00 | 100.33 | 29,372.00 | 6,499.00 | 621.73 | $1.27 | 1. tensorflow version error<br>2. model training method not implement | 2 |
+| 9 | 5.00 | 215.00 | 43.00 | 3.00 | 270.00 | 90.00 | 24,799.00 | 5,734.00 | 550.88 | $1.27 | 1. dependency error<br>2. URL 403 error | 3 |
+| 10 | 3.00 | 93.00 | 31.00 | 3.00 | 254.00 | 84.67 | 24,109.00 | 5,363.00 | 438.50 | $0.92 | 1. dependency error<br>2. missing main func. | 4 |
+| **Avg.** | **4.71** | **191.57** | **42.98** | **3.00** | **240.00** | **80.00** | **26,626.86** | **6,218.00** | **516.71** | **$1.12** | **0.51** *(only consider items scored 2, 3 or 4)* | **3.36** |
