@@ -1,8 +1,8 @@
 <div align="center">
   <img src="docs/assets/logo-brand.svg" alt="RedGrid Logo" width="200" height="200" />
   
-  <h1>RedGrid - Agentic Red Team (Frontend)</h1>
-  <p><b>Next.js User Interface for the RedGrid Autonomous Vulnerability Assessment Framework</b></p>
+  <h1>RedGrid - Agentic Red Team</h1>
+  <p><b>LLM-orchestrated multi-agent framework for autonomous VAPT</b></p>
 
   <a href="https://redgrid.kaiofficial.xyz" target="_blank">
     <img src="https://img.shields.io/badge/Live_App-redgrid.kaiofficial.xyz-0070f3?style=for-the-badge&logo=next.js&logoColor=white" alt="Live App" />
@@ -58,7 +58,7 @@ Our user interface is crafted to provide a commanding, premium experience for au
 
 ---
 
-## 🛠️ Technology Stack (Current)
+## 🛠️ Technology Stack
 
 | Category | Technology Stack |
 | :--- | :--- |
