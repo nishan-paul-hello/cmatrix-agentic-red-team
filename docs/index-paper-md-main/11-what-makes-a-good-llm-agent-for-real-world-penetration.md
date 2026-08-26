@@ -315,7 +315,7 @@ An agent tracking these signals can decide when to persist, when to pivot, and w
 - AutoPT's Pentesting State Machine (PSM) enforces phase transitions
 
 
-## 3.3.2 Design Implications
+#### 3.3.2 Design Implications
 
 📌 **Two-part strategy** for advancing LLM-based penetration testing, following from the failure-mode analysis in §3.3:
 
@@ -628,8 +628,6 @@ Four research questions:
   - Thinking mode amplifies architectural differences further: PentestGPT V2 gains 1–2 machines from thinking, reaching near-complete coverage.
 
 
-### 5.2.3 GOAD Results (cont.)
-
 GOAD shows the largest improvement. PentestGPT V2 compromises 4 of 5 hosts with GPT-5.2 and Opus 4.5 thinking (4 hosts in all three trials; the same four hosts each time) versus at most 2 for baselines — doubling the compromise rate (80% vs. 40%). This pattern holds consistently across all three models and both reasoning modes (even Gemini 3 achieves 3 hosts vs. 1–2 for baselines), indicating a robust architectural effect. Baselines achieve initial foothold but fail to progress through lateral movement; PentestGPT V2 executes coherent multi-host attack chains using the Memory Subsystem for credential persistence and TDA for exploration guidance.
 
 ## 5.3 RQ2: Ablation Study
@@ -840,46 +838,75 @@ Three categories of irreducible Type B failures that better tooling, larger corp
 - **Results**: 91% task completion on CTF benchmarks (49% improvement over baselines); compromises 4 of 5 hosts on GOAD vs. 2 for prior systems
 - Ablation studies show TDA-guided exploration provides benefits beyond tree structure alone — difficulty-aware planning produces value that model improvements cannot replicate
 
-## References (partial — items 1–19)
+## References
 
-1. Vulnhub: Vulnerable by design. vulnhub.com, 2012–2026.
-2. XBOW — AI-Powered Offensive Security Platform. xbow.com, 2024.
-3. Anonymous. Excalibur: Source code and artifacts (anonymous repo, double-blind review), 2025.
-4. Anthropic. Equipping agents for the real world with Agent Skills, Oct 2024.
-5. Anthropic. Model Context Protocol. modelcontextprotocol.io, 2024.
-6. Coulom, R. Efficient selectivity and backup operators in Monte-Carlo tree search. CG 2006.
-7. David, I. & Gervais, A. Multi-agent penetration testing AI for the web. arXiv:2508.20816, 2025.
-8. Deng, G. et al. PentestGPT: Evaluating and harnessing LLMs for automated penetration testing. USENIX Security 24, pp. 847–864.
-9. Gioacchini, L. et al. AutoPenBench: Benchmarking generative agents for penetration testing. arXiv:2410.03225, 2024.
-10. Google Project Zero. From Naptime to Big Sleep, Oct 2024.
-11. Hack The Box. hackthebox.com, 2024.
-12. Happe, A. & Cito, J. Can LLMs hack enterprise networks? ACM TOSEM, 2025.
-13. Heelan, S. How I used o3 to find CVE-2025-37899, May 2025.
-14. ISC2. ISC2 Cybersecurity Workforce Study 2024.
-15. Jimenez, C. et al. SWE-bench: Can language models resolve real-world GitHub issues? ICLR 2024.
-16. Kocsis, L. & Szepesvári, C. Bandit based Monte-Carlo planning. ECML 2006, pp. 282–293.
-17. Kong, H. et al. VulnBot: Autonomous penetration testing for a multi-agent collaborative framework. arXiv:2501.13411, 2025.
-18. Liu, N. F. et al. Lost in the middle: How language models use long contexts. TACL, 12:157–173, 2024.
-19. Luong, P. D. et al. xOffense: An AI-driven autonomous penetration testing framework. arXiv:2509.13021, 2025.
+- [1] Vulnhub: Vulnerable by design. https://www.vulnhub.com/, 2012–2026.
 
+- [2] XBOW — AI-Powered Offensive Security Platform. https://xbow.com/, 2024.
 
-## References (continued)
+- [3] Anonymous. Excalibur: Source code and artifacts. https://anonymous.4open.science/r/Excalibur-FA7D, 2025. Anonymous repository for double-blind review.
 
-- [20] Mai et al. — *Shell or nothing: Real-world benchmarks and memory-activated agents for automated penetration testing*, 2025. [arXiv:2509.09207](https://arxiv.org/abs/2509.09207)
-- [21] Mirzadeh et al. — *GSM-Symbolic: Understanding the limitations of mathematical reasoning in large language models*, 2025. [arXiv:2410.05229](https://arxiv.org/abs/2410.05229)
-- [22] Muzsai, Imolai, Lukács — *HackSynth: LLM agent and evaluation framework for autonomous penetration testing*, arXiv:2412.01778, 2024.
-- [23] Nakatani — *RapidPen: Fully automated IP-to-shell penetration testing with LLM-based agents*, arXiv:2502.16730, 2025.
-- [24] Nakatani (duplicate listing) — *RapidPen: Fully automated IP-to-shell penetration testing with LLM-based agents*, arXiv:2502.16730, 2025.
-- [25] Orange Cyberdefense — *GOAD - Game of Active Directory*, [GitHub](https://github.com/Orange-Cyberdefense/GOAD), 2024. Vulnerable AD lab environments for practicing attack techniques.
-- [26] OWASP Foundation — *OWASP Web Security Testing Guide*, v4.2, 2021.
-- [27] Packer et al. — *MemGPT: Towards LLMs as operating systems*, 2024. [arXiv:2310.08560](https://arxiv.org/abs/2310.08560)
-- [28] PTES Technical Guideline Development Team — *Penetration Testing Execution Standard (PTES)*, 2012. Defines seven phases from pre-engagement to reporting.
-- [29] Shao et al. — *An empirical evaluation of LLMs for solving offensive security challenges*, arXiv:2402.11814, 2024.
-- [30] Shen et al. — *PentestAgent: Incorporating LLM agents to automated penetration testing*, ASIA CCS '25, pp. 375–391, ACM, 2025.
-- [31] Wölflein et al. — *LLM agents making agent tools*, ACL 2025, pp. 26092–26130. [doi:10.18653/v1/2025.acl-long.1266](https://aclanthology.org/2025.acl-long.1266/)
-- [32] Wu et al. — *AutoPT: How far are we from the end2end automated web penetration testing?*, arXiv:2411.01236, 2024.
-- [33] Zhan et al. — *Adaptive attacks break defenses against indirect prompt injection attacks on LLM agents*, 2025. [arXiv:2503.00061](https://arxiv.org/abs/2503.00061)
-- [34] Zhou et al. — *WebArena: A realistic web environment for building autonomous agents*, ICLR 2024.
+- [4] Anthropic. Equipping agents for the real world with Agent Skills, October 2024. Engineering Blog. URL: https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills.
+
+- [5] Anthropic. Model context protocol. https://modelcontextprotocol.io/, 2024. An open protocol for connecting AI assistants to external data sources and tools, released November 2024.
+
+- [6] Rémi Coulom. Efficient selectivity and backup operators in Monte-Carlo tree search. In *Computers and Games: 5th International Conference, CG 2006, Turin, Italy, May 29–31, 2006. Revised Papers 5*, pages 72–83. Springer, 2007. URL: https://link.springer.com/chapter/10.1007/978-3-540-75538-8_7, doi:10.1007/978-3-540-75538-8_7.
+
+- [7] Isaac David and Arthur Gervais. Multi-agent penetration testing ai for the web. arXiv preprint arXiv:2508.20816, 2025.
+
+- [8] Gelei Deng, Yi Liu, Víctor Mayoral-Vilches, Peng Liu, Yuekang Li, Yuan Xu, Tianwei Zhang, Yang Liu, Martin Pinzger, and Stefan Rass. PentestGPT: Evaluating and harnessing large language models for automated penetration testing. In *Proceedings of the 33rd USENIX Security Symposium (USENIX Security 24)*, pages 847–864. USENIX Association, 2024.
+
+- [9] Luca Gioacchini, Marco Mellia, Idilio Drago, Alexander Delsanto, Giuseppe Siracusano, and Roberto Bifulco. AutoPenBench: Benchmarking generative agents for penetration testing. arXiv preprint arXiv:2410.03225, 2024.
+
+- [10] Google Project Zero. From naptime to big sleep: Using large language models to catch vulnerabilities in real-world code. https://projectzero.google/2024/10/from-naptime-to-big-sleep.html, October 2024.
+
+- [11] Hack The Box. Hack the box: Hacking training for the best. https://www.hackthebox.com/, 2024. Online platform with curated collection of vulnerable machines for penetration testing practice and skill development.
+
+- [12] Andreas Happe and Jürgen Cito. Can LLMs hack enterprise networks? autonomous assumed breach penetration-testing active directory networks. *ACM Transactions on Software Engineering and Methodology*, 2025. doi:10.1145/3766895.
+
+- [13] Sean Heelan. How I used o3 to find CVE-2025-37899, a remote zeroday vulnerability in the Linux kernel's SMB implementation. https://sean.heelan.io/2025/05/22/how-i-used-o3-to-find-cve-2025-37899-a-remote-zeroday-vulnerability-in-the-linux-kernels-smb-implementation/, May 2025.
+
+- [14] ISC2. ISC2 cybersecurity workforce study 2024. https://www.isc2.org/Insights/2024/10/ISC2-2024-Cybersecurity-Workforce-Study, 2024.
+
+- [15] Carlos E Jimenez, John Yang, Alexander Wettig, Shunyu Yao, Kexin Pei, Ofir Press, and Karthik R Narasimhan. SWE-bench: Can language models resolve real-world github issues? In *The Twelfth International Conference on Learning Representations*, 2024.
+
+- [16] Levente Kocsis and Csaba Szepesvári. Bandit based Monte-Carlo planning. In *Machine Learning: ECML 2006: 17th European Conference on Machine Learning, Berlin, Germany, September 18–22, 2006. Proceedings 17*, pages 282–293. Springer, 2006. URL: https://link.springer.com/chapter/10.1007/11871842_29, doi:10.1007/11871842_29.
+
+- [17] He Kong, Die Hu, Jingguo Ge, Liangxiong Li, Tong Li, and Bingzhen Wu. VulnBot: Autonomous penetration testing for a multi-agent collaborative framework. arXiv preprint arXiv:2501.13411, 2025.
+
+- [18] Nelson F. Liu, Kevin Lin, John Hewitt, Ashwin Paranjape, Michele Bevilacqua, Fabio Petroni, and Percy Liang. Lost in the middle: How language models use long contexts. *Transactions of the Association for Computational Linguistics*, 12:157–173, 2024. doi:10.1162/tacl_a_00638.
+
+- [19] Phung Duc Luong, Le Tran Gia Bao, Nguyen Vu Khai Tam, Dong Huu Nguyen Khoa, Nguyen Huu Quyen, Van-Hau Pham, and Phan The Duy. xOffense: An AI-driven autonomous penetration testing framework with offensive knowledge-enhanced LLMs and multi agent systems. arXiv preprint arXiv:2509.13021, 2025.
+
+- [20] Wuyuao Mai, Geng Hong, Qi Liu, Jinsong Chen, Jiarun Dai, Xudong Pan, Yuan Zhang, and Min Yang. Shell or nothing: Real-world benchmarks and memory-activated agents for automated penetration testing, 2025. URL: https://arxiv.org/abs/2509.09207, arXiv:2509.09207.
+
+- [21] Iman Mirzadeh, Keivan Alizadeh, Hooman Shahrokhi, Oncel Tuzel, Samy Bengio, and Mehrdad Farajtabar. Gsm-symbolic: Understanding the limitations of mathematical reasoning in large language models, 2025. URL: https://arxiv.org/abs/2410.05229, arXiv:2410.05229.
+
+- [22] Lajos Muzsai, David Imolai, and András Lukács. Hacksynth: Llm agent and evaluation framework for autonomous penetration testing. arXiv preprint arXiv:2412.01778, 2024.
+
+- [23] Sho Nakatani. RapidPen: Fully automated IP-to-shell penetration testing with LLM-based agents. arXiv preprint arXiv:2502.16730, 2025.
+
+- [24] Sho Nakatani. Rapidpen: Fully automated ip-to-shell penetration testing with llm-based agents. arXiv preprint arXiv:2502.16730, 2025.
+
+- [25] Orange Cyberdefense. GOAD - game of active directory. https://github.com/Orange-Cyberdefense/GOAD, 2024. A pentest Active Directory LAB project providing vulnerable AD environments for practicing attack techniques.
+
+- [26] OWASP Foundation. OWASP web security testing guide. https://owasp.org/www-project-web-security-testing-guide/, 2021. Version 4.2. Comprehensive guide to testing the security of web applications and web services.
+
+- [27] Charles Packer, Sarah Wooders, Kevin Lin, Vivian Fang, Shishir G. Patil, Ion Stoica, and Joseph E. Gonzalez. Memgpt: Towards llms as operating systems, 2024. URL: https://arxiv.org/abs/2310.08560, arXiv:2310.08560.
+
+- [28] PTES Technical Guideline Development Team. Penetration testing execution standard (PTES). http://www.pentest-standard.org, 2012. A comprehensive standard for conducting penetration tests, defining seven main phases from pre-engagement to reporting.
+
+- [29] Minghao Shao, Boyuan Chen, Sofija Jancheska, Brendan Dolan-Gavitt, Siddharth Garg, Ramesh Karri, and Muhammad Shafique. An empirical evaluation of LLMs for solving offensive security challenges. arXiv preprint arXiv:2402.11814, 2024.
+
+- [30] Xiangmin Shen, Lingzhi Wang, Zhenyuan Li, Yan Chen, Wencheng Zhao, Dawei Sun, Jiashui Wang, and Wei Ruan. PentestAgent: Incorporating LLM agents to automated penetration testing. In *Proceedings of the 20th ACM Asia Conference on Computer and Communications Security (ASIA CCS '25)*, pages 375–391. ACM, 2025.
+
+- [31] Georg Wölflein, Dyke Ferber, Daniel Truhn, Ognjen Arandjelovic, and Jakob Nikolas Kather. LLM agents making agent tools. In *Proceedings of the 63rd Annual Meeting of the Association for Computational Linguistics*, pages 26092–26130, Vienna, Austria, July 2025. Association for Computational Linguistics. URL: https://aclanthology.org/2025.acl-long.1266/, doi:10.18653/v1/2025.acl-long.1266.
+
+- [32] Benlong Wu, Guoqiang Chen, Kejiang Chen, Xiuwei Shang, Jiapeng Han, Yanru He, Weiming Zhang, and Nenghai Yu. AutoPT: How far are we from the end2end automated web penetration testing? arXiv preprint arXiv:2411.01236, 2024.
+
+- [33] Qiusi Zhan, Richard Fang, Henil Shalin Panchal, and Daniel Kang. Adaptive attacks break defenses against indirect prompt injection attacks on llm agents, 2025. URL: https://arxiv.org/abs/2503.00061, arXiv:2503.00061.
+
+- [34] Shuyan Zhou, Frank F. Xu, Hao Zhu, Xuhui Zhou, Robert Lo, Abishek Sridhar, Xianyi Cheng, Yonatan Bisk, Daniel Fried, Uri Alon, et al. Webarena: A realistic web environment for building autonomous agents. In *The Twelfth International Conference on Learning Representations (ICLR)*, 2024.
 
 ---
 
