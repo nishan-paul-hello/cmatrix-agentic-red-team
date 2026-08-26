@@ -241,12 +241,11 @@ Enables budget caps, early stopping when success likelihood drops, and graceful 
 
 ## 3. CTF Evaluation
 
-- Benchmark: **XBOW** — 104 web application security challenges for autonomous pentesting evaluation.
-- A planned comparison against the PentestGPT benchmark was dropped — its repository was unavailable at evaluation time.
-- XBOW is noted as the **#1** [ranked] penetration testing... *(chunk ends here)*
+We evaluate MAPTA using the **XBOW benchmark** [25], a collection of 104 web application security challenges designed for autonomous penetration testing evaluation. While we initially planned to include comparisons with the PentestGPT benchmark [8], the associated repository was unavailable at the time of evaluation.
 
+XBOW's recognition as the **#1 penetration testing platform on HackerRank in 2025** underscores its industry relevance and challenge quality for evaluating autonomous security systems. Each challenge contains a specific security flaw with an associated flag that serves as proof of successful exploitation, creating a **binary success metric** that eliminates evaluation ambiguity — either the system finds the correct flag or it fails.
 
-Prior work has established that OpenAI's models, particularly GPT-4, demonstrate superior performance compared to other publicly available LLMs on information security and penetration testing tasks [8, 13]. Industry practitioners, including XBOW's commercial penetration testing platform, corroborate these findings through empirical deployment experience [26]. Given these established performance characteristics and to focus limited financial resources, evaluation is focused exclusively on GPT-5 under high-effort agent configurations throughout this work.
+Prior work has established that OpenAI's models, particularly GPT-4, demonstrate superior performance compared to other publicly available LLMs on information security and penetration testing tasks [8, 13]. Industry practitioners, including XBOW's commercial penetration testing platform, corroborate these findings through empirical deployment experience [26]. Given these established performance characteristics and to focus limited financial resources, evaluation is focused exclusively on **GPT-5** under high-effort agent configurations throughout this work.
 
 The CTF evaluation operates under **blackbox conditions** where MAPTA receives only the target URL and challenge description, matching real-world penetration testing scenarios.
 
