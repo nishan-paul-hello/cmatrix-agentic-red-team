@@ -144,6 +144,8 @@ flowchart TB
     SAL --> FL
 ```
 
+> **Figure 1.** AWE system architecture.
+
 - **Orchestration Layer** — manages global state, coordinates agents, enforces budgetary constraints.
 - **Specialized Agents Layer** — executes targeted exploitation strategies tailored to each vulnerability class.
 - **Foundation Layer** — shared services: hybrid payload generation, persistent memory, browser-based verification, endpoint discovery/recon.
@@ -185,6 +187,8 @@ flowchart TD
     I -- "No (Retry)" --> G
     G -. "Retry exceeded" .-> K["XSS Failed"]
 ```
+
+> **Figure 2.** Five-phase XSS detection pipeline.
 
 Workflow stages:
 1. **Multi-stage canary injection** — parallel canaries map input reflection behavior for reflected XSS.
@@ -237,15 +241,15 @@ Evaluation methodology covering benchmark selection, baselines, model experiment
 - Deterministic across runs → supports statistical comparison of model behavior under identical conditions.
 - Each model evaluated across **n = 10** independent trials per vulnerability type for robust success-rate and convergence estimates.
 
-📊 **Figure 3 — Model comparison (DVWA), success rate by vulnerability type:**
+📊 **Figure 3 — Comparative performance of Claude Sonnet 4, GPT-4o, and Gemini 2.0 Flash across five vulnerability categories (DVWA):**
 
 | Vulnerability Type | Claude Sonnet 4 ⭐ | GPT-4o | Gemini 2.0 Flash |
 |---|---|---|---|
-| Reflected XSS | 100% | — | — |
-| Stored XSS | 67% | — | — |
-| DOM XSS | 80% | — | — |
-| SQLi Basic | 80% | — | — |
-| SQLi Blind | 70% | — | — |
+| Reflected XSS | 100% | 100% | 100% |
+| Stored XSS | 67% | 67% | 50% |
+| DOM XSS | 80% | 80% | 67% |
+| SQLi Basic | 80% | 80% | 70% |
+| SQLi Blind | 70% | 60% | 55% |
 
 
 ### B. Baseline
@@ -305,7 +309,7 @@ DVWA provides a stable, deterministic environment enabling fine-grained comparis
 
 📌 **Iteration efficiency**: Claude converged in 10–40 payload attempts; GPT-4o required ~20% more attempts; Gemini required ~40% more.
 
-🖼️ Figure 4: Four histograms showing the distribution of payload attempts needed for successful exploitation across DVWA Low (avg. 10), Medium (avg. 20), and Hard (avg. 40) difficulty, plus XSSy difficulty (avg. 12) — illustrating Claude Sonnet 4's faster convergence versus GPT-4o (~20% more attempts) and Gemini 2.0 Flash (~40% more attempts).
+🖼️ **Figure 4.** Average number of payload iterations required for successful exploitation by each model. Claude Sonnet 4 converges in the fewest attempts (10–40), followed by GPT-4o with about 20% more iterations and Gemini 2.0 Flash with about 40% more. This demonstrates Claude's superior efficiency and reasoning stability. (Histograms shown across DVWA Low avg. 10, Medium avg. 20, Hard avg. 40, and XSSy avg. 12 difficulty levels.)
 
 **Conclusion:** Claude Sonnet 4 provides the best balance of accuracy and reasoning efficiency, so it is used as AWE's underlying model in all subsequent experiments.
 
