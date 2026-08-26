@@ -5,7 +5,10 @@
 
 *Gaoling School of Artificial Intelligence, Renmin University of China, Beijing, 100872, China*
 
-> Front. Comput. Sci., 2025, 0(0): 1–42 · https://doi.org/10.1007/s11704-024-40231-1 · © Higher Education Press 2025
+> Front. Comput. Sci., 2025, 0(0): 1–42 · https://doi.org/10.1007/s11704-024-40231-1 · © Higher Education Press 2025  
+> arXiv:2308.11432v7 [cs.AI] 2 Mar 2025  
+> \* Both authors contribute equally to this paper.  
+> (B) Corresponding authors: E-mail: xu.chen@ruc.edu.cn; yankailin@ruc.edu.cn
 
 ## 📌 Abstract
 
@@ -30,19 +33,21 @@ With the rise of large language models (LLMs) — which encode vast amounts of w
 ### 🔬 Background & Motivation
 
 - Autonomous agents are viewed as a promising route to **artificial general intelligence (AGI)**, achieving tasks through self-directed planning and action.
-- Prior agents relied on **simple, heuristic policy functions** learned in isolated, restricted environments — a poor match for the complexity of human learning, which draws on a much wider variety of environments.
+- Prior agents relied on **simple, heuristic policy functions** learned in isolated, restricted environments [1–6] — a poor match for the complexity of human learning, which draws on a much wider variety of environments.
 - As a result, earlier agents fall short of human-level decision-making, especially in **open-domain, unconstrained settings**.
 
 ### Why LLMs Change the Picture
 
-LLMs have shown strong potential for human-like intelligence, driven by large training datasets and model scale. This has spurred a research direction using **LLMs as central controllers** for autonomous agents. Compared to reinforcement learning-based agents, LLM-based agents offer:
+LLMs have shown strong potential for human-like intelligence, driven by large training datasets and model scale [5–10]. This has spurred a research direction using **LLMs as central controllers** for autonomous agents [11–17]. Compared to reinforcement learning-based agents, LLM-based agents offer:
 
 1. **Richer internal world knowledge** — informed actions without needing domain-specific training.
 2. **Natural language interfaces** — greater flexibility and explainability in human interaction.
 
 The key idea across recent models is equipping LLMs with human-like capabilities — **memory** and **planning** — so they can behave like humans across varied tasks. These models were largely developed independently, motivating this survey's systematic, holistic summary.
 
-🖼️ **Figure 1:** A timeline chart showing the cumulative growth of papers on LLM-based autonomous agents from January 2021 to August 2023, colored by agent category (General, Tool, Simulation, Embodied, Game, Web, Assistant). Notable milestones plotted include WebGPT (2021-12), CoT (2022-01), TALM (2022-05), WebShop / Inner Monologue (2022-07), Toolformer / DEPS / HuggingGPT (2023-02), AutoGPT (2023-03), AgentGPT / Generative Agent (2023-04), GITM / ToT / Voyager (2023-05), MIND2WEB / RecAgent (2023-06), CO-LLM / ChatDev / ToolLLaMA (2023-07), and AgentSims (2023-08) — illustrating a sharply accelerating research trend.
+🖼️ **Figure 1:** A timeline chart showing the cumulative growth of papers on LLM-based autonomous agents from January 2021 to August 2023, colored by agent category (General, Tool, Simulation, Embodied, Game, Web, Assistant). Notable milestones plotted include WebGPT (2021-12), CoT (2022-01), TALM (2022-05), WebShop / Inner Monologue (2022-07), Toolformer / DEPS / HuggingGPT (2023-02), AutoGPT (2023-03), AgentGPT / Generative Agent (2023-04), GITM / ToT / Voyager (2023-05), MIND2WEB / RecAgent (2023-06), CO-LLM / ChatDev / ToolBench (2023-07), and AgentSims (2023-08) — illustrating a sharply accelerating research trend.
+
+> **Figure 1** — Illustration of the growth trend in the field of LLM-based autonomous agents. We present the cumulative number of papers published from January 2021 to August 2023. We assign different colors to represent various agent categories. For example, a game agent aims to simulate a game-player, while a tool agent mainly focuses on tool using. For each time period, we provide a curated list of studies with diverse agent categories.
 
 ### 📌 Survey Organization
 
@@ -103,31 +108,33 @@ The profiling module influences memory and planning; together, all three influen
 
 🖼️ **Figure 2:** A unified framework diagram showing four modules (Profile, Memory, Planning, Action) branching from a central LLM icon, each expanded into sub-components as detailed below.
 
+> **Figure 2** — A unified framework for the architecture design of LLM-based autonomous agent.
+
 #### 2.1.1 Profiling Module
 
-Agents typically perform tasks by assuming specific roles (e.g., coders, teachers, domain experts). The profiling module defines this role and is usually embedded directly into the prompt.
+Agents typically perform tasks by assuming specific roles, such as coders, teachers, and domain experts [18, 19]. The profiling module defines this role and is usually embedded directly into the prompt to influence LLM behavior.
 
 **Typical profile contents:**
-- Demographic information (age, gender, career)
+- Demographic information (age, gender, career) [20]
 - Personality/psychology information
-- Social information (relationships between agents)
+- Social information (relationships between agents) [21]
 
 The choice of profile content depends on the application — e.g., psychology traits matter more when studying human cognition.
 
 **Three profile generation strategies:**
 
-1. **Handcrafting Method** — profiles are manually specified (e.g., "you are an outgoing person").
-   - Used by *Generative Agent* (name, objectives, relationships), *MetaGPT*, *ChatDev*, *Self-collaboration* (predefined software-development roles), *PTLLM* (personality traits via tools like IPIP-NEO, BFI), and studies prompting LLMs as politicians/journalists/businesspeople.
+1. **Handcrafting Method** — profiles are manually specified (e.g., "you are an outgoing person" or "you are an introverted person").
+   - Used by *Generative Agent* [22] (name, objectives, relationships), *MetaGPT* [23], *ChatDev* [18], *Self-collaboration* [24] (predefined software-development roles), *PTLLM* [25] (personality traits via tools like IPIP-NEO [26] and BFI [27]), and studies exploring toxicity by prompting LLMs as politicians, journalists, and businesspersons [28].
    - ✅ Flexible — any profile info can be assigned.
    - ⚠️ **Limitation:** labor-intensive at scale.
 
 2. **LLM-generation Method** — profiles are generated automatically by an LLM from generation rules and optional seed examples.
-   - Example: *RecAgent* hand-crafts a few seed profiles (age, gender, traits, movie preferences), then uses ChatGPT to generate more.
+   - Example: *RecAgent* [21] hand-crafts seed profiles for a few agents (age, gender, traits, movie preferences), then uses ChatGPT to generate more.
    - ✅ Greatly reduces effort for large-scale populations.
    - ⚠️ **Limitation:** less precise control — can produce inconsistent or off-target profiles.
 
 3. **Dataset Alignment Method** — profiles are derived from real-world datasets, converted into natural language prompts.
-   - Example: assigning GPT-3 roles based on demographic backgrounds (race/ethnicity, gender, age, state of residence) from the American National Election Studies (ANES), then testing whether GPT-3 mirrors real human response patterns.
+   - Example: assigning GPT-3 roles based on demographic backgrounds (race/ethnicity, gender, age, state of residence) from the American National Election Studies (ANES) [29], then testing whether GPT-3 mirrors real human response patterns.
    - ✅ Accurately reflects real-world population attributes.
 
 > **Remark:** These strategies can be combined — e.g., using real datasets to profile a subset of agents (reflecting current society) while manually assigning novel, forward-looking roles to other agents to simulate future social developments.
@@ -148,10 +155,10 @@ LLM-based autonomous agents draw inspiration from human memory: **sensory → sh
 
 | Agent | Domain | Short-term Memory Basis |
 |---|---|---|
-| RLP | Conversation | Internal speaker/listener states |
-| SayPlan | Embodied task planning | Scene graphs + environment feedback |
-| CALYPSO | D&D narration | Scene descriptions, monster info, prior summaries |
-| DEPS | Minecraft | Generated task plans |
+| RLP [30] | Conversation | Internal speaker/listener states |
+| SayPlan [31] | Embodied task planning | Scene graphs + environment feedback |
+| CALYPSO [32] | D&D narration | Scene descriptions, monster info, prior summaries |
+| DEPS [33] | Minecraft | Generated task plans |
 
 📌 **Key Point:** Easy to implement, but limited by context window size — pushes research toward hybrid systems.
 
@@ -161,13 +168,13 @@ LLM-based autonomous agents draw inspiration from human memory: **sensory → sh
 
 | Agent | Long-term Memory Approach |
 |---|---|
-| Generative Agent | Stores past behaviors/thoughts, retrieved via current events |
-| AgentSims | Vector database of embedded daily memories |
-| GITM | Reference plans summarized from successful trajectories |
-| Reflexion | Sliding window (short-term) + persistent condensed insights (long-term) |
-| SCM | Selectively activates relevant long-term knowledge |
-| SimplyRetrieve | Query = short-term; private knowledge base = long-term |
-| MemorySandbox | Shared memory objects across conversations (drag-and-drop) |
+| Generative Agent [20] | Stores past behaviors/thoughts, retrieved via current events |
+| AgentSims [34] | Vector database of embedded daily memories |
+| GITM [16] | Reference plans summarized from successful trajectories |
+| Reflexion [12] | Sliding window (short-term) + persistent condensed insights (long-term) |
+| SCM [35] | Selectively activates relevant long-term knowledge |
+| SimplyRetrieve [36] | Query = short-term; private knowledge base = long-term |
+| MemorySandbox [37] | Shared memory objects across conversations (drag-and-drop) |
 
 > 💡 **Remark:** Long-term-only memory structures are rarely seen in the literature — likely because agents operate in continuous, dynamic environments where short-term memory capture is essential and can't be skipped.
 
@@ -179,21 +186,21 @@ Different storage mediums suit different needs:
 
 ### Natural Languages
 - Memory expressed as raw, flexible, semantically rich text.
-- Examples: **Reflexion** (feedback in a sliding window), **Voyager** (skill descriptions for Minecraft).
+- Examples: **Reflexion** [12] (feedback in a sliding window), **Voyager** [38] (skill descriptions for Minecraft).
 
 ### Embeddings
 - Memory encoded as vectors for efficient retrieval.
-- Example: **MemoryBank** — dual-tower dense retrieval over embedded memory segments.
+- Example: **MemoryBank** [39] — dual-tower dense retrieval over embedded memory segments.
 
 ### Databases
 - Memory stored/manipulated via structured queries.
-- Example: **ChatDB** — uses SQL to add/delete/modify memory.
+- Example: **ChatDB** [40] — uses SQL to add/delete/modify memory.
 
 ### Structured Lists
 - Memory organized as concise lists.
-- Examples: **GITM** (hierarchical tree of action lists per sub-goal), **RET-LLM** (natural language → triplet phrases).
+- Examples: **GITM** [16] (hierarchical tree of action lists per sub-goal), **RET-LLM** [41] (natural language → triplet phrases).
 
-> 💡 **Remark:** Formats aren't mutually exclusive. **GITM** combines them: keys = embeddings (efficient retrieval), values = natural language (rich content).
+> 💡 **Remark:** These formats are not exhaustive (e.g., programming code used by Voyager [38]) and are not mutually exclusive. Many models combine them — e.g., **GITM** uses a key-value list where keys = embeddings (efficient retrieval) and values = natural language (rich semantic content).
 
 ---
 
@@ -279,14 +286,16 @@ flowchart TD
 
 | Method | Approach |
 |---|---|
-| **CoT** | Reasoning steps as in-prompt examples; one-shot step generation |
-| **Zero-shot-CoT** | Triggers ("think step by step") without example steps |
-| **Re-Prompting** | Checks step prerequisites; regenerates plan on failure |
-| **ReWOO** | Separates plan generation from observation gathering, then combines |
-| **HuggingGPT** | Decomposes task into sub-goals, solves each via Huggingface models |
-| **SWIFTSAGE** | Dual-process: SWIFT = fast pattern-based responses; SAGE = deep LLM-based planning |
+| **CoT** [45] | Reasoning steps as in-prompt examples; one-shot step generation |
+| **Zero-shot-CoT** [46] | Triggers ("think step by step") without example steps |
+| **Re-Prompting** [47] | Checks step prerequisites; regenerates plan on failure |
+| **ReWOO** [48] | Separates plan generation from observation gathering, then combines |
+| **HuggingGPT** [13] | Decomposes task into sub-goals, solves each via Huggingface models |
+| **SWIFTSAGE** [49] | Dual-process theory [50]: SWIFT = fast pattern-based responses; SAGE = deep LLM-based planning |
 
-🖼️ Figure: Diagram comparing single-path reasoning (CoT, ReWOO/HuggingGPT — linear step chains) vs. multi-path reasoning (CoT-SC — parallel independent chains; ToT/LMZSP/RAP — branching tree of steps), illustrated as flow/tree diagrams.
+🖼️ **Figure 3:** Diagram comparing single-path reasoning (CoT, ReWOO/HuggingGPT — linear step chains) vs. multi-path reasoning (CoT-SC — parallel independent chains; ToT/LMZSP/RAP — branching tree of steps), illustrated as flow/tree diagrams.
+
+> **Figure 3** — Comparison between the strategies of single-path and multi-path reasoning. LMZSP is the model proposed in [44].
 
 
 ### 📌 Multi-path Reasoning
@@ -526,7 +535,9 @@ flowchart LR
     end
 ```
 
-🖼️ *Figure 4 (rendered above as diagram): Illustration of transitions in strategies for acquiring model capabilities — from parameter learning (ML era), to prompt engineering (LLM era), to mechanism engineering (agent era).*
+🖼️ **Figure 4:** Illustration of transitions in strategies for acquiring model capabilities — from parameter learning (ML era), to prompt engineering (LLM era), to mechanism engineering (agent era).
+
+> **Figure 4** — Illustration of transitions in strategies for acquiring model capabilities.
 
 In the agent era, capability can be acquired via three strategies:
 1. **Model fine-tuning**
@@ -558,12 +569,14 @@ A capability-enhancement strategy distinct from fine-tuning and prompting. Repre
    - *MemPrompt*: stores user natural-language feedback on problem-solving intent in memory, retrieved for similar future tasks.
 
 4. **Self-driven Evolution** — autonomous improvement through self-directed learning and feedback.
-   - *LMA3*: agent autonomously sets its own goals, improving via environment exploration and reward-function feedback.
-   - *S-ALLM-MS*: integrates advanced LLMs (e.g., GPT-4) into a multi-agent system for adaptive performance.
+   - *LMA3* [97]: agent autonomously sets its own goals, improving via environment exploration and reward-function feedback.
+   - *SALLM-MS* [98]: integrates advanced LLMs (e.g., GPT-4) into a multi-agent system for adaptive performance.
 
 ---
 
-### 📊 Table: Representative Agent Papers by Module Design
+### 📊 Table 1: Representative Agent Papers by Module Design
+
+> **Table 1** — For the profile module, we use ①, ② and ③ to represent the handcrafting method, LLM-generation method, and dataset alignment method, respectively. For the memory module, we focus on the implementation strategies for memory operation and memory structure. For memory operation, we use ① and ② to indicate that the model only has read/write operations and has read/write/reflection operations, respectively. For memory structure, we use ① and ② to represent unified and hybrid memories, respectively. For the planning module, we use ① and ② to represent planning w/o feedback and w/ feedback, respectively. For the action module, we use ① and ② to represent that the model does not use tools and use tools, respectively. For the agent capability acquisition (CA) strategy, we use ① and ② to represent the methods with and without fine-tuning, respectively. “-” indicates that the corresponding content is not explicitly discussed in the paper.
 
 **Legend:**
 - *Profile*: ① handcrafting, ② LLM-generation, ③ dataset alignment
@@ -586,7 +599,7 @@ A capability-enhancement strategy distinct from fine-tuning and prompting. Repre
 | DEPS | - | - | - | ② | ① | ② | 02/2023 |
 | Toolformer | - | - | - | ① | ② | ① | 02/2023 |
 | Reflexion | - | ② | ② | ② | ① | ② | 03/2023 |
-| CAMEL | ① | ② | - | - | ② | ① | 03/2023 |
+| CAMEL | ①② | - | - | ② | ① | - | 03/2023 |
 | API-Bank | - | - | - | ② | ② | ② | 04/2023 |
 | ViperGPT | - | - | - | - | ② | - | 03/2023 |
 | HuggingGPT | - | ① | ① | ① | ② | - | 03/2023 |
@@ -611,10 +624,10 @@ A capability-enhancement strategy distinct from fine-tuning and prompting. Repre
 
 ## 2.x Capability Acquisition Strategies (cont.)
 
-- **CLMTWA**: uses a large LLM as *teacher* and a weaker LLM as *student*
+- **CLMTWA** [99]: uses a large LLM as *teacher* and a weaker LLM as *student*
   - Teacher generates natural language explanations to improve student reasoning via theory of mind
   - Personalizes explanations; intervenes only when expected utility justifies it
-- **NLSOM**: agents collaborate via natural language, dynamically adjusting roles/tasks/relationships based on feedback to solve problems beyond a single agent's scope
+- **NLSOM** [100]: agents collaborate via natural language, dynamically adjusting roles/tasks/relationships based on feedback to solve problems beyond a single agent's scope
 
 > 📌 **Remark**: Fine-tuning adjusts model parameters and can absorb large amounts of task-specific knowledge, but only works for open-source LLMs. Non-fine-tuning methods (prompting/mechanism engineering) work for both open- and closed-source LLMs, but are limited by context window size, and the design space of prompts/mechanisms is huge — making optimal solutions hard to find.
 
@@ -648,6 +661,7 @@ flowchart TB
     D --> D2[Industrial Automation]
     D --> D3[Aerospace Engineering]
     D --> D4[Robotics & Embodied AI]
+    D --> D5[Civil Engineering]
 
     A --> E[Evaluation]
     E --> E1[Subjective Evaluation]
@@ -659,49 +673,53 @@ flowchart TB
     E2 --> E2c[Evaluation Benchmark]
 ```
 
+> **Figure 5** — The applications (left) and evaluation strategies (right) of LLM-based agents.
+
 ## 3.1 Social Science
 
 Social science studies societies and relationships among individuals. LLM-based agents contribute via human-like understanding, thinking, and task-solving.
 
 ### 🧠 Psychology
 
-- Agents assigned different profiles can complete psychology experiments, producing results aligning with human-participant studies
-- **Finding**: larger models tend to give more accurate simulation results
-- **Hyper-accuracy distortion**: models like ChatGPT/GPT-4 can produce *too perfect* estimates, potentially affecting downstream applications
-- A study analyzing conversational agents for **mental well-being support** (120 Reddit posts) found:
+- Agents assigned different profiles can complete psychology experiments, producing results aligning with human-participant studies [101, 102]
+- **Finding**: larger models tend to give more accurate simulation results [101]
+- **Hyper-accuracy distortion**: models like ChatGPT/GPT-4 can produce *too perfect* estimates, potentially affecting downstream applications [101]
+- A study analyzing conversational agents for **mental well-being support** (120 Reddit posts) found [103]:
   - ✅ Agents help users cope with anxiety, social isolation, depression
   - ⚠️ Agents may sometimes produce harmful content
 
 ### 🗳️ Political Science and Economy
 
-- Agents used for **ideology detection** and **predicting voting patterns**
-- Used to analyze **discourse structure and persuasive elements** of political speech
-- Agents given traits (talents, preferences, personalities) to explore **simulated human economic behavior**
+- Agents used for **ideology detection** and **predicting voting patterns** [29]
+- Used to analyze **discourse structure and persuasive elements** of political speech [104]
+- Agents given traits (talents, preferences, personalities) to explore **simulated human economic behavior** [105]
 
 ### 🌐 Social Simulation
 
-Simulating human societies is often expensive, unethical, or infeasible — LLM agents enable virtual alternatives.
+Simulating human societies is often expensive, unethical, or infeasible — LLM agents enable virtual alternatives [20, 34, 78, 80, 106–110].
 
 | System | Focus |
 |---|---|
-| Social Simulacra | Simulates online social community to aid decision-makers improve regulations |
-| Generative Agents / AgentSims | Multi-agent virtual town simulating daily human life |
-| SocialAI School | Simulates social cognitive skills during child development |
-| S³ | Social network simulator — propagation of information, emotion, attitude |
-| CGMI | Multi-agent simulation maintaining personality via tree structure + cognitive model (simulated a classroom scenario) |
+| Social Simulacra [80] | Simulates online social community to aid decision-makers improve regulations |
+| Generative Agents [20] / AgentSims [34] | Multi-agent virtual town simulating daily human life |
+| SocialAI School [108] | Simulates social cognitive skills during child development |
+| S³ [78] | Social network simulator — propagation of information, emotion, attitude |
+| CGMI [110] | Multi-agent simulation maintaining personality via tree structure + cognitive model (simulated a classroom scenario) |
+| Social Networks [106, 107] | Investigates behavioral characteristics of LLM agents in social networks |
+| Epidemic Modeling [109] | Simulates disease propagation and collective behavior |
 
 ### ⚖️ Jurisprudence
 
-- Agents assist legal decision-making processes
-  - **Blind Judgement**: multiple LLMs simulate multiple judges' decision-making, consolidating opinions via voting
-  - **ChatLaw**: prominent Chinese legal LLM model
+- Agents assist legal decision-making processes [111, 112]
+  - **Blind Judgement** [112]: multiple LLMs simulate multiple judges' decision-making, consolidating opinions via voting
+  - **ChatLaw** [111]: prominent Chinese legal LLM model
     - Supports database + keyword search strategies to mitigate hallucination
     - Uses self-attention mechanism to reduce reference inaccuracies
 
 ### 📚 Research Assistant
 
-- Assist with generating article abstracts, extracting keywords, crafting study scripts
-- Act as writing assistants that help identify novel research questions for social scientists
+- Assist with generating article abstracts, extracting keywords, crafting study scripts [104]
+- Act as writing assistants that help identify novel research questions for social scientists [113]
 
 ---
 
@@ -711,24 +729,25 @@ Natural science concerns description, understanding, and prediction of natural p
 
 ### 🗂️ Documentation and Data Management
 
-- Agents query/utilize internet information for QA and experiment planning
-- **ChatMOF**: extracts info from text descriptions, plans tool use to predict properties/structures of metal-organic frameworks
-- **ChemCrow**: uses chemistry databases to validate compound representations and identify dangerous substances
+- Agents query/utilize internet information for QA and experiment planning [114]
+- **ChatMOF** [115]: extracts info from text descriptions, plans tool use to predict properties/structures of metal-organic frameworks
+- **ChemCrow** [76]: uses chemistry databases to validate compound representations and identify dangerous substances
 
 ### 🔬 Experiment Assistant
 
-- Agents can independently design, plan, and execute scientific experiments
-  - Given an objective → retrieves documents from internet → uses Python for calculations → runs experiments
-- **ChemCrow**: 17 specialized tools for chemical research; recommends experimental procedures and flags safety risks
+- Agents can independently design, plan, and execute scientific experiments [76, 114, 121]
+  - Given an objective → retrieves documents from internet → uses Python for calculations → runs experiments (Boiko et al. [114])
+- **ChemCrow** [76]: 17 specialized tools for chemical research; recommends experimental procedures and flags safety risks
+- **Grossmann et al.** [121]: autonomous laboratory experimentation and chemical synthesis
 
 ### 🎓 Natural Science Education
 
-- Agent-based education systems help students learn experimental design, methodology, analysis
-- **Math Agents**: assist in exploring, discovering, solving, proving mathematical problems
-- CodeX-based systems: solve/explain university-level math problems
-- **CodeHelp**: programming education agent — course-specific keywords, monitors student queries, gives feedback
-- **EduChat**: personalized, equitable, empathetic educational support for teachers/students/parents
-- **FreeText**: automatically assesses open-ended student responses and gives feedback
+- Agent-based education systems help students learn experimental design, methodology, analysis [114]
+- **Math Agents** [116]: assist researchers in exploring, discovering, solving, and proving mathematical problems
+- **Drori et al.** [117] (using **CodeX** [118]): solve/explain university-level math problems as education tools
+- **CodeHelp** [119]: programming education agent — course-specific keywords, monitors student queries, gives feedback
+- **EduChat** [87]: personalized, equitable, empathetic educational support for teachers/students/parents
+- **FreeText** [120]: automatically assesses open-ended student responses and gives feedback
 
 ---
 
@@ -736,30 +755,30 @@ Natural science concerns description, understanding, and prediction of natural p
 
 ### 💻 Computer Science & Software Engineering
 
-Agents automate coding, testing, debugging, documentation generation.
+In the field of computer science and software engineering, LLM-based agents automate coding, testing, debugging, and documentation generation [18, 23, 24, 126–128].
 
-- **ChatDev**: end-to-end framework — multiple agent roles collaborate via natural language through the software development lifecycle
-- **MetaGPT**: abstracts roles (product manager, architect, project manager, engineer) to supervise code generation
-- **Self-collaboration framework**: multiple LLMs act as distinct "experts," forming a virtual team for code generation without human intervention
-- **LLIFT**: static analysis for code vulnerability identification, balancing accuracy vs. scalability
-- **ChatEDA**: electronic design automation agent — task planning, script generation, execution
-- **CodeHelp**: debugging/testing assistant — explains errors, suggests fixes
-- **PentestGPT**: penetration testing tool — identifies vulnerabilities, develops exploits from source code
-- **D-Bot**: diagnoses database anomalies using a *tree of thought* approach, allowing backtracking to previous steps
+- **ChatDev** [18]: end-to-end framework — multiple agent roles communicate and collaborate via natural language throughout the software development lifecycle
+- **MetaGPT** [23]: abstracts roles (product manager, architect, project manager, engineer) to supervise code generation and enhance output quality
+- **Self-collaboration framework** [24]: multiple LLMs act as distinct "experts," forming a virtual team for code generation without human intervention
+- **LLIFT** [141]: employs LLMs for static analysis to identify code vulnerabilities, balancing accuracy and scalability
+- **ChatEDA** [123]: electronic design automation (EDA) agent — streamlines design via task planning, script generation, and execution
+- **CodeHelp** [119]: debugging/testing assistant — explains errors, suggests fixes, and verifies code accuracy
+- **PentestGPT** [125]: penetration testing tool — identifies common vulnerabilities and develops exploits from source code
+- **D-Bot** [122]: diagnoses database anomalies using a *Tree of Thought* approach, allowing backtracking to previous steps
 
 ### 🏭 Industrial Automation
 
-- Framework integrating LLMs with **digital twin systems** for flexible production
-  - Uses prompt engineering to adapt agents to tasks based on digital-twin info
-  - Coordinates atomic functionalities/skills across production levels
-- **IELLM**: case study of LLMs in oil & gas industry (factory automation, PLC programming)
+In industrial automation, LLM-based agents achieve intelligent planning and control of production processes:
 
-### 🤖 Robotics & Embodied AI
+- **GPT4IA** [129]: integrates LLMs with digital twin systems for flexible production; prompt engineering adapts agents to tasks based on digital twins, coordinating atomic skills across production levels
+- **IELLM** [130]: case study of LLMs in the oil and gas industry, covering factory automation and PLC programming
 
 
 ---
 
-### 📊 Table: Representative Applications (Table 2)
+### 📊 Table 2: Representative Applications
+
+> **Table 2** — Representative applications of LLM-based autonomous agents.
 
 | Domain | Subcategory | Representative Work |
 |---|---|---|
@@ -778,35 +797,36 @@ Agents automate coding, testing, debugging, documentation generation.
 
 ## 🤖 LLM-based Agents in Embodied AI & Robotics
 
-Recent work extends LLM-based autonomous agents into robotics and embodied AI, focusing on improving planning, reasoning, and collaboration in embodied environments.
+Recent work advances reinforcement learning and autonomous agents for robotics and embodied artificial intelligence [16, 38, 79, 132–135, 137–140], focusing on improving planning, reasoning, and collaboration in embodied environments.
 
-- **Planner-Actor-Reporter paradigm** — proposed for embodied reasoning and task planning.
-- **DECKARD** — also introduces the Planner-Actor-Reporter paradigm, decoupling planning, execution, and reporting.
-- **TaPA** — builds a multimodal dataset (multi-view RGB images of indoor scenes + human instructions + plans) to fine-tune LLMs, aligning visual perception with task planning for more executable, visually grounded plans.
+- **Dasgupta et al.** [138] — proposes the Planner-Actor-Reporter paradigm for embodied reasoning and task planning.
+- **DECKARD** [139] — also introduces the Planner-Actor-Reporter paradigm, decoupling planning, execution, and reporting.
+- **TaPA** [137] — builds a multimodal dataset (multi-view RGB images of indoor scenes + human instructions + plans) to fine-tune LLMs, aligning visual perception with task planning for more executable, visually grounded plans.
 
 ### 🦾 Skill-based Control for Physical Tasks
 
 To overcome physical constraints, agents combine multiple skills to generate executable, long-horizon plans:
 
-- **SayCan** — investigates manipulation and navigation skills with a mobile manipulator robot; presents **551 skills** across **7 skill families** and **17 objects** (picking, placing, grasping, manipulating, etc.), inspired by kitchen tasks.
-- **TidyBot** — an embodied agent for personalized household cleanup; learns user preferences for object placement/manipulation via textual examples.
+- **SayCan** [79] — investigates manipulation and navigation skills with a mobile manipulator robot; presents **551 skills** across **7 skill families** and **17 objects** (picking, placing, grasping, manipulating, etc.), inspired by kitchen tasks.
+- **TidyBot** [136] — an embodied agent for personalized household cleanup; learns user preferences for object placement/manipulation via textual examples.
 
 ### 🧰 Open-Source Agent Frameworks
 
-A growing ecosystem of open-source libraries lets developers quickly build and evaluate customized agents:
+A growing ecosystem of open-source libraries enables researchers and developers to quickly build, implement, and evaluate customized agents [19, 82, 127, 142–155]:
 
 | Framework | Focus |
 |---|---|
-| **LangChain** | Automates coding, testing, debugging, documentation generation; integrates LMs with data sources and environments for multi-agent collaboration |
-| **XLang** (built on LangChain) | Executable language grounding — converts natural language into code/action sequences for databases, web apps, robots |
-| **AutoGPT** | Fully automated agent; sets goals, decomposes into tasks, cycles until goal completion |
-| **WorkGPT** | Similar to AutoGPT/LangChain; converses back-and-forth with AI given an instruction + APIs |
-| **GPT-Engineer** / **DemoGPT** | Automate code generation from prompts for development tasks |
-| **SmolModels** | Family of compact LMs for various tasks |
-| **AGiXT** | Dynamic AI automation platform; adaptive memory, smart features, plugin system |
-| **AgentVerse** | Framework for building customized LLM-agent simulations |
-| **GPT Researcher** | Develops research questions, crawls the web, summarizes and aggregates sources |
-| **BMTools** | Community-driven tool building/sharing platform; supports multi-tool concurrent task execution |
+| **LangChain** [147] | Automates coding, testing, debugging, documentation generation; integrates LMs with data sources and environments for multi-agent collaboration |
+| **XLang** [145] (built on LangChain) | Executable language grounding — converts natural language into code/action sequences for databases, web apps, robots |
+| **AutoGPT** [82] | Fully automated agent; sets goals, decomposes into tasks, cycles until goal completion |
+| **WorkGPT** [148] | Similar to AutoGPT/LangChain; converses back-and-forth with AI given an instruction + APIs |
+| **GPT-Engineer** [128] / **DemoGPT** [127] | Automate code generation from prompts for development tasks |
+| **SmolModels** [126] | Family of compact LMs for various tasks |
+| **AGiXT** [144] | Dynamic AI automation platform; adaptive memory, smart features, plugin system |
+| **AgentVerse** [156] | Framework for building customized LLM-agent simulations |
+| **GPT Researcher** [150] | Develops research questions, crawls the web, summarizes and aggregates sources |
+| **BMTools** [151] | Community-driven tool building/sharing platform; supports multi-tool concurrent task execution |
+| **Additional Libraries** | AgentGPT [142], AI-Legion [143], BabyAGI [146], LoopGPT [149], Transformers-Agent [152], MiniAGI [153], SuperAGI [154] |
 
 > ⚠️ **Limitation / Risk**
 > - LLMs can hallucinate, producing erroneous answers → incorrect conclusions, experimental failures, or safety risks in hazardous experiments. Users need domain expertise and caution.
@@ -838,42 +858,44 @@ flowchart TD
 
 ### 🧑‍⚖️ Subjective Evaluation
 
-Measures agent capability via human judgment — useful when no evaluation dataset exists or quantitative metrics are hard to design (e.g., intelligence, user-friendliness).
+Subjective evaluation measures agent capabilities based on human judgments [20, 22, 29, 80, 157] — useful when no evaluation datasets exist or quantitative metrics are hard to design (e.g., evaluating intelligence or user-friendliness).
 
-- **Human Annotation**: Evaluators directly score/rank agent outputs.
-  - Example: annotators asked 25 questions probing five key ability areas.
-  - Example: annotators judge whether models enhance rule development in online communities.
-- **Turing Test**: Evaluators try to distinguish agent output from human output; if they can't, the agent is deemed human-like.
-  - Example: experiments on free-form partisan text, where evaluators guess human vs. agent origin.
+- **Human Annotation**: Evaluators directly score or rank agent outputs [22, 29, 104].
+  - Example: in Generative Agents [20], annotators answer 25 questions probing five key agent ability areas.
+  - Example: in Social Simulacra [80], annotators judge whether models enhance rule development in online communities.
+- **Turing Test**: Evaluators try to distinguish agent output from human output; if indistinguishable, the agent achieves human-like performance.
+  - Example: Argyle et al. [29] conduct experiments on free-form partisan text where evaluators guess human vs. agent origin.
 
 > ⚠️ **Limitation**: Subjective evaluation is costly, inefficient, and subject to population bias.
 >
-> 📌 **Trend**: Researchers increasingly use LLMs themselves as evaluators:
-> - **ChemCrow** — uses GPT to assess task completion and process accuracy.
-> - **ChatEval** — employs multiple agents in a structured debate format to critique/assess candidate model outputs.
+> 📌 **Trend**: Researchers increasingly use LLMs themselves as intermediaries for subjective assessment:
+> - **ChemCrow** [76] — uses GPT to assess task completion and process accuracy.
+> - **ChatEval** [158] — employs multiple agents in a structured debate format to critique/assess candidate model outputs.
 
 ### 📐 Objective Evaluation
 
-Uses quantitative, comparable, trackable metrics. Three key aspects: **metrics**, **protocols**, and **benchmarks**.
+Assesses agent capabilities using quantitative metrics that can be computed, compared, and tracked over time. Three key aspects: **metrics**, **protocols**, and **benchmarks**.
 
 #### Metrics
 
-1. **Task success metrics** — success rate, reward/score, coverage, accuracy/error rate (may reflect program executability or task validity). Higher = better task completion.
-2. **Human similarity metrics** — coherence, fluency, dialogue similarity to humans, human acceptance rate. Higher = better human simulation.
-3. **Efficiency metrics** — development cost, training efficiency.
+1. **Task success metrics** — measure goal completion: success rate [12, 22, 58, 60], reward/score [22, 60, 161], coverage [16], and accuracy/error rate [18, 40, 80, 101] (reflecting program executability [18] or task validity [101]). Higher = greater completion ability.
+2. **Human similarity metrics** — quantify resemblance to human behaviors: coherence [104], fluency [104], dialogue similarities with humans [80], and human acceptance rate [101]. Higher = better simulation.
+3. **Efficiency metrics** — assess operational cost: development cost [18], training efficiency [16, 38].
 
 #### Protocols
 
-- **Real-world simulation**: Agents perform tasks autonomously in immersive environments (games, simulators); evaluated via task success rate and human similarity based on trajectories/objectives.
-- **Social evaluation**: Assesses social intelligence via agent interactions in simulated societies — collaborative tasks (teamwork), debates (argumentative reasoning), human studies (social aptitude). Measures coherence, theory of mind, social IQ, cooperation, communication, empathy.
-- **Multi-task evaluation**: Uses diverse tasks across domains to measure generalization in open-domain environments.
-- **Software testing**: Agents perform tasks like generating test cases, reproducing bugs, debugging, interacting with developers/tools. Measured via test coverage and bug detection rate.
+- **Real-world simulation**: Agents perform tasks autonomously in immersive environments (games, simulators); evaluated via task success rate and human similarity based on trajectories and completed objectives [12, 16, 22, 33, 38, 60, 86, 161, 164, 168].
+- **Social evaluation**: Assesses social intelligence via agent interactions in simulated societies — collaborative tasks (teamwork), debates (argumentative reasoning), human studies (social aptitude) [34, 80, 101, 163]. Measures coherence, theory of mind, social IQ, cooperation, communication, empathy.
+- **Multi-task evaluation**: Uses diverse tasks across domains to measure agent generalization in open-domain environments [12, 29, 86, 151, 162–164, 169, 170].
+- **Software testing**: Evaluates agents on software engineering tasks: test case generation, bug reproduction, debugging, interacting with developers/tools [159, 160, 167]. Measured via test coverage and bug detection rate.
 
-#### 📋 Benchmark Overview
+### 📊 Table 3: Evaluation Strategies Overview
+
+> **Table 3** — For subjective evaluation, we use ① and ② to represent human annotation and the Turing test, respectively. For objective evaluation, we use ①, ②, ③, and ④ to represent real-world simulation, social evaluation, multi-task evaluation, and software testing, respectively. “✓” indicates that the evaluations are based on benchmarks.
 
 > Legend — Subjective: ① Human Annotation, ② Turing Test. Objective: ① Real-world simulation, ② Social evaluation, ③ Multi-task evaluation, ④ Software testing. "✓" = evaluation based on benchmarks.
 
-| Model | Subjective | Objective | Benchmark | Date |
+| Model | Subjective | Objective | Benchmark | Time |
 |---|---|---|---|---|
 | WebShop | – | ①③ | ✓ | 07/2022 |
 | Social Simulacra | ① | ② | – | 08/2022 |
@@ -907,21 +929,21 @@ Uses quantitative, comparable, trackable metrics. Three key aspects: **metrics**
 
 #### 🏆 Notable Benchmarks
 
-- **ALFWorld, IGLU, Minecraft** — common environments for interactive, task-oriented evaluation.
-- **Tachikuma** — evaluates LLM ability to infer multi-character/novel-object interactions via TRPG game logs.
-- **AgentBench** — first systematic framework assessing LLMs as agents across diverse real-world domains.
-- **SocKET** — evaluates social capabilities across 58 tasks in 5 categories (humor/sarcasm, emotions, credibility, etc.).
-- **AgentSims** — flexible framework for designing agent planning/memory/action strategies.
-- **ToolBench** — tool-use benchmark with 16,464 real-world RESTful APIs, single- and multi-tool tasks.
-- **WebShop** — product search/retrieval benchmark built from 1.18M real-world items.
-- **Mobile-Env** — extendable platform for multi-step interaction evaluation.
-- **WebArena** — comprehensive multi-domain website environment for end-to-end agent evaluation.
-- **GentBench** — evaluates reasoning, safety, and efficiency in tool-using agents.
-- **RocoBench** — 6 tasks evaluating multi-agent collaboration/coordination in cooperative robotics.
-- **EmotionBench** — evaluates LLM emotion appraisal across 400+ situations eliciting 8 negative emotions.
-- **PEB** — tailored for penetration testing scenarios; 13 diverse targets from leading platforms, structured by difficulty.
-- **ClemBench** — 5 Dialogue Games assessing LLMs as players.
-- **E2E** — end-to-end benchmark for chatbot accuracy and usefulness.
+- **ALFWorld [60], IGLU [161], Minecraft [16, 33, 38]** — common environments for interactive, task-oriented simulation evaluation.
+- **Tachikuma** [168] — evaluates LLMs' ability to infer and understand complex interactions involving multiple characters and novel objects via TRPG game logs.
+- **AgentBench** [169] — first systematic framework assessing LLMs as agents on real-world challenges across diverse domains.
+- **SocKET** [163] — evaluates social capabilities of LLMs across 58 tasks covering 5 categories of social information (humor/sarcasm, emotions, credibility, etc.).
+- **AgentSims** [34] — versatile framework for evaluating LLM agents, measuring effectiveness of planning, memory, and action modules in interactive environments.
+- **ToolBench** [151] — assesses tool-use capability featuring 16,464 real-world RESTful APIs and diverse single-/multi-tool instructions.
+- **WebShop** [86] — evaluates product search and retrieval capabilities on 1.18M real-world items.
+- **Mobile-Env** [164] — extendable interactive platform evaluating multi-step interaction capabilities of LLM agents.
+- **WebArena** [173] — comprehensive multi-domain website environment for end-to-end task completion evaluation.
+- **GentBench** [171] — evaluates reasoning, safety, and efficiency in tool-augmented agents.
+- **RocoBench** [92] — 6 tasks evaluating multi-agent collaboration, communication, and coordination in cooperative robotics.
+- **EmotionBench** [172] — evaluates emotion appraisal ability across 400+ situations eliciting 8 negative emotions using self-report scales.
+- **PEB / PTB** [125] — tailored for penetration testing scenarios; 13 diverse targets from leading platforms across varying difficulty levels.
+- **ClemBench** [165] — 5 Dialogue Games assessing LLMs' ability as game players.
+- **E2E** [174] — end-to-end benchmark testing accuracy and usefulness of chatbots.
 
 > ⚠️ **Limitation**: Current objective techniques cannot perfectly measure all agent capabilities, but they provide essential, complementary insights alongside subjective assessment. Continued benchmark/methodology advances will further improve evaluation.
 
@@ -930,15 +952,15 @@ Uses quantitative, comparable, trackable metrics. Three key aspects: **metrics**
 
 > With the growth of LLM research, several surveys have emerged covering adjacent but distinct territory.
 
-- 📌 **Background & mainstream tech** — one survey extensively covers LLM background, findings, and mainstream techniques
-- 📌 **Downstream applications** — another focuses on LLM applications in downstream tasks and deployment challenges
-- 📌 **Human alignment** — a survey compiles alignment techniques, including data collection and training methodologies
-- 📌 **Reasoning** — a survey covers the state of LLM reasoning research, including how to improve and evaluate it
-- 📌 **Tool-augmented LMs (ALMs)** — a review of language models augmented with reasoning and tool-use ("Augmented Language Models")
-- 📌 **Evaluation** — a survey addresses *what*, *where*, and *how* to evaluate LLMs across downstream tasks and societal impact
-- 📌 **Capabilities & limitations** — another discusses LLM capabilities/limitations across downstream tasks
+- 📌 **Background & mainstream tech** — [175] extensively covers LLM background, findings, and mainstream technologies.
+- 📌 **Downstream applications** — [176] focuses on LLM applications in downstream tasks and deployment challenges.
+- 📌 **Human alignment** — [177] compiles existing alignment techniques, including data collection and model training methodologies.
+- 📌 **Reasoning** — [178] presents the current state of research on LLMs' reasoning abilities, exploring approaches to improve and evaluate them.
+- 📌 **Tool-augmented LMs (ALMs)** — [179] reviews language models augmented with reasoning capabilities and tool use ("Augmented Language Models").
+- 📌 **Evaluation** — [180] addresses *what*, *where*, and *how* to evaluate LLMs across downstream tasks and societal impact.
+- 📌 **Capabilities & limitations** — [181] discusses LLM capabilities and limitations across various downstream tasks.
 
-⚠️ **Gap identified**: None of the prior surveys specifically focus on **LLM-based Agents**. This paper compiles 100 relevant works on LLM-based Agents, covering construction, applications, and evaluation.
+⚠️ **Gap identified**: None of the prior surveys specifically focus on **LLM-based Agents**. This study compiles 100 relevant works on LLM-based Agents, covering construction, applications, and evaluation.
 
 ---
 
@@ -951,10 +973,10 @@ While the field has seen remarkable successes, it remains nascent. Key open chal
 - Autonomous agents must convincingly play specific roles (coder, researcher, chemist, etc.), unlike general-purpose LLMs.
 - **Problems:**
   - LLMs are trained on web corpora, so rarely-discussed or newly emerging roles are poorly simulated.
-  - Existing LLMs may not model human cognitive psychology well, leading to a lack of self-awareness in conversation.
+  - Existing LLMs may not model human cognitive psychology well, leading to a lack of self-awareness in conversation scenarios [30].
 - **Potential solutions:**
   - Fine-tune LLMs on real-human data collected for uncommon roles/psychology profiles.
-  - Design tailored agent prompts/architectures — though the design space is very large, making optimization hard.
+  - Design tailored agent prompts/architectures [182] — though the design space is very large, making optimization hard.
 - ⚠️ **Trade-off**: fine-tuning for uncommon roles risks degrading performance on common roles.
 
 ### 6.2 Generalized Human Alignment
@@ -972,7 +994,7 @@ While the field has seen remarkable successes, it remains nascent. Key open chal
 
 - Agents typically combine multiple modules (memory, planning, etc.), each needing its own prompt — together forming a **prompt framework**, not a single prompt.
 - Complications:
-  - Prior work shows LLM prompts lack robustness — minor changes can cause large output changes.
+  - Prior work [183, 184] shows LLM prompts lack robustness — minor alterations can yield substantially different outcomes.
   - This is worse for agents since one module's prompt can influence others.
   - Prompt frameworks vary significantly across different LLMs.
 - ⚠️ **Unresolved**: building a unified, resilient prompt framework across diverse LLMs.
@@ -983,20 +1005,20 @@ While the field has seen remarkable successes, it remains nascent. Key open chal
 ### 6.4 Hallucination
 
 - LLMs (and thus agents) can produce false information with high confidence.
-- Example: in code generation tasks, simplistic instructions can trigger hallucinatory behavior in agents.
-- **Consequences**: incorrect/misleading code, security risks, ethical issues.
-- **Mitigation**: incorporate human correction feedback directly into the human-agent interaction loop.
+- Example: in code generation tasks, simplistic instructions can trigger hallucinatory behavior in agents [185].
+- **Consequences**: incorrect/misleading code, security risks, and ethical issues [185].
+- **Mitigation**: incorporate human correction feedback directly into the human-agent interaction loop [23]. (See also [175] for broader discussion.)
 
 ### 6.5 Knowledge Boundary
 
-- A key application of agents is simulating human behavior — but LLMs' vast web-scale knowledge can exceed what a real individual would know.
+- A key application of agents is simulating diverse real-world human behaviors [20] — but LLMs' vast web-scale knowledge can exceed what a real individual would know.
 - **Example**: simulating movie-selection behavior requires the LLM to act as if it has no prior knowledge of the movies — but it may already "know" them, biasing the simulation.
 - 📌 **Open problem**: how to constrain an LLM's use of "user-unknown" knowledge to preserve simulation believability.
 
 ### 6.6 Efficiency
 
-- LLMs have inherently slow (autoregressive) inference.
-- Agents often need multiple LLM queries per action (memory extraction, planning, etc.), compounding latency.
+- Due to their autoregressive architecture, LLMs typically have slow inference speeds.
+- Agents often need multiple LLM queries per action (memory extraction, planning before action, etc.), compounding latency.
 - Agent efficiency is therefore tightly bound to LLM inference speed.
 
 ---
@@ -1011,11 +1033,11 @@ While the field has seen remarkable successes, it remains nascent. Key open chal
 
 ## Acknowledgement
 
-Supported in part by the National Natural Science Foundation of China (No. 62102420), the Beijing Outstanding Young Scientist Program, and multiple Renmin University of China initiatives (Intelligent Social Governance Platform, "Double-First Class" Initiative fund, Public Computing Cloud).
+This work is supported in part by National Natural Science Foundation of China (No. 62102420), Beijing Outstanding Young Scientist Program NO. BJJWZYJH012019100020098, Intelligent Social Governance Platform, Major Innovation & Planning Interdisciplinary Platform for the "Double-First Class" Initiative, Renmin University of China, Public Computing Cloud, Renmin University of China, and fund for building world-class universities (disciplines) of Renmin University of China.
 
 ---
 
-## References (partial — items 1–49)
+## References
 
 1. Mnih et al. — Human-level control through deep reinforcement learning. *Nature*, 2015.
 2. Lillicrap et al. — Continuous control with deep reinforcement learning. arXiv:1509.02971, 2015.

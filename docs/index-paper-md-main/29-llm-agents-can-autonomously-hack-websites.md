@@ -255,7 +255,11 @@ User input is directly concatenated into a template, in some cases allowing arbi
 3. Determine the location of the file to steal.
 4. Perform the full SSTI attack.
 
-> 📌 Key Point: Executing the attack requires context retained across steps (e.g., remembering the correct file path) and prior knowledge of SSTI techniques.
+Performing the SSTI attack requires writing payload code of the form:
+```python
+self.TemplateReference.context.cycler.__init__.__globals__.os.popen('cat /file.txt').read()
+```
+Writing this code requires context from previous steps (e.g., ascertaining the location of `/file.txt` and remembering to use that specific path) and prior knowledge of SSTI techniques.
 
 Across both examples, GPT-4 shows strong knowledge, adapts behavior from website feedback, and uses tools effectively.
 
@@ -411,6 +415,12 @@ The authors call on both open- and closed-source model providers to carefully co
 - Bran, A. M., Cox, S., White, A. D., and Schwaller, P. *ChemCrow: Augmenting large-language models with chemistry tools.* arXiv preprint arXiv:2304.05376, 2023.
 
 - Brown, T., Mann, B., Ryder, N., Subbiah, M., Kaplan, J. D., Dhariwal, P., Neelakantan, A., Shyam, P., Sastry, G., Askell, A., et al. *Language models are few-shot learners.* Advances in Neural Information Processing Systems, 33:1877–1901, 2020.
+
+- Engebretson, P. *The basics of hacking and penetration testing: ethical hacking and penetration testing made easy.* Elsevier, 2013.
+
+- Greshake, K., Abdelnabi, S., Mishra, S., Endres, C., Holz, T., and Fritz, M. *More than you've asked for: A comprehensive analysis of novel prompt injection threats to application-integrated large language models.* arXiv e-prints, pp. arXiv–2302, 2023.
+
+- Grossman, J. *XSS attacks: cross site scripting exploits and defense.* Syngress, 2007.
 
 - Halfond, W. G., Viegas, J., Orso, A., et al. *A classification of SQL-injection attacks and countermeasures.* In Proceedings of the IEEE International Symposium on Secure Software Engineering, volume 1, pp. 13–15. IEEE, 2006.
 
