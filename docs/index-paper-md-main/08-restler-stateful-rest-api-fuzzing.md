@@ -1,7 +1,8 @@
 
 # RESTler: Stateful REST API Fuzzing
 
-**Authors:** Vaggelis Atlidakis (Columbia University), Patrice Godefroid (Microsoft Research), Marina Polishchuk (Microsoft Research)
+**Authors:** Vaggelis Atlidakis* (Columbia University), Patrice Godefroid (Microsoft Research), Marina Polishchuk (Microsoft Research)  
+*\*The work of this author was mostly done at Microsoft Research.*
 
 ## 📌 Abstract
 
@@ -77,12 +78,33 @@ A simple service with five request types:
 
 ### From Spec to Grammar (Figure 2)
 
-RESTler converts a Swagger YAML snippet into an **executable Python grammar**:
+**Swagger Specification Snippet (YAML):**
 
-- `restler_static(x)` → appends the literal string `x` unchanged.
-- `restler_fuzzable(type)` → substitutes a value of that type from a small dictionary (e.g., dictionary for `string` might contain `"sampleString"`).
+```yaml
+basePath: '/api'
+swagger: '2.0'
+definitions:
+  "Blog Post":
+    properties:
+      body:
+        type: string
+      id:
+        type: integer
+    required:
+      - body
+    type: object
+paths:
+  "/blog/posts/":
+    post:
+      parameters:
+        - in: body
+          name: payload
+          required: true
+          schema:
+            $ref: "/definitions/Blog Post"
+```
 
-Example: the `POST /blog/posts/` schema requires `body` (string) and optionally returns `id` (integer). RESTler auto-generates a `parse_posts` function that extracts the returned `id` and registers it as a **dynamic object** for reuse.
+**Derived RESTler Grammar (Python):**
 
 ```python
 def parse_posts(data):
@@ -106,13 +128,79 @@ request = requests.Request(
 )
 ```
 
+RESTler converts the Swagger specification into this executable Python grammar:
+- `restler_static(x)` → appends the literal string `x` unchanged.
+- `restler_fuzzable(type)` → substitutes a value of that type from a (small) dictionary of values for that type (e.g., dictionary for `string` might contain `"sampleString"`).
+- The response returns a new dynamic object (a dynamically created resource id) named `id` of type integer. RESTler auto-generates the `parse_posts` function to extract the returned `id` and register it via `dependencies.set_var(post_id)` / `post_id.writer()` for reuse.
+
 📌 **Key Point:** By analyzing all request types in the spec this way, RESTler automatically infers that the `id` produced by `POST` is required by the other three request types (`GET/{id}`, `PUT/{id}`, `DELETE/{id}`). These **producer-consumer dependencies** drive later test generation.
 
 ---
 
 ## III. Test Generation Algorithm
 
-🔬 **Method overview** (Figure 3, python-like pseudocode):
+🔬 **Method overview (Figure 3):**
+
+```python
+# Inputs: swagger_spec, maxLength
+# Set of requests parsed from the Swagger API spec
+reqSet = PROCESS(swagger_spec)
+# Set of request sequences (initially an empty sequence epsilon)
+seqSet = { () }
+# Main loop: iterate up to a given maximum sequence length
+n = 1
+while (n <= maxLength):
+    seqSet = EXTEND(seqSet, reqSet)
+    seqSet = RENDER(seqSet)
+    n = n + 1
+
+# Extend all sequences in seqSet by appending
+# new requests whose dependencies are satisfied
+def EXTEND(seqSet, reqSet):
+    newSeqSet = {}
+    for seq in seqSet:
+        for req in reqSet:
+            if DEPENDENCIES(seq, req):
+                newSeqSet = newSeqSet + concat(seq, req)
+    return newSeqSet
+
+# Concretize all newly appended requests using dictionary values,
+# execute each new request sequence and keep the valid ones
+def RENDER(seqSet):
+    newSeqSet = {}
+    for seq in seqSet:
+        req = last_request_in(seq)
+        V_tilde = tuple_of_fuzzable_types_in(req)
+        for v_tilde in V_tilde:
+            newReq = concretize(req, v_tilde)
+            newSeq = concat(seq, newReq)
+            response = EXECUTE(newSeq)
+            if response has a valid code:
+                newSeqSet = newSeqSet + newSeq
+            else:
+                log_error
+    return newSeqSet
+
+# Check that all objects referenced in a request are produced
+# by some response in a prior request sequence
+def DEPENDENCIES(seq, req):
+    if CONSUMES(req) <= PRODUCES(seq):
+        return True
+    else:
+        return False
+
+# Objects required in a request
+def CONSUMES(req):
+    return object_types_required_in(req)
+
+# Objects produced in the responses of a sequence of requests
+def PRODUCES(seq):
+    dynamicObjects = {}
+    for req in seq:
+        newObjs = objects_produced_in_response_of(req)
+        dynamicObjects = dynamicObjects + newObjs
+    return dynamicObjects
+```
 
 ```mermaid
 flowchart TD
@@ -202,10 +290,12 @@ Q1 is answered using the simple **Blog Posts** service; Q2 and Q3 use **GitLab**
   - This bug is only reachable if the fuzzer tracks dynamic-object dependencies across requests (i.e., needs the real checksum from a prior `GET`, not a guessed one).
 
 **🖼️ GitLab**
-- Open-source self-hosted Git service; backend >376K lines of Ruby (Ruby on Rails), REST API front end.
-- Deployment config: Nginx → Unicorn (15 workers, 2GB cap each), PostgreSQL (pool of 10), default Sidekiq/Redis setup.
-- Rated to scale to ~4,000 concurrent users per GitLab's own guidance.
-- Used by 100,000+ organizations; ~2/3 market share of self-hosted Git.
+- Open-source self-hosted Git service; backend >376K lines of Ruby (Ruby on Rails [35]), REST API front end [14].
+- Deployment config: Nginx → Unicorn (15 workers, 2GB cap each), PostgreSQL (pool of 10 workers), default Sidekiq/Redis setup.
+- Rated to scale to ~4,000 concurrent users per GitLab's own guidance [15].
+- Used by 100,000+ organizations, with millions of users; holds ~2/3 market share of the self-hosted Git market [13], [20].*
+
+*\*Footnote 1: GitLab [13] is used by more than 100,000 organizations, has millions of users, and has currently a 2/3 market share of the self-hosted Git market [20].*
 
 **Fuzzing dictionaries used:**
 
@@ -313,26 +403,26 @@ Compared three algorithm variants on the Blog Posts service, generating all sequ
 
 *Total Requests column shows average feasible request renderings in parentheses (\*).*
 
-| API | Total Requests (*avg renderings) | Time (hrs) | BFS Len. | BFS Coverage | BFS-Fast Len. | BFS-Fast Coverage | RandomWalk Len. (restarts) | RandomWalk Coverage | Final seqSet (BFS / BFS-Fast) |
+| API | Total Requests (*avg renderings) | Time (hrs) | BFS Len. | BFS Coverage | BFS-Fast Len. | BFS-Fast Coverage | RandomWalk Len. (restarts) | RandomWalk Coverage | Final seqSet (BFS / BFS-Fast / RandomWalk) |
 |---|---|---|---|---|---|---|---|---|---|
 | Commits | 11 (\*11) | 1 | 4 | 1202 | 7 | 1697 | 13 (16) | 1285 | — |
 | | | 3 | 5 | 1760 | 9 | 1731 | 13 (35) | 1295 | — |
-| | | 5 | 5 | 1760 | 12 | 1731 | 13 (56) | 1303 | 20679 / 33 |
+| | | 5 | 5 | 1760 | 12 | 1731 | 13 (56) | 1303 | 20679 / 33 / 1 |
 | Branches | 7 (\*2) | 1 | 5 | 1182 | 21 | 1154 | 15 (24) | 1182 | — |
 | | | 3 | 5 | 1185 | 37 | 1178 | 19 (92) | 1187 | — |
-| | | 5 | 5 | 1185 | 47 | 1178 | 22 (158) | 1208 | 5528 / 11 |
+| | | 5 | 5 | 1185 | 47 | 1178 | 22 (158) | 1208 | 5528 / 11 / 1 |
 | Issues | 22 (\*82) | 1 | 2 | 1150 | 2 | 1086 | 10 (1) | 770 | — |
 | | | 3 | 3 | 1163 | 4 | 1551 | 10 (1) | 770 | — |
-| | | 5 | 3 | 1163 | 5 | 1570 | 16 (2) | 847 | 15658 / 26 |
+| | | 5 | 3 | 1163 | 5 | 1570 | 16 (2) | 847 | 15658 / 26 / 1 |
 | Repos | 10 (\*24) | 1 | 3 | 1127 | 5 | 1141 | 10 (29) | 1195 | — |
 | | | 3 | 3 | 1127 | 7 | 1141 | 13 (88) | 1231 | — |
-| | | 5 | 3 | 1181 | 8 | 1161 | 13 (142) | 1231 | 2194 / 64 |
+| | | 5 | 3 | 1181 | 8 | 1161 | 13 (142) | 1231 | 2194 / 64 / 1 |
 | Groups | 50 (\*2) | 1 | 2 | 961 | 6 | 1275 | 19 (41) | 1167 | — |
 | | | 3 | 3 | 1177 | 11 | 1275 | 19 (120) | 1250 | — |
-| | | 5 | 3 | 1177 | 14 | 1275 | 22 (186) | 1283 | 79518 / 130 |
+| | | 5 | 3 | 1177 | 14 | 1275 | 22 (186) | 1283 | 79518 / 130 / 1 |
 | Projects | 48 (\*4) | 1 | 2 | 1006 | 5 | 1318 | 4 (3) | 889 | — |
 | | | 3 | 2 | 1053 | 11 | 1319 | 22 (31) | 1024 | — |
-| | | 5 | 3 | 1203 | 15 | 1319 | 22 (45) | 1273 | 18173 / 171 |
+| | | 5 | 3 | 1203 | 15 | 1319 | 22 (45) | 1273 | 18173 / 171 / 1 |
 
 > Although BFS covers slightly more lines of code in some APIs, BFS-Fast and RandomWalk reach **deeper** request sequences while keeping a much **smaller seqSet**.
 
@@ -357,10 +447,12 @@ Compared three algorithm variants on the Blog Posts service, generating all sequ
 **Definition:** a *bug* = a `500` HTTP status code returned after executing a request sequence.
 
 ### Bucketization procedure
-1. When a new bug is found, compute all non-empty suffixes of its (non-rendered) request sequence, starting from the smallest.
+1. When a new bug is found, compute all non-empty suffixes of its (non-rendered) request sequence*, starting from the smallest.
 2. Check if any suffix matches a previously recorded bug-triggering sequence.
 3. If matched → add to that bug's existing bucket.
 4. If not → create a new bucket.
+
+*\*Footnote 2: A request sequence of length $n$ has $n$ suffixes of length $1, 2, \ldots, n$.*
 
 > With BFS or BFS-Fast, this scheme identifies each bug by its *shortest* triggering sequence.
 
@@ -387,7 +479,7 @@ Compared three algorithm variants on the Blog Posts service, generating all sequ
 
 ## 🐛 New Bugs Found in GitLab
 
-Across all fuzzing experiments, RESTler found **28 new unique bugs** in GitLab — all reproducible, disclosed, confirmed, and fixed by GitLab developers.
+Across all fuzzing experiments, RESTler found **28 new unique bugs** in GitLab — all reproducible, disclosed, confirmed, and fixed by GitLab developers (see [16], [17], [18], [19] for other examples of bugs found).
 
 ### Example 1 — Commits API bug
 - **Trigger:** cherry-picking a commit to a branch with an **empty name**.
@@ -447,30 +539,31 @@ RESTler was also tested (preliminarily) against **three Azure services** and **o
 
 ## 📚 Related Work
 
-- **HTTP Fuzzers** (Burp, Sulley, BooFuzz, AppSpider, Qualys WAS): capture/replay HTTP traffic and fuzz using pre-defined or user-defined rules; some now leverage Swagger specs. RESTler's originality: lightweight static analysis of Swagger specs to infer **request-type dependencies**, enabling stateful sequence generation without pre-recorded traffic.
+- **HTTP Fuzzers** (Burp [8], Sulley [38], BooFuzz [7], AppSpider [4], Qualys WAS [34], APIFuzzer [3], TnT-Fuzzer [41]): capture/replay HTTP traffic, parse HTTP requests/responses (and embedded JSON), and fuzz using pre-defined heuristics or user-defined rules. Some tools have been extended to leverage Swagger specs to guide fuzzing [4], [34], [41], [3]. RESTler's originality: lightweight static analysis of Swagger specs to automatically infer **request-type dependencies**, enabling stateful sequence generation exercising business logic without pre-recorded traffic.
 
-- **Feedback-directed Test Generation:** RESTler's dynamic-feedback pruning is conceptually similar to Randoop, though search strategies and object-equality optimizations differ. Unlike Randoop's typed object-oriented approach, Swagger's dynamic objects are implicitly declared and untyped — addressed via RESTler's annotation support.
+- **Feedback-directed Test Generation:** RESTler's dynamic-feedback pruning (line 32 in Figure 3) is conceptually similar to feedback used in Randoop [32], though search strategies and object-equality optimizations differ. Randoop analyzes type dependencies for typed object-oriented programs, whereas Swagger dynamic objects are implicitly declared and untyped (handled via RESTler's annotations). In the future, richer user annotations could specify complex service-specific types and properties in the spirit of code contracts [28], [5].
 
-- **Model-based Testing:** BFS-Fast is inspired by model-based test generation aiming for minimal test sets with full state/transition coverage, and by grammar-coverage test generation. BFS-Fast provides full grammar coverage up to a given sequence length (not necessarily minimal test count, but manageable in practice).
+- **Model-based Testing:** BFS-Fast is inspired by test generation in model-based testing [42] aiming to generate minimal test suites covering states and transitions of a finite-state machine [43], as well as grammar-coverage test generation covering all production rules [26]. BFS-Fast provides full grammar coverage up to the current sequence length with a manageable test count.
 
-- **Grammar-based Fuzzing** (Peach, SPIKE, etc.): general-purpose, but require manually constructed API-specific grammars. RESTler automatically derives its grammar from a Swagger spec, with fuzzing rules generated automatically.
+- **Grammar-based Fuzzing** (Peach [33], SPIKE [37], Sutton et al. [39]): general-purpose, but require manually constructing API-specific input grammars. RESTler automatically generates its grammar from a Swagger spec, with fuzzing rules determined separately and automatically by the Figure 3 algorithm.
 
-- **Grammar Learning from Samples:** a complementary research direction; RESTler currently depends on a Swagger spec but could potentially be refined using representative unit tests, live traffic, or ML/static analysis for services lacking specs.
+- **Grammar Learning from Samples:** a complementary research direction [25], [6], [24], [36]. RESTler relies on Swagger specs and learns pruning via service responses, but specs could be further refined using unit tests or live traffic. For services lacking specs, future work could infer them via machine learning on runtime traffic logs or static analysis of API implementation code.
 
-- **Whitebox Fuzzing:** combines grammar-based fuzzing with dynamic symbolic execution; RESTler is purely **blackbox** (only sees requests/responses). Possible future direction: incorporating backend log alerts (e.g., assertion violations) to better correlate bugs with request sequences.
+- **Whitebox Fuzzing:** combines grammar-based fuzzing [27], [21] with whitebox fuzzing [23] via dynamic symbolic execution [22], [9], constraint generation and solving. In contrast, RESTler is purely **blackbox** (only sees requests/responses). In the short term, RESTler could incorporate backend log alerts (e.g., assertion violations) to increase bug detection and correlate them to request sequences.
 
-- **Penetration Testing:** the dominant industry practice, but labor-intensive, expensive, and limited in scope/depth. Fuzzing tools like RESTler automate discovery of specific vulnerability classes and complement (not replace) pen testing.
+- **Penetration Testing:** the dominant industry practice, but labor-intensive, expensive, and limited in scope/depth. Fuzzing tools like RESTler partly automate discovery of specific vulnerability classes and complement (not replace) pen testing.
 
 ---
 
 ## ✅ Conclusion
 
-- RESTler is presented as **the first automatic stateful-fuzzing tool for cloud services via REST APIs**.
-- Found **28 bugs in GitLab** and several bugs across four Azure/Office365 services — results deemed preliminary but encouraging.
-- Open question: **how general are these results?** More services and properties need testing to characterize the security vulnerabilities hiding behind REST APIs (unlike well-studied classes like buffer overflows or XSS).
-- Past pen-testing evidence of such vulnerabilities is largely anecdotal; **systematic, automated tools** like RESTler are needed to answer:
+- RESTler is presented as **the first automatic tool for stateful fuzzing of cloud services through their REST APIs**.
+- Found **28 bugs in GitLab** and several bugs across four Azure and Office365 cloud services — results deemed preliminary but encouraging.
+- Open question: **How general are these results?** More services and properties need testing to detect different kinds of bugs and characterize the security vulnerabilities hiding behind REST APIs (unlike well-studied vulnerability classes such as buffer overflows in binary-format parsers, use-after-free bugs in web browsers, or cross-site-scripting attacks in web pages).
+- Past human-intensive pen-testing evidence of such vulnerabilities is largely anecdotal; **systematic, automated tools** like RESTler are needed to answer:
   - How many bugs can be found by fuzzing REST APIs?
-  - How security-critical are they?
+  - How security-critical will they be?
+- This paper provides a clear path forward to answer these questions.
 
 ## 🙏 Acknowledgements
 

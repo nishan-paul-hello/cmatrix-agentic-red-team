@@ -1,8 +1,11 @@
 
 # PrediQL: Automated Testing of GraphQL APIs with LLMs
 
-**Authors:** Shaolun Liu¹, Sina Marefat², Omar Tsai¹, Yu Chen¹, Zecheng Deng¹, Jia Wang¹, Mohammad A. Tayebi¹
-¹ Simon Fraser University, Canada · ² K. N. Toosi University of Technology, Iran
+**Authors:** Shaolun Liu¹*, Sina Marefat²*, Omar Tsai¹, Yu Chen¹, Zecheng Deng¹, Jia Wang¹, Mohammad A. Tayebi¹  
+¹ Simon Fraser University, Canada · ² K. N. Toosi University of Technology, Iran  
+*Equal contribution.  
+*Contact:* `shaolun.liu@sfu.ca`, `sina.marefat@email.kntu.ac.ir`, `omar@ztasecurity.com`, `yca518@sfu.ca`, `zda35@sfu.ca`, `jwa454@sfu.ca`, `tayebi@sfu.ca`  
+*Preprint:* arXiv:2510.10407v2 [cs.CR] 19 Oct 2025
 
 > **Keywords:** GraphQL Security, API Fuzzing, Large Language Models, Retrieval-Augmented Generation, Multi-Armed Bandit Learning
 
@@ -15,6 +18,7 @@
   - Retrieves/reuses execution traces, schema fragments, and prior errors for self-correction and progressive learning.
   - Uses a context-aware LLM vulnerability detector to interpret responses (data values, errors, status codes) and flag injection flaws, access-control bypasses, and information disclosure.
 - Evaluation on open-source/benchmark GraphQL APIs shows significantly higher coverage and vulnerability-discovery rates than state-of-the-art baselines.
+- Combining retrieval-augmented reasoning with adaptive fuzzing transforms API security testing from reactive enumeration into intelligent exploration.
 
 ## 1. Introduction
 
@@ -49,6 +53,8 @@ Joins schema introspection, retrieval-augmented LLM prompting, multi-armed bandi
 ---
 
 ## 2. Background & Related Work
+
+Modern web applications increasingly adopt GraphQL for its flexible and efficient data fetching model. While this simplifies client–server interaction, it also introduces security challenges distinct from traditional REST APIs. This section reviews GraphQL fundamentals, summarizes known vulnerability classes, and discusses prior work on API testing, GraphQL security analysis, and LLM-assisted fuzzing.
 
 ### 2.1 GraphQL Fundamentals
 
@@ -118,9 +124,10 @@ flowchart LR
     end
 
     subgraph AQG["Adaptive Query Generation"]
-        MAS["Multi-Arm Selection"] --> LLM["LLM"]
-        LLM --> PE["Prompt Enrichment"]
-        PE --> SP["Send Payload"]
+        NODE["Node (N Nodes)"] --> MAS["Multi-Arm Selection"]
+        MAS --> PE["Prompt Enrichment"]
+        PE --> LLM["LLM"]
+        LLM --> SP["Send Payload"]
         SP --> API2["GraphQL API"]
         API2 --> RESP["Response"]
         RESP --> SC["Self Correction"]
@@ -132,7 +139,7 @@ flowchart LR
     end
 
     ES --> MU
-    MU --> AQG
+    OS --> NODE
     SI --> MU
     BP --> MAS
 ```
@@ -430,7 +437,7 @@ Ablation study isolating the contribution of each prompt enrichment component to
 13. UserWallet GraphQL API. https://github.com/graphql-compose/graphql-compose-examples/tree/master/examples/user-wallet
 14. OWASP Zed Attack Proxy (ZAP). https://www.zaproxy.org/, 2024
 15. Agrawal, S., and Goyal, N. Analysis of Thompson sampling for the multi-armed bandit problem. arXiv:1111.1797 (2011)
-16. Andersson, T. REST API vs GraphQL — a literature and experimental study. DiVA portal, 2021
+16. Andersson, T. REST API vs GraphQL — a literature and experimental study. https://www.diva-portal.org/smash/get/diva2:1571154/FULLTEXT01.pdf, 2021
 17. Arcuri, A., Galeotti, J. P., Marculescu, B., and Zhang, M. EvoMaster: A search-based system test generation tool. JOSS 6, 57 (2021), 2153
 18. Belhadi, A., Zhang, M., and Arcuri, A. Random testing and evolutionary testing for fuzzing GraphQL APIs. ACM TWeb (2023)
 19. Belhadi, Y., and Arcuri, A. EvoMaster for GraphQL: Black-box test generation for web APIs. ASE (2023), 1503–1507
@@ -439,24 +446,24 @@ Ablation study isolating the contribution of each prompt enrichment component to
 22. Deng, Y., Xia, C. S., Peng, H., Yang, C., and Zhang, L. Large language models are zero-shot fuzzers. arXiv:2212.14834 (2022)
 23. Douze, M., Guzhva, A., Deng, C., Johnson, J., Szilvasy, G., Mazaré, P.-E., Lomeli, M., Hosseini, L., and Jégou, H. The FAISS library
 24. Doyensec. CrackQL: GraphQL security testing tool. https://github.com/doyensec/CrackQL, 2021
-25. Escape. The state of GraphQL security 2024. Escape Technologies, 2024
+25. Escape. The state of GraphQL security 2024. Tech. rep., Escape Technologies, 2024
 26. Escape Technologies. GraphQL-Cop: security scanner for GraphQL APIs. https://github.com/escape-technologies/graphql-cop, 2023
-27. Fastly. Exploring the security implications of GraphQL, 2022
+27. Fastly. Exploring the security implications of GraphQL. https://www.fastly.com/blog/exploring-the-security-implications-of-graphql, 2022
 28. Fioraldi, A., Maier, D., Eissfeldt, H., and Heuse, M. AFL++: combining incremental steps of fuzzing research. WOOT 20 (2020)
 29. Forward Security. AutoGQL: auto GraphQL scanner for Burp Suite. https://github.com/FWDSEC/burp-auto-gql, 2023
-30. Google. OSS-Fuzz — continuous fuzzing for open source software, 2024
-31. GraphCrawler Project. GraphCrawler: automated GraphQL introspection and fuzzing tool, 2022
+30. Google. OSS-Fuzz — continuous fuzzing for open source software. https://github.com/google/oss-fuzz, 2024
+31. GraphCrawler Project. GraphCrawler: automated GraphQL introspection and fuzzing tool. https://github.com/gsmith257-cyber/GraphCrawler, 2022
 32. Hatfield-Dodds, Z., et al. Deriving semantics-aware fuzzers from web API schemas, 2021
 33. Huang, L., Zhao, P., Chen, H., and Ma, L. Large language models based fuzzing techniques: a survey. arXiv:2402.00350 (2024)
 34. Hygraph. GraphQL survey 2024
-35. IBM PTC Security. Denial of service attacks with GraphQL, 2023
+35. IBM PTC Security. Denial of service attacks with GraphQL. https://medium.com/@ibm_ptc_security/denial-of-service-attacks-withgraphql-77189a6ba85b, 2023
 36. Jin, Y., et al. FuzzGPT: harnessing LLMs for effective API fuzzing. USENIX Security (2024)
 37. Johnson, J., Douze, M., and Jégou, H. Billion-scale similarity search with GPUs. IEEE TBD (2019)
-38. JSON-RPC Working Group. JSON-RPC 2.0 specification, 2013
+38. JSON-RPC Working Group. JSON-RPC 2.0 specification. https://www.jsonrpc.org/specification, 2013
 39. Kesarwani, M., et al. GraphQL query generation: a large training and benchmarking dataset, 1595–1607
 40. Lattimore, T., and Szepesvári, C. Bandit Algorithms. Cambridge University Press, 2020
 41. Lewis, P., et al. Retrieval-augmented generation for knowledge-intensive NLP tasks. NeurIPS 33 (2020), 9459–9474
-42. LLVM Project. libFuzzer — a library for coverage-guided fuzzing, 2024
+42. LLVM Project. libFuzzer — a library for coverage-guided fuzzing. https://llvm.org/docs/LibFuzzer.html, 2024
 43. Madaan, A., et al. Self-Refine: iterative refinement with self-feedback. NeurIPS (2023)
 44. McFadden, S., Maugeri, M., Hicks, C., Mavroudis, V., and Pierazzi, F. Wendigo: deep RL for DoS query discovery in GraphQL. IEEE SPW (2024), 68–75
 45. Meng, R., Duck, G. J., and Roychoudhury, A. Large language model assisted hybrid fuzzing. arXiv (2024)
