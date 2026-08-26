@@ -1,11 +1,11 @@
 
 # AWE: Adaptive Agents for Dynamic Web Penetration Testing
 
-**Authors:** Akshat Singh Jaswal*, Ashish Baghel* (Stux Labs)
-*Both authors contributed equally.*
+**Authors:** Akshat Singh Jaswal\* (akshat@stuxlabs.com), Ashish Baghel\* (ashish@stuxlabs.com) — Stux Labs  
+\* *The authors contributed equally to this work.*
 
-> Workshop on LLM Assisted Security and Trust Exploration (LAST-X) 2026 · 27 February 2026, San Diego, CA, USA
-> ISBN 978-1-970672-05-3 · DOI: 10.14722/last-x.2026.23037 · arXiv:2603.00960v1 [cs.CR] 1 Mar 2026
+> Workshop on LLM Assisted Security and Trust Exploration (LAST-X) 2026 · 27 February 2026, San Diego, CA, USA  
+> ISBN 978-1-970672-05-3 · DOI: 10.14722/last-x.2026.23037 · www.ndss-symposium.org · arXiv:2603.00960v1 [cs.CR] 1 Mar 2026
 
 **Index Terms:** Web Security, Large Language Models, Penetration Testing, Autonomous Agents
 
@@ -31,7 +31,7 @@ AWE achieves this while being much faster, cheaper, and more token-efficient tha
 
 - The rise of AI-assisted software development and no-code platforms lets developers with limited security expertise build web applications, broadening the attack surface.
 - Existing security tooling remains stuck in pattern-based detection and lacks genuine reasoning capability.
-- OWASP Top 10 data shows every major vulnerability category (injection, access control failures, SSRF, etc.) continues to appear across most real-world applications, despite advances in secure development practices.
+- OWASP Top 10 data shows every major vulnerability category (injection, access control failures, SSRF, etc.) continues to appear across most real-world applications [1], despite advances in secure development practices.
 - This creates a widening gap between accelerated development and static defensive capabilities.
 
 📌 **Contribution:** AWE (Adaptive Web Exploitation Framework) — a memory-augmented, multi-agent penetration testing system for autonomous, intelligent, and transparent vulnerability discovery. It bridges the gap between traditional scanners and general-purpose LLM agents by combining domain-specific exploitation logic with LLMs, enabling targeted, explainable, and scalable vulnerability discovery.
@@ -61,7 +61,7 @@ The attacker is realistic and constrained:
 ### C. Trust Relationship
 - Target application stack is assumed **uncompromised** (though it may contain vulnerabilities).
 - Hosting infrastructure and network fabric are trustworthy, giving no privileged access to the adversary.
-- All attacker-controlled inputs (parameters, headers, cookies, bodies) are treated as potentially malicious.
+- All attacker-controlled inputs (parameters, headers, cookies, bodies) are treated as potentially malicious, and dynamic content originating from the client side may also serve as a vehicle for exploit construction.
 
 ### D. Scope
 
@@ -85,18 +85,18 @@ The attacker is realistic and constrained:
 ## III. Background and Related Work
 
 ### A. Traditional Automated Vulnerability Scanning
-- DAST tools (Burp Suite, OWASP ZAP, Nuclei, sqlmap) rely on **signature-driven** payload databases and heuristic pattern matching.
+- DAST tools (Burp Suite [2], OWASP ZAP [3], Nuclei [4], sqlmap [5]) rely on **signature-driven** payload databases and heuristic pattern matching.
 - Effective for well-understood injection classes, but:
   - Cannot synthesize novel payloads or mutate strategies against nonstandard sanitization or adaptive WAFs.
-  - Rigid pattern matching → false positives (benign behavior resembling signatures) and false negatives (multi-step/contextual exploitation needed).
+  - Rigid pattern matching → false positives (benign behavior resembling signatures) and false negatives (multi-step/contextual exploitation needed) [6].
   - Specialized tools like sqlmap perform well domain-specifically but lack generality across heterogeneous, chained vulnerability families.
 
 ### B. LLM-Based Penetration Testing Systems
-- **PentestGPT** — first notable system showing LLMs can assist human testers (workflow structuring, recon suggestions, exploit logic), but remains assistive: humans maintain memory, validation, and execution.
-- Later systems (**AutoPT**, **AutoAttacker**, **CAI**, and related multi-agent frameworks) pursue autonomous operation by coupling LLM controllers with command execution and recon tooling, but:
+- **PentestGPT** [7] — first notable system showing LLMs can assist human testers (workflow structuring, recon suggestions, exploit logic), but remains assistive: humans maintain memory, validation, and execution.
+- Later systems (**AutoPT** [8], **AutoAttacker** [9], **CAI** [11], and related multi-agent frameworks [10], [12]) pursue autonomous operation by coupling LLM controllers with command execution and recon tooling, but:
   - Typically rely on unspecialized reasoning models.
   - Lack persistent memory for authentication status, filter behavior, or prior payload attempts — essential for complex injections.
-- **MAPTA** — a significant advance in autonomous LLM-driven pentesting:
+- **MAPTA** [12] — a significant advance in autonomous LLM-driven pentesting:
   - Three-role multi-agent architecture: **Coordinator** (high-level planning), **Sandbox agents** (execute in isolated per-job Docker), **Validation agent** (converts candidate exploits into verified PoCs).
   - Demonstrates fully autonomous end-to-end web exploitation is feasible; establishes a strong baseline for agent-driven security testing.
 
@@ -219,6 +219,8 @@ AWE's architecture reflects three principled design choices:
 2. **Stateful and memory-driven operation** — multi-step reasoning spanning many requests, input transformations, and contextual clues requires state that stateless scanners or unconstrained LLM agents cannot reliably maintain.
 3. **Verification rather than speculation** — every finding must be supported by concrete evidence (observable execution, differential behavior, successful data extraction), ensuring only real, exploitable vulnerabilities are reported.
 
+These design principles collectively enable AWE to operate as a practical, resource-bounded, and exploit-grounded autonomous penetration tester capable of discovering complex web vulnerabilities with high precision.
+
 ---
 
 ## V. Methodology
@@ -228,14 +230,15 @@ Evaluation methodology covering benchmark selection, baselines, model experiment
 ### A. Benchmarks
 
 **XBOW Benchmark:**
-- Curated suite of **104 vulnerable web applications** spanning **26 vulnerability categories**.
+- Curated suite of **104 vulnerable web applications** spanning **26 vulnerability categories** [14].
 - Each challenge is an isolated container with a hidden flag accessible only via a complete end-to-end exploit.
 - Substantial heterogeneity: from straightforward reflected XSS to multi-stage chains involving authentication, authorization, and context-specific sanitization bypasses.
 - Injection-related categories form a majority, mimicking real-world vulnerability distribution.
 - Some challenges solvable via single-step injection; others require combining multiple findings, sequencing authenticated requests, or adapting payloads to nontrivial server-side filters.
+- Serves as a suitable testbed for evaluating AWE's ability to perform adaptive exploitation at scale.
 
 **DVWA (Damn Vulnerable Web Application):**
-- Used for controlled model-selection experiments and fine-grained exploitation-behavior analysis.
+- Used for controlled model-selection experiments and fine-grained exploitation-behavior analysis [13].
 - Offers repeatable vulnerability configurations and configurable security levels.
 - Focus areas: reflected/stored XSS, DOM-based XSS, error-based SQL injection, time-based blind SQL injection.
 - Deterministic across runs → supports statistical comparison of model behavior under identical conditions.
@@ -256,6 +259,7 @@ Evaluation methodology covering benchmark selection, baselines, model experiment
 - AWE is compared against **MAPTA** on the XBOW benchmark, as the strongest publicly available autonomous pentesting framework.
 - MAPTA uses a general-purpose multi-agent architecture: a central LLM orchestrates reconnaissance, sandboxed execution, and exploit validation.
 - MAPTA's published evaluation reports a **76.9% solve rate** on XBOW under generous compute and time budgets, embodying the prevailing paradigm of broad, reasoning-centric agents — making it a natural baseline.
+- MAPTA's publicly reported per-challenge results are used for all comparisons.
 
 
 ### C. Model Selection
@@ -306,6 +310,7 @@ DVWA provides a stable, deterministic environment enabling fine-grained comparis
 - **CSP-enforced stored XSS**: Claude and GPT-4o tied at 67% accuracy; Gemini dropped to 50%.
 - **Blind SQLi**: Claude reached 70%, GPT-4o 60%, Gemini 55%.
 - These gaps reflect model-dependent differences in temporal inference, semantic constraint handling, and multi-step payload refinement.
+- Given that AWE performs many such cycles for complex vulnerability classes, convergence stability directly affects time and cost.
 
 📌 **Iteration efficiency**: Claude converged in 10–40 payload attempts; GPT-4o required ~20% more attempts; Gemini required ~40% more.
 
@@ -319,7 +324,7 @@ XBOW is a suite of 104 containerized web challenges spanning 26 vulnerability ca
 
 - MAPTA is used as the baseline because it is the most capable peer system — it employs **GPT-5** in extended-reasoning mode and executes arbitrary code within a sandbox, enabling broader exploration than AWE's specialized agents support.
 
-**Overall Performance**
+**Table I — Overall Performance on the XBOW Benchmark**
 
 | System | Solve Rate | Avg. Time (s) | Model |
 |---|---|---|---|
@@ -378,6 +383,7 @@ XBOW is a suite of 104 containerized web challenges spanning 26 vulnerability ca
   2. Memory-guided heuristics significantly reduce redundant attempts.
 - Time-to-solve shows a consistent **4–5× speedup** across percentiles.
 - Median solve time: **35.7s (AWE) vs. 156.2s (MAPTA)**.
+- These gains demonstrate that targeted vulnerability analysis can dramatically reduce overhead without sacrificing performance on its intended classes.
 
 ### F. Summary
 
@@ -443,7 +449,7 @@ XBOW is a suite of 104 containerized web challenges spanning 26 vulnerability ca
 
 [10] Q. Wang, G. Yang, J. Wang, M. Li, Z. Chang, Y. Huang, and Z. Jiang, "Mimicking the familiar: Dynamic command generation for information theft attacks in LLM tool-learning systems," arXiv:2502.11358, 2025. Available: https://arxiv.org/abs/2502.11358.
 
-[11] V. Mayoral-Vilches, L. J. Navarrete-Lozano, M. Sanz-Gomez, L. Salas Espejo, M. Crespo-Alvarez, F. Oca-Gonzalez, F. Balassone, A. Glera-Picon, U. Ayucar-Carbajo, J. A. Ruiz-Alcalde, S. Rass, M. Pinzger, and E. Gil-Uriarte, "CAI: An open, bug bounty-ready cybersecurity AI," arXiv:2504.06017, 2025. Available: https://arxiv.org/abs/2504.06017.
+[11] V. Mayoral-Vilches, L. J. Navarrete-Lozano, M. Sanz-Gómez, L. Salas Espejo, M. Crespo-Álvarez, F. Oca-Gonzalez, F. Balassone, A. Glera-Picón, U. Ayucar-Carbajo, J. A. Ruiz-Alcalde, S. Rass, M. Pinzger, and E. Gil-Uriarte, "CAI: An open, bug bounty-ready cybersecurity AI," arXiv:2504.06017, 2025. Available: https://arxiv.org/abs/2504.06017.
 
 [12] I. David and A. Gervais, "Multi-agent penetration testing AI for the web," arXiv:2508.20816, 2025. Available: https://arxiv.org/abs/2508.20816.
 

@@ -1,4 +1,3 @@
-
 # Multi-Agent Penetration Testing AI for the Web
 
 **Isaac David** — University College London
@@ -6,7 +5,7 @@
 
 ## 📌 Abstract
 
-> AI-powered development platforms are democratizing software creation, but this has triggered a scalability crisis in security auditing — up to 40% of AI-generated code contains vulnerabilities, and development now vastly outpaces security assessment capacity.
+> AI-powered development platforms are democratizing software creation, but this has triggered a scalability crisis in security auditing — up to 40% of AI-generated code contains vulnerabilities [21], and development now vastly outpaces security assessment capacity.
 
 We present **MAPTA** (Multi-Agent Penetration Testing AI), a multi-agent system for autonomous web application security assessment combining LLM orchestration, tool-grounded execution, and end-to-end exploit validation.
 
@@ -35,11 +34,11 @@ Web application security assessment faces a **scalability crisis**:
 - Manual/human-dependent assessment processes can't keep pace
 - There's a **semantic gap** between pattern-based vulnerability detection and contextual exploitability
   - e.g. a SQL injection *pattern* may be unexploitable due to prepared statements, input validation, or DB permissions
-  - conversely, business-logic flaws (multi-step attack chains) evade signature-based tools entirely
+  - conversely, business-logic flaws (multi-step attack chains) evade signature-based tools entirely [1, 14], yet represent a significant share of real-world web application vulnerabilities while remaining under-detected by automated scanners [23]
 
 ### The Opportunity
 
-LLMs and autonomous agents can reason about code semantics and exploitation strategy, but need:
+LLMs and autonomous agents can reason about code semantics and exploitation strategy [4, 5], but need:
 1. **Tool orchestration**
 2. **Rigorous verification** of theoretical vulnerabilities via real, end-to-end proof-of-concept (PoC) exploits
 
@@ -47,13 +46,13 @@ LLMs and autonomous agents can reason about code semantics and exploitation stra
 
 | System | Contribution |
 |---|---|
-| **PentestGPT** | Foundational multi-stage enumeration/exploitation workflow |
-| **PenHeal** | Coupled vulnerability discovery with automated remediation |
-| **XBOW** (commercial) | Claims competitive performance, but closed methodology — only blog-post level detail, no reproducibility |
+| **PentestGPT** | Foundational multi-stage enumeration/exploitation workflow [8] |
+| **PenHeal** | Coupled vulnerability discovery with automated remediation [13] |
+| **XBOW** (commercial) | Claims competitive performance, but closed methodology — only blog-post level detail, no reproducibility [10] |
 
 **Gaps in existing approaches:** lack of rigorous cost-performance analysis, and insufficient vulnerability validation → false positives.
 
-MAPTA is presented as, to the authors' knowledge, **the first open-source multi-agent penetration testing AI system for the web**, enabling continuous, end-to-end testing without human intervention.
+MAPTA is presented as, to the authors' knowledge, **the first open-source multi-agent penetration testing AI system for the web**, enabling continuous, end-to-end testing without human intervention. MAPTA fundamentally transforms security assessment from human-dependent pattern recognition to adaptive adversarial execution, matching the speed of AI-powered development.
 
 ---
 
@@ -138,6 +137,8 @@ flowchart TB
     Container --> Target
     Valid --> Coord
 ```
+
+*Figure 1: MAPTA multi-agent architecture with single-pass controller with evidence-gated branching. Three roles: a Coordinator (strategy and orchestration), one or more Sandbox agents (tactical execution in an isolated per-job Docker environment), and a Validation agent (concrete PoC execution and pass/fail evidence). The Coordinator dynamically decides whether to delegate to sandbox agents via the `sandbox_agent` tool or to execute commands directly; sandbox agents for the same job share a single virtual machine.*
 
 **Coordinator Agent** — attack-path reasoning, tool orchestration, report synthesis. 8 tools: `sandbox_agent`, `run_command`, `run_python`, `get_registered_emails`, `list_account_messages`, `get_message_by_id`, `send_slack_alert`, `send_slack_summary`.
 
@@ -249,7 +250,7 @@ Prior work has established that OpenAI's models, particularly GPT-4, demonstrate
 
 The CTF evaluation operates under **blackbox conditions** where MAPTA receives only the target URL and challenge description, matching real-world penetration testing scenarios.
 
-> 📌 While the XBOW benchmark includes vulnerability type and category metadata in Docker readmes, these detailed classifications were withheld from MAPTA to ensure autonomous strategy determination based solely on observed application behavior.
+> 📌 While the XBOW benchmark includes vulnerability type and category metadata in Docker readmes, these detailed classifications were withheld from MAPTA to ensure autonomous strategy determination based solely on observed application behavior. Challenge descriptions occasionally contained vulnerability hints, but this mirrors realistic penetration testing engagements where limited contextual information is available.
 
 - Each challenge deploys as an isolated Docker container with standardized network configuration.
 - 43 of the original 104 XBOW Docker images required manual fixes due to deprecated software versions — the authors completed extensive engineering efforts to restore functionality and plan to contribute fixes back to the community via pull request.
@@ -353,7 +354,7 @@ flowchart LR
     S --> C12["Sensitive Data Exposure (2)"]
     S --> C13["Crypto (1)"]
 ```
-*(Figure 7 — Sankey flow of outcomes → vulnerability categories, represented above as a flowchart)*
+*(Figure 7 — Vulnerability category distribution across 104 XBOW challenges: 13 categories spanning 8/10 OWASP Top-10 (2021) (A01–A07, A10; excluding A08/A09), represented above as a flow)*
 
 ### Injection Vulnerabilities
 
@@ -409,7 +410,7 @@ Analysis of the 24 failed challenges (23.1% of the dataset):
 - **XSS** — moderate success (57%) despite being the largest category, suggesting opportunities for enhanced payload generation and DOM manipulation strategies.
 - **Broken Authentication** — 67% failure rate, highlighting the need for improved credential analysis and session manipulation capabilities.
 
-🖼️ **Figure 9**: Vulnerability distribution and assessment costs across 6 target applications (stacked bars: High/Critical, Medium, Low/Info severity) with an overlaid line for assessment cost (USD).
+🖼️ **Figure 9**: Vulnerability distribution and assessment costs across targets. The stacked bars show vulnerability severity levels (High/Critical, Medium, Low/Info), while the orange line indicates assessment costs (USD) across all 10 target applications.
 
 ## 4 Real-World Application Assessment
 
@@ -486,37 +487,37 @@ flowchart LR
 
 Traditional automated security testing has evolved substantially over the past two decades, yet fundamental limitations persist that motivate AI-driven solutions like MAPTA.
 
-- **Dynamic scanners** (OWASP ZAP, Burp Suite) crawl applications and fuzz HTTP parameters for common vulnerabilities. They struggle with single-page applications with dynamic JavaScript content and cannot detect business-logic vulnerabilities requiring multi-step interactions, due to lack of contextual understanding.
-- **Static analysis (SAST) tools** examine source code without execution. A study of seven Java SAST tools found only **12.7%** of real-world vulnerabilities were detected, with the union of all tools still missing **71%**. Poor detection stems from difficulty modeling complex data flows, dynamic language features, and runtime exploitability — plus high false-positive rates. This gap directly motivates MAPTA's verify-by-execution approach.
+- **Dynamic scanners** (OWASP ZAP [20], Burp Suite [22]) crawl applications and fuzz HTTP parameters for common vulnerabilities. They struggle with single-page applications with dynamic JavaScript content and cannot detect business-logic vulnerabilities requiring multi-step interactions, due to lack of contextual understanding.
+- **Static analysis (SAST) tools** examine source code without execution. A study of seven Java SAST tools found only **12.7%** of real-world vulnerabilities were detected, with the union of all tools still missing **71%** [16]. Poor detection stems from difficulty modeling complex data flows, dynamic language features, and runtime exploitability — plus high false-positive rates. This gap directly motivates MAPTA's verify-by-execution approach.
 - **Hybrid approaches** combine static analysis with runtime instrumentation to cut false positives, but instrumentation overhead and complexity across microservices/containers limit adoption.
-- **API-driven architectures** introduce vulnerability classes (BOLA, BFLA, IDOR per the OWASP API Security Top 10 2023) that traditional scanners struggle with, since they require understanding application-specific access controls and stateful interaction sequences.
+- **API-driven architectures** introduce vulnerability classes (BOLA, BFLA, IDOR per the OWASP API Security Top 10 2023 [17]) that traditional scanners struggle with, since they require understanding application-specific access controls and stateful interaction sequences.
 
 ### 5.2 Stateful REST/API Fuzzing
 
 Stateless fuzzing fails to detect business-logic vulnerabilities, motivating stateful approaches that maintain application state across multi-step sequences.
 
-- **RESTler** (Microsoft Research) builds request dependency graphs from OpenAPI specs, finding vulnerabilities in Azure and Office365 — showing the value of dependency-aware testing over naive fuzzing.
-- **Pythia** extends RESTler with coverage feedback and learning-based mutations.
+- **RESTler** (Microsoft Research) [3] builds request dependency graphs from OpenAPI specs, finding vulnerabilities in Azure and Office365 — showing the value of dependency-aware testing over naive fuzzing.
+- **Pythia** [2] extends RESTler with coverage feedback and learning-based mutations.
 - **fuzz-lightyear** (Yelp) targets IDOR/BOLA specifically via stateful Swagger-based fuzzing.
 
 These tools show effective business-logic detection needs understanding of semantic relationships between data objects and authorization controls — the pattern MAPTA generalizes through statefulness, property checks, and oracle-backed validation.
 
 ### 5.3 LLMs for Secure Code
 
-- **GitHub Copilot** generates vulnerable code in **40%** of CWE-targeted scenarios, from reproducing insecure patterns in training data.
-- Surveys show LLMs excel at security reasoning and hypothesis generation but need **external oracles and environment feedback** to validate outputs and avoid hallucination — a pattern MAPTA addresses through tool integration and concrete execution.
-- **Google's Big Sleep** discovered a zero-day in SQLite (November 2024) and helped prevent exploitation, but remains closed-source, preventing independent verification — motivating MAPTA's open-science approach.
+- **GitHub Copilot** generates vulnerable code in **40%** of CWE-targeted scenarios [21], from reproducing insecure patterns in training data.
+- Comprehensive surveys [6] show LLMs excel at security reasoning and hypothesis generation but need **external oracles and environment feedback** to validate outputs and avoid hallucination — a pattern MAPTA addresses through tool integration and concrete execution.
+- **Google's Big Sleep** discovered a zero-day in SQLite (November 2024) and helped prevent exploitation [11, 12], but remains closed-source, preventing independent verification — motivating MAPTA's open-science approach.
 
 ### 5.4 LLM-Driven Autonomous Testing and Tool Orchestration
 
 Autonomous pentesting systems represent an evolution from static detection toward dynamic, reasoning-based assessment via sophisticated tool orchestration.
 
-- **ReAct** and **Toolformer** established that LLMs achieve superior performance through structured tool interaction and environmental feedback loops.
-- **SWE-agent** showed interface design and tool abstractions determine success on complex technical tasks.
-- **PentestGPT** pioneered multi-stage LLM workflows for enumeration, exploitation, and privilege escalation with optional human oversight, but operates through hardcoded interactive loops and lacks true agentic capability (the project itself states an "agentic upgrade" is still pending). It reports aggregate costs of $131.5 for 10 HTB machines and $5.1 average per picoMini attempt.
-- **PenHeal** couples discovery with remediation via knapsack optimization but doesn't report LLM token usage — its "cost" metric is a remediation score, not operational expense.
-- **RefPentester** adds self-reflection and knowledge-guided planning.
-- Browser-capable agents enable direct web interaction for CSRF/SSRF testing.
+- **ReAct** [28] and **Toolformer** [24] established that LLMs achieve superior performance through structured tool interaction and environmental feedback loops.
+- **SWE-agent** [27] showed interface design and tool abstractions determine success on complex technical tasks.
+- **PentestGPT** [8] pioneered multi-stage LLM workflows for enumeration, exploitation, and privilege escalation with optional human oversight, but operates through hardcoded interactive loops and lacks true agentic capability (the project itself states an "agentic upgrade" is still pending). It reports aggregate costs of $131.5 for 10 HTB machines and $5.1 average per picoMini attempt.
+- **PenHeal** [13] couples discovery with remediation via knapsack optimization but doesn't report LLM token usage — its "cost" metric is a remediation score, not operational expense.
+- **RefPentester** [7] adds self-reflection and knowledge-guided planning.
+- Browser-capable agents [15] enable direct web interaction for CSRF/SSRF testing.
 
 📌 **MAPTA's contribution vs. prior work:**
 - Complete token-level accounting across 104 XBOW challenges: **3.2M regular input, 1.10M output, 50.5M cached, 0.595M reasoning tokens**, totaling **$21.38** overall cost, median **$0.117** per challenge
@@ -526,9 +527,9 @@ Autonomous pentesting systems represent an evolution from static detection towar
 
 ### 5.5 Benchmarks and Testbeds
 
-- Traditional vulnerable apps (**Juice Shop**, **WebGoat**, **DVWA**) cover limited vulnerability types, unsuitable for evaluating advanced systems.
-- **XBOW benchmark** provides modern web application challenges with REST APIs, complex business logic, and realistic authentication — emphasizing exploit-execution validation over theoretical detection, eliminating false positives.
-- MAPTA's multi-agent architecture with sandboxed exploit validation directly addresses limitations in single-agent systems (PentestGPT) and traditional scanners' false-positive issues.
+- Traditional vulnerable apps (**Juice Shop** [18], **WebGoat** [19], **DVWA** [9]) cover limited vulnerability types, unsuitable for evaluating advanced systems.
+- **XBOW benchmark** dataset [25] provides modern web application challenges with REST APIs, complex business logic, and realistic authentication — emphasizing exploit-execution validation over theoretical detection, eliminating false positives.
+- Our approach builds on the fundamental insight that effective automated security assessment requires tool orchestration, stateful reasoning, and practical verification [3, 28]. MAPTA's multi-agent architecture with sandboxed exploit validation directly addresses limitations in single-agent systems like PentestGPT [8] and traditional scanners' false-positive challenges [16].
 
 ## 6 Conclusion
 

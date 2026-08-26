@@ -4,6 +4,8 @@
 **Authors:** Benlong Wu, Guoqiang Chen, Kejiang Chen*, Xiuwei Shang, Jiapeng Han, Yanru He, Weiming Zhang, Nenghai Yu
 *(University of Science and Technology of China; QI-ANXIN Technology Research Institute; Chaitin Future Technology Co., Ltd — *corresponding author)*
 
+> **Contact:** Benlong Wu (`dizzylong@mail.ustc.edu.cn`), Guoqiang Chen (`guoqiangchen@qianxin.com`), Kejiang Chen (`chenkj@ustc.edu.cn`), Xiuwei Shang (`shangxw@mail.ustc.edu.cn`), Jiapeng Han (`jiapeng.han@chaitin.com`), Yanru He (`heyanru@mail.ustc.edu.cn`), Weiming Zhang (`zhangwm@ustc.edu.cn`), Nenghai Yu (`ynh@ustc.edu.cn`)
+>
 > **arXiv:2411.01236v1 [cs.CR], 2 Nov 2024**
 
 ## 📌 Abstract
@@ -30,7 +32,7 @@
 
 ### 🔬 Problem Context
 - Web security is a major challenge; penetration testing and red teaming are standard defenses.
-- Example: 2024 Bank of America breach via service provider Infosys Mccamish Systems — 60,000+ customers exposed.
+- Example: 2024 Bank of America breach via service provider Infosys Mccamish Systems — 60,000+ customers exposed ([Footnote 1: Anquanke report](https://www.anquanke.com/post/id/293251)).
 - Most pentesting today is **labor-intensive**, done by skilled professionals using semi-automated tools.
 - Prior automation attempts:
   - Rule-based methods
@@ -273,7 +275,7 @@ A second (Druid CVE-2021-25646) trace is shown as raw tool output/log JSON — a
 ### 4.2 Preliminary Experiments
 
 **Model selection**
-- Built a ReAct + Terminal-tool scanning system; models had to iteratively explore and run the Xray scanner correctly.
+- Built a ReAct + Terminal-tool scanning system ([Footnote 2: pre-experimental code is published in the GitHub repository](https://github.com/Dizzy-K/AutoPT)); models had to iteratively explore and run the Xray scanner correctly.
 - Only **GPT-4o**, **GPT-4o-mini** (128k context), and **GPT-3.5** (16k context) passed the pre-experiment.
 
 **Challenge discovery**
@@ -282,7 +284,7 @@ A second (Druid CVE-2021-25646) trace is shown as raw tool output/log JSON — a
 
 **Table 3 — Manual failure-reason statistics by model/architecture** *(counts in parentheses)*
 
-| Failure Reason | GPT-3.5 ReAct | GPT-3.5 PTT | GPT-4o ReAct (86) | GPT-4o PTT (96) | GPT-4o-mini ReAct (90) | GPT-4o-mini PTT (97) |
+| Failure Reason | GPT-3.5 ReAct (-) | GPT-3.5 PTT (-) | GPT-4o ReAct (86) | GPT-4o PTT (96) | GPT-4o-mini ReAct (90) | GPT-4o-mini PTT (97) |
 |---|---|---|---|---|---|---|
 | Wrong command | 100% | 100% | 18.60% (16) | 65.63% (63) | 28.89% (26) | 19.59% (19) |
 | Failure in tools | 92% | 96% | 25.58% (22) | 64.58% (62) | 26.67% (24) | 45.36% (44) |
@@ -567,7 +569,7 @@ Output: Final interaction history Γ*
 
 - Three working versions: **AutoPT-GPT-3.5**, **AutoPT-GPT-4o**, **AutoPT-GPT-4o-mini**
 - Temperature = 0, max iteration steps = 15 (for reproducibility and cost control)
-- Environment: Terminal deployed on Docker (Kali Linux 2024.1), self-developed headless browser (Playwright), and the Search tool
+- Environment: Terminal deployed on Docker (Kali Linux 2024.1), secondary-developed headless browser Playwright ([Footnote 3: tool code on GitHub](https://github.com/mashiro01/langchain)), and the Search tool
 
 ### 6.2 Effectiveness Evaluation (RQ1)
 
@@ -652,7 +654,7 @@ xychart-beta
 
 **Human baseline estimate:**
 - Manual reproduction of all 20 vulnerabilities took an average of **5 person-hours**.
-- Using a 2024 average penetration tester salary of **$124,000**/year (40 h/week × 50 weeks), the hourly rate ≈ **$62**, giving a total human cost of **≈ $310** — roughly **300×** the cost of AutoPT.
+- Using a 2024 average penetration tester salary of **$124,000**/year ([Footnote 4: iSecJobs penetration tester salary report 2024](https://isecjobs.com/salaries/penetration-tester-salary-in-2024); 40 h/week × 50 weeks), the hourly rate ≈ **$62**, giving a total human cost of **≈ $310** — roughly **300×** the cost of AutoPT.
 
 > ⚠️ These figures are rough approximations intended to illustrate relative economic feasibility, not precise real-world attack costs.
 
@@ -717,7 +719,7 @@ Benchmark data and pre-experiment/AutoPT implementation code are available on Gi
 15. Yinlin Deng, Chunqiu Steven Xia, Haoran Peng, Chenyuan Yang, and Lingming Zhang. 2023. Large language models are zero-shot fuzzers: Fuzzing deep-learning libraries via large language models. *ISSTA 2023*. 423–435.
 16. Adam Doupé, Ludovico Cavedon, Christopher Kruegel, and Giovanni Vigna. 2012. Enemy of the State: A State-Aware Black-Box Web Vulnerability Scanner. *USENIX Security 12*. 523–538. `https://www.usenix.org/conference/usenixsecurity12/technical-sessions/presentation/doupe`
 17. Abhimanyu Dubey et al. 2024. The Llama 3 herd of models. arXiv:2407.21783
-18. OpenAI et al. 2024. GPT-4 Technical Report. arXiv:2303.08774 [cs.CL]
+18. OpenAI et al. 2024. GPT-4 Technical Report. arXiv:2303.08774 [cs.CL] `https://arxiv.org/abs/2303.08774`
 19. Marius Fleischer, Dipanjan Das, Priyanka Bose, Weiheng Bai, Kangjie Lu, Mathias Payer, Christopher Kruegel, and Giovanni Vigna. 2023. ACTOR: Action-Guided Kernel Fuzzing. *USENIX Security 23*. 5003–5020.
 20. Georgios Giantamidis, Stavros Tripakis, and Stylianos Basagiannis. 2021. Learning Moore machines from input–output traces. *Int'l Journal on Software Tools for Technology Transfer* 23, 1 (2021), 1–29.
 21. Hao Guan, Guangdong Bai, and Yepang Liu. 2024. Large Language Models Can Connect the Dots: Exploring Model Optimization Bugs with Domain Knowledge-Aware Prompts. *ISSTA 2024*. 1579–1591.
@@ -726,7 +728,7 @@ Benchmark data and pre-experiment/AutoPT implementation code are available on Gi
 24. Andreas Happe and Jürgen Cito. 2023. Getting pwn'd by AI: Penetration Testing with Large Language Models. *ESEC/FSE '23*. `https://doi.org/10.1145/3611643.3613083`
 25. Andreas Happe and Jürgen Cito. 2023. Understanding Hackers' Work: An Empirical Study of Offensive Security Practitioners. *ESEC/FSE '23*. 1669–1680. `https://doi.org/10.1145/3611643.3613900`
 26. Andreas Happe and Jürgen Cito. 2023. Understanding Hackers' Work: An Empirical Study of Offensive Security Practitioners. In *Proceedings of the 31st ACM Joint European Software Engineering Conference and Symposium on the Foundations of Software Engineering (ESEC/FSE '23)*. ACM, 1669–1680.
-27. Andreas Happe, Aaron Kaplan, and Juergen Cito. 2024. LLMs as Hackers: Autonomous Linux Privilege Escalation Attacks. arXiv:2310.11409 [cs.CR]
+27. Andreas Happe, Aaron Kaplan, and Juergen Cito. 2024. LLMs as Hackers: Autonomous Linux Privilege Escalation Attacks. arXiv:2310.11409 [cs.CR] `https://arxiv.org/abs/2310.11409`
 28. Marzuki Hasibuan and Andi Marwan Elhanafi. 2022. Penetration Testing Sistem Jaringan Komputer Menggunakan Kali Linux untuk Mengetahui Kerentanan Keamanan Server dengan Metode Black Box: Studi Kasus Web Server Diva Karaoke.co.id. *SUDO Jurnal Teknik Informatika* 1, 4 (2022), 171–177.
 29. Zhenguo Hu, Razvan Beuran, and Yasuo Tan. 2020. Automated penetration testing using deep reinforcement learning. *2020 IEEE EuroS&PW*. 2–10.
 30. Lei Huang, Weijiang Yu, Weitao Ma, Weihong Zhong, Zhangyin Feng, Haotian Wang, Qianglong Chen, Weihua Peng, Xiaocheng Feng, Bing Qin, et al. 2023. A survey on hallucination in large language models: Principles, taxonomy, challenges, and open questions. arXiv:2311.05232
@@ -750,7 +752,7 @@ Benchmark data and pre-experiment/AutoPT implementation code are available on Gi
 48. Elaine Rich et al. 2008. *Automata, Computability and Complexity: Theory and Applications.* Pearson Prentice Hall.
 49. Marcelo Invert Palma Salas, Eliane Martins. 2015. *A Black-box Approach to Detect Vulnerabilities in Web Services using Penetration Testing.* IEEE Latin America Transactions 13, 3, 707–712.
 50. Muzammil Shahbaz, Roland Groz. 2009. *Inferring Mealy Machines.* Intl. Symposium on Formal Methods, Springer, 207–222.
-51. Minghao Shao, Sofija Jancheska, Meet Udeshi, Brendan Dolan-Gavitt, Haoran Xi, Kimberly Milner, Boyuan Chen, Max Yin, Siddharth Garg, Prashanth Krishnamurthy, Farshad Khorrami, Ramesh Karri, Muhammad Shafique. 2024. *NYU CTF Dataset: A Scalable Open-Source Benchmark Dataset for Evaluating LLMs in Offensive Security.* arXiv:2406.05590.
+51. Minghao Shao, Sofija Jancheska, Meet Udeshi, Brendan Dolan-Gavitt, Haoran Xi, Kimberly Milner, Boyuan Chen, Max Yin, Siddharth Garg, Prashanth Krishnamurthy, Farshad Khorrami, Ramesh Karri, Muhammad Shafique. 2024. *NYU CTF Dataset: A Scalable Open-Source Benchmark Dataset for Evaluating LLMs in Offensive Security.* arXiv:2406.05590 [cs.CR] `https://arxiv.org/abs/2406.05590`
 52. Kumar Shravan, Bansal Neha, Bhadana Pawan. 2014. *Penetration Testing: A Review.* Compusoft 3, 4, 752.
 53. Ben Stock, Martin Johns, Marius Steffens, Michael Backes. 2017. *How the Web Tangled Itself: Uncovering the History of Client-Side Web (In)Security.* USENIX Security 17, 971–987.
 54. The OWASP Top 10 2021 team. n.d. *OWASP Top 10.* [owasp.org/Top10](https://owasp.org/Top10/) (Accessed 2024-08-24)
