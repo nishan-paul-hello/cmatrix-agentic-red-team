@@ -81,8 +81,6 @@ flowchart LR
   - The authors' takeaway: both the plan and the refusals were realistic and would give a human tester genuinely useful directional feedback.
 
 ---
-*End of Chunk 1.*
-
 
 ## 3.2 Low-Level: Attack-Execution System
 
@@ -106,9 +104,11 @@ flowchart LR
 
 ### Common attack paths observed
 - Listing the sudoers file (`sudo -l`) → abusing a listed shell or a [GTFObin](https://gtfobins.github.io/) to spawn a root shell
-- Retrieving `/etc/passwd` → identifying accounts not using shadow passwords
+- Retrieving `/etc/passwd` → identifying accounts not using shadow passwords[^2]
 - SUID binary searches were requested but didn't lead anywhere useful — a sign of weak multi-step planning (by the script or the model)
 - A tweaked prompt asking the LLM to open a reverse shell to a given IP **worked** and dropped root shells
+
+[^2]: As the authors footnote: "If your Linux system is not using shadow passwords by now, chatGPT is the least of your worries."
 
 ---
 
@@ -238,7 +238,9 @@ Current prototype: simplistic memory = raw command output stuffed into the promp
 | [22] | Liu & Chilton, *Design Guidelines for Prompt Engineering Text-to-Image Generative Models*, CHI 2022 |
 | [23] | Maslej et al., *The AI Index 2023 Annual Report*, Stanford HAI |
 | [24] | Miller, *Sam Altman: Size of LLMs Won't Matter as Much Moving Forward*, TechCrunch, 2023 |
-| [25]–[27] | Nakajima, BabyAGI / *Task-driven Autonomous Agent* (GitHub, Twitter, blog post), 2023 |
+| [25] | Yohei Nakajima, *BabyAGI*, GitHub, retrieved April 25, 2023. https://github.com/yoheinakajima/babyagi |
+| [26] | Yohei Nakajima, *Introducing Task-driven Autonomous Agent*, Twitter, retrieved April 25, 2023. https://twitter.com/yoheinakajima/status/1640934493489070080 |
+| [27] | Yohei Nakajima, *Task-driven Autonomous Agent Utilizing GPT-4, Pinecone, and LangChain for Diverse Applications*, blog post, retrieved April 25, 2023. https://yoheinakajima.com/task-driven-autonomous-agent-utilizing-gpt-4-pinecone-and-langchain-for-diverse-applications/ |
 | [28] | Park et al., *Generative Agents: Interactive Simulacra of Human Behavior*, arXiv:2304.03442 |
 | [29] | Peng et al., *Check Your Facts and Try Again: Improving Large Language Models with External Knowledge and Automated Feedback*, arXiv:2302.12813 |
 | [30] | Polop, *LinPEAS – Linux Privilege Escalation Awesome Script*, 2023 |
