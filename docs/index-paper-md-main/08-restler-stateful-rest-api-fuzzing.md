@@ -246,7 +246,8 @@ Compared three algorithm variants on the Blog Posts service, generating all sequ
 ### C. Deeper Service Exploration (Q2)
 
 - Uses GitLab, split into six API groups: commits, branches, issues/notes, repositories/repo files, groups/group membership, projects.
-- (Table I and further results referenced but not shown in this excerpt.)
+- Table I shows the total number of requests in each API group plus the coverage increase, tests executed, seqSet size, and number of dynamic objects created (using BFS) until the 5-hour timeout.
+- Code coverage is collected via Ruby's `Class::TracePoint` hook on GitLab's `service/lib` folder; numbers below are incremental on top of the 16,836 LOC executed at service boot.
 
 
 ## 📊 Blog Posts Service: Code Coverage & Bug Finding
