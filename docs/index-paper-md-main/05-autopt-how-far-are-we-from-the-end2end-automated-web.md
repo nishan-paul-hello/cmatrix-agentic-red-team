@@ -697,7 +697,7 @@ xychart-beta
 ### Data Availability
 Benchmark data and pre-experiment/AutoPT implementation code are available on GitHub: `https://github.com/Dizzy-K/AutoPT`
 
-## References (this chunk)
+## References
 
 
 1. HackTheBox. 2023. `https://www.hackthebox.com`
@@ -707,7 +707,7 @@ Benchmark data and pre-experiment/AutoPT implementation code are available on Gi
 5. Dennis Appelt, Cu Duy Nguyen, Lionel C Briand, and Nadia Alshahwan. 2014. Automated testing for SQL injection vulnerabilities: an input mutation approach. *ISSTA 2014*. 259–269.
 6. Brad Arkin, Scott Stender, and Gary McGraw. 2005. Software penetration testing. *IEEE Security & Privacy* 3, 1 (2005), 84–87.
 7. Nor Fatimah Awang and Azizah Abd Manaf. 2013. Detecting vulnerabilities in web applications using automated black box and manual penetration testing. *Int'l Conf. on Security of Information and Communication Networks*. Springer, 230–239.
-8. Kevin Bock, George Hughey, and Dave Levin. 2018. King of the Hill: A Novel Cybersecurity Competition for Teaching Penetration Testing. *USENIX ASE 18*.
+8. Kevin Bock, George Hughey, and Dave Levin. 2018. King of the Hill: A Novel Cybersecurity Competition for Teaching Penetration Testing. *USENIX ASE 18*. `https://www.usenix.org/conference/ase18/presentation/bock`
 9. Tanner J Burns, Samuel C Rios, Thomas K Jordan, Qijun Gu, and Trevor Underwood. 2017. Analysis and exercises for engaging beginners in online CTF competitions for security education. *USENIX ASE 17*.
 10. Harrison Chase. 2022. LangChain. `https://github.com/langchain-ai/langchain` (v0.2.34, accessed 2024-08-21).
 11. Yuyan Chen, Qiang Fu, Yichen Yuan, Zhihao Wen, Ge Fan, Dayiheng Liu, Dongmei Zhang, Zhixu Li, and Yanghua Xiao. 2023. Hallucination detection: Robustly discerning reliable answers in LLMs. *CIKM 2023*. 245–255.
@@ -715,7 +715,7 @@ Benchmark data and pre-experiment/AutoPT implementation code are available on Gi
 13. Gelei Deng, Yi Liu, Víctor Mayoral-Vilches, Peng Liu, Yuekang Li, Yuan Xu, Tianwei Zhang, Yang Liu, Martin Pinzger, and Stefan Rass. 2023. PentestGPT: An LLM-empowered Automatic Penetration Testing Tool. arXiv:2308.06782 [cs.SE]
 14. Gelei Deng, Zhiyi Zhang, Yuekang Li, Yi Liu, Tianwei Zhang, Yang Liu, Guo Yu, and Dongjin Wang. 2023. NAUTILUS: Automated RESTful API Vulnerability Detection. *USENIX Security 23*. 5593–5609.
 15. Yinlin Deng, Chunqiu Steven Xia, Haoran Peng, Chenyuan Yang, and Lingming Zhang. 2023. Large language models are zero-shot fuzzers: Fuzzing deep-learning libraries via large language models. *ISSTA 2023*. 423–435.
-16. Adam Doupé, Ludovico Cavedon, Christopher Kruegel, and Giovanni Vigna. 2012. Enemy of the State: A State-Aware Black-Box Web Vulnerability Scanner. *USENIX Security 12*. 523–538.
+16. Adam Doupé, Ludovico Cavedon, Christopher Kruegel, and Giovanni Vigna. 2012. Enemy of the State: A State-Aware Black-Box Web Vulnerability Scanner. *USENIX Security 12*. 523–538. `https://www.usenix.org/conference/usenixsecurity12/technical-sessions/presentation/doupe`
 17. Abhimanyu Dubey et al. 2024. The Llama 3 herd of models. arXiv:2407.21783
 18. OpenAI et al. 2024. GPT-4 Technical Report. arXiv:2303.08774 [cs.CL]
 19. Marius Fleischer, Dipanjan Das, Priyanka Bose, Weiheng Bai, Kangjie Lu, Mathias Payer, Christopher Kruegel, and Giovanni Vigna. 2023. ACTOR: Action-Guided Kernel Fuzzing. *USENIX Security 23*. 5003–5020.
@@ -725,7 +725,7 @@ Benchmark data and pre-experiment/AutoPT implementation code are available on Gi
 23. William GJ Halfond, Saswat Anand, and Alessandro Orso. 2009. Precise interface identification to improve testing and analysis of web applications. *ISSTA 2009*. 285–296.
 24. Andreas Happe and Jürgen Cito. 2023. Getting pwn'd by AI: Penetration Testing with Large Language Models. *ESEC/FSE '23*. `https://doi.org/10.1145/3611643.3613083`
 25. Andreas Happe and Jürgen Cito. 2023. Understanding Hackers' Work: An Empirical Study of Offensive Security Practitioners. *ESEC/FSE '23*. 1669–1680. `https://doi.org/10.1145/3611643.3613900`
-26. *(Duplicate entry in source PDF — same paper as [25]: Happe and Cito 2023, Understanding Hackers' Work, ESEC/FSE '23, 1669–1680.)*
+26. Andreas Happe and Jürgen Cito. 2023. Understanding Hackers' Work: An Empirical Study of Offensive Security Practitioners. In *Proceedings of the 31st ACM Joint European Software Engineering Conference and Symposium on the Foundations of Software Engineering (ESEC/FSE '23)*. ACM, 1669–1680.
 27. Andreas Happe, Aaron Kaplan, and Juergen Cito. 2024. LLMs as Hackers: Autonomous Linux Privilege Escalation Attacks. arXiv:2310.11409 [cs.CR]
 28. Marzuki Hasibuan and Andi Marwan Elhanafi. 2022. Penetration Testing Sistem Jaringan Komputer Menggunakan Kali Linux untuk Mengetahui Kerentanan Keamanan Server dengan Metode Black Box: Studi Kasus Web Server Diva Karaoke.co.id. *SUDO Jurnal Teknik Informatika* 1, 4 (2022), 171–177.
 29. Zhenguo Hu, Razvan Beuran, and Yasuo Tan. 2020. Automated penetration testing using deep reinforcement learning. *2020 IEEE EuroS&PW*. 2–10.
@@ -743,8 +743,8 @@ Benchmark data and pre-experiment/AutoPT implementation code are available on Gi
 41. Forum of Incident Response and Security Teams. 2024. *Common Vulnerability Scoring System SIG.* [first.org/cvss](https://www.first.org/cvss/)
 42. OpenAI. n.d. *Safety Systems.* [openai.com/safety-systems](https://openai.com/safety-systems/)
 43. OpenAI. 2023. *GPT-3.5: Large Language Model.* [platform.openai.com](https://platform.openai.com) (Accessed 2023-08-24)
-44. OpenAI. 2024. *GPT-4o Mini: Advancing Cost-Efficient Intelligence.*
-45. OpenAI. 2024. *Hello GPT-4o.*
+44. OpenAI. 2024. *GPT-4o Mini: Advancing Cost-Efficient Intelligence.* `https://openai.com/index/gpt-4o-mini-advancing-cost-efficient-intelligence/`
+45. OpenAI. 2024. *Hello GPT-4o.* `https://openai.com/index/hello-gpt-4o/`
 46. Walter J Price. 1989. *A Benchmark Tutorial.* IEEE Micro 9, 5, 28–43.
 47. Xue Qiu, Shuguang Wang, Qiong Jia, Chunhe Xia, Qingxin Xia. 2014. *An Automated Method of Penetration Testing.* IEEE CCITA Conference, 211–216.
 48. Elaine Rich et al. 2008. *Automata, Computability and Complexity: Theory and Applications.* Pearson Prentice Hall.
@@ -764,10 +764,10 @@ Benchmark data and pre-experiment/AutoPT implementation code are available on Gi
 62. Zhiheng Xi, Wenxiang Chen, Xin Guo, Wei He, Yiwen Ding, Boyang Hong, Ming Zhang, Junzhe Wang, Senjie Jin, Enyu Zhou, et al. 2023. *The Rise and Potential of Large Language Model Based Agents: A Survey.* arXiv:2309.07864.
 63. Linyao Yang, Hongyang Chen, Zhao Li, Xiao Ding, Xindong Wu. 2023. *ChatGPT Is Not Enough: Enhancing Large Language Models with Knowledge Graphs for Fact-Aware Language Modeling.* arXiv:2306.11489.
 64. Mihalis Yannakakis. 1991. *Testing Finite State Machines.* ACM STOC 1991, 476–485.
-65. Shunyu Yao, Jeffrey Zhao, Dian Yu, Nan Du, Izhak Shafran, Karthik Narasimhan, Yuan Cao. 2023. *ReAct: Synergizing Reasoning and Acting in Language Models.* arXiv:2210.03629.
+65. Shunyu Yao, Jeffrey Zhao, Dian Yu, Nan Du, Izhak Shafran, Karthik Narasimhan, Yuan Cao. 2023. *ReAct: Synergizing Reasoning and Acting in Language Models.* arXiv:2210.03629. `https://arxiv.org/abs/2210.03629`
 66. Jiahao Yu, Xingwei Lin, Zheng Yu, Xinyu Xing. 2024. *LLM-Fuzzer: Scaling Assessment of Large Language Model Jailbreaks.* USENIX Security 24.
 67. Xiao Yu, Lei Liu, Xing Hu, Jacky Keung, Xin Xia, David Lo. 2024. *Practitioners' Expectations on Automated Test Generation.* ACM SIGSOFT ISSTA 2024, 1618–1630.
 68. Zhihang Yuan, Yuzhang Shang, Yang Zhou, Zhen Dong, Chenhao Xue, Bingzhe Wu, Zhikai Li, Qingyi Gu, Yong Jae Lee, Yan Yan, et al. 2024. *LLM Inference Unveiled: Survey and Roofline Model Insights.* arXiv:2402.16363.
 69. Cen Zhang, Yaowen Zheng, Mingqiang Bai, Yeting Li, Wei Ma, Xiaofei Xie, Yuekang Li, Limin Sun, Yang Liu. 2024. *How Effective Are They? Exploring Large Language Model Based Fuzz Driver Generation.* ACM SIGSOFT ISSTA 2024, 1223–1235.
 70. Jianming Zhao, Wenli Shang, Ming Wan, Peng Zeng. 2015. *Penetration Testing Automation Assessment Method Based on Rule Tree.* IEEE CYBER 2015, 1829–1833.
-71. Yuchen Zhou, David Evans. 2014. *SSOScan: Automated Testing of Web Applications for Single Sign-On Vulnerabilities.* USENIX Security 14, 495–510.
+71. Yuchen Zhou, David Evans. 2014. *SSOScan: Automated Testing of Web Applications for Single Sign-On Vulnerabilities.* USENIX Security 14, 495–510. `https://www.usenix.org/conference/usenixsecurity14/technical-sessions/presentation/zhou`
