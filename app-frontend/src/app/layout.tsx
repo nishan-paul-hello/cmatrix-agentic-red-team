@@ -13,13 +13,13 @@ export const metadata: Metadata = {
     },
     description:
         "A secure research environment to run autonomous VAPT on hosted benchmarks.",
-    metadataBase: new URL("https://cmatrix.kaiofficial.xyz"),
+    metadataBase: new URL("https://redgrid.kaiofficial.xyz"),
     openGraph: {
         title: "RedGrid - Agentic Red Team",
         description:
             "A secure research environment to run autonomous VAPT on hosted benchmarks.",
         siteName: "RedGrid",
-        url: "https://cmatrix.kaiofficial.xyz",
+        url: "https://redgrid.kaiofficial.xyz",
         type: "website",
     },
     twitter: {
