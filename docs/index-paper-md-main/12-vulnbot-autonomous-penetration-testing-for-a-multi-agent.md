@@ -138,8 +138,8 @@ Three research questions (RQs) guided the empirical study of open-source LLMs in
 
 ##### 📊 Table 1 — Failure Counts & Causes by Phase
 
-| Model | Phase | Failures | Session Context Loss | False Output Interpretation | Failed Tool | Deadlock | Operation Failed | Command Param | Other |
-|---|---|---|---|---|---|---|---|---|---|
+| Model | Phase | Failures | Session Context Loss | False Output Interpretation | Failed Tool | Deadlock Operation | Failed Command Param | Other |
+|---|---|---|---|---|---|---|---|---|
 | Llama3.3-70B | Reconnaissance | 28 | 18 (64.29%) | 3 (10.71%) | 2 (7.14%) | 0 (0.00%) | 4 (14.29%) | 1 (3.57%) |
 | Llama3.3-70B | Scanning | 27 | 5 (18.52%) | 2 (7.41%) | 8 (29.63%) | 3 (11.11%) | 7 (25.93%) | 2 (7.41%) |
 | Llama3.3-70B | Exploitation | 45 | 16 (35.56%) | 4 (8.89%) | 13 (28.89%) | 2 (4.44%) | 8 (17.78%) | 2 (4.44%) |
@@ -148,7 +148,7 @@ Three research questions (RQs) guided the empirical study of open-source LLMs in
 | Llama3.1-405B | Exploitation | 33 | 15 (45.45%) | 2 (6.06%) | 7 (21.21%) | 1 (3.03%) | 6 (18.18%) | 1 (3.03%) |
 | **Total** | — | **203** | **86 (42.36%)** | **18 (8.87%)** | **40 (19.70%)** | **11 (5.42%)** | **39 (19.21%)** | **8 (3.94%)** |
 
-> Note: "Command Param" column values appear merged with "Other" in source layout ambiguity; totals row reflects the paper's reported aggregate.
+
 
 **Findings:**
 - Primary failure cause in reconnaissance & exploitation: **session context loss**.
