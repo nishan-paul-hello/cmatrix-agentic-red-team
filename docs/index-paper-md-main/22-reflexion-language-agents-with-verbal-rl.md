@@ -27,6 +27,28 @@ The paper explores three ways of generating this reflective feedback:
 2. Pre-defined heuristics for common failure modes
 3. Self-evaluation (LLM-based binary classification, or self-written unit tests for code)
 
+🖼️ **Figure 1: Reflexion works on decision-making (§4.1), programming (§4.3), and reasoning (§4.2) tasks.**
+The figure illustrates the end-to-end flow across three task domains through (a) Task, (b) Trajectory, (c) Evaluation (internal/external), (d) Reflection, and (e) Next Trajectory:
+- **Decision making (ALFWorld):**
+  - *(a) Task:* "You are in the middle of a room. [...] Task: clean some pan and put it in countertop"
+  - *(b) Trajectory:* Agent attempts `take pan 1 from stoveburner 1` (Obs: Nothing happens), `clean pan 1 with sinkbasin 1` (Obs: Nothing happens).
+  - *(c) Evaluation:* Rule / LM Heuristic flags *Hallucination*.
+  - *(d) Reflection:* Agent notes it tried to pick up the pan from stoveburner 1, but the pan was not there.
+  - *(e) Next Trajectory:* Agent executes `take pan 1 from stoveburner 2` and succeeds (`Obs: You put the pan 1 in countertop 1`).
+- **Programming (Code Generation):**
+  - *(a) Task:* "You are given a list of two strings [...] of open '(' or close ')' parentheses only [...]"
+  - *(b) Trajectory:* Initial code `def match_parens(lst): if s.count('(') == s.count(')'): ... return 'No'`
+  - *(c) Evaluation:* Self-generated unit tests fail (`assert match_parens(...)`).
+  - *(d) Reflection:* Agent reflects that counting parentheses is insufficient because it ignores the order of parentheses.
+  - *(e) Next Trajectory:* Fixed code `return 'Yes' if check(S1) or check(S2) else 'No'` passes tests.
+- **Reasoning (HotpotQA):**
+  - *(a) Task:* "What profession does John Lanchester and Alan Dean Foster have in common?"
+  - *(b) Trajectory:* `Think: [...] novelist, journalist, critic [...] novelist, screenwriter [...] Action: "novelist, screenwriter"`
+  - *(c) Evaluation:* Environment Binary Reward: 0 (Incorrect).
+  - *(d) Reflection:* Agent recognizes it assumed they shared multiple professions rather than identifying the specific shared profession.
+  - *(e) Next Trajectory:* `Think: [...] Action: "novelist"` (Correct).
+
+
 ### Advantages of Reflexion vs. traditional RL
 - ✅ Lightweight — no LLM fine-tuning required
 - ✅ Supports nuanced feedback (targeted action-level critique) vs. hard-to-assign scalar/vector rewards
@@ -97,6 +119,8 @@ Three cooperating LLM-based modules:
 - **Evaluator ($M_e$)** — scores the Actor's outputs
 - **Self-Reflection ($M_{sr}$)** — generates verbal reinforcement cues from the score + trajectory
 
+🖼️ **Figure 2: (a) Diagram of Reflexion. (b) Reflexion reinforcement algorithm.**
+
 ```mermaid
 flowchart LR
     Env[Environment] -- Obs / Reward --> Traj[Trajectory<br/>short-term memory]
@@ -107,6 +131,7 @@ flowchart LR
     SelfRef -- Reflective text --> Exp[Experience<br/>long-term memory]
     Exp --> Actor
 ```
+
 
 ### 🔬 Component details
 
@@ -331,26 +356,40 @@ Reflexion teaches agents to learn from past mistakes via verbal reinforcement, a
 
 ---
 
-## References (partial — chunk continues to next document)
+## References
 
-1. Ahn et al. (2022). *Do as I can, not as I say: Grounding language in robotic affordances.* arXiv:2204.01691.
-2. Austin et al. (2021). *Program synthesis with large language models.* arXiv:2108.07732.
-3. Brooks et al. (2022). *In-context policy iteration.* arXiv:2210.03821.
-4. Cassano et al. (2022). *MultiPL-E: A scalable and extensible approach to benchmarking neural code generation.*
-5. Chen et al. (2022). *CodeT: Code generation with generated tests.* arXiv:2207.10397.
-6. Chen et al. (2021). *Evaluating large language models trained on code.* arXiv:2107.03374.
-7. Chen et al. (2023). *Teaching large language models to self-debug.* arXiv:2304.05128.
-8. Côté et al. (2019). *TextWorld: A learning environment for text-based games.* Computer Games (CGW 2018), Springer.
+1. Ahn, M., Brohan, A., Brown, N., Chebotar, Y., Cortes, O., David, B., Finn, C., Gopalakrishnan, K., Hausman, K., Herzog, A., et al. (2022). *Do as I can, not as I say: Grounding language in robotic affordances.* arXiv:2204.01691.
+2. Austin, J., Odena, A., Nye, M., Bosma, M., Michalewski, H., Dohan, D., Jiang, E., Cai, C., Terry, M., Le, Q., et al. (2021). *Program synthesis with large language models.* arXiv:2108.07732.
+3. Brooks, E., Walls, L., Lewis, R. L., and Singh, S. (2022). *In-context policy iteration.* arXiv:2210.03821.
+4. Cassano, F., Gouwar, J., Nguyen, D., Nguyen, S., Phipps-Costin, L., Pinckney, D., Yee, M.-H., Zi, Y., Anderson, C. J., Feldman, M. Q., Guha, A., Greenberg, M., and Jangda, A. (2022). *MultiPL-E: A scalable and extensible approach to benchmarking neural code generation.*
+5. Chen, B., Zhang, F., Nguyen, A., Zan, D., Lin, Z., Lou, J.-G., and Chen, W. (2022). *CodeT: Code generation with generated tests.* arXiv:2207.10397.
+6. Chen, M., Tworek, J., Jun, H., Yuan, Q., Pinto, H. P. d. O., Kaplan, J., Edwards, H., Burda, Y., Joseph, N., Brockman, G., et al. (2021). *Evaluating large language models trained on code.* arXiv:2107.03374.
+7. Chen, X., Lin, M., Schärli, N., and Zhou, D. (2023). *Teaching large language models to self-debug.* arXiv:2304.05128.
+8. Côté, M.-A., Kádár, A., Yuan, X., Kybartas, B., Barnes, T., Fine, E., Moore, J., Hausknecht, M., El Asri, L., Adada, M., et al. (2019). *TextWorld: A learning environment for text-based games.* In Computer Games (CGW 2018), IJCAI, pages 41–75, Springer.
 9. Goodman, N. (2023). *Meta-Prompt: A simple self-improving language agent.* noahgoodman.substack.com.
-10. Kim, Baldi, McAleer (2023). *Language models can solve computer tasks.* arXiv:2303.17491.
-11. Lam et al. (2020). *A large-scale longitudinal study of flaky tests.* Proc. ACM Program. Lang., 4(OOPSLA).
-12. Le et al. (2022). *CodeRL: Mastering code generation through pretrained models and deep reinforcement learning.* NeurIPS 35:21314–21328.
-13. Li et al. (2023). *StarCoder: may the source be with you!* arXiv:2305.06161.
-14. Li et al. (2022). *Competition-level code generation with AlphaCode.* Science, 378(6624):1092–1097.
-15. Madaan et al. (2023). *Self-Refine: Iterative refinement with self-feedback.* arXiv:2303.17651.
-16. Nair et al. (2023). *DERA: Enhancing large language model completions with dialog-enabled resolving agents.* arXiv:2303.17071.
-17. Nakano et al. (2021). *WebGPT: Browser-assisted question-answering with human feedback.* arXiv:2112.09332.
+10. Kim, G., Baldi, P., and McAleer, S. (2023). *Language models can solve computer tasks.* arXiv:2303.17491.
+11. Lam, W., Winter, S., Wei, A., Xie, T., Marinov, D., and Bell, J. (2020). *A large-scale longitudinal study of flaky tests.* Proc. ACM Program. Lang., 4(OOPSLA).
+12. Le, H., Wang, Y., Gotmare, A. D., Savarese, S., and Hoi, S. C. H. (2022). *CodeRL: Mastering code generation through pretrained models and deep reinforcement learning.* NeurIPS 35:21314–21328.
+13. Li, R., Allal, L. B., Zi, Y., Muennighoff, N., Kocetkov, D., Mou, C., Marone, M., Akiki, C., Li, J., Chim, J., et al. (2023). *StarCoder: may the source be with you!* arXiv:2305.06161.
+14. Li, Y., Choi, D., Chung, J., Kushman, N., Schrittwieser, J., Leblond, R., Eccles, T., Keeling, J., Gimeno, F., Dal Lago, A., et al. (2022). *Competition-level code generation with AlphaCode.* Science, 378(6624):1092–1097.
+15. Madaan, A., Tandon, N., Gupta, P., Hallinan, S., Gao, L., Wiegreffe, S., Alon, U., Dziri, N., Prabhumoye, S., Yang, Y., et al. (2023). *Self-Refine: Iterative refinement with self-feedback.* arXiv:2303.17651.
+16. Nair, V., Schumacher, E., Tso, G., and Kannan, A. (2023). *DERA: Enhancing large language model completions with dialog-enabled resolving agents.* arXiv:2303.17071.
+17. Nakano, R., Hilton, J., Balaji, S., Wu, J., Ouyang, L., Kim, C., Hesse, C., Jain, S., Kosaraju, V., Saunders, W., et al. (2021). *WebGPT: Browser-assisted question-answering with human feedback.* arXiv:2112.09332.
 18. OpenAI (2023). *GPT-4 Technical Report.* ArXiv.
+19. Park, J. S., O’Brien, J. C., Cai, C. J., Morris, M. R., Liang, P., and Bernstein, M. S. (2023). *Generative agents: Interactive simulacra of human behavior.* arXiv:2304.03442.
+20. Paul, D., Ismayilzada, M., Peyrard, M., Borges, B., Bosselut, A., West, R., and Faltings, B. (2023). *Refiner: Reasoning feedback on intermediate representations.* arXiv:2304.01904.
+21. Pryzant, R., Iter, D., Li, J., Lee, Y. T., Zhu, C., and Zeng, M. (2023). *Automatic prompt optimization with "gradient descent" and beam search.* arXiv:2305.03495.
+22. Schick, T., Dwivedi-Yu, J., Dessì, R., Raileanu, R., Lomeli, M., Zettlemoyer, L., Cancedda, N., and Scialom, T. (2023). *Toolformer: Language models can teach themselves to use tools.* arXiv:2302.04761.
+23. Shen, Y., Song, K., Tan, X., Li, D., Lu, W., and Zhuang, Y. (2023). *HuggingGPT: Solving AI tasks with ChatGPT and its friends in Hugging Face.* arXiv:2303.17580.
+24. Shridhar, M., Yuan, X., Côté, M.-A., Bisk, Y., Trischler, A., and Hausknecht, M. (2021). *ALFWorld: Aligning Text and Embodied Environments for Interactive Learning.* In Proceedings of the International Conference on Learning Representations (ICLR).
+25. Sutton, R. S. and Barto, A. G. (2018). *Reinforcement Learning: An Introduction.* The MIT Press, second edition.
+26. Wei, J., Wang, X., Schuurmans, D., Bosma, M., Chi, E., Le, Q., and Zhou, D. (2022). *Chain of thought prompting elicits reasoning in large language models.* arXiv:2201.11903.
+27. Xie, Y., Kawaguchi, K., Zhao, Y., Zhao, X., Kan, M.-Y., He, J., and Xie, Q. (2023). *Decomposition enhances reasoning via self-evaluation guided decoding.* arXiv:2305.00633.
+28. Yang, Z., Qi, P., Zhang, S., Bengio, Y., Cohen, W. W., Salakhutdinov, R., and Manning, C. D. (2018). *HotpotQA: A dataset for diverse, explainable multi-hop question answering.* In Conference on Empirical Methods in Natural Language Processing (EMNLP).
+29. Yao, S., Chen, H., Yang, J., and Narasimhan, K. (preprint). *WebShop: Towards scalable real-world web interaction with grounded language agents.* In ArXiv.
+30. Yao, S., Zhao, J., Yu, D., Du, N., Shafran, I., Narasimhan, K., and Cao, Y. (2023). *ReAct: Synergizing reasoning and acting in language models.* In International Conference on Learning Representations (ICLR).
+31. Yoran, O., Wolfson, T., Bogin, B., Katz, U., Deutch, D., and Berant, J. (2023). *Answering questions by meta-reasoning over multiple chains of thought.* arXiv:2304.13007.
+
 
 # Appendix (Excerpt)
 
@@ -384,26 +423,54 @@ Across all model families tested, Reflexion improves on the baseline, with the l
 
 ## B. Decision-Making (AlfWorld Example)
 
-An AlfWorld trajectory illustrating how Reflexion corrects inefficient planning across trials.
+**Environment:** You are in the middle of a room. Looking quickly around you, you see a bed 1, a desk 2, a desk 1, a drawer 6, a drawer 5, a drawer 4, a drawer 3, a drawer 2, a drawer 1, a garbagecan 1, a laundryhamper 1, a safe 1, a shelf 6, a shelf 5, a shelf 4, a shelf 3, a shelf 2, and a shelf 1.
 
-**Task:** Examine the mug with the desk lamp, in a room containing a bed, two desks, six drawers, a garbage can, a laundry hamper, a safe, and six shelves.
+**Task:** examine the mug with the desklamp.
 
-### Trial #1 (Failure)
+### Trial #1
+```
+> think: To solve the task, I need to find and take a mug, then find and use a desklamp.
+> think: First I need to find a mug. A mug is more likely to appear in drawer (1-6), desk (1-2), shelf (1-6), garbagecan (1), laundryhamper (1). I can check one by one, starting with drawer 1.
+> go to drawer 1
+The drawer 1 is closed.
+. . .
+> open drawer 6
+You open the drawer 6. The drawer 6 is open. In it, you see a keychain 2.
+> go to desk 1
+On the desk 1, you see a creditcard 3, a desklamp 1, a laptop 2, a mug 1, a pen 1, and a pencil 1.
+> think: Now I find a mug (1). Next, I need to take it.
+> take mug 1 from desk 1
+You pick up the mug 1 from the desk 1.
+> think: Now I take a mug (1). Next, I need to find a desklamp. A desklamp is more likely to appear in desk (1-2), sidetable (1-2), shelf (1-6), bed (1), drawer (1-6). I can check one by one, starting with desk 1.
+> go to desk 1
+Nothing happens.
+> go to desk 2
+On the desk 2, you see a alarmclock 1, a bowl 1, a mug 3, a pencil 3, and a pencil 2.
+> think: Now I find a desklamp (1). Next, I need to use it.
+> use desklamp 1
+Nothing happens.
+> use desklamp 1
+Nothing happens.
+Status: Fail
+```
 
-The agent searches drawers and shelves for a mug, eventually finding one along with a desk lamp on desk 1. It picks up the mug, then searches for a desk lamp elsewhere (desk 2), and repeatedly tries to "use desklamp 1" without success — because it walked away from the desk where the actual lamp was.
+> 📌 **Reflection:** In this environment, my plan was to find a mug then find and use a desklamp. However, the task says to examine the mug with the desklamp. I should have looked for the desklamp first, then looked for the mug. I noticed that the desklamp was found on desk 1. In the next trial, I will go to desk 1, find the lamp, then look for the mug and examine it with the desklamp.
 
-**Outcome:** Fail
+### Trial #2
+```
+> go to desk 1
+On the desk 1, you see a creditcard 3, a desklamp 1, a laptop 2, a mug 1, a pen 1, and a pencil 1.
+> think: To solve the task, I need to find and take a mug, then find and use a desklamp.
+> take mug 1 from desk 1
+You pick up the mug 1 from the desk 1.
+> think: To solve the task, I need to find and take a mug, then find and use a desklamp.
+> use desklamp 1
+You turn on the desklamp 1.
+Status: Success
+```
 
-**Self-reflection generated by the agent:**
-> The agent recognizes it searched for the mug before the lamp, when it should have located the lamp first, then the mug, then examined the mug using the lamp — since it had already seen the lamp on desk 1.
+🖼️ **Figure 5:** [Top] An AlfWorld trajectory in which the agent failed due to inefficient planning. In the reflection, the agent recognizes that it should have looked for the desklamp then the mug, not the mug then the desklamp. [Bottom] The agent is able to correct its reasoning trace and execute a sequence of actions in a concise manner.
 
-### Trial #2 (Success)
-
-Using the reflection, the agent goes directly to desk 1, picks up the mug, and turns on the desk lamp successfully.
-
-**Outcome:** Success
-
-**Takeaway:** The first trial failed due to inefficient planning order. After reflecting on the mistake, the agent corrected its reasoning trace and completed the task efficiently in the very next trial.
 
 ---
 
@@ -481,46 +548,38 @@ The actor is instructed as a Python writing assistant: given a previous function
 
 ### C.3 Reflexion Self-Reflection Instruction and Example
 
-Uses the same actor-style instruction (previous implementation, test results, self-reflection → improved function body), with generations following the form:
-1. Instruction
-2. Function implementation
-3. Unit test feedback
+**Instruction:**
+> You are a Python writing assistant. You will be given your previous implementation of a function, a series of unit tests results, and your self-reflection on your previous implementation. Apply the necessary changes below by responding only with the improved body of the function. Do not include the signature in your response. The first line of your response should have 4 spaces of indentation so that it fits syntactically with the user provided signature. You will be given a few examples by the user.
+
+**Generation format:**
+1. (Instruction)
+2. (Function implementation)
+3. (Unit test feedback)
 
 ### C.4 Ablation: No Self-Reflection
 
-Generation format for the ablation removing the self-reflection step:
-1. Instruction
-2. Function implementation
-3. Unit test feedback
-4. Self-reflection
-5. Instruction for next function implementation
+Reflexion no Self-Reflection ablation Actor generations follow the form:
+1. (Instruction)
+2. (Function implementation)
+3. (Unit test feedback)
+4. (Self-reflection)
+5. (Instruction for next function implementation)
 
 ### C.5 Ablation: No Test Generation
 
-Generation format for the ablation removing self-generated test cases (details continue in the full paper).
+Reflexion no test generation ablation Actor generations follow the form:
+1. (Instruction)
+2. (Function implementation)
+3. (Unit test feedback)
+4. (Self-reflection)
+5. (Instruction for next function implementation)
 
 ---
 
-## References (partial list, this chunk)
-
-- Park et al. (2023) — *Generative Agents: Interactive Simulacra of Human Behavior*
-- Paul et al. (2023) — *Refiner: Reasoning Feedback on Intermediate Representations*
-- Pryzant et al. (2023) — *Automatic Prompt Optimization with "Gradient Descent" and Beam Search*
-- Schick et al. (2023) — *Toolformer: Language Models Can Teach Themselves to Use Tools*
-- Shen et al. (2023) — *HuggingGPT: Solving AI Tasks with ChatGPT and Its Friends in Hugging Face*
-- Shridhar et al. (2021) — *ALFWorld: Aligning Text and Embodied Environments for Interactive Learning* (ICLR)
-- Sutton & Barto (2018) — *Reinforcement Learning: An Introduction* (2nd ed., MIT Press)
-- Wei et al. (2022) — *Chain of Thought Prompting Elicits Reasoning in Large Language Models*
-- Xie et al. (2023) — *Decomposition Enhances Reasoning via Self-Evaluation Guided Decoding*
-- Yang et al. (2018) — *HotpotQA: A Dataset for Diverse, Explainable Multi-Hop Question Answering* (EMNLP)
-- Yao, Chen, Yang & Narasimhan (preprint) — *WebShop: Towards Scalable Real-World Web Interaction with Grounded Language Agents*
-- Yao, Zhao, Yu, Du, Shafran, Narasimhan & Cao (2023) — *ReAct: Synergizing Reasoning and Acting in Language Models* (ICLR)
-- Yoran et al. (2023) — *Answering Questions by Meta-Reasoning over Multiple Chains of Thought*
-
-
-## 16 D Reasoning
+## D. Reasoning
 
 ### D.1 Full Example
+
 
 **Trial #1**
 
@@ -555,7 +614,8 @@ Generation format for the ablation removing self-generated test cases (details c
 
 > 📌 **Reflection:** I searched the wrong title for the show, "'Allo 'Allo!", which resulted in no results. I should have searched the show's main character, Gorden Kaye, to find the role he was best known for in the show.
 
-🖼️ Figure: Diagram showing two HotPotQA trials within the same environment and task, illustrating how the Reflexion + ReAct agent uses self-reflection to determine a better search method for the next trial.
+🖼️ **Figure 7:** Two HotPotQA trials within the same environment and task. The Reflexion + ReAct agent uses self-reflection to determine a better search method for the next trial.
+
 
 ```mermaid
 flowchart TD
