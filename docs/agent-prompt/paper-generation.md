@@ -1205,5 +1205,5 @@ Stop immediately and flag if any of the following occur:
 ---
 
 > - Begin with STEP 1a. Read `artifacts/research-area.md` first. Create `artifacts/step-1a-codebase-read.md`. Run the checklist. Report results.  
-> - Put ✅ at the right side of substep in @docs/paper-research/context/steps-of-prompt.md that u have completed now.  
+> - Put ✅ at the right side of substep in `docs/agent-prompt/paper-steps.md` that u have completed now.  
 > - Stop and await for confirmation.  
