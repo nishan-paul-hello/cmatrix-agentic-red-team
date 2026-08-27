@@ -1,4 +1,3 @@
-
 # LLM Agents can Autonomously Hack Websites
 
 **Richard Fang¹, Rohan Bindu¹, Akul Gupta¹, Qiusi Zhan¹, Daniel Kang¹**
@@ -229,7 +228,7 @@ Unlike chatbot settings, the agent receives **no human feedback** during executi
 ## 5. Understanding Agent Capabilities
 
 
-## 5.1 GPT-4 Case Studies
+### 5.1 GPT-4 Case Studies
 
 ### 🔬 Complex Attack Walkthroughs
 
@@ -309,7 +308,7 @@ Across both examples, GPT-4 shows strong knowledge, adapts behavior from website
 
 > ⚠️ As expected, harder vulnerabilities have lower success rates. SQL Injection and CSRF hit 100%, hypothesized to be due to their prevalence as common examples in GPT-4's training data. Even a 20% success rate on harder vulnerabilities is meaningful for an attacker, since a single successful attempt suffices.
 
-## 5.2 Open-Source LLMs
+### 5.2 Open-Source LLMs
 
 - Base open-source LLMs are largely **incapable of using tools correctly** and fail to plan appropriately — including large models like Llama-70B and models fine-tuned on 1M+ GPT-4 examples (Nous Hermes-2 Yi 34B).
 - **OpenChat-3.5** (7B parameters) is the most capable open-source model tested — it attempts the correct vulnerability 25.3% of the time.

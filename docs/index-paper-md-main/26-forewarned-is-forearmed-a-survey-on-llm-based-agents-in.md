@@ -1,6 +1,5 @@
 # Forewarned is Forearmed: A Survey on Large Language Model-based Agents in Autonomous Cyberattacks
 
-
 **Authors:** Minrui Xu, Jiani Fan (Nanyang Technological University, Singapore) · Xinyu Huang, Conghao Zhou, Xuemin (Sherman) Shen (University of Waterloo, Canada) · Jiawen Kang (Guangdong University of Technology, China) · Dusit Niyato, Kwok-Yan Lam (Nanyang Technological University, Singapore) · Shiwen Mao (Auburn University, USA) · Zhu Han (University of Houston, USA)
 
 > **Contact:** Minrui Xu (MINRUI001@e.ntu.edu.sg), Jiani Fan (jiani001@e.ntu.edu.sg), Xinyu Huang (x357huan@uwaterloo.ca), Conghao Zhou (c89zhou@uwaterloo.ca), Jiawen Kang (kavinkang@gdut.edu.cn), Dusit Niyato (dniyato@ntu.edu.sg), Shiwen Mao (smao@ieee.org), Zhu Han (hanzhu22@gmail.com), Xuemin Shen (sshen@uwaterloo.ca), Kwok-Yan Lam (kwokyan.lam@ntu.edu.sg)
@@ -106,7 +105,7 @@ LLM-based agents reduce time, expertise, and resource requirements across all cy
 
 ---
 
-## 🖼️ Figure 1 — Survey Outline
+### 🖼️ Figure 1 — Survey Outline
 
 ```mermaid
 flowchart TD
@@ -136,7 +135,7 @@ flowchart TD
 > The analysis is intended as a reference for blue-team defenders tracking state-of-the-art adversaries.
 
 
-## 2 Large Language Model-based Agents in Autonomous Cyberattacks
+## 2. Large Language Model-based Agents in Autonomous Cyberattacks
 
 Cyberattack agents are built on top of LLMs with external modules that map high-level natural-language objectives to concrete offensive actions [212].
 
@@ -337,7 +336,7 @@ Multiple LLM-based agents can collaborate on a complex attack (e.g., one scans, 
 
 ---
 
-## 3 Common Cyberattacks and Benchmarks of LLM-based Agents
+## 3. Common Cyberattacks and Benchmarks of LLM-based Agents
 
 > Each LLM ability maps differently across cyberattack types, with perception and memory dominating reconnaissance tasks while reasoning, planning, and tool orchestration drive exploitation workflows (see Table 3). LLM-based agent frameworks for cyberattacks are listed in Table 4.
 
@@ -355,7 +354,7 @@ LLMs process and synthesize intelligence from diverse sources [184], transformin
 
 **📊 Benchmark:** Alam et al. [14] release **CTIBench**, an APT/malware benchmark — GPT-4 leads overall, but models tend to overestimate threats.
 
-## 📌 Table 3 — Mapping of LLM-based Agent Capabilities to Cyberattack Categories
+### 📌 Table 3 — Mapping of LLM-based Agent Capabilities to Cyberattack Categories
 
 *Legend: ⬤ High ◐ Medium ◯ Low*
 
@@ -372,7 +371,7 @@ LLMs process and synthesize intelligence from diverse sources [184], transformin
 
 ---
 
-## 3.1.2 Penetration Testing
+#### 3.1.2 Penetration Testing
 
 In LLM-based penetration-testing agents [104, 136, 171], dynamic reasoning lets agents adapt attack strategies based on discovered vulnerabilities. Early work kept a human "red button" in the loop.
 
@@ -386,7 +385,7 @@ In LLM-based penetration-testing agents [104, 136, 171], dynamic reasoning lets 
 - Nakatani et al. [132] develop **RapidPen** (ReAct-driven) — shell access in 200–400s.
 - Huang et al. [89] introduce **PenHealNet**, combining Pentest + Remediation agents to improve on PentestGPT.
 
-### 🤝 Multi-agent Pentest Frameworks
+##### 🤝 Multi-agent Pentest Frameworks
 
 - **PenHeal** [90] — combines testing + remediation; +31% coverage, −46% cost.
 - **Breach-Seek** [19] — distributed architecture for autonomous scanning.
@@ -450,7 +449,7 @@ In LLM-based penetration-testing agents [104, 136, 171], dynamic reasoning lets 
 
 ---
 
-## 3.1.3 Vulnerability Detection
+#### 3.1.3 Vulnerability Detection
 
 LLM-based agents combine language perception with structured reasoning and selective tool orchestration for automated, high-fidelity triage across codebases and binary artifacts [173].
 
@@ -464,7 +463,7 @@ LLM-based agents combine language perception with structured reasoning and selec
 
 ---
 
-## 3.1.4 Phishing and Social Engineering
+#### 3.1.4 Phishing and Social Engineering
 
 ```mermaid
 flowchart LR
@@ -495,9 +494,9 @@ Subsequent work pivots to testing defense resilience and multimodal countermeasu
 
 ---
 
-## 3.2 Automated Weaponization
+### 3.2 Automated Weaponization
 
-### 3.2.1 Malware Generation
+#### 3.2.1 Malware Generation
 
 ```mermaid
 flowchart LR
@@ -521,14 +520,14 @@ Agents convert behavioral descriptions into attack code, evade detection, and ge
 - Guo et al. [78] — **RedCode**, tests code agent safety across thousands of sandboxed tests; GPT-4 produces more harmful code despite safeguards.
 - Guo et al. [79] — **RedCodeAgent**, 72.47% attack success rate, highlighting need for better automated safety testing.
 
-### 3.2.2 Vulnerability Exploitation: One-Day and Zero-Day Attacks
+#### 3.2.2 Vulnerability Exploitation: One-Day and Zero-Day Attacks
 
 LLM-based agents use semantic analysis, exploit chain construction, and automated tool integration to transform manual exploitation into rapid, adaptive workflows — effective across cloud, web, and mobile environments with reduced expertise requirements.
 
 - Patil et al. [147] — inaugurate the defensive-side discourse, showing LLM-powered anomaly detectors improve zero-day spotting in cloud networks while proposing safeguards against hallucination and bias.
 
 
-### 🖼️ Figure: LLM-based agents' cyberattack capabilities of Zero-day attacks
+##### 🖼️ Figure: LLM-based agents' cyberattack capabilities of Zero-day attacks
 
 ```mermaid
 flowchart LR
@@ -537,7 +536,7 @@ flowchart LR
     A -->|③ Zero-day Vulnerability Exploitation| C[Target System]
 ```
 
-## One-Day / N-Day Exploit Reproduction
+##### One-Day / N-Day Exploit Reproduction
 
 - **Fang et al. [61]** — GPT-4 armed with public CVE descriptions:
   - Reproduces **87%** of one-day exploits
@@ -548,7 +547,7 @@ flowchart LR
   - >**90%** accuracy in step-to-reproduce extraction (prompt engineering + CoT)
 - **Ferrag et al. [66]** — critiques pattern dependence of traditional scanners; argues deep-learning pipelines must reconcile formal-verification precision with real-time performance to scale beyond curated datasets
 
-## Vulnerability Detection: From Finetuning to Knowledge Retrieval
+##### Vulnerability Detection: From Finetuning to Knowledge Retrieval
 
 - **Shestov et al. [174]** — finetune WizardCoder for Java vulnerability detection
   - Frames task as question-answering
@@ -556,14 +555,14 @@ flowchart LR
   - Evaluated on 624 vulnerabilities from 205 OSS projects; surpasses CodeBERT-like baselines on ROC-AUC and F1 (balanced & imbalanced)
   - ⚠️ Sensitive to noisy labels
 
-### 📊 Benchmarks
+##### 📊 Benchmarks
 
 | Work | Approach | Result | ⚠️ Limitation |
 |---|---|---|---|
 | Du et al. [57] — Vul-RAG | Knowledge base from 2,174 CVEs; semantic retrieval + GPT-4 reasoning; new **PairVul** benchmark (4,667 function pairs) | +12.96% overall accuracy, +110% pairwise accuracy over prior art | Leakage risks; Linux-kernel focus |
 | Ghosh et al. [73] — CVE-LLM | Domain-adaptive pre-training on regulatory notifications + human-in-the-loop, medical-device supply chain | Materially reduces analyst effort over 2-month pilot | Long-sequence handling; spurious text in Llama-2 variants |
 
-## 3.2.3 Honeypot Deployment
+#### 3.2.3 Honeypot Deployment
 
 > Honeypots are controlled environments that mimic vulnerable systems to study adversarial behavior safely. LLM-based agents generate realistic system responses to attacker inputs, simulating authentic behaviors from Linux shells to industrial protocols.
 
@@ -644,7 +643,7 @@ flowchart LR
 | HackSynth [131] | Autonomous CTF solving | Solves 34% of tasks | Lower performance on complex logic |
 | InterCode-CTF [200] | Interactive CTF coding tasks | ReAct&Plan boosts solve rate to 95% | Gaps in binary/reversing domains |
 
-## 3.2.4 Capture the Flag (CTF) Challenges
+#### 3.2.4 Capture the Flag (CTF) Challenges
 
 - **Tann et al. [182]** — early evaluation: ChatGPT, Google Bard, Microsoft Bing on 7 CTF exercises + 3 tiers of Cisco-level questions
   - ChatGPT solved **6/7** challenges, **82%** accuracy on knowledge items
@@ -654,7 +653,7 @@ flowchart LR
   - Most tasks solved in only 1–2 turns
   - Pushes InterCode-CTF success to **95%**, vs. prior baselines of 29% and 72%
 
-### 📊 Benchmarks
+##### 📊 Benchmarks
 
 - **Yang et al. [200] — InterCode-CTF**: 100-task PicoCTF-based benchmark
   - GPT-4 solved **40%** of tasks
@@ -664,7 +663,7 @@ flowchart LR
   - Outperforms prior benchmarks
   - ⚠️ Faces challenges in web-exploitation and data leakage protection
 
-## 3.3 Lessons Learned for Blue Teams
+### 3.3 Lessons Learned for Blue Teams
 
 1. **📌 Frequent Defense Upgrade**
    - Implement regular updates to security controls and threat intelligence feeds
@@ -679,7 +678,7 @@ flowchart LR
 
 ---
 
-# 4 Cyberattack Capabilities of LLM-based Agents on Static-Infrastructure Networks
+## 4. Cyberattack Capabilities of LLM-based Agents on Static-Infrastructure Networks
 
 > Static-infrastructure networks have fixed topology and node placement, maintaining stable traffic patterns. LLM-based agents automate attacks including 6G, enterprise, data center, SDN, smart grid, and quantum networks — focusing on **"one-shot-break, long-term-stay"** attacks for persistent installation in critical infrastructure.
 
@@ -694,7 +693,7 @@ flowchart LR
 | [93, 211] | Prompt completion & ICS payload synthesis | Smart Grid | False-data injection, phishing, system spoofing | Real-time model outputs bypass legacy sensors |
 | [9] | Code generation & classical/quantum planning | Quantum Networks | Side-channel attacks on QKD, device layer threats | Control-plane defenses need upgrade |
 
-## 4.1 6G Core and Radio Access Networks
+### 4.1 6G Core and Radio Access Networks
 
 - **Mani et al. [125]** — state-of-the-art LLMs translate natural-language directives into valid router, firewall, and orchestration code; same routines could inject flows or deactivate security rules → **dual-use capability**
 - **Nguyen et al. [135]** — enumerate 6G-specific attack surfaces; argue LLM autonomy enables real-time, cross-domain exploit generation
@@ -704,7 +703,7 @@ flowchart LR
 - **Zhang et al. [213]** — in-context learning matches fine-tuning in wireless-network IDSs; GPT-4 reaches **95%** accuracy across DDoS classes
 - **Legashev et al. [114]** — hybrid LLM-LSTM system for wireless backbones; Gemma-7B achieves **0.89 F1** in malicious classification, 3% error from poisoning
 
-## 4.2 Enterprise Networks
+### 4.2 Enterprise Networks
 
 - Valuable assets (public-facing servers, critical internal services) are frequent targets of distributed reconnaissance scans, lateral movement, privilege escalation, and DDoS [124]
 - Attackers typically exploit exposed services, misconfigured devices (internal DNS/NTP servers), unmanaged mobile devices
@@ -713,14 +712,14 @@ flowchart LR
   - Demonstrates LLMs can conduct Assumed Breach simulations: identifying access points, executing lateral movement
 - 📌 Blue teams should adopt a **zero-trust mindset**
 
-## 4.3 Data Center Networks
+### 4.3 Data Center Networks
 
 - Data center networks rely heavily on APIs and orchestration; LLM-based agents could exploit control plane APIs given credentials or misconfigurations
 - **Patil et al. [147]** — LLM system continuously analyzes cloud infrastructure logs/telemetry for zero-day attack patterns
   - Demonstrates superior detection vs. conventional rule-based approaches across multiple historical breach scenarios
 - 📌 Blue teams should enforce least privilege on API keys, rotate frequently, monitor API usage patterns
 
-## 4.4 Software-Defined Networking (SDN)
+### 4.4 Software-Defined Networking (SDN)
 
 - SDN controller is a high-value target; LLM-based agents might launch sophisticated DDoS or traffic-manipulation attacks that standard threshold-based systems can't catch [7]
 - **AlEroud et al. [16]** — inference-based intrusion detection for SDN controllers
@@ -732,7 +731,7 @@ flowchart LR
   - **99.96%** accuracy, **0.9995** precision and recall (known and unseen attacks)
 - 📌 Defending SDN requires understanding LLM capabilities in reasoning, evasion, flow manipulation, and network telemetry perception — traditional detection risks obsolescence
 
-## 4.5 Smart Grids
+### 4.5 Smart Grids
 
 - Smart grids face potential multi-vector, AI-orchestrated attacks; LLM-based agents might attempt false data injection to mislead grid control systems [117, 138]
 - Simulation platforms **GridAttackSim [112]** and **GridAttackAnalyzer [113]** enable modeling/evaluation of these scenarios
@@ -744,7 +743,7 @@ flowchart LR
 - **Zhang et al. [217]** — reveals vulnerabilities where LLM-generated code can compromise anomaly detection in IoT-enabled electrical substations
 - 📌 Defense: monitor/limit LLM capabilities in tool orchestration, prompt interpretation, code generation, adversarial reasoning; use model alignment, sandboxed execution, anomaly detection
 
-## 4.6 Quantum Networks
+### 4.6 Quantum Networks
 
 - Quantum communications may be theoretically secure in transmission, but supporting classical infrastructure remains vulnerable to LLM-based agents.
 - By combining pattern-completion, code-generation, and planning skills, LLMs can:
@@ -754,7 +753,7 @@ flowchart LR
 - **Ajimon and Kumar [9]** — present the first systematic blueprint in which an LLM is coupled with quantum-protocol libraries to generate proof-of-concept exploits (e.g., photon-number-splitting or detector-blinding scripts) against BB84 and decoy-state systems in real time.
 - In the future, attacks might target quantum repeaters, entanglement distribution systems, or even quantum routers as full quantum networks develop.
 
-## 4.7 Lessons Learned for Blue Teams
+### 4.7 Lessons Learned for Blue Teams
 
 1. **Use AI to Counter AI Threats** — Deploy LLM-based monitoring systems to detect and respond to attacks from LLM-based agents. This is particularly important for complex environments like 6G networks, where defensive LLMs can identify subtle malicious patterns that humans might miss in regular operations.
 2. **Implement Zero Trust Architecture** — In environments where LLM-based agents can automate reconnaissance and lateral movement, blue teams need to adopt zero-trust approaches that continuously verify all users and actions, implement strict network segmentation, and never assume internal traffic is automatically trustworthy.
@@ -939,7 +938,7 @@ Content-delivery networks (CDNs) and information-centric overlays are vulnerable
 - **Yeboah-Ofori and Hawsh [204]** — show malicious VR cues can mislead disabled users into hazardous movements.
 - **Bhatt et al. [34] (SEAR framework)** — systematically investigates how multimodal LLMs paired with AR devices can be weaponized for next-generation social engineering by fusing visual and audio context, retrieving the target's digital footprint, and driving an agent through conversational stages.
 
-## 6.6 Autonomous Agent Networks
+### 6.6 Autonomous Agent Networks
 
 Attacks in autonomous agent networks include:
 - Knowledge poisoning
@@ -952,7 +951,7 @@ LLM agents execute attacks by crafting malicious prompts, corrupting memory, and
 
 > 📌 **Key Point:** Agent-native networks are simultaneously attacker and defender domains, requiring formal verification and memory isolation.
 
-### Notable Work
+#### Notable Work
 
 - **Debar et al. [50]** — outline threats when nodes can explain, plan, and act.
 - **Tete et al. [183]** — provide a taxonomy for agent applications, focusing on backdoored prompts.
@@ -964,7 +963,7 @@ Countering these threats requires hardening reasoning integrity, controlling mem
 
 ---
 
-## 6.7 Lessons Learned for Blue Teams
+### 6.7 Lessons Learned for Blue Teams
 
 1. **Trust and Reputation Mechanisms**
    In infrastructure-free environments, LLM-based agents can create fake identities to conduct Sybil attacks and manipulate consensus. Blue teams must implement trust mechanisms like cryptographic attestations and behavioral scoring to ensure network accountability.

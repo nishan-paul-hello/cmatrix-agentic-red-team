@@ -1,4 +1,3 @@
-
 # BountyBench: Dollar Impact of AI Agent Attackers and Defenders on Real-World Cybersecurity Systems
 
 **Authors:** Andy K. Zhang, Joey Ji, Celeste Menders, Riya Dulepet, Thomas Qin, Ron Y. Wang, Junrong Wu, Kyleen Liao, Jiliang Li, Jinghan Hu, Sara Hong, Nardos Demilew, Shivatmica Murgai, Jason Tran, Nishka Kacheria, Ethan Ho, Denis Liu, Lauren McLane, Olivia Bruvik, Dai-Rong Han, Seungwoo Kim, Akhil Vyas, Cuiyuanxiu Chen, Ryan Li, Weiran Xu, Jonathan Z. Ye, Prerit Choudhary, Siddharth M. Bhatia, Vikram Sivashankar, Yuxuan Bao, Dawn Song, Dan Boneh, Daniel E. Ho, Percy Liang
@@ -202,7 +201,7 @@ flowchart TD
 
 ---
 
-## 2.5 Task Instantiation: Detect
+### 2.5 Task Instantiation: Detect
 
 **Definition:** Detect is a *snapshot-level* task — for a given snapshot, find any of the associated vulnerabilities.
 
@@ -234,7 +233,7 @@ The Detect Indicator captures this: the project is *not* deleted once the authen
 
 ---
 
-## 2.7 Task Instantiation: Exploit
+### 2.7 Task Instantiation: Exploit
 
 **Definition:** Exploit is a *vulnerability-level* task. In addition to the base environment, the agent is given:
 
@@ -1235,7 +1234,7 @@ Agent performance is compared relative to the model knowledge cutoff, contrastin
 | Patch | 21 (91%) | 14 (82%) |
 
 
-## 📊 Before/After Knowledge-Cutoff Results by Model
+### 📊 Before/After Knowledge-Cutoff Results by Model
 
 > Each table shows tasks solved (count and % success rate) for a given agent/model, split into bounties reported **before** vs **after** the model's knowledge cutoff, across five task types: Detect (No Info), Detect (CWE), Detect (CWE + Title), Exploit, and Patch.
 
@@ -2237,7 +2236,7 @@ For every experiment, the hardware platform, memory/storage allocations, and ave
 
 ---
 
-## Table 20: Summary of Reported Bounties
+### Table 20: Summary of Reported Bounties
 
 | Task | Bounty Name | Bounty Description | Disclosure Bounty | Patch Bounty | CVSS 3.x Score | CWE | CVE | Reported Date | Published Date |
 |---|---|---|---|---|---|---|---|---|---|
@@ -2282,7 +2281,7 @@ For every experiment, the hardware platform, memory/storage allocations, and ave
 | yaml 0 | Uncaught Document Parsing Exception | The attacker can craft a YAML input to cause an uncaught exception in document parsing functions, resulting in DoS. | $250 | $62.5 | High (7.5) | CWE-248: Uncaught Exception | CVE-2023-2251 | 04/22/23 | 04/24/23 |
 | zipp 0 | Zip File DoS via Infinite Loop | The attacker can cause a DoS by triggering an infinite loop in zipp’s Path-module ZIP handling functions with a specially crafted ZIP archive. | $125 | $31.25 | Medium (6.2) | CWE-400: Denial of Service | CVE-2024-5569 | 04/09/24 | 07/08/24 |
 
-## 📊 Detailed Results
+## 📊 Q. Detailed Results
 
 > Table 21 & 22: Success outcomes for the **Detect** task on all 40 bounties. ✓ indicates success given up to 3 attempts, X indicates failure. *`fastapi 0` was assigned a disclosure bounty that was not publicly disclosed.*
 
@@ -3073,8 +3072,6 @@ For every experiment, the hardware platform, memory/storage allocations, and ave
 
 ---
 
----
-
 ## R Usage Results
 
 ### R.1 Input Tokens
@@ -3566,7 +3563,7 @@ For every experiment, the hardware platform, memory/storage allocations, and ave
 ---
 
 
-## R.2 Output Tokens
+### R.2 Output Tokens
 
 > Claude Code and OpenAI Codex CLI (o3-high and o4-mini) totals are excluded because per-task token output for these external agents could not be reliably determined.
 
@@ -4055,7 +4052,7 @@ For every experiment, the hardware platform, memory/storage allocations, and ave
 ---
 
 
-## R.3 Time Taken
+### R.3 Time Taken
 
 ### 📊 Table 57: Time Taken — Detect Task (Part 1, Last Attempt, All 40 Bounties)
 

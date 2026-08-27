@@ -1,4 +1,3 @@
-
 # A Survey on Large Language Model based Autonomous Agents
 
 **Authors:** Lei Wang, Chen Ma*, Xueyang Feng*, Zeyu Zhang, Hao Yang, Jingsen Zhang, Zhi-Yuan Chen, Jiakai Tang, Xu Chen(B), Yankai Lin(B), Wayne Xin Zhao, Zhewei Wei, Ji-Rong Wen
@@ -141,15 +140,14 @@ The choice of profile content depends on the application — e.g., psychology tr
 
 #### 2.1.2 Memory Module
 
-
-## 🧠 Memory Structures
+##### 🧠 Memory Structures
 
 LLM-based autonomous agents draw inspiration from human memory: **sensory → short-term → long-term** memory. In agent design:
 
 - **Short-term memory** ≈ the context window (transformer input constraint)
 - **Long-term memory** ≈ external vector storage, queried/retrieved as needed
 
-### Unified Memory
+###### Unified Memory
 
 > Simulates only short-term memory, realized via in-context learning — memory is written directly into prompts.
 
@@ -162,7 +160,7 @@ LLM-based autonomous agents draw inspiration from human memory: **sensory → sh
 
 📌 **Key Point:** Easy to implement, but limited by context window size — pushes research toward hybrid systems.
 
-### Hybrid Memory
+###### Hybrid Memory
 
 > Explicitly models **both** short-term (recent perceptions) and long-term (consolidated) memory.
 
@@ -180,23 +178,23 @@ LLM-based autonomous agents draw inspiration from human memory: **sensory → sh
 
 ---
 
-## 🗂️ Memory Formats
+##### 🗂️ Memory Formats
 
 Different storage mediums suit different needs:
 
-### Natural Languages
+###### Natural Languages
 - Memory expressed as raw, flexible, semantically rich text.
 - Examples: **Reflexion** [12] (feedback in a sliding window), **Voyager** [38] (skill descriptions for Minecraft).
 
-### Embeddings
+###### Embeddings
 - Memory encoded as vectors for efficient retrieval.
 - Example: **MemoryBank** [39] — dual-tower dense retrieval over embedded memory segments.
 
-### Databases
+###### Databases
 - Memory stored/manipulated via structured queries.
 - Example: **ChatDB** [40] — uses SQL to add/delete/modify memory.
 
-### Structured Lists
+###### Structured Lists
 - Memory organized as concise lists.
 - Examples: **GITM** [16] (hierarchical tree of action lists per sub-goal), **RET-LLM** [41] (natural language → triplet phrases).
 
@@ -204,7 +202,7 @@ Different storage mediums suit different needs:
 
 ---
 
-## ⚙️ Memory Operations
+##### ⚙️ Memory Operations
 
 Three core operations connect the agent to its environment:
 
@@ -218,7 +216,7 @@ flowchart LR
     F --> C
 ```
 
-### 1. Memory Reading
+###### 1. Memory Reading
 
 📌 **Goal:** Extract the most useful information to guide agent action, scored by **recency**, **relevance**, and **importance**.
 
@@ -235,7 +233,7 @@ Where:
 - Setting $\alpha = \gamma = 0$ → relevance-only reading (used by several studies)
 - Setting $\alpha = \beta = \gamma = 1.0$ → equal weighting (Generative Agent)
 
-### 2. Memory Writing
+###### 2. Memory Writing
 
 📌 **Goal:** Store perceived environmental info for future use. Two key challenges:
 
@@ -247,7 +245,7 @@ Where:
 - **ChatDB**: explicit deletion via user commands.
 - **RET-LLM**: fixed-size FIFO buffer, overwrites oldest entries.
 
-### 3. Memory Reflection
+###### 3. Memory Reflection
 
 📌 **Goal:** Agent self-summarizes/infers high-level abstractions from raw memories — mimicking human self-evaluation.
 
@@ -266,13 +264,13 @@ Where:
 
 ---
 
-## 🧭 Planning Module
+#### 2.1.3 🧭 Planning Module
 
 Agents decompose complex tasks into subtasks, similar to human problem-solving. Studies are categorized by **whether feedback influences future planning**.
 
-### Planning without Feedback
+##### Planning without Feedback
 
-#### Single-Path Reasoning
+###### Single-Path Reasoning
 
 ```mermaid
 flowchart TD
@@ -298,7 +296,7 @@ flowchart TD
 > **Figure 3** — Comparison between the strategies of single-path and multi-path reasoning. LMZSP is the model proposed in [44].
 
 
-### 📌 Multi-path Reasoning
+###### 📌 Multi-path Reasoning
 
 Reasoning steps are organized into a **tree-like structure**, where each intermediate step may branch into multiple subsequent steps — analogous to how humans consider multiple options at each decision point.
 
@@ -323,7 +321,7 @@ graph TD
     G & H & I --> J[Final Plan via Search/Voting]
 ```
 
-### 📌 External Planner
+###### 📌 External Planner
 
 For domain-specific problems where zero-shot LLM planning struggles, researchers offload planning to **external, well-developed search algorithms**:
 
@@ -333,7 +331,7 @@ For domain-specific problems where zero-shot LLM planning struggles, researchers
 
 ---
 
-## Planning with Feedback
+##### Planning with Feedback
 
 For long-horizon tasks, feedback-free planning modules become less effective because:
 
@@ -342,7 +340,7 @@ For long-horizon tasks, feedback-free planning modules become less effective bec
 
 Humans iteratively revise plans based on feedback — agents simulate this via feedback from **environments**, **humans**, and **models**.
 
-### 🔬 Environmental Feedback
+###### 🔬 Environmental Feedback
 
 Feedback from the objective/virtual world (e.g., task completion signals, post-action observations).
 
@@ -356,13 +354,13 @@ Feedback from the objective/virtual world (e.g., task completion signals, post-a
 | **LLM-Planner** [61] | Grounded re-planning that updates plans on object mismatches/unattainable plans |
 | **Inner Monologue** [62] | Three feedback types: task success, passive scene description, active scene description |
 
-### 🔬 Human Feedback
+###### 🔬 Human Feedback
 
 A **subjective signal** that aligns agents with human values/preferences and helps reduce hallucination.
 
 - **Inner Monologue** [62] — agent performs high-level instructions in a 3D visual environment and actively solicits human feedback on scene descriptions, incorporating it into prompts. (Also combines environment + human feedback simultaneously.)
 
-### 🔬 Model Feedback
+###### 🔬 Model Feedback
 
 Internal feedback generated by pre-trained models themselves (not external signals):
 
@@ -376,7 +374,7 @@ Internal feedback generated by pre-trained models themselves (not external signa
 
 ---
 
-## 2.1.4 Action Module
+#### 2.1.4 Action Module
 
 The **action module** translates the agent's decisions into concrete outcomes — the most downstream module, directly interacting with the environment, and shaped by the profile, memory, and planning modules.
 
@@ -387,13 +385,13 @@ Four perspectives:
 3. **Action space** — in-action: available actions
 4. **Action impact** — after-action: consequences
 
-### 📌 Action Goal
+##### 📌 Action Goal
 
 - **Task Completion** — actions aimed at accomplishing well-defined tasks (e.g., crafting an iron pickaxe in Minecraft [38], completing a software function [18]). The most common goal type in the literature.
 - **Communication** — actions taken to communicate with other agents or humans for information sharing/collaboration (e.g., agents in **ChatDev** [18] communicating to jointly build software; **Inner Monologue** [62] adjusting strategy based on human feedback).
 - **Environment Exploration** — actions aimed at exploring unfamiliar environments, balancing exploration vs. exploitation (e.g., **Voyager** [38] exploring unknown skills and refining execution code via trial and error).
 
-### 📌 Action Production
+##### 📌 Action Production
 
 1. **Action via Memory Recollection** — actions generated by retrieving relevant info from agent memory given the current task.
    - **Generative Agents** [20] — retrieves recent, relevant, important memories before each action.
@@ -403,11 +401,11 @@ Four perspectives:
    - **DEPS** [33] — agent strictly follows its plan unless there are signals of plan failure.
    - **GITM** [16] — decomposes tasks into sub-goals via high-level plans, then acts on each sub-goal sequentially.
 
-### 📌 Action Space
+##### 📌 Action Space
 
 Two broad classes: **(1) external tools** and **(2) internal LLM knowledge**.
 
-#### 🔧 External Tools
+###### 🔧 External Tools
 
 Used to compensate for LLMs' lack of expert domain knowledge and to mitigate hallucination.
 
@@ -436,7 +434,7 @@ Used to compensate for LLMs' lack of expert domain knowledge and to mitigate hal
 - **ChemCrow** [76] — chemical agent for organic synthesis, drug discovery, material design; uses 17 expert-designed models.
 - **MM-REACT** [77] — integrates VideoBERT (video summarization), X-decoder (image generation), SpeechBERT (audio processing) for multimodal tasks.
 
-#### 🧠 Internal Knowledge
+###### 🧠 Internal Knowledge
 
 LLMs relying solely on their own internal knowledge to guide actions:
 
@@ -462,9 +460,6 @@ graph LR
     D1 --> D1c[External Models]
 ```
 
-
-### 📌 LLM Capabilities Enabling Agent Behavior (cont.)
-
 - **Conversation Capability** — LLMs generate high-quality conversations, letting agents behave more like humans.
   - *ChatDev*: agents discuss the software development process and reflect on their own behaviors.
   - *RLP*: an agent communicates with listeners based on predicted feedback on its utterances.
@@ -472,7 +467,7 @@ graph LR
   - *Generative Agent*: understands current state, surrounding environment, and summarizes high-level ideas from observations.
   - Similar conclusions apply to *RecAgent* and *S3*, which simulate user social behaviors.
 
-### 📌 Action Impact
+##### 📌 Action Impact
 
 The consequences of an agent's actions generally fall into three categories:
 
@@ -485,30 +480,30 @@ The consequences of an agent's actions generally fall into three categories:
 
 ---
 
-## 2.2 Agent Capability Acquisition
+### 2.2 Agent Capability Acquisition
 
 Agent architecture is the "hardware" enabling LLMs to accomplish tasks, but agents also need task-specific **capabilities, skills, and experience** — the "software." Strategies for equipping agents with these resources fall into two classes based on whether they require fine-tuning.
 
-### 🔬 Capability Acquisition *with* Fine-tuning
+#### 🔬 Capability Acquisition *with* Fine-tuning
 
 Datasets used for fine-tuning can come from human annotation, LLM generation, or real-world applications.
 
-#### Fine-tuning with Human Annotated Datasets
+##### Fine-tuning with Human Annotated Datasets
 - **CoH** — aligns LLMs with human values/preferences by converting human feedback into detailed natural-language comparison information (rather than simple symbolic feedback).
 - **RET-LLM** — fine-tunes LLMs on human-constructed "triplet–natural language" pairs to convert natural language into structured memory.
 - **WebShop** — collects 1.18M real-world Amazon products onto a simulated e-commerce site; 13 workers generate real human shopping behavior data, used to train heuristic-rule, imitation-learning, and RL-based methods.
 - **EduChat** — fine-tunes LLMs on human-annotated educational datasets to support QA, essay assessment, Socratic teaching, and emotional support.
 
-#### Fine-tuning with LLM Generated Datasets
+##### Fine-tuning with LLM Generated Datasets
 Cheaper and more scalable than human annotation, though lower quality.
 - **ToolBench** — collects 16,464 real-world APIs (49 categories) from RapidAPI Hub, uses ChatGPT to generate diverse single-/multi-tool instructions, then fine-tunes LLaMA for improved tool use.
 - **Social sandbox method [83]** — a central agent generates responses to a social question, shares them with nearby agents for feedback, and revises responses accordingly; the resulting social interaction data is used for fine-tuning.
 
-#### Fine-tuning with Real-world Datasets
+##### Fine-tuning with Real-world Datasets
 - **MIND2WEB** — collects 2,000+ open-ended tasks from 137 real-world websites across 31 domains to fine-tune LLMs for web-related tasks (e.g., movie discovery, ticket booking).
 - **SQL-PaLM** — fine-tunes PaLM-2 on cross-domain text-to-SQL datasets (Spider, BIRD), improving text-to-SQL performance.
 
-### 🔬 Capability Acquisition *without* Fine-tuning
+#### 🔬 Capability Acquisition *without* Fine-tuning
 
 In the LLM era, capability can be acquired via:
 1. Training/fine-tuning model parameters, **or**
@@ -544,13 +539,13 @@ In the agent era, capability can be acquired via three strategies:
 2. **Prompt engineering**
 3. **Mechanism engineering** — designing agent evolution mechanisms (specialized modules, novel working rules, etc.)
 
-#### 🧩 Prompt Engineering
+##### 🧩 Prompt Engineering
 Describing desired capability in natural language and using it as a prompt to influence LLM actions.
 - **CoT**, **CoT-SC**, **ToT** — present intermediate reasoning steps as few-shot examples to enable complex task reasoning.
 - **RLP** — enhances an agent's self-awareness by prompting with beliefs about its own and listeners' mental states, producing more engaging and strategic utterances.
 - **Retroformer** — a retrospective model generating reflections on past failures, integrated into prompts to guide future actions; uses RL to iteratively refine the retrospective model.
 
-#### 🧩 Mechanism Engineering
+##### 🧩 Mechanism Engineering
 A capability-enhancement strategy distinct from fine-tuning and prompting. Representative methods:
 
 1. **Trial-and-Error** — the agent acts, a pre-defined critic judges the action, and the agent incorporates feedback if unsatisfactory.
@@ -622,8 +617,6 @@ A capability-enhancement strategy distinct from fine-tuning and prompting. Repre
 | MetaGPT | ① | ② | ② | ② | ② | - | 08/2023 |
 
 
-## 2.x Capability Acquisition Strategies (cont.)
-
 - **CLMTWA** [99]: uses a large LLM as *teacher* and a weaker LLM as *student*
   - Teacher generates natural language explanations to improve student reasoning via theory of mind
   - Personalizes explanations; intervenes only when expected utility justifies it
@@ -633,7 +626,7 @@ A capability-enhancement strategy distinct from fine-tuning and prompting. Repre
 
 ---
 
-# 3 LLM-based Autonomous Agent Applications
+## 3. LLM-based Autonomous Agent Applications
 
 Owing to strong language comprehension, complex task reasoning, and common-sense understanding, LLM-based agents show significant potential across domains. This section groups applications into three areas:
 
@@ -675,11 +668,11 @@ flowchart TB
 
 > **Figure 5** — The applications (left) and evaluation strategies (right) of LLM-based agents.
 
-## 3.1 Social Science
+### 3.1 Social Science
 
 Social science studies societies and relationships among individuals. LLM-based agents contribute via human-like understanding, thinking, and task-solving.
 
-### 🧠 Psychology
+#### 🧠 Psychology
 
 - Agents assigned different profiles can complete psychology experiments, producing results aligning with human-participant studies [101, 102]
 - **Finding**: larger models tend to give more accurate simulation results [101]
@@ -688,13 +681,13 @@ Social science studies societies and relationships among individuals. LLM-based 
   - ✅ Agents help users cope with anxiety, social isolation, depression
   - ⚠️ Agents may sometimes produce harmful content
 
-### 🗳️ Political Science and Economy
+#### 🗳️ Political Science and Economy
 
 - Agents used for **ideology detection** and **predicting voting patterns** [29]
 - Used to analyze **discourse structure and persuasive elements** of political speech [104]
 - Agents given traits (talents, preferences, personalities) to explore **simulated human economic behavior** [105]
 
-### 🌐 Social Simulation
+#### 🌐 Social Simulation
 
 Simulating human societies is often expensive, unethical, or infeasible — LLM agents enable virtual alternatives [20, 34, 78, 80, 106–110].
 
@@ -708,7 +701,7 @@ Simulating human societies is often expensive, unethical, or infeasible — LLM 
 | Social Networks [106, 107] | Investigates behavioral characteristics of LLM agents in social networks |
 | Epidemic Modeling [109] | Simulates disease propagation and collective behavior |
 
-### ⚖️ Jurisprudence
+#### ⚖️ Jurisprudence
 
 - Agents assist legal decision-making processes [111, 112]
   - **Blind Judgement** [112]: multiple LLMs simulate multiple judges' decision-making, consolidating opinions via voting
@@ -716,31 +709,31 @@ Simulating human societies is often expensive, unethical, or infeasible — LLM 
     - Supports database + keyword search strategies to mitigate hallucination
     - Uses self-attention mechanism to reduce reference inaccuracies
 
-### 📚 Research Assistant
+#### 📚 Research Assistant
 
 - Assist with generating article abstracts, extracting keywords, crafting study scripts [104]
 - Act as writing assistants that help identify novel research questions for social scientists [113]
 
 ---
 
-## 3.2 Natural Science
+### 3.2 Natural Science
 
 Natural science concerns description, understanding, and prediction of natural phenomena via empirical evidence.
 
-### 🗂️ Documentation and Data Management
+#### 🗂️ Documentation and Data Management
 
 - Agents query/utilize internet information for QA and experiment planning [114]
 - **ChatMOF** [115]: extracts info from text descriptions, plans tool use to predict properties/structures of metal-organic frameworks
 - **ChemCrow** [76]: uses chemistry databases to validate compound representations and identify dangerous substances
 
-### 🔬 Experiment Assistant
+#### 🔬 Experiment Assistant
 
 - Agents can independently design, plan, and execute scientific experiments [76, 114, 121]
   - Given an objective → retrieves documents from internet → uses Python for calculations → runs experiments (Boiko et al. [114])
 - **ChemCrow** [76]: 17 specialized tools for chemical research; recommends experimental procedures and flags safety risks
 - **Grossmann et al.** [121]: autonomous laboratory experimentation and chemical synthesis
 
-### 🎓 Natural Science Education
+#### 🎓 Natural Science Education
 
 - Agent-based education systems help students learn experimental design, methodology, analysis [114]
 - **Math Agents** [116]: assist researchers in exploring, discovering, solving, and proving mathematical problems
@@ -751,9 +744,9 @@ Natural science concerns description, understanding, and prediction of natural p
 
 ---
 
-## 3.3 Engineering
+### 3.3 Engineering
 
-### 💻 Computer Science & Software Engineering
+#### 💻 Computer Science & Software Engineering
 
 In the field of computer science and software engineering, LLM-based agents automate coding, testing, debugging, and documentation generation [18, 23, 24, 126–128].
 
@@ -766,7 +759,7 @@ In the field of computer science and software engineering, LLM-based agents auto
 - **PentestGPT** [125]: penetration testing tool — identifies common vulnerabilities and develops exploits from source code
 - **D-Bot** [122]: diagnoses database anomalies using a *Tree of Thought* approach, allowing backtracking to previous steps
 
-### 🏭 Industrial Automation
+#### 🏭 Industrial Automation
 
 In industrial automation, LLM-based agents achieve intelligent planning and control of production processes:
 
@@ -795,7 +788,7 @@ In industrial automation, LLM-based agents achieve intelligent planning and cont
 | Engineering | Robotics & Embodied AI | ProAgent, LLM4RL, PET, REMEMBERER, DEPS, Unified Agent, SayCan, TidyBot, RoCo, SayPlan, TaPA, Dasgupta et al., DECKARD, Dialogue shaping |
 
 
-## 🤖 LLM-based Agents in Embodied AI & Robotics
+#### 🤖 LLM-based Agents in Embodied AI & Robotics
 
 Recent work advances reinforcement learning and autonomous agents for robotics and embodied artificial intelligence [16, 38, 79, 132–135, 137–140], focusing on improving planning, reasoning, and collaboration in embodied environments.
 
@@ -803,14 +796,14 @@ Recent work advances reinforcement learning and autonomous agents for robotics a
 - **DECKARD** [139] — also introduces the Planner-Actor-Reporter paradigm, decoupling planning, execution, and reporting.
 - **TaPA** [137] — builds a multimodal dataset (multi-view RGB images of indoor scenes + human instructions + plans) to fine-tune LLMs, aligning visual perception with task planning for more executable, visually grounded plans.
 
-### 🦾 Skill-based Control for Physical Tasks
+##### 🦾 Skill-based Control for Physical Tasks
 
 To overcome physical constraints, agents combine multiple skills to generate executable, long-horizon plans:
 
 - **SayCan** [79] — investigates manipulation and navigation skills with a mobile manipulator robot; presents **551 skills** across **7 skill families** and **17 objects** (picking, placing, grasping, manipulating, etc.), inspired by kitchen tasks.
 - **TidyBot** [136] — an embodied agent for personalized household cleanup; learns user preferences for object placement/manipulation via textual examples.
 
-### 🧰 Open-Source Agent Frameworks
+##### 🧰 Open-Source Agent Frameworks
 
 A growing ecosystem of open-source libraries enables researchers and developers to quickly build, implement, and evaluate customized agents [19, 82, 127, 142–155]:
 
@@ -834,7 +827,7 @@ A growing ecosystem of open-source libraries enables researchers and developers 
 
 ---
 
-## 📊 LLM-based Autonomous Agent Evaluation
+## 4. 📊 LLM-based Autonomous Agent Evaluation
 
 Evaluating agent effectiveness is challenging; two main approaches exist: **subjective** and **objective** evaluation.
 
