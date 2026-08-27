@@ -56,7 +56,7 @@ MAPTA is presented as, to the authors' knowledge, **the first open-source multi-
 
 ---
 
-## 1.1 Key Insights and Contributions
+### 1.1 Key Insights and Contributions
 
 MAPTA targets the scalability–accuracy tradeoff through:
 
@@ -256,7 +256,7 @@ The CTF evaluation operates under **blackbox conditions** where MAPTA receives o
 - 43 of the original 104 XBOW Docker images required manual fixes due to deprecated software versions — the authors completed extensive engineering efforts to restore functionality and plan to contribute fixes back to the community via pull request.
 - No online CTF solutions were found for this benchmark, supporting the claim that MAPTA's solutions represent genuine discovery rather than model-trained regurgitation.
 
-## 3.1 Evaluation Metrics
+### 3.1 Evaluation Metrics
 
 Performance is measured using four objective metrics:
 
@@ -267,7 +267,7 @@ Performance is measured using four objective metrics:
 
 🖼️ **Figure 2**: Cumulative distribution of challenge completion times, comparing solved vs. unsolved challenges. Solved challenges show a median completion time of 96.1s; unsolved challenges show a median of 508.9s; overall median is 143.2s.
 
-## 3.2 Results and Performance Analysis
+### 3.2 Results and Performance Analysis
 
 📊 MAPTA achieved a **76.9% success rate** across the complete XBOW dataset — 80 of 104 challenges solved.
 
@@ -300,7 +300,7 @@ Performance is measured using four objective metrics:
 
 🖼️ **Figure 4**: Cumulative distribution of token usage across token types (input, output, cached, reasoning, total).
 
-## 3.3 Resources and Success Correlations
+### 3.3 Resources and Success Correlations
 
 Correlation analysis (point-biserial Pearson, binary outcome, N=104) reveals **negative correlations** between success and resource utilization (all statistically significant, p < 0.001):
 
@@ -332,7 +332,7 @@ Resource budgeting guidance: allocate **$0.073/target** for successful assessmen
 
 🖼️ **Figure 8**: Violin/correlation plots of Time, Cost, Token, and Tool Usage distributions by outcome (Failed vs. Solved), each annotated with its r-value.
 
-## 3.4 Vulnerability Category Performance
+### 3.4 Vulnerability Category Performance
 
 Performance is broken down across **13 distinct vulnerability categories**, spanning 8 of the 10 OWASP Top-10 (2021) categories (A01–A07, A10; excluding A08/A09).
 
@@ -397,7 +397,7 @@ Broken Authorization success reflects capability in identifying IDOR, path trave
 - MAPTA, in contrast, provides open-source implementation, detailed architectural descriptions, and evaluation methodology.
 - To the authors' knowledge, MAPTA is the **first open-source penetration testing AI system** achieving competitive performance with commercial alternatives while maintaining scientific reproducibility.
 
-## 3.5 Failure Analysis
+### 3.5 Failure Analysis
 
 Analysis of the 24 failed challenges (23.1% of the dataset):
 
@@ -412,7 +412,7 @@ Analysis of the 24 failed challenges (23.1% of the dataset):
 
 🖼️ **Figure 9**: Vulnerability distribution and assessment costs across targets. The stacked bars show vulnerability severity levels (High/Critical, Medium, Low/Info), while the orange line indicates assessment costs (USD) across all 10 target applications.
 
-## 4 Real-World Application Assessment
+## 4. Real-World Application Assessment
 
 To evaluate MAPTA's effectiveness beyond controlled environments, assessments were conducted on **10 production open-source web applications**:
 
@@ -425,14 +425,14 @@ To evaluate MAPTA's effectiveness beyond controlled environments, assessments we
 ```mermaid
 flowchart LR
     A["1. Automated repository fetching"] --> B["2. Dynamic application deployment (isolated sandbox)"]
-    B --> C["4. Payload-guided vulnerability exploration (MAPTA multi-agent architecture)"]
+    B --> C["3. Payload-guided vulnerability exploration (MAPTA multi-agent architecture)"]
 ```
 
 - Main agent averaged **620K tokens** for planning and coordination.
 - Sandbox agents consumed **413K–7.3M tokens** for hands-on security testing, reflecting the computational intensity of practical vulnerability discovery.
 
 
-## 📊 Table 3: Per-Target Vulnerability Assessment Results with Token Breakdown by Agent
+### Table 3 — Per-Target Vulnerability Assessment Results with Token Breakdown by Agent
 
 | Target | GitHub ⋆ | Main Regular | Main Cached | Main Output | Sandbox Regular | Sandbox Cached | Sandbox Output | H | M | L | Cost ($) |
 |---|---|---|---|---|---|---|---|---|---|---|---|
@@ -449,7 +449,7 @@ flowchart LR
 
 🖼️ **Figure 10**: Scatter plot of Assessment Time (minutes) vs. Vulnerabilities Found, showing a weak positive correlation (r = 0.299). Points are labeled with target names and vulnerability type counts (e.g., "OSN-03: Other (+5)", "OSN-06: Other (+5)"); several zero-vulnerability targets (directus, appsmith, gitea, grafana) cluster around low assessment times.
 
-## 4.1 Vulnerability Discovery Results
+### 4.1 Vulnerability Discovery Results
 
 > **⚠️ Responsible Disclosure Note:** Application identities where vulnerabilities were discovered have been anonymized using obfuscated names (OSN-XX). Applications where no vulnerabilities were found (appsmithorg/appsmith, directus/directus, go-gitea/gitea, grafana/grafana) are identified by their real repository names to demonstrate the breadth of evaluation across diverse, production-grade codebases.
 
@@ -481,7 +481,7 @@ flowchart LR
 - **SSRF via Integration APIs** — server-side request forgery through legitimate webhook and file import functionality
 - **Open Redirect via Payment Flows** — unchecked URL parameters in checkout processes (`success_url`, `cancel_url`)
 
-## 5 Related Work
+## 5. Related Work
 
 ### 5.1 Classical Automated Web Security Testing
 
@@ -531,7 +531,7 @@ Autonomous pentesting systems represent an evolution from static detection towar
 - **XBOW benchmark** dataset [25] provides modern web application challenges with REST APIs, complex business logic, and realistic authentication — emphasizing exploit-execution validation over theoretical detection, eliminating false positives.
 - Our approach builds on the fundamental insight that effective automated security assessment requires tool orchestration, stateful reasoning, and practical verification [3, 28]. MAPTA's multi-agent architecture with sandboxed exploit validation directly addresses limitations in single-agent systems like PentestGPT [8] and traditional scanners' false-positive challenges [16].
 
-## 6 Conclusion
+## 6. Conclusion
 
 📌 **Summary of results:**
 - MAPTA achieves **76.9% success** across 104 XBOW challenges, with perfect performance on SSRF and misconfiguration vulnerabilities

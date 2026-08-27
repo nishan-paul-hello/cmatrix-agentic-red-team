@@ -1,4 +1,3 @@
-
 # AWE: Adaptive Agents for Dynamic Web Penetration Testing
 
 **Authors:** Akshat Singh Jaswal\* (akshat@stuxlabs.com), Ashish Baghel\* (ashish@stuxlabs.com) — Stux Labs  

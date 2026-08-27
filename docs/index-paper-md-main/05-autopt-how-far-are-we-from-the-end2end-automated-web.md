@@ -1,4 +1,3 @@
-
 # AutoPT: How Far Are We from the End2End Automated Web Penetration Testing?
 
 **Authors:** Benlong Wu, Guoqiang Chen, Kejiang Chen*, Xiuwei Shang, Jiapeng Han, Yanru He, Weiming Zhang, Nenghai Yu
@@ -598,7 +597,7 @@ To verify the effectiveness of the AutoPT architecture on the end-to-end penetra
 
 > ✅ **Answering RQ1:** AutoPT effectively completes most end-to-end penetration testing tasks. Even with a slightly weaker underlying model, the AutoPT architecture provides strong automated penetration testing capability.
 
-## 6.3 Performance Evaluation (RQ2)
+### 6.3 Performance Evaluation (RQ2)
 
 🖼️ *Figure 5 — Overall performance of agents based on GPT-3.5, GPT-4o, and GPT-4o mini across the ReAct, PTT, and AutoPT architectures:*
 
@@ -634,7 +633,7 @@ xychart-beta
 
 > ✅ **Answering RQ2:** AutoPT's success rate significantly exceeds other agent frameworks — roughly double on simple tasks and nearly 10× on complex tasks.
 
-## 6.4 Cost Evaluation (RQ3)
+### 6.4 Cost Evaluation (RQ3)
 
 ### 💰 Table 5 — Money and Time Cost Comparison
 
@@ -660,7 +659,7 @@ xychart-beta
 
 > ✅ **Answering RQ3:** Compared with humans, AutoPT reduces time by 10% and economic cost by 99.6%. Compared with other LLM-based frameworks, it reduces time by 50% and economic cost by 71.6%.
 
-## 7 Validity Analysis
+## 7. Validity Analysis
 
 ### 7.1 Internal Threats
 
@@ -675,7 +674,7 @@ xychart-beta
 1. **Vulnerability environment configuration limits** — mitigated by using **Vulhub** (an authoritative Docker-based vulnerability reproduction platform) and manually verifying availability/vulnerability item by item.
 2. **Outdated or erroneous reference-link information** queried by the model could mislead task-solving — mitigated by manually screening reference link content for relevance to vulnerability exploitation.
 
-## 8 Discussion and Limitation
+## 8. Discussion and Limitation
 
 ### 🔬 Discussion
 - Interest in applying LLM capability to network security has grown since ChatGPT's emergence, among both black-hat and white-hat practitioners.
@@ -688,7 +687,7 @@ xychart-beta
 2. Enabling agents to perform simulated web-page operations (an approach some companies/researchers have begun exploring) is an important factor for mitigating specific operational limitations.
 3. The techniques in this paper could be misused by real-world attackers. Future work should consider defenses against AutoPT-style attacks, e.g., detecting LLM-driven network attack commands via LLM hallucination detection.
 
-## 9 Conclusion
+## 9. Conclusion
 
 - Defined the **end-to-end penetration testing task**, ran pre-experiments, selected models, and summarized capabilities/limitations of common agent architectures for this task.
 - Found agents can solve basic penetration testing tasks and successfully invoke testing tools, but face challenges such as maintaining historical messages and getting "stuck."
