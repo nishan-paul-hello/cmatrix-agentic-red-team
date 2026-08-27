@@ -1,4 +1,3 @@
-
 # VOYAGER: An Open-Ended Embodied Agent with Large Language Models
 
 **Authors:** Guanzhi Wang, Yuqi Xie, Yunfan Jiang, Ajay Mandlekar, Chaowei Xiao, Yuke Zhu, Linxi "Jim" Fan, Anima Anandkumar
@@ -173,7 +172,7 @@ Three types of feedback drive self-improvement:
 Each round of code generation executes the program, gathers environment feedback + execution errors, and feeds them back into GPT-4's prompt for refinement — repeating until self-verification validates task completion.
 
 
-## 🔬 Self-Verification Examples
+#### 🔬 Self-Verification Examples
 
 🖼️ **Figure 6:** Self-verification examples. GPT-4 evaluates task completion from inventory state changes and provides critique on failure (see Appendix, Sec. A.5 for full prompt structure).
 
@@ -221,15 +220,15 @@ No out-of-the-box LLM-based Minecraft agents exist, so baselines were adapted fr
 
 ---
 
-## 📊 3.3 Evaluation Results
+### 📊 3.3 Evaluation Results
 
 Evaluated across: exploration performance, tech tree mastery, map coverage, and zero-shot generalization.
 
-### Significantly Better Exploration
+#### Significantly Better Exploration
 - VOYAGER discovers **63 unique items** within 160 prompting iterations — **3.3×** more than baselines.
 - AutoGPT lags considerably; ReAct and Reflexion struggle due to the abstract, curriculum-less nature of open-ended exploration.
 
-### Consistent Tech Tree Mastery
+#### Consistent Tech Tree Mastery
 
 **Table 1 — Tech tree mastery** (iterations averaged over 3 trials; fractions = successful trials out of 3; N/A = fails within 160 iterations)
 
@@ -244,7 +243,7 @@ Evaluated across: exploration performance, tech tree mastery, map coverage, and 
 - VOYAGER unlocks: wooden **15.3× faster**, stone **8.5× faster**, iron **6.4× faster** than baselines.
 - VOYAGER is the **only** method to reach the diamond tool level.
 
-### Extensive Map Traversal
+#### Extensive Map Traversal
 
 ```mermaid
 graph LR
@@ -258,7 +257,7 @@ graph LR
 
 ---
 
-## 📊 Zero-Shot Generalization to Unseen Tasks
+#### 📊 Zero-Shot Generalization to Unseen Tasks
 
 Test setup: clear inventory → reset to a new world → attempt unseen tasks. Both VOYAGER and AutoGPT use GPT-4 to decompose tasks into subgoals.
 
@@ -279,7 +278,7 @@ Test setup: clear inventory → reset to a new world → attempt unseen tasks. B
 
 ---
 
-## 🔬 3.4 Ablation Studies
+### 🔬 3.4 Ablation Studies
 
 Six design choices ablated: automatic curriculum, skill library, environment feedback, execution errors, self-verification, and GPT-4 (vs. GPT-3.5) for code generation.
 
@@ -296,7 +295,7 @@ Key findings:
 
 ---
 
-## 🖼️ 3.5 Multimodal Feedback from Humans
+### 🖼️ 3.5 Multimodal Feedback from Humans
 
 Since the GPT-4 API used was text-only at the time of writing, VOYAGER lacks native visual perception. However, it can be augmented with human-provided multimodal feedback to build complex 3D structures (e.g., a Nether Portal and a house).
 
@@ -425,9 +424,6 @@ We are extremely grateful to Ziming Zhu, Kaiyu Yang, Rafał Kocielnik, Colin Whi
 56. Bubeck et al. — *Sparks of Artificial General Intelligence: Early Experiments with GPT-4* (2023)
 57. Liu et al. — *Summary of ChatGPT/GPT-4 Research and Perspective towards the Future of Large Language Models* (2023)
 58. Liu et al. — *Prismer: A Vision-Language Model with an Ensemble of Experts* (2023)
-
-
-## 📚 References (continued)
 
 - [59] Driess et al. — *PaLM-E: An Embodied Multimodal Language Model*, arXiv:2303.03378, 2023.
 - [60] Touvron et al. — *LLaMA: Open and Efficient Foundation Language Models*, arXiv:2302.13971, 2023.
@@ -590,9 +586,9 @@ The GPT-4 input prompt is composed of:
 
 ---
 
-### A.3.4 Full Prompt
+#### A.3.4 Full Prompt
 
-#### 📌 Prompt 1: Full System Prompt for Automatic Curriculum
+##### 📌 Prompt 1: Full System Prompt for Automatic Curriculum
 
 > The list of question-answer pairs represents the additional context.
 
@@ -645,7 +641,7 @@ Task: Obtain a wood log.
 
 ---
 
-#### 📌 Prompt 2: Full System Prompt for Asking Questions (QA 1)
+##### 📌 Prompt 2: Full System Prompt for Asking Questions (QA 1)
 
 > We provide both good and bad examples as few-shot exemplars.
 
@@ -774,7 +770,7 @@ Concept 5: ...
 
 ---
 
-#### 📌 Prompt 3: Full System Prompt for Answering Questions (QA 2)
+##### 📌 Prompt 3: Full System Prompt for Answering Questions (QA 2)
 
 > Context represents the optional content from a wiki knowledge base.
 
@@ -791,9 +787,9 @@ You will answer the question based on the context (only if available and helpful
 
 ---
 
-## A.4 Skill Library
+### A.4 Skill Library
 
-### A.4.1 Components in the Prompt
+#### A.4.1 Components in the Prompt
 
 The input prompt to GPT-4 consists of the following components:
 
@@ -837,9 +833,9 @@ The input prompt to GPT-4 consists of the following components:
 
 ---
 
-### A.4.2 Full Prompt
+#### A.4.2 Full Prompt
 
-#### 📌 Prompt 4: Full System Prompt for Code Generation
+##### 📌 Prompt 4: Full System Prompt for Code Generation
 
 ```
 You are a helpful assistant that writes Mineflayer javascript code to complete any Minecraft task specified by me.
@@ -1059,7 +1055,7 @@ async function yourMainFunctionName(bot) {
 
 ---
 
-### 📌 Prompt 5: Full System Prompt for Generating Function Descriptions
+##### 📌 Prompt 5: Full System Prompt for Generating Function Descriptions
 
 > Used when adding a new skill to the skill library. A one-shot example is included in the prompt.
 
@@ -1119,9 +1115,9 @@ async function mineCobblestone(bot) {
 
 ---
 
-### A.4.3 Examples
+#### A.4.3 Examples
 
-#### 🔧 Skill Library Example 1: `craftWoodenPlanks`
+##### 🔧 Skill Library Example 1: `craftWoodenPlanks`
 
 ```javascript
 async function craftWoodenPlanks(bot) {
@@ -1143,7 +1139,7 @@ async function craftWoodenPlanks(bot) {
 }
 ```
 
-#### 🔧 Skill Library Example 2: `mineTenCobbledDeepslateBelowY0`
+##### 🔧 Skill Library Example 2: `mineTenCobbledDeepslateBelowY0`
 
 ```javascript
 async function mineTenCobbledDeepslateBelowY0(bot) {
@@ -1167,7 +1163,7 @@ async function mineTenCobbledDeepslateBelowY0(bot) {
 }
 ```
 
-#### 🔧 Skill Library Example 3: `smeltFiveRawIronV2`
+##### 🔧 Skill Library Example 3: `smeltFiveRawIronV2`
 
 ```javascript
 async function findSuitablePosition(bot) {
@@ -1207,7 +1203,7 @@ async function smeltFiveRawIron(bot) {
 }
 ```
 
-#### 🔧 Skill Library Example 4: `fillBucketWithWater`
+##### 🔧 Skill Library Example 4: `fillBucketWithWater`
 
 ```javascript
 async function fillBucketWithWater(bot) {
@@ -1244,7 +1240,7 @@ async function fillBucketWithWater(bot) {
 }
 ```
 
-#### 🔧 Skill Library Example 5: `catchFiveFishSafely`
+##### 🔧 Skill Library Example 5: `catchFiveFishSafely`
 
 ```javascript
 async function catchFiveFishSafely(bot) {
@@ -1299,9 +1295,9 @@ async function catchFiveFishSafely(bot) {
 
 ---
 
-## A.5 Self-Verification
+### A.5 Self-Verification
 
-### A.5.1 Components in the Prompt
+#### A.5.1 Components in the Prompt
 
 The input prompt to GPT-4 consists of the following components:
 
@@ -1311,9 +1307,9 @@ The input prompt to GPT-4 consists of the following components:
 4. **Chain-of-thought prompting** in the response — GPT-4 first reasons about the task's success or failure, outputs a boolean outcome, and finally provides a critique if the task fails.
 5. **Few-shot examples** for in-context learning.
 
-### A.5.2 Full Prompt
+#### A.5.2 Full Prompt
 
-#### 📌 Prompt 6: Full System Prompt for Self-Verification
+##### 📌 Prompt 6: Full System Prompt for Self-Verification
 
 You are an assistant that assesses my progress of playing Minecraft and provides useful guidance. You are required to evaluate if I have met the task requirements. Exceeding the task requirements is also considered a success, while failing to meet them requires you to provide critique to help me improve.
 
@@ -1351,9 +1347,6 @@ You are an assistant that assesses my progress of playing Minecraft and provides
 INPUT:
 Inventory (2/36): {'oak_log':2, 'spruce_log':2}
 ```
-
-
-## 📌 Example Self-Verification Prompts (continued)
 
 > The following are example input/output pairs used to illustrate the self-verification module's reasoning process.
 
@@ -1452,7 +1445,7 @@ RESPONSE:
 
 ---
 
-## 🔬 A.6 System-Level Comparison Between VOYAGER and Prior Works
+### 🔬 A.6 System-Level Comparison Between VOYAGER and Prior Works
 
 > VOYAGER is the only method combining automatic curriculum, iterative planning, and a skill library — and it requires no gradient updates to learn Minecraft.
 
@@ -1471,7 +1464,7 @@ RESPONSE:
 
 ---
 
-## 🔬 B Experiments
+## 🔬 B. Experiments
 
 ### B.1 Experimental Setup
 
@@ -1496,7 +1489,7 @@ RESPONSE:
 
 ---
 
-## 📊 Table A.3 — Comparison Between VOYAGER and Baselines
+**📊 Table A.3 — Comparison Between VOYAGER and Baselines**
 
 | Feature | ReAct [29] | Reflexion [30] | AutoGPT [28] | VOYAGER |
 |---|---|---|---|---|
@@ -1512,7 +1505,7 @@ RESPONSE:
 
 ---
 
-## 🔬 B.3 Ablations
+### 🔬 B.3 Ablations
 
 Six design choices in VOYAGER are ablated to study their impact on exploration performance:
 
@@ -1535,13 +1528,13 @@ Six design choices in VOYAGER are ablated to study their impact on exploration p
 
 ---
 
-## 📊 B.4 Evaluation Results
+### 📊 B.4 Evaluation Results
 
-### B.4.1 Significantly Better Exploration
+#### B.4.1 Significantly Better Exploration
 
 Three trials were run per method, tracking the distinct items collected.
 
-#### VOYAGER
+##### VOYAGER
 
 | Trial | Items Collected (count) |
 |---|---|
@@ -1549,7 +1542,7 @@ Three trials were run per method, tracking the distinct items collected.
 | 2 | iron_ingot, tuff, stone_shovel, iron_leggings, fishing_rod, cooked_mutton, spruce_planks, gunpowder, amethyst_shard, chest, string, cooked_salmon, iron_sword, raw_copper, crafting_table, torch, lapis_lazuli, iron_pickaxe, copper_ingot, stone_pickaxe, wooden_hoe, stick, amethyst_block, salmon, calcite, gravel, white_bed, bone, dirt, mutton, white_wool, spyglass, coal, wooden_pickaxe, cod, iron_boots, lily_pad, cobbled_deepslate, lightning_rod, snowball, stone_axe, smooth_basalt, diorite, water_bucket, furnace, andesite, bucket, granite, shield, iron_helmet, raw_iron, cobblestone, spruce_log, cooked_cod, tripwire_hook, stone_hoe, iron_chestplate, stone_sword (58 items) |
 | 3 | spruce_planks, dirt, shield, redstone, clock, diamond_sword, iron_chestplate, stone_pickaxe, leather, string, chicken, chest, diorite, iron_leggings, black_wool, cobblestone_wall, cobblestone, cooked_chicken, feather, stone_sword, raw_gold, gravel, birch_planks, coal, cobbled_deepslate, oak_planks, iron_pickaxe, granite, tuff, crafting_table, iron_helmet, stone_hoe, iron_ingot, stone_axe, birch_boat, stick, sand, bone, raw_iron, beef, rail, oak_sapling, kelp, gold_ingot, birch_log, wheat_seeds, cooked_mutton, furnace, arrow, stone_shovel, white_wool, andesite, jungle_slab, mutton, iron_sword, copper_ingot, diamond, torch, oak_log, cooked_beef, copper_block, flint, bone_meal, raw_copper, wooden_pickaxe, iron_boots, wooden_sword (65 items) |
 
-#### ReAct [29]
+##### ReAct [29]
 
 | Trial | Items Collected |
 |---|---|
@@ -1557,7 +1550,7 @@ Three trials were run per method, tracking the distinct items collected.
 | 2 | dirt, rabbit, spruce_log, spruce_sapling |
 | 3 | dirt, pointed_dripstone |
 
-#### Reflexion [30]
+##### Reflexion [30]
 
 | Trial | Items Collected |
 |---|---|
@@ -1565,7 +1558,7 @@ Three trials were run per method, tracking the distinct items collected.
 | 2 | spruce_log, dirt, clay_ball, sand, gravel |
 | 3 | wheat_seeds, oak_log, dirt, birch_log, sand |
 
-#### AutoGPT [28]
+##### AutoGPT [28]
 
 | Trial | Items Collected |
 |---|---|
@@ -1576,7 +1569,7 @@ Three trials were run per method, tracking the distinct items collected.
 > 📌 VOYAGER collects dramatically more distinct items per trial (~60) than ReAct (~3), Reflexion (~5), and AutoGPT (~11–25), illustrating the exploration benefit of the skill library, automatic curriculum, and self-verification combined.
 
 
-### B.4.2 Extensive Map Traversal
+#### B.4.2 Extensive Map Traversal
 
 🖼️ Figure A.2: Two bird's-eye views of Minecraft maps showing trajectories for VOYAGER, ReAct, Reflexion, and AutoGPT. VOYAGER (orange path) traverses roughly 2.3× longer distances than the baselines while crossing more diverse terrain; trajectories are plotted at the positions where each agent interacts with GPT-4.
 
@@ -1616,7 +1609,7 @@ Three trials were run per method, tracking the distinct items collected.
 
 ---
 
-### B.4.3 Efficient Zero-Shot Generalization to Unseen Tasks
+#### B.4.3 Efficient Zero-Shot Generalization to Unseen Tasks
 
 > Results of zero-shot generalization to unseen tasks for the remaining two tasks are shown in Fig. A.3. As with the main-text results, VOYAGER consistently solves all tasks while the baselines solve none within 50 prompting iterations. The skill library (built from lifelong learning) boosts not only VOYAGER but also AutoGPT [28].
 
@@ -1624,7 +1617,7 @@ Three trials were run per method, tracking the distinct items collected.
 
 ---
 
-### B.4.4 Accurate Skill Retrieval
+#### B.4.4 Accurate Skill Retrieval
 
 > Skill retrieval was evaluated on 309 samples total (Table A.4). Top-5 accuracy of 96.5% indicates the retrieval process is reliable — note the top-5 relevant skills are included in the prompt when synthesizing a new skill.
 
@@ -1636,7 +1629,7 @@ Three trials were run per method, tracking the distinct items collected.
 
 ---
 
-### B.4.5 Robust to Model Variations
+#### B.4.5 Robust to Model Variations
 
 > All main-paper experiments use `gpt-4-0314`. Additional experiments were run with `gpt-4-0613`, showing roughly equivalent performance (Fig. A.4) — demonstrating VOYAGER's robustness to model variations.
 

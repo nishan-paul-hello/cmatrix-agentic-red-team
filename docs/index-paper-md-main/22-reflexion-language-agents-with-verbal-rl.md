@@ -1,4 +1,3 @@
-
 # Reflexion: Language Agents with Verbal Reinforcement Learning
 
 **Authors:** Noah Shinn (Northeastern), Federico Cassano (Northeastern), Edward Berman (Northeastern), Ashwin Gopinath (MIT), Karthik Narasimhan (Princeton), Shunyu Yao (Princeton)
@@ -207,9 +206,6 @@ Evaluated on:
 
 **Analysis:** A frequent baseline failure mode is the agent incorrectly believing it's holding an item it doesn't actually have, then executing a long chain of actions without being able to backtrack to find the mistake — a case self-reflection specifically helps correct.
 
-
-## 4.1 Decision-making: ALFWorld (continued)
-
 🖼️ Figure 3: Two line charts. (a) ALFWorld Success Rate — cumulative proportion of solved environments (134 tasks) across 10 trials, comparing "ReAct only," "ReAct + Reflexion (Heuristic)," and "ReAct + Reflexion (GPT)." Both Reflexion variants climb from ~0.62 to ~0.95–0.97, while ReAct-only plateaus around 0.75. (b) Classification of ALFWorld trajectories by failure reason — proportion of environments failing due to "hallucination" vs "inefficient planning," for ReAct-only vs ReAct + Reflexion, across trials. ReAct-only hallucination stays high (converging near 0.22); Reflexion sharply reduces both failure types toward near-zero.
 
 > 📌 **Key finding:** Self-reflection distills long, failed trajectories into reusable "self-hints." Long-term memory helps in two main ways:
@@ -220,11 +216,11 @@ The learning curve suggests learning happens over multiple experiences — an in
 
 ---
 
-## 4.2 Reasoning: HotpotQA
+### 4.2 Reasoning: HotpotQA
 
 **Dataset:** HotpotQA — a Wikipedia-based dataset with 113k question-answer pairs requiring reasoning over multiple supporting documents.
 
-### 🔬 Method
+#### 🔬 Method
 
 - **Reasoning-only test:** Reflexion + Chain-of-Thought (CoT), implemented two ways:
   - $Q \rightarrow A$
@@ -234,7 +230,7 @@ The learning curve suggests learning happens over multiple experiences — an in
 - **Evaluation signal:** exact-match answer grading (binary success/fail) between trials.
 - **Memory:** sliding window of 3 experiences (same setup as §4.1 ALFWorld).
 
-### 📊 Results
+#### 📊 Results
 
 - Reflexion outperforms all baselines by significant margins over multiple learning steps.
 - ReAct-only, CoT-only, and CoT (GT)-only **fail to probabilistically improve** on any task — none of the tasks failed on trial 1 were solved in later trials (temperature 0.7).
@@ -244,7 +240,7 @@ The learning curve suggests learning happens over multiple experiences — an in
 
 🖼️ Figure 4: Three line charts over trials (0–100 HotpotQA questions). (a) HotPotQA Success Rate — CoT only, ReAct only, CoT + Reflexion, ReAct + Reflexion; both Reflexion variants rise from ~0.35–0.4 toward ~0.65–0.75 while the non-Reflexion baselines stay flat (~0.3–0.45). (b) HotPotQA CoT (GT) — CoT (GT) only vs CoT (GT) + Reflexion; Reflexion rises from ~0.65 to ~0.75 while the baseline stays flat near 0.6. (c) HotPotQA Episodic Memory — CoT (GT) only, CoT (GT) + EPM, CoT (GT) + EPM + Reflexion; the full Reflexion+EPM line reaches the highest performance (~0.75–0.8).
 
-### Analysis: episodic memory ablation
+#### Analysis: episodic memory ablation
 
 To isolate the benefit of the self-reflective step, the authors compare against a **CoT (GT)** baseline (reasoning over long ground-truth context):
 
@@ -255,7 +251,7 @@ To isolate the benefit of the self-reflective step, the authors compare against 
 
 ---
 
-## 4.3 Programming
+### 4.3 Programming
 
 Reflexion and baseline approaches are evaluated on Python and Rust code generation using:
 
@@ -263,7 +259,7 @@ Reflexion and baseline approaches are evaluated on Python and Rust code generati
 - **LeetcodeHardGym** — a new interactive programming gym introduced in this paper, containing 40 Leetcode hard-rated questions released *after* October 8, 2022 (GPT-4's pretraining cutoff).
 - **MultiPL-E** — a benchmark compiler used to translate HumanEval/MBPP subsets into Rust, demonstrating that Reflexion generalizes across interpreted and compiled languages.
 
-### 🔬 Method: self-generated unit tests
+#### 🔬 Method: self-generated unit tests
 
 Programming allows a more grounded self-evaluation signal via self-generated tests, making Reflexion eligible for pass@1 reporting:
 
@@ -273,7 +269,7 @@ Programming allows a more grounded self-evaluation signal via self-generated tes
 
 Otherwise the learning loop matches the reasoning/decision-making setup, but with a **max memory of 1 experience**.
 
-### 📊 Results — Table 1: Pass@1 Accuracy
+#### 📊 Results — Table 1: Pass@1 Accuracy
 
 | Benchmark + Language | Prev SOTA Pass@1 | SOTA Pass@1 | Reflexion Pass@1 |
 |---|---|---|---|
@@ -285,7 +281,7 @@ Otherwise the learning loop matches the reasoning/decision-making setup, but wit
 
 Reflexion sets new SOTA on all benchmarks except **MBPP Python**.
 
-### Analysis: why Reflexion underperforms on MBPP Python
+#### Analysis: why Reflexion underperforms on MBPP Python
 
 Self-reflecting code agents are limited by the quality/diversity of their generated tests:
 
@@ -307,7 +303,7 @@ Self-reflecting code agents are limited by the quality/diversity of their genera
 
 For MBPP Python, the **false positive rate is 16.3%** vs. only **1.4%** for HumanEval Python — despite similar baseline pass@1 accuracies (~80–82%) — explaining much of the gap.
 
-### 🔬 Ablation study — Table 3
+#### 🔬 Ablation study — Table 3
 
 Tested on the 50 hardest HumanEval Rust problems (chosen because the Rust compiler gives verbose, useful error logs).
 
@@ -474,7 +470,7 @@ Status: Success
 
 ---
 
-## B.1 WebShop Limitation
+### B.1 WebShop Limitation
 
 Reflexion struggles to escape local minima that require highly creative or exploratory behavior — a limitation demonstrated on the **WebShop** benchmark, where agents must navigate an e-commerce site to locate and purchase products matching customer requests.
 

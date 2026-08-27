@@ -1,4 +1,3 @@
-
 # MetaGPT: Meta Programming for a Multi-Agent Collaborative Framework
 
 **Authors:** Sirui Hong¹\*, Mingchen Zhuge²\*, Jiaqi Chen¹, Xiawu Zheng³, Yuheng Cheng⁴, Ceyao Zhang⁴, Jinlin Wang¹, Zili Wang, Steven Ka Shing Yau⁵, Zijuan Lin⁴, Liyang Zhou⁶, Chenyu Ran¹, Lingfeng Xiao¹'⁷, Chenglin Wu¹†, Jürgen Schmidhuber²,⁸
@@ -153,7 +152,7 @@ Drawing on human organizational structures, MetaGPT formalizes agent-to-agent co
 - These artifacts capture module design and interaction order, and serve as key inputs for the **Engineer** role.
 - Unlike ChatDev, which relies on dialogue, MetaGPT agents exchange **documents and diagrams** — structured outputs that reduce ambiguity and omission.
 
-### 🔬 Publish-Subscribe Mechanism
+#### 🔬 Publish-Subscribe Mechanism
 
 Efficient information sharing is central to multi-agent collaboration. Architects and Engineers, for example, frequently need to consult Product Requirement Documents (PRDs).
 
@@ -179,7 +178,7 @@ flowchart LR
 
 ---
 
-## 3.3 Iterative Programming with Executable Feedback
+### 3.3 Iterative Programming with Executable Feedback
 
 Debugging and optimization are core to real-world programming, yet many prior multi-agent methods lack a genuine self-correction loop, resulting in code that ultimately fails to run.
 
@@ -668,7 +667,7 @@ and starts the application loop.
 **Anything UNCLEAR**
 > The project requirements and implementation approach are clear. However, we need to ensure that all team members are familiar with the Tkinter and Pillow libraries. If not, they may need some time to learn these libraries before starting the development.
 
-### 🔧 Engineer Role
+#### 🔧 Engineer Role
 
 Given the provided file structure and function definitions, an Engineer agent requires only fundamental development skills to complete the development tasks. Due to the large number of files, only one auto-generated code file is presented here.
 
@@ -697,7 +696,7 @@ class ColorPicker:
         return self.color
 ```
 
-### 🧪 QA Engineer Role
+#### 🧪 QA Engineer Role
 
 Upon receiving the code output from the Engineer, the QA Engineer generates unit test code and reviews it to identify and fix any bugs, ensuring high-quality software.
 
