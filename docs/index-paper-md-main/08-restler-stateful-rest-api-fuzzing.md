@@ -1,4 +1,3 @@
-
 # RESTler: Stateful REST API Fuzzing
 
 **Authors:** Vaggelis Atlidakis* (Columbia University), Patrice Godefroid (Microsoft Research), Marina Polishchuk (Microsoft Research)  
@@ -340,7 +339,7 @@ Compared three algorithm variants on the Blog Posts service, generating all sequ
 - Code coverage is collected via Ruby's `Class::TracePoint` hook on GitLab's `service/lib` folder; numbers below are incremental on top of the 16,836 LOC executed at service boot.
 
 
-## 📊 Blog Posts Service: Code Coverage & Bug Finding
+### 📊 Blog Posts Service: Code Coverage & Bug Finding
 
 🖼️ Figure: Three side-by-side panels (Fig. 4) showing code coverage (LOC) over time/test cases (top row) and cumulative HTTP status codes received over time (bottom row) for a simple blog posts service, under three RESTler configurations:
 - **Left** — RESTler ignores dependencies among request types
@@ -350,8 +349,6 @@ Compared three algorithm variants on the Blog Posts service, generating all sequ
 > **Key takeaway:** combining dependency-awareness with dynamic feedback yields the best code coverage and the fastest bug discovery.
 
 ---
-
-## 🔬 Testing Common GitLab APIs with RESTler
 
 **Setup:**
 - 5-hour timeout per experiment
@@ -397,7 +394,7 @@ Compared three algorithm variants on the Blog Posts service, generating all sequ
 
 ---
 
-## 🔬 Search Strategy Comparison: BFS vs. BFS-Fast vs. RandomWalk
+### D. 🔬 Search Strategy Comparison: BFS vs. BFS-Fast vs. RandomWalk
 
 ### Table II: Comparison of BFS, BFS-Fast, and RandomWalk Over Time
 
@@ -442,7 +439,7 @@ Compared three algorithm variants on the Blog Posts service, generating all sequ
 
 ---
 
-## 🐛 Bug Bucketization
+### E. 🐛 Bug Bucketization
 
 **Definition:** a *bug* = a `500` HTTP status code returned after executing a request sequence.
 
@@ -477,7 +474,7 @@ Compared three algorithm variants on the Blog Posts service, generating all sequ
 
 ---
 
-## 🐛 New Bugs Found in GitLab
+## VI. 🐛 New Bugs Found in GitLab
 
 Across all fuzzing experiments, RESTler found **28 new unique bugs** in GitLab — all reproducible, disclosed, confirmed, and fixed by GitLab developers (see [16], [17], [18], [19] for other examples of bugs found).
 
@@ -507,7 +504,7 @@ Across all fuzzing experiments, RESTler found **28 new unique bugs** in GitLab �
 
 ---
 
-## ☁️ Experiences with Public Cloud Services
+## VII. ☁️ Experiences with Public Cloud Services
 
 RESTler was also tested (preliminarily) against **three Azure services** and **one Microsoft Office365 service**, mostly resource-management and real-time data-aggregation services, using publicly available Swagger specs from Microsoft's GitHub.
 
@@ -537,7 +534,7 @@ RESTler was also tested (preliminarily) against **three Azure services** and **o
 
 ---
 
-## 📚 Related Work
+## VIII. 📚 Related Work
 
 - **HTTP Fuzzers** (Burp [8], Sulley [38], BooFuzz [7], AppSpider [4], Qualys WAS [34], APIFuzzer [3], TnT-Fuzzer [41]): capture/replay HTTP traffic, parse HTTP requests/responses (and embedded JSON), and fuzz using pre-defined heuristics or user-defined rules. Some tools have been extended to leverage Swagger specs to guide fuzzing [4], [34], [41], [3]. RESTler's originality: lightweight static analysis of Swagger specs to automatically infer **request-type dependencies**, enabling stateful sequence generation exercising business logic without pre-recorded traffic.
 
@@ -555,7 +552,7 @@ RESTler was also tested (preliminarily) against **three Azure services** and **o
 
 ---
 
-## ✅ Conclusion
+## IX. ✅ Conclusion
 
 - RESTler is presented as **the first automatic tool for stateful fuzzing of cloud services through their REST APIs**.
 - Found **28 bugs in GitLab** and several bugs across four Azure and Office365 cloud services — results deemed preliminary but encouraging.

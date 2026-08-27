@@ -1,4 +1,3 @@
-
 # Getting Pwn'd by AI: Penetration Testing with Large Language Models
 
 **Authors:** Andreas Happe (andreas.happe@tuwien.ac.at), Jürgen Cito (juergen.cito@tuwien.ac.at) — TU Wien, Austria  
@@ -86,7 +85,7 @@ flowchart LR
 
 ---
 
-## 3.2 Low-Level: Attack-Execution System
+### 3.2 Low-Level: Attack-Execution System
 
 The low-level evaluation targets a common pen-testing scenario: an attacker with low-privilege access to a Linux box searches for a way to escalate to root.
 
@@ -106,7 +105,7 @@ flowchart LR
 
 📌 **Key Point:** With this simple loop, the prototype was able to gain root privileges on the vulnerable VM.
 
-### Common attack paths observed
+#### Common attack paths observed
 - Listing the sudoers file (`sudo -l`) → abusing a listed shell or employing a [GTFObin](https://gtfobins.github.io/) (benign system commands that, when called through `sudo`, can be abused to spawn a root shell)
 - Retrieving `/etc/passwd` → identifying user accounts not using shadow passwords[^2]
 - SUID binary searches were requested by the model, but returned binaries were not actively exploited — indicating a lack of multi-step planning capabilities in either the script or the underlying model

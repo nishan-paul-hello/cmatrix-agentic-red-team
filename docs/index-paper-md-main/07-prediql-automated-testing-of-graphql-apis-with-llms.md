@@ -1,4 +1,3 @@
-
 # PrediQL: Automated Testing of GraphQL APIs with LLMs
 
 **Authors:** Shaolun Liu¹*, Sina Marefat²*, Omar Tsai¹, Yu Chen¹, Zecheng Deng¹, Jia Wang¹, Mohammad A. Tayebi¹  
@@ -274,7 +273,7 @@ Implementation is open-source (https://github.com/SLL288/prediql). Research ques
 - The bandit dynamically reallocates probability mass toward arms maximizing successful, coverage-expanding executions.
 
 
-## 📊 4.2 Schema Coverage (RQ1)
+### 📊 4.2 Schema Coverage (RQ1)
 
 **Table 4: Coverage comparison — PrediQL vs. baselines** *(Tests that could not be executed are marked as FAILED.)*
 
@@ -322,7 +321,7 @@ $$
 
 ---
 
-## 🔬 4.3 Prompt Engineering Impact (RQ2)
+### 🔬 4.3 Prompt Engineering Impact (RQ2)
 
 Ablation study isolating the contribution of each prompt enrichment component to schema coverage and vulnerability discovery.
 
@@ -357,7 +356,7 @@ Ablation study isolating the contribution of each prompt enrichment component to
 
 ---
 
-## 🛡️ 4.4 Vulnerability Detection (RQ3)
+### 🛡️ 4.4 Vulnerability Detection (RQ3)
 
 - GraphQLer is the only baseline with a built-in vulnerability detection module (EvoMaster, ZAP focus on coverage/fuzzing only) → serves as the primary detection baseline.
 - PrediQL consistently identifies **more and a wider range** of vulnerabilities across all APIs.

@@ -1,4 +1,3 @@
-
 # What Makes a Good LLM Agent for Real-world Penetration Testing?
 
 **Authors:** Gelei Deng, Yi Liu, Yuekang Li, Ruozhao Yang, Xiaofei Xie, Jie Zhang, Han Qiu, Tianwei Zhang
@@ -351,7 +350,7 @@ An agent tracking these signals can decide when to persist, when to pivot, and w
 
 ---
 
-## 4 Design of PentestGPT V2
+## 4. Design of PentestGPT V2
 
 ### 4.1 Overview
 
@@ -598,7 +597,7 @@ Stored TDI informs revisit decisions: when new credentials appear elsewhere in t
 
 ---
 
-## 5 Evaluation
+## 5. Evaluation
 
 Four research questions:
 
@@ -646,7 +645,7 @@ Four research questions:
 
 GOAD shows the largest improvement. PentestGPT V2 compromises 4 of 5 hosts with GPT-5.2 and Opus 4.5 thinking (4 hosts in all three trials; the same four hosts each time) versus at most 2 for baselines — doubling the compromise rate (80% vs. 40%). This pattern holds consistently across all three models and both reasoning modes (even Gemini 3 achieves 3 hosts vs. 1–2 for baselines), indicating a robust architectural effect. Baselines achieve initial foothold but fail to progress through lateral movement; PentestGPT V2 executes coherent multi-host attack chains using the Memory Subsystem for credential persistence and TDA for exploration guidance.
 
-## 5.3 RQ2: Ablation Study
+### 5.3 RQ2: Ablation Study
 
 To isolate each component's contribution, system variants are evaluated with individual components disabled.
 
@@ -692,18 +691,18 @@ To isolate each component's contribution, system variants are evaluated with ind
 
 > ⚠️ The GOAD improvement is notable: extended attack campaigns cause context forgetting in systems without explicit state management; Memory enables the credential persistence required for the fourth compromise.
 
-## 5.4 RQ3: Strategy Analysis
+### 5.4 RQ3: Strategy Analysis
 
 Analyzing how TDA-EGATS changes attack strategy vs. PentestGPT's PTT-based approach.
 
-### 5.4.1 Search Behavior
+#### 5.4.1 Search Behavior
 
 Table 7 (above) compares exploration patterns — qualitatively different search behaviors emerge:
 
 - **PentestGPT**: deep-first pattern — fewer branches explored (3.2 vs. 7.8) but commits to each for longer (avg. depth 12.4 steps before pivoting vs. 5.1). Reflects the *premature commitment* failure mode: agents persist on initial hypotheses without signals to recognize intractability.
 - **PentestGPT V2 (TDA-EGATS)**: adaptive pattern — TDI (Task Difficulty Index) monitoring triggers backtracking when success rate drops; evidence confidence guides exploitation timing. 4.2 pruned branches per machine = paths abandoned due to persistently high TDI, preventing infinite loops seen in baselines.
 
-### 5.4.2 Case Study: HTB Falafel
+#### 5.4.2 Case Study: HTB Falafel
 
 Falafel is a **Hard-rated** HTB machine requiring a multi-stage attack chain combining web exploitation, cryptographic quirks, and privilege escalation via Linux group memberships.
 
@@ -753,7 +752,7 @@ flowchart TD
 ```
 *(b) PentestGPT V2 / EGATS — TDI-triggered pivot to type-juggling path*
 
-### 5.4.3 Failure Case: PlayerTwo
+#### 5.4.3 Failure Case: PlayerTwo
 
 The only PentestGPT Benchmark machine PentestGPT V2 fails to compromise.
 
@@ -764,11 +763,11 @@ The only PentestGPT Benchmark machine PentestGPT V2 fails to compromise.
 
 > ⚠️ **TDA limitation exposed:** it cannot distinguish "difficult but tractable" from "novel requiring creative reasoning" — both present as high TDI. When RAG retrieval finds no relevant documentation and the LLM lacks parametric knowledge, TDA's evidence-based signals provide no useful guidance. TDA-EGATS improves navigation through *known* attack spaces but does not address *novel* exploitation requiring genuine invention.
 
-## 5.5 RQ4: Real-World Deployment
+### 5.5 RQ4: Real-World Deployment
 
 Evaluates PentestGPT V2's resource consumption and deploys it in a live competition environment.
 
-### 5.5.1 Cost Analysis
+#### 5.5.1 Cost Analysis
 
 **Table 8: Resource consumption per task** (median values, GPT-5.2 thinking).
 
@@ -783,7 +782,7 @@ Evaluates PentestGPT V2's resource consumption and deploys it in a live competit
 - **Cost-effectiveness (per-success basis)**: 1.8× more cost-effective on XBOW, 1.7× more cost-effective on GOAD — EGATS overhead more than offset by higher success rates
 - A complete GOAD engagement costs ≈ **$28.50** and achieves **80% environment compromise** (4 of 5 hosts) — making automated penetration testing economically viable for enterprise security assessments
 
-### 5.5.2 Live Competition Deployment
+#### 5.5.2 Live Competition Deployment
 
 Deployed during **HTB Season 8** (May–August 2025) — 13 newly released machines with solutions unavailable until season conclusion. Tests real-world viability: unlike retired benchmark machines, Season machines incorporate recent CVEs and novel attack chains with no public walkthroughs.
 
@@ -807,7 +806,7 @@ Deployed during **HTB Season 8** (May–August 2025) — 13 newly released machi
 
 > 📌 The 100% success rate on Easy/Medium suggests readiness for deployment on typical enterprise targets; Hard/Insane failures mark current boundaries where human expertise is still required.
 
-## 6 Discussion
+## 6. Discussion
 
 ### 6.1 Limitations and Threats to Validity
 
@@ -843,7 +842,7 @@ Three categories of irreducible Type B failures that better tooling, larger corp
 
 3. **The Temporal Scale Barrier** — Human pentesters maintain mental models across engagements spanning weeks, correlating information across sessions and exercising strategic patience. EGATS improves multi-step reasoning *within* sessions and Memory preserves state, but neither addresses cross-session continuity. Long-horizon planning ≠ long-context processing — it requires hierarchical abstraction, goal decomposition, and progress monitoring, none of which current transformer architectures natively support.
 
-## 7 Conclusion
+## 7. Conclusion
 
 - Presents a systematic analysis of LLM-based penetration testing distinguishing:
   - **Type A failures**: capability gaps addressable through engineering
