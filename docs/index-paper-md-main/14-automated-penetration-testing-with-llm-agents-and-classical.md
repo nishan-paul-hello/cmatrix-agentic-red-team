@@ -1,4 +1,3 @@
-
 # Automated Penetration Testing with LLM Agents and Classical Planning
 
 **Authors:** Lingzhi Wang\*, Xinyi Shi\*, Ziyu Li\*, Yi Jiang†, Shiyu Tan†, Yuhao Jiang\*, Junjie Cheng†, Wenyuan Chen†, Xiangmin Shen‡, Zhenyuan Li†, Yan Chen\*  
@@ -153,7 +152,7 @@ Automated pentesting systems are decomposed into three cooperating components, e
 - Existing work is text-focused; visual information (e.g., inferring app functionality from UI, reading CAPTCHAs) is underexplored.
 - Despite growing multimodal LLM capability, no prior work effectively leverages visual artifacts for pentesting.
 
-### 📊 Table I — Taxonomy of Automated Pentesting Systems (PEP)
+#### 📊 Table I — Taxonomy of Automated Pentesting Systems (PEP)
 
 | System | Planner | Executor | Perceptor |
 |---|---|---|---|
@@ -489,7 +488,7 @@ Evaluated on 20 penetration tasks both systems successfully completed, under ide
 
 🖼️ Figure 5: Paired bar charts showing (a) monetary cost (USD) and (b) execution time (minutes) per task for ClaudeCode vs. CheckMate — CheckMate consistently lower on both metrics across nearly all sampled tasks.
 
-### Example Workflow (Classical Planning+ in Action)
+#### Example Workflow (Classical Planning+ in Action)
 
 ```mermaid
 flowchart TD
@@ -608,7 +607,7 @@ CHECKMATE is compared against two commonly used strategies for enhancing LLM-bas
 
 > 📌 **Key Idea:** Each method was evaluated on 20 tasks, run three times each. All four methods (CheckMate, ClaudeCode+RAG, ClaudeCode+Structured Plan, ClaudeCode) successfully obtained a remote shell at least once.
 
-### 📊 Results — Cost and Time Comparison
+#### 📊 Results — Cost and Time Comparison
 
 | Method | Median Cost (USD) [IQR] | Median Time (min) [IQR] |
 |---|---|---|

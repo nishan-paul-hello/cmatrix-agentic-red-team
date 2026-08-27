@@ -1,4 +1,3 @@
-
 # D-CIPHER: Dynamic Collaborative Intelligent Multi-Agent System with Planner and Heterogeneous Executors for Offensive Security
 
 **Authors:** Meet Udeshi*, Minghao Shao*, Haoran Xi*, Nanda Rani, Kimberly Milner, Venkata Sai Charan Putrevu, Brendan Dolan-Gavitt, Sandeep Kumar Shukla, Prashanth Krishnamurthy, Farshad Khorrami, Ramesh Karri, Muhammad Shafique
@@ -40,7 +39,7 @@
 
 ---
 
-## 1. Introduction
+## I. Introduction
 
 - LLMs show strong potential in cybersecurity: vulnerability detection, bug localization, automated program repair.
 - Growing use of LLMs for **autonomous offensive security** tasks to counter expanding cyber threats.
@@ -101,7 +100,7 @@ flowchart LR
 
 ---
 
-## 2. Related Work
+## II. Related Work
 
 - Autonomous frameworks give LLMs a feedback loop to act via tool/function calling (command line, web search, file editing, code execution).
 - **Plan-and-solve prompting** adds a planning phase before iterative execution for long-horizon tasks.
@@ -138,7 +137,7 @@ flowchart LR
 
 ---
 
-## 3. D-CIPHER Implementation
+## III. D-CIPHER Implementation
 
 - Each agent is based on the **NYU CTF baseline agent**, with upgraded prompts and additional interaction tools for multi-agent collaboration.
 - Uses LLM **function calling** to produce actions (no custom structured action format — relies on the provider's API for parsing).
@@ -191,7 +190,7 @@ flowchart TD
 ```
 *(Fig. 2 — Workflow of the D-CIPHER multi-agent system. Execution starts with the Auto-prompter which explores the CTF and produces a dynamic, relevant prompt. The Planner proceeds with exploration and delegates specific tasks to the Executors. Each Executor starts with a fresh conversation history to focus on the delegated task, while the Planner maintains overall context and drives the problem solving.)*
 
-### 3.A Context Management
+### A. Context Management
 
 - Each agent keeps a conversation history of LLM inputs/outputs. Context = **(1)** system prompt (role + actions), **(2)** initial prompt (environment/task description), **(3)** conversation history of actions & observations.
 - Follows the **ReAct** strategy: LLM reasons then produces an action each iteration; observations are appended to history.
@@ -201,7 +200,7 @@ flowchart TD
   - Observations truncated to **25,000 characters**.
   - Actions/observations in all but the last few rounds are optionally truncated while preserving reasoning (similar to Abramovich et al.).
 
-### 3.B Environment and Tools
+### B. Environment and Tools
 
 - All agents share one **Linux container environment** with the CTF files, network access to the CTF server, and internet access to install packages.
 
@@ -227,7 +226,7 @@ flowchart TD
 | `Delegate` | Planner → assigns a task to a new Executor |
 | `FinishTask` | Executor → terminates and returns a task summary |
 
-### 3.C Workflow
+### C. Workflow
 
 #### 1) Auto-prompter
 
@@ -312,7 +311,7 @@ sequenceDiagram
 
 ---
 
-## 4. Experiment Setup
+## IV. Experiment Setup
 
 - Each D-CIPHER run attempts **one** CTF challenge.
 
@@ -327,7 +326,7 @@ sequenceDiagram
 | Max rounds — each Executor | 100 |
 | Executor history truncation | last 5 actions/observations |
 
-### 4.A Benchmarks
+### A. Benchmarks
 
 Evaluated on **NYU CTF Bench**, **Cybench**, and **HackTheBox** — 290 CTFs total across six categories: cryptography (crypto), forensics, binary exploitation (pwn), reverse engineering (rev), web, and miscellaneous (misc).
 
@@ -343,7 +342,7 @@ Evaluated on **NYU CTF Bench**, **Cybench**, and **HackTheBox** — 290 CTFs tot
 | HackTheBox | 30 | 0 | 0 | 20 | 0 | 0 | **50** |
 | **Total** | **99** | **19** | **40** | **77** | **27** | **28** | **290** |
 
-### 4.B LLM Selection
+### B. LLM Selection
 
 - Same LLM used for all three agents per run; accessed via provider APIs (open-source LLaMA via Together AI[^2]).
 
@@ -364,13 +363,13 @@ Evaluated on **NYU CTF Bench**, **Cybench**, and **HackTheBox** — 290 CTFs tot
 - LLaMa 3.3 70B (`meta-llama/Llama-3.3-70B-Instruct-Turbo`)
 - Gemini 1.5 Flash 8B (`gemini-1.5-flash-8b`)
 
-### 4.C Evaluation Metrics
+### C. Evaluation Metrics
 
 - **% solved** — primary metric; % of CTFs where the correct flag is submitted by the Planner, or observed anywhere in agent conversation (covers cases where Auto-prompter/Executor find the flag but don't relay it to the Planner).
   - False positives considered highly unlikely since flags are unique, specifically formatted strings (`flag{...}`).
 - **$ cost** — average total USD cost of all LLM API calls (across agents) for solved CTFs; indicates computational resources required.
 
-### 4.D MITRE ATT&CK Classification
+### D. MITRE ATT&CK Classification
 
 - The **MITRE ATT&CK framework** is a widely used taxonomy of offensive tactics, techniques, and procedures for classifying cyberattacks.
 - CTFs can be attributed a set of ATT&CK techniques required to solve them; for all CTFs an agent solves, its successfully employed techniques are aggregated to benchmark offensive capability.
@@ -384,7 +383,7 @@ Evaluated on **NYU CTF Bench**, **Cybench**, and **HackTheBox** — 290 CTFs tot
   - **T1203 (Exploitation for Client Execution)** and **T1574 (Hijack Execution Flow)** — common in binary exploitation CTFs.
 
 
-## 5. Results
+## V. Results
 
 ### A. Comparison of % solved
 

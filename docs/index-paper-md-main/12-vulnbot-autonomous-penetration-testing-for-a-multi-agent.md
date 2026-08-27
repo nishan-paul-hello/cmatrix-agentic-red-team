@@ -1,4 +1,3 @@
-
 # VulnBot: Autonomous Penetration Testing for A Multi-Agent Collaborative Framework
 
 **Authors:** He Kong¹ ² , Die Hu¹ ² , Jingguo Ge¹ ² , Liangxiong Li¹, Tong Li¹, Bingzhen Wu¹
@@ -289,7 +288,7 @@ flowchart TB
 
 ---
 
-## 3.3.1 Task-Driven Mechanism
+#### 3.3.1 Task-Driven Mechanism
 
 The task-driven mechanism centers on the **Penetration Testing Task Graph (PTG)** — a structured representation of tasks and their dependencies, ensuring tasks execute in a logical, conflict-free order while tracking progress and results.
 
@@ -346,7 +345,7 @@ The PTG structures tasks so each depends on one or more preceding tasks — e.g.
 
 ---
 
-## 3.3.2 Check and Reflection Mechanism
+#### 3.3.2 Check and Reflection Mechanism
 
 > ⚠️ **Problem:** LLMs often lack effective error-handling and self-correction, frequently hallucinating erroneous commands/parameters, and struggle to accurately interpret task execution results.
 
@@ -388,7 +387,7 @@ return mergedTasks
 
 ---
 
-## 3.4 Inter-Agent Communication
+### 3.4 Inter-Agent Communication
 
 Agents communicate in **natural language** for clarity and interoperability, with accurate information extraction to optimize token usage.
 
@@ -398,7 +397,7 @@ Agents communicate in **natural language** for clarity and interoperability, wit
 
 ---
 
-## 3.5 Generative Penetration Behavior and Interaction
+### 3.5 Generative Penetration Behavior and Interaction
 
 VulnBot supports three operating modes:
 
@@ -515,7 +514,7 @@ xychart-beta
 - ⚠️ **Limitation:** Exploitation remains the hardest phase — VulnBot-Llama3.3-70B logs 93 failures and VulnBot-Llama3.1-405B logs 105, both higher than in other phases, reflecting the inherent complexity of the exploitation stage.
 
 
-## 5.2 Ablation Study (RQ2)
+### 5.2 Ablation Study (RQ2)
 
 Impact of key architectural components, evaluated via ablation experiments on **AUTOPENBENCH Real-world tasks**, using **Llama3.1-405B** within a 128k token context.
 
@@ -549,7 +548,7 @@ xychart-beta
 
 ---
 
-## 5.3 Effectiveness for Real-World (RQ3)
+### 5.3 Effectiveness for Real-World (RQ3)
 
 > 🔬 **Method:**
 > - Benchmark: **AI-Pentest-Benchmark** (13 vulnerable machines total; 6 selected for this evaluation)
@@ -589,7 +588,7 @@ xychart-beta
 
 ---
 
-## 5.4 Retrieval Augmented Generation (RQ4)
+### 5.4 Retrieval Augmented Generation (RQ4)
 
 > 🔬 **Method:**
 > - Integrated a **Memory Retriever** module into Llama3.1-405B (128k context) using **RAG**
@@ -619,7 +618,7 @@ xychart-beta
 
 ---
 
-## 6 Discussion
+## 6. Discussion
 
 ### 6.1 Limitations in Processing Non-Textual Information
 
@@ -639,7 +638,7 @@ xychart-beta
 
 ---
 
-## 7 Related Work
+## 7. Related Work
 
 ### 7.1 Vulnerability Detection and Exploitation
 
@@ -680,7 +679,7 @@ xychart-beta
 
 ---
 
-## 8 Conclusion
+## 8. Conclusion
 
 - **VulnBot**: autonomous penetration testing framework combining LLMs + multi-agent systems, emulating human pentest team workflows
 - Decomposes tasks into specialized phases (**reconnaissance → scanning → exploitation**), using a **PTG** for logical task execution

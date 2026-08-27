@@ -1,4 +1,3 @@
-
 # Can LLMs Hack Enterprise Networks?
 ### Autonomous Assumed Breach Penetration-Testing Active Directory Networks
 
@@ -176,7 +175,7 @@ Three abstraction levels:
 
 ---
 
-## 2.2 Penetration Testing
+### 2.2 Penetration Testing
 
 Ethical hackers assess target security posture and report findings for remediation. Based on Happe & Cito's interview study, three main assignment types exist:
 
@@ -188,28 +187,28 @@ Ethical hackers assess target security posture and report findings for remediati
 
 **Assumed Breach Simulations** rest on the premise that a breach is inevitable, so testing efficiency comes from focusing on what happens *after* initial compromise — the attacker tries to reach domain/forest admin.
 
-### 🏋️ Testbeds for Assumed Breach Simulations
+#### 2.2.1 🏋️ Testbeds for Assumed Breach Simulations
 - **CTF (Capture-the-Flag)** exercises are seen by practitioners as good preparation that transfers to real pentesting work. Delivered as VMs or cloud instances; success is proven via a unique "flag" file.
   - Platforms: [TryHackMe](https://tryhackme.com/), [HackTheBox](https://www.hackthebox.com/)
 - CTF-style testbeds are also used in professional certification exams (timeframes from 8h to a week), with goals like "compromise 4 of 5 domain controllers" or "become domain admin."
   - Certifications: [OSCP](https://www.offsec.com/courses/pen-200/), [OSCE](https://www.offsec.com/certificates/osce3/) / OSCE3, [CRTO](https://training.zeropointsecurity.co.uk/courses/red-team-ops), [CRTP](https://www.alteredsecurity.com/post/certified-red-team-professional-crtp), among others.
 
-### 💰 Costs of Penetration Testing
+#### 2.2.2 💰 Costs of Penetration Testing
 - Average penetration tester salary (per [Indeed.com](https://www.indeed.com)): **$53.09/h**
 - Penetration test firms typically charge clients **$100–$300/h**
 
 ---
 
-## 2.3 LLM-aided Task Planning
+### 2.3 LLM-aided Task Planning
 
-### 🔬 Intra-Task Improvements (solving a single task)
+#### 2.3.1 🔬 Intra-Task Improvements (solving a single task)
 - **Chain-of-Thought (CoT) prompting** (Wei et al.) — lets the model articulate intermediate reasoning steps before a final answer; strong when combined with few-shot examples.
 - **Zero-shot CoT** (Kojima et al.) — simply appending "Let's think step by step," removing the need for hand-crafted examples.
 - **Self-generated reasoning chains** (Zhang et al.) — the LLM itself iteratively produces reasoning chains, removing manual example curation entirely.
 - **ReAct** (Yao et al.) — interleaves reasoning traces with task-specific actions, letting the model both plan and interact with external tools/information sources.
 - **Reflexion** — converts environmental feedback into linguistic self-reflection used as context in the next episode, enabling learning from past mistakes.
 
-### 🧠 Reasoning LLMs (LRMs)
+#### 2.3.2 🧠 Reasoning LLMs (LRMs)
 - Models explicitly trained for native chain-of-thought reasoning (e.g., OpenAI o1-preview — announced Sept 2024, API access Dec 2024; also Alibaba Qwen3, DeepSeek R1).
 - OpenAI describes training these models to "think longer and harder," improving strategizing and planning at the cost of longer inference time.
 - ⚠️ Manually adding CoT prompting to reasoning models can *reduce* instruction-following performance (Li et al.); few-shot prompting is often discouraged for these models (dubbed "Boomer-Prompts" by OpenAI).
@@ -220,24 +219,24 @@ Ethical hackers assess target security posture and report findings for remediati
 - Math olympiad findings (Petrov et al.) show reasoning models rely on pattern recognition rather than true mathematical reasoning, performing well mainly when similar data was in training.
 - **Implication for this paper**: AD penetration-testing is assumed to be a *moderate-difficulty*, pattern-matchable task (well-represented in LLM training data), making reasoning LLMs a good fit.
 
-### 🧩 Inter-Task Planning (splitting into subtasks)
+#### 2.3.3 🧩 Inter-Task Planning (splitting into subtasks)
 - **Plan-and-Solve** (Wang et al.) — devise a plan to split a task into subtasks, then execute them; popularized by the open-source [BabyAGI](https://github.com/yoheinakajima/babyagi) project. Applied to Linux privilege escalation by Happe & Cito.
 - **Pentest Task Trees (PTT)** (Deng et al.) — a hierarchical, Markdown-like todo-list structure that both plans a pentest and records findings; validated on CTF-style challenges.
 
 ---
 
-## 2.4 Automated Penetration Testing
+### 2.4 Automated Penetration Testing
 
-### 🖥️ Traditional Automated Scanners
+#### 2.4.1 🖥️ Traditional Automated Scanners
 - Tools: `nmap`, OpenVAS, Nessus — noisy, checklist/rule-based, run large numbers of tests.
 - Mainly enumerate but don't chain/exploit findings (e.g., a discovered credential file isn't automatically reused), limiting depth and breadth.
 - **MITRE Caldera** — used in Purple-Teaming (attacker and defender collaborate) to emulate known APT tactics/techniques/procedures. Scope/technique selection is manually configured, not autonomously strategized, by design (to emulate documented APTs).
 
-### 🤖 ML for Offensive Security (Non-LLM)
+#### 2.4.2 🤖 ML for Offensive Security (Non-LLM)
 - **POMDPs** (Partially Observable Markov Decision Processes) showed early promise for automated pentesting but scaled poorly.
 - **ChainReactor** (Pasquale et al.) — uses PDDL planning to find multi-step exploit chains in containers; fully enumerates a target, translates data to PDDL, applies manually written rules with an existing solver. Found two vulnerability classes (cron-job and systemd unit file permission issues) but required manual exploitation — **not** autonomous.
 
-### 🧑‍💻 LLMs for Offensive Security (chronological overview)
+#### 2.4.3 🧑‍💻 LLMs for Offensive Security (chronological overview)
 - **Initial forays**: Happe & Cito — first autonomous LLM-driven control loop for Linux privilege escalation on a vulnerable VM. Concurrently, Deng et al. used LLMs to generate Pentest Task Trees and suggest commands for CTF machines, executed by a human operator with error-fixing agency.
 - **Automated single-target exploitation**:
   - Happe et al. — extended privilege-escalation work with a benchmark and multiple LLM configurations (incl. Plan-and-Solve).
@@ -248,7 +247,7 @@ Ethical hackers assess target security posture and report findings for remediati
   - Additional CTF-style single-host benchmarks: Zhang et al., Gioacchini et al., Isozaki et al.
 
 
-## 📌 Table 1 — Publications Included in This Survey
+### 📌 Table 1 — Publications Included in This Survey
 
 *Table 1. Publications included in this survey. Initial Version and Current Version indicate the first and latest version of the publication available on arXiv. Publications are listed in chronological order as given by the date of initial publication on arXiv.*
 
@@ -275,7 +274,7 @@ Ethical hackers assess target security posture and report findings for remediati
 
 > Nakatani et al. and Kong et al. both target CTF virtual machines (single/multi-agent). Singer et al. shift focus to whole-organization, multi-host network attacks — a direction this paper also pursues, first uploaded to arXiv in February 2025.
 
-## 🔬 2.5 Differences to Existing Work
+### 🔬 2.5 Differences to Existing Work
 
 The authors' prototype (**cochise**) merges the executor loop from their earlier *hackingBuddyGPT* with *pentestGPT*'s high-level Pentest-Task-Tree (PTT) planning, applied to autonomous **Assumed Breach** simulations across enterprise multi-host networks.
 
@@ -400,7 +399,7 @@ Drawing on Sommer and Paxson's critique of synthetic environments in network int
 📌 **Conclusion:** These factors motivate the authors' choice of a live, realistic GOAD-based testbed over a synthetic benchmark, paired with a qualitative analysis approach alongside systematic quantitative pre-processing.
 
 
-### 3.2.4 Attacker's Virtual Machine: Kali Linux
+#### 3.2.4 Attacker's Virtual Machine: Kali Linux
 
 The prototype executes commands on a [Kali Linux](https://www.kali.org/) virtual machine connected to the target network. All penetration-testing commands used are listed in the appendix (Section D) with short descriptions.
 
@@ -414,7 +413,7 @@ The prototype executes commands on a [Kali Linux](https://www.kali.org/) virtual
 - Backup IP-to-hostname mappings added to `/etc/hosts`
 - An initial user list (simulating OSINT results) was provided to the VM — inspired by a [GOADv2 walkthrough](https://mayfly277.github.io/posts/GOADv2-pwning-part2/) that generated a similar list by querying IMDB. Usable for [AS-REP roasting](https://attack.mitre.org/techniques/T1558/004/) or [password spraying](https://attack.mitre.org/techniques/T1110/003/).
 
-### 3.2.5 Scenario Prompt
+#### 3.2.5 Scenario Prompt
 
 A constant scenario prompt (see Appendix A.1) prefixes all prompts sent to the LLM.
 
@@ -505,7 +504,7 @@ $$cost = input\_tokens \times input\_token\_price - cached\_input\_tokens \times
 | Controlled test environment vs. real dynamic enterprise networks | External validity | Used an industry-standard training environment with real-world systems |
 | Replicability of thematic coding | Reliability | Detailed documentation of coding process; adherence to established guidelines |
 
-### 4 Prototype Architecture
+## 4. Prototype Architecture
 
 Two high-level, LLM-driven components:
 
@@ -517,7 +516,7 @@ flowchart TD
     C -->|command output| B
 ```
 
-#### 4.1 The Planner
+### 4.1 The Planner
 
 - Maintains and updates a **Pentest-Task-Tree (PTT)** — the overall pentest plan
 - Each strategy round runs an **update-plan** prompt, taking as input: the existing PTT, the Executor's summary of the last task, and the full shell history (commands + outputs) from that task
@@ -528,7 +527,7 @@ flowchart TD
 🖼️ Figure 5: Example of the Planner's initial (empty) Pentest-Task-Tree state.
 🖼️ Figure 6: Excerpt of the Pentest-Task-Tree after 10 update-strategy rounds.
 
-#### 4.2 The Executor
+### 4.2 The Executor
 
 - Implements a **ReAct agent pattern**
 - Receives a task + context from the Planner and begins a command execution round
@@ -585,7 +584,7 @@ flowchart TB
 
 > 🖼️ **Fig. 4** — High-level architecture diagram of the prototype *Cochise*. Information (task + description) flows from the Planner to the Executor; the Executor returns a summary of results and a collected shell history.
 
-### 📌 Example: Initial Planner State (PTT)
+#### 📌 Example: Initial Planner State (PTT)
 
 Generated by OpenAI's o1-GPT-4o. Since the LLM initially has only limited information about the target environment, the generated PTT consists solely of initial network-enumeration tasks (**Fig. 5**):
 
@@ -601,7 +600,7 @@ The **Executor round limit** is 10. Once reached, the Executor stops and the LLM
 
 ---
 
-### 📌 Example: PTT After 10 Update-Strategy Rounds
+#### 📌 Example: PTT After 10 Update-Strategy Rounds
 
 **Fig. 6** shows an excerpt of the Planner state after 10 rounds, demonstrating the Planner's ability to integrate findings and **self-correct (auto-repair)**:
 
@@ -631,7 +630,7 @@ The **Executor round limit** is 10. Once reached, the Executor stops and the LLM
 
 ---
 
-### 📌 Example: Task/Context Handed to the Executor
+#### 📌 Example: Task/Context Handed to the Executor
 
 **Fig. 7** — an early-stage task, generated with only limited target information:
 
@@ -655,7 +654,7 @@ The **Executor round limit** is 10. Once reached, the Executor stops and the LLM
 
 ---
 
-## 🔬 Planner–Executor Interaction
+### 🔬 4.3 Planner–Executor Interaction
 
 - The Executor returns to the Planner: the executed task, an executive summary, and the full list of executed commands with outputs.
 - The Executor is **stateless** — its command history is cleared after each run, so the Planner must integrate *all* relevant pen-test state into the PTT.
@@ -665,7 +664,7 @@ The **Executor round limit** is 10. Once reached, the Executor stops and the LLM
 
 ---
 
-## 📊 Evaluation
+## 📊 5. Evaluation
 
 Evaluation followed the paper's Experiment Design (Section 3); Tables 3–7 give quantitative results per evaluated LLM.
 
@@ -724,13 +723,13 @@ Human penetration-testers evaluated execution traces to assign these ratings.
 
 ---
 
-## 📊 5.1 Non-Reasoning LLMs: GPT-4o vs. DeepSeek-V3
+### 📊 5.1 Non-Reasoning LLMs: GPT-4o vs. DeepSeek-V3
 
 Evaluation begins with two "traditional" non-reasoning LLMs — the mainstay of LLM usage between 2023–2025[^23] — comparing a closed-weight model (**GPT-4o**) with an open-weight model (**DeepSeek-V3**, runnable on-premise given sufficient hardware).
 
 [^23]: ChatGPT was made publicly available in November 2022; OpenAI's o1-preview reasoning model became generally available in December 2024.
 
-### 5.1.1 Comparison between GPT-4o and DeepSeek-V3
+#### 5.1.1 Comparison between GPT-4o and DeepSeek-V3
 
 - Neither model routinely compromised user accounts — **0.33 compromised accounts per 2 hours**, for both.
 - **Done / Almost / Lead** counts were comparable between the two models.
@@ -740,7 +739,7 @@ Evaluation begins with two "traditional" non-reasoning LLMs — the mainstay of 
 - DeepSeek's hosted platform showed worse response-time scaling than OpenAI's (Fig. 10(b), referenced later in paper).
 - Tool usage patterns were similar; traces indicate both models possess sufficient pen-testing background/tool knowledge in their training data.
 
-### 5.1.2 Attack Vector Coverage
+#### 5.1.2 Attack Vector Coverage
 
 Professional penetration-testers categorized the attack vectors each LLM pursued, measured as the percentage of runs in which a given vector was pursued with sufficient quality (i.e., meeting the *Almost* or *Done* bar).
 
@@ -773,7 +772,7 @@ graph TD
 Both GPT-4o and DeepSeek-V3 were able to **install missing tools** when the Linux distribution didn't include them by default. Both struggled with successful exploitation: executed commands targeted correct attack vectors and were well-executed, but the **Planner failed to follow up** on initial findings. GPT-4o pursued more attack venues than DeepSeek-V3 overall, and — while this didn't translate into more successful exploitation — it did produce more *almost*-rated results.
 
 
-## 5.2 Reasoning SLM: Qwen3:32b
+### 5.2 Reasoning SLM: Qwen3:32b
 
 > Qwen3 was used as an example of a locally-run small language model (SLM), and as the second open-weight model evaluated (alongside DeepSeek-V3).
 
@@ -791,7 +790,7 @@ Because of these issues, Qwen3 is excluded from the main comparative discussion 
 
 ---
 
-## 5.3 Reasoning LLMs: OpenAI o1+GPT-4o and Google Gemini-2.5-Flash (preview)
+### 5.3 Reasoning LLMs: OpenAI o1+GPT-4o and Google Gemini-2.5-Flash (preview)
 
 Reasoning models incorporate techniques like Chain-of-Thought (CoT) and Reflexion, which internalize optimizations that non-reasoning models typically require prompt-engineering to achieve.
 
@@ -799,7 +798,7 @@ Reasoning models incorporate techniques like Chain-of-Thought (CoT) and Reflexio
 - **o1 + GPT-4o** — o1 used for strategic reasoning (Planner), paired with non-reasoning GPT-4o as Executor
 - **Gemini-2.5-Flash (preview)** — a single combined model used for both reasoning and non-reasoning tasks
 
-### 5.3.1 Compared to Non-Reasoning Models
+#### 5.3.1 Compared to Non-Reasoning Models
 
 - 📊 Reasoning models compromised **substantially more accounts** and produced **double the leads**.
 - They performed **more high-level Planner rounds** than non-reasoning LLMs.
@@ -831,7 +830,7 @@ Reasoning models incorporate techniques like Chain-of-Thought (CoT) and Reflexio
 | run-20250129-194248 | 38 | 3.87 ± 2.44 | 3.92 ± 2.76 | 1 | 2 | 5 | 338.78 | 200.34 | 315.74 | 33.04 | $16.90 | $16.90 |
 | **Average** | 45.67 | 4.66 ± 3.04 | 4.56 ± 3.37 | 1.83 | 1.83 | 6.66 | 489.58 ± 232.30 | 276.27 ± 125.37 | 513.00 ± 237.49 | 38.94 ± 17.22 | $23.28 ± $10.24 | $17.56 |
 
-### 5.3.2 Comparing o1+GPT-4o and Gemini-2.5-Flash
+#### 5.3.2 Comparing o1+GPT-4o and Gemini-2.5-Flash
 
 - Both configurations yielded similar overall results, but **o1+GPT-4o compromised double the accounts** compared to Gemini-2.5-Flash.
 - **Gemini-2.5-Flash's** Planner offered more *stable* trajectories, hyper-focusing on a single AD domain/controller.
@@ -840,13 +839,13 @@ Reasoning models incorporate techniques like Chain-of-Thought (CoT) and Reflexio
 - Gemini executed **50% more high-level strategy rounds** overall, due to fewer rounds per Executor invocation and higher server-side token throughput.
 - Gemini-2.5-Flash used **substantially more tokens** than o1+GPT-4o (Planner used ~4x the tokens of o1), yet its **overall cost was an order of magnitude lower**, due to differing provider pricing.
 
-### 5.3.3 Attack Vector Coverage
+#### 5.3.3 Attack Vector Coverage
 
 🖼️ **Figure 9** (referenced, not shown in this chunk): overviews attack vectors used, indicating both LLMs possess sufficient background knowledge of hacking techniques/tooling.
 
 ---
 
-## 5.4 Planner Rounds, Executor Rounds, and Command Counts
+### 5.4 Planner Rounds, Executor Rounds, and Command Counts
 
 The prototype uses three control loops across distinct abstraction layers:
 
@@ -873,7 +872,7 @@ flowchart TD
 
 ---
 
-## 5.5 LLM Cost and Call Duration
+### 5.5 LLM Cost and Call Duration
 
 - The most expensive configuration, **o1+GPT-4o**, cost **$11.64/hour** on average.
 - All other configurations were **at least an order of magnitude cheaper**.
@@ -881,7 +880,7 @@ flowchart TD
 - Focus of the study was **feasibility**, not cost optimization — though cost/timing were analyzed for completeness.
 - Newer LLM iterations generally offer reduced costs and improved speed, potentially reducing the urgency of performance optimization.
 
-### 5.5.1 LLM Costs
+#### 5.5.1 LLM Costs
 
 Three distinct price tiers emerged across the two-hour sampling runs:
 
@@ -897,7 +896,7 @@ Three distinct price tiers emerged across the two-hour sampling runs:
   - All o1 prompting occurs within the Planner component.
   - o1 output tokens **cannot be prefix-cached**.
 
-### 5.5.2 Overall Time Consumption
+#### 5.5.2 Overall Time Consumption
 
 🖼️ **Figure 10(a):** Bar chart showing percentage of time spent in Planner / Executor / Commands (wait time) phases, per model (DeepSeek-V3, GPT-4o, Qwen3, Gemini-2.5-Flash, o1+GPT-4o).
 
@@ -916,7 +915,7 @@ Three distinct price tiers emerged across the two-hour sampling runs:
 
 > Sampling runs were time-capped at two hours, making time-efficiency of high importance.
 
-### 5.5.3 PTT Growth
+#### 5.5.3 PTT Growth
 
 🖼️ **Figure 11:** Line/scatter chart of Pentest-Task-Tree (PTT) size (in tokens) vs. Planner round number, across all five models.
 
@@ -925,7 +924,7 @@ Three distinct price tiers emerged across the two-hour sampling runs:
 - **Qwen3** failed to integrate Executor results into the PTT, so its PTT size **never meaningfully increased** (one outlier run showed a PTT bloated with repeated instructions).
 - **Gemini-2.5-Flash** created **longer and more convoluted** PTTs than the other models.
 
-### 5.5.4 Executor Context Size
+#### 5.5.4 Executor Context Size
 
 - The Executor prompt context grows with each round performed (capped at 10 rounds), incorporating executed commands and their output.
 - ⚠️ This append-only growth conflicts with modern LLM **prefix-caching**, which reduces cost for repeated prefixes:
@@ -945,18 +944,17 @@ Three distinct price tiers emerged across the two-hour sampling runs:
 
 ---
 
-## 5.6 Detailed Tool-Analysis for OpenAI o1+GPT-4o
+### 5.6 Detailed Tool-Analysis for OpenAI o1+GPT-4o
 
 Using professional penetration-testers, the authors performed a detailed analysis of command-line tools employed by the evaluated LLMs. Due to the time-intensive nature of this analysis and limited availability of expert reviewers, it was restricted to the **best-performing configuration: o1+GPT-4o**.
 
-### 5.6.1 Tool Usage
+#### 5.6.1 Tool Usage
 
 - **72 different command-line tools** were used by the Executor across all tasks.
 - 🖼️ *Table 8* (referenced, not included in this chunk) lists the 15 most frequently executed commands.
 - 🖼️ *Figure 13* (referenced, not included in this chunk): shows relative tool inclusion across experiment runs — **42% of tools** were used in two or more runs.
 
 
-## Executor Behavior Over Time
 
 🖼️ Figure 12a: Line chart of Executor input prompt size (in tokens) over 10 executor rounds, for four models (Gemini-2.5-Flash, GPT-4o, Qwen3, DeepSeek-V3). All models show growing input size as rounds progress, with DeepSeek-V3 growing fastest, peaking near 12,000 tokens around round 8 before dropping.
 
@@ -968,7 +966,7 @@ Using professional penetration-testers, the authors performed a detailed analysi
 
 > **Fig. 13.** Inclusion of Tools within OpenAI's o1+GPT-4o experiment runs. This is an exact count — a tool counted at $n=1$ is not also counted at $n=2$. The graph indicates that many tools are only used within a single executor run, while approximately 10% of tools were included in every sample.
 
-## 📌 Executor Tool-Call Errors
+##### 📌 Executor Tool-Call Errors
 
 The Executor often proposed invalid tool calls (**35.9% on average**). The first author (a professional penetration-tester) split these erroneous calls into two classes:
 
@@ -985,7 +983,7 @@ The Executor often proposed invalid tool calls (**35.9% on average**). The first
     - An invalid path used within `smbclient` (e.g., `\\server\share\dir` instead of `\\server\share`)
   - ⚠️ Type 2 errors are typically **not detected by the tools themselves** and are instead reported as network errors — which can "confuse" the Executor.
 
-## 📊 Table 8 — Tool Usage by OpenAI's o1+GPT-4o
+### 📊 Table 8 — Tool Usage by OpenAI's o1+GPT-4o
 
 | Command | % of runs | # | % errors | % Type 1 | # Type 2 | Description |
 |---|---|---|---|---|---|---|
@@ -1016,7 +1014,7 @@ The full command list is provided in Appendix Section D. Commands span:
 - **High-level/broad tools:** e.g., `bloodhound-python`
 - **Non-offensive tools:** compilers/interpreters such as `python3`, `mono`/`mcs`, `pwsh`
 
-## 📊 Table 9 — Mapping Tasks to MITRE ATT&CK Tactics and Techniques (o1+GPT-4o)
+#### 📊 5.6.2 Mapping Tasks to MITRE ATT&CK Tactics and Techniques (o1+GPT-4o)
 
 | MITRE Tactic | MITRE Technique | # | in % runs | Examples |
 |---|---|---|---|---|
@@ -1037,7 +1035,7 @@ Overall, the top 10 techniques describe an attacker that has gained an initial f
 
 ---
 
-## 6 Discussion
+## 6. Discussion
 
 Covers plan/trajectory and command quality, enhancement opportunities, future research, and safety/ethics/defense considerations.
 
@@ -1094,7 +1092,7 @@ Covers plan/trajectory and command quality, enhancement opportunities, future re
 
 The Planner used the PTT to carry information about future attacks and temporal dependencies — e.g., queuing a re-attempt of credential capture after new users were compromised, or splitting user lists into sub-lists to interleave password spraying and avoid account lockouts (with retry-later entries added to the PTT when lockouts occurred).
 
-## 🔬 Summarizing and Integrating Findings into the PTT
+#### 🔬 6.2.3 Summarizing and Integrating Findings into the PTT
 
 After an Executor task finishes, it generates a summary of its findings (either implicitly via the ReAct agent, or explicitly via a dedicated LLM call if the step limit is hit) plus the full task execution history, which the Planner uses to update the PTT.
 
@@ -1106,7 +1104,7 @@ After an Executor task finishes, it generates a summary of its findings (either 
 - All models struggled to incorporate leads (especially full hashes/tokens) into the PTT — tokens were often size-limited, redacted, or replaced with placeholders, requiring extra Executor rounds to fix.
 - Gemini-2.5-Flash had the fewest problems detecting compromised accounts.
 
-## 🔬 Missing Information Transfer between Planner and Executor
+#### 🔬 6.2.4 Missing Information Transfer between Planner and Executor
 
 The Planner is meant to pass relevant contextual data to the Executor for each task, but all models often supplied insufficient context.
 
@@ -1119,7 +1117,7 @@ The Planner is meant to pass relevant contextual data to the Executor for each t
 - Explicitly instruct the Planner to always include full relevant context per task.
 - Maintain a fact/finding repository within the Executor — though this complicates parallel execution (shared state) and would forfeit PTT-based run resumption.
 
-## 🔬 Planner "Going Down the Rabbit Hole"
+#### 🔬 6.2.5 Planner "Going Down the Rabbit Hole"
 
 Professional pentesters are known to hyper-fixate on one attack avenue while ignoring alternatives — the same behavior appeared in every evaluated LLM.
 
@@ -1132,7 +1130,7 @@ Professional pentesters are known to hyper-fixate on one attack avenue while ign
 - A circuit breaker forcing the Planner to pursue other leads after a fixed number of rounds on one avenue (the PTT already supports rescheduling tasks for later).
 - Human oversight from an experienced pentester as the most robust long-term solution.
 
-## 📊 Quality of Attacks
+### 📊 6.3 Quality of Attacks
 
 Evaluated LLMs generally used relevant attack vectors. Notable/unexpected behaviors:
 
@@ -1143,7 +1141,7 @@ Evaluated LLMs generally used relevant attack vectors. Notable/unexpected behavi
 - All models browsed SMB shares via `smbtool`, `nxc`, or `smbmap`, and could detect credential-bearing files — but none could match contextual password *hints* to actual passwords (see below).
 - Advanced attacks (Kerberos Unconstrained Delegation, MSSQL link abuse, coercion attacks, Pass-the-Hash/Token) were logged to the PTT but never actually selected/executed by the Planner.
 
-### 🔬 Inter-Context Attacks
+#### 🔬 6.3.1 Inter-Context Attacks
 
 Some attack paths diverged from what conventional automated scanners can do, by leveraging information gathered through unstructured, out-of-band techniques.
 
@@ -1228,7 +1226,7 @@ $secret = "76492d1116743f0423413b16050a5345MgB8AGkAcwBDACsAUwArADIAcABRAEcARABnA
 
 This kind of unstructured full-text analysis and cross-referencing of findings into later attacks is a capability conventional scanners lack — echoed by prior red-team literature describing "analyzing network shares for juicy data" as a tedious but valuable manual task.
 
-### 🔬 Scenario-Specific Password Generation
+#### 🔬 6.3.2 Scenario-Specific Password Generation
 
 LLMs routinely ran password-spraying attacks, requiring careful (small) candidate lists to avoid lockouts (preventing account lock-outs was explicitly stated as a goal within the scenario prompt).
 
@@ -1237,7 +1235,7 @@ LLMs routinely ran password-spraying attacks, requiring careful (small) candidat
 - Real-world weak-password patterns typically follow `SeasonYYYY!`, sibling-name+birthdate concatenations, local geography references, or company-name+postal-code combos.
 - Professional pentesters, in informal discussion, viewed this scenario-specific password generation as particularly valuable.
 
-### 🔬 Installation of Additional Tools
+#### 🔬 6.3.3 Installation of Additional Tools
 
 LLMs could install tools missing from the base VM, and adapt around restrictions:
 
@@ -1245,9 +1243,9 @@ LLMs could install tools missing from the base VM, and adapt around restrictions
 - When `bloodhound-python` output needed GUI-based analysis (unsupported in the headless test infra), the Executor instead installed `jq` to parse the raw JSON directly from the generated zip.
 - Also installed: social engineering tools (`gophish`, SET) and AD Certificate Services attack tooling (`certipy`).
 
-## ⚠️ Problems with Command Generation
+### ⚠️ 6.4 Problems with Command Generation
 
-### GPT-4o's Executor Struggled with Valid Commands
+#### 6.4.1 GPT-4o's Executor Struggled with Valid Commands
 
 35.9% of GPT-4o-generated commands were invalid (per quantitative analysis) — raising the question of how the prototype still succeeded overall.
 
@@ -1257,7 +1255,6 @@ LLMs could install tools missing from the base VM, and adapt around restrictions
 - Mishandling tools with complex/convoluted option syntax (e.g., `nxc`'s command structure).
 
 
-### 🔬 Command Syntax & Parameter Errors (cont'd)
 
 - `nxc` exposes a complicated syntax structure:
   ```bash
@@ -1269,7 +1266,7 @@ LLMs could install tools missing from the base VM, and adapt around restrictions
   - `nxc`: domain usernames must use `domain\\username`; formats like `domain\username` or `user@domain` (often returned by AD enumeration tools) are invalid.
 - **`hashcat`**: requires all hashes in a file to match the selected hash type. Wrong-format hashes triggered "Separator unmatched" warnings — accounting for **94% of invocation failures**. This problem occurred more with GPT-4o than Gemini-2.5-Flash.
 
-### 6.4.2 Interactive, Long-Running, and GUI Commands
+#### 6.4.2 Interactive, Long-Running, and GUI Commands
 
 > Some tools drop into interactive mode when required parameters are missing, causing the prototype to stall until timeout.
 
@@ -1280,7 +1277,7 @@ LLMs could install tools missing from the base VM, and adapt around restrictions
   - ⚠️ Sufficient for the Goad testbed, but real-world use would need a system that notifies the Executor of new output rather than blindly killing long-running processes.
 - GUI-based tools are unsupported by the prototype, but considered a minor limitation since pentesting tools are predominantly CLI-based.
 
-### 6.4.3 Planner/Executor Auto-Repair
+#### 6.4.3 Planner/Executor Auto-Repair
 
 📌 Auto-repair operates at two levels:
 
@@ -1305,7 +1302,7 @@ flowchart TD
   - The Executor is cheap relative to total cost (as low as **6%** of costs in the o1+GPT-4o configuration), making extra repair rounds cost-effective. However, since the Executor has no persistent memory, each invocation must re-learn correct tool usage from scratch.
 - **High-level (Planner):** if the Executor cannot fix the issue, it reports a short description back to the Planner, which suggests remediation for the Executor to apply next. More expensive in time/cost, but often effective.
 
-### 6.4.4 Potential Impact of Improved Tooling Support
+#### 6.4.4 Potential Impact of Improved Tooling Support
 
 - Complicated tool parameter conventions caused many issues but did not significantly hurt overall performance in this experiment.
 - Missing tools are auto-installed (distro packages, package repos, or GitHub clones); the prototype can also generate custom scripts (Python, C#, PowerShell).
@@ -1563,7 +1560,7 @@ or the Lockheed-Martin Cyber Killchain.
 
 > 🔬 **Method**: Prompt used by the planner component to build/maintain a hierarchical, tree-structured task plan that worker agents execute against.
 
-```text
+````text
 You are given the following objective by the user:
 
 ```
@@ -1574,7 +1571,7 @@ You are required to strategize and create a tree-structured task plan that will 
 successfully solve the objective. Workers will follow your task plan to complete the objective,
 and will report after each finished task back to you. You should use this feedback to update the
 task plan.
-```
+````
 
 **Requirements when creating the task plan:**
 
@@ -1598,7 +1595,7 @@ task plan.
 
 **Output rule:** Provide the hierarchical task plan as the answer only — no title, no appendix.
 
-```text
+````text
 {% if plan == None or plan == '' %}
 # You have no task plan yet, generate a new plan.
 {% else %}
@@ -1639,7 +1636,7 @@ $ {{ item['cmd'] }}
 {% endfor %}
 
 {% endif %}
-```
+````
 
 
 ### A.3 Planner Prompt: Select Next Task
@@ -1695,7 +1692,7 @@ arose while trying to solve the task.
 
 ---
 
-## B Example States/Pentest-Task-Trees using OpenAI's o1-GPT-4o
+## Appendix B — Example States/Pentest-Task-Trees using OpenAI's o1-GPT-4o
 
 ### B.1 Initial State/Pentest-Task-Tree (before first command executed)
 
@@ -1875,7 +1872,7 @@ graph TD
 
 ---
 
-## C List of "Almost-There" Attack Vectors
+## Appendix C — List of "Almost-There" Attack Vectors
 
 > During analysis, professional penetration testers were tasked with detecting successful attacks performed by LLMs. Their feedback indicated that LLMs were often *almost* able to complete an attack, failing not from technical incapability but from small mismatches between the attack and its target. These attacks would likely succeed with a minimal change (e.g., targeting a different server), and were captured as **Almost-There**.
 
@@ -1892,65 +1889,54 @@ Attacks classified as Almost-There:
 
 ---
 
-## D List of Offensive Tools
+## Appendix D — List of Offensive Tools
 
-🔧 Tools encountered during analysis of the prototype under the OpenAI o1+GPT-4o configuration (raw tool/command names as logged):
+The following tools were encountered during the analysis of our prototype with the OpenAI o1+GPT-4o configuration:
 
-> nmap, nxc, smbclient, impacket-GetNPUsers, echo, john, hashcat, netexec, impacket-GetUserSPNs, ldapsearch, ping, cat, ip, sudo, impacket-grouper, impacket-smbclient, impacket-secretsdump, find, python3, pip3, source, winexe, rpcclient, grep, impacket-certipy, certipy, pip, apt, certipy-ad, unzip, bloodhound-python, apt-get, impacket-mssqlclient, head, impacket-ldapsearch, dig, sc.exe, impacket-smbexec, schtasks, impacket-wmiexec, impacket-GetADUsers, ifconfig, evil-winrm, ls, krb2john, locate, smbmap, impacket-psexec, openssl, xxd, mcs, mono, pwsh, impacket-GetADGroupMembers, mount, impacket-rpcdump, git, mkdir, dmesg, file, responder, sed, tr, systemctl, impacket-GetTGT, impacket-GetSPNs, for, impacket-GetLAPSPassword, searchsploit, impacket-dumpad, nslookup, ntlmrelayx
+nmap, nxc, smbclient, impacket-GetNPUsers, echo, john, hashcat, netexec, impacket-GetUserSPNs, ldapsearch, ping, cat, #, ip, sudo, impacket-grouper, impacket-smbclient, impacket-secretsdump, find, python3, pip3, source, winexe, rpcclient, grep, impacket-certipy, certipy, pip, apt, certipy-ad, unzip, bloodhound-python, apt-get, impacket-mssqlclient, head, impacket-ldapsearch, dig, sc.exe, impacket-smbexec, schtasks, impacket-wmiexec, impacket-GetADUsers, ifconfig, evil-winrm, ls, krb2john, locate, smbmap, impacket-psexec, openssl, xxd, mcs, mono, pwsh, impacket-GetADGroupMembers, mount, impacket-rpcdump, git, mkdir, dmesg, file, responder, sed, tr, systemctl, impacket-GetTGT, impacket-GetSPNs, for, impacket-GetLAPSPassword, searchsploit, impacket-dumpad, nslookup, ntlmrelayx
 
-### D.1 (Offensive) Tools Mentioned Within This Paper
+### D.1 (Offensive) Tools Mentioned within this Paper
 
-| Tool | Description |
-|---|---|
-| **ADRecon** | Enumeration tool for Active Directory — [github.com/sense-of-security/ADRecon](https://github.com/sense-of-security/ADRecon) |
-| **bloodhound** (bloodhound-python) | Enumerates a Microsoft AD environment and uses graph analysis to identify insecure configurations and vulnerabilities — [github.com/SpecterOps/BloodHound](https://github.com/SpecterOps/BloodHound) |
-| **certipy** | Python-based tool for Active Directory Certificate Services enumeration and abuse — [github.com/ly4k/Certipy](https://github.com/ly4k/Certipy) |
-| **dirb** | Web server file/directory fuzzer — [github.com/v0re/dirb](https://github.com/v0re/dirb) |
-| **evil-winrm** | Executes commands over the Windows Remote Management protocol — [github.com/Hackplayers/evil-winrm](https://github.com/Hackplayers/evil-winrm) |
-| **gobuster** | Directory/file enumeration tool, typically used against web servers — [github.com/OJ/gobuster](https://github.com/OJ/gobuster) |
-| **gophish** | Open-source phishing framework and server — [github.com/gophish/gophish](https://github.com/gophish/gophish) |
-| **hashcat** | Password cracking tool — [hashcat.net/hashcat](https://hashcat.net/hashcat/) |
-| **impacket suite** | Collection of Python classes for working with network protocols, including ready-made scripts for attacking AD functions — [github.com/fortra/impacket](https://github.com/fortra/impacket) |
+Multiple offensive tools are mentioned throughout this paper. As these are security-specific and thus potentially unknown to readers, we are listing them including a short description and link their respective homepage:
 
-**Notable impacket scripts:**
-
-- `impacket-mssqlclient` — interactive Microsoft SQL Server session
-- `impacket-GetUserSPNs` — extracts Service Principal Name (SPN) Kerberos tickets, typically for Kerberoasting
-- `impacket-GetNPUsers` — used for Kerberos AS-REP attacks
-- `impacket-smbexec` — semi-interactive shell for executing Windows commands over SMB
-- `impacket-secretsdump` — uses an authenticated administrative account to remotely dump the NTDS, SAM, and SYSTEM registry hives (commonly containing credentials)
-- `impacket-getADUsers` — outputs an AD's users and their email addresses
-
-| Tool | Description |
-|---|---|
-| **john** (john-the-ripper) | Password cracking tool — [openwall.com/john](https://www.openwall.com/john/) |
-| **jq** | Lightweight, flexible command-line JSON processor — [jqlang.org](https://jqlang.org/) |
-| **kekeo** | Tool for performing Kerberos operations — [github.com/gentilkiwi/kekeo](https://github.com/gentilkiwi/kekeo) |
-
-
-### 🛠️ Tool Glossary (continued)
-
-- **ldapsearch** — non-offensive tool to query LDAP servers. [docs.ldap.com](https://docs.ldap.com/ldap-sdk/docs/tool-usages/ldapsearch.html)
-- **Nessus** — commercial network vulnerability scanner. [tenable.com](https://www.tenable.com/products/nessus)
-- **netexec (nxc)** — multi-protocol tool (SMB, LDAP, WMI) for attacking AD networks; formerly *crackmapexec (cme)*. [netexec.wiki](https://www.netexec.wiki/)
-- **nmap** — general-purpose network and service scanner, extendable with user scripts. [nmap.org](https://nmap.org/)
-- **nikto** — web server vulnerability scanner. [GitHub](https://github.com/sullo/nikto)
-- **OpenVAS** — network vulnerability scanner. [openvas.org](https://www.openvas.org/)
-- **PowerMad** — enrolls new virtual computers into an AD. [GitHub](https://github.com/Kevin-Robertson/Powermad)
-- **PowerUp** — automatic Windows privilege-escalation tool. [GitHub](https://github.com/PowerShellMafia/PowerSploit/blob/master/Privesc/PowerUp.ps1)
-- **PowerUpSQL** — automatic Microsoft SQL Server privilege-escalation tool. [GitHub](https://github.com/NetSPI/PowerUpSQL)
-- **PowerView** — Active Directory enumeration tool. [GitHub](https://github.com/PowerShellMafia/PowerSploit/blob/master/Recon/PowerView.ps1)
-- **responder** — network-protocol poisoner with many built-in server implementations; typically used to force clients to expose credentials or perform Attacker-in-the-Middle attacks. [GitHub](https://github.com/lgandx/Responder)
-- **Rubeus** — Windows-based tool used for Kerberos attacks. [GitHub](https://github.com/GhostPack/Rubeus)
-- **rpcclient** — non-offensive tool used to access Microsoft DCE RPC services. [samba.org](https://www.samba.org/samba/docs/4.17/man-html/rpcclient.1.html)
-- **SharpView** — C# reimplementation of PowerView. [GitHub](https://github.com/tevora-threat/SharpView)
-- **smbclient** — non-offensive tool used to access Microsoft SMB network shares. [samba.org](https://www.samba.org/samba/docs/current/man-html/smbclient.1.html)
-- **smbmap** — enumerates Samba share drives across an entire domain. [GitHub](https://github.com/ShawnDEvans/smbmap)
-- **Social Engineer Toolkit (SET)** — open-source penetration testing framework focused on social engineering. [GitHub](https://github.com/trustedsec/social-engineer-toolkit)
-- **tcpdump** — network sniffing tool. [tcpdump.org](https://www.tcpdump.org/)
-- **tshark** — network sniffing tool. [linux.die.net](https://linux.die.net/man/1/tshark)
+- **ADRecon** enumeration tool for Active Directory, https://github.com/sense-of-security/ADRecon
+- **bloodhound** also known as *bloodhound-python*, attacker tool that enumerates a Microsoft AD and uses graphs to identify potential insecure configurations and vulnerabilities, https://github.com/SpecterOps/BloodHound
+- **certipy** python-based tool for Active Directory Certificate Services enumeration and abuse, https://github.com/ly4k/Certipy
+- **dirb** web server file/directory fuzzer, https://github.com/v0re/dirb
+- **evil-winrm** execute commands over the windows remote management protocol, https://github.com/Hackplayers/evil-winrm
+- **gobuster** directory/file enumeration tool, in this paper typically used to enumerate web servers, https://github.com/OJ/gobuster
+- **gophish** open-source phishing framework and server, https://github.com/gophish/gophish
+- **hashcat** password cracking tool, https://hashcat.net/hashcat/
+- **impacket suite** Impacket is a collection of Python classes for working with network protocols, they also include ready-made scripts for attacking different AD functions, https://github.com/fortra/impacket, examples of scripts included are:
+  - **impacket-mssqlclient** used to create an interactive Microsoft SQL-Server SQL session
+  - **impacket-GetUserSPNs** extract Service Principal Name (SPN) Kerberos tickets, typically used during Kerberoasting attacks
+  - **impacket-GetNPUsers** used for Kerberos AS-REP attacks.
+  - **impacket-smbexec** provides a semi-interactive shell for executing windows commands over SMB
+  - **impacket-secretsdump** uses an authenticated administrative account to remotely dump the NTDS, SAM, and SYSTEM registry hives commonly containing credentials
+  - **impacket-getADUsers** outputs an AD's users and their email addresses
+- **john** password cracking tool, also known as *john-the-ripper*, https://www.openwall.com/john/
+- **jq** lightweight and flexible command-line JSON processor, https://jqlang.org/
+- **kekeo** tool for performing kerberos operations, https://github.com/gentilkiwi/kekeo
+- **ldapsearch** non-offensive tool to query LDAP servers, https://docs.ldap.com/ldap-sdk/docs/tool-usages/ldapsearch.html
+- **Nessus** network vulnerability scanner (commercial), https://www.tenable.com/products/nessus
+- **netexec (nxc)** multi-tool for attacking AD networks over multiple protocols such as SMB, LDAP, WMI; formerly known as *crackmapexec (cme)*, https://www.netexec.wiki/
+- **nmap** general-purpose network and service scanner, extendable with user scripts, https://nmap.org/
+- **nikto** web server vulnerability scanner, https://github.com/sullo/nikto
+- **OpenVAS** network vulnerability scanner, https://www.openvas.org/
+- **PowerMad** enrolls new virtual computers into an AD, https://github.com/Kevin-Robertson/Powermad
+- **PowerUp** automatic windows privilege-escalation tool, https://github.com/PowerShellMafia/PowerSploit/blob/master/Privesc/PowerUp.ps1
+- **PowerUpSQL** automatic Microsoft SQL Server privilege escalation tool, https://github.com/NetSPI/PowerUpSQL
+- **PowerView** active directory enumeration tool, https://github.com/PowerShellMafia/PowerSploit/blob/master/Recon/PowerView.ps1
+- **responder** Responder is a network-protocol poisoner, with many built-in server implementation, typically used to force clients to expose credentials or to perform Attacker-in-the-Middle attacks, https://github.com/lgandx/Responder
+- **Rubeus** windows-based tool used for kerberos attacks, https://github.com/GhostPack/Rubeus
+- **rpcclient** non-offensive tool used to access Microsoft DCE RPC services, https://www.samba.org/samba/docs/4.17/man-html/rpcclient.1.html
+- **SharpView** reimplementation of PowerView in C#, https://github.com/tevora-threat/SharpView
+- **smbclient** non-offensive tool used to access Microsoft SMB network shares, https://www.samba.org/samba/docs/current/man-html/smbclient.1.html
+- **smbmap** allows users to enumerate samba share drives across an entire domain, https://github.com/ShawnDEvans/smbmap
+- **social engineer toolkit (set)** open-source penetration testing framework focused upon social engineering, https://github.com/trustedsec/social-engineer-toolkit
+- **tcpdump** network sniffing tool, https://www.tcpdump.org/
+- **tshark** network sniffing tool, https://linux.die.net/man/1/tshark
 
 ---
 
 > *Received 16 February 2025; revised 21 August 2025; accepted 24 August 2025*
-> *Manuscript submitted to ACM*

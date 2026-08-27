@@ -1,4 +1,3 @@
-
 # Incalmo: An Autonomous LLM-assisted System for Red Teaming Multi-Host Networks
 
 **Authors:** Brian Singer\*, Keane Lucas†, Lakshmi Adiga\*, Meghna Jain\*, Lujo Bauer\*, Vyas Sekar\*
@@ -625,11 +624,11 @@ $$C_{a,e} = \left|\bigcup_{t=1}^{T} G_{a,e,t}\right| / |C_e|$$
 These results highlight the promise of Incalmo to find many gaps in security defenses because a more comprehensive red team reveals a wider range of security vulnerabilities. In Sec. 7 we revisit why Incalmo was unable to acquire all critical assets in some cases.
 
 
-## 6.2 Factor Analysis
+### 6.2 Factor Analysis
 
 Experiments vary **(1)** the LLM executing the plan, and **(2)** disabling modules in Incalmo. For brevity and cost constraints, these run on the 10 illustrative environments used in Sec. 2.
 
-### 🔬 Impact of LLM Choice
+#### 🔬 Impact of LLM Choice
 
 Incalmo is evaluated with 10 different LLMs:
 - Haiku 3.5
@@ -660,7 +659,7 @@ A comparison is also made between Incalmo with smaller LLMs vs. ExpertPromptShel
 - Example — *Equifax* environment: ExpertPromptShell w/ Sonnet 4 exfiltrated a single file; Incalmo w/ Haiku 3.5 exfiltrated **all 25 databases**.
 - ⚠️ Contrary to the common assumption that larger models perform better [10], [32] — in the red-teaming domain, **Incalmo's abstractions matter more than model size**.
 
-### 🔬 Impact of High-Level Tasks
+#### 🔬 Impact of High-Level Tasks
 
 A variant, **Incalmo-WHT** (Without High-level Tasks), removes access to the five high-level tasks but keeps the environment and attack graph services. LLMs instead use 19 predefined low-level tasks (e.g., reading a file, exploiting Apache Struts) [^14].
 
@@ -668,7 +667,7 @@ A variant, **Incalmo-WHT** (Without High-level Tasks), removes access to the fiv
 
 > **📌 Finding 3.A**: Incalmo-WHT was unable to succeed across all 10 environments and 10 LLMs, suggesting that the high-level task abstraction is an important factor for red team success (not shown for brevity).
 
-### 🔬 Impact of Incalmo Services
+#### 🔬 Impact of Incalmo Services
 
 A variant, **Incalmo-WS** (Without Services), removes the environment and attack graph *services* but keeps the five high-level tasks. Incalmo-WS's agents still use these services internally to stay environment-agnostic, but the **planning LLM** cannot access them directly (unlike full Incalmo).
 
@@ -681,7 +680,7 @@ A variant, **Incalmo-WS** (Without Services), removes the environment and attack
 - Incalmo-WS with GPT4o Mini: critical assets obtained in only **3** environments.
 - Incalmo with GPT4o: critical assets obtained in **8** environments.
 
-### 🔬 Task-Agent Breakdown (Sonnet 3.5)
+#### 🔬 Task-Agent Breakdown (Sonnet 3.5)
 
 > **Figure 15 Caption:** The Success and TotalAcquisition metrics of Incalmo with Sonnet 3.5 task agents in three environments. Sonnet 3.5 task agents show promise at individual tasks, but LLMs still require assistance from non-LLM agents to successfully execute red teams. The gray boxes are environments where that task is not necessary for a successful red team.
 >
@@ -689,9 +688,9 @@ A variant, **Incalmo-WS** (Without Services), removes the environment and attack
 
 ---
 
-## 6.3 Cost and Speed
+### 6.3 Cost and Speed
 
-### ⏱️ Speed
+#### ⏱️ Speed
 
 - *Enterprise C*: root access gained on all 15 critical hosts in **12–18 minutes** (Fig. 14).
 - *Equifax*-inspired environment: data exfiltrated from all 48 databases in **54 minutes**.
@@ -702,7 +701,7 @@ A variant, **Incalmo-WS** (Without Services), removes the environment and attack
 
 ⚠️ **Inefficiencies observed**: In one trial of *Dumbbell A*, Incalmo-Haiku 3.5 took 35 extra minutes because it infected all 15 external web servers **twice** before eventually exfiltrating database data.
 
-### 💰 Cost
+#### 💰 Cost
 
 - Incalmo-Gemini 2 Flash usage fell within the **free tier**.
 - Most expensive experiment: Sonnet 3.5 with 5,750K input tokens / 60K output tokens ≈ **$15**.
@@ -712,7 +711,7 @@ A variant, **Incalmo-WS** (Without Services), removes the environment and attack
 
 ---
 
-## 6.4. Extensibility Case Study
+### 6.4 Extensibility Case Study
 
 Demonstrates extending Incalmo with **new task-specific LLM-based agents** (vs. the deterministic agents used in prior evaluations).
 
