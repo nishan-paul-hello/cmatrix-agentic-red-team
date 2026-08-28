@@ -19,15 +19,15 @@ export default function TechnicalActions() {
 
     const sel = ACTIONS.find((a) => a.id === selId) ?? ACTIONS[0];
     const sc: Record<string, string> = {
-        [TASK_STATUS.SUCCESS]: "var(--color-hex-3fb950)",
-        [TASK_STATUS.TIMEOUT]: "var(--color-hex-d29922)",
-        [TASK_STATUS.FAILED]: "var(--color-hex-ff2a32)",
-        [TASK_STATUS.RUNNING]: "var(--color-hex-e31b23)",
+        [TASK_STATUS.SUCCESS]: "var(--color-success)",
+        [TASK_STATUS.TIMEOUT]: "var(--color-warning)",
+        [TASK_STATUS.FAILED]: "var(--color-danger)",
+        [TASK_STATUS.RUNNING]: "var(--color-brand)",
     };
     return (
         <div className="flex min-h-[0px] flex-1 overflow-hidden">
             <div className="flex-1 overflow-y-auto">
-                <table className="w-full border-collapse text-[10px]">
+                <table className="w-full border-collapse text-lg">
                     <thead>
                         <tr className="sticky top-0 bg-[var(--color-hex-0f0f0f)]">
                             {[
@@ -42,7 +42,7 @@ export default function TechnicalActions() {
                             ].map((h) => (
                                 <th
                                     key={h}
-                                    className="px-[12px] py-[6px] text-left text-[7.5px] font-semibold tracking-[0.16em] whitespace-nowrap text-[var(--color-hex-444444)]"
+                                    className="text-sm-tight tracking-wider-2 px-[12px] py-[6px] text-left font-semibold whitespace-nowrap text-[var(--color-hex-444444)]"
                                     style={{
                                         borderBottom: "1px solid var(--color-hex-1a1a1a)",
                                     }}
@@ -68,23 +68,23 @@ export default function TechnicalActions() {
                                     (e.currentTarget.style.background = "transparent")
                                 }
                             >
-                                <td className="px-[12px] py-[7px] text-[9px] text-[var(--color-hex-555555)]">
+                                <td className="px-[12px] py-[7px] text-base text-[var(--color-hex-555555)]">
                                     {a.id}
                                 </td>
-                                <td className="px-[12px] py-[7px] text-[9px] text-[var(--color-hex-333333)]">
+                                <td className="px-[12px] py-[7px] text-base text-[var(--color-hex-333333)]">
                                     {a.ts}
                                 </td>
-                                <td className="px-[12px] py-[7px] text-[9px] font-bold tracking-[0.06em] text-[var(--color-hex-e31b23)]">
+                                <td className="tracking-tight-1 px-[12px] py-[7px] text-base font-bold text-[var(--color-brand)]">
                                     {a.spec}
                                 </td>
-                                <td className="font-inherit px-[12px] py-[7px] text-[9px] text-[var(--color-hex-666666)]">
+                                <td className="font-inherit px-[12px] py-[7px] text-base text-[var(--color-hex-666666)]">
                                     {a.action}
                                 </td>
-                                <td className="px-[12px] py-[7px] text-[9px] text-[var(--color-hex-444444)]">
+                                <td className="px-[12px] py-[7px] text-base text-[var(--color-hex-444444)]">
                                     {a.tool}
                                 </td>
                                 <td
-                                    className="max-w-[240px] overflow-hidden px-[12px] py-[7px] text-[9px] whitespace-nowrap text-[var(--color-hex-555555)]"
+                                    className="max-w-[240px] overflow-hidden px-[12px] py-[7px] text-base whitespace-nowrap text-[var(--color-hex-555555)]"
                                     style={{
                                         textOverflow: "ellipsis",
                                     }}
@@ -92,11 +92,11 @@ export default function TechnicalActions() {
                                     {a.result}
                                 </td>
                                 <td
-                                    className="px-[12px] py-[7px] text-[9px] font-semibold"
+                                    className="px-[12px] py-[7px] text-base font-semibold"
                                     style={{
                                         color:
                                             a.eord !== "—"
-                                                ? "var(--color-hex-3fb950)"
+                                                ? "var(--color-success)"
                                                 : "var(--color-hex-333333)",
                                     }}
                                 >
@@ -104,7 +104,7 @@ export default function TechnicalActions() {
                                 </td>
                                 <td className="px-[12px] py-[7px]">
                                     <span
-                                        className="text-[8.5px] font-semibold tracking-[0.1em]"
+                                        className="text-base-tight font-semibold tracking-normal"
                                         style={{
                                             color: sc[a.status] ?? "var(--color-hex-666666)",
                                         }}
@@ -118,7 +118,7 @@ export default function TechnicalActions() {
                 </table>
             </div>
             <div
-                className="flex w-[320px] flex-shrink-0 flex-col overflow-y-auto bg-[var(--color-hex-0d0d0d)]"
+                className="flex w-[var(--width-drawer-md)] flex-shrink-0 flex-col overflow-y-auto bg-[var(--color-hex-0d0d0d)]"
                 style={{
                     borderLeft: "1px solid var(--color-hex-292929)",
                 }}
@@ -130,16 +130,16 @@ export default function TechnicalActions() {
                     }}
                 >
                     <div>
-                        <div className="text-[12px] font-bold tracking-[0.1em] text-[var(--color-hex-f2f2f2)]">
+                        <div className="text-2xl font-bold tracking-normal text-[var(--color-fg)]">
                             {sel.id}
                         </div>
-                        <div className="mt-[2px] text-[8.5px] text-[var(--color-hex-444444)]">
+                        <div className="text-base-tight mt-[2px] text-[var(--color-hex-444444)]">
                             {sel.spec} · {sel.tool}
                         </div>
                     </div>
                     <button
                         onClick={() => setSelId(null)}
-                        className="cursor-pointer border-none bg-[transparent] text-[14px] text-[var(--color-hex-444444)]"
+                        className="cursor-pointer border-none bg-[transparent] text-4xl text-[var(--color-hex-444444)]"
                     >
                         ✕
                     </button>
@@ -181,16 +181,16 @@ export default function TechnicalActions() {
                         }[]
                     ).map((r) => (
                         <div key={r.k}>
-                            <div className="mb-[3px] text-[7.5px] tracking-[0.18em] text-[var(--color-hex-444444)]">
+                            <div className="text-sm-tight tracking-wider-3 mb-[3px] text-[var(--color-hex-444444)]">
                                 {r.k}
                             </div>
                             <div
-                                className="text-[10px] leading-[1.6]"
+                                className="text-lg leading-normal"
                                 style={{
                                     color:
                                         r.col ??
                                         (r.red
-                                            ? "var(--color-hex-3fb950)"
+                                            ? "var(--color-success)"
                                             : "var(--color-hex-888888)"),
                                 }}
                             >

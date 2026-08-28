@@ -47,29 +47,29 @@ export default function BranchTree({ nodes, depth = 0 }: { nodes: BranchEntry[];
                                     borderBottom: "1px solid var(--color-hex-141414)",
                                 }}
                             >
-                                <span className="text-[9px] font-bold tracking-[0.1em] text-[var(--color-hex-e31b23)]">
+                                <span className="text-base font-bold tracking-normal text-[var(--color-brand)]">
                                     {b.id}
                                 </span>
-                                <span className="flex-1 text-[8.5px] text-[var(--color-hex-a0a0a0)]">
+                                <span className="text-base-tight flex-1 text-[var(--color-hex-a0a0a0)]">
                                     {b.decision}
                                 </span>
-                                <span className="text-[8px] text-[var(--color-hex-333333)]">
+                                <span className="text-sm text-[var(--color-hex-333333)]">
                                     {b.ts}
                                 </span>
                                 <span
-                                    className="text-[8px] font-semibold tracking-[0.12em]"
+                                    className="text-sm font-semibold tracking-wide"
                                     style={{
                                         color: (() => {
                                             if (b.outcome === "SUCCESS") {
-                                                return "var(--color-hex-3fb950)";
+                                                return "var(--color-success)";
                                             }
                                             if (
                                                 b.outcome === "IN PROGRESS" ||
                                                 b.outcome === "RUNNING"
                                             ) {
-                                                return "var(--color-hex-d29922)";
+                                                return "var(--color-warning)";
                                             }
-                                            return "var(--color-hex-e31b23)";
+                                            return "var(--color-brand)";
                                         })(),
                                     }}
                                 >
@@ -78,22 +78,22 @@ export default function BranchTree({ nodes, depth = 0 }: { nodes: BranchEntry[];
                             </div>
                             <div className="px-4 py-3">
                                 <div className="mb-[8px]">
-                                    <div className="mb-[4px] text-[7.5px] tracking-[0.18em] text-[var(--color-hex-444444)]">
+                                    <div className="text-sm-tight tracking-wider-3 mb-[4px] text-[var(--color-hex-444444)]">
                                         CHOSEN PATH
                                     </div>
-                                    <div className="text-[10px] font-semibold tracking-[0.06em] text-[var(--color-hex-3fb950)]">
+                                    <div className="tracking-tight-1 text-lg font-semibold text-[var(--color-success)]">
                                         {b.chosen}
                                     </div>
                                 </div>
                                 <div className="mb-[8px]">
-                                    <div className="mb-[4px] text-[7.5px] tracking-[0.18em] text-[var(--color-hex-444444)]">
+                                    <div className="text-sm-tight tracking-wider-3 mb-[4px] text-[var(--color-hex-444444)]">
                                         ALTERNATIVES REJECTED
                                     </div>
                                     <div className="flex flex-wrap gap-2">
                                         {b.alternatives.map((a: string) => (
                                             <span
                                                 key={a}
-                                                className="rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1a1a1a)] bg-[var(--color-hex-111111)] px-[7px] py-[2px] text-[8.5px] text-[var(--color-hex-333333)]"
+                                                className="text-base-tight rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1a1a1a)] bg-[var(--color-hex-111111)] px-[7px] py-[2px] text-[var(--color-hex-333333)]"
                                                 style={{
                                                     textDecoration: "line-through",
                                                 }}
@@ -104,10 +104,10 @@ export default function BranchTree({ nodes, depth = 0 }: { nodes: BranchEntry[];
                                     </div>
                                 </div>
                                 <div className="mb-[6px]">
-                                    <div className="mb-[4px] text-[7.5px] tracking-[0.18em] text-[var(--color-hex-444444)]">
+                                    <div className="text-sm-tight tracking-wider-3 mb-[4px] text-[var(--color-hex-444444)]">
                                         RATIONALE
                                     </div>
-                                    <div className="text-[9.5px] leading-[1.7] text-[var(--color-hex-555555)]">
+                                    <div className="text-lg-tight leading-relaxed text-[var(--color-hex-555555)]">
                                         {b.reason}
                                     </div>
                                 </div>
@@ -118,10 +118,10 @@ export default function BranchTree({ nodes, depth = 0 }: { nodes: BranchEntry[];
                                         paddingTop: 8,
                                     }}
                                 >
-                                    <div className="mb-[3px] text-[7.5px] tracking-[0.18em] text-[var(--color-hex-444444)]">
+                                    <div className="text-sm-tight tracking-wider-3 mb-[3px] text-[var(--color-hex-444444)]">
                                         IMPACT
                                     </div>
-                                    <div className="text-[9.5px] leading-[1.6] text-[var(--color-hex-666666)]">
+                                    <div className="text-lg-tight leading-normal text-[var(--color-hex-666666)]">
                                         {b.impact}
                                     </div>
                                 </div>

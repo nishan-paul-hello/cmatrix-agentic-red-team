@@ -9,15 +9,15 @@ export default function FailureMemory() {
     const failures: FailureLogEntry[] = blackboard.readFailures();
     const [selId, setSelId] = useState<string | null>(null);
     const tc: Record<string, string> = {
-        TIMEOUT: "var(--color-hex-d29922)",
-        FAILED: "var(--color-hex-ff2a32)",
-        ERROR: "var(--color-hex-ff2a32)",
+        TIMEOUT: "var(--color-warning)",
+        FAILED: "var(--color-danger)",
+        ERROR: "var(--color-danger)",
     };
     const sc: Record<string, string> = {
         LOW: "var(--color-hex-666666)",
-        MEDIUM: "var(--color-hex-d29922)",
-        HIGH: "var(--color-hex-ff2a32)",
-        CRITICAL: "var(--color-hex-ff2a32)",
+        MEDIUM: "var(--color-warning)",
+        HIGH: "var(--color-danger)",
+        CRITICAL: "var(--color-danger)",
     };
     const sel = (selId ? failures.find((f) => f.id === selId) : failures[0]) ?? null;
     return (
@@ -75,14 +75,14 @@ export default function FailureMemory() {
                                 borderBottom: "1px solid var(--color-hex-141414)",
                             }}
                         >
-                            <span className="text-[9px] font-bold tracking-[0.1em] text-[var(--color-hex-e31b23)]">
+                            <span className="text-base font-bold tracking-normal text-[var(--color-brand)]">
                                 {f.id}
                             </span>
-                            <span className="text-[8.5px] text-[var(--color-hex-555555)]">
+                            <span className="text-base-tight text-[var(--color-hex-555555)]">
                                 {f.action}
                             </span>
                             <span
-                                className="ml-auto text-[8px] font-semibold tracking-[0.12em]"
+                                className="ml-auto text-sm font-semibold tracking-wide"
                                 style={{
                                     color: tc[f.type] ?? "var(--color-hex-666666)",
                                 }}
@@ -90,35 +90,33 @@ export default function FailureMemory() {
                                 {f.type}
                             </span>
                             <span
-                                className="text-[8px] font-semibold tracking-[0.1em]"
+                                className="text-sm font-semibold tracking-normal"
                                 style={{
                                     color: sc[f.severity],
                                 }}
                             >
                                 {f.severity}
                             </span>
-                            <span className="text-[8px] text-[var(--color-hex-333333)]">
-                                {f.ts}
-                            </span>
+                            <span className="text-sm text-[var(--color-hex-333333)]">{f.ts}</span>
                         </div>
                         <div className="px-4 py-3">
                             <div className="mb-[6px]">
-                                <span className="text-[7.5px] tracking-[0.16em] text-[var(--color-hex-444444)]">
+                                <span className="text-sm-tight tracking-wider-2 text-[var(--color-hex-444444)]">
                                     DIAGNOSIS ·{" "}
                                 </span>
-                                <span className="text-[9.5px] leading-[1.7] text-[var(--color-hex-555555)]">
+                                <span className="text-lg-tight leading-relaxed text-[var(--color-hex-555555)]">
                                     {f.diagnosis}
                                 </span>
                             </div>
                             <div className="mb-[6px]">
-                                <span className="text-[7.5px] tracking-[0.16em] text-[var(--color-hex-444444)]">
+                                <span className="text-sm-tight tracking-wider-2 text-[var(--color-hex-444444)]">
                                     RESOLUTION ·{" "}
                                 </span>
                                 <span
-                                    className="text-[9.5px] leading-[1.7]"
+                                    className="text-lg-tight leading-relaxed"
                                     style={{
                                         color: f.correctable
-                                            ? "var(--color-hex-3fb950)"
+                                            ? "var(--color-success)"
                                             : "var(--color-hex-666666)",
                                     }}
                                 >
@@ -132,15 +130,15 @@ export default function FailureMemory() {
                                     paddingTop: 10,
                                 }}
                             >
-                                <div className="mb-[4px] text-[7.5px] tracking-[0.18em] text-[var(--color-hex-444444)]">
+                                <div className="text-sm-tight tracking-wider-3 mb-[4px] text-[var(--color-hex-444444)]">
                                     LESSONS LEARNED
                                 </div>
                                 {f.lessons.map((l) => (
                                     <div key={l} className="flex items-start gap-2">
-                                        <span className="mt-[1px] text-[9px] text-[var(--color-hex-d29922)]">
+                                        <span className="mt-[1px] text-base text-[var(--color-warning)]">
                                             ◆
                                         </span>
-                                        <span className="text-[9.5px] leading-[1.6] text-[var(--color-hex-555555)]">
+                                        <span className="text-lg-tight leading-normal text-[var(--color-hex-555555)]">
                                             {l}
                                         </span>
                                     </div>

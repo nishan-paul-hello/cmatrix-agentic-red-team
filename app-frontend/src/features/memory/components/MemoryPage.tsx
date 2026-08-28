@@ -9,11 +9,18 @@ import { useMemoryData } from "@/features/memory/hooks/useMemoryData";
 
 export default function MemoryPage({
     initialTab = "VULNERABILITY PATTERNS",
+    missionId,
 }: {
     initialTab?: MemTab;
+    /**
+     * When provided, this is a per-mission view (reached from inside a mission workspace).
+     * Header reads "MISSION / {missionId}".
+     * When absent (reached from the global KNOWLEDGE nav), header reads "KNOWLEDGE"
+     * and the content is the cross-mission aggregate view via MemoryBrowser.
+     */
+    missionId?: string;
 } = {}) {
     const { activeTab, setActiveTab } = useMemoryData(initialTab);
-    // Use initialTab on initial render
     const tabs: MemTab[] = [
         "VULNERABILITY PATTERNS",
         "STRATEGY BRANCHING",
@@ -30,10 +37,10 @@ export default function MemoryPage({
                     borderBottom: "1px solid var(--color-hex-1e1e1e)",
                 }}
             >
-                <div className="mb-[3px] text-[9px] tracking-[0.22em] text-[var(--color-hex-666666)]">
-                    MISSION / CVE-001
+                <div className="tracking-widest-2 mb-[3px] text-base text-[var(--color-hex-666666)]">
+                    {missionId ? `MISSION / ${missionId}` : "KNOWLEDGE"}
                 </div>
-                <h1 className="mb-[12px] text-[20px] font-bold tracking-[0.12em] text-[var(--color-hex-f2f2f2)]">
+                <h1 className="mb-[12px] text-9xl font-bold tracking-wide text-[var(--color-fg)]">
                     MEMORY
                 </h1>
                 <div className="flex overflow-x-auto">
@@ -41,16 +48,14 @@ export default function MemoryPage({
                         <button
                             key={t}
                             onClick={() => setActiveTab(t)}
-                            className="font-inherit cursor-pointer border-none bg-[transparent] px-[14px] py-[5px] text-[8.5px] tracking-[0.12em] whitespace-nowrap"
+                            className="font-inherit text-base-tight cursor-pointer border-none bg-[transparent] px-[14px] py-[5px] tracking-wide whitespace-nowrap"
                             style={{
                                 borderBottom:
                                     t === activeTab
-                                        ? "2px solid var(--color-hex-e31b23)"
+                                        ? "2px solid var(--color-brand)"
                                         : "2px solid transparent",
                                 color:
-                                    t === activeTab
-                                        ? "var(--color-hex-f2f2f2)"
-                                        : "var(--color-hex-444444)",
+                                    t === activeTab ? "var(--color-fg)" : "var(--color-hex-444444)",
                                 marginBottom: -1,
                                 display: "flex",
                                 alignItems: "center",
@@ -59,7 +64,7 @@ export default function MemoryPage({
                         >
                             {t}
                             {}
-                            <span className="ml-[4px] rounded-[2px] bg-[var(--color-hex-1a1a1a)] px-[4px] py-[0px] text-[7.5px] text-[var(--color-hex-444444)]">
+                            <span className="text-sm-tight ml-[4px] rounded-[2px] bg-[var(--color-hex-1a1a1a)] px-[4px] py-[0px] text-[var(--color-hex-444444)]">
                                 {(() => {
                                     if (t === "CONTEXT UTILIZATION") {
                                         return "T1";
@@ -87,7 +92,7 @@ export default function MemoryPage({
                     {
                         n: 1,
                         label: "WORKING CONTEXT",
-                        color: "var(--color-hex-d29922)",
+                        color: "var(--color-warning)",
                     },
                     {
                         n: 2,
@@ -97,7 +102,7 @@ export default function MemoryPage({
                     {
                         n: 3,
                         label: "SKILL LIBRARY",
-                        color: "var(--color-hex-e31b23)",
+                        color: "var(--color-brand)",
                     },
                 ].map((t) => (
                     <div
@@ -114,11 +119,26 @@ export default function MemoryPage({
                                 background: t.color,
                             }}
                         />
-                        <span className="text-[7.5px] tracking-[0.16em] text-[var(--color-hex-444444)]">
+                        <span className="text-sm-tight tracking-wider-2 text-[var(--color-hex-444444)]">
                             TIER {t.n} — {t.label}
                         </span>
                     </div>
                 ))}
+                {/* Cross-mission scope indicator — only shown in global (no missionId) view */}
+                {!missionId && (
+                    <div
+                        style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 5,
+                            marginLeft: "auto",
+                        }}
+                    >
+                        <span className="text-sm-tight tracking-wider-2 text-[var(--color-success)]">
+                            ◈ CROSS-MISSION AGGREGATE
+                        </span>
+                    </div>
+                )}
             </div>
             <div className="flex-1 overflow-auto bg-[var(--color-hex-0b0b0b)]">
                 {activeTab === "VULNERABILITY PATTERNS" && <VulnPatterns />}

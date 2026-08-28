@@ -16,7 +16,7 @@ export default function Sub({
             }}
         >
             <div
-                className="mb-[10px] text-[8px] tracking-[0.2em] text-[var(--color-hex-444444)]"
+                className="mb-[10px] text-sm tracking-widest text-[var(--color-hex-444444)]"
                 style={{
                     borderBottom: "1px solid var(--color-hex-141414)",
                     paddingBottom: 5,

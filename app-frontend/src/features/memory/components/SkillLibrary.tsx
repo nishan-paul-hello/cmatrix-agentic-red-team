@@ -21,7 +21,7 @@ export default function SkillLibrary() {
     return (
         <div className="flex min-h-[0px] flex-1 overflow-hidden">
             <div
-                className="flex w-[280px] flex-shrink-0 flex-col overflow-hidden"
+                className="w-panel-sm flex flex-shrink-0 flex-col overflow-hidden"
                 style={{
                     borderRight: "1px solid var(--color-hex-1e1e1e)",
                 }}
@@ -36,7 +36,7 @@ export default function SkillLibrary() {
                         value={filter}
                         onChange={(e) => setFilter(e.target.value)}
                         placeholder="FILTER SKILLS…"
-                        className="font-inherit w-full rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)] bg-[var(--color-hex-111111)] px-[8px] py-[5px] text-[9px] tracking-[0.08em] text-[var(--color-hex-a0a0a0)] outline-none"
+                        className="font-inherit w-full rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)] bg-[var(--color-hex-111111)] px-[8px] py-[5px] text-base tracking-tight text-[var(--color-hex-a0a0a0)] outline-none"
                         style={{
                             boxSizing: "border-box",
                         }}
@@ -61,7 +61,7 @@ export default function SkillLibrary() {
                                     sel.id === sk.id ? "var(--color-hex-120608)" : "transparent",
                                 borderLeft:
                                     sel.id === sk.id
-                                        ? "2px solid var(--color-hex-e31b23)"
+                                        ? "2px solid var(--color-brand)"
                                         : "2px solid transparent",
                             }}
                             onMouseEnter={(e) => {
@@ -75,14 +75,14 @@ export default function SkillLibrary() {
                                 }
                             }}
                         >
-                            <div className="font-inherit mb-[2px] text-[10px] font-bold tracking-[0.06em] text-[var(--color-hex-a0a0a0)]">
+                            <div className="font-inherit tracking-tight-1 mb-[2px] text-lg font-bold text-[var(--color-hex-a0a0a0)]">
                                 {sk.name}()
                             </div>
                             <div className="flex items-center gap-2">
-                                <span className="rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1a1a1a)] bg-[var(--color-hex-111111)] px-[5px] py-[1px] text-[7.5px] tracking-[0.1em] text-[var(--color-hex-333333)]">
+                                <span className="text-sm-tight rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1a1a1a)] bg-[var(--color-hex-111111)] px-[5px] py-[1px] tracking-normal text-[var(--color-hex-333333)]">
                                     {sk.cat}
                                 </span>
-                                <span className="ml-auto text-[7.5px] text-[var(--color-hex-3fb950)]">
+                                <span className="text-sm-tight ml-auto text-[var(--color-success)]">
                                     {sk.success}/{sk.calls} OK
                                 </span>
                             </div>
@@ -92,24 +92,24 @@ export default function SkillLibrary() {
             </div>
             <div className="flex-1 overflow-y-auto px-6 py-5">
                 <div className="mb-2 flex items-baseline gap-3">
-                    <h2 className="font-inherit text-[14px] font-bold text-[var(--color-hex-f2f2f2)]">
+                    <h2 className="font-inherit text-4xl font-bold text-[var(--color-fg)]">
                         {sel.name}()
                     </h2>
-                    <span className="text-[9px] tracking-[0.1em] text-[var(--color-hex-444444)]">
+                    <span className="text-base tracking-normal text-[var(--color-hex-444444)]">
                         {sel.id}
                     </span>
                 </div>
                 <div className="mb-5 flex items-center gap-3">
-                    <span className="text-[8.5px] font-semibold tracking-[0.1em] text-[var(--color-hex-e31b23)]">
+                    <span className="text-base-tight font-semibold tracking-normal text-[var(--color-brand)]">
                         {sel.spec}
                     </span>
-                    <span className="rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1a1a1a)] bg-[var(--color-hex-111111)] px-[6px] py-[1px] text-[8px] tracking-[0.1em] text-[var(--color-hex-333333)]">
+                    <span className="rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1a1a1a)] bg-[var(--color-hex-111111)] px-[6px] py-[1px] text-sm tracking-normal text-[var(--color-hex-333333)]">
                         {sel.cat}
                     </span>
                 </div>
                 <Sub label="DESCRIPTION">
                     <p
-                        className="text-[10px] leading-[1.8] text-[var(--color-hex-666666)]"
+                        className="text-lg leading-loose text-[var(--color-hex-666666)]"
                         style={{
                             margin: 0,
                         }}
@@ -134,13 +134,13 @@ export default function SkillLibrary() {
                                             : "var(--color-hex-0d0d0d)",
                                 }}
                             >
-                                <span className="font-inherit min-w-[80px] shrink-0 text-[10px] font-bold text-[var(--color-hex-a0a0a0)]">
+                                <span className="font-inherit min-w-[80px] shrink-0 text-lg font-bold text-[var(--color-hex-a0a0a0)]">
                                     {p.k}
                                 </span>
-                                <span className="min-w-[28px] shrink-0 text-[8.5px] text-[var(--color-hex-333333)]">
+                                <span className="text-base-tight min-w-[28px] shrink-0 text-[var(--color-hex-333333)]">
                                     {p.t}
                                 </span>
-                                <span className="text-[9px] text-[var(--color-hex-555555)]">
+                                <span className="text-base text-[var(--color-hex-555555)]">
                                     {p.desc}
                                 </span>
                             </div>
@@ -177,20 +177,20 @@ export default function SkillLibrary() {
                                             : "none",
                                 }}
                             >
-                                <div className="mb-[4px] text-[7.5px] tracking-[0.16em] text-[var(--color-hex-444444)]">
+                                <div className="text-sm-tight tracking-wider-2 mb-[4px] text-[var(--color-hex-444444)]">
                                     {m.k}
                                 </div>
                                 <div
-                                    className="text-[14px] font-bold"
+                                    className="text-4xl font-bold"
                                     style={{
                                         color: (() => {
                                             if (m.k === "SUCCESS") {
-                                                return "var(--color-hex-3fb950)";
+                                                return "var(--color-success)";
                                             }
                                             if (m.k === "E_ORD DELTA") {
-                                                return "var(--color-hex-e31b23)";
+                                                return "var(--color-brand)";
                                             }
-                                            return "var(--color-hex-f2f2f2)";
+                                            return "var(--color-fg)";
                                         })(),
                                     }}
                                 >

@@ -22,13 +22,13 @@ export default function VulnPatterns() {
     return (
         <div className="flex min-h-[0px] flex-1 overflow-hidden">
             <div
-                className="w-[300px] flex-shrink-0 overflow-y-auto"
+                className="w-panel-md flex-shrink-0 overflow-y-auto"
                 style={{
                     borderRight: "1px solid var(--color-hex-1e1e1e)",
                 }}
             >
                 <div
-                    className="text-[8px] tracking-[0.2em] text-[var(--color-hex-444444)]"
+                    className="text-sm tracking-widest text-[var(--color-hex-444444)]"
                     style={{
                         padding: "8px 16px 6px",
                         borderBottom: "1px solid var(--color-hex-111111)",
@@ -53,7 +53,7 @@ export default function VulnPatterns() {
                             background: sel.id === p.id ? "var(--color-hex-120608)" : "transparent",
                             borderLeft:
                                 sel.id === p.id
-                                    ? "2px solid var(--color-hex-e31b23)"
+                                    ? "2px solid var(--color-brand)"
                                     : "2px solid transparent",
                         }}
                         onMouseEnter={(e) => {
@@ -68,24 +68,24 @@ export default function VulnPatterns() {
                         }}
                     >
                         <div className="mb-1 flex justify-between">
-                            <span className="text-[10px] font-bold tracking-[0.08em] text-[var(--color-hex-e31b23)]">
+                            <span className="text-lg font-bold tracking-tight text-[var(--color-brand)]">
                                 {p.id}
                             </span>
-                            <span className="text-[8px] text-[var(--color-hex-3fb950)]">
+                            <span className="text-sm text-[var(--color-success)]">
                                 ↑{p.score.toFixed(2)}
                             </span>
                         </div>
-                        <div className="mb-[2px] text-[10px] text-[var(--color-hex-a0a0a0)]">
+                        <div className="mb-[2px] text-lg text-[var(--color-hex-a0a0a0)]">
                             {p.vuln}
                         </div>
-                        <div className="text-[8.5px] text-[var(--color-hex-444444)]">
+                        <div className="text-base-tight text-[var(--color-hex-444444)]">
                             {p.subtype}
                         </div>
                         <div className="mt-2 flex gap-3">
-                            <span className="text-[7.5px] tracking-[0.1em] text-[var(--color-hex-333333)]">
+                            <span className="text-sm-tight tracking-normal text-[var(--color-hex-333333)]">
                                 ×{p.uses} USES
                             </span>
-                            <span className="text-[7.5px] text-[var(--color-hex-333333)]">
+                            <span className="text-sm-tight text-[var(--color-hex-333333)]">
                                 {p.lastSeen}
                             </span>
                         </div>
@@ -94,13 +94,13 @@ export default function VulnPatterns() {
             </div>
             <div className="flex-1 overflow-y-auto px-6 py-5">
                 <div className="mb-5 flex items-baseline gap-3">
-                    <h2 className="text-[15px] font-bold tracking-[0.1em] text-[var(--color-hex-f2f2f2)]">
+                    <h2 className="text-5xl font-bold tracking-normal text-[var(--color-fg)]">
                         {sel.id}
                     </h2>
-                    <span className="text-[9px] tracking-[0.1em] text-[var(--color-hex-e31b23)]">
+                    <span className="text-base tracking-normal text-[var(--color-brand)]">
                         {sel.vuln}
                     </span>
-                    <span className="text-[9px] text-[var(--color-hex-444444)]">{sel.subtype}</span>
+                    <span className="text-base text-[var(--color-hex-444444)]">{sel.subtype}</span>
                 </div>
                 <div className="mb-5 grid grid-cols-3 gap-0 overflow-hidden rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)]">
                     {[
@@ -126,15 +126,13 @@ export default function VulnPatterns() {
                                     i < a.length - 1 ? "1px solid var(--color-hex-1a1a1a)" : "none",
                             }}
                         >
-                            <div className="mb-[4px] text-[7.5px] tracking-[0.18em] text-[var(--color-hex-444444)]">
+                            <div className="text-sm-tight tracking-wider-3 mb-[4px] text-[var(--color-hex-444444)]">
                                 {m.k}
                             </div>
                             <div
-                                className="text-[17px] font-bold"
+                                className="text-7xl font-bold"
                                 style={{
-                                    color: m.red
-                                        ? "var(--color-hex-e31b23)"
-                                        : "var(--color-hex-f2f2f2)",
+                                    color: m.red ? "var(--color-brand)" : "var(--color-fg)",
                                 }}
                             >
                                 {m.v}
@@ -154,11 +152,11 @@ export default function VulnPatterns() {
                                     justifyContent: "center",
                                 }}
                             >
-                                <span className="text-[7.5px] text-[var(--color-hex-444444)]">
+                                <span className="text-sm-tight text-[var(--color-hex-444444)]">
                                     {i + 1}
                                 </span>
                             </div>
-                            <span className="text-[10px] text-[var(--color-hex-888888)]">{t}</span>
+                            <span className="text-lg text-[var(--color-hex-888888)]">{t}</span>
                         </div>
                     ))}
                 </Sub>
@@ -166,14 +164,12 @@ export default function VulnPatterns() {
                     {sel.indicators.map((ind: string) => (
                         <div key={ind} className="mb-2 flex items-center gap-2">
                             <div
-                                className="h-[5px] w-[5px] shrink-0 bg-[var(--color-hex-e31b23)]"
+                                className="h-[5px] w-[5px] shrink-0 bg-[var(--color-brand)]"
                                 style={{
                                     borderRadius: "50%",
                                 }}
                             />
-                            <span className="text-[10px] text-[var(--color-hex-666666)]">
-                                {ind}
-                            </span>
+                            <span className="text-lg text-[var(--color-hex-666666)]">{ind}</span>
                         </div>
                     ))}
                 </Sub>
@@ -187,12 +183,12 @@ export default function VulnPatterns() {
                             <div key={ev.ts} className="flex items-start gap-3">
                                 <div className="flex shrink-0 flex-col items-center">
                                     <div
-                                        className="mt-[2px] h-[7px] w-[7px] border-[1px] border-solid border-[var(--color-hex-e31b23)]"
+                                        className="mt-[2px] h-[7px] w-[7px] border-[1px] border-solid border-[var(--color-brand)]"
                                         style={{
                                             borderRadius: "50%",
                                             background:
                                                 i === a.length - 1
-                                                    ? "var(--color-hex-e31b23)"
+                                                    ? "var(--color-brand)"
                                                     : "transparent",
                                         }}
                                     />
@@ -201,10 +197,10 @@ export default function VulnPatterns() {
                                     )}
                                 </div>
                                 <div>
-                                    <span className="mr-[8px] text-[8px] text-[var(--color-hex-333333)]">
+                                    <span className="mr-[8px] text-sm text-[var(--color-hex-333333)]">
                                         {ev.ts}
                                     </span>
-                                    <span className="text-[9.5px] leading-[1.6] text-[var(--color-hex-666666)]">
+                                    <span className="text-lg-tight leading-normal text-[var(--color-hex-666666)]">
                                         {ev.note}
                                     </span>
                                 </div>

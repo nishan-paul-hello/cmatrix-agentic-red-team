@@ -27,8 +27,8 @@ export default function ContextUtilization() {
     const longTermSkills: (SkillRecord & { tier: string })[] = blackboard.readSkills();
     const longTermFailures: (FailureRecord & { tier: string })[] = blackboard.readFailures();
     const stc: Record<string, string> = {
-        COMPACTED: "var(--color-hex-d29922)",
-        ACTIVE: "var(--color-hex-3fb950)",
+        COMPACTED: "var(--color-warning)",
+        ACTIVE: "var(--color-success)",
         IDLE: "var(--color-hex-444444)",
     };
     return (
@@ -60,13 +60,13 @@ export default function ContextUtilization() {
                                     i < a.length - 1 ? "1px solid var(--color-hex-1a1a1a)" : "none",
                             }}
                         >
-                            <div className="mb-[6px] text-[7.5px] tracking-[0.18em] text-[var(--color-hex-444444)]">
+                            <div className="text-sm-tight tracking-wider-3 mb-[6px] text-[var(--color-hex-444444)]">
                                 {m.k}
                             </div>
-                            <div className="mb-[2px] text-[22px] font-bold text-[var(--color-hex-f2f2f2)]">
+                            <div className="text-10xl mb-[2px] font-bold text-[var(--color-fg)]">
                                 {m.v}
                             </div>
-                            <div className="text-[8px] tracking-[0.1em] text-[var(--color-hex-333333)]">
+                            <div className="text-sm tracking-normal text-[var(--color-hex-333333)]">
                                 {m.sub}
                             </div>
                         </div>
@@ -76,12 +76,12 @@ export default function ContextUtilization() {
                     const pct = Math.round((s.used / s.max) * 100);
                     const barColor = (() => {
                         if (pct > 85) {
-                            return "var(--color-hex-ff2a32)";
+                            return "var(--color-danger)";
                         }
                         if (pct > 60) {
-                            return "var(--color-hex-d29922)";
+                            return "var(--color-warning)";
                         }
-                        return "var(--color-hex-3fb950)";
+                        return "var(--color-success)";
                     })();
                     return (
                         <div
@@ -108,18 +108,18 @@ export default function ContextUtilization() {
                             }
                         >
                             <div className="mb-3 flex items-center gap-3">
-                                <span className="text-[10px] font-bold tracking-[0.08em] text-[var(--color-hex-a0a0a0)]">
+                                <span className="text-lg font-bold tracking-tight text-[var(--color-hex-a0a0a0)]">
                                     {s.role}
                                 </span>
                                 <span
-                                    className="ml-auto text-[8px] font-semibold tracking-[0.14em]"
+                                    className="tracking-wider-1 ml-auto text-sm font-semibold"
                                     style={{
                                         color: stc[s.state],
                                     }}
                                 >
                                     {s.state}
                                 </span>
-                                <span className="text-[8.5px] text-[var(--color-hex-555555)]">
+                                <span className="text-base-tight text-[var(--color-hex-555555)]">
                                     {pct}%
                                 </span>
                             </div>
@@ -134,15 +134,15 @@ export default function ContextUtilization() {
                                 />
                             </div>
                             <div className="mt-2 flex items-center gap-4">
-                                <span className="text-[8px] tracking-[0.1em] text-[var(--color-hex-333333)]">
+                                <span className="text-sm tracking-normal text-[var(--color-hex-333333)]">
                                     {(s.used / 1024).toFixed(0)}K / {s.max / 1024}K tokens
                                 </span>
                                 {s.compacted > 0 && (
-                                    <span className="text-[8px] tracking-[0.1em] text-[var(--color-hex-d29922)]">
+                                    <span className="text-sm tracking-normal text-[var(--color-warning)]">
                                         COMPACTED ×{s.compacted}
                                     </span>
                                 )}
-                                <span className="ml-auto text-[8px] text-[var(--color-hex-333333)]">
+                                <span className="ml-auto text-sm text-[var(--color-hex-333333)]">
                                     THIS SESSION: {(s.tokens / 1000).toFixed(1)}K
                                 </span>
                             </div>
@@ -150,38 +150,38 @@ export default function ContextUtilization() {
                     );
                 })}
 
-                <div className="mt-8 mb-4 border-b border-solid border-[var(--color-hex-1e1e1e)] pb-2 text-[10px] tracking-[0.16em] text-[var(--color-hex-a0a0a0)]">
+                <div className="tracking-wider-2 mt-8 mb-4 border-b border-solid border-[var(--color-hex-1e1e1e)] pb-2 text-lg text-[var(--color-hex-a0a0a0)]">
                     MEMORY TIERS (BLACKBOARD)
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                     <div className="rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)] bg-[var(--color-hex-0d0d0d)] p-4">
-                        <div className="mb-2 text-[8.5px] tracking-[0.14em] text-[var(--color-hex-444444)]">
+                        <div className="text-base-tight tracking-wider-1 mb-2 text-[var(--color-hex-444444)]">
                             SHORT_TERM
                         </div>
-                        <div className="text-[14px] font-bold text-[var(--color-hex-f2f2f2)]">
+                        <div className="text-4xl font-bold text-[var(--color-fg)]">
                             {shortTerm.length} Contexts Active
                         </div>
                     </div>
                     <div className="rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)] bg-[var(--color-hex-0d0d0d)] p-4">
-                        <div className="mb-2 text-[8.5px] tracking-[0.14em] text-[var(--color-hex-444444)]">
+                        <div className="text-base-tight tracking-wider-1 mb-2 text-[var(--color-hex-444444)]">
                             LONG_TERM
                         </div>
-                        <div className="text-[14px] font-bold text-[var(--color-hex-f2f2f2)]">
+                        <div className="text-4xl font-bold text-[var(--color-fg)]">
                             {longTermSkills.length} Skills · {longTermFailures.length} Failures
                         </div>
                     </div>
                 </div>
             </div>
             <div
-                className="flex w-[280px] flex-shrink-0 flex-col overflow-y-auto p-[16px]"
+                className="w-panel-sm flex flex-shrink-0 flex-col overflow-y-auto p-[16px]"
                 style={{
                     borderLeft: "1px solid var(--color-hex-1e1e1e)",
                 }}
             >
-                <div className="mb-[4px] text-[11px] font-bold tracking-[0.1em] text-[var(--color-hex-f2f2f2)]">
+                <div className="mb-[4px] text-xl font-bold tracking-normal text-[var(--color-fg)]">
                     {sel.role}
                 </div>
-                <div className="mb-[16px] text-[8.5px] tracking-[0.14em] text-[var(--color-hex-444444)]">
+                <div className="text-base-tight tracking-wider-1 mb-[16px] text-[var(--color-hex-444444)]">
                     {sel.id} · {sel.state}
                 </div>
                 {[
@@ -207,20 +207,18 @@ export default function ContextUtilization() {
                     },
                 ].map((r) => (
                     <div key={r.k} className="mb-[12px]">
-                        <div className="mb-[3px] text-[7.5px] tracking-[0.18em] text-[var(--color-hex-444444)]">
+                        <div className="text-sm-tight tracking-wider-3 mb-[3px] text-[var(--color-hex-444444)]">
                             {r.k}
                         </div>
-                        <div className="text-[13px] font-bold text-[var(--color-hex-f2f2f2)]">
-                            {r.v}
-                        </div>
+                        <div className="text-3xl font-bold text-[var(--color-fg)]">{r.v}</div>
                     </div>
                 ))}
                 {sel.compacted > 0 && (
                     <div className="mt-[8px] rounded-[2px] border-[1px] border-solid border-[var(--color-hex-d2992244)] bg-[var(--color-hex-110e00)] px-[12px] py-[10px]">
-                        <div className="mb-[4px] text-[8px] tracking-[0.16em] text-[var(--color-hex-d29922)]">
+                        <div className="tracking-wider-2 mb-[4px] text-sm text-[var(--color-warning)]">
                             COMPACTION NOTE
                         </div>
-                        <div className="text-[9px] leading-[1.7] text-[var(--color-hex-666666)]">
+                        <div className="text-base leading-relaxed text-[var(--color-hex-666666)]">
                             Context was compacted {sel.compacted}× to preserve working memory.
                             Historical tool outputs summarized. Active state preserved.
                         </div>
