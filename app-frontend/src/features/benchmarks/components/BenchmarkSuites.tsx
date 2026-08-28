@@ -44,13 +44,8 @@ export function BenchmarkSuites() {
         },
     ];
     return (
-        <div
-            className="shrink-0 px-[24px] py-[16px]"
-            style={{
-                borderBottom: "1px solid var(--color-hex-1e1e1e)",
-            }}
-        >
-            <div className="mb-[12px] text-sm tracking-widest text-[var(--color-hex-444444)]">
+        <div className="border-border shrink-0 border-b px-6 py-4">
+            <div className="text-muted-foreground mb-3 text-sm tracking-widest">
                 BENCHMARK SUITES
             </div>
             <div
@@ -62,37 +57,35 @@ export function BenchmarkSuites() {
                 {TIERS.map((t) => {
                     const scoreColor = (() => {
                         if (t.score === null) {
-                            return "var(--color-hex-333333)";
+                            return "var(--border)";
                         }
                         if (t.score >= 0.75) {
-                            return "var(--color-success)";
+                            return "var(--success)";
                         }
                         if (t.score >= 0.5) {
-                            return "var(--color-warning)";
+                            return "var(--warning)";
                         }
-                        return "var(--color-hex-333333)";
+                        return "var(--border)";
                     })();
                     return (
                         <div
                             key={t.n}
-                            className="min-w-[0px] flex-1 rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)] bg-[var(--color-hex-0d0d0d)] px-[12px] py-[10px]"
+                            className="border-border bg-background min-w-0 flex-1 rounded-sm border-[1px] border-solid px-3 py-2.5"
                         >
-                            <div className="text-sm-tight tracking-wider-2 text-[var(--color-hex-444444)]">
+                            <div className="text-muted-foreground text-xs tracking-widest">
                                 TIER {t.n}
                             </div>
                             <div
-                                className="mt-[4px] overflow-hidden text-lg font-bold tracking-normal whitespace-nowrap text-[var(--color-fg)]"
+                                className="text-foreground mt-1 overflow-hidden text-xs font-bold tracking-normal whitespace-nowrap"
                                 style={{
                                     textOverflow: "ellipsis",
                                 }}
                             >
                                 {t.name}
                             </div>
-                            <div className="text-base-tight mt-[2px] text-[var(--color-hex-444444)]">
-                                {t.desc}
-                            </div>
+                            <div className="text-muted-foreground mt-0.5 text-sm">{t.desc}</div>
                             <div
-                                className="mt-[6px] text-xl font-bold"
+                                className="mt-1.5 text-xs font-bold"
                                 style={{
                                     color: scoreColor,
                                 }}

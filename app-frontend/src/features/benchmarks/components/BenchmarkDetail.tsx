@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import { Button } from "@/components/ui/button";
 import {
     TIER_META,
     type BenchRecord,
@@ -25,62 +26,59 @@ export default function BenchmarkDetail({
     const hasAxisNote = !!tierMeta.axisNote;
 
     return (
-        <div className="flex h-full min-h-[0px] flex-col">
-            <div
-                className="flex-shrink-0 px-6 pt-5 pb-0"
-                style={{
-                    borderBottom: "1px solid var(--color-hex-1e1e1e)",
-                }}
-            >
-                <button
+        <div className="flex h-full min-h-0 flex-col">
+            <div className="border-border flex-shrink-0 border-b px-6 pt-5 pb-0">
+                <Button
+                    variant="ghost"
                     onClick={onBack}
-                    className="font-inherit tracking-wider-1 mb-[10px] cursor-pointer border-none bg-[transparent] p-[0px] text-base text-[var(--color-hex-666666)] hover:text-[var(--color-hex-a0a0a0)]"
+                    className="text-muted-foreground hover:text-muted-foreground mb-2.5 h-auto p-0 text-base tracking-widest hover:bg-transparent"
                 >
                     ← BENCHMARKS
-                </button>
+                </Button>
                 <div className="mb-3 flex items-baseline gap-3">
-                    <h1 className="text-8xl font-bold tracking-normal text-[var(--color-fg)]">
+                    <h1 className="text-foreground text-xs font-bold tracking-normal">
                         {bench.id}
                     </h1>
                     {/* Tier badge replaces old type badge */}
                     <span
-                        className="text-base-tight font-semibold tracking-wide"
+                        className="text-sm font-semibold tracking-wide"
                         style={{ color: tierMeta.color }}
                     >
                         {tierMeta.label}
                     </span>
-                    <span className="text-lg tracking-tight text-[var(--color-hex-555555)]">
+                    <span className="text-muted-foreground text-xs tracking-tight">
                         {bench.avgCost} · {bench.avgTime}
                     </span>
                 </div>
-                <div className="mb-[8px] text-xl tracking-tighter text-[var(--color-hex-555555)]">
+                <div className="text-muted-foreground mb-2 text-xs tracking-tighter">
                     {bench.name}
                 </div>
                 {/* Separate-axis notice */}
                 {hasAxisNote && (
-                    <div className="mb-[10px] rounded-[2px] border-[1px] border-solid border-[var(--color-hex-3fb95022)] bg-[var(--color-hex-0a1a10)] px-[10px] py-[6px]">
-                        <span className="text-sm tracking-wide text-[var(--color-success)]">
+                    <div className="border-border bg-muted mb-2.5 rounded-sm border-[1px] border-solid px-2.5 py-1.5">
+                        <span className="text-success text-sm tracking-wide">
                             ◈ {tierMeta.axisNote}
                         </span>
                     </div>
                 )}
                 <div className="flex">
                     {(["OVERVIEW", "TASKS", "CATEGORIES"] as const).map((t) => (
-                        <button
+                        <Button
                             key={t}
+                            variant="ghost"
                             onClick={() => setTab(t)}
-                            className="font-inherit tracking-wider-1 cursor-pointer border-none bg-[transparent] px-[14px] py-[5px] text-base"
+                            className="h-auto rounded-none px-3.5 py-1 text-base tracking-widest hover:bg-transparent"
                             style={{
                                 borderBottom:
                                     t === tab
-                                        ? "2px solid var(--color-brand)"
+                                        ? "2px solid var(--primary)"
                                         : "2px solid transparent",
-                                color: t === tab ? "var(--color-fg)" : "var(--color-hex-444444)",
+                                color: t === tab ? "var(--foreground)" : "var(--muted-foreground)",
                                 marginBottom: -1,
                             }}
                         >
                             {t}
-                        </button>
+                        </Button>
                     ))}
                 </div>
             </div>

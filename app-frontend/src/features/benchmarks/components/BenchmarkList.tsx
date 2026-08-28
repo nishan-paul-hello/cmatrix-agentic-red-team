@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 
+import { Button } from "@/components/ui/button";
 import { BenchmarksRepository } from "@/features/benchmarks/data/BenchmarksRepository";
 import {
     ALL_BENCH_RUNS,
@@ -45,72 +46,61 @@ export default function BenchmarkList({ onSelect }: { onSelect: (b: BenchRecord)
     } // Wait for load
 
     return (
-        <div className="flex h-full min-h-[0px] flex-col">
-            <div
-                className="flex-shrink-0 px-6 pt-5 pb-4"
-                style={{
-                    borderBottom: "1px solid var(--color-hex-1e1e1e)",
-                }}
-            >
-                <div className="tracking-widest-2 mb-[3px] text-base text-[var(--color-hex-666666)]">
+        <div className="flex h-full min-h-0 flex-col">
+            <div className="border-border flex-shrink-0 border-b px-6 pt-5 pb-4">
+                <div className="text-muted-foreground mb-0.5 text-base tracking-widest">
                     RESEARCH
                 </div>
                 <div className="flex items-baseline justify-between">
-                    <h1 className="text-9xl font-bold tracking-wide text-[var(--color-fg)]">
-                        BENCHMARKS
-                    </h1>
+                    <h1 className="text-foreground text-xs font-bold tracking-wide">BENCHMARKS</h1>
                     {/* Tier filter chips */}
-                    <div className="flex flex-wrap gap-[5px]">
-                        <button
+                    <div className="flex flex-wrap gap-1">
+                        <Button
                             key="ALL"
+                            variant="outline"
                             onClick={() => setTierFilter("ALL")}
                             aria-pressed={tierFilter === "ALL"}
                             aria-label="Show all tiers"
-                            className="font-inherit cursor-pointer rounded-[2px] px-[10px] py-[3px] text-sm tracking-wide"
+                            className="h-auto rounded-sm px-2.5 py-0.5 text-sm tracking-wide"
                             style={{
-                                background:
-                                    tierFilter === "ALL" ? "var(--color-brand)" : "transparent",
-                                border: `1px solid ${tierFilter === "ALL" ? "var(--color-brand)" : "var(--color-hex-1e1e1e)"}`,
+                                background: tierFilter === "ALL" ? "var(--primary)" : "transparent",
+                                border: `1px solid ${tierFilter === "ALL" ? "var(--primary)" : "var(--border)"}`,
                                 color:
                                     tierFilter === "ALL"
-                                        ? "var(--color-fg)"
-                                        : "var(--color-hex-444444)",
+                                        ? "var(--foreground)"
+                                        : "var(--muted-foreground)",
                             }}
                         >
                             ALL
-                        </button>
+                        </Button>
                         {ALL_TIERS.map((t) => {
                             const meta = TIER_META[t];
                             const isActive = tierFilter === t;
                             return (
-                                <button
+                                <Button
                                     key={t}
+                                    variant="outline"
                                     onClick={() => setTierFilter(t)}
                                     aria-pressed={isActive}
                                     aria-label={`Filter by ${meta.label}`}
-                                    className="font-inherit text-sm-tight cursor-pointer rounded-[2px] px-[8px] py-[3px] tracking-normal"
+                                    className="h-auto rounded-sm px-2 py-0.5 text-xs tracking-normal"
                                     style={{
                                         background: isActive ? meta.color : "transparent",
-                                        border: `1px solid ${isActive ? meta.color : "var(--color-hex-1e1e1e)"}`,
+                                        border: `1px solid ${isActive ? meta.color : "var(--border)"}`,
                                         color: isActive
-                                            ? "var(--color-fg)"
-                                            : "var(--color-hex-444444)",
+                                            ? "var(--foreground)"
+                                            : "var(--muted-foreground)",
                                     }}
                                 >
                                     {meta.label.split(" — ")[0]}
-                                </button>
+                                </Button>
                             );
                         })}
                     </div>
                 </div>
             </div>
             {/* KPI strip */}
-            <div
-                className="grid flex-shrink-0 grid-cols-4"
-                style={{
-                    borderBottom: "1px solid var(--color-hex-1e1e1e)",
-                }}
-            >
+            <div className="border-border grid flex-shrink-0 grid-cols-1 border-b sm:grid-cols-2 lg:grid-cols-4">
                 {(
                     [
                         {
@@ -144,31 +134,20 @@ export default function BenchmarkList({ onSelect }: { onSelect: (b: BenchRecord)
                         sub?: string;
                         red?: boolean;
                     }[]
-                ).map((m, i, a) => (
-                    <div
-                        key={m.k}
-                        className="bg-[var(--color-hex-0d0d0d)] px-[20px] py-[12px]"
-                        style={{
-                            borderRight:
-                                i < a.length - 1 ? "1px solid var(--color-hex-1e1e1e)" : "none",
-                        }}
-                    >
-                        <div className="text-sm-tight tracking-wider-3 mb-[5px] text-[var(--color-hex-444444)]">
+                ).map((m) => (
+                    <div key={m.k} className="bg-background border-border border-r px-5 py-3">
+                        <div className="text-muted-foreground mb-1 text-xs tracking-widest">
                             {m.k}
                         </div>
                         <div
-                            className="mb-[2px] text-9xl font-bold"
+                            className="mb-0.5 text-xs font-bold"
                             style={{
-                                color: m.red ? "var(--color-brand)" : "var(--color-fg)",
+                                color: m.red ? "var(--primary)" : "var(--foreground)",
                             }}
                         >
                             {m.v}
                         </div>
-                        {m.sub && (
-                            <div className="text-sm-tight text-[var(--color-hex-333333)]">
-                                {m.sub}
-                            </div>
-                        )}
+                        {m.sub && <div className="text-muted-foreground text-xs">{m.sub}</div>}
                     </div>
                 ))}
             </div>

@@ -12,18 +12,15 @@ export function BenchmarkTable({
     onSelect: (b: BenchRecord) => void;
 }) {
     return (
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-auto">
             <table className="w-full border-collapse">
                 <thead>
-                    <tr className="sticky top-0 bg-[var(--color-hex-0f0f0f)]">
+                    <tr className="bg-card sticky top-0">
                         {["ID", "NAME", "TIER", "AVG COST", "AVG TIME", "DATE", "STATUS"].map(
                             (h) => (
                                 <th
                                     key={h}
-                                    className="text-sm-tight tracking-wider-2 px-[14px] py-[5px] text-left font-semibold whitespace-nowrap text-[var(--color-hex-444444)]"
-                                    style={{
-                                        borderBottom: "1px solid var(--color-hex-1a1a1a)",
-                                    }}
+                                    className="text-muted-foreground border-border border-b px-3.5 py-1 text-left text-xs font-semibold tracking-widest whitespace-nowrap"
                                 >
                                     {h}
                                 </th>
@@ -38,25 +35,21 @@ export function BenchmarkTable({
                             <tr
                                 key={b.id}
                                 onClick={() => onSelect(b)}
-                                className="cursor-pointer"
-                                style={{
-                                    borderBottom: "1px solid var(--color-hex-111111)",
-                                    opacity: b.status === BENCHMARK_STATUS.QUEUED ? 0.5 : 1,
-                                }}
+                                className="border-border cursor-pointer border-b"
                                 onMouseEnter={(e) =>
-                                    (e.currentTarget.style.background = "var(--color-hex-0d0d0d)")
+                                    (e.currentTarget.style.background = "var(--background)")
                                 }
                                 onMouseLeave={(e) =>
                                     (e.currentTarget.style.background = "transparent")
                                 }
                             >
-                                <td className="px-[14px] py-[9px] text-base font-bold text-[var(--color-brand)]">
+                                <td className="text-primary px-3.5 py-2 text-base font-bold">
                                     {b.id}
                                 </td>
-                                <td className="px-[14px] py-[9px] text-lg text-[var(--color-hex-a0a0a0)]">
+                                <td className="text-muted-foreground px-3.5 py-2 text-xs">
                                     {b.name}
                                 </td>
-                                <td className="px-[14px] py-[9px]">
+                                <td className="px-3.5 py-2">
                                     <span
                                         className="text-sm font-semibold tracking-normal"
                                         style={{ color: tierMeta.color }}
@@ -64,27 +57,27 @@ export function BenchmarkTable({
                                         {tierMeta.label}
                                     </span>
                                 </td>
-                                <td className="px-[14px] py-[9px] text-base text-[var(--color-hex-444444)]">
+                                <td className="text-muted-foreground px-3.5 py-2 text-base">
                                     {b.avgCost}
                                 </td>
-                                <td className="px-[14px] py-[9px] text-base text-[var(--color-hex-444444)]">
+                                <td className="text-muted-foreground px-3.5 py-2 text-base">
                                     {b.avgTime}
                                 </td>
-                                <td className="px-[14px] py-[9px] text-base text-[var(--color-hex-444444)]">
+                                <td className="text-muted-foreground px-3.5 py-2 text-base">
                                     {b.date}
                                 </td>
-                                <td className="px-[14px] py-[9px]">
+                                <td className="px-3.5 py-2">
                                     <span
-                                        className="text-base-tight font-semibold tracking-wide"
+                                        className="text-sm font-semibold tracking-wide"
                                         style={{
                                             color: (() => {
                                                 if (b.status === BENCHMARK_STATUS.COMPLETE) {
-                                                    return "var(--color-success)";
+                                                    return "var(--success)";
                                                 }
                                                 if (b.status === BENCHMARK_STATUS.RUNNING) {
-                                                    return "var(--color-danger)";
+                                                    return "var(--destructive)";
                                                 }
-                                                return "var(--color-hex-333333)";
+                                                return "var(--border)";
                                             })(),
                                         }}
                                     >
