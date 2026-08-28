@@ -45,7 +45,8 @@ export const VDG_NODES: VDGNode[] = [
     {
         id: "RECON-001",
         type: "RECONNAISSANCE",
-        status: VDG_NODE_STATUS.COMPLETED,
+        // COMPLETED is not an architecture concept — maps to EXPLOITED (terminal success, §7.1)
+        status: VDG_NODE_STATUS.EXPLOITED,
         x: 0,
         y: 0,
     },
@@ -69,15 +70,42 @@ export const VDG_NODES: VDGNode[] = [
     {
         id: "DB-ACCESS-002",
         type: "DATABASE ACCESS",
-        status: VDG_NODE_STATUS.DEPENDENT,
+        // DEPENDENT is not an architecture concept — prerequisites unmet → INFEASIBLE per §7.3 step 4
+        status: VDG_NODE_STATUS.INFEASIBLE,
         x: 0,
         y: 3,
     },
+    {
+        // BLOCKED status — required for A4 ablation visualization (§13.1). Status propagates when
+        // a prerequisite node is marked INFEASIBLE and the dependent path is cut off.
+        id: "XSS-002",
+        type: "CROSS-SITE SCRIPT",
+        status: VDG_NODE_STATUS.BLOCKED,
+        ucb: 0.512,
+        eord: 2,
+        eordMax: 5,
+        x: 1,
+        y: 2,
+    },
+    {
+        // DEPRIORITIZED status — required for architecture §7.1 completeness.
+        // UCB score dropped below threshold after path-score re-evaluation.
+        id: "SSTI-003",
+        type: "SERVER-SIDE TMPL",
+        status: VDG_NODE_STATUS.DEPRIORITIZED,
+        ucb: 0.21,
+        eord: 1,
+        eordMax: 5,
+        x: 1,
+        y: 3,
+    },
 ];
+/** Layer-3 Specialists roster for mission CVE-001 (WEB surface) */
 export const SPECIALISTS: Specialist[] = [
     {
         id: "S-01",
         role: "RECON SPECIALIST",
+        layer: 3,
         status: SPEC_STATUS.COMPLETED,
         task: "recon_target()",
         context: "COMPACTED",
@@ -89,6 +117,7 @@ export const SPECIALISTS: Specialist[] = [
     {
         id: "S-02",
         role: "AUTH SPECIALIST",
+        layer: 3,
         status: SPEC_STATUS.COMPLETED,
         task: "exploit_auth()",
         context: "COMPACTED",
@@ -98,8 +127,10 @@ export const SPECIALISTS: Specialist[] = [
         skills: 4,
     },
     {
-        id: "S-03",
-        role: "INJECTION SPECIALIST",
+        // SQLi Specialist — §9.2: baseline→SLEEP probe→bit-extraction FSM
+        id: "S-03a",
+        role: "SQLI SPECIALIST",
+        layer: 3,
         status: SPEC_STATUS.RUNNING,
         task: "sqli_blind_time()",
         context: "FRESH",
@@ -109,24 +140,156 @@ export const SPECIALISTS: Specialist[] = [
         skills: 2,
     },
     {
-        id: "S-04",
-        role: "VALIDATION AGENT",
-        status: SPEC_STATUS.VALIDATING,
-        task: "oracle_test(AUTH-001)",
+        // XSS Specialist — §9.3: 5-phase canary→context→mutation→verify→webhook pipeline
+        id: "S-03b",
+        role: "XSS SPECIALIST",
+        layer: 3,
+        status: SPEC_STATUS.WAITING,
+        task: "xss_phase3_mutation()",
         context: "FRESH",
-        evidence: 4,
-        node: "SQLI-001",
+        evidence: 3,
+        node: "XSS-002",
         failures: 0,
-        skills: 1,
+        skills: 2,
+        phase: 3,
+        phaseTotal: 5,
     },
     {
         id: "S-05",
         role: "LOGIC SPECIALIST",
+        layer: 3,
         status: SPEC_STATUS.IDLE,
         task: "—",
         context: "—",
         evidence: 0,
         node: "—",
+        failures: 0,
+        skills: 1,
+    },
+    {
+        // VALIDATION AGENT — Layer 4 per §8.4. Structurally separate from Layer-3 specialists.
+        // Runs Diagnosis-Adapt-Cap retry loop (≤3 retries) on oracle confirmation.
+        id: "S-04",
+        role: "VALIDATION AGENT",
+        layer: 4,
+        status: SPEC_STATUS.VALIDATING,
+        task: "oracle_test(AUTH-001)",
+        context: "FRESH",
+        evidence: 4,
+        node: "AUTH-001",
+        failures: 0,
+        skills: 1,
+    },
+];
+
+/**
+ * Second mock mission (GRAPHQL surface) specialist fixture.
+ * Ensures all 6 named Layer-3 specialists (§8, §9) exist somewhere in the mockup:
+ * Recon, SQLi, XSS, GraphQL, Auth/Session, Lateral-Movement.
+ */
+export const GRAPHQL_MISSION_SPECIALISTS: Specialist[] = [
+    {
+        id: "GM-01",
+        role: "RECON SPECIALIST",
+        layer: 3,
+        status: SPEC_STATUS.COMPLETED,
+        task: "graphql_introspect()",
+        context: "COMPACTED",
+        evidence: 28,
+        node: "SCHEMA-001",
+        failures: 0,
+        skills: 3,
+    },
+    {
+        // GraphQL Specialist — §9.4: schema-coverage + batching attack pipeline
+        id: "GM-02",
+        role: "GRAPHQL SPECIALIST",
+        layer: 3,
+        status: SPEC_STATUS.RUNNING,
+        task: "gql_nested_query_abuse()",
+        context: "FRESH",
+        evidence: 11,
+        node: "GQL-IDOR-003",
+        failures: 0,
+        skills: 4,
+    },
+    {
+        id: "GM-03",
+        role: "AUTH SPECIALIST",
+        layer: 3,
+        status: SPEC_STATUS.IDLE,
+        task: "—",
+        context: "—",
+        evidence: 0,
+        node: "—",
+        failures: 0,
+        skills: 2,
+    },
+    {
+        id: "GM-04",
+        role: "VALIDATION AGENT",
+        layer: 4,
+        status: SPEC_STATUS.IDLE,
+        task: "—",
+        context: "—",
+        evidence: 0,
+        node: "—",
+        failures: 0,
+        skills: 1,
+    },
+];
+
+/**
+ * Third mock mission (MULTI-HOST surface) specialist fixture.
+ * Adds Lateral-Movement Specialist to complete the §9 roster.
+ */
+export const MULTIHOST_MISSION_SPECIALISTS: Specialist[] = [
+    {
+        id: "MH-01",
+        role: "RECON SPECIALIST",
+        layer: 3,
+        status: SPEC_STATUS.COMPLETED,
+        task: "nmap_topology_scan()",
+        context: "COMPACTED",
+        evidence: 42,
+        node: "HOST-001",
+        failures: 0,
+        skills: 3,
+    },
+    {
+        // Lateral-Movement Specialist — §9.6
+        id: "MH-02",
+        role: "LATERAL-MOVEMENT SPECIALIST",
+        layer: 3,
+        status: SPEC_STATUS.RUNNING,
+        task: "pivot_credential_reuse()",
+        context: "FRESH",
+        evidence: 14,
+        node: "HOST-003",
+        failures: 1,
+        skills: 3,
+    },
+    {
+        id: "MH-03",
+        role: "AUTH SPECIALIST",
+        layer: 3,
+        status: SPEC_STATUS.COMPLETED,
+        task: "privesc_sudo_abuse()",
+        context: "COMPACTED",
+        evidence: 18,
+        node: "HOST-002",
+        failures: 0,
+        skills: 2,
+    },
+    {
+        id: "MH-04",
+        role: "VALIDATION AGENT",
+        layer: 4,
+        status: SPEC_STATUS.VALIDATING,
+        task: "oracle_test(HOST-003)",
+        context: "FRESH",
+        evidence: 6,
+        node: "HOST-003",
         failures: 0,
         skills: 1,
     },
@@ -138,7 +301,7 @@ export const INITIAL_LOG: LogEntry[] = [
         agent: "TEAM-MGR",
         action: "UCB_SELECT",
         desc: "SQLI-001 selected — UCB 0.824, path 0.612, E_ord 3/5",
-        color: "var(--color-hex-e31b23)",
+        color: "var(--color-brand)",
     },
     {
         id: 11,
@@ -154,7 +317,7 @@ export const INITIAL_LOG: LogEntry[] = [
         agent: "VALID-AGENT",
         action: "ORACLE_PASS",
         desc: "AUTH-001 oracle confirmed — CVE-BENCH PASS",
-        color: "var(--color-hex-3fb950)",
+        color: "var(--color-success)",
     },
     {
         id: 9,
@@ -162,7 +325,7 @@ export const INITIAL_LOG: LogEntry[] = [
         agent: "EVAL-AGENT",
         action: "E_ORD_UPDATE",
         desc: "AUTH-001 evidence raised E_ord 3 → 4 (CONFIRMED)",
-        color: "var(--color-hex-3fb950)",
+        color: "var(--color-success)",
     },
     {
         id: 8,
@@ -186,7 +349,7 @@ export const INITIAL_LOG: LogEntry[] = [
         agent: "AUTH-SPEC",
         action: "CREDENTIAL_FOUND",
         desc: "admin@targetcorp.com extracted from /api/auth",
-        color: "var(--color-hex-3fb950)",
+        color: "var(--color-success)",
     },
     {
         id: 5,
@@ -292,21 +455,21 @@ export const STREAM_EVENTS: Omit<LogEntry, "id">[] = [
         agent: "INJECT-SPEC",
         action: "RESPONSE_PARSE",
         desc: "Response time 4.18s — timing injection confirmed",
-        color: "var(--color-hex-3fb950)",
+        color: "var(--color-success)",
     },
     {
         ts: "06:31:14",
         agent: "TEAM-MGR",
         action: "UCB_UPDATE",
         desc: "SQLI-001 UCB raised to 0.891 post-evidence",
-        color: "var(--color-hex-e31b23)",
+        color: "var(--color-brand)",
     },
     {
         ts: "06:31:19",
         agent: "EVAL-AGENT",
         action: "E_ORD_UPDATE",
         desc: "SQLI-001 evidence raised E_ord 3 → 4 (CONFIRMED)",
-        color: "var(--color-hex-3fb950)",
+        color: "var(--color-success)",
     },
 ];
 
