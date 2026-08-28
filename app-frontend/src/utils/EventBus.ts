@@ -47,6 +47,6 @@ export class EventBus {
 export const globalEventBus = new EventBus();
 
 // Expose to window for manual testing/debugging
-if (typeof window !== "undefined") {
+if (typeof window !== "undefined" && process.env.NODE_ENV !== "production") {
     (window as unknown as { __EVENT_BUS__: EventBus }).__EVENT_BUS__ = globalEventBus;
 }

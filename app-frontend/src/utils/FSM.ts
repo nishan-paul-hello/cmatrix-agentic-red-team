@@ -102,16 +102,20 @@ export function canTransitionFinding(from: FindingStatus, to: FindingStatus): bo
 }
 
 const VDG_NODE_TRANSITIONS: Record<VdgNodeStatus, Set<VdgNodeStatus>> = {
-    [VDG_NODE_STATUS.DEPENDENT]: new Set([VDG_NODE_STATUS.ELIGIBLE, VDG_NODE_STATUS.INFEASIBLE]),
-    [VDG_NODE_STATUS.ELIGIBLE]: new Set([VDG_NODE_STATUS.IN_PROGRESS]),
+    [VDG_NODE_STATUS.ELIGIBLE]: new Set([
+        VDG_NODE_STATUS.IN_PROGRESS,
+        VDG_NODE_STATUS.DEPRIORITIZED,
+    ]),
     [VDG_NODE_STATUS.IN_PROGRESS]: new Set([
-        VDG_NODE_STATUS.COMPLETED,
         VDG_NODE_STATUS.EXPLOITED,
         VDG_NODE_STATUS.INFEASIBLE,
+        VDG_NODE_STATUS.BLOCKED,
+        VDG_NODE_STATUS.DEPRIORITIZED,
     ]),
-    [VDG_NODE_STATUS.COMPLETED]: new Set([]),
     [VDG_NODE_STATUS.EXPLOITED]: new Set([]),
     [VDG_NODE_STATUS.INFEASIBLE]: new Set([]),
+    [VDG_NODE_STATUS.BLOCKED]: new Set([VDG_NODE_STATUS.ELIGIBLE]), // unblocked → re-eligible
+    [VDG_NODE_STATUS.DEPRIORITIZED]: new Set([VDG_NODE_STATUS.ELIGIBLE]), // re-prioritized → eligible
 };
 
 export function canTransitionVdgNode(from: VdgNodeStatus, to: VdgNodeStatus): boolean {
