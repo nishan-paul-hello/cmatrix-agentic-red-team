@@ -1,15 +1,29 @@
 import { useState } from "react";
 
-import { TYPE_C, type Bench } from "@/features/benchmarks/data/fixtures/benchmarksMockData";
+import {
+    TIER_META,
+    type BenchRecord,
+} from "@/features/benchmarks/data/fixtures/benchmarksMockData";
 import { useBenchmarkDetailData } from "@/features/benchmarks/hooks/useBenchmarkDetailData";
 
 import { BenchmarkCategoriesTab } from "./BenchmarkCategoriesTab";
 import { BenchmarkOverviewTab } from "./BenchmarkOverviewTab";
 import { BenchmarkTasksTab } from "./BenchmarkTasksTab";
 
-export default function BenchmarkDetail({ bench, onBack }: { bench: Bench; onBack: () => void }) {
+export default function BenchmarkDetail({
+    bench,
+    onBack,
+}: {
+    bench: BenchRecord;
+    onBack: () => void;
+}) {
     const [tab, setTab] = useState<"OVERVIEW" | "TASKS" | "CATEGORIES">("OVERVIEW");
     const { tasks, catStats } = useBenchmarkDetailData();
+    const tierMeta = TIER_META[bench.tier];
+
+    // Separate-axis notice — shown for Tier 3 (GraphQL) and Tier 4 (Multi-Host)
+    const hasAxisNote = !!tierMeta.axisNote;
+
     return (
         <div className="flex h-full min-h-[0px] flex-col">
             <div
@@ -20,44 +34,48 @@ export default function BenchmarkDetail({ bench, onBack }: { bench: Bench; onBac
             >
                 <button
                     onClick={onBack}
-                    className="font-inherit mb-[10px] cursor-pointer border-none bg-[transparent] p-[0px] text-[9px] tracking-[0.14em] text-[var(--color-hex-666666)] hover:text-[var(--color-hex-a0a0a0)]"
+                    className="font-inherit tracking-wider-1 mb-[10px] cursor-pointer border-none bg-[transparent] p-[0px] text-base text-[var(--color-hex-666666)] hover:text-[var(--color-hex-a0a0a0)]"
                 >
                     ← BENCHMARKS
                 </button>
                 <div className="mb-3 flex items-baseline gap-3">
-                    <h1 className="text-[18px] font-bold tracking-[0.1em] text-[var(--color-hex-f2f2f2)]">
+                    <h1 className="text-8xl font-bold tracking-normal text-[var(--color-fg)]">
                         {bench.id}
                     </h1>
+                    {/* Tier badge replaces old type badge */}
                     <span
-                        className="text-[9px] font-semibold tracking-[0.12em]"
-                        style={{
-                            color: TYPE_C[bench.type],
-                        }}
+                        className="text-base-tight font-semibold tracking-wide"
+                        style={{ color: tierMeta.color }}
                     >
-                        {bench.type}
+                        {tierMeta.label}
                     </span>
-                    <span className="ml-auto text-[14px] font-bold text-[var(--color-hex-3fb950)]">
-                        {(bench.score * 100).toFixed(1)}%
+                    <span className="text-lg tracking-tight text-[var(--color-hex-555555)]">
+                        {bench.avgCost} · {bench.avgTime}
                     </span>
                 </div>
-                <div className="mb-[12px] text-[11px] tracking-[0.04em] text-[var(--color-hex-555555)]">
+                <div className="mb-[8px] text-xl tracking-tighter text-[var(--color-hex-555555)]">
                     {bench.name}
                 </div>
+                {/* Separate-axis notice */}
+                {hasAxisNote && (
+                    <div className="mb-[10px] rounded-[2px] border-[1px] border-solid border-[var(--color-hex-3fb95022)] bg-[var(--color-hex-0a1a10)] px-[10px] py-[6px]">
+                        <span className="text-sm tracking-wide text-[var(--color-success)]">
+                            ◈ {tierMeta.axisNote}
+                        </span>
+                    </div>
+                )}
                 <div className="flex">
                     {(["OVERVIEW", "TASKS", "CATEGORIES"] as const).map((t) => (
                         <button
                             key={t}
                             onClick={() => setTab(t)}
-                            className="font-inherit cursor-pointer border-none bg-[transparent] px-[14px] py-[5px] text-[9px] tracking-[0.14em]"
+                            className="font-inherit tracking-wider-1 cursor-pointer border-none bg-[transparent] px-[14px] py-[5px] text-base"
                             style={{
                                 borderBottom:
                                     t === tab
-                                        ? "2px solid var(--color-hex-e31b23)"
+                                        ? "2px solid var(--color-brand)"
                                         : "2px solid transparent",
-                                color:
-                                    t === tab
-                                        ? "var(--color-hex-f2f2f2)"
-                                        : "var(--color-hex-444444)",
+                                color: t === tab ? "var(--color-fg)" : "var(--color-hex-444444)",
                                 marginBottom: -1,
                             }}
                         >

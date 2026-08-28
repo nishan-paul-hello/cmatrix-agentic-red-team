@@ -14,20 +14,20 @@ export function BenchmarkCategoriesTab({ catStats }: { catStats: CategoryStat[] 
                             className="rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)] px-[16px] py-[12px]"
                         >
                             <div className="mb-2 flex items-center justify-between">
-                                <span className="text-[10px] font-semibold tracking-[0.08em] text-[var(--color-hex-a0a0a0)]">
+                                <span className="text-lg font-semibold tracking-tight text-[var(--color-hex-a0a0a0)]">
                                     {c.cat}
                                 </span>
                                 <span
-                                    className="text-[10px] font-bold"
+                                    className="text-lg font-bold"
                                     style={{
                                         color: (() => {
                                             if (pct > 80) {
-                                                return "var(--color-hex-3fb950)";
+                                                return "var(--color-success)";
                                             }
                                             if (pct > 50) {
-                                                return "var(--color-hex-d29922)";
+                                                return "var(--color-warning)";
                                             }
-                                            return "var(--color-hex-ff2a32)";
+                                            return "var(--color-danger)";
                                         })(),
                                     }}
                                 >
@@ -41,17 +41,17 @@ export function BenchmarkCategoriesTab({ catStats }: { catStats: CategoryStat[] 
                                         width: `${pct}%`,
                                         background: (() => {
                                             if (pct > 80) {
-                                                return "var(--color-hex-3fb950)";
+                                                return "var(--color-success)";
                                             }
                                             if (pct > 50) {
-                                                return "var(--color-hex-d29922)";
+                                                return "var(--color-warning)";
                                             }
-                                            return "var(--color-hex-ff2a32)";
+                                            return "var(--color-danger)";
                                         })(),
                                     }}
                                 />
                             </div>
-                            <div className="mt-[4px] text-[8px] text-[var(--color-hex-333333)]">
+                            <div className="mt-[4px] text-sm text-[var(--color-hex-333333)]">
                                 {c.solved}/{c.tasks.length} SOLVED
                             </div>
                         </div>

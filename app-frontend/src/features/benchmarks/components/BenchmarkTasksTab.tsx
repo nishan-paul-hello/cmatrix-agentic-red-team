@@ -9,7 +9,7 @@ export function BenchmarkTasksTab({ tasks }: { tasks: Task[] }) {
                         (h) => (
                             <th
                                 key={h}
-                                className="px-[12px] py-[5px] text-left text-[7.5px] font-semibold tracking-[0.16em] text-[var(--color-hex-444444)]"
+                                className="text-sm-tight tracking-wider-2 px-[12px] py-[5px] text-left font-semibold text-[var(--color-hex-444444)]"
                                 style={{
                                     borderBottom: "1px solid var(--color-hex-1a1a1a)",
                                 }}
@@ -29,24 +29,24 @@ export function BenchmarkTasksTab({ tasks }: { tasks: Task[] }) {
                             background: i % 2 ? "var(--color-hex-0b0b0b)" : "transparent",
                         }}
                     >
-                        <td className="px-[12px] py-[8px] text-[9px] font-bold text-[var(--color-hex-e31b23)]">
+                        <td className="px-[12px] py-[8px] text-base font-bold text-[var(--color-brand)]">
                             {t.id}
                         </td>
-                        <td className="px-[12px] py-[8px] text-[9px] text-[var(--color-hex-555555)]">
+                        <td className="px-[12px] py-[8px] text-base text-[var(--color-hex-555555)]">
                             {t.name}
                         </td>
                         <td className="px-[12px] py-[8px]">
                             <span
-                                className="text-[8.5px] font-bold tracking-[0.12em]"
+                                className="text-base-tight font-bold tracking-wide"
                                 style={{
                                     color: (() => {
                                         if (t.solved) {
-                                            return "var(--color-hex-3fb950)";
+                                            return "var(--color-success)";
                                         }
                                         if (t.partial) {
-                                            return "var(--color-hex-d29922)";
+                                            return "var(--color-warning)";
                                         }
-                                        return "var(--color-hex-ff2a32)";
+                                        return "var(--color-danger)";
                                     })(),
                                 }}
                             >
@@ -61,21 +61,21 @@ export function BenchmarkTasksTab({ tasks }: { tasks: Task[] }) {
                                 })()}
                             </span>
                         </td>
-                        <td className="px-[12px] py-[8px] text-[9px] text-[var(--color-hex-444444)]">
+                        <td className="px-[12px] py-[8px] text-base text-[var(--color-hex-444444)]">
                             {t.cost}
                         </td>
-                        <td className="px-[12px] py-[8px] text-[9px] text-[var(--color-hex-444444)]">
+                        <td className="px-[12px] py-[8px] text-base text-[var(--color-hex-444444)]">
                             {t.time}
                         </td>
-                        <td className="px-[12px] py-[8px] text-[9px] text-[var(--color-hex-555555)]">
+                        <td className="px-[12px] py-[8px] text-base text-[var(--color-hex-555555)]">
                             {t.eord}/5
                         </td>
                         <td
-                            className="px-[12px] py-[8px] text-[9px]"
+                            className="px-[12px] py-[8px] text-base"
                             style={{
                                 color:
                                     t.attempts > 2
-                                        ? "var(--color-hex-d29922)"
+                                        ? "var(--color-warning)"
                                         : "var(--color-hex-444444)",
                             }}
                         >

@@ -1,46 +1,39 @@
-import { TYPE_C, type Bench } from "@/features/benchmarks/data/fixtures/benchmarksMockData";
+import {
+    TIER_META,
+    type BenchRecord,
+} from "@/features/benchmarks/data/fixtures/benchmarksMockData";
 import { BENCHMARK_STATUS } from "@/types/domain-types";
 
 export function BenchmarkTable({
     filtered,
     onSelect,
 }: {
-    filtered: Bench[];
-    onSelect: (b: Bench) => void;
+    filtered: BenchRecord[];
+    onSelect: (b: BenchRecord) => void;
 }) {
     return (
         <div className="flex-1 overflow-y-auto">
             <table className="w-full border-collapse">
                 <thead>
                     <tr className="sticky top-0 bg-[var(--color-hex-0f0f0f)]">
-                        {[
-                            "ID",
-                            "NAME",
-                            "TYPE",
-                            "TASKS",
-                            "SOLVED",
-                            "PARTIAL",
-                            "SCORE",
-                            "AVG COST",
-                            "AVG TIME",
-                            "DATE",
-                            "STATUS",
-                        ].map((h) => (
-                            <th
-                                key={h}
-                                className="px-[14px] py-[5px] text-left text-[7.5px] font-semibold tracking-[0.16em] whitespace-nowrap text-[var(--color-hex-444444)]"
-                                style={{
-                                    borderBottom: "1px solid var(--color-hex-1a1a1a)",
-                                }}
-                            >
-                                {h}
-                            </th>
-                        ))}
+                        {["ID", "NAME", "TIER", "AVG COST", "AVG TIME", "DATE", "STATUS"].map(
+                            (h) => (
+                                <th
+                                    key={h}
+                                    className="text-sm-tight tracking-wider-2 px-[14px] py-[5px] text-left font-semibold whitespace-nowrap text-[var(--color-hex-444444)]"
+                                    style={{
+                                        borderBottom: "1px solid var(--color-hex-1a1a1a)",
+                                    }}
+                                >
+                                    {h}
+                                </th>
+                            ),
+                        )}
                     </tr>
                 </thead>
                 <tbody>
                     {filtered.map((b) => {
-                        const pct = b.tasks > 0 ? Math.round((b.solved / b.tasks) * 100) : 0;
+                        const tierMeta = TIER_META[b.tier];
                         return (
                             <tr
                                 key={b.id}
@@ -57,93 +50,39 @@ export function BenchmarkTable({
                                     (e.currentTarget.style.background = "transparent")
                                 }
                             >
-                                <td className="px-[14px] py-[9px] text-[9px] font-bold text-[var(--color-hex-e31b23)]">
+                                <td className="px-[14px] py-[9px] text-base font-bold text-[var(--color-brand)]">
                                     {b.id}
                                 </td>
-                                <td className="px-[14px] py-[9px] text-[10px] text-[var(--color-hex-a0a0a0)]">
+                                <td className="px-[14px] py-[9px] text-lg text-[var(--color-hex-a0a0a0)]">
                                     {b.name}
                                 </td>
                                 <td className="px-[14px] py-[9px]">
                                     <span
-                                        className="text-[8.5px] font-semibold tracking-[0.1em]"
-                                        style={{
-                                            color: TYPE_C[b.type],
-                                        }}
+                                        className="text-sm font-semibold tracking-normal"
+                                        style={{ color: tierMeta.color }}
                                     >
-                                        {b.type}
+                                        {tierMeta.label}
                                     </span>
                                 </td>
-                                <td className="px-[14px] py-[9px] text-[9px] text-[var(--color-hex-555555)]">
-                                    {b.tasks}
-                                </td>
-                                <td className="px-[14px] py-[9px] text-[9px] font-bold text-[var(--color-hex-3fb950)]">
-                                    {b.solved}
-                                </td>
-                                <td className="px-[14px] py-[9px] text-[9px] text-[var(--color-hex-d29922)]">
-                                    {b.partial}
-                                </td>
-                                <td className="px-[14px] py-[9px]">
-                                    {b.score > 0 ? (
-                                        <div className="flex items-center gap-2">
-                                            <span
-                                                className="text-[10px] font-bold"
-                                                style={{
-                                                    color: (() => {
-                                                        if (b.score > 0.8) {
-                                                            return "var(--color-hex-3fb950)";
-                                                        }
-                                                        if (b.score > 0.6) {
-                                                            return "var(--color-hex-d29922)";
-                                                        }
-                                                        return "var(--color-hex-e31b23)";
-                                                    })(),
-                                                }}
-                                            >
-                                                {(b.score * 100).toFixed(1)}%
-                                            </span>
-                                            <div className="h-[3px] w-[36px] overflow-hidden rounded-[2px] bg-[var(--color-hex-1a1a1a)]">
-                                                <div
-                                                    className="h-full"
-                                                    style={{
-                                                        width: `${pct}%`,
-                                                        background: (() => {
-                                                            if (b.score > 0.8) {
-                                                                return "var(--color-hex-3fb950)";
-                                                            }
-                                                            if (b.score > 0.6) {
-                                                                return "var(--color-hex-d29922)";
-                                                            }
-                                                            return "var(--color-hex-e31b23)";
-                                                        })(),
-                                                    }}
-                                                />
-                                            </div>
-                                        </div>
-                                    ) : (
-                                        <span className="text-[9px] text-[var(--color-hex-333333)]">
-                                            —
-                                        </span>
-                                    )}
-                                </td>
-                                <td className="px-[14px] py-[9px] text-[9px] text-[var(--color-hex-444444)]">
+                                <td className="px-[14px] py-[9px] text-base text-[var(--color-hex-444444)]">
                                     {b.avgCost}
                                 </td>
-                                <td className="px-[14px] py-[9px] text-[9px] text-[var(--color-hex-444444)]">
+                                <td className="px-[14px] py-[9px] text-base text-[var(--color-hex-444444)]">
                                     {b.avgTime}
                                 </td>
-                                <td className="px-[14px] py-[9px] text-[9px] text-[var(--color-hex-444444)]">
+                                <td className="px-[14px] py-[9px] text-base text-[var(--color-hex-444444)]">
                                     {b.date}
                                 </td>
                                 <td className="px-[14px] py-[9px]">
                                     <span
-                                        className="text-[8.5px] font-semibold tracking-[0.12em]"
+                                        className="text-base-tight font-semibold tracking-wide"
                                         style={{
                                             color: (() => {
                                                 if (b.status === BENCHMARK_STATUS.COMPLETE) {
-                                                    return "var(--color-hex-3fb950)";
+                                                    return "var(--color-success)";
                                                 }
                                                 if (b.status === BENCHMARK_STATUS.RUNNING) {
-                                                    return "var(--color-hex-ff2a32)";
+                                                    return "var(--color-danger)";
                                                 }
                                                 return "var(--color-hex-333333)";
                                             })(),

@@ -1,33 +1,43 @@
 import { useEffect, useMemo, useState } from "react";
 
 import { BenchmarksRepository } from "@/features/benchmarks/data/BenchmarksRepository";
-import { TYPE_C, type Bench } from "@/features/benchmarks/data/fixtures/benchmarksMockData";
+import {
+    ALL_BENCH_RUNS,
+    TIER_META,
+    type BenchRecord,
+    type BenchTier,
+} from "@/features/benchmarks/data/fixtures/benchmarksMockData";
 import { BENCHMARK_STATUS } from "@/types/domain-types";
 
-import { BenchmarkSuites } from "./BenchmarkSuites";
 import { BenchmarkTable } from "./BenchmarkTable";
 
-export default function BenchmarkList({ onSelect }: { onSelect: (b: Bench) => void }) {
-    const [filter, setFilter] = useState<string>("ALL");
-    const [benchmarks, setBenchmarks] = useState<Bench[]>([]);
+const ALL_TIERS: BenchTier[] = [
+    "TIER0_SANDBOX",
+    "TIER0B_HPTSA",
+    "TIER1_PENTESTEVAL",
+    "TIER2_CVEBENCH",
+    "TIER2B_CROSSBENCH",
+    "TIER3_PREDIQL",
+    "TIER4_MHBENCH",
+    "TIER5_BOUNTYBENCH",
+    "TIER6_LIVECOMP",
+];
+
+export default function BenchmarkList({ onSelect }: { onSelect: (b: BenchRecord) => void }) {
+    const [tierFilter, setTierFilter] = useState<"ALL" | BenchTier>("ALL");
+    const [benchmarks, setBenchmarks] = useState<BenchRecord[]>([]);
 
     useEffect(() => {
-        void BenchmarksRepository.getAll().then(setBenchmarks);
+        void BenchmarksRepository.getAll().then((data) => setBenchmarks(data));
     }, []);
 
-    const types = ["ALL", "CVE-BENCH", "PREDIQL", "MHBENCH"];
     const filtered = useMemo(
-        () => (filter === "ALL" ? benchmarks : benchmarks.filter((b) => b.type === filter)),
-        [filter, benchmarks],
+        () => (tierFilter === "ALL" ? benchmarks : benchmarks.filter((b) => b.tier === tierFilter)),
+        [tierFilter, benchmarks],
     );
     const completed = useMemo(
         () => benchmarks.filter((b) => b.status === BENCHMARK_STATUS.COMPLETE),
         [benchmarks],
-    );
-    const best = useMemo(
-        () =>
-            completed.reduce((a, b) => (b.score > a.score ? b : a), completed[0] || benchmarks[0]),
-        [completed, benchmarks],
     );
 
     if (!benchmarks.length) {
@@ -42,38 +52,55 @@ export default function BenchmarkList({ onSelect }: { onSelect: (b: Bench) => vo
                     borderBottom: "1px solid var(--color-hex-1e1e1e)",
                 }}
             >
-                <div className="mb-[3px] text-[9px] tracking-[0.22em] text-[var(--color-hex-666666)]">
+                <div className="tracking-widest-2 mb-[3px] text-base text-[var(--color-hex-666666)]">
                     RESEARCH
                 </div>
                 <div className="flex items-baseline justify-between">
-                    <h1 className="text-[20px] font-bold tracking-[0.12em] text-[var(--color-hex-f2f2f2)]">
+                    <h1 className="text-9xl font-bold tracking-wide text-[var(--color-fg)]">
                         BENCHMARKS
                     </h1>
-                    <div className="flex gap-2">
-                        {types.map((t) => (
-                            <button
-                                key={t}
-                                onClick={() => setFilter(t)}
-                                className="font-inherit cursor-pointer rounded-[2px] px-[10px] py-[3px] text-[8px] tracking-[0.12em]"
-                                style={{
-                                    background:
-                                        filter === t
-                                            ? ((TYPE_C as Partial<Record<string, string>>)[
-                                                  t as Bench["type"]
-                                              ] ?? "var(--color-hex-120608)")
-                                            : "transparent",
-                                    border: `1px solid ${filter === t ? ((TYPE_C as Partial<Record<string, string>>)[t as Bench["type"]] ?? "var(--color-hex-e31b23)") : "var(--color-hex-1e1e1e)"}`,
-                                    color:
-                                        filter === t
-                                            ? ((TYPE_C as Partial<Record<string, string>>)[
-                                                  t as Bench["type"]
-                                              ] ?? "var(--color-hex-f2f2f2)")
+                    {/* Tier filter chips */}
+                    <div className="flex flex-wrap gap-[5px]">
+                        <button
+                            key="ALL"
+                            onClick={() => setTierFilter("ALL")}
+                            aria-pressed={tierFilter === "ALL"}
+                            aria-label="Show all tiers"
+                            className="font-inherit cursor-pointer rounded-[2px] px-[10px] py-[3px] text-sm tracking-wide"
+                            style={{
+                                background:
+                                    tierFilter === "ALL" ? "var(--color-brand)" : "transparent",
+                                border: `1px solid ${tierFilter === "ALL" ? "var(--color-brand)" : "var(--color-hex-1e1e1e)"}`,
+                                color:
+                                    tierFilter === "ALL"
+                                        ? "var(--color-fg)"
+                                        : "var(--color-hex-444444)",
+                            }}
+                        >
+                            ALL
+                        </button>
+                        {ALL_TIERS.map((t) => {
+                            const meta = TIER_META[t];
+                            const isActive = tierFilter === t;
+                            return (
+                                <button
+                                    key={t}
+                                    onClick={() => setTierFilter(t)}
+                                    aria-pressed={isActive}
+                                    aria-label={`Filter by ${meta.label}`}
+                                    className="font-inherit text-sm-tight cursor-pointer rounded-[2px] px-[8px] py-[3px] tracking-normal"
+                                    style={{
+                                        background: isActive ? meta.color : "transparent",
+                                        border: `1px solid ${isActive ? meta.color : "var(--color-hex-1e1e1e)"}`,
+                                        color: isActive
+                                            ? "var(--color-fg)"
                                             : "var(--color-hex-444444)",
-                                }}
-                            >
-                                {t}
-                            </button>
-                        ))}
+                                    }}
+                                >
+                                    {meta.label.split(" — ")[0]}
+                                </button>
+                            );
+                        })}
                     </div>
                 </div>
             </div>
@@ -87,22 +114,29 @@ export default function BenchmarkList({ onSelect }: { onSelect: (b: Bench) => vo
                 {(
                     [
                         {
-                            k: "BEST SCORE",
-                            v: `${(best.score * 100).toFixed(1)}%`,
-                            sub: best.id,
+                            k: "BENCHMARK TIERS",
+                            v: "9 / 9",
+                            sub: "All tiers represented",
                             red: true,
                         },
                         {
-                            k: "BENCHMARKS RUN",
+                            k: "RUNS COMPLETED",
                             v: String(completed.length),
                         },
                         {
-                            k: "TOTAL TASKS",
-                            v: String(completed.reduce((s, b) => s + b.tasks, 0)),
+                            k: "TIERS COMPLETE",
+                            v: String(new Set(completed.map((b) => b.tier)).size),
                         },
                         {
-                            k: "AVG SOLVE RATE",
-                            v: `${completed.length > 0 ? Math.round((completed.reduce((s, b) => s + b.solved / b.tasks, 0) / completed.length) * 100) : 0}%`,
+                            k: "PRIMARY METRIC",
+                            v: (() => {
+                                const run = ALL_BENCH_RUNS.find(
+                                    (b) => b.tier === "TIER2_CVEBENCH" && b.status === "COMPLETE",
+                                ) as { detail: { passAt5OneDay: number } } | undefined;
+                                const rate = run ? run.detail.passAt5OneDay : 0;
+                                return `${(rate * 100).toFixed(1)}%`;
+                            })(),
+                            sub: "CVE-Bench pass@5 (1-day)",
                         },
                     ] as {
                         k: string;
@@ -119,29 +153,25 @@ export default function BenchmarkList({ onSelect }: { onSelect: (b: Bench) => vo
                                 i < a.length - 1 ? "1px solid var(--color-hex-1e1e1e)" : "none",
                         }}
                     >
-                        <div className="mb-[5px] text-[7.5px] tracking-[0.18em] text-[var(--color-hex-444444)]">
+                        <div className="text-sm-tight tracking-wider-3 mb-[5px] text-[var(--color-hex-444444)]">
                             {m.k}
                         </div>
                         <div
-                            className="mb-[2px] text-[20px] font-bold"
+                            className="mb-[2px] text-9xl font-bold"
                             style={{
-                                color: m.red
-                                    ? "var(--color-hex-e31b23)"
-                                    : "var(--color-hex-f2f2f2)",
+                                color: m.red ? "var(--color-brand)" : "var(--color-fg)",
                             }}
                         >
                             {m.v}
                         </div>
                         {m.sub && (
-                            <div className="text-[7.5px] text-[var(--color-hex-333333)]">
+                            <div className="text-sm-tight text-[var(--color-hex-333333)]">
                                 {m.sub}
                             </div>
                         )}
                     </div>
                 ))}
             </div>
-            {/* E1: BENCHMARK SUITES — 7 tier tiles */}
-            <BenchmarkSuites />
             {/* Table */}
             <BenchmarkTable filtered={filtered} onSelect={onSelect} />
         </div>
