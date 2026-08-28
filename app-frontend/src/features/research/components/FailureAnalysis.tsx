@@ -37,17 +37,15 @@ export default function FailureAnalysis() {
                                     i < a.length - 1 ? "1px solid var(--color-hex-1a1a1a)" : "none",
                             }}
                         >
-                            <div className="mb-[5px] text-[7.5px] tracking-[0.18em] text-[var(--color-hex-444444)]">
+                            <div className="text-sm-tight tracking-wider-3 mb-[5px] text-[var(--color-hex-444444)]">
                                 {m.k}
                             </div>
-                            <div className="text-[20px] font-bold text-[var(--color-hex-f2f2f2)]">
-                                {m.v}
-                            </div>
+                            <div className="text-9xl font-bold text-[var(--color-fg)]">{m.v}</div>
                         </div>
                     ))}
                 </div>
                 {/* Failure clusters */}
-                <div className="mb-[12px] text-[8px] tracking-[0.2em] text-[var(--color-hex-444444)]">
+                <div className="mb-[12px] text-sm tracking-widest text-[var(--color-hex-444444)]">
                     FAILURE CLUSTERS
                 </div>
                 {FAILURE_CLUSTERS.map((c) => (
@@ -81,18 +79,18 @@ export default function FailureAnalysis() {
                                     background: c.color,
                                 }}
                             />
-                            <span className="flex-1 text-[10px] font-bold tracking-[0.08em] text-[var(--color-hex-a0a0a0)]">
+                            <span className="flex-1 text-lg font-bold tracking-tight text-[var(--color-hex-a0a0a0)]">
                                 {c.label}
                             </span>
                             <span
-                                className="text-[14px] font-bold"
+                                className="text-4xl font-bold"
                                 style={{
                                     color: c.color,
                                 }}
                             >
                                 {c.count}
                             </span>
-                            <span className="min-w-[32px] text-right text-[9px] text-[var(--color-hex-444444)]">
+                            <span className="min-w-[32px] text-right text-base text-[var(--color-hex-444444)]">
                                 {c.pct}%
                             </span>
                         </div>
@@ -119,7 +117,7 @@ export default function FailureAnalysis() {
                                 }}
                             >
                                 <div className="mb-2 flex items-center justify-between">
-                                    <span className="text-[8px] tracking-[0.16em] text-[var(--color-hex-444444)]">
+                                    <span className="tracking-wider-2 text-sm text-[var(--color-hex-444444)]">
                                         {c.id} DETAIL
                                     </span>
                                     <button
@@ -127,7 +125,7 @@ export default function FailureAnalysis() {
                                             e.stopPropagation();
                                             setSel(null);
                                         }}
-                                        className="cursor-pointer border-none bg-[transparent] text-[13px] leading-[1] text-[var(--color-hex-444444)]"
+                                        className="cursor-pointer border-none bg-[transparent] text-3xl leading-none text-[var(--color-hex-444444)]"
                                         style={{
                                             padding: "0 2px",
                                         }}
@@ -135,14 +133,14 @@ export default function FailureAnalysis() {
                                         ✕
                                     </button>
                                 </div>
-                                <div className="mb-[10px] text-[9.5px] leading-[1.8] text-[var(--color-hex-555555)]">
+                                <div className="text-lg-tight mb-[10px] leading-loose text-[var(--color-hex-555555)]">
                                     {c.desc}
                                 </div>
                                 <div className="flex items-start gap-2">
-                                    <span className="shrink-0 text-[8px] font-bold tracking-[0.14em] text-[var(--color-hex-3fb950)]">
+                                    <span className="tracking-wider-1 shrink-0 text-sm font-bold text-[var(--color-success)]">
                                         FIX →
                                     </span>
-                                    <span className="text-[9.5px] leading-[1.7] text-[var(--color-hex-3fb950)]">
+                                    <span className="text-lg-tight leading-relaxed text-[var(--color-success)]">
                                         {c.fix}
                                     </span>
                                 </div>
@@ -151,7 +149,7 @@ export default function FailureAnalysis() {
                     </div>
                 ))}
                 {/* Failure timeline */}
-                <div className="mt-[20px] mb-[12px] text-[8px] tracking-[0.2em] text-[var(--color-hex-444444)]">
+                <div className="mt-[20px] mb-[12px] text-sm tracking-widest text-[var(--color-hex-444444)]">
                     RECENT FAILURES
                 </div>
                 <div className="overflow-hidden rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)]">
@@ -165,7 +163,7 @@ export default function FailureAnalysis() {
                             (h) => (
                                 <div
                                     key={h}
-                                    className="px-[12px] py-[5px] text-[7.5px] font-semibold tracking-[0.14em] text-[var(--color-hex-444444)]"
+                                    className="text-sm-tight tracking-wider-1 px-[12px] py-[5px] font-semibold text-[var(--color-hex-444444)]"
                                     style={{
                                         flex: h === "TYPE" ? 2 : 1,
                                     }}
@@ -187,32 +185,32 @@ export default function FailureAnalysis() {
                                 background: i % 2 ? "var(--color-hex-0b0b0b)" : "transparent",
                             }}
                         >
-                            <div className="flex-1 px-[12px] py-[7px] text-[8.5px] text-[var(--color-hex-333333)]">
+                            <div className="text-base-tight flex-1 px-[12px] py-[7px] text-[var(--color-hex-333333)]">
                                 {f.ts}
                             </div>
                             <div
-                                className="px-[12px] py-[7px] text-[9px] font-semibold tracking-[0.06em] text-[var(--color-hex-a0a0a0)]"
+                                className="tracking-tight-1 px-[12px] py-[7px] text-base font-semibold text-[var(--color-hex-a0a0a0)]"
                                 style={{
                                     flex: 2,
                                 }}
                             >
                                 {f.type}
                             </div>
-                            <div className="flex-1 px-[12px] py-[7px] text-[9px] text-[var(--color-hex-e31b23)]">
+                            <div className="flex-1 px-[12px] py-[7px] text-base text-[var(--color-brand)]">
                                 {f.run}
                             </div>
-                            <div className="flex-1 px-[12px] py-[7px] text-[9px] text-[var(--color-hex-444444)]">
+                            <div className="flex-1 px-[12px] py-[7px] text-base text-[var(--color-hex-444444)]">
                                 {f.task}
                             </div>
-                            <div className="flex-1 px-[12px] py-[7px] text-[9px] text-[var(--color-hex-555555)]">
+                            <div className="flex-1 px-[12px] py-[7px] text-base text-[var(--color-hex-555555)]">
                                 {f.cost}
                             </div>
                             <div
-                                className="flex-1 px-[12px] py-[7px] text-[9px]"
+                                className="flex-1 px-[12px] py-[7px] text-base"
                                 style={{
                                     color:
                                         f.attempts > 2
-                                            ? "var(--color-hex-d29922)"
+                                            ? "var(--color-warning)"
                                             : "var(--color-hex-444444)",
                                 }}
                             >
@@ -220,10 +218,10 @@ export default function FailureAnalysis() {
                             </div>
                             <div className="flex-1 px-[12px] py-[7px]">
                                 <span
-                                    className="text-[8.5px] font-bold"
+                                    className="text-base-tight font-bold"
                                     style={{
                                         color: f.resolved
-                                            ? "var(--color-hex-3fb950)"
+                                            ? "var(--color-success)"
                                             : "var(--color-hex-333333)",
                                     }}
                                 >

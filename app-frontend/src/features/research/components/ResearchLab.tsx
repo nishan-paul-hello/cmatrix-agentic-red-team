@@ -14,10 +14,10 @@ export default function ResearchLab({ initialTab }: { initialTab?: LabTab }) {
                     borderBottom: "1px solid var(--color-hex-1e1e1e)",
                 }}
             >
-                <div className="mb-[3px] text-[9px] tracking-[0.22em] text-[var(--color-hex-666666)]">
+                <div className="tracking-widest-2 mb-[3px] text-base text-[var(--color-hex-666666)]">
                     RESEARCH
                 </div>
-                <h1 className="mb-[12px] text-[20px] font-bold tracking-[0.12em] text-[var(--color-hex-f2f2f2)]">
+                <h1 className="mb-[12px] text-9xl font-bold tracking-wide text-[var(--color-fg)]">
                     RESEARCH LAB
                 </h1>
                 <div className="flex">
@@ -26,16 +26,14 @@ export default function ResearchLab({ initialTab }: { initialTab?: LabTab }) {
                             <button
                                 key={t}
                                 onClick={() => setTab(t)}
-                                className="font-inherit cursor-pointer border-none bg-[transparent] px-[16px] py-[5px] text-[9px] tracking-[0.14em] whitespace-nowrap"
+                                className="font-inherit tracking-wider-1 cursor-pointer border-none bg-[transparent] px-[16px] py-[5px] text-base whitespace-nowrap"
                                 style={{
                                     borderBottom:
                                         t === tab
-                                            ? "2px solid var(--color-hex-e31b23)"
+                                            ? "2px solid var(--color-brand)"
                                             : "2px solid transparent",
                                     color:
-                                        t === tab
-                                            ? "var(--color-hex-f2f2f2)"
-                                            : "var(--color-hex-444444)",
+                                        t === tab ? "var(--color-fg)" : "var(--color-hex-444444)",
                                     marginBottom: -1,
                                 }}
                             >

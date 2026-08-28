@@ -3,24 +3,22 @@ import { STAT_DATA } from "@/features/research/data/fixtures/researchMockData";
 export default function StatisticalEval() {
     return (
         <div className="flex-1 overflow-y-auto px-6 py-5">
+            {/* ── Compute-normalization note — §12.3 ── */}
+            <div className="mb-4 rounded-[2px] border-[1px] border-solid border-[var(--color-hex-d2992233)] bg-[var(--color-hex-1a1200)] px-[12px] py-[8px]">
+                <span className="text-sm tracking-wide text-[var(--color-warning)]">
+                    ◈ COMPUTE-NORMALIZED — all results normalized to 50 API calls/CVE. Orchestration
+                    overhead excluded. McNemar&apos;s chi-squared test for paired binary outcomes
+                    (§12.3).
+                </span>
+            </div>
+
+            {/* ── KPI strip — updated from WILCOXON → McNemar's ── */}
             <div className="mb-6 grid grid-cols-4 gap-0 overflow-hidden rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)]">
                 {[
-                    {
-                        k: "N BENCHMARKS",
-                        v: "7",
-                    },
-                    {
-                        k: "N TASKS",
-                        v: "350",
-                    },
-                    {
-                        k: "CONFIDENCE",
-                        v: "95%",
-                    },
-                    {
-                        k: "TEST",
-                        v: "WILCOXON",
-                    },
+                    { k: "N BENCHMARKS", v: "7" },
+                    { k: "N TASKS", v: "350" },
+                    { k: "CONFIDENCE", v: "95%" },
+                    { k: "TEST", v: "McNemar's (paired)" },
                 ].map((m, i, a) => (
                     <div
                         key={m.k}
@@ -30,24 +28,21 @@ export default function StatisticalEval() {
                                 i < a.length - 1 ? "1px solid var(--color-hex-1a1a1a)" : "none",
                         }}
                     >
-                        <div className="mb-[4px] text-[7.5px] tracking-[0.18em] text-[var(--color-hex-444444)]">
+                        <div className="text-sm-tight tracking-wider-3 mb-[4px] text-[var(--color-hex-444444)]">
                             {m.k}
                         </div>
-                        <div className="text-[18px] font-bold text-[var(--color-hex-f2f2f2)]">
-                            {m.v}
-                        </div>
+                        <div className="text-6xl font-bold text-[var(--color-fg)]">{m.v}</div>
                     </div>
                 ))}
             </div>
-            <div className="mb-[12px] text-[8px] tracking-[0.2em] text-[var(--color-hex-444444)]">
+
+            <div className="mb-[12px] text-sm tracking-widest text-[var(--color-hex-444444)]">
                 METRIC COMPARISON TABLE
             </div>
-            <div className="mb-[24px] overflow-hidden rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)]">
+            <div className="mb-[8px] overflow-hidden rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)]">
                 <div
                     className="flex bg-[var(--color-hex-0f0f0f)]"
-                    style={{
-                        borderBottom: "1px solid var(--color-hex-1a1a1a)",
-                    }}
+                    style={{ borderBottom: "1px solid var(--color-hex-1a1a1a)" }}
                 >
                     {[
                         "METRIC",
@@ -55,14 +50,15 @@ export default function StatisticalEval() {
                         "NO UCB",
                         "NO E_ORD",
                         "BASELINE",
-                        "p-VALUE",
+                        "McNemar p",
+                        "Δ pp",
                         "SIG",
                     ].map((h) => (
                         <div
                             key={h}
-                            className="px-[12px] py-[5px] text-[7.5px] font-semibold tracking-[0.14em] text-[var(--color-hex-444444)]"
+                            className="text-sm-tight tracking-wider-1 px-[10px] py-[5px] font-semibold text-[var(--color-hex-444444)]"
                             style={{
-                                flex: h === "METRIC" ? 2 : 1,
+                                flex: h === "METRIC" ? 2.5 : 1,
                                 textAlign: h === "METRIC" ? "left" : "right",
                             }}
                         >
@@ -83,61 +79,86 @@ export default function StatisticalEval() {
                         }}
                     >
                         <div
-                            className="px-[12px] py-[8px] text-[10px] text-[var(--color-hex-888888)]"
-                            style={{
-                                flex: 2,
-                            }}
+                            className="text-lg-tight px-[10px] py-[8px] text-[var(--color-hex-888888)]"
+                            style={{ flex: 2.5 }}
                         >
-                            {row.metric}
+                            <div>{row.metric}</div>
+                            {/* Wilson CI inline under full-system value */}
                         </div>
-                        <div className="flex-1 px-[12px] py-[8px] text-right text-[10px] font-bold text-[var(--color-hex-3fb950)]">
-                            {row.full}
+                        {/* FULL SYSTEM — shows Wilson CI */}
+                        <div className="flex flex-1 flex-col items-end px-[10px] py-[6px]">
+                            <span className="text-lg font-bold text-[var(--color-success)]">
+                                {row.full}
+                            </span>
+                            <span className="text-xs text-[var(--color-hex-333333)]">
+                                [{row.wilsonCI[0].toFixed(3)}, {row.wilsonCI[1].toFixed(3)}]
+                            </span>
                         </div>
-                        <div className="flex-1 px-[12px] py-[8px] text-right text-[10px] text-[var(--color-hex-555555)]">
+                        <div className="flex-1 px-[10px] py-[8px] text-right text-lg text-[var(--color-hex-555555)]">
                             {row.noUCB}
                         </div>
-                        <div className="flex-1 px-[12px] py-[8px] text-right text-[10px] text-[var(--color-hex-555555)]">
+                        <div className="flex-1 px-[10px] py-[8px] text-right text-lg text-[var(--color-hex-555555)]">
                             {row.noEord}
                         </div>
-                        <div className="flex-1 px-[12px] py-[8px] text-right text-[10px] text-[var(--color-hex-333333)]">
+                        <div className="flex-1 px-[10px] py-[8px] text-right text-lg text-[var(--color-hex-333333)]">
                             {row.baseline}
                         </div>
+                        {/* McNemar p (renamed from p-VALUE) */}
                         <div
-                            className="flex-1 px-[12px] py-[8px] text-right text-[9px]"
+                            className="flex-1 px-[10px] py-[8px] text-right text-base"
                             style={{
                                 color: (() => {
-                                    if (row.pValue < 0.01) {
-                                        return "var(--color-hex-3fb950)";
+                                    if (row.mcNemarP < 0.01) {
+                                        return "var(--color-success)";
                                     }
-                                    if (row.pValue < 0.05) {
-                                        return "var(--color-hex-d29922)";
+                                    if (row.mcNemarP < 0.05) {
+                                        return "var(--color-warning)";
                                     }
                                     return "var(--color-hex-555555)";
                                 })(),
                             }}
                         >
-                            {row.pValue.toFixed(3)}
+                            {row.mcNemarP.toFixed(3)}
                         </div>
-                        <div className="flex-1 px-[12px] py-[8px] text-right">
+                        {/* Δ pp column — new */}
+                        <div
+                            className="flex-1 px-[10px] py-[8px] text-right text-base font-bold"
+                            style={{
+                                color: (() => {
+                                    if (row.deltaPp > 0) {
+                                        return "var(--color-success)";
+                                    }
+                                    if (Math.abs(row.deltaPp) < 20) {
+                                        return "var(--color-warning)";
+                                    }
+                                    return "var(--color-danger)";
+                                })(),
+                            }}
+                        >
+                            {row.deltaPp > 0 ? "+" : ""}
+                            {row.deltaPp.toFixed(1)}pp
+                        </div>
+                        {/* SIG stars */}
+                        <div className="flex-1 px-[10px] py-[8px] text-right">
                             <span
-                                className="text-[9px] font-bold"
+                                className="text-base font-bold"
                                 style={{
                                     color: (() => {
-                                        if (row.pValue < 0.01) {
-                                            return "var(--color-hex-3fb950)";
+                                        if (row.mcNemarP < 0.01) {
+                                            return "var(--color-success)";
                                         }
-                                        if (row.pValue < 0.05) {
-                                            return "var(--color-hex-d29922)";
+                                        if (row.mcNemarP < 0.05) {
+                                            return "var(--color-warning)";
                                         }
                                         return "var(--color-hex-444444)";
                                     })(),
                                 }}
                             >
                                 {(() => {
-                                    if (row.pValue < 0.01) {
+                                    if (row.mcNemarP < 0.01) {
                                         return "***";
                                     }
-                                    if (row.pValue < 0.05) {
+                                    if (row.mcNemarP < 0.05) {
                                         return "**";
                                     }
                                     return "ns";
@@ -147,65 +168,55 @@ export default function StatisticalEval() {
                     </div>
                 ))}
             </div>
+
+            {/* McNemar test caption */}
+            <div className="text-sm-tight mb-[20px] leading-normal tracking-normal text-[var(--color-hex-333333)]">
+                McNemar&apos;s χ² test (paired binary outcomes). Wilson score 95% CI shown inline
+                with full-system values. *** p &lt; 0.01, ** p &lt; 0.05, ns = not significant. Δ pp
+                = percentage-point improvement vs Baseline condition.
+            </div>
+
             {/* Effect sizes */}
-            <div className="mb-[12px] text-[8px] tracking-[0.2em] text-[var(--color-hex-444444)]">
+            <div className="mb-[12px] text-sm tracking-widest text-[var(--color-hex-444444)]">
                 UCB CONTRIBUTION — COHEN&apos;S d
             </div>
             {[
-                {
-                    metric: "Solve Rate",
-                    d: 1.82,
-                    interp: "LARGE",
-                },
-                {
-                    metric: "Cost per Task",
-                    d: 1.41,
-                    interp: "LARGE",
-                },
-                {
-                    metric: "Attempts",
-                    d: 1.09,
-                    interp: "LARGE",
-                },
-                {
-                    metric: "Fail Rate",
-                    d: 2.14,
-                    interp: "LARGE",
-                },
+                { metric: "Solve Rate", d: 1.82, interp: "LARGE" },
+                { metric: "Cost per Task", d: 1.41, interp: "LARGE" },
+                { metric: "Attempts", d: 1.09, interp: "LARGE" },
+                { metric: "Fail Rate", d: 2.14, interp: "LARGE" },
             ].map((e) => (
                 <div key={e.metric} className="mb-[12px]">
                     <div className="mb-1 flex justify-between">
-                        <span className="text-[9px] text-[var(--color-hex-666666)]">
-                            {e.metric}
-                        </span>
+                        <span className="text-base text-[var(--color-hex-666666)]">{e.metric}</span>
                         <div className="flex items-center gap-3">
-                            <span className="text-[9px] font-bold text-[var(--color-hex-3fb950)]">
+                            <span className="text-base font-bold text-[var(--color-success)]">
                                 d = {e.d.toFixed(2)}
                             </span>
-                            <span className="text-[8px] tracking-[0.1em] text-[var(--color-hex-3fb950)]">
+                            <span className="text-sm tracking-normal text-[var(--color-success)]">
                                 {e.interp}
                             </span>
                         </div>
                     </div>
                     <div className="h-[3px] overflow-hidden rounded-[2px] bg-[var(--color-hex-1a1a1a)]">
                         <div
-                            className="h-full rounded-[2px] bg-[var(--color-hex-3fb950)]"
-                            style={{
-                                width: `${Math.min((e.d / 2.5) * 100, 100)}%`,
-                            }}
+                            className="h-full rounded-[2px] bg-[var(--color-success)]"
+                            style={{ width: `${Math.min((e.d / 2.5) * 100, 100)}%` }}
                         />
                     </div>
                 </div>
             ))}
+
             <div className="mt-[20px] rounded-[2px] border-[1px] border-solid border-[var(--color-hex-3fb95044)] bg-[var(--color-hex-061a0c)] px-[16px] py-[14px]">
-                <div className="mb-[6px] text-[8px] tracking-[0.18em] text-[var(--color-hex-3fb950)]">
+                <div className="tracking-wider-3 mb-[6px] text-sm text-[var(--color-success)]">
                     CONCLUSION
                 </div>
-                <div className="text-[10px] leading-[1.8] text-[var(--color-hex-555555)]">
-                    All core system components (UCB selection, E_ord gating) show statistically
-                    significant positive contribution (p &lt; 0.01, large effect size d &gt; 1.0).
-                    The full system outperforms the no-UCB baseline by 17.1 percentage points and
-                    the no-E_ord ablation by 8.8pp. Results support the design hypothesis.
+                <div className="text-lg leading-loose text-[var(--color-hex-555555)]">
+                    All core components (UCB selection, E_ord gating) show statistically significant
+                    positive contribution (McNemar&apos;s p &lt; 0.01, large effect size d &gt;
+                    1.0). Full system outperforms Baseline by +41.1pp on Mean Solve Rate (pass@5,
+                    1-day). Wilson 95% CI [0.771, 0.850] for full-system solve rate. Results support
+                    paper contribution claims C1 and C2.
                 </div>
             </div>
         </div>
