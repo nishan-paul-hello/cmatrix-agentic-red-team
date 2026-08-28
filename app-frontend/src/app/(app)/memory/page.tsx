@@ -1,12 +1,12 @@
 "use client";
 
 import { PanelErrorBoundary } from "@/components/PanelErrorBoundary";
-import MemoryPage from "@/features/memory/components/MemoryPage";
+import MemoryBrowser from "@/features/memory/components/MemoryBrowser";
 
 export default function Memory() {
     return (
         <PanelErrorBoundary>
-            <MemoryPage />
+            <MemoryBrowser />
         </PanelErrorBoundary>
     );
 }
