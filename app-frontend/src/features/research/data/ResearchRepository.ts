@@ -1,14 +1,17 @@
 import {
-    ABLATION_RUNS,
+    ABLATIONS,
     FAILURE_CLUSTERS,
     FAILURE_TIMELINE,
     STAT_DATA,
-    type AblationRun,
+    type AblationSpec,
 } from "@/features/research/data/fixtures/researchMockData";
 import { type DataSource } from "@/types/adapters";
 
+// AblationSpec is the new type; AblationRun is kept as legacy alias in fixtures
+type AblationRun = AblationSpec;
+
 export class ResearchRepository implements DataSource<AblationRun> {
-    private static mockData: AblationRun[] = [...ABLATION_RUNS];
+    private static mockData: AblationRun[] = [...ABLATIONS];
     private static mockStatData = { ...STAT_DATA };
     private static mockFailureClusters = [...FAILURE_CLUSTERS];
     private static mockFailureTimeline = [...FAILURE_TIMELINE];
