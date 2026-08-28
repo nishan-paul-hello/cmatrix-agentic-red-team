@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { type SurfaceType } from "@/features/missions/data/fixtures/wizardMockData";
 import { useWizardData } from "@/features/missions/hooks/useWizardData";
 
@@ -5,8 +6,8 @@ export default function SurfaceCards({
     value,
     onChange,
 }: {
-    value: SurfaceType;
-    onChange: (v: SurfaceType) => void;
+    value?: SurfaceType;
+    onChange?: (v: SurfaceType) => void;
 }) {
     const { surfaceOptions } = useWizardData();
 
@@ -20,18 +21,19 @@ export default function SurfaceCards({
             {surfaceOptions.map((opt) => {
                 const selected = value === opt.value;
                 return (
-                    <button
+                    <Button
                         key={opt.value}
-                        onClick={() => onChange(opt.value)}
-                        className={`font-inherit relative flex flex-1 cursor-pointer flex-col rounded-[2px] border border-solid text-left transition-colors duration-100 ${selected ? "border-[var(--color-brand)] bg-[var(--color-hex-120608)]" : "border-[var(--color-hex-292929)] bg-[var(--color-hex-0d0d0d)] hover:border-[var(--color-hex-444444)] hover:bg-[var(--color-hex-111111)]"}`}
+                        variant="outline"
+                        onClick={() => onChange?.(opt.value)}
+                        className={`h-[160px] flex-1 flex-col items-start justify-start rounded-sm border border-solid text-left whitespace-normal transition-colors duration-100 ${selected ? "border-primary bg-muted" : "border-border bg-background hover:border-muted-foreground hover:bg-card"}`}
                         style={{
-                            padding: "18px 16px 16px",
+                            padding: "20px 20px 16px",
                         }}
                     >
                         {/* Selected indicator */}
                         {selected && (
                             <div
-                                className="absolute top-[10px] right-[10px] h-[8px] w-[8px] bg-[var(--color-brand)]"
+                                className="bg-primary absolute top-2.5 right-2.5 h-2 w-2"
                                 style={{
                                     borderRadius: "50%",
                                 }}
@@ -41,19 +43,19 @@ export default function SurfaceCards({
                         {/* Icon + name */}
                         <div className="mb-2 flex items-center gap-2">
                             <span
-                                className="text-6xl"
+                                className="text-base"
                                 style={{
-                                    color: selected
-                                        ? "var(--color-brand)"
-                                        : "var(--color-hex-444444)",
+                                    color: selected ? "var(--primary)" : "var(--muted-foreground)",
                                 }}
                             >
                                 {opt.icon}
                             </span>
                             <span
-                                className="tracking-wider-2 text-xl font-bold"
+                                className="text-xs font-bold tracking-widest"
                                 style={{
-                                    color: selected ? "var(--color-fg)" : "var(--color-hex-666666)",
+                                    color: selected
+                                        ? "var(--foreground)"
+                                        : "var(--muted-foreground)",
                                 }}
                             >
                                 {opt.value}
@@ -62,11 +64,9 @@ export default function SurfaceCards({
 
                         {/* Protocol */}
                         <div
-                            className="tracking-wider-2 mb-[12px] text-base font-semibold"
+                            className="mb-3 text-base font-semibold tracking-widest"
                             style={{
-                                color: selected
-                                    ? "var(--color-hex-9e1118)"
-                                    : "var(--color-hex-333333)",
+                                color: selected ? "var(--border)" : "var(--border)",
                             }}
                         >
                             {opt.proto}
@@ -74,16 +74,14 @@ export default function SurfaceCards({
 
                         {/* Divider */}
                         <div
-                            className="mb-[12px] h-[1px]"
+                            className="mb-3 h-px"
                             style={{
-                                background: selected
-                                    ? "var(--color-hex-2a0a0c)"
-                                    : "var(--color-hex-1a1a1a)",
+                                background: selected ? "var(--border)" : "var(--border)",
                             }}
                         />
 
                         {/* Description */}
-                        <div className="text-lg-tight leading-normal-2 tracking-tight-2 mb-[14px] grow text-[var(--color-hex-555555)]">
+                        <div className="leading-normal-2 text-muted-foreground mb-3.5 grow text-base tracking-tight">
                             {opt.description}
                         </div>
 
@@ -92,15 +90,13 @@ export default function SurfaceCards({
                             {opt.tags.map((tag: string) => (
                                 <span
                                     key={tag}
-                                    className="text-base-tight rounded-[2px] px-[5px] py-[1px] tracking-normal whitespace-nowrap"
+                                    className="rounded-sm px-1 py-px text-sm tracking-normal whitespace-nowrap"
                                     style={{
                                         color: selected
-                                            ? "var(--color-brand)"
-                                            : "var(--color-hex-444444)",
-                                        background: selected
-                                            ? "var(--color-hex-1a0608)"
-                                            : "var(--color-hex-111111)",
-                                        border: `1px solid ${selected ? "var(--color-hex-6f171b)" : "var(--color-hex-222222)"}`,
+                                            ? "var(--primary)"
+                                            : "var(--muted-foreground)",
+                                        background: selected ? "var(--border)" : "var(--border)",
+                                        border: `1px solid ${selected ? "var(--border)" : "var(--border)"}`,
                                     }}
                                 >
                                     {tag}
@@ -110,17 +106,15 @@ export default function SurfaceCards({
 
                         {/* Divider */}
                         <div
-                            className="mb-[10px] h-[1px]"
+                            className="mb-2.5 h-px"
                             style={{
-                                background: selected
-                                    ? "var(--color-hex-2a0a0c)"
-                                    : "var(--color-hex-1a1a1a)",
+                                background: selected ? "var(--border)" : "var(--border)",
                             }}
                         />
 
                         {/* Specialists */}
                         <div>
-                            <div className="tracking-wider-3 mb-[6px] text-sm text-[var(--color-hex-444444)]">
+                            <div className="text-muted-foreground mb-1.5 text-sm tracking-widest">
                                 SPECIALISTS
                             </div>
                             <div className="flex flex-wrap gap-1">
@@ -130,8 +124,8 @@ export default function SurfaceCards({
                                         className="text-sm tracking-wide"
                                         style={{
                                             color: selected
-                                                ? "var(--color-hex-a0a0a0)"
-                                                : "var(--color-hex-333333)",
+                                                ? "var(--muted-foreground)"
+                                                : "var(--border)",
                                         }}
                                     >
                                         {s}{" "}
@@ -139,7 +133,7 @@ export default function SurfaceCards({
                                 ))}
                             </div>
                         </div>
-                    </button>
+                    </Button>
                 );
             })}
         </div>

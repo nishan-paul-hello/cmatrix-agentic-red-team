@@ -38,7 +38,7 @@ export default function ReviewStep({
         {
             label: "TARGET",
             value: target || "—",
-            valueColor: "var(--color-brand)",
+            valueColor: "var(--primary)",
             mono: true,
         },
         {
@@ -52,7 +52,7 @@ export default function ReviewStep({
         {
             label: "MODE",
             value: mode,
-            valueColor: mode === "ZERO-DAY" ? "var(--color-danger)" : "var(--color-warning)",
+            valueColor: mode === "ZERO-DAY" ? "var(--destructive)" : "var(--warning)",
         },
         {
             label: "MAX RUNTIME",
@@ -61,7 +61,7 @@ export default function ReviewStep({
         {
             label: "COST CEILING",
             value: `$${parseFloat(costCeiling).toFixed(2)}`,
-            valueColor: costNum > 50 ? "var(--color-warning)" : "var(--color-fg)",
+            valueColor: costNum > 50 ? "var(--warning)" : "var(--foreground)",
             warn: costNum > 50,
         },
         {
@@ -88,38 +88,22 @@ export default function ReviewStep({
     return (
         <>
             <StepHeading step={5} label="REVIEW & CONFIRM" />
-            <div className="text-lg-tight mb-[24px] leading-relaxed tracking-wide text-[var(--color-hex-666666)]">
+            <div className="text-muted-foreground mb-6 text-base leading-relaxed tracking-wide">
                 Review the full mission configuration before launch. Once started, cost ceiling and
                 rules of engagement cannot be modified.
             </div>
 
             {/* Main config table */}
-            <div className="mb-[20px] overflow-hidden rounded-[2px] border-[1px] border-solid border-[var(--color-hex-292929)]">
-                {rows.map((row, i) => (
-                    <div
-                        key={row.label}
-                        className="flex"
-                        style={{
-                            borderBottom:
-                                i < rows.length - 1 ? "1px solid var(--color-hex-1a1a1a)" : "none",
-                            background:
-                                i % 2 === 0 ? "var(--color-hex-0d0d0d)" : "var(--color-hex-0b0b0b)",
-                        }}
-                    >
-                        <div
-                            className="w-[148px] shrink-0 px-[16px] py-[10px] text-base font-semibold tracking-widest text-[var(--color-hex-444444)]"
-                            style={{
-                                borderRight: "1px solid var(--color-hex-1a1a1a)",
-                                display: "flex",
-                                alignItems: "center",
-                            }}
-                        >
+            <div className="border-border mb-5 overflow-hidden rounded-sm border-[1px] border-solid">
+                {rows.map((row) => (
+                    <div key={row.label} className="border-border flex border-b">
+                        <div className="text-muted-foreground border-border w-[148px] shrink-0 border-r px-4 py-2.5 text-base font-semibold tracking-widest">
                             {row.label}
                         </div>
                         <div
-                            className="text-xl-tight tracking-tight-2 flex-1 px-[16px] py-[10px] leading-snug"
+                            className="flex-1 px-4 py-2.5 text-xs leading-snug tracking-tight"
                             style={{
-                                color: row.valueColor ?? "var(--color-hex-a0a0a0)",
+                                color: row.valueColor ?? "var(--muted-foreground)",
                                 display: "flex",
                                 alignItems: "center",
                                 gap: 8,
@@ -127,7 +111,7 @@ export default function ReviewStep({
                         >
                             <span className="font-inherit">{row.value}</span>
                             {row.warn && (
-                                <span className="text-base-tight shrink-0 rounded-[2px] border-[1px] border-solid border-[var(--color-hex-d2992244)] bg-[var(--color-hex-1a1200)] px-[5px] py-[1px] tracking-wide text-[var(--color-warning)]">
+                                <span className="border-border bg-muted text-warning shrink-0 rounded-sm border-[1px] border-solid px-1 py-px text-sm tracking-wide">
                                     HIGH
                                 </span>
                             )}
@@ -137,28 +121,18 @@ export default function ReviewStep({
             </div>
 
             {/* ROE block */}
-            <div className="mb-[24px] overflow-hidden rounded-[2px] border-[1px] border-solid border-[var(--color-hex-292929)]">
-                <div
-                    className="bg-[var(--color-hex-111111)] px-[16px] py-[8px] text-base font-semibold tracking-widest text-[var(--color-hex-444444)]"
-                    style={{
-                        borderBottom: "1px solid var(--color-hex-1a1a1a)",
-                    }}
-                >
+            <div className="border-border mb-6 overflow-hidden rounded-sm border-[1px] border-solid">
+                <div className="bg-card text-muted-foreground border-border border-b px-4 py-2 text-base font-semibold tracking-widest">
                     RULES OF ENGAGEMENT
                 </div>
-                <div className="leading-relaxed-2 bg-[var(--color-hex-0d0d0d)] px-[16px] py-[12px] text-lg tracking-tighter text-[var(--color-hex-555555)]">
+                <div className="leading-relaxed-2 bg-background text-muted-foreground px-4 py-3 text-xs tracking-tighter">
                     {roe || "—"}
                 </div>
             </div>
 
             {/* System confirmations */}
-            <div className="mb-[8px] overflow-hidden rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)]">
-                <div
-                    className="bg-[var(--color-hex-0b0b0b)] px-[16px] py-[8px] text-base font-semibold tracking-widest text-[var(--color-hex-444444)]"
-                    style={{
-                        borderBottom: "1px solid var(--color-hex-1a1a1a)",
-                    }}
-                >
+            <div className="border-border mb-2 overflow-hidden rounded-sm border-[1px] border-solid">
+                <div className="bg-background text-muted-foreground border-border border-b px-4 py-2 text-base font-semibold tracking-widest">
                     PRE-FLIGHT CHECKS
                 </div>
                 {[
@@ -189,32 +163,28 @@ export default function ReviewStep({
                         label: "Memory subsystem",
                         detail: "Vulnerability pattern DB: 847 records",
                     },
-                ].map((chk, i, arr) => (
+                ].map((chk) => (
                     <div
                         key={chk.label}
-                        className="flex items-center gap-3 bg-[var(--color-hex-0d0d0d)] px-[16px] py-[9px]"
-                        style={{
-                            borderBottom:
-                                i < arr.length - 1 ? "1px solid var(--color-hex-141414)" : "none",
-                        }}
+                        className="bg-background border-border flex items-center gap-3 border-b px-4 py-2"
                     >
                         <span
-                            className="shrink-0 text-xl"
+                            className="shrink-0 text-xs"
                             style={{
-                                color: chk.ok ? "var(--color-success)" : "var(--color-warning)",
+                                color: chk.ok ? "var(--success)" : "var(--warning)",
                             }}
                         >
                             {chk.ok ? "✓" : "⚠"}
                         </span>
                         <span
-                            className="min-w-[200px] text-lg tracking-tight"
+                            className="min-w-[200px] text-xs tracking-tight"
                             style={{
-                                color: chk.ok ? "var(--color-hex-a0a0a0)" : "var(--color-warning)",
+                                color: chk.ok ? "var(--muted-foreground)" : "var(--warning)",
                             }}
                         >
                             {chk.label}
                         </span>
-                        <span className="tracking-tight-1 text-base text-[var(--color-hex-444444)]">
+                        <span className="text-muted-foreground text-base tracking-tight">
                             {chk.detail}
                         </span>
                     </div>

@@ -1,3 +1,4 @@
+import { RadioGroupItem, RadioGroup as ShadcnRadioGroup } from "@/components/ui/radio-group";
 import { type ModeType } from "@/features/missions/data/fixtures/wizardMockData";
 import { useWizardData } from "@/features/missions/hooks/useWizardData";
 
@@ -5,48 +6,52 @@ export default function ModeCards({
     value,
     onChange,
 }: {
-    value: ModeType;
-    onChange: (v: ModeType) => void;
+    value?: ModeType;
+    onChange?: (v: ModeType) => void;
 }) {
     const { modeOptions } = useWizardData();
 
     return (
-        <div
-            className="flex gap-5"
-            style={{
-                alignItems: "stretch",
-            }}
+        <ShadcnRadioGroup
+            value={value}
+            onValueChange={onChange}
+            className="flex items-stretch gap-5"
         >
             {modeOptions.map((opt) => {
                 const selected = value === opt.value;
                 return (
-                    <button
+                    <label
                         key={opt.value}
-                        onClick={() => onChange(opt.value)}
-                        className={`font-inherit relative flex flex-1 cursor-pointer flex-col rounded-[2px] border border-solid text-left transition-colors duration-100 ${selected ? "border-[var(--color-brand)] bg-[var(--color-hex-120608)]" : "border-[var(--color-hex-292929)] bg-[var(--color-hex-0d0d0d)] hover:border-[var(--color-hex-444444)] hover:bg-[var(--color-hex-111111)]"}`}
+                        htmlFor={`mode-${opt.value}`}
+                        className={`flex h-auto flex-1 cursor-pointer flex-col items-stretch justify-start rounded-sm border border-solid text-left whitespace-normal transition-colors duration-100 ${selected ? "border-primary bg-muted" : "border-border bg-background hover:border-muted-foreground hover:bg-card"}`}
                         style={{
                             padding: "22px 20px 18px",
                         }}
                     >
+                        <RadioGroupItem
+                            value={opt.value}
+                            id={`mode-${opt.value}`}
+                            className="sr-only"
+                        />
                         {/* Top row: icon + title + selected dot */}
                         <div className="mb-1 flex items-start justify-between">
                             <div className="flex items-center gap-2.5">
                                 <span
-                                    className="text-8xl leading-none"
+                                    className="text-xs leading-none"
                                     style={{
                                         color: selected
-                                            ? "var(--color-brand)"
-                                            : "var(--color-hex-444444)",
+                                            ? "var(--primary)"
+                                            : "var(--muted-foreground)",
                                     }}
                                 >
                                     {opt.icon}
                                 </span>
                                 <span
-                                    className="tracking-wider-1 text-6xl font-bold"
+                                    className="text-base font-bold tracking-widest"
                                     style={{
                                         color: selected
-                                            ? "var(--color-fg)"
-                                            : "var(--color-hex-555555)",
+                                            ? "var(--foreground)"
+                                            : "var(--muted-foreground)",
                                     }}
                                 >
                                     {opt.value}
@@ -54,7 +59,7 @@ export default function ModeCards({
                             </div>
                             {selected && (
                                 <div
-                                    className="mt-[4px] h-[8px] w-[8px] shrink-0 bg-[var(--color-brand)]"
+                                    className="bg-primary mt-1 h-2 w-2 shrink-0"
                                     style={{
                                         borderRadius: "50%",
                                     }}
@@ -67,15 +72,13 @@ export default function ModeCards({
                             <span
                                 className="text-base font-semibold tracking-widest"
                                 style={{
-                                    color: selected
-                                        ? "var(--color-hex-9e1118)"
-                                        : "var(--color-hex-333333)",
+                                    color: selected ? "var(--border)" : "var(--border)",
                                 }}
                             >
                                 {opt.hint}
                             </span>
                             <span
-                                className="text-base-tight tracking-wider-2 rounded-[2px] px-[6px] py-[1px] font-semibold"
+                                className="rounded-sm px-1.5 py-px text-sm font-semibold tracking-widest"
                                 style={{
                                     color: opt.badgeColor,
                                     background: `${opt.badgeColor}18`,
@@ -84,33 +87,29 @@ export default function ModeCards({
                             >
                                 {opt.badge}
                             </span>
-                            <span className="text-base-tight tracking-wider-1 rounded-[2px] border-[1px] border-solid border-[var(--color-hex-222222)] bg-[var(--color-hex-151515)] px-[6px] py-[1px] text-[var(--color-hex-555555)]">
+                            <span className="border-border bg-muted text-muted-foreground rounded-sm border-[1px] border-solid px-1.5 py-px text-sm tracking-widest">
                                 {opt.difficulty}
                             </span>
                         </div>
 
                         {/* Divider */}
                         <div
-                            className="mb-[16px] h-[1px]"
+                            className="mb-4 h-px"
                             style={{
-                                background: selected
-                                    ? "var(--color-hex-2a0a0c)"
-                                    : "var(--color-hex-1a1a1a)",
+                                background: selected ? "var(--border)" : "var(--border)",
                             }}
                         />
 
                         {/* Description */}
-                        <div className="mb-[20px] grow text-lg leading-relaxed tracking-tighter text-[var(--color-hex-555555)]">
+                        <div className="text-muted-foreground mb-5 grow text-xs leading-relaxed tracking-tighter">
                             {opt.description}
                         </div>
 
                         {/* Divider */}
                         <div
-                            className="mb-[14px] h-[1px]"
+                            className="mb-3.5 h-px"
                             style={{
-                                background: selected
-                                    ? "var(--color-hex-2a0a0c)"
-                                    : "var(--color-hex-1a1a1a)",
+                                background: selected ? "var(--border)" : "var(--border)",
                             }}
                         />
 
@@ -119,24 +118,22 @@ export default function ModeCards({
                             {opt.implications.map((imp: { label: string; detail: string }) => (
                                 <div key={imp.label} className="flex items-start gap-2">
                                     <span
-                                        className="text-base-tight tracking-wider-2 min-w-[96px] shrink-0 font-semibold"
+                                        className="min-w-[96px] shrink-0 text-sm font-semibold tracking-widest"
                                         style={{
-                                            color: selected
-                                                ? "var(--color-brand)"
-                                                : "var(--color-hex-333333)",
+                                            color: selected ? "var(--primary)" : "var(--border)",
                                         }}
                                     >
                                         {imp.label}
                                     </span>
-                                    <span className="text-base-tight tracking-tight-1 leading-snug text-[var(--color-hex-444444)]">
+                                    <span className="text-muted-foreground text-sm leading-snug tracking-tight">
                                         {imp.detail}
                                     </span>
                                 </div>
                             ))}
                         </div>
-                    </button>
+                    </label>
                 );
             })}
-        </div>
+        </ShadcnRadioGroup>
     );
 }

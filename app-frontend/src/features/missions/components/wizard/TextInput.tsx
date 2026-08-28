@@ -1,17 +1,11 @@
-export default function TextInput({
-    value,
-    onChange,
-}: {
-    value: string;
-    onChange: (v: string) => void;
-}) {
+import { Input } from "@/components/ui/input";
+
+export default function TextInput(props: Record<string, unknown>) {
     return (
-        <input
-            type="text"
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
+        <Input
             spellCheck={false}
-            className="font-inherit w-full rounded-[2px] border-[1px] border-solid border-[var(--color-hex-333333)] bg-[var(--color-hex-111111)] px-[14px] py-[10px] text-2xl tracking-tighter text-[var(--color-fg)] outline-none focus:border-[var(--color-brand)]"
+            className="bg-card text-foreground focus-visible:border-primary h-auto w-full rounded-sm px-3.5 py-2.5 text-xs tracking-tighter shadow-none"
+            {...props}
         />
     );
 }
