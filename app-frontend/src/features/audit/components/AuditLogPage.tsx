@@ -19,7 +19,7 @@ import { useAuditFeed } from "@/features/audit/hooks/useAuditFeed";
 import { useAuditFilters } from "@/features/audit/hooks/useAuditFilters";
 import { type AuditEntry, type AuditResultValue } from "@/types/domain-types";
 
-export default function AuditLogPage() {
+export default React.memo(function AuditLogPage() {
     const entries = useAuditFeed();
     const { typeFilter, setTypeFilter, resultFilter, setResultFilter, search, setSearch, visible } =
         useAuditFilters(entries);
@@ -30,7 +30,6 @@ export default function AuditLogPage() {
         setSel((prev) => (prev?.id === entry.id ? null : entry));
     }, []);
 
-    // eslint-disable-next-line react-hooks/incompatible-library
     const rowVirtualizer = useVirtualizer({
         count: visible.length,
         getScrollElement: () => parentRef.current,
@@ -51,7 +50,7 @@ export default function AuditLogPage() {
             <div className="flex-shrink-0 border-b border-[var(--color-hex-1e1e1e)] px-6 pt-5 pb-4">
                 <div className="page-eyebrow">SYSTEM</div>
                 <div className="flex items-baseline justify-between">
-                    <h1 className="text-[20px] font-bold tracking-[0.12em] text-[var(--color-hex-f2f2f2)]">
+                    <h1 className="text-9xl font-bold tracking-wide text-[var(--color-fg)]">
                         AUDIT LOG
                     </h1>
                     <div className="flex items-center gap-4">
@@ -60,9 +59,9 @@ export default function AuditLogPage() {
                             onChange={(e) => setSearch(e.target.value)}
                             placeholder="SEARCH…"
                             aria-label="Search audit log"
-                            className="w-[160px] rounded-[2px] border border-[var(--color-hex-1e1e1e)] bg-[var(--color-hex-0d0d0d)] px-[10px] py-[4px] text-[9px] tracking-[0.08em] text-[var(--color-hex-a0a0a0)] transition-colors duration-100 outline-none focus:border-[var(--color-hex-e31b23)]"
+                            className="w-[160px] rounded-[2px] border border-[var(--color-hex-1e1e1e)] bg-[var(--color-hex-0d0d0d)] px-[10px] py-[4px] text-base tracking-tight text-[var(--color-hex-a0a0a0)] transition-colors duration-100 outline-none focus:border-[var(--color-brand)]"
                         />
-                        <span className="text-[8.5px] tracking-[0.12em] text-[var(--color-hex-333333)]">
+                        <span className="text-base-tight tracking-wide text-[var(--color-hex-333333)]">
                             {visible.length} EVENTS
                         </span>
                     </div>
@@ -81,14 +80,14 @@ export default function AuditLogPage() {
                                 key={t}
                                 onClick={() => setTypeFilter(t)}
                                 aria-pressed={active}
-                                className="cursor-pointer rounded-[2px] px-[8px] py-[2px] text-[7.5px] tracking-[0.12em] transition-colors duration-100"
+                                className="text-sm-tight cursor-pointer rounded-[2px] px-[8px] py-[2px] tracking-wide transition-colors duration-100"
                                 style={{
                                     background: active
                                         ? (cc?.bg ?? "var(--color-hex-1e1e1e)")
                                         : "transparent",
-                                    border: `1px solid ${active ? (cc?.c ?? "var(--color-hex-f2f2f2)") : "var(--color-hex-1e1e1e)"}`,
+                                    border: `1px solid ${active ? (cc?.c ?? "var(--color-fg)") : "var(--color-hex-1e1e1e)"}`,
                                     color: active
-                                        ? (cc?.c ?? "var(--color-hex-f2f2f2)")
+                                        ? (cc?.c ?? "var(--color-fg)")
                                         : "var(--color-hex-444444)",
                                 }}
                             >
@@ -110,7 +109,7 @@ export default function AuditLogPage() {
                                 key={r}
                                 onClick={() => setResultFilter(r)}
                                 aria-pressed={active}
-                                className="cursor-pointer rounded-[2px] bg-transparent px-[8px] py-[2px] text-[7.5px] tracking-[0.12em] transition-colors duration-100"
+                                className="text-sm-tight cursor-pointer rounded-[2px] bg-transparent px-[8px] py-[2px] tracking-wide transition-colors duration-100"
                                 style={{
                                     border: `1px solid ${active ? color : "var(--color-hex-1e1e1e)"}`,
                                     color: active ? color : "var(--color-hex-444444)",
@@ -133,7 +132,7 @@ export default function AuditLogPage() {
                                 {TABLE_HEADERS.map((h) => (
                                     <th
                                         key={h}
-                                        className="border-b border-[var(--color-hex-1a1a1a)] px-[12px] py-[5px] text-left text-[7.5px] font-semibold tracking-[0.16em] whitespace-nowrap text-[var(--color-hex-444444)]"
+                                        className="text-sm-tight tracking-wider-2 border-b border-[var(--color-hex-1a1a1a)] px-[12px] py-[5px] text-left font-semibold whitespace-nowrap text-[var(--color-hex-444444)]"
                                     >
                                         {h}
                                     </th>
@@ -153,7 +152,7 @@ export default function AuditLogPage() {
                                         key={e.id}
                                         e={e}
                                         isSelected={sel?.id === e.id}
-                                        onClick={() => toggleSel(e)}
+                                        onClick={toggleSel}
                                     />
                                 );
                             })}
@@ -168,20 +167,20 @@ export default function AuditLogPage() {
 
                 {/* Detail drawer */}
                 {sel && (
-                    <div className="flex w-[300px] flex-shrink-0 flex-col overflow-y-auto border-l border-[var(--color-hex-292929)] bg-[var(--color-hex-0d0d0d)]">
+                    <div className="w-panel-md flex flex-shrink-0 flex-col overflow-y-auto border-l border-[var(--color-hex-292929)] bg-[var(--color-hex-0d0d0d)]">
                         <div className="flex items-start justify-between border-b border-[var(--color-hex-1e1e1e)] px-4 pt-4 pb-3">
                             <div>
-                                <div className="text-[11px] font-bold tracking-[0.1em] text-[var(--color-hex-f2f2f2)]">
+                                <div className="text-xl font-bold tracking-normal text-[var(--color-fg)]">
                                     {sel.id}
                                 </div>
-                                <div className="mt-[2px] text-[8.5px] text-[var(--color-hex-444444)]">
+                                <div className="text-base-tight mt-[2px] text-[var(--color-hex-444444)]">
                                     {sel.ts}
                                 </div>
                             </div>
                             <button
                                 onClick={() => setSel(null)}
                                 aria-label="Close detail drawer"
-                                className="cursor-pointer border-none bg-transparent text-[14px] text-[var(--color-hex-444444)] transition-colors duration-100 hover:text-[var(--color-hex-a0a0a0)]"
+                                className="cursor-pointer border-none bg-transparent text-4xl text-[var(--color-hex-444444)] transition-colors duration-100 hover:text-[var(--color-hex-a0a0a0)]"
                             >
                                 ✕
                             </button>
@@ -190,11 +189,11 @@ export default function AuditLogPage() {
                         <div className="flex flex-col gap-4 px-4 py-4">
                             {drawerFields(sel).map((row) => (
                                 <div key={row.k}>
-                                    <div className="mb-[3px] text-[7.5px] tracking-[0.18em] text-[var(--color-hex-444444)]">
+                                    <div className="text-sm-tight tracking-wider-3 mb-[3px] text-[var(--color-hex-444444)]">
                                         {row.k}
                                     </div>
                                     <div
-                                        className="text-[10px] leading-[1.6]"
+                                        className="text-lg leading-normal"
                                         style={{ color: row.c ?? "var(--color-hex-888888)" }}
                                     >
                                         {row.v}
@@ -207,4 +206,4 @@ export default function AuditLogPage() {
             </div>
         </div>
     );
-}
+});

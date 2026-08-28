@@ -9,17 +9,17 @@ export interface ColorPair {
 
 export const TYPE_C: Record<AuditEventType, ColorPair> = {
     AUTH: { c: "var(--color-hex-a0a0a0)", bg: "var(--color-hex-111111)" },
-    MISSION: { c: "var(--color-hex-e31b23)", bg: "var(--color-hex-120608)" },
+    MISSION: { c: "var(--color-brand)", bg: "var(--color-hex-120608)" },
     EXECUTION: { c: "var(--color-hex-666666)", bg: "var(--color-hex-0d0d0d)" },
-    ESCALATION: { c: "var(--color-hex-d29922)", bg: "var(--color-hex-110e00)" },
-    SYSTEM: { c: "var(--color-hex-3fb950)", bg: "var(--color-hex-061a0c)" },
+    ESCALATION: { c: "var(--color-warning)", bg: "var(--color-hex-110e00)" },
+    SYSTEM: { c: "var(--color-success)", bg: "var(--color-hex-061a0c)" },
     CONFIG: { c: "var(--color-hex-a0a0a0)", bg: "var(--color-hex-111111)" },
 };
 
 export const RESULT_C: Record<AuditResultValue, string> = {
-    SUCCESS: "var(--color-hex-3fb950)",
-    FAILURE: "var(--color-hex-ff2a32)",
-    WARNING: "var(--color-hex-d29922)",
+    SUCCESS: "var(--color-success)",
+    FAILURE: "var(--color-danger)",
+    WARNING: "var(--color-warning)",
 };
 
 export const AuditLogRow = React.memo(function AuditLogRowInner({
@@ -29,27 +29,27 @@ export const AuditLogRow = React.memo(function AuditLogRowInner({
 }: {
     e: AuditEntry;
     isSelected: boolean;
-    onClick: () => void;
+    onClick: (entry: AuditEntry) => void;
 }) {
     const tc = TYPE_C[e.type];
     const rc = RESULT_C[e.result];
     return (
         <tr
-            onClick={onClick}
+            onClick={() => onClick(e)}
             className={[
                 "cursor-pointer border-b border-[var(--color-hex-0e0e0e)] transition-colors duration-75",
                 isSelected ? "bg-[var(--color-hex-0d0d0d)]" : "hover:bg-[var(--color-hex-0a0a0a)]",
             ].join(" ")}
         >
-            <td className="px-[12px] py-[7px] text-[8.5px] text-[var(--color-hex-333333)]">
+            <td className="text-base-tight px-[12px] py-[7px] text-[var(--color-hex-333333)]">
                 {e.id}
             </td>
-            <td className="px-[12px] py-[7px] text-[8.5px] whitespace-nowrap text-[var(--color-hex-333333)]">
+            <td className="text-base-tight px-[12px] py-[7px] whitespace-nowrap text-[var(--color-hex-333333)]">
                 {e.ts}
             </td>
             <td className="px-[12px] py-[7px]">
                 <span
-                    className="rounded-[2px] px-[5px] py-[1px] text-[8px] font-semibold tracking-[0.1em]"
+                    className="rounded-[2px] px-[5px] py-[1px] text-sm font-semibold tracking-normal"
                     style={{
                         color: tc.c,
                         background: tc.bg,
@@ -59,17 +59,20 @@ export const AuditLogRow = React.memo(function AuditLogRowInner({
                     {e.type}
                 </span>
             </td>
-            <td className="px-[12px] py-[7px] text-[9px] tracking-[0.04em] text-[var(--color-hex-666666)]">
+            <td className="px-[12px] py-[7px] text-base tracking-tighter text-[var(--color-hex-666666)]">
                 {e.actor}
             </td>
-            <td className="px-[12px] py-[7px] text-[9px] font-semibold tracking-[0.04em] text-[var(--color-hex-a0a0a0)]">
+            <td className="px-[12px] py-[7px] text-base font-semibold tracking-tighter text-[var(--color-hex-a0a0a0)]">
                 {e.action}
             </td>
-            <td className="px-[12px] py-[7px] text-[9px] text-[var(--color-hex-444444)]">
+            <td className="px-[12px] py-[7px] text-base text-[var(--color-hex-444444)]">
                 {e.resource}
             </td>
             <td className="px-[12px] py-[7px]">
-                <span className="text-[8.5px] font-semibold tracking-[0.1em]" style={{ color: rc }}>
+                <span
+                    className="text-base-tight font-semibold tracking-normal"
+                    style={{ color: rc }}
+                >
                     {e.result}
                 </span>
             </td>
