@@ -58,11 +58,6 @@ export class WorkspaceRepository {
         return repo.fetchAll<VDGNode>({ limit: 1000, collection: "nodes" });
     }
 
-    static async getSpecialists(): Promise<Specialist[]> {
-        const repo = new WorkspaceRepository();
-        return repo.fetchAll<Specialist>({ limit: 1000, collection: "specialists" });
-    }
-
     static async getSubNav(): Promise<{ id: MissionSubNav; label: string }[]> {
         const repo = new WorkspaceRepository();
         return repo.fetchAll<{ id: MissionSubNav; label: string }>({
