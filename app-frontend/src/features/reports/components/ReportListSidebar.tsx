@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { type Report } from "@/features/reports/data/fixtures/reportsMockData";
 
@@ -17,12 +18,7 @@ export function ReportListSidebar({
     reportsLength: number;
 }) {
     return (
-        <div
-            className="w-panel-md flex flex-shrink-0 flex-col"
-            style={{
-                borderRight: "1px solid var(--color-hex-1e1e1e)",
-            }}
-        >
+        <div className="border-border lg:w-panel-md flex w-full flex-shrink-0 flex-col border-b lg:border-r lg:border-b-0">
             <div className="flex-1 overflow-y-auto">
                 {filtered.length === 0 ? (
                     <EmptyState message="NO REPORTS FOUND" />
@@ -38,19 +34,10 @@ export function ReportListSidebar({
                                     setSel(r);
                                 }
                             }}
-                            className="cursor-pointer px-[16px] py-[13px]"
-                            style={{
-                                borderBottom: "1px solid var(--color-hex-111111)",
-                                background:
-                                    sel?.id === r.id ? "var(--color-hex-0d0d0d)" : "transparent",
-                                borderLeft:
-                                    sel?.id === r.id
-                                        ? "2px solid var(--color-brand)"
-                                        : "2px solid transparent",
-                            }}
+                            className="border-border cursor-pointer border-b px-4 py-3"
                             onMouseEnter={(e) => {
                                 if (sel?.id !== r.id) {
-                                    e.currentTarget.style.background = "var(--color-hex-0a0a0a)";
+                                    e.currentTarget.style.background = "var(--background)";
                                 }
                             }}
                             onMouseLeave={(e) => {
@@ -60,7 +47,7 @@ export function ReportListSidebar({
                             }}
                         >
                             <div className="mb-1 flex items-center justify-between">
-                                <span className="text-base font-bold tracking-tight text-[var(--color-brand)]">
+                                <span className="text-primary text-base font-bold tracking-tight">
                                     {r.id}
                                 </span>
                                 <span
@@ -68,30 +55,30 @@ export function ReportListSidebar({
                                     style={{
                                         color:
                                             r.status === "READY"
-                                                ? "var(--color-success)"
-                                                : "var(--color-warning)",
+                                                ? "var(--success)"
+                                                : "var(--warning)",
                                     }}
                                 >
                                     {r.status}
                                 </span>
                             </div>
-                            <div className="mb-[2px] text-lg tracking-tighter text-[var(--color-hex-a0a0a0)]">
+                            <div className="text-muted-foreground mb-0.5 text-xs tracking-tighter">
                                 {r.type}
                             </div>
-                            <div className="text-base-tight tracking-tight-1 text-[var(--color-hex-333333)]">
+                            <div className="text-muted-foreground text-sm tracking-tight">
                                 {r.mission} · {r.generated}
                             </div>
                             <div className="mt-2 flex gap-3">
-                                <span className="text-sm-tight tracking-normal text-[var(--color-hex-555555)]">
+                                <span className="text-muted-foreground text-xs tracking-normal">
                                     {r.findings} FINDINGS
                                 </span>
                                 {r.critical > 0 && (
-                                    <span className="text-sm-tight tracking-normal text-[var(--color-danger)]">
+                                    <span className="text-destructive text-xs tracking-normal">
                                         {r.critical} CRITICAL
                                     </span>
                                 )}
                                 {r.pages > 0 && (
-                                    <span className="text-sm-tight tracking-normal text-[var(--color-hex-333333)]">
+                                    <span className="text-muted-foreground text-xs tracking-normal">
                                         {r.pages} PAGES
                                     </span>
                                 )}
@@ -101,27 +88,25 @@ export function ReportListSidebar({
                 )}
             </div>
             {/* Pagination Controls */}
-            <div className="flex flex-shrink-0 items-center justify-between border-t border-solid border-[var(--color-hex-1e1e1e)] bg-[var(--color-hex-0a0a0a)] px-6 py-4">
-                <div className="text-lg tracking-normal text-[var(--color-hex-666666)]">
-                    PAGE {page}
-                </div>
+            <div className="border-border bg-background flex flex-shrink-0 items-center justify-between border-t border-solid px-6 py-4">
+                <div className="text-muted-foreground text-xs tracking-normal">PAGE {page}</div>
                 <div className="flex gap-2">
-                    <button
-                        className="font-inherit tracking-wider-2 cursor-pointer rounded-[2px] border-none bg-[var(--color-hex-111111)] px-[12px] py-[6px] text-base font-semibold text-[var(--color-fg)]"
+                    <Button
+                        variant="secondary"
+                        className="bg-card text-foreground hover:bg-card/80 h-auto rounded-sm px-3 py-1.5 text-base font-semibold tracking-widest"
                         onClick={() => setPage((p) => Math.max(1, p - 1))}
                         disabled={page === 1}
-                        style={{ opacity: page === 1 ? 0.5 : 1 }}
                     >
                         PREV
-                    </button>
-                    <button
-                        className="font-inherit tracking-wider-2 cursor-pointer rounded-[2px] border-none bg-[var(--color-hex-111111)] px-[12px] py-[6px] text-base font-semibold text-[var(--color-fg)]"
+                    </Button>
+                    <Button
+                        variant="secondary"
+                        className="bg-card text-foreground hover:bg-card/80 h-auto rounded-sm px-3 py-1.5 text-base font-semibold tracking-widest"
                         onClick={() => setPage((p) => p + 1)}
                         disabled={reportsLength < 50}
-                        style={{ opacity: reportsLength < 50 ? 0.5 : 1 }}
                     >
                         NEXT
-                    </button>
+                    </Button>
                 </div>
             </div>
         </div>
