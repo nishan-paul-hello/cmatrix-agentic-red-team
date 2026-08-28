@@ -23,7 +23,7 @@ export default function Login({ onLogin }: LoginProps) {
     }
 
     return (
-        <div className="flex min-h-screen items-center justify-center bg-[var(--color-hex-080808)]">
+        <div className="flex min-h-screen items-center justify-center bg-[var(--color-bg)]">
             {/* Decorative grid background */}
             <div
                 className="pointer-events-none absolute inset-0"
@@ -40,7 +40,7 @@ export default function Login({ onLogin }: LoginProps) {
                 <div className="mb-8 flex items-center gap-3">
                     <GeometricMark size={28} />
                     <div className="flex flex-col">
-                        <span className="text-[22px] font-bold tracking-[0.22em] text-[var(--color-hex-f2f2f2)]">
+                        <span className="text-10xl tracking-widest-2 font-bold text-[var(--color-fg)]">
                             RedGrid
                         </span>
                     </div>
@@ -51,7 +51,7 @@ export default function Login({ onLogin }: LoginProps) {
                     className="mb-8 h-[1px] w-full"
                     style={{
                         background:
-                            "linear-gradient(90deg, var(--color-hex-e31b23) 0%, var(--color-hex-9e1118) 60%, transparent 100%)",
+                            "linear-gradient(90deg, var(--color-brand) 0%, var(--color-hex-9e1118) 60%, transparent 100%)",
                     }}
                     aria-hidden="true"
                 />
@@ -63,7 +63,7 @@ export default function Login({ onLogin }: LoginProps) {
                         <div className="mb-4">
                             <label
                                 htmlFor="username"
-                                className="mb-1.5 block text-[10px] tracking-[0.18em] text-[var(--color-hex-666666)]"
+                                className="tracking-wider-3 mb-1.5 block text-lg text-[var(--color-hex-666666)]"
                             >
                                 USERNAME
                             </label>
@@ -75,7 +75,7 @@ export default function Login({ onLogin }: LoginProps) {
                                 autoComplete="username"
                                 spellCheck={false}
                                 aria-required="true"
-                                className="w-full rounded-[2px] border border-[var(--color-hex-292929)] bg-[var(--color-hex-191919)] px-[12px] py-[9px] text-[12px] text-[var(--color-hex-f2f2f2)] transition-colors duration-100 outline-none focus:border-[var(--color-hex-e31b23)]"
+                                className="w-full rounded-[2px] border border-[var(--color-hex-292929)] bg-[var(--color-hex-191919)] px-[12px] py-[9px] text-2xl text-[var(--color-fg)] transition-colors duration-100 outline-none focus:border-[var(--color-brand)]"
                             />
                         </div>
 
@@ -83,7 +83,7 @@ export default function Login({ onLogin }: LoginProps) {
                         <div className="mb-6">
                             <label
                                 htmlFor="password"
-                                className="mb-1.5 block text-[10px] tracking-[0.18em] text-[var(--color-hex-666666)]"
+                                className="tracking-wider-3 mb-1.5 block text-lg text-[var(--color-hex-666666)]"
                             >
                                 PASSWORD
                             </label>
@@ -94,7 +94,7 @@ export default function Login({ onLogin }: LoginProps) {
                                 onChange={(e) => setPassword(e.target.value)}
                                 autoComplete="current-password"
                                 aria-required="true"
-                                className="w-full rounded-[2px] border border-[var(--color-hex-292929)] bg-[var(--color-hex-191919)] px-[12px] py-[9px] text-[12px] text-[var(--color-hex-f2f2f2)] transition-colors duration-100 outline-none focus:border-[var(--color-hex-e31b23)]"
+                                className="w-full rounded-[2px] border border-[var(--color-hex-292929)] bg-[var(--color-hex-191919)] px-[12px] py-[9px] text-2xl text-[var(--color-fg)] transition-colors duration-100 outline-none focus:border-[var(--color-brand)]"
                             />
                         </div>
 
@@ -104,11 +104,11 @@ export default function Login({ onLogin }: LoginProps) {
                             disabled={loading}
                             aria-busy={loading}
                             className={[
-                                "w-full rounded-[2px] py-[11px] text-[11px] font-semibold tracking-[0.22em] text-[var(--color-hex-f2f2f2)]",
+                                "tracking-widest-2 w-full rounded-[2px] py-[11px] text-xl font-semibold text-[var(--color-fg)]",
                                 "transition-colors duration-100",
                                 loading
                                     ? "cursor-not-allowed bg-[var(--color-hex-9e1118)]"
-                                    : "cursor-pointer bg-[var(--color-hex-e31b23)] hover:bg-[var(--color-hex-ff2a32)]",
+                                    : "cursor-pointer bg-[var(--color-brand)] hover:bg-[var(--color-danger)]",
                             ].join(" ")}
                         >
                             {loading ? "AUTHENTICATING..." : "SIGN IN"}
@@ -121,10 +121,10 @@ export default function Login({ onLogin }: LoginProps) {
                     {/* Footer status */}
                     <div className="flex items-center justify-center gap-2">
                         <div
-                            className="h-[5px] w-[5px] shrink-0 rounded-full bg-[var(--color-hex-3fb950)]"
+                            className="h-[5px] w-[5px] shrink-0 rounded-full bg-[var(--color-success)]"
                             aria-hidden="true"
                         />
-                        <span className="text-[9px] tracking-[0.22em] text-[var(--color-hex-666666)]">
+                        <span className="tracking-widest-2 text-base text-[var(--color-hex-666666)]">
                             SECURE RESEARCH ENVIRONMENT
                         </span>
                     </div>
@@ -132,10 +132,10 @@ export default function Login({ onLogin }: LoginProps) {
 
                 {/* Version / copyright */}
                 <div className="mt-5 flex w-full items-center justify-between">
-                    <span className="text-[9px] tracking-[0.1em] text-[var(--color-hex-333333)]">
+                    <span className="text-base tracking-normal text-[var(--color-hex-333333)]">
                         v1.1.1
                     </span>
-                    <span className="inline-flex items-center gap-1.5 text-[9px] tracking-[0.1em] text-[var(--color-hex-333333)]">
+                    <span className="inline-flex items-center gap-1.5 text-base tracking-normal text-[var(--color-hex-333333)]">
                         <a
                             href="https://kaiofficial.xyz/"
                             target="_blank"
