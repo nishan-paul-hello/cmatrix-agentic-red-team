@@ -1,14 +1,11 @@
 import React, { useCallback, useMemo, useRef, useState } from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
 
-import {
-    STATUS_C,
-    TrajectoryStepRow,
-    TYPE_C,
-} from "@/features/trajectory/components/TrajectoryStepRow";
+import { TrajectoryStepRow, TYPE_C } from "@/features/trajectory/components/TrajectoryStepRow";
 import { type TrajStep } from "@/features/trajectory/data/fixtures/trajectoryMockData";
 import { useTrajectoryFeed } from "@/features/trajectory/hooks/useTrajectoryFeed";
 import { TASK_STATUS } from "@/types/domain-types";
+import { getStatusColor } from "@/utils/statusColors";
 
 export default function TrajectoryPage() {
     const stepsData = useTrajectoryFeed();
@@ -53,11 +50,11 @@ export default function TrajectoryPage() {
                     borderBottom: "1px solid var(--color-hex-1e1e1e)",
                 }}
             >
-                <div className="mb-[3px] text-[9px] tracking-[0.22em] text-[var(--color-hex-666666)]">
+                <div className="tracking-widest-2 mb-[3px] text-base text-[var(--color-hex-666666)]">
                     MISSION / CVE-001
                 </div>
                 <div className="flex items-baseline justify-between">
-                    <h1 className="text-[20px] font-bold tracking-[0.12em] text-[var(--color-hex-f2f2f2)]">
+                    <h1 className="text-9xl font-bold tracking-wide text-[var(--color-fg)]">
                         TRAJECTORY
                     </h1>
                     <div className="flex items-center gap-5">
@@ -82,7 +79,9 @@ export default function TrajectoryPage() {
                     <button
                         key={t}
                         onClick={() => setFilter(t)}
-                        className="font-inherit cursor-pointer rounded-[2px] px-[10px] py-[3px] text-[8px] tracking-[0.14em]"
+                        aria-pressed={filter === t}
+                        aria-label={t === "ALL" ? "Show all events" : `Filter by ${t}`}
+                        className="font-inherit tracking-wider-1 cursor-pointer rounded-[2px] px-[10px] py-[3px] text-sm"
                         style={{
                             background: (() => {
                                 if (filter === t) {
@@ -105,7 +104,7 @@ export default function TrajectoryPage() {
                             color: (() => {
                                 if (filter === t) {
                                     if (t === "ALL") {
-                                        return "var(--color-hex-f2f2f2)";
+                                        return "var(--color-fg)";
                                     }
                                     return (TYPE_C[t] as { color: string }).color;
                                 }
@@ -116,7 +115,7 @@ export default function TrajectoryPage() {
                         {t}
                     </button>
                 ))}
-                <span className="ml-auto text-[8px] tracking-[0.12em] text-[var(--color-hex-333333)]">
+                <span className="ml-auto text-sm tracking-wide text-[var(--color-hex-333333)]">
                     {visible.length} EVENTS
                 </span>
             </div>
@@ -135,7 +134,7 @@ export default function TrajectoryPage() {
                                 step={step}
                                 isSel={sel?.step === step.step}
                                 isLast={virtualRow.index === visible.length - 1}
-                                onClick={() => handleRowClick(step)}
+                                onClick={handleRowClick}
                             />
                         );
                     })}
@@ -159,7 +158,7 @@ export default function TrajectoryPage() {
                         borderLeft: "1px solid var(--color-hex-1e1e1e)",
                     }}
                 >
-                    <div className="mb-[14px] text-[8px] tracking-[0.2em] text-[var(--color-hex-444444)]">
+                    <div className="mb-[14px] text-sm tracking-widest text-[var(--color-hex-444444)]">
                         STEP TYPES
                     </div>
                     {(
@@ -183,11 +182,11 @@ export default function TrajectoryPage() {
                                         background: tc.color,
                                     }}
                                 />
-                                <span className="flex-1 text-[9px] tracking-[0.06em] text-[var(--color-hex-555555)]">
+                                <span className="tracking-tight-1 flex-1 text-base text-[var(--color-hex-555555)]">
                                     {t}
                                 </span>
                                 <span
-                                    className="text-[10px] font-bold"
+                                    className="text-lg font-bold"
                                     style={{
                                         color: tc.color,
                                     }}
@@ -203,7 +202,7 @@ export default function TrajectoryPage() {
                             margin: "12px 0",
                         }}
                     />
-                    <div className="mb-[14px] text-[8px] tracking-[0.2em] text-[var(--color-hex-444444)]">
+                    <div className="mb-[14px] text-sm tracking-widest text-[var(--color-hex-444444)]">
                         OUTCOMES
                     </div>
                     {(
@@ -221,16 +220,16 @@ export default function TrajectoryPage() {
                                     className="h-[6px] w-[6px] shrink-0"
                                     style={{
                                         borderRadius: "50%",
-                                        background: STATUS_C[s],
+                                        background: getStatusColor(s).color,
                                     }}
                                 />
-                                <span className="flex-1 text-[9px] text-[var(--color-hex-555555)]">
+                                <span className="flex-1 text-base text-[var(--color-hex-555555)]">
                                     {s}
                                 </span>
                                 <span
-                                    className="text-[10px] font-bold"
+                                    className="text-lg font-bold"
                                     style={{
-                                        color: STATUS_C[s],
+                                        color: getStatusColor(s).color,
                                     }}
                                 >
                                     {count}
@@ -246,13 +245,13 @@ export default function TrajectoryPage() {
 function Stat({ label, value, red }: { label: string; value: string; red?: boolean }) {
     return (
         <div className="flex flex-col items-end">
-            <div className="mb-[2px] text-[7.5px] tracking-[0.18em] text-[var(--color-hex-444444)]">
+            <div className="text-sm-tight tracking-wider-3 mb-[2px] text-[var(--color-hex-444444)]">
                 {label}
             </div>
             <div
-                className="text-[14px] font-bold"
+                className="text-4xl font-bold"
                 style={{
-                    color: red ? "var(--color-hex-e31b23)" : "var(--color-hex-f2f2f2)",
+                    color: red ? "var(--color-brand)" : "var(--color-fg)",
                 }}
             >
                 {value}

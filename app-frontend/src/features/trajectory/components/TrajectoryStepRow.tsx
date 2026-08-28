@@ -2,6 +2,7 @@ import React from "react";
 
 import { type TrajStep } from "@/features/trajectory/data/fixtures/trajectoryMockData";
 import { TASK_STATUS } from "@/types/domain-types";
+import { getStatusColor } from "@/utils/statusColors";
 
 export const TYPE_C: Record<
     TrajStep["type"],
@@ -11,7 +12,7 @@ export const TYPE_C: Record<
     }
 > = {
     DECISION: {
-        color: "var(--color-hex-e31b23)",
+        color: "var(--color-brand)",
         bg: "var(--color-hex-120608)",
     },
     EXECUTION: {
@@ -23,7 +24,7 @@ export const TYPE_C: Record<
         bg: "var(--color-hex-0f0f0f)",
     },
     BRANCH: {
-        color: "var(--color-hex-d29922)",
+        color: "var(--color-warning)",
         bg: "var(--color-hex-110e00)",
     },
     COMPACTION: {
@@ -31,17 +32,9 @@ export const TYPE_C: Record<
         bg: "var(--color-hex-060e1a)",
     },
     VALIDATION: {
-        color: "var(--color-hex-3fb950)",
+        color: "var(--color-success)",
         bg: "var(--color-hex-061a0c)",
     },
-};
-
-export const STATUS_C: Record<TrajStep["status"], string> = {
-    [TASK_STATUS.SUCCESS]: "var(--color-hex-3fb950)",
-    [TASK_STATUS.FAILED]: "var(--color-hex-ff2a32)",
-    [TASK_STATUS.RUNNING]: "var(--color-hex-d29922)",
-    [TASK_STATUS.TIMEOUT]: "var(--color-hex-555555)",
-    [TASK_STATUS.PENDING]: "var(--color-hex-666666)",
 };
 
 export const TrajectoryStepRow = React.memo(function TrajectoryStepRowInner({
@@ -53,7 +46,7 @@ export const TrajectoryStepRow = React.memo(function TrajectoryStepRowInner({
     step: TrajStep;
     isSel: boolean;
     isLast: boolean;
-    onClick: () => void;
+    onClick: (step: TrajStep) => void;
 }) {
     const tc = TYPE_C[step.type];
     return (
@@ -87,10 +80,10 @@ export const TrajectoryStepRow = React.memo(function TrajectoryStepRowInner({
                 tabIndex={0}
                 onKeyDown={(e) => {
                     if (e.key === "Enter") {
-                        onClick();
+                        onClick(step);
                     }
                 }}
-                onClick={onClick}
+                onClick={() => onClick(step)}
                 className="flex-1 cursor-pointer"
                 style={{
                     marginBottom: !isLast ? 0 : 0,
@@ -118,11 +111,11 @@ export const TrajectoryStepRow = React.memo(function TrajectoryStepRowInner({
                             background: tc.bg,
                         }}
                     >
-                        <span className="min-w-[20px] text-[8px] tracking-[0.12em] text-[var(--color-hex-333333)]">
+                        <span className="min-w-[20px] text-sm tracking-wide text-[var(--color-hex-333333)]">
                             #{String(step.step).padStart(2, "0")}
                         </span>
                         <span
-                            className="rounded-[2px] px-[6px] py-[1px] text-[8px] font-bold tracking-[0.14em]"
+                            className="tracking-wider-1 rounded-[2px] px-[6px] py-[1px] text-sm font-bold"
                             style={{
                                 color: tc.color,
                                 border: `1px solid ${tc.color}44`,
@@ -130,16 +123,16 @@ export const TrajectoryStepRow = React.memo(function TrajectoryStepRowInner({
                         >
                             {step.type}
                         </span>
-                        <span className="text-[9px] font-semibold tracking-[0.06em] text-[var(--color-hex-e31b23)]">
+                        <span className="tracking-tight-1 text-base font-semibold text-[var(--color-brand)]">
                             {step.agent}
                         </span>
-                        <span className="ml-auto text-[8px] text-[var(--color-hex-333333)]">
+                        <span className="ml-auto text-sm text-[var(--color-hex-333333)]">
                             {step.ts}
                         </span>
                         <span
-                            className="text-[8px] font-semibold tracking-[0.12em]"
+                            className="text-sm font-semibold tracking-wide"
                             style={{
-                                color: STATUS_C[step.status],
+                                color: getStatusColor(step.status).color,
                             }}
                         >
                             {step.status}
@@ -147,7 +140,7 @@ export const TrajectoryStepRow = React.memo(function TrajectoryStepRowInner({
                     </div>
                     <div className="px-4 py-3">
                         <p
-                            className="text-[10px] leading-[1.7] text-[var(--color-hex-666666)]"
+                            className="text-lg leading-relaxed text-[var(--color-hex-666666)]"
                             style={{
                                 margin: 0,
                                 marginBottom: isSel ? 10 : 0,
@@ -186,18 +179,18 @@ export const TrajectoryStepRow = React.memo(function TrajectoryStepRowInner({
                                     },
                                 ].map((r) => (
                                     <div key={r.k}>
-                                        <div className="mb-[2px] text-[7.5px] tracking-[0.18em] text-[var(--color-hex-444444)]">
+                                        <div className="text-sm-tight tracking-wider-3 mb-[2px] text-[var(--color-hex-444444)]">
                                             {r.k}
                                         </div>
                                         <div
-                                            className="text-[10px]"
+                                            className="text-lg"
                                             style={{
                                                 color: (() => {
                                                     if (r.k === "COST" || r.k === "TOKENS") {
                                                         return "var(--color-hex-555555)";
                                                     }
                                                     if (r.k === "E_ORD DELTA" && r.v !== "—") {
-                                                        return "var(--color-hex-3fb950)";
+                                                        return "var(--color-success)";
                                                     }
                                                     return "var(--color-hex-888888)";
                                                 })(),
