@@ -6,6 +6,12 @@ import { ServicesProvider } from "@/lib/services-context";
 
 import "@/app/globals.css";
 
+import { Geist } from "next/font/google";
+
+import { cn } from "@/lib/utils";
+
+const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
+
 export const metadata: Metadata = {
     title: {
         default: "RedGrid - Agentic Red Team",
@@ -51,7 +57,7 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en" className="dark">
+        <html lang="en" className={cn("dark", "font-sans", geist.variable)}>
             {/*
              * suppressHydrationWarning is required here because Next.js server-renders
              * the <body> without the class that the browser may inject for OS-level

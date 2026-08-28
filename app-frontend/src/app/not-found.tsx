@@ -1,6 +1,9 @@
 import { type Metadata } from "next";
 import Link from "next/link";
 
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+
 export const metadata: Metadata = {
     title: "404 — Page Not Found",
 };
@@ -11,7 +14,7 @@ export const metadata: Metadata = {
  */
 export default function NotFound() {
     return (
-        <div className="flex min-h-screen flex-col items-center justify-center bg-[var(--color-bg)] text-[var(--color-fg)]">
+        <div className="bg-background text-foreground flex min-h-screen flex-col items-center justify-center">
             {/* Decorative grid background */}
             <div
                 className="pointer-events-none absolute inset-0"
@@ -25,34 +28,34 @@ export default function NotFound() {
 
             <div className="relative flex flex-col items-center gap-6 px-6 text-center">
                 {/* Error code */}
-                <div
-                    className="text-huge leading-none font-bold tracking-tight"
-                    style={{ color: "var(--color-brand)" }}
-                >
+                <div className="text-primary text-base leading-none font-bold tracking-tight">
                     404
                 </div>
 
                 {/* Divider */}
                 <div
-                    className="h-[1px] w-[200px]"
+                    className="h-px w-[200px]"
                     style={{
                         background:
-                            "linear-gradient(90deg, var(--color-brand) 0%, var(--color-hex-9e1118) 60%, transparent 100%)",
+                            "linear-gradient(90deg, var(--primary) 0%, var(--border) 60%, transparent 100%)",
                     }}
                 />
 
                 <div className="flex flex-col gap-1">
-                    <p className="text-3xl font-semibold tracking-widest text-[var(--color-hex-a0a0a0)]">
+                    <p className="text-muted-foreground text-sm font-semibold tracking-widest">
                         PAGE NOT FOUND
                     </p>
-                    <p className="text-lg tracking-wide text-[var(--color-hex-444444)]">
+                    <p className="text-muted-foreground text-xs tracking-wide">
                         The route you requested does not exist in this system.
                     </p>
                 </div>
 
                 <Link
                     href="/dashboard"
-                    className="tracking-wider-3 mt-2 rounded-[2px] border border-[var(--color-hex-6f171b)] px-[16px] py-[6px] text-lg font-semibold text-[var(--color-brand)] transition-colors duration-150 hover:border-[var(--color-brand)] hover:bg-[var(--color-hex-1a0608)]"
+                    className={cn(
+                        buttonVariants({ variant: "outline", size: "sm" }),
+                        "text-primary border-border hover:border-primary hover:bg-muted mt-2 text-xs font-semibold tracking-widest",
+                    )}
                 >
                     ← RETURN TO DASHBOARD
                 </Link>
