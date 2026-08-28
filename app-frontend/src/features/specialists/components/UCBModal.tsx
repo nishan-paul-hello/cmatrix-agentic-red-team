@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { FocusTrap } from "focus-trap-react";
 
+import { Button } from "@/components/ui/button";
 import { STATUS_C } from "@/features/specialists/constants";
 import { type VDGEntry } from "@/features/specialists/data/fixtures/teamDashboardMockData";
 
@@ -28,25 +29,25 @@ export function UCBModal({
         {
             label: "EXPLOIT TERM",
             value: entry.exploit,
-            color: "var(--color-brand)",
+            color: "var(--primary)",
             desc: "Q(s,a) — average reward from past attempts",
         },
         {
             label: "EXPLORE TERM",
             value: entry.explore,
-            color: "var(--color-success)",
+            color: "var(--success)",
             desc: "c × √(ln N / n) — exploration bonus",
         },
         {
             label: "EPSS PRIOR",
             value: epss,
-            color: "var(--color-warning)",
+            color: "var(--warning)",
             desc: "λ × EPSS score — initial exploitability prior from NVD/FIRST API",
         },
         {
             label: "UCB SCORE",
             value: entry.ucb,
-            color: "var(--color-danger)",
+            color: "var(--destructive)",
             desc: "Combined final selection score",
         },
     ];
@@ -62,7 +63,7 @@ export function UCBModal({
                         onClose();
                     }
                 }}
-                className="fixed inset-0 flex items-center justify-center bg-[var(--color-hex-00000099)]"
+                className="bg-muted fixed inset-0 flex items-center justify-center"
                 style={{
                     zIndex: 60,
                 }}
@@ -76,67 +77,64 @@ export function UCBModal({
                     role="dialog"
                     aria-modal="true"
                     aria-labelledby="ucb-modal-title"
-                    className="w-panel-lg rounded-[2px] border-[1px] border-solid border-[var(--color-hex-292929)] bg-[var(--color-hex-0d0d0d)]"
+                    className="w-panel-lg border-border bg-background rounded-sm border-[1px] border-solid"
                 >
                     {/* Header */}
-                    <div
-                        className="flex items-start justify-between px-5 pt-4 pb-3"
-                        style={{
-                            borderBottom: "1px solid var(--color-hex-1e1e1e)",
-                        }}
-                    >
+                    <div className="border-border flex items-start justify-between border-b px-5 pt-4 pb-3">
                         <div>
                             <div
                                 id="ucb-modal-title"
-                                className="mb-[2px] text-4xl font-bold tracking-normal text-[var(--color-fg)]"
+                                className="text-foreground mb-0.5 text-sm font-bold tracking-normal"
                             >
                                 UCB BREAKDOWN
                             </div>
-                            <div className="text-base tracking-normal text-[var(--color-brand)]">
+                            <div className="text-primary text-base tracking-normal">
                                 {entry.id} — {entry.type}
                             </div>
                         </div>
-                        <button
+                        <Button
+                            variant="ghost"
+                            size="icon-sm"
                             onClick={onClose}
-                            className="cursor-pointer border-none bg-[transparent] text-6xl text-[var(--color-hex-444444)]"
+                            className="text-muted-foreground"
                         >
                             ✕
-                        </button>
+                        </Button>
                     </div>
                     <div className="px-5 py-5">
                         {/* Formula */}
-                        <div className="mb-[20px] rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1a1a1a)] bg-[var(--color-bg)] px-[16px] py-[12px] text-center">
-                            <div className="mb-[6px] text-xl tracking-tight text-[var(--color-hex-555555)]">
+                        <div className="border-border bg-background mb-5 rounded-sm border-[1px] border-solid px-4 py-3 text-center">
+                            <div className="text-muted-foreground mb-1.5 text-xs tracking-tight">
                                 UCB FORMULA
                             </div>
-                            <div className="tracking-tight-1 text-3xl text-[var(--color-hex-a0a0a0)]">
-                                UCB(s) = <span className="text-[var(--color-brand)]">Q(s,a)</span> +{" "}
-                                <span className="text-[var(--color-success)]">c × √(ln N / n)</span>
+                            <div className="text-muted-foreground text-sm tracking-tight">
+                                UCB(s) = <span className="text-primary">Q(s,a)</span> +{" "}
+                                <span className="text-success">c × √(ln N / n)</span>
                             </div>
-                            <div className="mt-[8px] text-base tracking-tight text-[var(--color-hex-333333)]">
+                            <div className="text-muted-foreground mt-2 text-base tracking-tight">
                                 c={C} · N={N} total visits · n={n === 0 ? "0 (new node)" : n} visits
                                 · ln(N)=
                                 {Math.log(N || 1).toFixed(3)}
                             </div>
                             {/* G1: c constant note */}
-                            <div className="mt-[6px] text-sm tracking-normal text-[var(--color-hex-333333)]">
+                            <div className="text-muted-foreground mt-1.5 text-sm tracking-normal">
                                 UCB POLICY c = {C.toFixed(2)} — configurable in Settings → VDG
                             </div>
                         </div>
                         {/* Score bars */}
                         {bars.map((b) => (
-                            <div key={b.label} className="mb-[16px]">
+                            <div key={b.label} className="mb-4">
                                 <div className="mb-2 flex items-center justify-between">
                                     <div>
-                                        <span className="tracking-wider-3 text-base font-semibold text-[var(--color-hex-444444)]">
+                                        <span className="text-muted-foreground text-base font-semibold tracking-widest">
                                             {b.label}
                                         </span>
-                                        <div className="text-base-tight mt-[2px] text-[var(--color-hex-333333)]">
+                                        <div className="text-muted-foreground mt-0.5 text-sm">
                                             {b.desc}
                                         </div>
                                     </div>
                                     <span
-                                        className="text-6xl font-bold"
+                                        className="text-base font-bold"
                                         style={{
                                             color: b.color,
                                         }}
@@ -144,9 +142,9 @@ export function UCBModal({
                                         {b.value.toFixed(3)}
                                     </span>
                                 </div>
-                                <div className="h-[5px] overflow-hidden rounded-[2px] bg-[var(--color-hex-1a1a1a)]">
+                                <div className="bg-card h-1 overflow-hidden rounded-sm">
                                     <div
-                                        className="h-full rounded-[2px]"
+                                        className="h-full rounded-sm"
                                         style={{
                                             width: `${b.value * 100}%`,
                                             background: b.color,
@@ -156,11 +154,11 @@ export function UCBModal({
                             </div>
                         ))}
                         {/* G3: EPSS ONE-DAY mode footnote */}
-                        <div className="mt-[6px] text-sm tracking-normal text-[var(--color-hex-333333)]">
+                        <div className="text-muted-foreground mt-1.5 text-sm tracking-normal">
                             ONE-DAY mode: Q(s,a) seeded from EPSS prior
                         </div>
                         {/* Stats grid */}
-                        <div className="mt-4 grid grid-cols-4 gap-0 overflow-hidden rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)]">
+                        <div className="border-border mt-4 grid grid-cols-1 gap-0 overflow-hidden rounded-sm border-[1px] border-solid sm:grid-cols-2 lg:grid-cols-4">
                             {[
                                 {
                                     k: "E_ORD",
@@ -178,27 +176,21 @@ export function UCBModal({
                                     k: "COST",
                                     v: entry.cost,
                                 },
-                            ].map((m, i, a) => (
+                            ].map((m) => (
                                 <div
                                     key={m.k}
-                                    className="bg-[var(--color-hex-0b0b0b)] px-[12px] py-[10px]"
-                                    style={{
-                                        borderRight:
-                                            i < a.length - 1
-                                                ? "1px solid var(--color-hex-1a1a1a)"
-                                                : "none",
-                                    }}
+                                    className="bg-background border-border border-r px-3 py-2.5"
                                 >
-                                    <div className="text-sm-tight tracking-wider-3 mb-[4px] text-[var(--color-hex-444444)]">
+                                    <div className="text-muted-foreground mb-1 text-xs tracking-widest">
                                         {m.k}
                                     </div>
                                     <div
-                                        className="text-3xl font-bold"
+                                        className="text-sm font-bold"
                                         style={{
                                             color:
                                                 m.k === "STATUS"
                                                     ? STATUS_C[entry.status]
-                                                    : "var(--color-fg)",
+                                                    : "var(--foreground)",
                                         }}
                                     >
                                         {m.v}

@@ -1,6 +1,6 @@
 import React from "react";
 
-import { KPI } from "@/features/specialists/components/KPI";
+import { KPIStrip } from "@/components/ui/KPIStrip";
 import { UCBModal } from "@/features/specialists/components/UCBModal";
 import { VDGScoringTable } from "@/features/specialists/components/VDGScoringTable";
 import {
@@ -11,10 +11,10 @@ import {
 import { SPEC_STATUS } from "@/types/domain-types";
 
 const SPEC_C: Record<string, string> = {
-    [SPEC_STATUS.COMPLETED]: "var(--color-success)",
-    [SPEC_STATUS.RUNNING]: "var(--color-danger)",
-    [SPEC_STATUS.WAITING]: "var(--color-warning)",
-    [SPEC_STATUS.IDLE]: "var(--color-hex-333333)",
+    [SPEC_STATUS.COMPLETED]: "var(--success)",
+    [SPEC_STATUS.RUNNING]: "var(--destructive)",
+    [SPEC_STATUS.WAITING]: "var(--warning)",
+    [SPEC_STATUS.IDLE]: "var(--border)",
 };
 const TeamManagerDashboardView = React.memo(function ({
     ucbEntry,
@@ -30,127 +30,98 @@ const TeamManagerDashboardView = React.memo(function ({
     sched: SchedEntry[];
 }) {
     return (
-        <div className="flex h-full min-h-[0px] flex-col">
+        <div className="flex h-full min-h-0 flex-col">
             {/* Header */}
-            <div
-                className="flex-shrink-0 px-6 pt-5 pb-4"
-                style={{
-                    borderBottom: "1px solid var(--color-hex-1e1e1e)",
-                }}
-            >
-                <div className="tracking-widest-2 mb-[3px] text-base text-[var(--color-hex-666666)]">
+            <div className="border-border flex-shrink-0 border-b px-6 pt-5 pb-4">
+                <div className="text-muted-foreground mb-0.5 text-base tracking-widest">
                     MISSION / CVE-001
                 </div>
                 <div className="flex items-baseline justify-between">
-                    <h1 className="text-9xl font-bold tracking-wide text-[var(--color-fg)]">
+                    <h1 className="text-foreground text-xs font-bold tracking-wide">
                         TEAM MANAGER
                     </h1>
-                    <div className="flex items-center gap-6">
-                        <KPI label="ACTIVE SPECIALISTS" value="1" />
-                        <KPI
-                            label="VDG ELIGIBLE"
-                            value={String(vdg.filter((v) => v.status === "ELIGIBLE").length)}
-                            red
-                        />
-                        <KPI label="TOTAL COST" value="$1.42" />
-                        <KPI label="RUNTIME" value="00:19:04" />
-                    </div>
+                    <KPIStrip
+                        variant="inline"
+                        className="gap-6"
+                        items={[
+                            { k: "ACTIVE SPECIALISTS", v: "1" },
+                            {
+                                k: "VDG ELIGIBLE",
+                                v: String(vdg.filter((v) => v.status === "ELIGIBLE").length),
+                                c: "var(--primary)",
+                            },
+                            { k: "TOTAL COST", v: "$1.42" },
+                            { k: "RUNTIME", v: "00:19:04" },
+                        ]}
+                    />
                 </div>
             </div>
 
-            <div className="flex min-h-[0px] flex-1 overflow-hidden">
+            <div className="flex min-h-0 flex-1 overflow-hidden">
                 {/* LEFT: VDG scoring table */}
                 <VDGScoringTable vdg={vdg} setUcbEntry={setUcbEntry} />
 
                 {/* RIGHT: specialists + schedule */}
                 <div className="w-panel-sm flex flex-shrink-0 flex-col overflow-y-auto">
                     {/* Specialists */}
-                    <div
-                        className="bg-[var(--color-hex-0a0a0a)] text-sm tracking-widest text-[var(--color-hex-444444)]"
-                        style={{
-                            padding: "10px 16px 8px",
-                            borderBottom: "1px solid var(--color-hex-111111)",
-                        }}
-                    >
+                    <div className="bg-background text-muted-foreground border-border border-b text-sm tracking-widest">
                         SPECIALIST STATUS
                     </div>
                     {specialists.map((s) => (
-                        <div
-                            key={s.id}
-                            className="px-[16px] py-[10px]"
-                            style={{
-                                borderBottom: "1px solid var(--color-hex-111111)",
-                            }}
-                        >
+                        <div key={s.id} className="border-border border-b px-4 py-2.5">
                             <div className="mb-1 flex items-center gap-2">
                                 <div
-                                    className="h-[6px] w-[6px] shrink-0"
+                                    className="h-1.5 w-1.5 shrink-0"
                                     style={{
                                         borderRadius: "50%",
-                                        background: SPEC_C[s.status] ?? "var(--color-hex-333333)",
+                                        background: SPEC_C[s.status] ?? "var(--border)",
                                     }}
                                 />
-                                <span className="tracking-tight-1 flex-1 text-lg font-bold text-[var(--color-hex-a0a0a0)]">
+                                <span className="text-muted-foreground flex-1 text-xs font-bold tracking-tight">
                                     {s.role}
                                 </span>
                                 <span
                                     className="text-sm font-semibold tracking-normal"
                                     style={{
-                                        color: SPEC_C[s.status] ?? "var(--color-hex-333333)",
+                                        color: SPEC_C[s.status] ?? "var(--border)",
                                     }}
                                 >
                                     {s.status}
                                 </span>
                             </div>
-                            <div className="text-base-tight tracking-tight-1 mb-[1px] text-[var(--color-hex-333333)]">
+                            <div className="text-muted-foreground mb-px text-sm tracking-tight">
                                 {s.task}
                             </div>
                             {s.score > 0 && (
-                                <div className="text-sm tracking-normal text-[var(--color-brand)]">
+                                <div className="text-primary text-sm tracking-normal">
                                     UCB={s.score.toFixed(3)}
                                 </div>
                             )}
                         </div>
                     ))}
                     {/* Schedule */}
-                    <div
-                        className="bg-[var(--color-hex-0a0a0a)] text-sm tracking-widest text-[var(--color-hex-444444)]"
-                        style={{
-                            padding: "10px 16px 8px",
-                            borderBottom: "1px solid var(--color-hex-111111)",
-                            borderTop: "1px solid var(--color-hex-1e1e1e)",
-                        }}
-                    >
+                    <div className="bg-background text-muted-foreground border-border border-b text-sm tracking-widest">
                         NEXT SCHEDULED
                     </div>
                     {sched.map((s, i) => (
-                        <div
-                            key={s.node}
-                            className="px-[16px] py-[10px]"
-                            style={{
-                                borderBottom: "1px solid var(--color-hex-111111)",
-                            }}
-                        >
+                        <div key={s.node} className="border-border border-b px-4 py-2.5">
                             <div className="mb-1 flex items-center gap-2">
                                 <span
-                                    className="tracking-wider-1 min-w-[48px] text-sm font-bold"
+                                    className="min-w-12 text-sm font-bold tracking-widest"
                                     style={{
-                                        color:
-                                            i === 0
-                                                ? "var(--color-warning)"
-                                                : "var(--color-hex-333333)",
+                                        color: i === 0 ? "var(--warning)" : "var(--border)",
                                     }}
                                 >
                                     {s.step}
                                 </span>
-                                <span className="tracking-tight-1 text-lg font-bold text-[var(--color-brand)]">
+                                <span className="text-primary text-xs font-bold tracking-tight">
                                     {s.node}
                                 </span>
-                                <span className="ml-auto text-base font-bold text-[var(--color-success)]">
+                                <span className="text-success ml-auto text-base font-bold">
                                     {s.ucb.toFixed(3)}
                                 </span>
                             </div>
-                            <div className="tracking-tight-1 text-sm leading-snug text-[var(--color-hex-333333)]">
+                            <div className="text-muted-foreground text-sm leading-snug tracking-tight">
                                 {s.reason}
                             </div>
                         </div>

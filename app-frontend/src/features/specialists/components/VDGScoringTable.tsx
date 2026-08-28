@@ -11,25 +11,14 @@ export const VDGScoringTable = React.memo(function ({
     setUcbEntry: (v: VDGEntry | null) => void;
 }) {
     return (
-        <div
-            className="flex flex-1 flex-col overflow-hidden"
-            style={{
-                borderRight: "1px solid var(--color-hex-1e1e1e)",
-            }}
-        >
-            <div
-                className="shrink-0 bg-[var(--color-hex-0a0a0a)] text-sm tracking-widest text-[var(--color-hex-444444)]"
-                style={{
-                    padding: "10px 20px 8px",
-                    borderBottom: "1px solid var(--color-hex-111111)",
-                }}
-            >
+        <div className="border-border flex flex-1 flex-col overflow-hidden border-r">
+            <div className="bg-background text-muted-foreground border-border shrink-0 border-b text-sm tracking-widest">
                 VDG SCORING — UCB POLICY
             </div>
-            <div className="flex-1 overflow-y-auto">
+            <div className="flex-1 overflow-auto">
                 <table className="w-full border-collapse">
                     <thead>
-                        <tr className="sticky top-0 bg-[var(--color-hex-0f0f0f)]">
+                        <tr className="bg-card sticky top-0">
                             {[
                                 "NODE",
                                 "TYPE",
@@ -43,18 +32,7 @@ export const VDGScoringTable = React.memo(function ({
                             ].map((h) => (
                                 <th
                                     key={h}
-                                    className="text-sm-tight tracking-wider-2 px-[12px] py-[5px] font-semibold whitespace-nowrap text-[var(--color-hex-444444)]"
-                                    style={{
-                                        textAlign:
-                                            h === "UCB ↓" ||
-                                            h === "EXPLOIT" ||
-                                            h === "EXPLORE" ||
-                                            h === "VISITS" ||
-                                            h === "E_ORD"
-                                                ? "right"
-                                                : "left",
-                                        borderBottom: "1px solid var(--color-hex-1a1a1a)",
-                                    }}
+                                    className="text-muted-foreground border-border border-b px-3 py-1 text-xs font-semibold tracking-widest whitespace-nowrap"
                                 >
                                     {h}
                                 </th>
@@ -68,28 +46,23 @@ export const VDGScoringTable = React.memo(function ({
                                 <tr
                                     key={v.id}
                                     onClick={() => setUcbEntry(v)}
-                                    className="cursor-pointer"
-                                    style={{
-                                        borderBottom: "1px solid var(--color-hex-111111)",
-                                        opacity: v.status === "BLOCKED" ? 0.4 : 1,
-                                    }}
+                                    className="border-border cursor-pointer border-b"
                                     onMouseEnter={(e) =>
-                                        (e.currentTarget.style.background =
-                                            "var(--color-hex-0d0d0d)")
+                                        (e.currentTarget.style.background = "var(--background)")
                                     }
                                     onMouseLeave={(e) =>
                                         (e.currentTarget.style.background = "transparent")
                                     }
                                 >
-                                    <td className="text-lg-tight tracking-tight-1 px-[12px] py-[7px] font-bold text-[var(--color-brand)]">
+                                    <td className="text-primary px-3 py-1.5 text-base font-bold tracking-tight">
                                         {v.id}
                                     </td>
-                                    <td className="px-[12px] py-[7px] text-base text-[var(--color-hex-555555)]">
+                                    <td className="text-muted-foreground px-3 py-1.5 text-base">
                                         {v.type}
                                     </td>
-                                    <td className="px-[12px] py-[7px]">
+                                    <td className="px-3 py-1.5">
                                         <span
-                                            className="text-base-tight font-semibold tracking-normal"
+                                            className="text-sm font-semibold tracking-normal"
                                             style={{
                                                 color: STATUS_C[v.status],
                                             }}
@@ -97,53 +70,53 @@ export const VDGScoringTable = React.memo(function ({
                                             {v.status}
                                         </span>
                                     </td>
-                                    <td className="px-[12px] py-[7px] text-right">
+                                    <td className="px-3 py-1.5 text-right">
                                         <span
-                                            className="text-lg font-bold"
+                                            className="text-xs font-bold"
                                             style={{
                                                 color: (() => {
                                                     if (v.ucb > 0.8) {
-                                                        return "var(--color-danger)";
+                                                        return "var(--destructive)";
                                                     }
                                                     if (v.ucb > 0.6) {
-                                                        return "var(--color-brand)";
+                                                        return "var(--primary)";
                                                     }
                                                     if (v.ucb > 0) {
-                                                        return "var(--color-hex-a0a0a0)";
+                                                        return "var(--muted-foreground)";
                                                     }
-                                                    return "var(--color-hex-333333)";
+                                                    return "var(--border)";
                                                 })(),
                                             }}
                                         >
                                             {v.ucb > 0 ? v.ucb.toFixed(3) : "—"}
                                         </span>
                                     </td>
-                                    <td className="px-[12px] py-[7px] text-right text-base text-[var(--color-hex-555555)]">
+                                    <td className="text-muted-foreground px-3 py-1.5 text-right text-base">
                                         {v.exploit > 0 ? v.exploit.toFixed(3) : "—"}
                                     </td>
-                                    <td className="px-[12px] py-[7px] text-right text-base text-[var(--color-success)]">
+                                    <td className="text-success px-3 py-1.5 text-right text-base">
                                         {v.explore > 0 ? v.explore.toFixed(3) : "—"}
                                     </td>
-                                    <td className="px-[12px] py-[7px] text-right text-base text-[var(--color-hex-444444)]">
+                                    <td className="text-muted-foreground px-3 py-1.5 text-right text-base">
                                         {v.visits}
                                     </td>
                                     <td
-                                        className="px-[12px] py-[7px] text-right text-base"
+                                        className="px-3 py-1.5 text-right text-base"
                                         style={{
                                             color: (() => {
                                                 if (v.eord >= 4) {
-                                                    return "var(--color-success)";
+                                                    return "var(--success)";
                                                 }
                                                 if (v.eord >= 2) {
-                                                    return "var(--color-warning)";
+                                                    return "var(--warning)";
                                                 }
-                                                return "var(--color-hex-444444)";
+                                                return "var(--muted-foreground)";
                                             })(),
                                         }}
                                     >
                                         {v.eord}/5
                                     </td>
-                                    <td className="px-[12px] py-[7px] text-right text-base text-[var(--color-hex-444444)]">
+                                    <td className="text-muted-foreground px-3 py-1.5 text-right text-base">
                                         {v.cost}
                                     </td>
                                 </tr>
