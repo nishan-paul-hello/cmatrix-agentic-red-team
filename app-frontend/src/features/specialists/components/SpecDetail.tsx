@@ -21,7 +21,7 @@ export function Sidebar({
                 borderBottom: last ? "none" : "1px solid var(--color-hex-1e1e1e)",
             }}
         >
-            <div className="mb-[8px] text-[8px] tracking-[0.2em] text-[var(--color-hex-444444)]">
+            <div className="mb-[8px] text-sm tracking-widest text-[var(--color-hex-444444)]">
                 {label}
             </div>
             {children}
@@ -48,16 +48,16 @@ export function SpecDetail({ spec, onBack }: { spec: Specialist; onBack: () => v
             >
                 <button
                     onClick={onBack}
-                    className="font-inherit mb-[10px] cursor-pointer border-none bg-[transparent] p-[0px] text-[9px] tracking-[0.14em] text-[var(--color-hex-666666)] hover:text-[var(--color-hex-a0a0a0)]"
+                    className="font-inherit tracking-wider-1 mb-[10px] cursor-pointer border-none bg-[transparent] p-[0px] text-base text-[var(--color-hex-666666)] hover:text-[var(--color-hex-a0a0a0)]"
                 >
                     ← SPECIALISTS
                 </button>
                 <div className="flex items-center gap-3">
-                    <h1 className="text-[18px] font-bold tracking-[0.12em] text-[var(--color-hex-f2f2f2)]">
+                    <h1 className="text-8xl font-bold tracking-wide text-[var(--color-fg)]">
                         {spec.role}
                     </h1>
                     <span
-                        className="rounded-[2px] px-[7px] py-[2px] text-[8.5px] font-semibold tracking-[0.14em]"
+                        className="text-base-tight tracking-wider-1 rounded-[2px] px-[7px] py-[2px] font-semibold"
                         style={{
                             color: dot,
                             background: BADGE_BG[spec.status],
@@ -115,14 +115,14 @@ export function SpecDetail({ spec, onBack }: { spec: Specialist; onBack: () => v
                                 }}
                             >
                                 <div
-                                    className="w-[140px] shrink-0 px-[14px] py-[9px] text-[8.5px] font-semibold tracking-[0.18em] text-[var(--color-hex-444444)]"
+                                    className="text-base-tight tracking-wider-3 w-[140px] shrink-0 px-[14px] py-[9px] font-semibold text-[var(--color-hex-444444)]"
                                     style={{
                                         borderRight: "1px solid var(--color-hex-141414)",
                                     }}
                                 >
                                     {r.k}
                                 </div>
-                                <div className="flex-1 px-[14px] py-[9px] text-[10px] tracking-[0.04em] text-[var(--color-hex-888888)]">
+                                <div className="flex-1 px-[14px] py-[9px] text-lg tracking-tighter text-[var(--color-hex-888888)]">
                                     {r.v}
                                 </div>
                             </div>
@@ -130,7 +130,7 @@ export function SpecDetail({ spec, onBack }: { spec: Specialist; onBack: () => v
                     </div>
 
                     {/* Invocation timeline */}
-                    <div className="mb-[14px] text-[9px] tracking-[0.2em] text-[var(--color-hex-444444)]">
+                    <div className="mb-[14px] text-base tracking-widest text-[var(--color-hex-444444)]">
                         INVOCATION TIMELINE
                     </div>
                     <div
@@ -145,10 +145,10 @@ export function SpecDetail({ spec, onBack }: { spec: Specialist; onBack: () => v
                                     <div
                                         className="mt-[2px] h-[8px] w-[8px] rounded-[1px]"
                                         style={{
-                                            border: `1px solid ${i === timeline.length - 1 ? "var(--color-hex-e31b23)" : "var(--color-hex-333333)"}`,
+                                            border: `1px solid ${i === timeline.length - 1 ? "var(--color-brand)" : "var(--color-hex-333333)"}`,
                                             background: (() => {
                                                 if (i === timeline.length - 1) {
-                                                    return "var(--color-hex-e31b23)";
+                                                    return "var(--color-brand)";
                                                 }
                                                 if (i < timeline.length - 1) {
                                                     return "var(--color-hex-1a1a1a)";
@@ -168,22 +168,22 @@ export function SpecDetail({ spec, onBack }: { spec: Specialist; onBack: () => v
                                     }}
                                 >
                                     <div className="mb-0.5 flex items-center gap-3">
-                                        <span className="text-[8.5px] tracking-[0.06em] text-[var(--color-hex-333333)]">
+                                        <span className="text-base-tight tracking-tight-1 text-[var(--color-hex-333333)]">
                                             {t.ts}
                                         </span>
                                         <span
-                                            className="text-[9.5px] font-semibold tracking-[0.12em]"
+                                            className="text-lg-tight font-semibold tracking-wide"
                                             style={{
                                                 color:
                                                     i === timeline.length - 1
-                                                        ? "var(--color-hex-e31b23)"
+                                                        ? "var(--color-brand)"
                                                         : "var(--color-hex-666666)",
                                             }}
                                         >
                                             {t.event}
                                         </span>
                                     </div>
-                                    <div className="text-[9px] tracking-[0.04em] text-[var(--color-hex-444444)]">
+                                    <div className="text-base tracking-tighter text-[var(--color-hex-444444)]">
                                         {t.detail}
                                     </div>
                                 </div>
@@ -200,15 +200,13 @@ export function SpecDetail({ spec, onBack }: { spec: Specialist; onBack: () => v
                     }}
                 >
                     <Sidebar label="AGENT ID">
-                        <span className="text-[10px] text-[var(--color-hex-666666)]">
-                            {spec.id}
-                        </span>
+                        <span className="text-lg text-[var(--color-hex-666666)]">{spec.id}</span>
                     </Sidebar>
                     <Sidebar label="SKILL LIBRARY">
                         {strategy.capabilities.slice(0, Math.max(1, spec.skills)).map((sk) => (
                             <div key={sk} className="mb-1 flex items-center gap-2">
-                                <span className="text-[8px] text-[var(--color-hex-e31b23)]">◈</span>
-                                <span className="text-[9px] tracking-[0.06em] text-[var(--color-hex-555555)]">
+                                <span className="text-sm text-[var(--color-brand)]">◈</span>
+                                <span className="tracking-tight-1 text-base text-[var(--color-hex-555555)]">
                                     {sk}()
                                 </span>
                             </div>
@@ -216,7 +214,7 @@ export function SpecDetail({ spec, onBack }: { spec: Specialist; onBack: () => v
                     </Sidebar>
                     <Sidebar label="FAILURE MEMORY">
                         {spec.failures === 0 ? (
-                            <span className="text-[9px] text-[var(--color-hex-333333)]">
+                            <span className="text-base text-[var(--color-hex-333333)]">
                                 No failures recorded
                             </span>
                         ) : (
@@ -226,7 +224,7 @@ export function SpecDetail({ spec, onBack }: { spec: Specialist; onBack: () => v
                             ).map((failId, i) => (
                                 <div
                                     key={failId}
-                                    className="mb-[4px] text-[9px] leading-[1.5] text-[var(--color-hex-555555)]"
+                                    className="mb-[4px] text-base leading-snug text-[var(--color-hex-555555)]"
                                 >
                                     Reflection #{i + 1}: payload timeout on FILTERED port
                                 </div>
@@ -236,7 +234,7 @@ export function SpecDetail({ spec, onBack }: { spec: Specialist; onBack: () => v
                     <Sidebar label="CONTEXT UTILIZATION" last>
                         <div className="h-[6px] overflow-hidden rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)] bg-[var(--color-hex-111111)]">
                             <div
-                                className="h-full bg-[var(--color-hex-e31b23)]"
+                                className="h-full bg-[var(--color-brand)]"
                                 style={{
                                     width: `${(() => {
                                         if (spec.context === "FRESH") {
@@ -250,7 +248,7 @@ export function SpecDetail({ spec, onBack }: { spec: Specialist; onBack: () => v
                                 }}
                             />
                         </div>
-                        <div className="mt-[4px] text-[8px] tracking-[0.1em] text-[var(--color-hex-444444)]">
+                        <div className="mt-[4px] text-sm tracking-normal text-[var(--color-hex-444444)]">
                             {(() => {
                                 if (spec.context === "FRESH") {
                                     return "12%";

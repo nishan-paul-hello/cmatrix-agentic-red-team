@@ -18,7 +18,7 @@ export const VDGScoringTable = React.memo(function ({
             }}
         >
             <div
-                className="shrink-0 bg-[var(--color-hex-0a0a0a)] text-[8px] tracking-[0.2em] text-[var(--color-hex-444444)]"
+                className="shrink-0 bg-[var(--color-hex-0a0a0a)] text-sm tracking-widest text-[var(--color-hex-444444)]"
                 style={{
                     padding: "10px 20px 8px",
                     borderBottom: "1px solid var(--color-hex-111111)",
@@ -43,7 +43,7 @@ export const VDGScoringTable = React.memo(function ({
                             ].map((h) => (
                                 <th
                                     key={h}
-                                    className="px-[12px] py-[5px] text-[7.5px] font-semibold tracking-[0.16em] whitespace-nowrap text-[var(--color-hex-444444)]"
+                                    className="text-sm-tight tracking-wider-2 px-[12px] py-[5px] font-semibold whitespace-nowrap text-[var(--color-hex-444444)]"
                                     style={{
                                         textAlign:
                                             h === "UCB ↓" ||
@@ -81,15 +81,15 @@ export const VDGScoringTable = React.memo(function ({
                                         (e.currentTarget.style.background = "transparent")
                                     }
                                 >
-                                    <td className="px-[12px] py-[7px] text-[9.5px] font-bold tracking-[0.06em] text-[var(--color-hex-e31b23)]">
+                                    <td className="text-lg-tight tracking-tight-1 px-[12px] py-[7px] font-bold text-[var(--color-brand)]">
                                         {v.id}
                                     </td>
-                                    <td className="px-[12px] py-[7px] text-[9px] text-[var(--color-hex-555555)]">
+                                    <td className="px-[12px] py-[7px] text-base text-[var(--color-hex-555555)]">
                                         {v.type}
                                     </td>
                                     <td className="px-[12px] py-[7px]">
                                         <span
-                                            className="text-[8.5px] font-semibold tracking-[0.1em]"
+                                            className="text-base-tight font-semibold tracking-normal"
                                             style={{
                                                 color: STATUS_C[v.status],
                                             }}
@@ -99,14 +99,14 @@ export const VDGScoringTable = React.memo(function ({
                                     </td>
                                     <td className="px-[12px] py-[7px] text-right">
                                         <span
-                                            className="text-[10px] font-bold"
+                                            className="text-lg font-bold"
                                             style={{
                                                 color: (() => {
                                                     if (v.ucb > 0.8) {
-                                                        return "var(--color-hex-ff2a32)";
+                                                        return "var(--color-danger)";
                                                     }
                                                     if (v.ucb > 0.6) {
-                                                        return "var(--color-hex-e31b23)";
+                                                        return "var(--color-brand)";
                                                     }
                                                     if (v.ucb > 0) {
                                                         return "var(--color-hex-a0a0a0)";
@@ -118,24 +118,24 @@ export const VDGScoringTable = React.memo(function ({
                                             {v.ucb > 0 ? v.ucb.toFixed(3) : "—"}
                                         </span>
                                     </td>
-                                    <td className="px-[12px] py-[7px] text-right text-[9px] text-[var(--color-hex-555555)]">
+                                    <td className="px-[12px] py-[7px] text-right text-base text-[var(--color-hex-555555)]">
                                         {v.exploit > 0 ? v.exploit.toFixed(3) : "—"}
                                     </td>
-                                    <td className="px-[12px] py-[7px] text-right text-[9px] text-[var(--color-hex-3fb950)]">
+                                    <td className="px-[12px] py-[7px] text-right text-base text-[var(--color-success)]">
                                         {v.explore > 0 ? v.explore.toFixed(3) : "—"}
                                     </td>
-                                    <td className="px-[12px] py-[7px] text-right text-[9px] text-[var(--color-hex-444444)]">
+                                    <td className="px-[12px] py-[7px] text-right text-base text-[var(--color-hex-444444)]">
                                         {v.visits}
                                     </td>
                                     <td
-                                        className="px-[12px] py-[7px] text-right text-[9px]"
+                                        className="px-[12px] py-[7px] text-right text-base"
                                         style={{
                                             color: (() => {
                                                 if (v.eord >= 4) {
-                                                    return "var(--color-hex-3fb950)";
+                                                    return "var(--color-success)";
                                                 }
                                                 if (v.eord >= 2) {
-                                                    return "var(--color-hex-d29922)";
+                                                    return "var(--color-warning)";
                                                 }
                                                 return "var(--color-hex-444444)";
                                             })(),
@@ -143,7 +143,7 @@ export const VDGScoringTable = React.memo(function ({
                                     >
                                         {v.eord}/5
                                     </td>
-                                    <td className="px-[12px] py-[7px] text-right text-[9px] text-[var(--color-hex-444444)]">
+                                    <td className="px-[12px] py-[7px] text-right text-base text-[var(--color-hex-444444)]">
                                         {v.cost}
                                     </td>
                                 </tr>

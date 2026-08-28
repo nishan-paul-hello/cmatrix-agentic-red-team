@@ -11,9 +11,9 @@ import {
 import { SPEC_STATUS } from "@/types/domain-types";
 
 const SPEC_C: Record<string, string> = {
-    [SPEC_STATUS.COMPLETED]: "var(--color-hex-3fb950)",
-    [SPEC_STATUS.RUNNING]: "var(--color-hex-ff2a32)",
-    [SPEC_STATUS.WAITING]: "var(--color-hex-d29922)",
+    [SPEC_STATUS.COMPLETED]: "var(--color-success)",
+    [SPEC_STATUS.RUNNING]: "var(--color-danger)",
+    [SPEC_STATUS.WAITING]: "var(--color-warning)",
     [SPEC_STATUS.IDLE]: "var(--color-hex-333333)",
 };
 const TeamManagerDashboardView = React.memo(function ({
@@ -38,11 +38,11 @@ const TeamManagerDashboardView = React.memo(function ({
                     borderBottom: "1px solid var(--color-hex-1e1e1e)",
                 }}
             >
-                <div className="mb-[3px] text-[9px] tracking-[0.22em] text-[var(--color-hex-666666)]">
+                <div className="tracking-widest-2 mb-[3px] text-base text-[var(--color-hex-666666)]">
                     MISSION / CVE-001
                 </div>
                 <div className="flex items-baseline justify-between">
-                    <h1 className="text-[20px] font-bold tracking-[0.12em] text-[var(--color-hex-f2f2f2)]">
+                    <h1 className="text-9xl font-bold tracking-wide text-[var(--color-fg)]">
                         TEAM MANAGER
                     </h1>
                     <div className="flex items-center gap-6">
@@ -63,10 +63,10 @@ const TeamManagerDashboardView = React.memo(function ({
                 <VDGScoringTable vdg={vdg} setUcbEntry={setUcbEntry} />
 
                 {/* RIGHT: specialists + schedule */}
-                <div className="flex w-[280px] flex-shrink-0 flex-col overflow-y-auto">
+                <div className="w-panel-sm flex flex-shrink-0 flex-col overflow-y-auto">
                     {/* Specialists */}
                     <div
-                        className="bg-[var(--color-hex-0a0a0a)] text-[8px] tracking-[0.2em] text-[var(--color-hex-444444)]"
+                        className="bg-[var(--color-hex-0a0a0a)] text-sm tracking-widest text-[var(--color-hex-444444)]"
                         style={{
                             padding: "10px 16px 8px",
                             borderBottom: "1px solid var(--color-hex-111111)",
@@ -90,11 +90,11 @@ const TeamManagerDashboardView = React.memo(function ({
                                         background: SPEC_C[s.status] ?? "var(--color-hex-333333)",
                                     }}
                                 />
-                                <span className="flex-1 text-[10px] font-bold tracking-[0.06em] text-[var(--color-hex-a0a0a0)]">
+                                <span className="tracking-tight-1 flex-1 text-lg font-bold text-[var(--color-hex-a0a0a0)]">
                                     {s.role}
                                 </span>
                                 <span
-                                    className="text-[8px] font-semibold tracking-[0.1em]"
+                                    className="text-sm font-semibold tracking-normal"
                                     style={{
                                         color: SPEC_C[s.status] ?? "var(--color-hex-333333)",
                                     }}
@@ -102,11 +102,11 @@ const TeamManagerDashboardView = React.memo(function ({
                                     {s.status}
                                 </span>
                             </div>
-                            <div className="mb-[1px] text-[8.5px] tracking-[0.06em] text-[var(--color-hex-333333)]">
+                            <div className="text-base-tight tracking-tight-1 mb-[1px] text-[var(--color-hex-333333)]">
                                 {s.task}
                             </div>
                             {s.score > 0 && (
-                                <div className="text-[8px] tracking-[0.1em] text-[var(--color-hex-e31b23)]">
+                                <div className="text-sm tracking-normal text-[var(--color-brand)]">
                                     UCB={s.score.toFixed(3)}
                                 </div>
                             )}
@@ -114,7 +114,7 @@ const TeamManagerDashboardView = React.memo(function ({
                     ))}
                     {/* Schedule */}
                     <div
-                        className="bg-[var(--color-hex-0a0a0a)] text-[8px] tracking-[0.2em] text-[var(--color-hex-444444)]"
+                        className="bg-[var(--color-hex-0a0a0a)] text-sm tracking-widest text-[var(--color-hex-444444)]"
                         style={{
                             padding: "10px 16px 8px",
                             borderBottom: "1px solid var(--color-hex-111111)",
@@ -133,24 +133,24 @@ const TeamManagerDashboardView = React.memo(function ({
                         >
                             <div className="mb-1 flex items-center gap-2">
                                 <span
-                                    className="min-w-[48px] text-[8px] font-bold tracking-[0.14em]"
+                                    className="tracking-wider-1 min-w-[48px] text-sm font-bold"
                                     style={{
                                         color:
                                             i === 0
-                                                ? "var(--color-hex-d29922)"
+                                                ? "var(--color-warning)"
                                                 : "var(--color-hex-333333)",
                                     }}
                                 >
                                     {s.step}
                                 </span>
-                                <span className="text-[10px] font-bold tracking-[0.06em] text-[var(--color-hex-e31b23)]">
+                                <span className="tracking-tight-1 text-lg font-bold text-[var(--color-brand)]">
                                     {s.node}
                                 </span>
-                                <span className="ml-auto text-[9px] font-bold text-[var(--color-hex-3fb950)]">
+                                <span className="ml-auto text-base font-bold text-[var(--color-success)]">
                                     {s.ucb.toFixed(3)}
                                 </span>
                             </div>
-                            <div className="text-[8px] leading-[1.5] tracking-[0.06em] text-[var(--color-hex-333333)]">
+                            <div className="tracking-tight-1 text-sm leading-snug text-[var(--color-hex-333333)]">
                                 {s.reason}
                             </div>
                         </div>
