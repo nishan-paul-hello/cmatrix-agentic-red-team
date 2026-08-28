@@ -17,22 +17,17 @@ export default function ParametersPanel() {
 
     return (
         <div className="flex-1 overflow-auto">
-            <div
-                className="flex flex-shrink-0 items-center gap-2 bg-[var(--color-hex-0a0a0a)] px-4 py-2"
-                style={{
-                    borderBottom: "1px solid var(--color-hex-141414)",
-                }}
-            >
-                <span className="tracking-wider-3 text-sm text-[var(--color-hex-444444)]">
+            <div className="bg-background border-border flex flex-shrink-0 items-center gap-2 border-b px-4 py-2">
+                <span className="text-muted-foreground text-sm tracking-widest">
                     DISCOVERED PARAMETERS
                 </span>
-                <span className="ml-auto text-sm tracking-wide text-[var(--color-brand)]">
+                <span className="text-primary ml-auto text-sm tracking-wide">
                     {PARAMS.filter((p) => p.injectable).length} INJECTION ELIGIBLE
                 </span>
             </div>
-            <table className="text-xl-tight w-full border-collapse">
+            <table className="w-full border-collapse text-xs">
                 <thead>
-                    <tr className="sticky top-0 bg-[var(--color-hex-0f0f0f)]">
+                    <tr className="bg-card sticky top-0">
                         {[
                             "ID",
                             "ENDPOINT",
@@ -44,10 +39,7 @@ export default function ParametersPanel() {
                         ].map((h) => (
                             <th
                                 key={h}
-                                className="tracking-wider-2 px-[12px] py-[6px] text-left text-sm font-semibold whitespace-nowrap text-[var(--color-hex-444444)]"
-                                style={{
-                                    borderBottom: "1px solid var(--color-hex-1a1a1a)",
-                                }}
+                                className="text-muted-foreground border-border border-b px-3 py-1.5 text-left text-sm font-semibold tracking-widest whitespace-nowrap"
                             >
                                 {h}
                             </th>
@@ -59,45 +51,43 @@ export default function ParametersPanel() {
                         <tr
                             key={p.id}
                             style={{
-                                borderBottom: "1px solid var(--color-hex-111111)",
-                                background: i % 2 ? "var(--color-hex-0b0b0b)" : "transparent",
+                                borderBottom: "1px solid var(--border)",
+                                background: i % 2 ? "var(--background)" : "transparent",
                             }}
                             onMouseEnter={(e) =>
-                                (e.currentTarget.style.background = "var(--color-hex-0f0f0f)")
+                                (e.currentTarget.style.background = "var(--border)")
                             }
                             onMouseLeave={(e) =>
                                 (e.currentTarget.style.background =
-                                    i % 2 ? "var(--color-hex-0b0b0b)" : "transparent")
+                                    i % 2 ? "var(--background)" : "transparent")
                             }
                         >
-                            <td className="px-[12px] py-[7px] text-base font-bold text-[var(--color-brand)]">
-                                {p.id}
-                            </td>
-                            <td className="px-[12px] py-[7px] text-base text-[var(--color-hex-555555)]">
+                            <td className="text-primary px-3 py-1.5 text-base font-bold">{p.id}</td>
+                            <td className="text-muted-foreground px-3 py-1.5 text-base">
                                 {p.endpoint}
                             </td>
-                            <td className="px-[12px] py-[7px] font-semibold text-[var(--color-hex-a0a0a0)]">
+                            <td className="text-muted-foreground px-3 py-1.5 font-semibold">
                                 {p.param}
                             </td>
-                            <td className="px-[12px] py-[7px] text-base text-[var(--color-hex-666666)]">
+                            <td className="text-muted-foreground px-3 py-1.5 text-base">
                                 {p.type}
                             </td>
-                            <td className="px-[12px] py-[7px] text-base text-[var(--color-hex-555555)]">
+                            <td className="text-muted-foreground px-3 py-1.5 text-base">
                                 {p.source}
                             </td>
-                            <td className="px-[12px] py-[7px]">
+                            <td className="px-3 py-1.5">
                                 <span
-                                    className="text-base-tight font-semibold tracking-wide"
+                                    className="text-sm font-semibold tracking-wide"
                                     style={{
                                         color: p.injectable
-                                            ? "var(--color-danger)"
-                                            : "var(--color-hex-333333)",
+                                            ? "var(--destructive)"
+                                            : "var(--border)",
                                     }}
                                 >
                                     {p.injectable ? "YES" : "—"}
                                 </span>
                             </td>
-                            <td className="px-[12px] py-[7px] text-base text-[var(--color-hex-444444)]">
+                            <td className="text-muted-foreground px-3 py-1.5 text-base">
                                 {p.lastVal}
                             </td>
                         </tr>

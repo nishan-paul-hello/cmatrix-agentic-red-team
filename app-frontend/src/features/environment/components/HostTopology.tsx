@@ -21,7 +21,7 @@ export default function HostTopology() {
     }
     const sel = HOSTS.find((h) => h.id === selected);
     return (
-        <div className="flex h-full min-h-[0px]">
+        <div className="flex h-full min-h-0">
             {/* Topology diagram */}
             <HostTopologyDiagram hosts={HOSTS} selected={selected} setSelected={setSelected} />
 

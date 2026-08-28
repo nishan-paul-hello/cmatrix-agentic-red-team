@@ -17,30 +17,20 @@ export default function EndpointsPanel() {
 
     return (
         <>
-            <div
-                className="flex items-center justify-between bg-[var(--color-hex-0b0b0b)] px-6 py-2"
-                style={{
-                    borderBottom: "1px solid var(--color-hex-1e1e1e)",
-                }}
-            >
-                <span className="text-base-tight tracking-wider-2 text-[var(--color-hex-444444)]">
+            <div className="bg-background border-border flex items-center justify-between border-b px-6 py-2">
+                <span className="text-muted-foreground text-sm tracking-widest">
                     {ENDPOINTS.length} OBSERVED ENDPOINTS · SOURCE: SPIDER + INFERENCE · OBSERVED
                 </span>
-                <span className="tracking-wider-1 text-sm text-[var(--color-success)]">
-                    E_ord ≥ 3 — CLEAR
-                </span>
+                <span className="text-success text-sm tracking-widest">E_ord ≥ 3 — CLEAR</span>
             </div>
-            <table className="text-xl-tight w-full border-collapse">
+            <table className="w-full border-collapse text-xs">
                 <thead>
-                    <tr className="bg-[var(--color-hex-0f0f0f)]">
+                    <tr className="bg-card">
                         {["ENDPOINT", "METHOD", "AUTH", "PARAMETERS", "SOURCE", "LAST SEEN"].map(
                             (h) => (
                                 <th
                                     key={h}
-                                    className="tracking-wider-3 px-[16px] py-[6px] text-left text-sm font-semibold whitespace-nowrap text-[var(--color-hex-444444)]"
-                                    style={{
-                                        borderBottom: "1px solid var(--color-hex-1a1a1a)",
-                                    }}
+                                    className="text-muted-foreground border-border border-b px-4 py-1.5 text-left text-sm font-semibold tracking-widest whitespace-nowrap"
                                 >
                                     {h}
                                 </th>
@@ -52,23 +42,17 @@ export default function EndpointsPanel() {
                     {ENDPOINTS.map((row) => (
                         <tr
                             key={`${row.method}-${row.endpoint}`}
-                            className="cursor-pointer"
-                            style={{
-                                borderBottom: "1px solid var(--color-hex-111111)",
-                            }}
-                            onMouseEnter={(e) =>
-                                (e.currentTarget.style.background = "var(--color-hex-0f0f0f)")
-                            }
-                            onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+                            className="border-border hover:bg-border cursor-pointer border-b transition-colors duration-75"
                         >
-                            <td className="font-inherit px-[16px] py-[7px] whitespace-nowrap text-[var(--color-hex-a0a0a0)]">
+                            <td className="font-inherit text-muted-foreground px-4 py-1.5 whitespace-nowrap">
                                 {row.endpoint}
                             </td>
-                            <td className="px-[16px] py-[7px] whitespace-nowrap">
+                            <td className="px-4 py-1.5 whitespace-nowrap">
                                 <span
-                                    className="rounded-[2px] px-[5px] py-[1px] text-base font-semibold tracking-normal"
+                                    className="rounded-sm px-1 py-px text-base font-semibold tracking-normal"
                                     style={{
-                                        color: METHOD_COLOR[row.method] ?? "#666",
+                                        color:
+                                            METHOD_COLOR[row.method] ?? "var(--muted-foreground)",
                                         background: `${METHOD_COLOR[row.method]}15`,
                                         border: `1px solid ${METHOD_COLOR[row.method]}33`,
                                     }}
@@ -76,16 +60,16 @@ export default function EndpointsPanel() {
                                     {row.method}
                                 </span>
                             </td>
-                            <td className="text-lg-tight px-[16px] py-[7px] whitespace-nowrap text-[var(--color-hex-555555)]">
+                            <td className="text-muted-foreground px-4 py-1.5 text-base whitespace-nowrap">
                                 {row.auth}
                             </td>
-                            <td className="text-lg-tight px-[16px] py-[7px] text-[var(--color-hex-444444)]">
+                            <td className="text-muted-foreground px-4 py-1.5 text-base">
                                 {row.params}
                             </td>
-                            <td className="px-[16px] py-[7px] text-base tracking-normal text-[var(--color-hex-333333)]">
+                            <td className="text-muted-foreground px-4 py-1.5 text-base tracking-normal">
                                 {row.source}
                             </td>
-                            <td className="px-[16px] py-[7px] text-base whitespace-nowrap text-[var(--color-hex-333333)]">
+                            <td className="text-muted-foreground px-4 py-1.5 text-base whitespace-nowrap">
                                 {row.seen}
                             </td>
                         </tr>

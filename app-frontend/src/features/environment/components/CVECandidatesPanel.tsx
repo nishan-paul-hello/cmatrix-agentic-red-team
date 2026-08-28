@@ -17,22 +17,17 @@ export default function CVECandidatesPanel() {
 
     return (
         <div className="flex-1 overflow-auto">
-            <div
-                className="flex flex-shrink-0 items-center gap-2 bg-[var(--color-hex-0a0a0a)] px-4 py-2"
-                style={{
-                    borderBottom: "1px solid var(--color-hex-141414)",
-                }}
-            >
-                <span className="tracking-wider-3 text-sm text-[var(--color-hex-444444)]">
+            <div className="bg-background border-border flex flex-shrink-0 items-center gap-2 border-b px-4 py-2">
+                <span className="text-muted-foreground text-sm tracking-widest">
                     VDG HYPOTHESIS CANDIDATES
                 </span>
-                <span className="ml-auto text-sm tracking-wide text-[var(--color-warning)]">
+                <span className="text-warning ml-auto text-sm tracking-wide">
                     {CVE_CANDIDATES.filter((c) => c.poc).length} WITH PoC
                 </span>
             </div>
-            <table className="text-xl-tight w-full border-collapse">
+            <table className="w-full border-collapse text-xs">
                 <thead>
-                    <tr className="sticky top-0 bg-[var(--color-hex-0f0f0f)]">
+                    <tr className="bg-card sticky top-0">
                         {[
                             "CVE ID",
                             "TECHNOLOGY",
@@ -44,10 +39,7 @@ export default function CVECandidatesPanel() {
                         ].map((h) => (
                             <th
                                 key={h}
-                                className="tracking-wider-2 px-[12px] py-[6px] text-left text-sm font-semibold whitespace-nowrap text-[var(--color-hex-444444)]"
-                                style={{
-                                    borderBottom: "1px solid var(--color-hex-1a1a1a)",
-                                }}
+                                className="text-muted-foreground border-border border-b px-3 py-1.5 text-left text-sm font-semibold tracking-widest whitespace-nowrap"
                             >
                                 {h}
                             </th>
@@ -61,69 +53,60 @@ export default function CVECandidatesPanel() {
                             <tr
                                 key={c.id}
                                 style={{
-                                    borderBottom: "1px solid var(--color-hex-111111)",
+                                    borderBottom: "1px solid var(--border)",
                                 }}
                                 onMouseEnter={(e) =>
-                                    (e.currentTarget.style.background = "var(--color-hex-0f0f0f)")
+                                    (e.currentTarget.style.background = "var(--border)")
                                 }
                                 onMouseLeave={(e) =>
                                     (e.currentTarget.style.background = "transparent")
                                 }
                             >
-                                <td className="tracking-tight-1 px-[12px] py-[7px] text-base font-bold text-[var(--color-brand)]">
+                                <td className="text-primary px-3 py-1.5 text-base font-bold tracking-tight">
                                     {c.id}
                                 </td>
-                                <td className="px-[12px] py-[7px] text-[var(--color-hex-a0a0a0)]">
-                                    {c.tech}
-                                </td>
-                                <td className="px-[12px] py-[7px] text-base text-[var(--color-hex-666666)]">
+                                <td className="text-muted-foreground px-3 py-1.5">{c.tech}</td>
+                                <td className="text-muted-foreground px-3 py-1.5 text-base">
                                     {c.class}
                                 </td>
-                                <td className="px-[12px] py-[7px]">
+                                <td className="px-3 py-1.5">
                                     <span
-                                        className="text-lg font-bold"
+                                        className="text-xs font-bold"
                                         style={{
                                             color: (() => {
                                                 if (c.epss > 0.5) {
-                                                    return "var(--color-danger)";
+                                                    return "var(--destructive)";
                                                 }
                                                 if (c.epss > 0.3) {
-                                                    return "var(--color-warning)";
+                                                    return "var(--warning)";
                                                 }
-                                                return "var(--color-hex-555555)";
+                                                return "var(--muted-foreground)";
                                             })(),
                                         }}
                                     >
                                         {c.epss.toFixed(2)}
                                     </span>
                                 </td>
-                                <td className="px-[12px] py-[7px]">
+                                <td className="px-3 py-1.5">
                                     <span
-                                        className="text-base-tight tracking-wide"
+                                        className="text-sm tracking-wide"
                                         style={{
-                                            color: c.poc
-                                                ? "var(--color-success)"
-                                                : "var(--color-hex-333333)",
+                                            color: c.poc ? "var(--success)" : "var(--border)",
                                         }}
                                     >
                                         {c.poc ? "YES" : "NO"}
                                     </span>
                                 </td>
                                 <td
-                                    className="px-[12px] py-[7px] text-base"
+                                    className="px-3 py-1.5 text-base"
                                     style={{
-                                        color:
-                                            c.node !== "—"
-                                                ? "var(--color-brand)"
-                                                : "var(--color-hex-333333)",
+                                        color: c.node !== "—" ? "var(--primary)" : "var(--border)",
                                         fontWeight: c.node !== "—" ? 700 : 400,
                                     }}
                                 >
                                     {c.node}
                                 </td>
-                                <td className="px-[12px] py-[7px] text-[var(--color-hex-666666)]">
-                                    {c.eord}/5
-                                </td>
+                                <td className="text-muted-foreground px-3 py-1.5">{c.eord}/5</td>
                             </tr>
                         ))}
                 </tbody>

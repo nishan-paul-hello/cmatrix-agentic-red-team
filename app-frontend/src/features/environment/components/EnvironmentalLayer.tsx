@@ -1,4 +1,5 @@
 import { PanelErrorBoundary } from "@/components/PanelErrorBoundary";
+import { Button } from "@/components/ui/button";
 import AuthStatesPanel from "@/features/environment/components/AuthStatesPanel";
 import CredentialsPanel from "@/features/environment/components/CredentialsPanel";
 import CVECandidatesPanel from "@/features/environment/components/CVECandidatesPanel";
@@ -23,42 +24,38 @@ export default function EnvironmentalLayer() {
 function EnvironmentalLayerInner() {
     const { activeTab, setActiveTab } = useEnvironmentalData();
     return (
-        <div className="flex h-full min-h-[0px] flex-col">
+        <div className="flex h-full min-h-0 flex-col">
             {/* Header */}
-            <div
-                className="flex-shrink-0 px-6 pt-5 pb-0"
-                style={{
-                    borderBottom: "1px solid var(--color-hex-1e1e1e)",
-                }}
-            >
-                <div className="tracking-widest-2 mb-[3px] text-base text-[var(--color-hex-666666)]">
+            <div className="border-border flex-shrink-0 border-b px-6 pt-5 pb-0">
+                <div className="text-muted-foreground mb-0.5 text-base tracking-widest">
                     ENVIRONMENT
                 </div>
                 <div className="mb-3 flex items-baseline gap-3">
-                    <h1 className="text-9xl font-bold tracking-wide text-[var(--color-fg)]">
+                    <h1 className="text-foreground text-xs font-bold tracking-wide">
                         ENVIRONMENTAL LAYER
                     </h1>
-                    <span className="tracking-wider-2 rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1a4a20)] bg-[var(--color-hex-0a1a10)] px-[7px] py-[1px] text-base text-[var(--color-success)]">
+                    <span className="border-border bg-muted text-success rounded-sm border-[1px] border-solid px-1.5 py-px text-base tracking-widest">
                         CONFIRMED
                     </span>
                 </div>
                 {/* Tabs */}
                 <div className="flex items-end gap-0 overflow-x-auto">
                     {TABS.map((t) => (
-                        <button
+                        <Button
                             key={t}
+                            variant="ghost"
                             onClick={() => setActiveTab(t)}
-                            className={`font-inherit text-lg-tight relative cursor-pointer bg-transparent px-[24px] py-[12px] font-bold tracking-widest transition-colors duration-150 ${
+                            className={`relative h-auto cursor-pointer rounded-none bg-transparent px-6 py-3 text-base font-bold tracking-widest transition-colors duration-150 ${
                                 activeTab === t
-                                    ? "text-[var(--color-fg)]"
-                                    : "text-[var(--color-hex-555555)] hover:text-[var(--color-hex-a0a0a0)]"
+                                    ? "text-foreground hover:text-foreground hover:bg-transparent"
+                                    : "text-muted-foreground hover:text-muted-foreground hover:bg-transparent"
                             }`}
                         >
                             {t}
                             {activeTab === t && (
-                                <div className="absolute bottom-0 left-0 h-[2px] w-full bg-[var(--color-brand)]" />
+                                <div className="bg-primary absolute bottom-0 left-0 h-0.5 w-full" />
                             )}
-                        </button>
+                        </Button>
                     ))}
                 </div>
             </div>

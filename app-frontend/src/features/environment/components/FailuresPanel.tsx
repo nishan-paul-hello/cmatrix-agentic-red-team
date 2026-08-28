@@ -17,24 +17,19 @@ export default function FailuresPanel() {
         return null;
     }
     return (
-        <div className="flex min-h-[0px] flex-1 overflow-hidden">
-            <div className="flex min-w-[0px] flex-1 flex-col overflow-y-auto">
-                <div
-                    className="flex flex-shrink-0 items-center gap-2 bg-[var(--color-hex-0a0a0a)] px-4 py-2"
-                    style={{
-                        borderBottom: "1px solid var(--color-hex-141414)",
-                    }}
-                >
-                    <span className="tracking-wider-3 text-sm text-[var(--color-hex-444444)]">
+        <div className="flex min-h-0 flex-1 overflow-hidden">
+            <div className="flex min-w-0 flex-1 flex-col overflow-y-auto">
+                <div className="bg-background border-border flex flex-shrink-0 items-center gap-2 border-b px-4 py-2">
+                    <span className="text-muted-foreground text-sm tracking-widest">
                         SPECIALIST FAILURE LOG
                     </span>
-                    <span className="ml-auto text-sm tracking-wide text-[var(--color-warning)]">
+                    <span className="text-warning ml-auto text-sm tracking-wide">
                         {FAILURE_LOG.filter((f) => !f.resolved).length} UNRESOLVED
                     </span>
                 </div>
-                <table className="text-xl-tight w-full border-collapse">
+                <table className="w-full border-collapse text-xs">
                     <thead>
-                        <tr className="sticky top-0 bg-[var(--color-hex-0f0f0f)]">
+                        <tr className="bg-card sticky top-0">
                             {[
                                 "ID",
                                 "TIMESTAMP",
@@ -47,10 +42,7 @@ export default function FailuresPanel() {
                             ].map((h) => (
                                 <th
                                     key={h}
-                                    className="tracking-wider-2 px-[12px] py-[6px] text-left text-sm font-semibold whitespace-nowrap text-[var(--color-hex-444444)]"
-                                    style={{
-                                        borderBottom: "1px solid var(--color-hex-1a1a1a)",
-                                    }}
+                                    className="text-muted-foreground border-border border-b px-3 py-1.5 text-left text-sm font-semibold tracking-widest whitespace-nowrap"
                                 >
                                     {h}
                                 </th>
@@ -64,60 +56,56 @@ export default function FailuresPanel() {
                                 onClick={() => setSelId(f.id === selId ? null : f.id)}
                                 className="cursor-pointer"
                                 style={{
-                                    borderBottom: "1px solid var(--color-hex-111111)",
+                                    borderBottom: "1px solid var(--border)",
                                     background: (() => {
                                         if (selId === f.id) {
-                                            return "var(--color-hex-110808)";
+                                            return "var(--border)";
                                         }
                                         if (i % 2) {
-                                            return "var(--color-hex-0b0b0b)";
+                                            return "var(--background)";
                                         }
                                         return "transparent";
                                     })(),
                                 }}
                                 onMouseEnter={(e) =>
-                                    (e.currentTarget.style.background = "var(--color-hex-0f0f0f)")
+                                    (e.currentTarget.style.background = "var(--border)")
                                 }
                                 onMouseLeave={(e) =>
                                     (e.currentTarget.style.background = (() => {
                                         if (selId === f.id) {
-                                            return "var(--color-hex-110808)";
+                                            return "var(--border)";
                                         }
                                         if (i % 2) {
-                                            return "var(--color-hex-0b0b0b)";
+                                            return "var(--background)";
                                         }
                                         return "transparent";
                                     })())
                                 }
                             >
-                                <td className="px-[12px] py-[7px] text-base font-bold text-[var(--color-brand)]">
+                                <td className="text-primary px-3 py-1.5 text-base font-bold">
                                     {f.id}
                                 </td>
-                                <td className="px-[12px] py-[7px] text-base text-[var(--color-hex-444444)]">
+                                <td className="text-muted-foreground px-3 py-1.5 text-base">
                                     {f.ts}
                                 </td>
-                                <td className="px-[12px] py-[7px] text-base font-semibold text-[var(--color-hex-a0a0a0)]">
+                                <td className="text-muted-foreground px-3 py-1.5 text-base font-semibold">
                                     {f.spec}
                                 </td>
-                                <td className="px-[12px] py-[7px] text-base text-[var(--color-hex-666666)]">
+                                <td className="text-muted-foreground px-3 py-1.5 text-base">
                                     {f.action}
                                 </td>
-                                <td className="px-[12px] py-[7px] text-base text-[var(--color-hex-555555)]">
+                                <td className="text-muted-foreground px-3 py-1.5 text-base">
                                     {f.target}
                                 </td>
-                                <td className="px-[12px] py-[7px] text-base text-[var(--color-hex-666666)]">
+                                <td className="text-muted-foreground px-3 py-1.5 text-base">
                                     {f.error}
                                 </td>
-                                <td className="px-[12px] py-[7px] text-[var(--color-hex-555555)]">
-                                    {f.eord}/5
-                                </td>
-                                <td className="px-[12px] py-[7px]">
+                                <td className="text-muted-foreground px-3 py-1.5">{f.eord}/5</td>
+                                <td className="px-3 py-1.5">
                                     <span
-                                        className="text-base-tight font-semibold tracking-wide"
+                                        className="text-sm font-semibold tracking-wide"
                                         style={{
-                                            color: f.resolved
-                                                ? "var(--color-success)"
-                                                : "var(--color-warning)",
+                                            color: f.resolved ? "var(--success)" : "var(--warning)",
                                         }}
                                     >
                                         {f.resolved ? "YES" : "NO"}
@@ -129,12 +117,7 @@ export default function FailuresPanel() {
                 </table>
             </div>
             {selId && (
-                <div
-                    className="w-panel-sm shrink-0 overflow-y-auto bg-[var(--color-hex-0a0a0a)] px-[14px] py-[16px]"
-                    style={{
-                        borderLeft: "1px solid var(--color-hex-1e1e1e)",
-                    }}
-                >
+                <div className="w-panel-sm bg-background border-border shrink-0 overflow-y-auto border-l px-3.5 py-4">
                     {(() => {
                         const f = FAILURE_LOG.find((x) => x.id === selId);
                         if (!f) {
@@ -142,7 +125,7 @@ export default function FailuresPanel() {
                         }
                         return (
                             <>
-                                <div className="mb-[12px] text-sm tracking-widest text-[var(--color-hex-444444)]">
+                                <div className="text-muted-foreground mb-3 text-sm tracking-widest">
                                     FAILURE DETAIL
                                 </div>
                                 {[
@@ -175,21 +158,21 @@ export default function FailuresPanel() {
                                         v: f.resolved ? "YES" : "NO",
                                     },
                                 ].map((r) => (
-                                    <div key={r.k} className="mb-[8px]">
-                                        <div className="text-sm-tight tracking-wider-2 mb-[2px] text-[var(--color-hex-444444)]">
+                                    <div key={r.k} className="mb-2">
+                                        <div className="text-muted-foreground mb-0.5 text-xs tracking-widest">
                                             {r.k}
                                         </div>
                                         <div
-                                            className="text-lg"
+                                            className="text-xs"
                                             style={{
                                                 color: (() => {
                                                     if (r.k === "RESOLVED" && f.resolved) {
-                                                        return "var(--color-success)";
+                                                        return "var(--success)";
                                                     }
                                                     if (r.k === "RESOLVED") {
-                                                        return "var(--color-warning)";
+                                                        return "var(--warning)";
                                                     }
-                                                    return "var(--color-hex-888888)";
+                                                    return "var(--muted-foreground)";
                                                 })(),
                                             }}
                                         >
@@ -197,7 +180,7 @@ export default function FailuresPanel() {
                                         </div>
                                     </div>
                                 ))}
-                                <div className="mt-[12px] rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)] bg-[var(--color-hex-111111)] px-[10px] py-[8px] text-base leading-relaxed text-[var(--color-danger)]">
+                                <div className="border-border bg-card text-destructive mt-3 rounded-sm border-[1px] border-solid px-2.5 py-2 text-base leading-relaxed">
                                     {f.error}
                                 </div>
                             </>
