@@ -28,10 +28,10 @@ export function ReportPreviewPane({
                         }}
                     >
                         <div>
-                            <div className="text-[11px] font-bold tracking-[0.08em] text-[var(--color-hex-f2f2f2)]">
+                            <div className="text-xl font-bold tracking-tight text-[var(--color-fg)]">
                                 {sel.id} — {sel.type}
                             </div>
-                            <div className="mt-[2px] text-[8.5px] tracking-[0.1em] text-[var(--color-hex-444444)]">
+                            <div className="text-base-tight mt-[2px] tracking-normal text-[var(--color-hex-444444)]">
                                 {sel.mission} · {sel.generated}
                             </div>
                         </div>
@@ -39,7 +39,7 @@ export function ReportPreviewPane({
                             {["DOWNLOAD PDF", "COPY LINK"].map((a) => (
                                 <button
                                     key={a}
-                                    className="font-inherit rounded-[2px] border-[1px] border-solid border-[var(--color-hex-292929)] bg-[transparent] px-[12px] py-[5px] text-[8.5px] tracking-[0.1em] text-[var(--color-hex-a0a0a0)]"
+                                    className="font-inherit text-base-tight rounded-[2px] border-[1px] border-solid border-[var(--color-hex-292929)] bg-[transparent] px-[12px] py-[5px] tracking-normal text-[var(--color-hex-a0a0a0)]"
                                     style={{
                                         cursor: sel.status === "READY" ? "pointer" : "not-allowed",
                                         opacity: sel.status === "READY" ? 1 : 0.4,
@@ -56,9 +56,9 @@ export function ReportPreviewPane({
                                 style={{
                                     borderRadius: "50%",
                                 }}
-                                className="h-[8px] w-[8px] animate-pulse bg-[var(--color-hex-e31b23)]"
+                                className="h-[8px] w-[8px] animate-pulse bg-[var(--color-brand)]"
                             />
-                            <div className="text-[9px] tracking-[0.2em] text-[var(--color-hex-444444)]">
+                            <div className="text-base tracking-widest text-[var(--color-hex-444444)]">
                                 GENERATING REPORT…
                             </div>
                         </div>
@@ -67,13 +67,13 @@ export function ReportPreviewPane({
                             <div className="mx-auto max-w-[720px] px-8 py-6">
                                 {/* Report cover block */}
                                 <div className="mb-[24px] rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)] bg-[var(--color-hex-0d0d0d)] px-[24px] py-[20px]">
-                                    <div className="mb-[6px] text-[8.5px] tracking-[0.2em] text-[var(--color-hex-444444)]">
+                                    <div className="text-base-tight mb-[6px] tracking-widest text-[var(--color-hex-444444)]">
                                         RedGrid REPORT
                                     </div>
-                                    <div className="mb-[4px] text-[18px] font-bold tracking-[0.1em] text-[var(--color-hex-f2f2f2)]">
+                                    <div className="mb-[4px] text-8xl font-bold tracking-normal text-[var(--color-fg)]">
                                         {sel.type}
                                     </div>
-                                    <div className="mb-[12px] text-[9px] tracking-[0.1em] text-[var(--color-hex-e31b23)]">
+                                    <div className="mb-[12px] text-base tracking-normal text-[var(--color-brand)]">
                                         MISSION {sel.mission}
                                     </div>
                                     <div className="flex gap-6">
@@ -103,15 +103,15 @@ export function ReportPreviewPane({
                                             }[]
                                         ).map((m) => (
                                             <div key={m.k}>
-                                                <div className="mb-[2px] text-[7.5px] tracking-[0.16em] text-[var(--color-hex-444444)]">
+                                                <div className="text-sm-tight tracking-wider-2 mb-[2px] text-[var(--color-hex-444444)]">
                                                     {m.k}
                                                 </div>
                                                 <div
-                                                    className="text-[12px] font-bold"
+                                                    className="text-2xl font-bold"
                                                     style={{
                                                         color: m.red
-                                                            ? "var(--color-hex-ff2a32)"
-                                                            : "var(--color-hex-f2f2f2)",
+                                                            ? "var(--color-danger)"
+                                                            : "var(--color-fg)",
                                                     }}
                                                 >
                                                     {m.v}
@@ -123,14 +123,14 @@ export function ReportPreviewPane({
                                 {previewSections.map((s, i) => (
                                     <div key={s.title} className="mb-[24px]">
                                         <div className="mb-4 flex items-center gap-3">
-                                            <div className="h-[14px] w-[2px] bg-[var(--color-hex-e31b23)]" />
-                                            <span className="text-[9px] font-bold tracking-[0.2em] text-[var(--color-hex-f2f2f2)]">
+                                            <div className="h-[14px] w-[2px] bg-[var(--color-brand)]" />
+                                            <span className="text-base font-bold tracking-widest text-[var(--color-fg)]">
                                                 {s.title}
                                             </span>
                                         </div>
                                         {s.content && (
                                             <p
-                                                className="text-[10.5px] leading-[1.9] text-[var(--color-hex-666666)]"
+                                                className="text-xl-tight leading-loose-2 text-[var(--color-hex-666666)]"
                                                 style={{
                                                     margin: 0,
                                                     whiteSpace: "pre-line",
@@ -157,26 +157,26 @@ export function ReportPreviewPane({
                                                         }}
                                                     >
                                                         <span
-                                                            className="min-w-[60px] text-[8.5px] font-bold tracking-[0.12em]"
+                                                            className="text-base-tight min-w-[60px] font-bold tracking-wide"
                                                             style={{
                                                                 color:
                                                                     item.sev === "CRITICAL"
-                                                                        ? "var(--color-hex-ff2a32)"
-                                                                        : "var(--color-hex-e31b23)",
+                                                                        ? "var(--color-danger)"
+                                                                        : "var(--color-brand)",
                                                             }}
                                                         >
                                                             {item.sev}
                                                         </span>
-                                                        <span className="min-w-[50px] text-[9.5px] font-bold text-[var(--color-hex-e31b23)]">
+                                                        <span className="text-lg-tight min-w-[50px] font-bold text-[var(--color-brand)]">
                                                             {item.id}
                                                         </span>
-                                                        <span className="flex-1 text-[10px] text-[var(--color-hex-888888)]">
+                                                        <span className="flex-1 text-lg text-[var(--color-hex-888888)]">
                                                             {item.name}
                                                         </span>
-                                                        <span className="text-[9px] text-[var(--color-hex-444444)]">
+                                                        <span className="text-base text-[var(--color-hex-444444)]">
                                                             {item.target}
                                                         </span>
-                                                        <span className="text-[9px] font-bold text-[var(--color-hex-3fb950)]">
+                                                        <span className="text-base font-bold text-[var(--color-success)]">
                                                             E_ord {item.eord}
                                                         </span>
                                                     </div>

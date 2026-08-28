@@ -21,11 +21,11 @@ export default function ReportsPage() {
                     borderBottom: "1px solid var(--color-hex-1e1e1e)",
                 }}
             >
-                <div className="mb-[3px] text-[9px] tracking-[0.22em] text-[var(--color-hex-666666)]">
+                <div className="tracking-widest-2 mb-[3px] text-base text-[var(--color-hex-666666)]">
                     RESEARCH
                 </div>
                 <div className="flex items-baseline justify-between">
-                    <h1 className="text-[20px] font-bold tracking-[0.12em] text-[var(--color-hex-f2f2f2)]">
+                    <h1 className="text-9xl font-bold tracking-wide text-[var(--color-fg)]">
                         REPORTS
                     </h1>
                     <div className="flex gap-2">
@@ -33,14 +33,16 @@ export default function ReportsPage() {
                             <button
                                 key={t}
                                 onClick={() => setFilter(t)}
-                                className="font-inherit cursor-pointer rounded-[2px] px-[10px] py-[3px] text-[8px] tracking-[0.12em]"
+                                aria-pressed={filter === t}
+                                aria-label={t === "ALL" ? "Show all reports" : `Filter by ${t}`}
+                                className="font-inherit cursor-pointer rounded-[2px] px-[10px] py-[3px] text-sm tracking-wide"
                                 style={{
                                     background:
                                         filter === t ? "var(--color-hex-120608)" : "transparent",
-                                    border: `1px solid ${filter === t ? "var(--color-hex-e31b23)" : "var(--color-hex-1e1e1e)"}`,
+                                    border: `1px solid ${filter === t ? "var(--color-brand)" : "var(--color-hex-1e1e1e)"}`,
                                     color:
                                         filter === t
-                                            ? "var(--color-hex-e31b23)"
+                                            ? "var(--color-brand)"
                                             : "var(--color-hex-444444)",
                                 }}
                             >

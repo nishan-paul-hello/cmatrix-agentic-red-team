@@ -18,7 +18,7 @@ export function ReportListSidebar({
 }) {
     return (
         <div
-            className="flex w-[300px] flex-shrink-0 flex-col"
+            className="w-panel-md flex flex-shrink-0 flex-col"
             style={{
                 borderRight: "1px solid var(--color-hex-1e1e1e)",
             }}
@@ -45,7 +45,7 @@ export function ReportListSidebar({
                                     sel?.id === r.id ? "var(--color-hex-0d0d0d)" : "transparent",
                                 borderLeft:
                                     sel?.id === r.id
-                                        ? "2px solid var(--color-hex-e31b23)"
+                                        ? "2px solid var(--color-brand)"
                                         : "2px solid transparent",
                             }}
                             onMouseEnter={(e) => {
@@ -60,38 +60,38 @@ export function ReportListSidebar({
                             }}
                         >
                             <div className="mb-1 flex items-center justify-between">
-                                <span className="text-[9px] font-bold tracking-[0.08em] text-[var(--color-hex-e31b23)]">
+                                <span className="text-base font-bold tracking-tight text-[var(--color-brand)]">
                                     {r.id}
                                 </span>
                                 <span
-                                    className="text-[8px] font-semibold tracking-[0.12em]"
+                                    className="text-sm font-semibold tracking-wide"
                                     style={{
                                         color:
                                             r.status === "READY"
-                                                ? "var(--color-hex-3fb950)"
-                                                : "var(--color-hex-d29922)",
+                                                ? "var(--color-success)"
+                                                : "var(--color-warning)",
                                     }}
                                 >
                                     {r.status}
                                 </span>
                             </div>
-                            <div className="mb-[2px] text-[10px] tracking-[0.04em] text-[var(--color-hex-a0a0a0)]">
+                            <div className="mb-[2px] text-lg tracking-tighter text-[var(--color-hex-a0a0a0)]">
                                 {r.type}
                             </div>
-                            <div className="text-[8.5px] tracking-[0.06em] text-[var(--color-hex-333333)]">
+                            <div className="text-base-tight tracking-tight-1 text-[var(--color-hex-333333)]">
                                 {r.mission} · {r.generated}
                             </div>
                             <div className="mt-2 flex gap-3">
-                                <span className="text-[7.5px] tracking-[0.1em] text-[var(--color-hex-555555)]">
+                                <span className="text-sm-tight tracking-normal text-[var(--color-hex-555555)]">
                                     {r.findings} FINDINGS
                                 </span>
                                 {r.critical > 0 && (
-                                    <span className="text-[7.5px] tracking-[0.1em] text-[var(--color-hex-ff2a32)]">
+                                    <span className="text-sm-tight tracking-normal text-[var(--color-danger)]">
                                         {r.critical} CRITICAL
                                     </span>
                                 )}
                                 {r.pages > 0 && (
-                                    <span className="text-[7.5px] tracking-[0.1em] text-[var(--color-hex-333333)]">
+                                    <span className="text-sm-tight tracking-normal text-[var(--color-hex-333333)]">
                                         {r.pages} PAGES
                                     </span>
                                 )}
@@ -102,12 +102,12 @@ export function ReportListSidebar({
             </div>
             {/* Pagination Controls */}
             <div className="flex flex-shrink-0 items-center justify-between border-t border-solid border-[var(--color-hex-1e1e1e)] bg-[var(--color-hex-0a0a0a)] px-6 py-4">
-                <div className="text-[10px] tracking-[0.1em] text-[var(--color-hex-666666)]">
+                <div className="text-lg tracking-normal text-[var(--color-hex-666666)]">
                     PAGE {page}
                 </div>
                 <div className="flex gap-2">
                     <button
-                        className="font-inherit cursor-pointer rounded-[2px] border-none bg-[var(--color-hex-111111)] px-[12px] py-[6px] text-[9px] font-semibold tracking-[0.16em] text-[var(--color-hex-f2f2f2)]"
+                        className="font-inherit tracking-wider-2 cursor-pointer rounded-[2px] border-none bg-[var(--color-hex-111111)] px-[12px] py-[6px] text-base font-semibold text-[var(--color-fg)]"
                         onClick={() => setPage((p) => Math.max(1, p - 1))}
                         disabled={page === 1}
                         style={{ opacity: page === 1 ? 0.5 : 1 }}
@@ -115,7 +115,7 @@ export function ReportListSidebar({
                         PREV
                     </button>
                     <button
-                        className="font-inherit cursor-pointer rounded-[2px] border-none bg-[var(--color-hex-111111)] px-[12px] py-[6px] text-[9px] font-semibold tracking-[0.16em] text-[var(--color-hex-f2f2f2)]"
+                        className="font-inherit tracking-wider-2 cursor-pointer rounded-[2px] border-none bg-[var(--color-hex-111111)] px-[12px] py-[6px] text-base font-semibold text-[var(--color-fg)]"
                         onClick={() => setPage((p) => p + 1)}
                         disabled={reportsLength < 50}
                         style={{ opacity: reportsLength < 50 ? 0.5 : 1 }}
