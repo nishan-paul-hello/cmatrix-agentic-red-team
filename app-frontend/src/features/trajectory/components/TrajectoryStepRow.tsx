@@ -1,8 +1,8 @@
 import React from "react";
 
+import { getStatusColor } from "@/components/ui/StatusBadge";
 import { type TrajStep } from "@/features/trajectory/data/fixtures/trajectoryMockData";
 import { TASK_STATUS } from "@/types/domain-types";
-import { getStatusColor } from "@/utils/statusColors";
 
 export const TYPE_C: Record<
     TrajStep["type"],
@@ -12,28 +12,28 @@ export const TYPE_C: Record<
     }
 > = {
     DECISION: {
-        color: "var(--color-brand)",
-        bg: "var(--color-hex-120608)",
+        color: "var(--primary)",
+        bg: "var(--border)",
     },
     EXECUTION: {
-        color: "var(--color-hex-444444)",
-        bg: "var(--color-hex-0d0d0d)",
+        color: "var(--muted-foreground)",
+        bg: "var(--background)",
     },
     EVALUATION: {
-        color: "var(--color-hex-a0a0a0)",
-        bg: "var(--color-hex-0f0f0f)",
+        color: "var(--muted-foreground)",
+        bg: "var(--border)",
     },
     BRANCH: {
-        color: "var(--color-warning)",
-        bg: "var(--color-hex-110e00)",
+        color: "var(--warning)",
+        bg: "var(--border)",
     },
     COMPACTION: {
-        color: "var(--color-hex-3b82f6)",
-        bg: "var(--color-hex-060e1a)",
+        color: "var(--border)",
+        bg: "var(--border)",
     },
     VALIDATION: {
-        color: "var(--color-success)",
-        bg: "var(--color-hex-061a0c)",
+        color: "var(--success)",
+        bg: "var(--border)",
     },
 };
 
@@ -52,9 +52,9 @@ export const TrajectoryStepRow = React.memo(function TrajectoryStepRowInner({
     return (
         <div className="flex items-start gap-0">
             {/* Spine */}
-            <div className="mt-[2px] flex w-[32px] flex-shrink-0 flex-col items-center">
+            <div className="mt-0.5 flex w-8 flex-shrink-0 flex-col items-center">
                 <div
-                    className="h-[10px] w-[10px] shrink-0"
+                    className="h-2.5 w-2.5 shrink-0"
                     style={{
                         borderRadius: "50%",
                         border: `1px solid ${tc.color}`,
@@ -70,9 +70,7 @@ export const TrajectoryStepRow = React.memo(function TrajectoryStepRowInner({
                         zIndex: 1,
                     }}
                 />
-                {!isLast && (
-                    <div className="min-h-[28px] w-[1px] flex-1 bg-[var(--color-hex-1a1a1a)]" />
-                )}
+                {!isLast && <div className="bg-card min-h-7 w-px flex-1" />}
             </div>
             {/* Card */}
             <div
@@ -91,31 +89,23 @@ export const TrajectoryStepRow = React.memo(function TrajectoryStepRowInner({
                 }}
             >
                 <div
-                    className="overflow-hidden rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1a1a1a)]"
+                    className="border-border overflow-hidden rounded-sm border-[1px] border-solid"
                     style={{
-                        background: isSel ? "var(--color-hex-0d0d0d)" : "transparent",
+                        background: isSel ? "var(--background)" : "transparent",
                     }}
-                    onMouseEnter={(e) =>
-                        (e.currentTarget.style.background = "var(--color-hex-0a0a0a)")
-                    }
+                    onMouseEnter={(e) => (e.currentTarget.style.background = "var(--background)")}
                     onMouseLeave={(e) =>
                         (e.currentTarget.style.background = isSel
-                            ? "var(--color-hex-0d0d0d)"
+                            ? "var(--background)"
                             : "transparent")
                     }
                 >
-                    <div
-                        className="flex items-center gap-3 px-4 py-2"
-                        style={{
-                            borderBottom: "1px solid var(--color-hex-141414)",
-                            background: tc.bg,
-                        }}
-                    >
-                        <span className="min-w-[20px] text-sm tracking-wide text-[var(--color-hex-333333)]">
+                    <div className="border-border flex items-center gap-3 border-b px-4 py-2">
+                        <span className="text-muted-foreground min-w-5 text-sm tracking-wide">
                             #{String(step.step).padStart(2, "0")}
                         </span>
                         <span
-                            className="tracking-wider-1 rounded-[2px] px-[6px] py-[1px] text-sm font-bold"
+                            className="rounded-sm px-1.5 py-px text-sm font-bold tracking-widest"
                             style={{
                                 color: tc.color,
                                 border: `1px solid ${tc.color}44`,
@@ -123,12 +113,10 @@ export const TrajectoryStepRow = React.memo(function TrajectoryStepRowInner({
                         >
                             {step.type}
                         </span>
-                        <span className="tracking-tight-1 text-base font-semibold text-[var(--color-brand)]">
+                        <span className="text-primary text-base font-semibold tracking-tight">
                             {step.agent}
                         </span>
-                        <span className="ml-auto text-sm text-[var(--color-hex-333333)]">
-                            {step.ts}
-                        </span>
+                        <span className="text-muted-foreground ml-auto text-sm">{step.ts}</span>
                         <span
                             className="text-sm font-semibold tracking-wide"
                             style={{
@@ -140,7 +128,7 @@ export const TrajectoryStepRow = React.memo(function TrajectoryStepRowInner({
                     </div>
                     <div className="px-4 py-3">
                         <p
-                            className="text-lg leading-relaxed text-[var(--color-hex-666666)]"
+                            className="text-muted-foreground text-xs leading-relaxed"
                             style={{
                                 margin: 0,
                                 marginBottom: isSel ? 10 : 0,
@@ -149,13 +137,7 @@ export const TrajectoryStepRow = React.memo(function TrajectoryStepRowInner({
                             {step.summary}
                         </p>
                         {isSel && (
-                            <div
-                                className="mt-3 grid grid-cols-2 gap-x-8 gap-y-3"
-                                style={{
-                                    borderTop: "1px solid var(--color-hex-141414)",
-                                    paddingTop: 12,
-                                }}
-                            >
+                            <div className="border-border mt-3 grid grid-cols-1 gap-x-8 gap-y-3 border-t sm:grid-cols-2">
                                 {[
                                     {
                                         k: "VDG DELTA",
@@ -179,20 +161,20 @@ export const TrajectoryStepRow = React.memo(function TrajectoryStepRowInner({
                                     },
                                 ].map((r) => (
                                     <div key={r.k}>
-                                        <div className="text-sm-tight tracking-wider-3 mb-[2px] text-[var(--color-hex-444444)]">
+                                        <div className="text-muted-foreground mb-0.5 text-xs tracking-widest">
                                             {r.k}
                                         </div>
                                         <div
-                                            className="text-lg"
+                                            className="text-xs"
                                             style={{
                                                 color: (() => {
                                                     if (r.k === "COST" || r.k === "TOKENS") {
-                                                        return "var(--color-hex-555555)";
+                                                        return "var(--muted-foreground)";
                                                     }
                                                     if (r.k === "E_ORD DELTA" && r.v !== "—") {
-                                                        return "var(--color-success)";
+                                                        return "var(--success)";
                                                     }
-                                                    return "var(--color-hex-888888)";
+                                                    return "var(--muted-foreground)";
                                                 })(),
                                             }}
                                         >

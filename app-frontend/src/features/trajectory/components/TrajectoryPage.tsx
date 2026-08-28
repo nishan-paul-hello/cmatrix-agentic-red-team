@@ -1,11 +1,13 @@
 import React, { useCallback, useMemo, useRef, useState } from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
 
+import { Button } from "@/components/ui/button";
+import { KPIStrip } from "@/components/ui/KPIStrip";
+import { getStatusColor } from "@/components/ui/StatusBadge";
 import { TrajectoryStepRow, TYPE_C } from "@/features/trajectory/components/TrajectoryStepRow";
 import { type TrajStep } from "@/features/trajectory/data/fixtures/trajectoryMockData";
 import { useTrajectoryFeed } from "@/features/trajectory/hooks/useTrajectoryFeed";
 import { TASK_STATUS } from "@/types/domain-types";
-import { getStatusColor } from "@/utils/statusColors";
 
 export default function TrajectoryPage() {
     const stepsData = useTrajectoryFeed();
@@ -42,51 +44,43 @@ export default function TrajectoryPage() {
         setSel((prev) => (prev?.step === step.step ? null : step));
     }, []);
     return (
-        <div className="flex h-full min-h-[0px] flex-col">
+        <div className="flex h-full min-h-0 flex-col">
             {/* Header */}
-            <div
-                className="flex-shrink-0 px-6 pt-5 pb-4"
-                style={{
-                    borderBottom: "1px solid var(--color-hex-1e1e1e)",
-                }}
-            >
-                <div className="tracking-widest-2 mb-[3px] text-base text-[var(--color-hex-666666)]">
+            <div className="border-border flex-shrink-0 border-b px-6 pt-5 pb-4">
+                <div className="text-muted-foreground mb-0.5 text-base tracking-widest">
                     MISSION / CVE-001
                 </div>
                 <div className="flex items-baseline justify-between">
-                    <h1 className="text-9xl font-bold tracking-wide text-[var(--color-fg)]">
-                        TRAJECTORY
-                    </h1>
-                    <div className="flex items-center gap-5">
-                        <Stat label="TOTAL STEPS" value={String(stepsData.length)} />
-                        <Stat
-                            label="DECISIONS"
-                            value={String(stepsData.filter((s) => s.type === "DECISION").length)}
-                            red
-                        />
-                        <Stat label="TOTAL COST" value={`$${totCost.toFixed(4)}`} />
-                    </div>
+                    <h1 className="text-foreground text-xs font-bold tracking-wide">TRAJECTORY</h1>
+                    <KPIStrip
+                        variant="inline"
+                        items={[
+                            { k: "TOTAL STEPS", v: String(stepsData.length) },
+                            {
+                                k: "DECISIONS",
+                                v: String(stepsData.filter((s) => s.type === "DECISION").length),
+                                c: "var(--primary)",
+                            },
+                            { k: "TOTAL COST", v: `$${totCost.toFixed(4)}` },
+                        ]}
+                    />
                 </div>
             </div>
             {/* Filter strip */}
-            <div
-                className="flex flex-shrink-0 items-center gap-2 bg-[var(--color-hex-0a0a0a)] px-6 py-2"
-                style={{
-                    borderBottom: "1px solid var(--color-hex-141414)",
-                }}
-            >
+            <div className="bg-background border-border flex flex-shrink-0 items-center gap-2 border-b px-6 py-2">
                 {types.map((t) => (
-                    <button
+                    <Button
                         key={t}
+                        variant="outline"
                         onClick={() => setFilter(t)}
                         aria-pressed={filter === t}
                         aria-label={t === "ALL" ? "Show all events" : `Filter by ${t}`}
-                        className="font-inherit tracking-wider-1 cursor-pointer rounded-[2px] px-[10px] py-[3px] text-sm"
+                        className="h-auto rounded-sm px-2.5 py-0.5 text-sm tracking-widest hover:bg-transparent"
                         style={{
                             background: (() => {
                                 if (filter === t) {
                                     if (t === "ALL") {
-                                        return "var(--color-hex-1a1a1a)";
+                                        return "var(--border)";
                                     }
                                     return (TYPE_C[t] as { bg: string }).bg;
                                 }
@@ -95,32 +89,32 @@ export default function TrajectoryPage() {
                             border: `1px solid ${(() => {
                                 if (filter === t) {
                                     if (t === "ALL") {
-                                        return "var(--color-hex-444444)";
+                                        return "var(--muted-foreground)";
                                     }
                                     return `${(TYPE_C[t] as { color: string }).color}66`;
                                 }
-                                return "var(--color-hex-1e1e1e)";
+                                return "var(--border)";
                             })()}`,
                             color: (() => {
                                 if (filter === t) {
                                     if (t === "ALL") {
-                                        return "var(--color-fg)";
+                                        return "var(--foreground)";
                                     }
                                     return (TYPE_C[t] as { color: string }).color;
                                 }
-                                return "var(--color-hex-444444)";
+                                return "var(--muted-foreground)";
                             })(),
                         }}
                     >
                         {t}
-                    </button>
+                    </Button>
                 ))}
-                <span className="ml-auto text-sm tracking-wide text-[var(--color-hex-333333)]">
+                <span className="text-muted-foreground ml-auto text-sm tracking-wide">
                     {visible.length} EVENTS
                 </span>
             </div>
             {/* Main */}
-            <div className="flex min-h-[0px] flex-1 overflow-hidden">
+            <div className="flex min-h-0 flex-1 overflow-hidden">
                 {/* Timeline */}
                 <div className="flex-1 overflow-y-auto px-6 py-5" ref={parentRef}>
                     {rowVirtualizer.getVirtualItems().length > 0 && (
@@ -152,13 +146,8 @@ export default function TrajectoryPage() {
                     )}
                 </div>
                 {/* Right summary panel */}
-                <div
-                    className="flex w-[220px] flex-shrink-0 flex-col overflow-y-auto px-[14px] py-[16px]"
-                    style={{
-                        borderLeft: "1px solid var(--color-hex-1e1e1e)",
-                    }}
-                >
-                    <div className="mb-[14px] text-sm tracking-widest text-[var(--color-hex-444444)]">
+                <div className="border-border flex w-[220px] flex-shrink-0 flex-col overflow-y-auto border-l px-3.5 py-4">
+                    <div className="text-muted-foreground mb-3.5 text-sm tracking-widest">
                         STEP TYPES
                     </div>
                     {(
@@ -176,17 +165,17 @@ export default function TrajectoryPage() {
                         return (
                             <div key={t} className="mb-3 flex items-center gap-2">
                                 <div
-                                    className="h-[6px] w-[6px] shrink-0"
+                                    className="h-1.5 w-1.5 shrink-0"
                                     style={{
                                         borderRadius: "50%",
                                         background: tc.color,
                                     }}
                                 />
-                                <span className="tracking-tight-1 flex-1 text-base text-[var(--color-hex-555555)]">
+                                <span className="text-muted-foreground flex-1 text-base tracking-tight">
                                     {t}
                                 </span>
                                 <span
-                                    className="text-lg font-bold"
+                                    className="text-xs font-bold"
                                     style={{
                                         color: tc.color,
                                     }}
@@ -197,12 +186,12 @@ export default function TrajectoryPage() {
                         );
                     })}
                     <div
-                        className="h-[1px] bg-[var(--color-hex-1a1a1a)]"
+                        className="bg-card h-px"
                         style={{
                             margin: "12px 0",
                         }}
                     />
-                    <div className="mb-[14px] text-sm tracking-widest text-[var(--color-hex-444444)]">
+                    <div className="text-muted-foreground mb-3.5 text-sm tracking-widest">
                         OUTCOMES
                     </div>
                     {(
@@ -217,17 +206,15 @@ export default function TrajectoryPage() {
                         return count > 0 ? (
                             <div key={s} className="mb-3 flex items-center gap-2">
                                 <div
-                                    className="h-[6px] w-[6px] shrink-0"
+                                    className="h-1.5 w-1.5 shrink-0"
                                     style={{
                                         borderRadius: "50%",
                                         background: getStatusColor(s).color,
                                     }}
                                 />
-                                <span className="flex-1 text-base text-[var(--color-hex-555555)]">
-                                    {s}
-                                </span>
+                                <span className="text-muted-foreground flex-1 text-base">{s}</span>
                                 <span
-                                    className="text-lg font-bold"
+                                    className="text-xs font-bold"
                                     style={{
                                         color: getStatusColor(s).color,
                                     }}
@@ -238,23 +225,6 @@ export default function TrajectoryPage() {
                         ) : null;
                     })}
                 </div>
-            </div>
-        </div>
-    );
-}
-function Stat({ label, value, red }: { label: string; value: string; red?: boolean }) {
-    return (
-        <div className="flex flex-col items-end">
-            <div className="text-sm-tight tracking-wider-3 mb-[2px] text-[var(--color-hex-444444)]">
-                {label}
-            </div>
-            <div
-                className="text-4xl font-bold"
-                style={{
-                    color: red ? "var(--color-brand)" : "var(--color-fg)",
-                }}
-            >
-                {value}
             </div>
         </div>
     );
