@@ -25,31 +25,31 @@ export const ESCALATION_CATEGORIES: EscalationCategory[] = [
         id: "AMBIGUOUS_SCOPE",
         label: "AMBIGUOUS SCOPE",
         desc: "Agent cannot determine if target is in-scope for this engagement",
-        color: "var(--color-warning)",
+        color: "var(--warning)",
     },
     {
         id: "NOVEL_VULNERABILITY",
         label: "NOVEL VULNERABILITY",
         desc: "Potential zero-day pattern detected — requires human expert verification before exploitation",
-        color: "var(--color-brand)",
+        color: "var(--primary)",
     },
     {
         id: "HIGH_RISK_ACTION",
         label: "HIGH-RISK ACTION",
         desc: "Next action may cause irreversible damage or unintended lateral impact",
-        color: "var(--color-danger)",
+        color: "var(--destructive)",
     },
     {
         id: "ORACLE_FAILURE",
         label: "ORACLE FAILURE",
         desc: "Validation oracle returned unexpected result — human review required",
-        color: "var(--color-warning)",
+        color: "var(--warning)",
     },
     {
         id: "COST_THRESHOLD",
         label: "COST THRESHOLD",
         desc: "Projected cost exceeds ROE ceiling — explicit authorization required to continue",
-        color: "var(--color-hex-555555)",
+        color: "var(--color-zinc-600)",
     },
 ];
 
