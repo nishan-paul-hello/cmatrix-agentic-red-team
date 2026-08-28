@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { FocusTrap } from "focus-trap-react";
 
+import { Button } from "@/components/ui/button";
+import { getStatusColor } from "@/components/ui/StatusBadge";
 import { type ExecEntry } from "@/types/domain-types";
-import { getStatusColor } from "@/utils/statusColors";
 
 import { ExecDrawerElChangesTab } from "./exec-drawer-tabs/ExecDrawerElChangesTab";
 import { ExecDrawerParsedTab } from "./exec-drawer-tabs/ExecDrawerParsedTab";
@@ -52,43 +53,32 @@ export function ExecDrawer({
                 role="dialog"
                 aria-modal="true"
                 aria-labelledby="exec-drawer-title"
-                className="flex w-[var(--width-drawer-lg)] flex-shrink-0 flex-col overflow-hidden bg-[var(--color-hex-0d0d0d)]"
-                style={{
-                    borderLeft: "1px solid var(--color-hex-292929)",
-                }}
+                className="bg-background border-border flex w-full flex-shrink-0 flex-col overflow-hidden border-t md:w-[var(--width-drawer-lg)] md:border-t-0 md:border-l"
             >
-                <div
-                    className="flex items-center justify-between px-4 pt-4 pb-3"
-                    style={{
-                        borderBottom: "1px solid var(--color-hex-1e1e1e)",
-                    }}
-                >
+                <div className="border-border flex items-center justify-between border-b px-4 pt-4 pb-3">
                     <div>
                         <div
                             id="exec-drawer-title"
-                            className="text-2xl font-bold tracking-wide text-[var(--color-fg)]"
+                            className="text-foreground text-xs font-bold tracking-wide"
                         >
                             EXECUTION #{entry.id}
                         </div>
-                        <div className="text-base-tight mt-[2px] tracking-wide text-[var(--color-hex-444444)]">
+                        <div className="text-muted-foreground mt-0.5 text-sm tracking-wide">
                             {entry.specialist} · {entry.command.tool.id}
                         </div>
                     </div>
-                    <button
+                    <Button
+                        variant="ghost"
+                        size="icon-sm"
                         onClick={onClose}
-                        className="font-inherit cursor-pointer border-none bg-[transparent] text-4xl text-[var(--color-hex-444444)]"
+                        className="text-muted-foreground"
                     >
                         ✕
-                    </button>
+                    </Button>
                 </div>
 
                 {/* Tabs */}
-                <div
-                    className="flex flex-shrink-0"
-                    style={{
-                        borderBottom: "1px solid var(--color-hex-1e1e1e)",
-                    }}
-                >
+                <div className="border-border flex flex-shrink-0 overflow-x-auto border-b">
                     {(
                         [
                             "SUMMARY",
@@ -98,20 +88,21 @@ export function ExecDrawer({
                             "TRAJECTORY",
                         ] as const
                     ).map((t) => (
-                        <button
+                        <Button
                             key={t}
+                            variant="ghost"
                             onClick={() => setTab(t)}
-                            className="font-inherit cursor-pointer border-none bg-[transparent] px-[8px] py-[5px] text-sm tracking-normal whitespace-nowrap"
+                            className="h-auto rounded-none px-2 py-1 text-sm tracking-normal whitespace-nowrap hover:bg-transparent"
                             style={{
                                 borderBottom:
                                     t === tab
-                                        ? "2px solid var(--color-brand)"
+                                        ? "2px solid var(--primary)"
                                         : "2px solid transparent",
-                                color: t === tab ? "var(--color-fg)" : "var(--color-hex-444444)",
+                                color: t === tab ? "var(--foreground)" : "var(--muted-foreground)",
                             }}
                         >
                             {t}
-                        </button>
+                        </Button>
                     ))}
                 </div>
 

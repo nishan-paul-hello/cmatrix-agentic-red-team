@@ -23,68 +23,51 @@ export default function ExecutionConsoleView({
     handleRowClick: (e: ExecEntry) => void;
 }) {
     return (
-        <div className="flex h-full min-h-[0px]">
-            <div className="flex min-h-[0px] flex-1 flex-col overflow-hidden">
+        <div className="flex h-full min-h-0 flex-col md:flex-row">
+            <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
                 {/* Header */}
-                <div
-                    className="flex-shrink-0 px-6 pt-5 pb-4"
-                    style={{
-                        borderBottom: "1px solid var(--color-hex-1e1e1e)",
-                    }}
-                >
-                    <div className="tracking-widest-2 mb-[3px] text-base text-[var(--color-hex-666666)]">
+                <div className="border-border flex-shrink-0 border-b px-6 pt-5 pb-4">
+                    <div className="text-muted-foreground mb-0.5 text-base tracking-widest">
                         MISSION / CVE-001
                     </div>
                     <div className="flex items-baseline gap-3">
-                        <h1 className="text-8xl font-bold tracking-wide text-[var(--color-fg)]">
+                        <h1 className="text-foreground text-xs font-bold tracking-wide">
                             EXECUTION AGENT
                         </h1>
-                        <span className="tracking-wider-2 text-base text-[var(--color-hex-444444)]">
+                        <span className="text-muted-foreground text-base tracking-widest">
                             DETERMINISTIC EXECUTION CHANNEL
                         </span>
                     </div>
                 </div>
 
                 {/* Architecture note */}
-                <div
-                    className="flex flex-shrink-0 items-start gap-3 bg-[var(--color-hex-0b0b0b)] px-6 py-2"
-                    style={{
-                        borderBottom: "1px solid var(--color-hex-1e1e1e)",
-                    }}
-                >
-                    <div className="mt-[2px] h-[28px] w-[2px] shrink-0 bg-[var(--color-brand)]" />
+                <div className="bg-background border-border flex flex-shrink-0 items-start gap-3 border-b px-6 py-2">
+                    <div className="bg-primary mt-0.5 h-7 w-0.5 shrink-0" />
                     <div>
-                        <div className="text-base-tight tracking-wider-1 mb-[2px] text-[var(--color-hex-444444)]">
+                        <div className="text-muted-foreground mb-0.5 text-sm tracking-widest">
                             REASONING / EXECUTION SEPARATION
                         </div>
-                        <div className="tracking-tight-1 text-base leading-normal text-[var(--color-hex-333333)]">
+                        <div className="text-muted-foreground text-base leading-normal tracking-tight">
                             Specialists reason and plan · Execution agent runs tools
                             deterministically · No LLM reasoning occurs during tool execution
                         </div>
                     </div>
                     <div className="ml-auto flex flex-shrink-0 items-center gap-2">
                         <div
-                            className="h-[6px] w-[6px] bg-[var(--color-danger)]"
+                            className="bg-destructive h-1.5 w-1.5"
                             style={{
                                 borderRadius: "50%",
                                 animation: "pulse 1.4s ease infinite",
                             }}
                         />
-                        <span className="tracking-wider-1 text-base text-[var(--color-brand)]">
-                            1 RUNNING
-                        </span>
+                        <span className="text-primary text-base tracking-widest">1 RUNNING</span>
                     </div>
                 </div>
 
                 {/* Console log */}
-                <div className="flex-1 overflow-y-auto bg-[var(--color-bg)]" ref={parentRef}>
+                <div className="bg-background flex-1 overflow-y-auto" ref={parentRef}>
                     {/* Header row */}
-                    <div
-                        className="sticky top-0 flex gap-0 bg-[var(--color-hex-0d0d0d)]"
-                        style={{
-                            borderBottom: "1px solid var(--color-hex-1a1a1a)",
-                        }}
-                    >
+                    <div className="bg-background border-border sticky top-0 flex gap-0 border-b">
                         {[
                             "#",
                             "TIMESTAMP",
@@ -97,7 +80,7 @@ export default function ExecutionConsoleView({
                         ].map((h, i) => (
                             <div
                                 key={h}
-                                className="text-sm-tight tracking-wider-3 shrink-0 px-[12px] py-[5px] font-semibold text-[var(--color-hex-333333)]"
+                                className="text-muted-foreground shrink-0 px-3 py-1 text-xs font-semibold tracking-widest"
                                 style={{
                                     width: [48, 80, 108, 160, 72, 64, 72, undefined][i],
                                     flex: i === 7 ? 1 : undefined,
