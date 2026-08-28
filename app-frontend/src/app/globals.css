@@ -94,6 +94,75 @@
     --color-hex-ff2a32: #ff2a32;
     --color-hex-ff2a3244: #ff2a3244;
     --color-hex-ff2a3266: #ff2a3266;
+
+    /* Missing tokens added for validation features */
+    --color-hex-a371f7: #a371f7;
+    --color-hex-1a0f2e: #1a0f2e;
+    --color-hex-3fb95022: #3fb95022;
+    --color-hex-3fb95033: #3fb95033;
+    --color-hex-a371f744: #a371f744;
+
+    /* Typography Tokens added for Item 7 & 8 */
+    --text-2xs: 6.5px;
+    --text-xs: 7px;
+    --text-sm-tight: 7.5px;
+    --text-sm: 8px;
+    --text-base-tight: 8.5px;
+    --text-base: 9px;
+    --text-lg-tight: 9.5px;
+    --text-lg: 10px;
+    --text-xl-tight: 10.5px;
+    --text-xl: 11px;
+    --text-2xl: 12px;
+    --text-3xl: 13px;
+    --text-4xl: 14px;
+    --text-5xl: 15px;
+    --text-6xl: 16px;
+    --text-7xl: 17px;
+    --text-8xl: 18px;
+    --text-9xl: 20px;
+    --text-10xl: 22px;
+    --text-11xl: 24px;
+    --text-12xl: 26px;
+    --text-13xl: 28px;
+    --text-huge: 72px;
+
+    --tracking-tighter-2: 0.02em;
+    --tracking-tighter-1: 0.03em;
+    --tracking-tighter: 0.04em;
+    --tracking-tight-2: 0.05em;
+    --tracking-tight-1: 0.06em;
+    --tracking-tight: 0.08em;
+    --tracking-normal: 0.1em;
+    --tracking-wide: 0.12em;
+    --tracking-wider-1: 0.14em;
+    --tracking-wider-2: 0.16em;
+    --tracking-wider-3: 0.18em;
+    --tracking-widest: 0.2em;
+    --tracking-widest-2: 0.22em;
+
+    --leading-none: 1;
+    --leading-tight-2: 1.2;
+    --leading-tight-1: 1.3;
+    --leading-tight: 1.4;
+    --leading-snug: 1.5;
+    --leading-normal: 1.6;
+    --leading-normal-2: 1.65;
+    --leading-relaxed: 1.7;
+    --leading-relaxed-2: 1.75;
+    --leading-loose: 1.8;
+    --leading-loose-2: 1.9;
+
+    /* Panel Widths */
+    --width-panel-sm: 280px;
+    --width-panel-md: 300px;
+    --width-panel-lg: 540px;
+    --width-panel-xl: 600px;
+    --width-panel-2xl: 620px;
+    --width-drawer-sm: 264px;
+    --width-drawer-md: 320px;
+    --width-drawer-lg: 340px;
+    --width-cell-max: 180px;
 }
 
 * {

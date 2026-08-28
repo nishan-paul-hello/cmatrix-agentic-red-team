@@ -11,13 +11,11 @@ export const metadata: Metadata = {
         default: "RedGrid - Agentic Red Team",
         template: "%s | RedGrid",
     },
-    description:
-        "A secure research environment to run autonomous VAPT on hosted benchmarks.",
+    description: "A secure research environment to run autonomous VAPT on hosted benchmarks.",
     metadataBase: new URL("https://redgrid.kaiofficial.xyz"),
     openGraph: {
         title: "RedGrid - Agentic Red Team",
-        description:
-            "A secure research environment to run autonomous VAPT on hosted benchmarks.",
+        description: "A secure research environment to run autonomous VAPT on hosted benchmarks.",
         siteName: "RedGrid",
         url: "https://redgrid.kaiofficial.xyz",
         type: "website",
@@ -25,8 +23,7 @@ export const metadata: Metadata = {
     twitter: {
         card: "summary_large_image",
         title: "RedGrid - Agentic Red Team",
-        description:
-            "A secure research environment to run autonomous VAPT on hosted benchmarks.",
+        description: "A secure research environment to run autonomous VAPT on hosted benchmarks.",
     },
     robots: {
         index: true,
