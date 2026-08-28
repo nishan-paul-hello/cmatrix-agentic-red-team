@@ -1,12 +1,26 @@
-import { type Bench, type Task } from "@/features/benchmarks/data/fixtures/benchmarksMockData";
+import {
+    type BenchRecord,
+    type Task,
+} from "@/features/benchmarks/data/fixtures/benchmarksMockData";
+
+// Bench is aliased to BenchRecord in the fixture file; keep local alias for clarity
+type Bench = BenchRecord;
 
 export function computeBenchmarkStats(benchmarks: Bench[], filter: string) {
-    const filtered = filter === "ALL" ? benchmarks : benchmarks.filter((b) => b.type === filter);
+    // filter is now a tier key or "ALL" — BenchList now does its own filtering
+    // This function is retained for backward compatibility via useBenchmarksData
+    const filtered = filter === "ALL" ? benchmarks : benchmarks.filter((b) => b.tier === filter);
+    // "best" no longer has a single .score — pick latest COMPLETE CVE-Bench run
     const completed = benchmarks.filter((b) => b.status === "COMPLETE");
-    const best = completed.reduce(
-        (a, b) => (b.score > a.score ? b : a),
-        completed[0] || benchmarks[0],
-    );
+    const cveBench = completed.find((b) => b.tier === "TIER2_CVEBENCH");
+    let best: Bench;
+    if (cveBench !== undefined) {
+        best = cveBench;
+    } else if (completed.length > 0) {
+        best = completed[0];
+    } else {
+        best = benchmarks[0];
+    }
     return { filtered, best };
 }
 
