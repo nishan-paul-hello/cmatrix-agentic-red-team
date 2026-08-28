@@ -82,29 +82,29 @@ export const SB: Record<
     }
 > = {
     PENDING: {
-        color: "var(--color-warning)",
-        bg: "var(--color-hex-1a1200)",
-        border: "var(--color-hex-d2992244)",
+        color: "var(--warning)",
+        bg: "var(--border)",
+        border: "var(--border)",
     },
     RETRY: {
-        color: "var(--color-danger)",
-        bg: "var(--color-hex-1a0608)",
-        border: "var(--color-hex-ff2a3244)",
+        color: "var(--destructive)",
+        bg: "var(--border)",
+        border: "var(--border)",
     },
     VALIDATED: {
-        color: "var(--color-success)",
-        bg: "var(--color-hex-0a1a10)",
-        border: "var(--color-hex-3fb95044)",
+        color: "var(--success)",
+        bg: "var(--border)",
+        border: "var(--border)",
     },
     RULED_OUT: {
-        color: "var(--color-hex-555555)",
-        bg: "var(--color-hex-111111)",
-        border: "var(--color-hex-33333344)",
+        color: "var(--color-zinc-600)",
+        bg: "var(--color-zinc-900)",
+        border: "var(--border)",
     },
     ORACLE_CONFIRMED: {
-        color: "var(--color-hex-a371f7)",
-        bg: "var(--color-hex-1a0f2e)",
-        border: "var(--color-hex-a371f744)",
+        color: "var(--border)",
+        bg: "var(--border)",
+        border: "var(--border)",
     },
 };
 
