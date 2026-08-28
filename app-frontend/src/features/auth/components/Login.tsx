@@ -1,19 +1,41 @@
 import React, { useState } from "react";
 import Image from "next/image";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
 
+import { Button } from "@/components/ui/button";
 import GeometricMark from "@/components/ui/GeometricMark";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+
+const loginSchema = z.object({
+    username: z.string().min(1, "Username is required"),
+    password: z.string().min(1, "Password is required"),
+});
+
+type LoginFormValues = z.infer<typeof loginSchema>;
 
 interface LoginProps {
     onLogin: () => void;
 }
 
 export default function Login({ onLogin }: LoginProps) {
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
 
-    function handleSubmit(e: React.FormEvent) {
-        e.preventDefault();
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<LoginFormValues>({
+        resolver: zodResolver(loginSchema),
+        defaultValues: {
+            username: "",
+            password: "",
+        },
+    });
+
+    function onSubmit(_data: LoginFormValues) {
         setLoading(true);
         // TODO: replace with real auth API call
         setTimeout(() => {
@@ -23,24 +45,24 @@ export default function Login({ onLogin }: LoginProps) {
     }
 
     return (
-        <div className="flex min-h-screen items-center justify-center bg-[var(--color-bg)]">
+        <div className="bg-background flex min-h-screen items-center justify-center">
             {/* Decorative grid background */}
             <div
-                className="pointer-events-none absolute inset-0"
+                className="pointer-events-none absolute inset-0 opacity-20"
                 style={{
                     backgroundImage:
-                        "linear-gradient(rgba(41,41,41,0.18) 1px, transparent 1px), linear-gradient(90deg, rgba(41,41,41,0.18) 1px, transparent 1px)",
+                        "linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px)",
                     backgroundSize: "48px 48px",
                 }}
                 aria-hidden="true"
             />
 
-            <div className="relative flex w-[360px] flex-col items-center">
+            <div className="relative flex w-full max-w-[360px] flex-col items-center sm:w-[360px]">
                 {/* Brand header */}
                 <div className="mb-8 flex items-center gap-3">
                     <GeometricMark size={28} />
                     <div className="flex flex-col">
-                        <span className="text-10xl tracking-widest-2 font-bold text-[var(--color-fg)]">
+                        <span className="text-foreground text-sm font-bold tracking-widest">
                             RedGrid
                         </span>
                     </div>
@@ -48,83 +70,81 @@ export default function Login({ onLogin }: LoginProps) {
 
                 {/* Red gradient divider */}
                 <div
-                    className="mb-8 h-[1px] w-full"
-                    style={{
-                        background:
-                            "linear-gradient(90deg, var(--color-brand) 0%, var(--color-hex-9e1118) 60%, transparent 100%)",
-                    }}
+                    className="from-primary mb-8 h-px w-full bg-gradient-to-r to-transparent"
                     aria-hidden="true"
                 />
 
                 {/* Form card */}
-                <div className="w-full rounded-[2px] border border-[var(--color-hex-292929)] bg-[var(--color-hex-111111)] px-8 pt-8 pb-7">
-                    <form onSubmit={handleSubmit} autoComplete="off" noValidate>
+                <div className="border-border bg-card w-full rounded-md border px-8 pt-8 pb-7 shadow-sm">
+                    <form onSubmit={handleSubmit(onSubmit)} autoComplete="off" noValidate>
                         {/* Username */}
                         <div className="mb-4">
-                            <label
+                            <Label
                                 htmlFor="username"
-                                className="tracking-wider-3 mb-1.5 block text-lg text-[var(--color-hex-666666)]"
+                                className="text-muted-foreground mb-1.5 block text-xs tracking-widest uppercase"
                             >
                                 USERNAME
-                            </label>
-                            <input
+                            </Label>
+                            <Input
                                 id="username"
                                 type="text"
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
+                                {...register("username")}
                                 autoComplete="username"
                                 spellCheck={false}
                                 aria-required="true"
-                                className="w-full rounded-[2px] border border-[var(--color-hex-292929)] bg-[var(--color-hex-191919)] px-[12px] py-[9px] text-2xl text-[var(--color-fg)] transition-colors duration-100 outline-none focus:border-[var(--color-brand)]"
+                                className="bg-background text-xs"
                             />
+                            {errors.username && (
+                                <p className="text-destructive mt-1 text-sm">
+                                    {errors.username.message}
+                                </p>
+                            )}
                         </div>
 
                         {/* Password */}
                         <div className="mb-6">
-                            <label
+                            <Label
                                 htmlFor="password"
-                                className="tracking-wider-3 mb-1.5 block text-lg text-[var(--color-hex-666666)]"
+                                className="text-muted-foreground mb-1.5 block text-xs tracking-widest uppercase"
                             >
                                 PASSWORD
-                            </label>
-                            <input
+                            </Label>
+                            <Input
                                 id="password"
                                 type="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
+                                {...register("password")}
                                 autoComplete="current-password"
                                 aria-required="true"
-                                className="w-full rounded-[2px] border border-[var(--color-hex-292929)] bg-[var(--color-hex-191919)] px-[12px] py-[9px] text-2xl text-[var(--color-fg)] transition-colors duration-100 outline-none focus:border-[var(--color-brand)]"
+                                className="bg-background text-xs"
                             />
+                            {errors.password && (
+                                <p className="text-destructive mt-1 text-sm">
+                                    {errors.password.message}
+                                </p>
+                            )}
                         </div>
 
                         {/* Submit */}
-                        <button
+                        <Button
                             type="submit"
                             disabled={loading}
-                            aria-busy={loading}
-                            className={[
-                                "tracking-widest-2 w-full rounded-[2px] py-[11px] text-xl font-semibold text-[var(--color-fg)]",
-                                "transition-colors duration-100",
-                                loading
-                                    ? "cursor-not-allowed bg-[var(--color-hex-9e1118)]"
-                                    : "cursor-pointer bg-[var(--color-brand)] hover:bg-[var(--color-danger)]",
-                            ].join(" ")}
+                            className="w-full text-sm font-semibold tracking-widest uppercase"
+                            size="lg"
                         >
                             {loading ? "AUTHENTICATING..." : "SIGN IN"}
-                        </button>
+                        </Button>
                     </form>
 
                     {/* Divider */}
-                    <div className="my-6 h-[1px] bg-[var(--color-hex-1e1e1e)]" />
+                    <div className="bg-border my-6 h-px" />
 
                     {/* Footer status */}
                     <div className="flex items-center justify-center gap-2">
                         <div
-                            className="h-[5px] w-[5px] shrink-0 rounded-full bg-[var(--color-success)]"
+                            className="bg-success h-1.5 w-1.5 shrink-0 rounded-full"
                             aria-hidden="true"
                         />
-                        <span className="tracking-widest-2 text-base text-[var(--color-hex-666666)]">
+                        <span className="text-muted-foreground text-xs tracking-widest uppercase">
                             SECURE RESEARCH ENVIRONMENT
                         </span>
                     </div>
@@ -132,21 +152,19 @@ export default function Login({ onLogin }: LoginProps) {
 
                 {/* Version / copyright */}
                 <div className="mt-5 flex w-full items-center justify-between">
-                    <span className="text-base tracking-normal text-[var(--color-hex-333333)]">
-                        v1.1.1
-                    </span>
-                    <span className="inline-flex items-center gap-1.5 text-base tracking-normal text-[var(--color-hex-333333)]">
+                    <span className="text-muted-foreground text-xs">v1.1.1</span>
+                    <span className="text-muted-foreground inline-flex items-center gap-1.5 text-xs">
                         <a
                             href="https://kaiofficial.xyz/"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 font-semibold text-[#00F07C] transition-opacity hover:opacity-80"
+                            className="text-success inline-flex items-center gap-1 font-semibold transition-opacity hover:opacity-80"
                         >
                             <Image
                                 src="/logo-company.svg"
                                 alt="KAI Logo"
-                                width={16}
-                                height={16}
+                                width={12}
+                                height={12}
                                 className="inline-block"
                             />
                             <span>KAI</span>
