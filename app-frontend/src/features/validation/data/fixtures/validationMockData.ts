@@ -82,17 +82,17 @@ export const SB: Record<
     }
 > = {
     PENDING: {
-        color: "var(--color-hex-d29922)",
+        color: "var(--color-warning)",
         bg: "var(--color-hex-1a1200)",
         border: "var(--color-hex-d2992244)",
     },
     RETRY: {
-        color: "var(--color-hex-ff2a32)",
+        color: "var(--color-danger)",
         bg: "var(--color-hex-1a0608)",
         border: "var(--color-hex-ff2a3244)",
     },
     VALIDATED: {
-        color: "var(--color-hex-3fb950)",
+        color: "var(--color-success)",
         bg: "var(--color-hex-0a1a10)",
         border: "var(--color-hex-3fb95044)",
     },
