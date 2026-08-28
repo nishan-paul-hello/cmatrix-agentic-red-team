@@ -1,12 +1,12 @@
 "use client";
 
 import { PanelErrorBoundary } from "@/components/PanelErrorBoundary";
-import MemoryPage from "@/features/memory/components/MemoryPage";
+import MemoryBrowser from "@/features/memory/components/MemoryBrowser";
 
 export default function SkillLibrary() {
     return (
         <PanelErrorBoundary>
-            <MemoryPage initialTab="SKILL LIBRARY" />
+            <MemoryBrowser initialTab="SKILL LIBRARY" />
         </PanelErrorBoundary>
     );
 }
