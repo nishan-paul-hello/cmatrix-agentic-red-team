@@ -85,6 +85,12 @@ export interface Specialist {
     node: string;
     failures: number;
     skills: number;
+    /** Layer 3 = specialist, Layer 4 = validation/execution agent (§8.4) */
+    layer?: 3 | 4;
+    /** Current phase for multi-phase specialists (e.g. XSS 5-phase pipeline) */
+    phase?: number;
+    /** Total phases for multi-phase specialists */
+    phaseTotal?: number;
 }
 
 export type Severity = "CRITICAL" | "HIGH" | "MEDIUM" | "LOW";
@@ -123,13 +129,19 @@ export interface AuditEntry {
     detail: string;
 }
 
+/**
+ * VDG node lifecycle statuses — exactly six, per architecture §7.1.
+ * Mapping from removed legacy values:
+ *   COMPLETED  → EXPLOITED (terminal success)
+ *   DEPENDENT  → INFEASIBLE (nodes with unmet prerequisites per §7.3 step 4)
+ */
 export const VDG_NODE_STATUS = {
-    COMPLETED: "COMPLETED",
-    EXPLOITED: "EXPLOITED",
     ELIGIBLE: "ELIGIBLE",
     IN_PROGRESS: "IN_PROGRESS",
-    DEPENDENT: "DEPENDENT",
+    EXPLOITED: "EXPLOITED",
     INFEASIBLE: "INFEASIBLE",
+    DEPRIORITIZED: "DEPRIORITIZED",
+    BLOCKED: "BLOCKED",
 } as const;
 
 export type VdgNodeStatus = (typeof VDG_NODE_STATUS)[keyof typeof VDG_NODE_STATUS];
