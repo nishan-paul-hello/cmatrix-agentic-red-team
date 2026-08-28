@@ -18,6 +18,7 @@ export function useWizardData() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        let ignore = false;
         async function load() {
             setLoading(true);
             try {
@@ -27,17 +28,26 @@ export function useWizardData() {
                     WizardRepository.getModeOptions(),
                     WizardRepository.getSurfaceSpecialists(),
                 ]);
-                setSteps(st);
-                setSurfaceOptions(so);
-                setModeOptions(mo);
-                setSurfaceSpecialists(sSp);
+                if (!ignore) {
+                    setSteps(st);
+                    setSurfaceOptions(so);
+                    setModeOptions(mo);
+                    setSurfaceSpecialists(sSp);
+                }
             } catch (error) {
-                console.error("Failed to load wizard data", error);
+                if (!ignore) {
+                    console.error("Failed to load wizard data", error);
+                }
             } finally {
-                setLoading(false);
+                if (!ignore) {
+                    setLoading(false);
+                }
             }
         }
         void load();
+        return () => {
+            ignore = true;
+        };
     }, []);
 
     return { steps, surfaceOptions, modeOptions, surfaceSpecialists, loading };

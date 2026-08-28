@@ -6,6 +6,7 @@ import {
     type VDGNode,
 } from "@/features/missions/data/fixtures/workspaceMockData";
 import { WorkspaceRepository } from "@/features/missions/data/WorkspaceRepository";
+import { useServices } from "@/lib/services-context";
 import { type Specialist } from "@/types/domain-types";
 
 export function useWorkspaceData() {
@@ -15,31 +16,42 @@ export function useWorkspaceData() {
     const [initialLog, setInitialLog] = useState<LogEntry[]>([]);
     const [streamEvents, setStreamEvents] = useState<Omit<LogEntry, "id">[]>([]);
     const [loading, setLoading] = useState(true);
+    const { specialistRepository } = useServices();
 
     useEffect(() => {
+        let ignore = false;
         async function load() {
             setLoading(true);
             try {
                 const [n, s, sn, il, se] = await Promise.all([
                     WorkspaceRepository.getNodes(),
-                    WorkspaceRepository.getSpecialists(),
+                    specialistRepository.fetchAll(),
                     WorkspaceRepository.getSubNav(),
                     WorkspaceRepository.getInitialLog(),
                     WorkspaceRepository.getStreamEvents(),
                 ]);
-                setNodes(n);
-                setSpecialists(s);
-                setSubNav(sn);
-                setInitialLog(il);
-                setStreamEvents(se);
+                if (!ignore) {
+                    setNodes(n);
+                    setSpecialists(s);
+                    setSubNav(sn);
+                    setInitialLog(il);
+                    setStreamEvents(se);
+                }
             } catch (error) {
-                console.error("Failed to load workspace data", error);
+                if (!ignore) {
+                    console.error("Failed to load workspace data", error);
+                }
             } finally {
-                setLoading(false);
+                if (!ignore) {
+                    setLoading(false);
+                }
             }
         }
         void load();
-    }, []);
+        return () => {
+            ignore = true;
+        };
+    }, [specialistRepository]);
 
     return { nodes, specialists, subNav, initialLog, streamEvents, loading };
 }
