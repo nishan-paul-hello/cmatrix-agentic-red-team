@@ -1,12 +1,15 @@
 import {
-    BENCHMARKS,
+    ALL_BENCH_RUNS,
     TASK_DATA,
-    type Bench,
+    type BenchRecord,
 } from "@/features/benchmarks/data/fixtures/benchmarksMockData";
 import { type DataSource } from "@/types/adapters";
 
+// BenchRecord is the new discriminated-union type; Bench is aliased to it in the fixture file
+type Bench = BenchRecord;
+
 export class BenchmarksRepository implements DataSource<Bench> {
-    private static mockData: Bench[] = [...BENCHMARKS];
+    private static mockData: Bench[] = [...ALL_BENCH_RUNS];
 
     static seed(data: Bench[]) {
         this.mockData = data;
@@ -45,7 +48,8 @@ export class BenchmarksRepository implements DataSource<Bench> {
     async create(data: Omit<Bench, "id">): Promise<Bench> {
         return new Promise((resolve) => {
             setTimeout(() => {
-                const newItem = { ...data, id: `ID-${Date.now()}` };
+                // VALIDATION SEAM: discriminated union — cast is safe in mock context
+                const newItem = { ...data, id: `ID-${Date.now()}` } as Bench;
                 BenchmarksRepository.mockData.push(newItem);
                 resolve(newItem);
             }, 100);
@@ -57,10 +61,11 @@ export class BenchmarksRepository implements DataSource<Bench> {
             setTimeout(() => {
                 const idx = BenchmarksRepository.mockData.findIndex((m) => m.id === id);
                 if (idx >= 0) {
+                    // VALIDATION SEAM: spread merge on discriminated union — safe in mock context
                     BenchmarksRepository.mockData[idx] = {
                         ...BenchmarksRepository.mockData[idx],
                         ...data,
-                    };
+                    } as Bench;
                     resolve(BenchmarksRepository.mockData[idx]);
                 } else {
                     reject(new Error("Not found"));
