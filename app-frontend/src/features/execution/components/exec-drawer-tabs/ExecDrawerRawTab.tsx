@@ -3,9 +3,8 @@ import React from "react";
 export function ExecDrawerRawTab() {
     return (
         <pre
-            className="font-inherit text-base leading-relaxed text-[var(--color-hex-555555)]"
+            className="font-inherit text-muted-foreground text-base leading-relaxed whitespace-pre-wrap"
             style={{
-                whiteSpace: "pre-wrap",
                 margin: 0,
             }}
         >

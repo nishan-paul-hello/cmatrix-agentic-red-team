@@ -9,7 +9,7 @@ export function ExecDrawerTrajectoryTab({ entry }: { entry: ExecEntry }) {
                 paddingTop: 4,
             }}
         >
-            <div className="mb-[10px] text-sm tracking-widest text-[var(--color-hex-444444)]">
+            <div className="text-muted-foreground mb-2.5 text-sm tracking-widest">
                 TRAJECTORY CONTRIBUTION
             </div>
             {[
@@ -22,7 +22,7 @@ export function ExecDrawerTrajectoryTab({ entry }: { entry: ExecEntry }) {
             ].map((r) => (
                 <div
                     key={r.step}
-                    className="overflow-hidden rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)]"
+                    className="border-border overflow-hidden rounded-sm border-[1px] border-solid"
                     style={{
                         display: "flex",
                         gap: 0,
@@ -33,21 +33,15 @@ export function ExecDrawerTrajectoryTab({ entry }: { entry: ExecEntry }) {
                         ["VDG DELTA", r.vdgDelta],
                         ["EL DELTA", r.elDelta],
                         ["COST", r.cost],
-                    ].map(([k, v], j, a) => (
+                    ].map(([k, v]) => (
                         <div
                             key={k}
-                            className="flex-1 bg-[var(--color-hex-0d0d0d)] px-[12px] py-[9px]"
-                            style={{
-                                borderRight:
-                                    j < a.length - 1 ? "1px solid var(--color-hex-1a1a1a)" : "none",
-                            }}
+                            className="bg-background border-border flex-1 border-r px-3 py-2"
                         >
-                            <div className="text-sm-tight tracking-wider-3 mb-[4px] text-[var(--color-hex-444444)]">
+                            <div className="text-muted-foreground mb-1 text-xs tracking-widest">
                                 {k}
                             </div>
-                            <div className="text-lg font-semibold text-[var(--color-hex-888888)]">
-                                {v}
-                            </div>
+                            <div className="text-muted-foreground text-xs font-semibold">{v}</div>
                         </div>
                     ))}
                 </div>

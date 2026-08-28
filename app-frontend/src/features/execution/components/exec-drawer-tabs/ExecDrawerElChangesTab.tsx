@@ -10,10 +10,8 @@ export function ExecDrawerElChangesTab() {
                 "HOST app.targetcorp.com CONFIRMED",
             ].map((c) => (
                 <div key={c} className="flex items-center gap-2">
-                    <span className="text-base text-[var(--color-success)]">+</span>
-                    <span className="tracking-tight-1 text-base text-[var(--color-hex-555555)]">
-                        {c}
-                    </span>
+                    <span className="text-success text-base">+</span>
+                    <span className="text-muted-foreground text-base tracking-tight">{c}</span>
                 </div>
             ))}
         </div>

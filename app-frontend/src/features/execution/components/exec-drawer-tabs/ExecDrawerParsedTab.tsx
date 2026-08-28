@@ -12,17 +12,14 @@ export function ExecDrawerParsedTab({
     return (
         <table className="w-full border-collapse">
             <thead>
-                <tr className="bg-[var(--color-hex-111111)]">
+                <tr className="bg-card">
                     {(entry.command.tool.outputShape
                         ? Object.keys(entry.command.tool.outputShape)
                         : ["PORT", "STATE", "SERVICE", "VERSION"]
                     ).map((h) => (
                         <th
                             key={h}
-                            className="text-sm-tight tracking-wider-1 px-[8px] py-[5px] text-left text-[var(--color-hex-444444)] uppercase"
-                            style={{
-                                borderBottom: "1px solid var(--color-hex-1a1a1a)",
-                            }}
+                            className="text-muted-foreground border-border border-b px-2 py-1 text-left text-xs tracking-widest uppercase"
                         >
                             {h}
                         </th>
@@ -38,14 +35,11 @@ export function ExecDrawerParsedTab({
                         <tr
                             key={r.id ? String(r.id) : i}
                             style={{
-                                borderBottom: "1px solid var(--color-hex-111111)",
+                                borderBottom: "1px solid var(--border)",
                             }}
                         >
                             {keys.map((k) => (
-                                <td
-                                    key={k}
-                                    className="px-[8px] py-[5px] text-base text-[var(--color-hex-a0a0a0)]"
-                                >
+                                <td key={k} className="text-muted-foreground px-2 py-1 text-base">
                                     {String(r[k] ?? "")}
                                 </td>
                             ))}
