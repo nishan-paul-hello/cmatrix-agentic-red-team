@@ -11,9 +11,7 @@ export function ToggleRow({ label, on }: { label: string; on: boolean }) {
                 paddingBottom: 10,
             }}
         >
-            <span className="text-[10px] tracking-[0.06em] text-[var(--color-hex-888888)]">
-                {label}
-            </span>
+            <span className="tracking-tight-1 text-lg text-[var(--color-hex-888888)]">{label}</span>
             <Toggle on={on} />
         </div>
     );

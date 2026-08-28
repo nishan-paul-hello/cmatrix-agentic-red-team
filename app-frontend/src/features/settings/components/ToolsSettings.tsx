@@ -10,7 +10,7 @@ export function ToolsSettings({ data }: { data: SettingsData["tools"] }) {
     const { timeout, setTimeout: setTimeout_, parallel, setParallel } = data;
     const tools = ["nmap", "sqlmap", "curl", "ffuf", "nuclei", "gobuster", "hydra"];
     return (
-        <div className="max-w-[600px] flex-1 overflow-y-auto px-6 py-6">
+        <div className="max-w-panel-xl flex-1 overflow-y-auto px-6 py-6">
             <SectionHead label="EXECUTION LIMITS" />
             <FieldRow label="TOOL TIMEOUT" unit="seconds" value={timeout} onChange={setTimeout_} />
             <FieldRow label="MAX PARALLEL TOOL CALLS" value={parallel} onChange={setParallel} />
@@ -24,7 +24,7 @@ export function ToolsSettings({ data }: { data: SettingsData["tools"] }) {
                         paddingBottom: 10,
                     }}
                 >
-                    <span className="font-inherit text-[10px] tracking-[0.08em] text-[var(--color-hex-888888)]">
+                    <span className="font-inherit text-lg tracking-tight text-[var(--color-hex-888888)]">
                         {t}
                     </span>
                     <Toggle on={["nmap", "sqlmap", "curl", "ffuf", "nuclei"].includes(t)} />

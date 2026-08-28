@@ -47,7 +47,7 @@ export default function SettingsPageView({ data }: { data: SettingsData }) {
                 }}
             >
                 <div
-                    className="mb-[12px] text-[9px] tracking-[0.22em] text-[var(--color-hex-666666)]"
+                    className="tracking-widest-2 mb-[12px] text-base text-[var(--color-hex-666666)]"
                     style={{
                         paddingLeft: 16,
                     }}
@@ -58,12 +58,11 @@ export default function SettingsPageView({ data }: { data: SettingsData }) {
                     <button
                         key={t}
                         onClick={() => setTab(t)}
-                        className="font-inherit w-full cursor-pointer border-none px-4 py-2 text-left text-[10px] tracking-[0.08em]"
+                        className="font-inherit w-full cursor-pointer border-none px-4 py-2 text-left text-lg tracking-tight"
                         style={{
                             background: t === tab ? "var(--color-hex-1a0a0b)" : "transparent",
-                            borderLeft: `2px solid ${t === tab ? "var(--color-hex-e31b23)" : "transparent"}`,
-                            color:
-                                t === tab ? "var(--color-hex-f2f2f2)" : "var(--color-hex-555555)",
+                            borderLeft: `2px solid ${t === tab ? "var(--color-brand)" : "transparent"}`,
+                            color: t === tab ? "var(--color-fg)" : "var(--color-hex-555555)",
                         }}
                         onMouseEnter={(e) => {
                             if (t !== tab) {

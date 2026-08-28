@@ -9,7 +9,7 @@ import { type SettingsData } from "@/features/settings/hooks/useSettingsData";
 export function ValidationSettings({ data }: { data: SettingsData["validation"] }) {
     const { retries, setRetries, timeout, setTimeout: setTimeout_ } = data;
     return (
-        <div className="max-w-[600px] flex-1 overflow-y-auto px-6 py-6">
+        <div className="max-w-panel-xl flex-1 overflow-y-auto px-6 py-6">
             <SectionHead label="ORACLE SETTINGS" />
             <FieldRow label="MAX ORACLE RETRIES" value={retries} onChange={setRetries} />
             <FieldRow

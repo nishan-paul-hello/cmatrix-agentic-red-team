@@ -15,11 +15,11 @@ export function Chips({
                 <button
                     key={o}
                     onClick={() => onChange(o)}
-                    className="font-inherit cursor-pointer rounded-[2px] px-[12px] py-[4px] text-[9px] tracking-[0.12em]"
+                    className="font-inherit cursor-pointer rounded-[2px] px-[12px] py-[4px] text-base tracking-wide"
                     style={{
                         background: value === o ? "var(--color-hex-1a0608)" : "transparent",
-                        border: `1px solid ${value === o ? "var(--color-hex-e31b23)" : "var(--color-hex-292929)"}`,
-                        color: value === o ? "var(--color-hex-ff2a32)" : "var(--color-hex-555555)",
+                        border: `1px solid ${value === o ? "var(--color-brand)" : "var(--color-hex-292929)"}`,
+                        color: value === o ? "var(--color-danger)" : "var(--color-hex-555555)",
                     }}
                 >
                     {o}

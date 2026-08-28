@@ -10,7 +10,7 @@ import { type SettingsData } from "@/features/settings/hooks/useSettingsData";
 export function MissionsSettings({ data }: { data: SettingsData["missions"] }) {
     const { surface, setSurface, mode, setMode } = data;
     return (
-        <div className="max-w-[600px] flex-1 overflow-y-auto px-6 py-6">
+        <div className="max-w-panel-xl flex-1 overflow-y-auto px-6 py-6">
             <SectionHead label="MISSION DEFAULTS" />
             <Field label="DEFAULT SURFACE">
                 <Chips

@@ -9,7 +9,7 @@ import { type SettingsData } from "@/features/settings/hooks/useSettingsData";
 export function SecuritySettings({ data }: { data: SettingsData["security"] }) {
     const { sessionTimeout, setSessionTimeout, retention, setRetention } = data;
     return (
-        <div className="max-w-[600px] flex-1 overflow-y-auto px-6 py-6">
+        <div className="max-w-panel-xl flex-1 overflow-y-auto px-6 py-6">
             <SectionHead label="AUTHENTICATION" />
             <ToggleRow label="REQUIRE MFA" on />
             <FieldRow

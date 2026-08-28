@@ -14,13 +14,13 @@ export function Toggle({ on }: { on: boolean }) {
             onClick={() => setV(!v)}
             className="relative h-[16px] w-[32px] shrink-0 cursor-pointer rounded-[8px]"
             style={{
-                background: v ? "var(--color-hex-e31b23)" : "var(--color-hex-1e1e1e)",
-                border: `1px solid ${v ? "var(--color-hex-e31b23)" : "var(--color-hex-292929)"}`,
+                background: v ? "var(--color-brand)" : "var(--color-hex-1e1e1e)",
+                border: `1px solid ${v ? "var(--color-brand)" : "var(--color-hex-292929)"}`,
                 transition: "background 0.15s",
             }}
         >
             <div
-                className="absolute top-[1px] h-[12px] w-[12px] bg-[var(--color-hex-f2f2f2)]"
+                className="absolute top-[1px] h-[12px] w-[12px] bg-[var(--color-fg)]"
                 style={{
                     borderRadius: "50%",
                     left: v ? 16 : 2,
