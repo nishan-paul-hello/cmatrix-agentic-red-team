@@ -4,27 +4,21 @@ import { FieldRow } from "@/features/settings/components/FieldRow";
 import { SaveBar } from "@/features/settings/components/SaveBar";
 import { SectionHead } from "@/features/settings/components/SectionHead";
 import { Toggle } from "@/features/settings/components/Toggle";
-import { type SettingsData } from "@/features/settings/hooks/useSettingsData";
 
-export function ToolsSettings({ data }: { data: SettingsData["tools"] }) {
-    const { timeout, setTimeout: setTimeout_, parallel, setParallel } = data;
+export function ToolsSettings() {
     const tools = ["nmap", "sqlmap", "curl", "ffuf", "nuclei", "gobuster", "hydra"];
     return (
         <div className="max-w-panel-xl flex-1 overflow-y-auto px-6 py-6">
             <SectionHead label="EXECUTION LIMITS" />
-            <FieldRow label="TOOL TIMEOUT" unit="seconds" value={timeout} onChange={setTimeout_} />
-            <FieldRow label="MAX PARALLEL TOOL CALLS" value={parallel} onChange={setParallel} />
+            <FieldRow label="TOOL TIMEOUT" unit="seconds" name="tools.timeout" />
+            <FieldRow label="MAX PARALLEL TOOL CALLS" name="tools.parallel" />
             <SectionHead label="TOOL ALLOWLIST" />
             {tools.map((t) => (
                 <div
                     key={t}
-                    className="mb-4 flex items-center justify-between"
-                    style={{
-                        borderBottom: "1px solid var(--color-hex-111111)",
-                        paddingBottom: 10,
-                    }}
+                    className="border-border mb-4 flex items-center justify-between border-b"
                 >
-                    <span className="font-inherit text-lg tracking-tight text-[var(--color-hex-888888)]">
+                    <span className="font-inherit text-muted-foreground text-xs tracking-tight">
                         {t}
                     </span>
                     <Toggle on={["nmap", "sqlmap", "curl", "ffuf", "nuclei"].includes(t)} />

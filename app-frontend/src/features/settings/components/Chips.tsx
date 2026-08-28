@@ -1,4 +1,11 @@
+"use client";
+
 import React from "react";
+import { Toggle as TogglePrimitive } from "@base-ui/react/toggle";
+import { ToggleGroup as ToggleGroupPrimitive } from "@base-ui/react/toggle-group";
+
+import { toggleVariants } from "@/components/ui/toggle";
+import { cn } from "@/lib/utils";
 
 export function Chips({
     options,
@@ -6,25 +13,33 @@ export function Chips({
     onChange,
 }: {
     options: string[];
-    value: string;
-    onChange: (v: string) => void;
+    value?: string;
+    onChange?: (v: string) => void;
 }) {
     return (
-        <div className="flex flex-wrap gap-2">
+        <ToggleGroupPrimitive
+            multiple={false}
+            value={value ? [value] : []}
+            onValueChange={(values) => {
+                const next = values[0];
+                if (next) {
+                    onChange?.(next);
+                }
+            }}
+            className="flex flex-wrap gap-2"
+        >
             {options.map((o) => (
-                <button
+                <TogglePrimitive
                     key={o}
-                    onClick={() => onChange(o)}
-                    className="font-inherit cursor-pointer rounded-[2px] px-[12px] py-[4px] text-base tracking-wide"
-                    style={{
-                        background: value === o ? "var(--color-hex-1a0608)" : "transparent",
-                        border: `1px solid ${value === o ? "var(--color-brand)" : "var(--color-hex-292929)"}`,
-                        color: value === o ? "var(--color-danger)" : "var(--color-hex-555555)",
-                    }}
+                    value={o}
+                    className={cn(
+                        toggleVariants({ variant: "outline", size: "sm" }),
+                        "data-[state=on]:border-primary data-[state=on]:text-destructive text-xs tracking-wide uppercase",
+                    )}
                 >
                     {o}
-                </button>
+                </TogglePrimitive>
             ))}
-        </div>
+        </ToggleGroupPrimitive>
     );
 }

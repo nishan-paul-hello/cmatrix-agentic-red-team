@@ -1,5 +1,7 @@
 import React from "react";
 
+import { Button } from "@/components/ui/button";
+import { Form } from "@/components/ui/form";
 import { BenchmarksSettings } from "@/features/settings/components/BenchmarksSettings";
 import { CostSettings } from "@/features/settings/components/CostSettings";
 import { GeneralSettings } from "@/features/settings/components/GeneralSettings";
@@ -36,64 +38,48 @@ const TABS: SettingsTab[] = [
     "SECURITY",
 ];
 export default function SettingsPageView({ data }: { data: SettingsData }) {
-    const { tab, setTab } = data;
+    const { tab, setTab, form } = data;
     return (
-        <div className="flex h-full min-h-[0px]">
-            {/* Left nav */}
-            <div
-                className="flex w-[160px] flex-shrink-0 flex-col overflow-y-auto bg-[var(--color-hex-0b0b0b)] py-4"
-                style={{
-                    borderRight: "1px solid var(--color-hex-1e1e1e)",
-                }}
-            >
-                <div
-                    className="tracking-widest-2 mb-[12px] text-base text-[var(--color-hex-666666)]"
-                    style={{
-                        paddingLeft: 16,
-                    }}
-                >
-                    SYSTEM / SETTINGS
+        <Form {...form}>
+            <div className="flex h-full min-h-0 flex-col md:flex-row">
+                {/* Left nav */}
+                <div className="border-border bg-background flex w-full flex-shrink-0 flex-row overflow-x-auto border-b py-2 md:w-40 md:flex-col md:overflow-y-auto md:border-r md:border-b-0 md:py-4">
+                    <div className="text-muted-foreground mb-3 hidden pl-4 text-base tracking-widest md:block">
+                        SYSTEM / SETTINGS
+                    </div>
+                    {TABS.map((t) => (
+                        <Button
+                            key={t}
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => setTab(t)}
+                            className={[
+                                "w-max shrink-0 justify-start rounded-none border-b-2 px-4 py-2 text-xs tracking-tight md:w-full md:border-b-0 md:border-l-2",
+                                t === tab
+                                    ? "bg-border text-foreground border-primary"
+                                    : "text-muted-foreground hover:text-foreground border-transparent",
+                            ].join(" ")}
+                        >
+                            {t}
+                        </Button>
+                    ))}
                 </div>
-                {TABS.map((t) => (
-                    <button
-                        key={t}
-                        onClick={() => setTab(t)}
-                        className="font-inherit w-full cursor-pointer border-none px-4 py-2 text-left text-lg tracking-tight"
-                        style={{
-                            background: t === tab ? "var(--color-hex-1a0a0b)" : "transparent",
-                            borderLeft: `2px solid ${t === tab ? "var(--color-brand)" : "transparent"}`,
-                            color: t === tab ? "var(--color-fg)" : "var(--color-hex-555555)",
-                        }}
-                        onMouseEnter={(e) => {
-                            if (t !== tab) {
-                                e.currentTarget.style.color = "var(--color-hex-a0a0a0)";
-                            }
-                        }}
-                        onMouseLeave={(e) => {
-                            if (t !== tab) {
-                                e.currentTarget.style.color = "var(--color-hex-555555)";
-                            }
-                        }}
-                    >
-                        {t}
-                    </button>
-                ))}
-            </div>
 
-            {/* Content */}
-            <div className="min-h-[0px] flex-1 overflow-hidden">
-                {tab === "GENERAL" && <GeneralSettings data={data.general} />}
-                {tab === "MODELS" && <ModelSettings data={data.models} />}
-                {tab === "MISSIONS" && <MissionsSettings data={data.missions} />}
-                {tab === "TOOLS" && <ToolsSettings data={data.tools} />}
-                {tab === "MEMORY" && <MemorySettings data={data.memory} />}
-                {tab === "VDG" && <VDGSettings data={data.vdg} />}
-                {tab === "VALIDATION" && <ValidationSettings data={data.validation} />}
-                {tab === "BENCHMARKS" && <BenchmarksSettings data={data.benchmarks} />}
-                {tab === "COST" && <CostSettings data={data.cost} />}
-                {tab === "SECURITY" && <SecuritySettings data={data.security} />}
+                {/* Content */}
+                <div className="min-h-0 flex-1 overflow-hidden">
+                    {tab === "GENERAL" && <GeneralSettings />}
+                    {tab === "MODELS" && <ModelSettings />}
+                    {tab === "MISSIONS" && <MissionsSettings />}
+                    {tab === "TOOLS" && <ToolsSettings />}
+                    {tab === "MEMORY" && <MemorySettings />}
+                    {tab === "VDG" && <VDGSettings />}
+                    {tab === "VALIDATION" && <ValidationSettings />}
+                    {tab === "BENCHMARKS" && <BenchmarksSettings />}
+                    {tab === "COST" && <CostSettings />}
+                    {tab === "SECURITY" && <SecuritySettings />}
+                </div>
             </div>
-        </div>
+        </Form>
     );
 }
 

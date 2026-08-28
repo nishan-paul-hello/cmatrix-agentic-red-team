@@ -1,20 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 
-import { sanitizeInput } from "@/utils/sanitize";
+import { Input } from "@/components/ui/input";
 
-export function TextInput({ value, placeholder }: { value: string; placeholder?: string }) {
-    const [v, setV] = useState(value);
+export function TextInput({ value, onChange, ...props }: React.ComponentProps<typeof Input>) {
     return (
-        <input
-            value={v}
-            onChange={(e) => setV(sanitizeInput(e.target.value))}
-            placeholder={placeholder}
-            className="font-inherit w-full rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)] bg-[var(--color-hex-0d0d0d)] px-[12px] py-[7px] text-lg tracking-tighter text-[var(--color-hex-a0a0a0)] outline-none"
-            style={{
-                boxSizing: "border-box",
-            }}
-            onFocus={(e) => (e.target.style.borderColor = "var(--color-brand)")}
-            onBlur={(e) => (e.target.style.borderColor = "var(--color-hex-1e1e1e)")}
+        <Input
+            value={value}
+            onChange={onChange}
+            className="text-muted-foreground text-xs"
+            {...props}
         />
     );
 }
