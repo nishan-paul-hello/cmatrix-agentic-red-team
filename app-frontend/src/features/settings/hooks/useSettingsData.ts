@@ -35,6 +35,14 @@ export function useSettingsData() {
     const [c, setC] = useState("0.40");
     const [eordThresh, setEordThresh] = useState("3");
     const [retryCap, setRetryCap] = useState("3");
+    /** UCB α — E_ord-weighted prior strength (§5.1) */
+    const [alpha, setAlpha] = useState("0.25");
+    /** Maximum VDG traversal depth before forced backtrack */
+    const [maxDepth, setMaxDepth] = useState("6");
+    /** Exploit bias — fraction of cycles run greedy vs exploratory (§5.1) */
+    const [exploitBias, setExploitBias] = useState("0.30");
+    /** Validation Agent Diagnosis-Adapt-Cap retry cap (§11.3) */
+    const [validationRetryCap, setValidationRetryCap] = useState("3");
 
     // Validation
     const [retries, setRetries] = useState("3");
@@ -62,7 +70,22 @@ export function useSettingsData() {
         missions: { surface, setSurface, mode, setMode },
         tools: { timeout: toolsTimeout, setTimeout: setToolsTimeout, parallel, setParallel },
         memory: { thresh, setThresh, maxEp, setMaxEp, skillProm, setSkillProm },
-        vdg: { c, setC, eordThresh, setEordThresh, retryCap, setRetryCap },
+        vdg: {
+            c,
+            setC,
+            eordThresh,
+            setEordThresh,
+            retryCap,
+            setRetryCap,
+            alpha,
+            setAlpha,
+            maxDepth,
+            setMaxDepth,
+            exploitBias,
+            setExploitBias,
+            validationRetryCap,
+            setValidationRetryCap,
+        },
         validation: { retries, setRetries, timeout: valTimeout, setTimeout: setValTimeout },
         benchmarks: {
             suite,
