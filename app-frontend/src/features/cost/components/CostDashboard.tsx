@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 
+import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import ContextState from "@/features/cost/components/ContextState";
 import CostUsage from "@/features/cost/components/CostUsage";
@@ -52,41 +53,37 @@ export default function CostDashboard({
     }
 
     return (
-        <div className="flex h-full min-h-[0px] flex-col">
+        <div className="flex h-full min-h-0 flex-col">
             {!hideHeader && (
-                <div
-                    className="flex-shrink-0 px-6 pt-5 pb-0"
-                    style={{
-                        borderBottom: "1px solid var(--color-hex-1e1e1e)",
-                    }}
-                >
-                    <div className="tracking-widest-2 mb-[3px] text-base text-[var(--color-hex-666666)]">
+                <div className="border-border flex-shrink-0 border-b px-6 pt-5 pb-0">
+                    <div className="text-muted-foreground mb-0.5 text-base tracking-widest">
                         {missionId ? `MISSION / ${missionId}` : "SYSTEM"}
                     </div>
-                    <h1 className="mb-[12px] text-9xl font-bold tracking-wide text-[var(--color-fg)]">
+                    <h1 className="text-foreground mb-3 text-xs font-bold tracking-wide">
                         COST &amp; USAGE
                     </h1>
                     <div className="flex">
                         {(["COST & USAGE", "MODEL BREAKDOWN", "CONTEXT STATE"] as CostTab[]).map(
                             (t) => (
-                                <button
+                                <Button
                                     key={t}
+                                    variant="ghost"
                                     onClick={() => setTab(t)}
-                                    className="font-inherit tracking-wider-1 cursor-pointer border-none bg-[transparent] px-[16px] py-[5px] text-base whitespace-nowrap"
+                                    className="h-auto rounded-none px-4 py-1 text-base tracking-widest whitespace-nowrap hover:bg-transparent"
                                     style={{
                                         borderBottom:
                                             t === tab
-                                                ? "2px solid var(--color-brand)"
+                                                ? "2px solid var(--primary)"
                                                 : "2px solid transparent",
                                         color:
                                             t === tab
-                                                ? "var(--color-fg)"
-                                                : "var(--color-hex-444444)",
+                                                ? "var(--foreground)"
+                                                : "var(--muted-foreground)",
                                         marginBottom: -1,
                                     }}
                                 >
                                     {t}
-                                </button>
+                                </Button>
                             ),
                         )}
                     </div>

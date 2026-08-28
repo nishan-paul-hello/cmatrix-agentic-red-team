@@ -11,9 +11,9 @@ export default function ModelBreakdown() {
     }, []);
 
     const MODEL_C: Record<string, string | undefined> = {
-        "claude-sonnet-5": "var(--color-brand)",
-        "claude-haiku-4-5": "var(--color-warning)",
-        "claude-opus-5": "var(--color-success)",
+        "claude-sonnet-5": "var(--primary)",
+        "claude-haiku-4-5": "var(--warning)",
+        "claude-opus-5": "var(--success)",
     };
 
     if (models.length === 0) {
@@ -31,47 +31,42 @@ export default function ModelBreakdown() {
                 {models.map((m) => (
                     <div
                         key={m.model}
-                        className="overflow-hidden rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)]"
+                        className="border-border overflow-hidden rounded-sm border-[1px] border-solid"
                     >
-                        <div
-                            className="flex items-center gap-4 bg-[var(--color-hex-0d0d0d)] px-5 py-3"
-                            style={{
-                                borderBottom: "1px solid var(--color-hex-141414)",
-                            }}
-                        >
+                        <div className="bg-background border-border flex items-center gap-4 border-b px-5 py-3">
                             <div
-                                className="h-[8px] w-[8px] shrink-0"
+                                className="h-2 w-2 shrink-0"
                                 style={{
                                     borderRadius: "50%",
-                                    background: MODEL_C[m.model] ?? "var(--color-hex-555555)",
+                                    background: MODEL_C[m.model] ?? "var(--muted-foreground)",
                                 }}
                             />
-                            <span className="flex-1 text-2xl font-bold tracking-tight text-[var(--color-fg)]">
+                            <span className="text-foreground flex-1 text-xs font-bold tracking-tight">
                                 {m.model}
                             </span>
-                            <span className="text-base tracking-normal text-[var(--color-hex-444444)]">
+                            <span className="text-muted-foreground text-base tracking-normal">
                                 {m.provider}
                             </span>
                             <span
-                                className="text-4xl font-bold"
+                                className="text-sm font-bold"
                                 style={{
-                                    color: MODEL_C[m.model] ?? "var(--color-hex-555555)",
+                                    color: MODEL_C[m.model] ?? "var(--muted-foreground)",
                                 }}
                             >
                                 ${m.total.toFixed(4)}
                             </span>
                         </div>
                         <div className="px-5 py-4">
-                            <div className="mb-[16px] h-[3px] overflow-hidden rounded-[2px] bg-[var(--color-hex-1a1a1a)]">
+                            <div className="bg-card mb-4 h-0.5 overflow-hidden rounded-sm">
                                 <div
-                                    className="h-full rounded-[2px]"
+                                    className="h-full rounded-sm"
                                     style={{
                                         width: `${m.pct}%`,
-                                        background: MODEL_C[m.model] ?? "var(--color-hex-555555)",
+                                        background: MODEL_C[m.model] ?? "var(--muted-foreground)",
                                     }}
                                 />
                             </div>
-                            <div className="grid grid-cols-4 gap-0">
+                            <div className="grid grid-cols-1 gap-0 sm:grid-cols-2 lg:grid-cols-4">
                                 {[
                                     {
                                         k: "CALLS",
@@ -96,35 +91,29 @@ export default function ModelBreakdown() {
                                             paddingRight: i < a.length - 1 ? 24 : 0,
                                         }}
                                     >
-                                        <div className="text-sm-tight tracking-wider-3 mb-[3px] text-[var(--color-hex-444444)]">
+                                        <div className="text-muted-foreground mb-0.5 text-xs tracking-widest">
                                             {stat.k}
                                         </div>
-                                        <div className="text-4xl font-bold text-[var(--color-hex-a0a0a0)]">
+                                        <div className="text-muted-foreground text-sm font-bold">
                                             {stat.v}
                                         </div>
                                     </div>
                                 ))}
                             </div>
-                            <div
-                                className="mt-4 grid grid-cols-2 gap-4"
-                                style={{
-                                    borderTop: "1px solid var(--color-hex-141414)",
-                                    paddingTop: 12,
-                                }}
-                            >
+                            <div className="border-border mt-4 grid grid-cols-1 gap-4 border-t sm:grid-cols-2">
                                 <div>
-                                    <div className="text-sm-tight tracking-wider-3 mb-[2px] text-[var(--color-hex-444444)]">
+                                    <div className="text-muted-foreground mb-0.5 text-xs tracking-widest">
                                         INPUT COST
                                     </div>
-                                    <div className="text-2xl font-bold text-[var(--color-hex-555555)]">
+                                    <div className="text-muted-foreground text-xs font-bold">
                                         ${m.inputCost.toFixed(4)}
                                     </div>
                                 </div>
                                 <div>
-                                    <div className="text-sm-tight tracking-wider-3 mb-[2px] text-[var(--color-hex-444444)]">
+                                    <div className="text-muted-foreground mb-0.5 text-xs tracking-widest">
                                         OUTPUT COST
                                     </div>
-                                    <div className="text-2xl font-bold text-[var(--color-hex-555555)]">
+                                    <div className="text-muted-foreground text-xs font-bold">
                                         ${m.outputCost.toFixed(4)}
                                     </div>
                                 </div>
@@ -134,20 +123,15 @@ export default function ModelBreakdown() {
                 ))}
             </div>
             {/* Summary table */}
-            <div className="mb-[10px] text-sm tracking-widest text-[var(--color-hex-444444)]">
+            <div className="text-muted-foreground mb-2.5 text-sm tracking-widest">
                 PRICING REFERENCE
             </div>
-            <div className="overflow-hidden rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)]">
-                <div
-                    className="flex bg-[var(--color-hex-0f0f0f)]"
-                    style={{
-                        borderBottom: "1px solid var(--color-hex-1a1a1a)",
-                    }}
-                >
+            <div className="border-border overflow-hidden rounded-sm border-[1px] border-solid">
+                <div className="bg-card border-border flex border-b">
                     {["MODEL", "INPUT $/1M", "OUTPUT $/1M"].map((h) => (
                         <div
                             key={h}
-                            className="text-sm-tight tracking-wider-2 px-[14px] py-[5px] font-semibold text-[var(--color-hex-444444)]"
+                            className="text-muted-foreground px-3.5 py-1 text-xs font-semibold tracking-widest"
                             style={{
                                 flex: h === "MODEL" ? 2 : 1,
                             }}
@@ -172,28 +156,20 @@ export default function ModelBreakdown() {
                         i: "$15.00",
                         o: "$75.00",
                     },
-                ].map((r, i, a) => (
-                    <div
-                        key={r.m}
-                        className="flex"
-                        style={{
-                            borderBottom:
-                                i < a.length - 1 ? "1px solid var(--color-hex-111111)" : "none",
-                            background: i % 2 ? "var(--color-hex-0b0b0b)" : "transparent",
-                        }}
-                    >
+                ].map((r) => (
+                    <div key={r.m} className="border-border flex border-b">
                         <div
-                            className="px-[14px] py-[8px] text-lg font-semibold text-[var(--color-hex-666666)]"
+                            className="text-muted-foreground px-3.5 py-2 text-xs font-semibold"
                             style={{
                                 flex: 2,
                             }}
                         >
                             {r.m}
                         </div>
-                        <div className="flex-1 px-[14px] py-[8px] text-lg text-[var(--color-hex-555555)]">
+                        <div className="text-muted-foreground flex-1 px-3.5 py-2 text-xs">
                             {r.i}
                         </div>
-                        <div className="flex-1 px-[14px] py-[8px] text-lg text-[var(--color-hex-555555)]">
+                        <div className="text-muted-foreground flex-1 px-3.5 py-2 text-xs">
                             {r.o}
                         </div>
                     </div>
