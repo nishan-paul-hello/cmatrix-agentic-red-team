@@ -236,9 +236,9 @@ export const HOSTS = [
     },
 ];
 export const EORD_COLOR: Record<number, string> = {
-    5: "var(--color-hex-ff2a32)",
-    4: "var(--color-hex-e31b23)",
-    3: "var(--color-hex-d29922)",
+    5: "var(--color-danger)",
+    4: "var(--color-brand)",
+    3: "var(--color-warning)",
     2: "var(--color-hex-666666)",
     1: "var(--color-hex-444444)",
     0: "var(--color-hex-333333)",
@@ -252,12 +252,12 @@ export const STATUS_BADGE: Record<
     }
 > = {
     CONFIRMED: {
-        color: "var(--color-hex-3fb950)",
+        color: "var(--color-success)",
         bg: "var(--color-hex-0a1a10)",
         border: "var(--color-hex-1a4a2044)",
     },
     DISCOVERED: {
-        color: "var(--color-hex-d29922)",
+        color: "var(--color-warning)",
         bg: "var(--color-hex-1a1200)",
         border: "var(--color-hex-d2992244)",
     },
@@ -318,15 +318,15 @@ export const CREDS = [
     },
 ];
 export const METHOD_COLOR: Record<string, string> = {
-    GET: "var(--color-hex-3fb950)",
-    POST: "var(--color-hex-d29922)",
+    GET: "var(--color-success)",
+    POST: "var(--color-warning)",
     PUT: "var(--color-hex-8b8b8b)",
-    DELETE: "var(--color-hex-ff2a32)",
-    PATCH: "var(--color-hex-d29922)",
+    DELETE: "var(--color-danger)",
+    PATCH: "var(--color-warning)",
 };
 export const STATUS_COLOR: Record<string, string> = {
-    OPEN: "var(--color-hex-3fb950)",
-    FILTERED: "var(--color-hex-d29922)",
+    OPEN: "var(--color-success)",
+    FILTERED: "var(--color-warning)",
     CLOSED: "var(--color-hex-444444)",
 };
 
