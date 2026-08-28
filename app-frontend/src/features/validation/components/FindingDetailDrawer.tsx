@@ -1,6 +1,7 @@
 import React from "react";
 import { FocusTrap } from "focus-trap-react";
 
+import { Button } from "@/components/ui/button";
 import { type VFinding } from "@/features/validation/data/fixtures/validationMockData";
 import { type TelemetryEventName } from "@/hooks/useTelemetry";
 import { type GuardrailResult } from "@/types/domain-types";
@@ -30,7 +31,7 @@ export function FindingDetailDrawer({
                         setSelected(null);
                     }
                 }}
-                className="fixed inset-0 flex items-center justify-center bg-[var(--color-hex-00000088)]"
+                className="bg-muted fixed inset-0 flex items-center justify-center"
                 style={{
                     zIndex: 50,
                 }}
@@ -44,26 +45,28 @@ export function FindingDetailDrawer({
                     role="dialog"
                     aria-modal="true"
                     aria-labelledby="finding-detail-title"
-                    className="w-[400px] rounded-[2px] border-[1px] border-solid border-[var(--color-hex-292929)] bg-[var(--color-hex-111111)] px-[28px] py-[24px]"
+                    className="border-border bg-card w-full max-w-[400px] rounded-sm border-[1px] border-solid px-7 py-6 sm:w-[400px]"
                 >
                     <div className="mb-4 flex justify-between">
                         <div>
                             <div
                                 id="finding-detail-title"
-                                className="text-3xl font-bold tracking-normal text-[var(--color-fg)]"
+                                className="text-foreground text-sm font-bold tracking-normal"
                             >
                                 {selected.id}
                             </div>
-                            <div className="tracking-wider-1 text-base text-[var(--color-hex-666666)]">
+                            <div className="text-muted-foreground text-base tracking-widest">
                                 {selected.type}
                             </div>
                         </div>
-                        <button
+                        <Button
+                            variant="ghost"
+                            size="icon-sm"
                             onClick={() => setSelected(null)}
-                            className="cursor-pointer border-none bg-[transparent] text-4xl text-[var(--color-hex-444444)]"
+                            className="text-muted-foreground"
                         >
                             ✕
-                        </button>
+                        </Button>
                     </div>
                     <div className="flex flex-col gap-3">
                         {[
@@ -85,25 +88,25 @@ export function FindingDetailDrawer({
                             },
                         ].map((r) => (
                             <div key={r.k}>
-                                <div className="tracking-wider-3 mb-[1px] text-sm text-[var(--color-hex-444444)]">
+                                <div className="text-muted-foreground mb-px text-sm tracking-widest">
                                     {r.k}
                                 </div>
-                                <div className="text-lg text-[var(--color-hex-888888)]">{r.v}</div>
+                                <div className="text-muted-foreground text-xs">{r.v}</div>
                             </div>
                         ))}
 
                         {selected.id in guardrails && (
-                            <div className="mt-4 rounded-[2px] border-[1px] border-solid border-[var(--color-hex-333333)] bg-[var(--color-hex-0a0a0a)] px-[12px] py-[10px]">
-                                <div className="mb-2 text-sm tracking-widest text-[var(--color-hex-444444)]">
+                            <div className="border-border bg-background mt-4 rounded-sm border-[1px] border-solid px-3 py-2.5">
+                                <div className="text-muted-foreground mb-2 text-sm tracking-widest">
                                     SUPERVISOR GUARDRAIL
                                 </div>
                                 <div
-                                    className="text-lg font-bold"
+                                    className="text-xs font-bold"
                                     style={{
                                         color:
                                             guardrails[selected.id].verdict === "PASS"
-                                                ? "var(--color-success)"
-                                                : "var(--color-danger)",
+                                                ? "var(--success)"
+                                                : "var(--destructive)",
                                     }}
                                 >
                                     {guardrails[selected.id].verdict}
@@ -111,7 +114,9 @@ export function FindingDetailDrawer({
                             </div>
                         )}
                         <div className="mt-5 flex gap-3">
-                            <button
+                            <Button
+                                variant="outline"
+                                size="sm"
                                 onClick={() => {
                                     if (updateFindingStatus(selected, "VALIDATED")) {
                                         addGuardrailResult({
@@ -124,11 +129,13 @@ export function FindingDetailDrawer({
                                         });
                                     }
                                 }}
-                                className="font-inherit text-lg-tight tracking-wider-1 cursor-pointer rounded-[2px] border-[1px] border-solid border-[var(--color-hex-3fb95044)] bg-[transparent] px-[16px] py-[6px] text-[var(--color-success)] hover:border-[var(--color-success)] hover:bg-[var(--color-hex-0a1a0c)]"
+                                className="text-success hover:border-success hover:bg-muted text-xs tracking-widest"
                             >
                                 VERIFY
-                            </button>
-                            <button
+                            </Button>
+                            <Button
+                                variant="outline"
+                                size="sm"
                                 onClick={() => {
                                     if (updateFindingStatus(selected, "RULED_OUT")) {
                                         addGuardrailResult({
@@ -141,10 +148,10 @@ export function FindingDetailDrawer({
                                         });
                                     }
                                 }}
-                                className="font-inherit text-lg-tight tracking-wider-1 cursor-pointer rounded-[2px] border-[1px] border-solid border-[var(--color-hex-ff2a3244)] bg-[transparent] px-[16px] py-[6px] text-[var(--color-danger)] hover:border-[var(--color-danger)] hover:bg-[var(--color-hex-130408)]"
+                                className="text-destructive hover:border-destructive hover:bg-muted text-xs tracking-widest"
                             >
                                 REJECT
-                            </button>
+                            </Button>
                         </div>
                     </div>
                 </div>

@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { FocusTrap } from "focus-trap-react";
 
+import { Button } from "@/components/ui/button";
 import { type VFinding } from "@/features/validation/data/fixtures/validationMockData";
 
 import { STATE_MACHINE_EDGES, STATE_MACHINE_NODES } from "./StateMachineConstants";
@@ -54,7 +55,7 @@ export default function StateMachineModal({
                         onClose();
                     }
                 }}
-                className="fixed inset-0 z-[60] flex items-center justify-center bg-[var(--color-hex-00000099)]"
+                className="bg-muted fixed inset-0 z-[60] flex items-center justify-center"
                 onClick={(e) => {
                     if (e.target === e.currentTarget) {
                         onClose();
@@ -65,28 +66,30 @@ export default function StateMachineModal({
                     role="dialog"
                     aria-modal="true"
                     aria-labelledby="state-machine-modal-title"
-                    className="w-panel-2xl rounded-[2px] border-[1px] border-solid border-[var(--color-hex-292929)] bg-[var(--color-hex-0d0d0d)] p-[24px]"
+                    className="w-panel-2xl border-border bg-background rounded-sm border-[1px] border-solid p-6"
                 >
                     <div className="mb-5 flex justify-between">
                         <div>
                             <div
                                 id="state-machine-modal-title"
-                                className="text-3xl font-bold tracking-wide text-[var(--color-fg)]"
+                                className="text-foreground text-sm font-bold tracking-wide"
                             >
                                 VALIDATION STATE MACHINE
                             </div>
-                            <div className="text-base-tight tracking-wider-2 text-[var(--color-hex-444444)]">
+                            <div className="text-muted-foreground text-sm tracking-widest">
                                 {finding
                                     ? `${finding.id} — ${finding.type} — ${finding.status}`
                                     : "DIAGNOSIS → ADAPT → CAP RETRY LOOP"}
                             </div>
                         </div>
-                        <button
+                        <Button
+                            variant="ghost"
+                            size="icon-sm"
                             onClick={onClose}
-                            className="cursor-pointer border-none bg-[transparent] text-4xl text-[var(--color-hex-444444)]"
+                            className="text-muted-foreground"
                         >
                             ✕
-                        </button>
+                        </Button>
                     </div>
                     <div className="relative h-[530px]">
                         <svg
@@ -104,7 +107,7 @@ export default function StateMachineModal({
                                         y1={e.y1}
                                         x2={e.x2}
                                         y2={e.y2}
-                                        stroke="var(--color-hex-333333)"
+                                        stroke="var(--border)"
                                         strokeWidth="1"
                                         markerEnd="url(#sm-arrow)"
                                     />
@@ -112,7 +115,7 @@ export default function StateMachineModal({
                                         <text
                                             x={(e.x1 + e.x2) / 2 + 6}
                                             y={(e.y1 + e.y2) / 2}
-                                            fill="var(--color-hex-555555)"
+                                            fill="var(--muted-foreground)"
                                             fontSize="8"
                                             letterSpacing="1"
                                         >
@@ -124,7 +127,7 @@ export default function StateMachineModal({
                             {/* Retry back-arrow */}
                             <path
                                 d="M 280 508 Q 140 508 140 132 Q 140 116 200 116"
-                                stroke="var(--color-hex-6f171b)"
+                                stroke="var(--border)"
                                 strokeWidth="1"
                                 fill="none"
                                 strokeDasharray="4 3"
@@ -133,7 +136,7 @@ export default function StateMachineModal({
                             <text
                                 x="100"
                                 y="340"
-                                fill="var(--color-hex-6f171b)"
+                                fill="var(--border)"
                                 fontSize="8"
                                 letterSpacing="1"
                             >
@@ -148,7 +151,7 @@ export default function StateMachineModal({
                                     refY="3"
                                     orient="auto"
                                 >
-                                    <path d="M0,0 L0,6 L6,3 z" fill="var(--color-hex-333333)" />
+                                    <path d="M0,0 L0,6 L6,3 z" fill="var(--border)" />
                                 </marker>
                                 <marker
                                     id="sm-arrow-red"
@@ -158,7 +161,7 @@ export default function StateMachineModal({
                                     refY="3"
                                     orient="auto"
                                 >
-                                    <path d="M0,0 L0,6 L6,3 z" fill="var(--color-hex-6f171b)" />
+                                    <path d="M0,0 L0,6 L6,3 z" fill="var(--border)" />
                                 </marker>
                             </defs>
                         </svg>
@@ -167,14 +170,14 @@ export default function StateMachineModal({
                             return (
                                 <div
                                     key={n.id}
-                                    className="absolute rounded-[2px]"
+                                    className="absolute rounded-sm"
                                     style={{
                                         left: n.x,
                                         top: n.y,
                                         width: n.w,
                                         height: n.h,
-                                        background: isActive ? "var(--color-brand)" : n.color,
-                                        border: `1px solid ${isActive ? "var(--color-danger)" : (n.border ?? "var(--color-hex-292929)")}`,
+                                        background: isActive ? "var(--primary)" : n.color,
+                                        border: `1px solid ${isActive ? "var(--destructive)" : (n.border ?? "var(--border)")}`,
                                         display: "flex",
                                         alignItems: "center",
                                         justifyContent: "center",
@@ -183,7 +186,7 @@ export default function StateMachineModal({
                                     <span
                                         className="text-base font-bold tracking-wide"
                                         style={{
-                                            color: isActive ? "var(--color-fg)" : n.text,
+                                            color: isActive ? "var(--foreground)" : n.text,
                                         }}
                                     >
                                         {n.id}

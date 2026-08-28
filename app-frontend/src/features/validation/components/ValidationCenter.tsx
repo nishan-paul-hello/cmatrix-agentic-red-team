@@ -27,37 +27,32 @@ export default function ValidationCenter() {
         {
             label: "PENDING VALIDATION",
             value: "08",
-            color: "var(--color-warning)",
+            color: "var(--warning)",
         },
         {
             label: "VALIDATED",
             value: "21",
-            color: "var(--color-success)",
+            color: "var(--success)",
         },
         {
             label: "RULED OUT",
             value: "13",
-            color: "var(--color-hex-555555)",
+            color: "var(--muted-foreground)",
         },
         {
             label: "RETRIES",
             value: "17",
-            color: "var(--color-danger)",
+            color: "var(--destructive)",
         },
     ];
     return (
-        <div className="flex h-full min-h-[0px] flex-col">
-            <div
-                className="flex-shrink-0 px-6 pt-5 pb-4"
-                style={{
-                    borderBottom: "1px solid var(--color-hex-1e1e1e)",
-                }}
-            >
-                <div className="tracking-widest-2 mb-[3px] text-base text-[var(--color-hex-666666)]">
+        <div className="flex h-full min-h-0 flex-col">
+            <div className="border-border flex-shrink-0 border-b px-6 pt-5 pb-4">
+                <div className="text-muted-foreground mb-0.5 text-base tracking-widest">
                     MISSION / CVE-001
                 </div>
                 <div className="flex items-center justify-between">
-                    <h1 className="text-9xl font-bold tracking-wide text-[var(--color-fg)]">
+                    <h1 className="text-foreground text-xs font-bold tracking-wide">
                         VALIDATION CENTER
                     </h1>
                     <div className="flex gap-2">
@@ -74,25 +69,14 @@ export default function ValidationCenter() {
             </div>
 
             {/* Metrics */}
-            <div
-                className="grid flex-shrink-0 grid-cols-4"
-                style={{
-                    borderBottom: "1px solid var(--color-hex-1e1e1e)",
-                }}
-            >
-                {metrics.map((m, i) => (
-                    <div
-                        key={m.label}
-                        className="bg-[var(--color-hex-0d0d0d)] px-[20px] py-[14px]"
-                        style={{
-                            borderRight: i < 3 ? "1px solid var(--color-hex-1e1e1e)" : "none",
-                        }}
-                    >
-                        <div className="mb-[6px] text-sm tracking-widest text-[var(--color-hex-444444)]">
+            <div className="border-border grid flex-shrink-0 grid-cols-1 border-b sm:grid-cols-2 lg:grid-cols-4">
+                {metrics.map((m) => (
+                    <div key={m.label} className="bg-background border-border border-r px-5 py-3.5">
+                        <div className="text-muted-foreground mb-1.5 text-sm tracking-widest">
                             {m.label}
                         </div>
                         <div
-                            className="text-13xl leading-none font-bold"
+                            className="text-sm leading-none font-bold"
                             style={{
                                 color: m.color,
                             }}
@@ -104,7 +88,7 @@ export default function ValidationCenter() {
             </div>
 
             {/* Body */}
-            <div className="flex min-h-[0px] flex-1 overflow-hidden">
+            <div className="flex min-h-0 flex-1 overflow-hidden">
                 {/* Table */}
                 <ValidationTable
                     findings={findings}

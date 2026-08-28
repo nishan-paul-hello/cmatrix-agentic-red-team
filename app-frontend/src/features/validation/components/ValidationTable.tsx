@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { SB, type VFinding } from "@/features/validation/data/fixtures/validationMockData";
 
 export function ValidationTable({
@@ -11,17 +12,14 @@ export function ValidationTable({
 }) {
     return (
         <div className="flex-1 overflow-auto">
-            <table className="text-xl-tight w-full border-collapse">
+            <table className="w-full border-collapse text-xs">
                 <thead>
-                    <tr className="sticky top-0 bg-[var(--color-hex-0f0f0f)]">
+                    <tr className="bg-card sticky top-0">
                         {["FINDING", "TYPE", "EVIDENCE", "RETRY", "STATUS", "ORACLE", ""].map(
                             (h) => (
                                 <th
                                     key={h}
-                                    className="tracking-wider-3 px-[16px] py-[6px] text-left text-sm font-semibold whitespace-nowrap text-[var(--color-hex-444444)]"
-                                    style={{
-                                        borderBottom: "1px solid var(--color-hex-1a1a1a)",
-                                    }}
+                                    className="text-muted-foreground border-border border-b px-4 py-1.5 text-left text-sm font-semibold tracking-widest whitespace-nowrap"
                                 >
                                     {h}
                                 </th>
@@ -36,49 +34,41 @@ export function ValidationTable({
                         return (
                             <tr
                                 key={f.id}
-                                className="cursor-pointer"
-                                style={{
-                                    borderBottom: "1px solid var(--color-hex-111111)",
-                                    background: isSelected
-                                        ? "var(--color-hex-0f0f0f)"
-                                        : "transparent",
-                                }}
+                                className="border-border cursor-pointer border-b"
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     setSelected(f);
                                 }}
                                 onMouseEnter={(e) =>
-                                    (e.currentTarget.style.background = "var(--color-hex-0f0f0f)")
+                                    (e.currentTarget.style.background = "var(--border)")
                                 }
                                 onMouseLeave={(e) =>
                                     (e.currentTarget.style.background = isSelected
-                                        ? "var(--color-hex-0f0f0f)"
+                                        ? "var(--border)"
                                         : "transparent")
                                 }
                             >
-                                <td className="px-[16px] py-[8px] font-bold tracking-tight text-[var(--color-brand)]">
+                                <td className="text-primary px-4 py-2 font-bold tracking-tight">
                                     {f.id}
                                 </td>
-                                <td className="px-[16px] py-[8px] text-[var(--color-hex-a0a0a0)]">
-                                    {f.type}
-                                </td>
-                                <td className="px-[16px] py-[8px] text-base text-[var(--color-hex-666666)]">
+                                <td className="text-muted-foreground px-4 py-2">{f.type}</td>
+                                <td className="text-muted-foreground px-4 py-2 text-base">
                                     {f.evidence}
                                 </td>
                                 <td
-                                    className="px-[16px] py-[8px] text-right"
+                                    className="px-4 py-2 text-right"
                                     style={{
                                         color:
                                             f.retry > 0
-                                                ? "var(--color-warning)"
-                                                : "var(--color-hex-444444)",
+                                                ? "var(--warning)"
+                                                : "var(--muted-foreground)",
                                     }}
                                 >
                                     {f.retry}
                                 </td>
-                                <td className="px-[16px] py-[8px]">
+                                <td className="px-4 py-2">
                                     <span
-                                        className="rounded-[2px] px-[6px] py-[1px] text-base font-semibold tracking-wide"
+                                        className="rounded-sm px-1.5 py-px text-base font-semibold tracking-wide"
                                         style={{
                                             color: sb.color,
                                             background: sb.bg,
@@ -88,19 +78,21 @@ export function ValidationTable({
                                         {f.status}
                                     </span>
                                 </td>
-                                <td className="px-[16px] py-[8px] text-base text-[var(--color-hex-555555)]">
+                                <td className="text-muted-foreground px-4 py-2 text-base">
                                     {f.oracle}
                                 </td>
-                                <td className="px-[16px] py-[8px]">
-                                    <button
+                                <td className="px-4 py-2">
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
                                         onClick={(e) => {
                                             e.stopPropagation();
                                             setSelected(f);
                                         }}
-                                        className="font-inherit text-base-tight cursor-pointer rounded-[2px] border-[1px] border-solid border-[var(--color-hex-292929)] bg-[var(--color-hex-111111)] px-[8px] py-[2px] tracking-normal text-[var(--color-hex-666666)] hover:border-[var(--color-brand)]"
+                                        className="text-muted-foreground hover:border-primary text-xs tracking-normal"
                                     >
                                         DETAIL
-                                    </button>
+                                    </Button>
                                 </td>
                             </tr>
                         );
