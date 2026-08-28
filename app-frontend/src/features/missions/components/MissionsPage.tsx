@@ -45,12 +45,12 @@ export default function MissionsPage({ onNewMission, onOpenMission }: MissionsPa
             <div className="flex-shrink-0 border-b border-[var(--color-hex-1e1e1e)] px-6 pt-5 pb-4">
                 <div className="page-eyebrow">OPERATIONS</div>
                 <div className="flex items-baseline justify-between">
-                    <h1 className="text-[20px] font-bold tracking-[0.12em] text-[var(--color-hex-f2f2f2)]">
+                    <h1 className="text-9xl font-bold tracking-wide text-[var(--color-fg)]">
                         MISSIONS
                     </h1>
                     <button
                         onClick={onNewMission}
-                        className="cursor-pointer rounded-[2px] border border-[var(--color-hex-6f171b)] bg-transparent px-[12px] py-[4px] text-[9px] font-semibold tracking-[0.14em] text-[var(--color-hex-e31b23)] transition-colors duration-100 hover:border-[var(--color-hex-e31b23)] hover:bg-[var(--color-hex-1a0608)]"
+                        className="tracking-wider-1 cursor-pointer rounded-[2px] border border-[var(--color-hex-6f171b)] bg-transparent px-[12px] py-[4px] text-base font-semibold text-[var(--color-brand)] transition-colors duration-100 hover:border-[var(--color-brand)] hover:bg-[var(--color-hex-1a0608)]"
                     >
                         NEW MISSION →
                     </button>
@@ -71,27 +71,27 @@ export default function MissionsPage({ onNewMission, onOpenMission }: MissionsPa
                         className={[
                             "filter-btn transition-colors duration-100",
                             filter === f
-                                ? "border-[var(--color-hex-e31b23)] bg-[var(--color-hex-120608)] text-[var(--color-hex-ff2a32)]"
+                                ? "border-[var(--color-brand)] bg-[var(--color-hex-120608)] text-[var(--color-danger)]"
                                 : "border-[var(--color-hex-1e1e1e)] bg-transparent text-[var(--color-hex-555555)] hover:text-[var(--color-hex-a0a0a0)]",
                         ].join(" ")}
                     >
                         {f}
                     </button>
                 ))}
-                <span className="ml-auto text-[8.5px] tracking-[0.12em] text-[var(--color-hex-444444)]">
+                <span className="text-base-tight ml-auto tracking-wide text-[var(--color-hex-444444)]">
                     {filtered.length} MISSIONS
                 </span>
             </div>
 
             {/* Missions table */}
             <div className="flex-1 overflow-auto">
-                <table className="w-full border-collapse text-[11px]">
+                <table className="w-full border-collapse text-xl">
                     <thead>
                         <tr className="sticky top-0 z-10 bg-[var(--color-hex-111111)]">
                             {TABLE_HEADERS.map((h) => (
                                 <th
                                     key={h}
-                                    className="border-b border-[var(--color-hex-1e1e1e)] px-[16px] py-[6px] text-left text-[8.5px] font-semibold tracking-[0.18em] whitespace-nowrap text-[var(--color-hex-444444)]"
+                                    className="text-base-tight tracking-wider-3 border-b border-[var(--color-hex-1e1e1e)] px-[16px] py-[6px] text-left font-semibold whitespace-nowrap text-[var(--color-hex-444444)]"
                                 >
                                     {h}
                                 </th>
@@ -116,16 +116,16 @@ export default function MissionsPage({ onNewMission, onOpenMission }: MissionsPa
                                     onClick={() => onOpenMission?.(m.id)}
                                     className="cursor-pointer border-b border-[var(--color-hex-191919)] transition-colors duration-75 hover:bg-[var(--color-hex-131313)]"
                                 >
-                                    <td className="px-[16px] py-[8px] font-semibold tracking-[0.08em] whitespace-nowrap text-[var(--color-hex-e31b23)]">
+                                    <td className="px-[16px] py-[8px] font-semibold tracking-tight whitespace-nowrap text-[var(--color-brand)]">
                                         {m.id}
                                     </td>
-                                    <td className="cell-truncate max-w-[180px] px-[16px] py-[8px] whitespace-nowrap text-[var(--color-hex-a0a0a0)]">
+                                    <td className="cell-truncate max-w-[var(--width-cell-max)] px-[16px] py-[8px] whitespace-nowrap text-[var(--color-hex-a0a0a0)]">
                                         {m.target}
                                     </td>
-                                    <td className="px-[16px] py-[8px] text-[10px] whitespace-nowrap text-[var(--color-hex-666666)]">
+                                    <td className="px-[16px] py-[8px] text-lg whitespace-nowrap text-[var(--color-hex-666666)]">
                                         {m.surface}
                                     </td>
-                                    <td className="px-[16px] py-[8px] text-[10px] whitespace-nowrap text-[var(--color-hex-666666)]">
+                                    <td className="px-[16px] py-[8px] text-lg whitespace-nowrap text-[var(--color-hex-666666)]">
                                         {m.mode}
                                     </td>
                                     <td className="px-[16px] py-[8px] whitespace-nowrap">
@@ -139,7 +139,7 @@ export default function MissionsPage({ onNewMission, onOpenMission }: MissionsPa
                                         style={{
                                             color:
                                                 m.findings > 0
-                                                    ? "var(--color-hex-ff2a32)"
+                                                    ? "var(--color-danger)"
                                                     : "var(--color-hex-666666)",
                                             fontWeight: m.findings > 0 ? 600 : 400,
                                         }}
@@ -149,7 +149,7 @@ export default function MissionsPage({ onNewMission, onOpenMission }: MissionsPa
                                     <td className="px-[16px] py-[8px] text-right text-[var(--color-hex-a0a0a0)]">
                                         {m.cost}
                                     </td>
-                                    <td className="px-[16px] py-[8px] text-[9.5px] whitespace-nowrap text-[var(--color-hex-555555)]">
+                                    <td className="text-lg-tight px-[16px] py-[8px] whitespace-nowrap text-[var(--color-hex-555555)]">
                                         {m.started}
                                     </td>
                                 </tr>
