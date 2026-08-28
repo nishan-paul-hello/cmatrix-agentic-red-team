@@ -26,8 +26,8 @@ export const STATE_MACHINE_NODES: {
         w: 120,
         h: 32,
         color: "var(--color-hex-1a0608)",
-        text: "var(--color-hex-e31b23)",
-        border: "var(--color-hex-e31b23)",
+        text: "var(--color-brand)",
+        border: "var(--color-brand)",
     },
     {
         id: TASK_STATUS.SUCCESS,
@@ -36,7 +36,7 @@ export const STATE_MACHINE_NODES: {
         w: 100,
         h: 28,
         color: "var(--color-hex-0a1a10)",
-        text: "var(--color-hex-3fb950)",
+        text: "var(--color-success)",
         border: "var(--color-hex-3fb95066)",
     },
     {
@@ -46,7 +46,7 @@ export const STATE_MACHINE_NODES: {
         w: 120,
         h: 32,
         color: "var(--color-hex-0a1a10)",
-        text: "var(--color-hex-3fb950)",
+        text: "var(--color-success)",
         border: "var(--color-hex-3fb95066)",
     },
     {
@@ -56,7 +56,7 @@ export const STATE_MACHINE_NODES: {
         w: 100,
         h: 28,
         color: "var(--color-hex-1a0608)",
-        text: "var(--color-hex-ff2a32)",
+        text: "var(--color-danger)",
         border: "var(--color-hex-ff2a3266)",
     },
     {
@@ -66,7 +66,7 @@ export const STATE_MACHINE_NODES: {
         w: 120,
         h: 32,
         color: "var(--color-hex-120608)",
-        text: "var(--color-hex-e31b23)",
+        text: "var(--color-brand)",
         border: "var(--color-hex-e31b2344)",
     },
     {
@@ -76,7 +76,7 @@ export const STATE_MACHINE_NODES: {
         w: 120,
         h: 28,
         color: "var(--color-hex-1a1200)",
-        text: "var(--color-hex-d29922)",
+        text: "var(--color-warning)",
         border: "var(--color-hex-d2992244)",
     },
     {
@@ -86,7 +86,7 @@ export const STATE_MACHINE_NODES: {
         w: 120,
         h: 28,
         color: "var(--color-hex-1a0608)",
-        text: "var(--color-hex-ff2a32)",
+        text: "var(--color-danger)",
         border: "var(--color-hex-ff2a3244)",
     },
     {
@@ -116,7 +116,7 @@ export const STATE_MACHINE_NODES: {
         w: 100,
         h: 28,
         color: "var(--color-hex-1a0608)",
-        text: "var(--color-hex-e31b23)",
+        text: "var(--color-brand)",
         border: "var(--color-hex-e31b2344)",
     },
 ];

@@ -15,14 +15,14 @@ export default function EvaluationScreen({
                     borderBottom: "1px solid var(--color-hex-1e1e1e)",
                 }}
             >
-                <div className="mb-[3px] text-[9px] tracking-[0.22em] text-[var(--color-hex-666666)]">
+                <div className="tracking-widest-2 mb-[3px] text-base text-[var(--color-hex-666666)]">
                     EXECUTION / {entry.nodeId}
                 </div>
                 <div className="flex items-baseline gap-3">
-                    <h1 className="text-[20px] font-bold tracking-[0.12em] text-[var(--color-hex-f2f2f2)]">
+                    <h1 className="text-9xl font-bold tracking-wide text-[var(--color-fg)]">
                         EVALUATION
                     </h1>
-                    <span className="rounded-[2px] border-[1px] border-solid border-[var(--color-hex-d2992244)] bg-[var(--color-hex-1a1200)] px-[7px] py-[1px] text-[9px] tracking-[0.14em] text-[var(--color-hex-d29922)]">
+                    <span className="tracking-wider-1 rounded-[2px] border-[1px] border-solid border-[var(--color-hex-d2992244)] bg-[var(--color-hex-1a1200)] px-[7px] py-[1px] text-base text-[var(--color-warning)]">
                         EXECUTION #{entry.execId}
                     </span>
                 </div>
@@ -49,13 +49,13 @@ export default function EvaluationScreen({
                 ].map((block, i, arr) => (
                     <div key={block.label}>
                         <div className="mb-4 flex items-center gap-3">
-                            <div className="h-[16px] w-[2px] bg-[var(--color-hex-e31b23)]" />
-                            <span className="text-[10px] font-bold tracking-[0.18em] text-[var(--color-hex-f2f2f2)]">
+                            <div className="h-[16px] w-[2px] bg-[var(--color-brand)]" />
+                            <span className="tracking-wider-3 text-lg font-bold text-[var(--color-fg)]">
                                 {block.label}
                             </span>
                         </div>
                         <div
-                            className="text-[10.5px] leading-[1.8] tracking-[0.04em]"
+                            className="text-xl-tight leading-loose tracking-tighter"
                             style={{
                                 color: block.color,
                                 whiteSpace: "pre-wrap",
@@ -77,7 +77,7 @@ export default function EvaluationScreen({
 
                 {/* E_ord indicator */}
                 <div className="mt-[8px] rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)] bg-[var(--color-hex-0d0d0d)] px-[24px] py-[20px]">
-                    <div className="mb-[20px] text-[8.5px] tracking-[0.2em] text-[var(--color-hex-444444)]">
+                    <div className="text-base-tight mb-[20px] tracking-widest text-[var(--color-hex-444444)]">
                         EVIDENCE LEVEL INDICATOR
                     </div>
                     <div
@@ -89,7 +89,7 @@ export default function EvaluationScreen({
                         {/* Track */}
                         <div className="absolute top-[7px] right-0 left-0 h-[1px] bg-[var(--color-hex-292929)]" />
                         <div
-                            className="absolute top-[7px] left-0 h-[1px] bg-[var(--color-hex-e31b23)]"
+                            className="absolute top-[7px] left-0 h-[1px] bg-[var(--color-brand)]"
                             style={{
                                 width: `${(VALUE / 5) * 100}%`,
                             }}
@@ -107,29 +107,29 @@ export default function EvaluationScreen({
                                     <div
                                         className="h-[7px] w-[7px] rounded-[1px]"
                                         style={{
-                                            border: `1px solid ${i <= VALUE ? "var(--color-hex-e31b23)" : "var(--color-hex-292929)"}`,
+                                            border: `1px solid ${i <= VALUE ? "var(--color-brand)" : "var(--color-hex-292929)"}`,
                                             background: (() => {
                                                 if (i < VALUE) {
-                                                    return "var(--color-hex-e31b23)";
+                                                    return "var(--color-brand)";
                                                 }
                                                 if (i === VALUE) {
-                                                    return "var(--color-hex-ff2a32)";
+                                                    return "var(--color-danger)";
                                                 }
                                                 return "transparent";
                                             })(),
                                         }}
                                     />
                                     {i === VALUE && (
-                                        <div className="mt-[2px] text-[8px] font-bold text-[var(--color-hex-ff2a32)]">
+                                        <div className="mt-[2px] text-sm font-bold text-[var(--color-danger)]">
                                             ▲
                                         </div>
                                     )}
                                     <div
-                                        className="absolute bottom-0 text-[7.5px] tracking-[0.1em] whitespace-nowrap"
+                                        className="text-sm-tight absolute bottom-0 tracking-normal whitespace-nowrap"
                                         style={{
                                             color:
                                                 i === VALUE
-                                                    ? "var(--color-hex-e31b23)"
+                                                    ? "var(--color-brand)"
                                                     : "var(--color-hex-333333)",
                                             transform: (() => {
                                                 if (i === 5) {
@@ -150,10 +150,10 @@ export default function EvaluationScreen({
                         </div>
                     </div>
                     <div className="mt-2 flex items-center gap-3">
-                        <span className="text-[10px] font-bold tracking-[0.08em] text-[var(--color-hex-e31b23)]">
+                        <span className="text-lg font-bold tracking-tight text-[var(--color-brand)]">
                             E_ord {VALUE} — {EORD_LABELS[VALUE]}
                         </span>
-                        <span className="text-[9px] tracking-[0.06em] text-[var(--color-hex-444444)]">
+                        <span className="tracking-tight-1 text-base text-[var(--color-hex-444444)]">
                             Raised from {VALUE - 1} ({EORD_LABELS[VALUE - 1]}) after timing
                             confirmation
                         </span>

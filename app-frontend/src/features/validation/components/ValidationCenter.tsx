@@ -27,12 +27,12 @@ export default function ValidationCenter() {
         {
             label: "PENDING VALIDATION",
             value: "08",
-            color: "var(--color-hex-d29922)",
+            color: "var(--color-warning)",
         },
         {
             label: "VALIDATED",
             value: "21",
-            color: "var(--color-hex-3fb950)",
+            color: "var(--color-success)",
         },
         {
             label: "RULED OUT",
@@ -42,7 +42,7 @@ export default function ValidationCenter() {
         {
             label: "RETRIES",
             value: "17",
-            color: "var(--color-hex-ff2a32)",
+            color: "var(--color-danger)",
         },
     ];
     return (
@@ -53,11 +53,11 @@ export default function ValidationCenter() {
                     borderBottom: "1px solid var(--color-hex-1e1e1e)",
                 }}
             >
-                <div className="mb-[3px] text-[9px] tracking-[0.22em] text-[var(--color-hex-666666)]">
+                <div className="tracking-widest-2 mb-[3px] text-base text-[var(--color-hex-666666)]">
                     MISSION / CVE-001
                 </div>
                 <div className="flex items-center justify-between">
-                    <h1 className="text-[20px] font-bold tracking-[0.12em] text-[var(--color-hex-f2f2f2)]">
+                    <h1 className="text-9xl font-bold tracking-wide text-[var(--color-fg)]">
                         VALIDATION CENTER
                     </h1>
                     <div className="flex gap-2">
@@ -88,11 +88,11 @@ export default function ValidationCenter() {
                             borderRight: i < 3 ? "1px solid var(--color-hex-1e1e1e)" : "none",
                         }}
                     >
-                        <div className="mb-[6px] text-[8px] tracking-[0.2em] text-[var(--color-hex-444444)]">
+                        <div className="mb-[6px] text-sm tracking-widest text-[var(--color-hex-444444)]">
                             {m.label}
                         </div>
                         <div
-                            className="text-[28px] leading-[1] font-bold"
+                            className="text-13xl leading-none font-bold"
                             style={{
                                 color: m.color,
                             }}

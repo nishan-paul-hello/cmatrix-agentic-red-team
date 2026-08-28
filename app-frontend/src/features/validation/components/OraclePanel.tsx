@@ -36,7 +36,7 @@ export default function OraclePanel({ onClose }: { onClose: () => void }) {
     ];
     return (
         <div
-            className="flex w-[300px] flex-shrink-0 flex-col overflow-y-auto bg-[var(--color-hex-0b0b0b)]"
+            className="w-panel-md flex flex-shrink-0 flex-col overflow-y-auto bg-[var(--color-hex-0b0b0b)]"
             style={{
                 borderLeft: "1px solid var(--color-hex-1e1e1e)",
             }}
@@ -47,12 +47,12 @@ export default function OraclePanel({ onClose }: { onClose: () => void }) {
                     borderBottom: "1px solid var(--color-hex-1e1e1e)",
                 }}
             >
-                <span className="text-[10px] font-semibold tracking-[0.16em] text-[var(--color-hex-a0a0a0)]">
+                <span className="tracking-wider-2 text-lg font-semibold text-[var(--color-hex-a0a0a0)]">
                     ORACLE PANEL
                 </span>
                 <button
                     onClick={onClose}
-                    className="cursor-pointer border-none bg-[transparent] text-[13px] text-[var(--color-hex-444444)]"
+                    className="cursor-pointer border-none bg-[transparent] text-3xl text-[var(--color-hex-444444)]"
                 >
                     ✕
                 </button>
@@ -66,16 +66,16 @@ export default function OraclePanel({ onClose }: { onClose: () => void }) {
                     }}
                 >
                     <div className="mb-3 flex items-center justify-between">
-                        <span className="text-[10px] font-bold tracking-[0.1em] text-[var(--color-hex-f2f2f2)]">
+                        <span className="text-lg font-bold tracking-normal text-[var(--color-fg)]">
                             {o.oracle}
                         </span>
                         <span
-                            className="rounded-[2px] px-[6px] py-[1px] text-[9px] font-bold tracking-[0.12em]"
+                            className="rounded-[2px] px-[6px] py-[1px] text-base font-bold tracking-wide"
                             style={{
                                 color:
                                     o.result === "PASS"
-                                        ? "var(--color-hex-3fb950)"
-                                        : "var(--color-hex-ff2a32)",
+                                        ? "var(--color-success)"
+                                        : "var(--color-danger)",
                                 background:
                                     o.result === "PASS"
                                         ? "var(--color-hex-0a1a10)"
@@ -101,10 +101,10 @@ export default function OraclePanel({ onClose }: { onClose: () => void }) {
                         },
                     ].map((r) => (
                         <div key={r.k} className="mb-[6px]">
-                            <div className="mb-[1px] text-[7.5px] tracking-[0.18em] text-[var(--color-hex-444444)]">
+                            <div className="text-sm-tight tracking-wider-3 mb-[1px] text-[var(--color-hex-444444)]">
                                 {r.k}
                             </div>
-                            <div className="text-[9.5px] leading-[1.5] tracking-[0.04em] text-[var(--color-hex-666666)]">
+                            <div className="text-lg-tight leading-snug tracking-tighter text-[var(--color-hex-666666)]">
                                 {r.v}
                             </div>
                         </div>

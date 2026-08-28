@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { FocusTrap } from "focus-trap-react";
 
 import { type VFinding } from "@/features/validation/data/fixtures/validationMockData";
 
@@ -45,150 +46,154 @@ export default function StateMachineModal({
     const nodes = STATE_MACHINE_NODES;
     const edges = STATE_MACHINE_EDGES;
     return (
-        <div
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => {
-                if (e.key === "Escape" || e.key === "Enter") {
-                    onClose();
-                }
-            }}
-            className="fixed inset-0 flex items-center justify-center bg-[var(--color-hex-00000099)]"
-            style={{
-                zIndex: 60,
-            }}
-            onClick={onClose}
-        >
+        <FocusTrap focusTrapOptions={{ escapeDeactivates: false }}>
             <div
-                role="button"
-                tabIndex={0}
-                onKeyDown={(e) => e.stopPropagation()}
-                className="w-[620px] rounded-[2px] border-[1px] border-solid border-[var(--color-hex-292929)] bg-[var(--color-hex-0d0d0d)] p-[24px]"
-                onClick={(e) => e.stopPropagation()}
+                role="presentation"
+                onKeyDown={(e) => {
+                    if (e.key === "Escape" || e.key === "Enter") {
+                        onClose();
+                    }
+                }}
+                className="fixed inset-0 z-[60] flex items-center justify-center bg-[var(--color-hex-00000099)]"
+                onClick={(e) => {
+                    if (e.target === e.currentTarget) {
+                        onClose();
+                    }
+                }}
             >
-                <div className="mb-5 flex justify-between">
-                    <div>
-                        <div className="text-[13px] font-bold tracking-[0.12em] text-[var(--color-hex-f2f2f2)]">
-                            VALIDATION STATE MACHINE
-                        </div>
-                        <div className="text-[8.5px] tracking-[0.16em] text-[var(--color-hex-444444)]">
-                            {finding
-                                ? `${finding.id} — ${finding.type} — ${finding.status}`
-                                : "DIAGNOSIS → ADAPT → CAP RETRY LOOP"}
-                        </div>
-                    </div>
-                    <button
-                        onClick={onClose}
-                        className="cursor-pointer border-none bg-[transparent] text-[14px] text-[var(--color-hex-444444)]"
-                    >
-                        ✕
-                    </button>
-                </div>
-                <div className="relative h-[530px]">
-                    <svg
-                        className="absolute"
-                        style={{
-                            inset: 0,
-                        }}
-                        width="100%"
-                        height="100%"
-                    >
-                        {edges.map((e) => (
-                            <g key={`${e.x1}-${e.y1}-${e.x2}-${e.y2}`}>
-                                <line
-                                    x1={e.x1}
-                                    y1={e.y1}
-                                    x2={e.x2}
-                                    y2={e.y2}
-                                    stroke="var(--color-hex-333333)"
-                                    strokeWidth="1"
-                                    markerEnd="url(#sm-arrow)"
-                                />
-                                {e.label && (
-                                    <text
-                                        x={(e.x1 + e.x2) / 2 + 6}
-                                        y={(e.y1 + e.y2) / 2}
-                                        fill="var(--color-hex-555555)"
-                                        fontSize="8"
-                                        letterSpacing="1"
-                                    >
-                                        {e.label}
-                                    </text>
-                                )}
-                            </g>
-                        ))}
-                        {/* Retry back-arrow */}
-                        <path
-                            d="M 280 508 Q 140 508 140 132 Q 140 116 200 116"
-                            stroke="var(--color-hex-6f171b)"
-                            strokeWidth="1"
-                            fill="none"
-                            strokeDasharray="4 3"
-                            markerEnd="url(#sm-arrow-red)"
-                        />
-                        <text
-                            x="100"
-                            y="340"
-                            fill="var(--color-hex-6f171b)"
-                            fontSize="8"
-                            letterSpacing="1"
-                        >
-                            RETRY
-                        </text>
-                        <defs>
-                            <marker
-                                id="sm-arrow"
-                                markerWidth="6"
-                                markerHeight="6"
-                                refX="5"
-                                refY="3"
-                                orient="auto"
-                            >
-                                <path d="M0,0 L0,6 L6,3 z" fill="var(--color-hex-333333)" />
-                            </marker>
-                            <marker
-                                id="sm-arrow-red"
-                                markerWidth="6"
-                                markerHeight="6"
-                                refX="5"
-                                refY="3"
-                                orient="auto"
-                            >
-                                <path d="M0,0 L0,6 L6,3 z" fill="var(--color-hex-6f171b)" />
-                            </marker>
-                        </defs>
-                    </svg>
-                    {nodes.map((n) => {
-                        const isActive = n.id === activeState;
-                        return (
+                <div
+                    role="dialog"
+                    aria-modal="true"
+                    aria-labelledby="state-machine-modal-title"
+                    className="w-panel-2xl rounded-[2px] border-[1px] border-solid border-[var(--color-hex-292929)] bg-[var(--color-hex-0d0d0d)] p-[24px]"
+                >
+                    <div className="mb-5 flex justify-between">
+                        <div>
                             <div
-                                key={n.id}
-                                className="absolute rounded-[2px]"
-                                style={{
-                                    left: n.x,
-                                    top: n.y,
-                                    width: n.w,
-                                    height: n.h,
-                                    background: isActive ? "var(--color-hex-e31b23)" : n.color,
-                                    border: `1px solid ${isActive ? "var(--color-hex-ff2a32)" : (n.border ?? "var(--color-hex-292929)")}`,
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                }}
+                                id="state-machine-modal-title"
+                                className="text-3xl font-bold tracking-wide text-[var(--color-fg)]"
                             >
-                                <span
-                                    className="text-[9px] font-bold tracking-[0.12em]"
+                                VALIDATION STATE MACHINE
+                            </div>
+                            <div className="text-base-tight tracking-wider-2 text-[var(--color-hex-444444)]">
+                                {finding
+                                    ? `${finding.id} — ${finding.type} — ${finding.status}`
+                                    : "DIAGNOSIS → ADAPT → CAP RETRY LOOP"}
+                            </div>
+                        </div>
+                        <button
+                            onClick={onClose}
+                            className="cursor-pointer border-none bg-[transparent] text-4xl text-[var(--color-hex-444444)]"
+                        >
+                            ✕
+                        </button>
+                    </div>
+                    <div className="relative h-[530px]">
+                        <svg
+                            className="absolute"
+                            style={{
+                                inset: 0,
+                            }}
+                            width="100%"
+                            height="100%"
+                        >
+                            {edges.map((e) => (
+                                <g key={`${e.x1}-${e.y1}-${e.x2}-${e.y2}`}>
+                                    <line
+                                        x1={e.x1}
+                                        y1={e.y1}
+                                        x2={e.x2}
+                                        y2={e.y2}
+                                        stroke="var(--color-hex-333333)"
+                                        strokeWidth="1"
+                                        markerEnd="url(#sm-arrow)"
+                                    />
+                                    {e.label && (
+                                        <text
+                                            x={(e.x1 + e.x2) / 2 + 6}
+                                            y={(e.y1 + e.y2) / 2}
+                                            fill="var(--color-hex-555555)"
+                                            fontSize="8"
+                                            letterSpacing="1"
+                                        >
+                                            {e.label}
+                                        </text>
+                                    )}
+                                </g>
+                            ))}
+                            {/* Retry back-arrow */}
+                            <path
+                                d="M 280 508 Q 140 508 140 132 Q 140 116 200 116"
+                                stroke="var(--color-hex-6f171b)"
+                                strokeWidth="1"
+                                fill="none"
+                                strokeDasharray="4 3"
+                                markerEnd="url(#sm-arrow-red)"
+                            />
+                            <text
+                                x="100"
+                                y="340"
+                                fill="var(--color-hex-6f171b)"
+                                fontSize="8"
+                                letterSpacing="1"
+                            >
+                                RETRY
+                            </text>
+                            <defs>
+                                <marker
+                                    id="sm-arrow"
+                                    markerWidth="6"
+                                    markerHeight="6"
+                                    refX="5"
+                                    refY="3"
+                                    orient="auto"
+                                >
+                                    <path d="M0,0 L0,6 L6,3 z" fill="var(--color-hex-333333)" />
+                                </marker>
+                                <marker
+                                    id="sm-arrow-red"
+                                    markerWidth="6"
+                                    markerHeight="6"
+                                    refX="5"
+                                    refY="3"
+                                    orient="auto"
+                                >
+                                    <path d="M0,0 L0,6 L6,3 z" fill="var(--color-hex-6f171b)" />
+                                </marker>
+                            </defs>
+                        </svg>
+                        {nodes.map((n) => {
+                            const isActive = n.id === activeState;
+                            return (
+                                <div
+                                    key={n.id}
+                                    className="absolute rounded-[2px]"
                                     style={{
-                                        color: isActive ? "var(--color-hex-f2f2f2)" : n.text,
+                                        left: n.x,
+                                        top: n.y,
+                                        width: n.w,
+                                        height: n.h,
+                                        background: isActive ? "var(--color-brand)" : n.color,
+                                        border: `1px solid ${isActive ? "var(--color-danger)" : (n.border ?? "var(--color-hex-292929)")}`,
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
                                     }}
                                 >
-                                    {n.id}
-                                </span>
-                            </div>
-                        );
-                    })}
+                                    <span
+                                        className="text-base font-bold tracking-wide"
+                                        style={{
+                                            color: isActive ? "var(--color-fg)" : n.text,
+                                        }}
+                                    >
+                                        {n.id}
+                                    </span>
+                                </div>
+                            );
+                        })}
+                    </div>
                 </div>
             </div>
-        </div>
+        </FocusTrap>
     );
 }

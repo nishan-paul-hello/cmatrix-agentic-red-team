@@ -11,14 +11,14 @@ export function ValidationTable({
 }) {
     return (
         <div className="flex-1 overflow-auto">
-            <table className="w-full border-collapse text-[10.5px]">
+            <table className="text-xl-tight w-full border-collapse">
                 <thead>
                     <tr className="sticky top-0 bg-[var(--color-hex-0f0f0f)]">
                         {["FINDING", "TYPE", "EVIDENCE", "RETRY", "STATUS", "ORACLE", ""].map(
                             (h) => (
                                 <th
                                     key={h}
-                                    className="px-[16px] py-[6px] text-left text-[8px] font-semibold tracking-[0.18em] whitespace-nowrap text-[var(--color-hex-444444)]"
+                                    className="tracking-wider-3 px-[16px] py-[6px] text-left text-sm font-semibold whitespace-nowrap text-[var(--color-hex-444444)]"
                                     style={{
                                         borderBottom: "1px solid var(--color-hex-1a1a1a)",
                                     }}
@@ -43,7 +43,10 @@ export function ValidationTable({
                                         ? "var(--color-hex-0f0f0f)"
                                         : "transparent",
                                 }}
-                                onClick={() => setSelected(f)}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setSelected(f);
+                                }}
                                 onMouseEnter={(e) =>
                                     (e.currentTarget.style.background = "var(--color-hex-0f0f0f)")
                                 }
@@ -53,13 +56,13 @@ export function ValidationTable({
                                         : "transparent")
                                 }
                             >
-                                <td className="px-[16px] py-[8px] font-bold tracking-[0.08em] text-[var(--color-hex-e31b23)]">
+                                <td className="px-[16px] py-[8px] font-bold tracking-tight text-[var(--color-brand)]">
                                     {f.id}
                                 </td>
                                 <td className="px-[16px] py-[8px] text-[var(--color-hex-a0a0a0)]">
                                     {f.type}
                                 </td>
-                                <td className="px-[16px] py-[8px] text-[9px] text-[var(--color-hex-666666)]">
+                                <td className="px-[16px] py-[8px] text-base text-[var(--color-hex-666666)]">
                                     {f.evidence}
                                 </td>
                                 <td
@@ -67,7 +70,7 @@ export function ValidationTable({
                                     style={{
                                         color:
                                             f.retry > 0
-                                                ? "var(--color-hex-d29922)"
+                                                ? "var(--color-warning)"
                                                 : "var(--color-hex-444444)",
                                     }}
                                 >
@@ -75,7 +78,7 @@ export function ValidationTable({
                                 </td>
                                 <td className="px-[16px] py-[8px]">
                                     <span
-                                        className="rounded-[2px] px-[6px] py-[1px] text-[9px] font-semibold tracking-[0.12em]"
+                                        className="rounded-[2px] px-[6px] py-[1px] text-base font-semibold tracking-wide"
                                         style={{
                                             color: sb.color,
                                             background: sb.bg,
@@ -85,7 +88,7 @@ export function ValidationTable({
                                         {f.status}
                                     </span>
                                 </td>
-                                <td className="px-[16px] py-[8px] text-[9px] text-[var(--color-hex-555555)]">
+                                <td className="px-[16px] py-[8px] text-base text-[var(--color-hex-555555)]">
                                     {f.oracle}
                                 </td>
                                 <td className="px-[16px] py-[8px]">
@@ -94,7 +97,7 @@ export function ValidationTable({
                                             e.stopPropagation();
                                             setSelected(f);
                                         }}
-                                        className="font-inherit cursor-pointer rounded-[2px] border-[1px] border-solid border-[var(--color-hex-292929)] bg-[var(--color-hex-111111)] px-[8px] py-[2px] text-[8.5px] tracking-[0.1em] text-[var(--color-hex-666666)] hover:border-[var(--color-hex-e31b23)]"
+                                        className="font-inherit text-base-tight cursor-pointer rounded-[2px] border-[1px] border-solid border-[var(--color-hex-292929)] bg-[var(--color-hex-111111)] px-[8px] py-[2px] tracking-normal text-[var(--color-hex-666666)] hover:border-[var(--color-brand)]"
                                     >
                                         DETAIL
                                     </button>
