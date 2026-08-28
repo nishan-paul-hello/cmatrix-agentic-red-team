@@ -89,15 +89,15 @@ export const SEV_C: Record<
     }
 > = {
     CRITICAL: {
-        color: "var(--color-hex-ff2a32)",
+        color: "var(--color-danger)",
         bg: "var(--color-hex-1a0608)",
     },
     HIGH: {
-        color: "var(--color-hex-e31b23)",
+        color: "var(--color-brand)",
         bg: "var(--color-hex-150608)",
     },
     MEDIUM: {
-        color: "var(--color-hex-d29922)",
+        color: "var(--color-warning)",
         bg: "var(--color-hex-1a1200)",
     },
     LOW: {
@@ -106,8 +106,8 @@ export const SEV_C: Record<
     },
 };
 export const STATUS_C: Record<string, string> = {
-    [FINDING_STATUS.ORACLE_CONFIRMED]: "var(--color-hex-ff2a32)",
-    [FINDING_STATUS.VALIDATED]: "var(--color-hex-3fb950)",
-    [FINDING_STATUS.PENDING]: "var(--color-hex-d29922)",
+    [FINDING_STATUS.ORACLE_CONFIRMED]: "var(--color-danger)",
+    [FINDING_STATUS.VALIDATED]: "var(--color-success)",
+    [FINDING_STATUS.PENDING]: "var(--color-warning)",
     [FINDING_STATUS.RULED_OUT]: "var(--color-hex-555555)",
 };
