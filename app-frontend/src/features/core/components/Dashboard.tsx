@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 
+import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { MetricTile } from "@/components/ui/MetricTile";
+import { KPIStrip } from "@/components/ui/KPIStrip";
 import StatusBadge from "@/components/ui/StatusBadge";
 import {
     INITIAL_ACTIVITY,
@@ -69,53 +70,51 @@ export default function Dashboard({ onNewMission, onOpenMission }: DashboardProp
     return (
         <div className="flex h-full min-h-0 flex-col">
             {/* Page header */}
-            <div className="flex-shrink-0 border-b border-[var(--color-hex-1e1e1e)] px-6 pt-5 pb-4">
+            <div className="border-border flex-shrink-0 border-b px-6 pt-5 pb-4">
                 <div className="page-eyebrow">OPERATIONS</div>
                 <div className="flex items-baseline gap-3">
-                    <h1 className="text-9xl font-bold tracking-wide text-[var(--color-fg)]">
+                    <h1 className="text-foreground text-xs font-bold tracking-wide">
                         COMMAND CENTER
                     </h1>
                 </div>
             </div>
 
             {/* KPI strip */}
-            <div className="grid flex-shrink-0 grid-cols-6 border-b border-[var(--color-hex-1e1e1e)]">
-                {KPI_ITEMS.map((kpi, i) => (
-                    <MetricTile
-                        key={kpi.label}
-                        label={kpi.label}
-                        value={kpi.value}
-                        variant="dashboard"
-                        borderRight={i < 5}
-                        valueColor={kpi.red ? "var(--color-brand)" : "var(--color-fg)"}
-                    />
-                ))}
-            </div>
+            <KPIStrip
+                className="grid-cols-2 sm:grid-cols-3 lg:grid-cols-6"
+                items={KPI_ITEMS.map((kpi) => ({
+                    k: kpi.label,
+                    v: kpi.value,
+                    c: kpi.red ? "var(--primary)" : "var(--foreground)",
+                }))}
+            />
 
             {/* Body: missions table + live feed */}
             <div className="flex min-h-0 flex-1 overflow-hidden">
                 {/* Active missions table */}
-                <div className="flex flex-1 flex-col overflow-hidden border-r border-[var(--color-hex-1e1e1e)]">
-                    <div className="flex flex-shrink-0 items-center justify-between border-b border-[var(--color-hex-1e1e1e)] px-6 py-3">
-                        <span className="tracking-wider-2 text-xl font-semibold text-[var(--color-hex-a0a0a0)]">
+                <div className="border-border flex flex-1 flex-col overflow-hidden border-r">
+                    <div className="border-border flex flex-shrink-0 items-center justify-between border-b px-6 py-3">
+                        <span className="text-muted-foreground text-xs font-semibold tracking-widest">
                             ACTIVE MISSIONS
                         </span>
-                        <button
+                        <Button
+                            variant="outline"
+                            size="sm"
                             onClick={onNewMission}
-                            className="tracking-wider-1 cursor-pointer rounded-[2px] border border-[var(--color-hex-6f171b)] bg-transparent px-[8px] py-[2px] text-base text-[var(--color-brand)] transition-colors duration-100 hover:border-[var(--color-brand)] hover:bg-[var(--color-hex-1a0608)]"
+                            className="border-border text-primary hover:border-primary hover:bg-muted h-auto rounded-sm px-2 py-0.5 text-base tracking-widest transition-colors duration-100"
                         >
                             + NEW MISSION
-                        </button>
+                        </Button>
                     </div>
 
                     <div className="flex-1 overflow-auto">
-                        <table className="w-full border-collapse text-xl">
+                        <table className="w-full border-collapse text-xs">
                             <thead>
-                                <tr className="bg-[var(--color-hex-111111)]">
+                                <tr className="bg-card">
                                     {TABLE_HEADERS.map((h) => (
                                         <th
                                             key={h}
-                                            className="text-base-tight tracking-wider-3 border-b border-[var(--color-hex-1e1e1e)] px-[16px] py-[6px] text-left font-semibold whitespace-nowrap text-[var(--color-hex-444444)]"
+                                            className="border-border text-muted-foreground border-b px-4 py-1.5 text-left text-sm font-semibold tracking-widest whitespace-nowrap"
                                         >
                                             {h}
                                         </th>
@@ -146,48 +145,48 @@ export default function Dashboard({ onNewMission, onOpenMission }: DashboardProp
                                         <tr
                                             key={m.id}
                                             onClick={() => onOpenMission?.(m.id)}
-                                            className="cursor-pointer border-b border-[var(--color-hex-191919)] transition-colors duration-75 hover:bg-[var(--color-hex-131313)]"
+                                            className="border-border hover:bg-muted cursor-pointer border-b transition-colors duration-75"
                                         >
-                                            <td className="px-[16px] py-[8px] font-semibold tracking-tight whitespace-nowrap text-[var(--color-brand)]">
+                                            <td className="text-primary px-4 py-2 font-semibold tracking-tight whitespace-nowrap">
                                                 {m.id}
                                             </td>
-                                            <td className="cell-truncate max-w-[var(--width-cell-max)] px-[16px] py-[8px] whitespace-nowrap text-[var(--color-hex-a0a0a0)]">
+                                            <td className="cell-truncate text-muted-foreground max-w-[var(--width-cell-max)] px-4 py-2 whitespace-nowrap">
                                                 {m.target}
                                             </td>
-                                            <td className="px-[16px] py-[8px] text-lg whitespace-nowrap text-[var(--color-hex-666666)]">
+                                            <td className="text-muted-foreground px-4 py-2 text-xs whitespace-nowrap">
                                                 {m.surface}
                                             </td>
-                                            <td className="px-[16px] py-[8px] text-lg whitespace-nowrap text-[var(--color-hex-666666)]">
+                                            <td className="text-muted-foreground px-4 py-2 text-xs whitespace-nowrap">
                                                 {m.mode}
                                             </td>
-                                            <td className="px-[16px] py-[8px] whitespace-nowrap">
+                                            <td className="px-4 py-2 whitespace-nowrap">
                                                 <StatusBadge status={m.status} />
                                             </td>
-                                            <td className="px-[16px] py-[8px] text-right text-[var(--color-hex-a0a0a0)]">
+                                            <td className="text-muted-foreground px-4 py-2 text-right">
                                                 {m.nodes}
                                             </td>
                                             <td
-                                                className="px-[16px] py-[8px] text-right"
+                                                className="px-4 py-2 text-right"
                                                 style={{
                                                     color:
                                                         m.findings > 0
-                                                            ? "var(--color-danger)"
-                                                            : "var(--color-hex-666666)",
+                                                            ? "var(--destructive)"
+                                                            : "var(--muted-foreground)",
                                                     fontWeight: m.findings > 0 ? 600 : 400,
                                                 }}
                                             >
                                                 {m.findings}
                                             </td>
-                                            <td className="px-[16px] py-[8px] text-right text-[var(--color-hex-a0a0a0)]">
+                                            <td className="text-muted-foreground px-4 py-2 text-right">
                                                 {m.cost}
                                             </td>
-                                            <td className="px-[16px] py-[8px] text-center text-[var(--color-hex-a0a0a0)]">
+                                            <td className="text-muted-foreground px-4 py-2 text-center">
                                                 {orchestrators[m.id].hasActiveWorkers() ? (
-                                                    <span className="text-base font-semibold tracking-normal text-[var(--color-success)]">
+                                                    <span className="text-success text-base font-semibold tracking-normal">
                                                         ACTIVE
                                                     </span>
                                                 ) : (
-                                                    <span className="text-base tracking-normal text-[var(--color-hex-666666)]">
+                                                    <span className="text-muted-foreground text-base tracking-normal">
                                                         IDLE
                                                     </span>
                                                 )}
@@ -202,13 +201,13 @@ export default function Dashboard({ onNewMission, onOpenMission }: DashboardProp
 
                 {/* Live activity feed */}
                 <div className="flex w-[var(--width-drawer-lg)] flex-shrink-0 flex-col overflow-hidden">
-                    <div className="flex flex-shrink-0 items-center gap-2 border-b border-[var(--color-hex-1e1e1e)] px-4 py-3">
+                    <div className="border-border flex flex-shrink-0 items-center gap-2 border-b px-4 py-3">
                         <div
-                            className="h-[6px] w-[6px] shrink-0 rounded-full bg-[var(--color-danger)]"
+                            className="bg-destructive h-1.5 w-1.5 shrink-0 rounded-full"
                             style={{ animation: "pulse 1.4s ease-in-out infinite" }}
                             aria-hidden="true"
                         />
-                        <span className="tracking-wider-2 text-xl font-semibold text-[var(--color-hex-a0a0a0)]">
+                        <span className="text-muted-foreground text-xs font-semibold tracking-widest">
                             LIVE ACTIVITY
                         </span>
                     </div>
@@ -219,29 +218,26 @@ export default function Dashboard({ onNewMission, onOpenMission }: DashboardProp
                         aria-label="Live agent activity feed"
                     >
                         {activity.map((entry) => (
-                            <div
-                                key={entry.id}
-                                className="border-b border-[var(--color-hex-111111)] px-4 py-2"
-                            >
+                            <div key={entry.id} className="border-border border-b px-4 py-2">
                                 <div className="mb-0.5 flex items-center gap-2">
-                                    <span className="tracking-tight-1 shrink-0 text-base text-[var(--color-hex-444444)]">
+                                    <span className="text-muted-foreground shrink-0 text-base tracking-tight">
                                         {entry.ts}
                                     </span>
-                                    <span className="text-base font-semibold tracking-normal text-[var(--color-brand)]">
+                                    <span className="text-primary text-base font-semibold tracking-normal">
                                         {entry.agent}
                                     </span>
                                     <span
-                                        className="text-base tracking-normal text-[var(--color-hex-333333)]"
+                                        className="text-muted-foreground text-base tracking-normal"
                                         aria-hidden="true"
                                     >
                                         ·
                                     </span>
-                                    <span className="text-base tracking-normal text-[var(--color-hex-555555)]">
+                                    <span className="text-muted-foreground text-base tracking-normal">
                                         {entry.action}
                                     </span>
                                 </div>
                                 <div
-                                    className="tracking-tighter-2 text-lg leading-tight"
+                                    className="text-xs leading-tight tracking-tighter"
                                     style={{ color: entry.color }}
                                 >
                                     {entry.desc}

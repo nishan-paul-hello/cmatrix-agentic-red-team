@@ -2,6 +2,9 @@
 
 import React, { createContext, useContext } from "react";
 
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 import { CAT_STYLE, HELP_KEYS, type PaletteItem } from "./CommandPaletteConstants";
@@ -39,7 +42,7 @@ export default function CommandPaletteView(props: CommandPaletteContextType) {
     return (
         <CommandPaletteContext.Provider value={props}>
             <div
-                className="fixed inset-0 z-[100] flex items-start justify-center bg-[var(--color-hex-00000099)] pt-[120px]"
+                className="bg-muted fixed inset-0 z-[100] flex items-start justify-center pt-[120px]"
                 onClick={(e) => {
                     if (e.target === e.currentTarget) {
                         onClose();
@@ -56,8 +59,8 @@ export default function CommandPaletteView(props: CommandPaletteContextType) {
                     role="dialog"
                     aria-modal="true"
                     aria-label="Command palette"
-                    className="w-panel-xl overflow-hidden rounded-[3px] border border-[var(--color-hex-292929)] bg-[var(--color-hex-0d0d0d)]"
-                    style={{ boxShadow: "0 24px 48px var(--color-hex-000000cc)" }}
+                    className="w-panel-xl border-border bg-background overflow-hidden rounded-[3px] border"
+                    style={{ boxShadow: "0 24px 48px var(--border)" }}
                 >
                     <CommandPaletteView.SearchInput />
                     <CommandPaletteView.ResultList />
@@ -71,11 +74,11 @@ export default function CommandPaletteView(props: CommandPaletteContextType) {
 CommandPaletteView.SearchInput = function SearchInput() {
     const { query, updateQuery, inputRef, handleKey } = useCommandPaletteContext();
     return (
-        <div className="flex h-[48px] items-center gap-3 border-b border-[var(--color-hex-1e1e1e)] px-4">
-            <span className="text-4xl text-[var(--color-hex-333333)]" aria-hidden="true">
+        <div className="border-border flex h-12 items-center gap-3 border-b px-4">
+            <span className="text-muted-foreground text-sm" aria-hidden="true">
                 ⌘
             </span>
-            <input
+            <Input
                 ref={inputRef}
                 value={query}
                 onChange={(e) => updateQuery(e.target.value)}
@@ -83,18 +86,20 @@ CommandPaletteView.SearchInput = function SearchInput() {
                 placeholder="Search missions, findings, actions…"
                 aria-label="Search command palette"
                 aria-autocomplete="list"
-                className="flex-1 border-none bg-transparent text-2xl tracking-tighter text-[var(--color-fg)] outline-none"
+                className="text-foreground flex-1 border-none bg-transparent px-0 text-xs tracking-tighter shadow-none outline-none focus-visible:ring-0"
             />
             {query && (
-                <button
+                <Button
+                    variant="ghost"
+                    size="icon-xs"
                     onClick={() => updateQuery("")}
                     aria-label="Clear search"
-                    className="cursor-pointer border-none bg-transparent text-2xl text-[var(--color-hex-333333)] transition-colors duration-100 hover:text-[var(--color-hex-666666)]"
+                    className="text-muted-foreground hover:text-muted-foreground cursor-pointer hover:bg-transparent"
                 >
                     ✕
-                </button>
+                </Button>
             )}
-            <kbd className="rounded-[2px] border border-[var(--color-hex-1e1e1e)] bg-[var(--color-hex-111111)] px-[6px] py-[2px] text-sm text-[var(--color-hex-333333)]">
+            <kbd className="border-border bg-card text-muted-foreground rounded-sm border px-1.5 py-0.5 text-sm">
                 ESC
             </kbd>
         </div>
@@ -108,21 +113,16 @@ CommandPaletteView.ResultList = function ResultList() {
         <div ref={listRef} className="max-h-[420px] overflow-y-auto">
             {filtered.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-10">
-                    <div
-                        className="mb-[8px] text-9xl text-[var(--color-hex-1e1e1e)]"
-                        aria-hidden="true"
-                    >
+                    <div className="text-muted-foreground mb-2 text-xs" aria-hidden="true">
                         ◇
                     </div>
-                    <div className="tracking-wider-1 text-lg text-[var(--color-hex-333333)]">
-                        NO RESULTS
-                    </div>
+                    <div className="text-muted-foreground text-xs tracking-widest">NO RESULTS</div>
                 </div>
             ) : (
                 cats.map((cat) => (
                     <div key={cat}>
                         {/* Category header */}
-                        <div className="text-sm-tight border-t border-[var(--color-hex-111111)] bg-[var(--color-hex-0a0a0a)] px-[16px] py-[6px] pb-[3px] tracking-widest text-[var(--color-hex-333333)]">
+                        <div className="border-border bg-background text-muted-foreground border-t px-4 py-1.5 pb-0.5 text-xs tracking-widest">
                             {cat}
                         </div>
 
@@ -151,15 +151,15 @@ CommandPaletteView.ResultList = function ResultList() {
                                         aria-selected={active}
                                         tabIndex={0}
                                         className={[
-                                            "flex cursor-pointer items-center gap-3 border-l-2 px-[16px] py-[9px] transition-colors duration-75",
+                                            "flex cursor-pointer items-center gap-3 border-l-2 px-4 py-2 transition-colors duration-75",
                                             active
-                                                ? "border-[var(--color-brand)] bg-[var(--color-hex-141414)]"
+                                                ? "border-primary bg-card"
                                                 : "border-transparent",
                                         ].join(" ")}
                                     >
                                         {/* Category badge */}
                                         <span
-                                            className="shrink-0 rounded-[2px] px-[6px] py-[1px] text-base font-semibold tracking-normal"
+                                            className="shrink-0 rounded-sm px-1.5 py-px text-base font-semibold tracking-normal"
                                             style={{
                                                 color: cc.color,
                                                 background: cc.bg,
@@ -172,24 +172,24 @@ CommandPaletteView.ResultList = function ResultList() {
                                         {/* Label + sub */}
                                         <div className="min-w-0 flex-1">
                                             <div
-                                                className="text-xl-tight overflow-hidden tracking-tighter text-ellipsis whitespace-nowrap"
+                                                className="overflow-hidden text-xs tracking-tighter text-ellipsis whitespace-nowrap"
                                                 style={{
                                                     color: active
-                                                        ? "var(--color-fg)"
-                                                        : "var(--color-hex-a0a0a0)",
+                                                        ? "var(--foreground)"
+                                                        : "var(--muted-foreground)",
                                                     fontWeight: active ? 700 : 400,
                                                 }}
                                             >
                                                 {item.label}
                                             </div>
-                                            <div className="text-base-tight mt-[1px] overflow-hidden tracking-tighter text-ellipsis whitespace-nowrap text-[var(--color-hex-444444)]">
+                                            <div className="text-muted-foreground mt-px overflow-hidden text-sm tracking-tighter text-ellipsis whitespace-nowrap">
                                                 {item.sub}
                                             </div>
                                         </div>
 
                                         {/* Keyboard shortcut */}
                                         {item.kbd && (
-                                            <kbd className="shrink-0 rounded-[2px] border border-[var(--color-hex-1e1e1e)] bg-[var(--color-hex-111111)] px-[6px] py-[2px] text-sm text-[var(--color-hex-333333)]">
+                                            <kbd className="border-border bg-card text-muted-foreground shrink-0 rounded-sm border px-1.5 py-0.5 text-sm">
                                                 {item.kbd}
                                             </kbd>
                                         )}
@@ -206,20 +206,18 @@ CommandPaletteView.ResultList = function ResultList() {
 CommandPaletteView.FooterHint = function FooterHint() {
     const { filtered } = useCommandPaletteContext();
     return (
-        <div className="flex items-center justify-between border-t border-[var(--color-hex-141414)] bg-[var(--color-hex-0a0a0a)] px-4 py-2">
+        <div className="border-border bg-background flex items-center justify-between border-t px-4 py-2">
             <div className="flex items-center gap-4">
                 {HELP_KEYS.map((h) => (
                     <div key={h.k} className="flex items-center gap-1">
-                        <kbd className="text-sm-tight rounded-[2px] border border-[var(--color-hex-1e1e1e)] bg-[var(--color-hex-111111)] px-[5px] py-[1px] text-[var(--color-hex-333333)]">
+                        <kbd className="border-border bg-card text-muted-foreground rounded-sm border px-1 py-px text-xs">
                             {h.k}
                         </kbd>
-                        <span className="text-sm-tight tracking-normal text-[var(--color-hex-333333)]">
-                            {h.v}
-                        </span>
+                        <span className="text-muted-foreground text-xs tracking-normal">{h.v}</span>
                     </div>
                 ))}
             </div>
-            <span className="text-sm-tight tracking-wide text-[var(--color-hex-222222)]">
+            <span className="text-muted-foreground text-xs tracking-wide">
                 {filtered.length} RESULTS
             </span>
         </div>
