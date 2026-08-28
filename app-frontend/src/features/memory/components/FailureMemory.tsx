@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { MetricTile } from "@/components/ui/MetricTile";
+import { KPIStrip } from "@/components/ui/KPIStrip";
 import { useServices } from "@/lib/services-context";
 import { type FailureLogEntry } from "@/types/domain-types";
 
@@ -9,42 +9,30 @@ export default function FailureMemory() {
     const failures: FailureLogEntry[] = blackboard.readFailures();
     const [selId, setSelId] = useState<string | null>(null);
     const tc: Record<string, string> = {
-        TIMEOUT: "var(--color-warning)",
-        FAILED: "var(--color-danger)",
-        ERROR: "var(--color-danger)",
+        TIMEOUT: "var(--warning)",
+        FAILED: "var(--destructive)",
+        ERROR: "var(--destructive)",
     };
     const sc: Record<string, string> = {
-        LOW: "var(--color-hex-666666)",
-        MEDIUM: "var(--color-warning)",
-        HIGH: "var(--color-danger)",
-        CRITICAL: "var(--color-danger)",
+        LOW: "var(--muted-foreground)",
+        MEDIUM: "var(--warning)",
+        HIGH: "var(--destructive)",
+        CRITICAL: "var(--destructive)",
     };
     const sel = (selId ? failures.find((f) => f.id === selId) : failures[0]) ?? null;
     return (
-        <div className="flex min-h-[0px] flex-1 overflow-hidden">
+        <div className="flex min-h-0 flex-1 overflow-hidden">
             <div className="flex-1 overflow-y-auto px-6 py-5">
-                <div className="mb-5 flex items-center gap-4">
-                    {[
-                        {
-                            l: "TOTAL FAILURES",
-                            v: "3",
-                        },
-                        {
-                            l: "CORRECTABLE",
-                            v: "1",
-                        },
-                        {
-                            l: "RULED OUT",
-                            v: "2",
-                        },
-                        {
-                            l: "LESSONS ADDED",
-                            v: "6",
-                        },
-                    ].map((m) => (
-                        <MetricTile key={m.l} label={m.l} value={m.v} variant="card" />
-                    ))}
-                </div>
+                <KPIStrip
+                    variant="card"
+                    className="mb-5"
+                    items={[
+                        { k: "TOTAL FAILURES", v: "3" },
+                        { k: "CORRECTABLE", v: "1" },
+                        { k: "RULED OUT", v: "2" },
+                        { k: "LESSONS ADDED", v: "6" },
+                    ]}
+                />
                 {failures.map((f) => (
                     <div
                         key={f.id}
@@ -56,35 +44,27 @@ export default function FailureMemory() {
                                 setSelId(f.id === selId ? null : f.id);
                             }
                         }}
-                        className="mb-[10px] cursor-pointer rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)]"
+                        className="border-border mb-2.5 cursor-pointer rounded-sm border-[1px] border-solid"
                         style={{
-                            background:
-                                sel?.id === f.id ? "var(--color-hex-0d0d0d)" : "transparent",
+                            background: sel?.id === f.id ? "var(--background)" : "transparent",
                         }}
                         onMouseEnter={(e) =>
-                            (e.currentTarget.style.background = "var(--color-hex-0a0a0a)")
+                            (e.currentTarget.style.background = "var(--background)")
                         }
                         onMouseLeave={(e) =>
                             (e.currentTarget.style.background =
-                                sel?.id === f.id ? "var(--color-hex-0d0d0d)" : "transparent")
+                                sel?.id === f.id ? "var(--background)" : "transparent")
                         }
                     >
-                        <div
-                            className="flex items-center gap-3 px-4 py-3"
-                            style={{
-                                borderBottom: "1px solid var(--color-hex-141414)",
-                            }}
-                        >
-                            <span className="text-base font-bold tracking-normal text-[var(--color-brand)]">
+                        <div className="border-border flex items-center gap-3 border-b px-4 py-3">
+                            <span className="text-primary text-base font-bold tracking-normal">
                                 {f.id}
                             </span>
-                            <span className="text-base-tight text-[var(--color-hex-555555)]">
-                                {f.action}
-                            </span>
+                            <span className="text-muted-foreground text-sm">{f.action}</span>
                             <span
                                 className="ml-auto text-sm font-semibold tracking-wide"
                                 style={{
-                                    color: tc[f.type] ?? "var(--color-hex-666666)",
+                                    color: tc[f.type] ?? "var(--muted-foreground)",
                                 }}
                             >
                                 {f.type}
@@ -97,48 +77,40 @@ export default function FailureMemory() {
                             >
                                 {f.severity}
                             </span>
-                            <span className="text-sm text-[var(--color-hex-333333)]">{f.ts}</span>
+                            <span className="text-muted-foreground text-sm">{f.ts}</span>
                         </div>
                         <div className="px-4 py-3">
-                            <div className="mb-[6px]">
-                                <span className="text-sm-tight tracking-wider-2 text-[var(--color-hex-444444)]">
+                            <div className="mb-1.5">
+                                <span className="text-muted-foreground text-xs tracking-widest">
                                     DIAGNOSIS ·{" "}
                                 </span>
-                                <span className="text-lg-tight leading-relaxed text-[var(--color-hex-555555)]">
+                                <span className="text-muted-foreground text-base leading-relaxed">
                                     {f.diagnosis}
                                 </span>
                             </div>
-                            <div className="mb-[6px]">
-                                <span className="text-sm-tight tracking-wider-2 text-[var(--color-hex-444444)]">
+                            <div className="mb-1.5">
+                                <span className="text-muted-foreground text-xs tracking-widest">
                                     RESOLUTION ·{" "}
                                 </span>
                                 <span
-                                    className="text-lg-tight leading-relaxed"
+                                    className="text-base leading-relaxed"
                                     style={{
                                         color: f.correctable
-                                            ? "var(--color-success)"
-                                            : "var(--color-hex-666666)",
+                                            ? "var(--success)"
+                                            : "var(--muted-foreground)",
                                     }}
                                 >
                                     {f.resolution}
                                 </span>
                             </div>
-                            <div
-                                className="mt-3 flex flex-col gap-1"
-                                style={{
-                                    borderTop: "1px solid var(--color-hex-141414)",
-                                    paddingTop: 10,
-                                }}
-                            >
-                                <div className="text-sm-tight tracking-wider-3 mb-[4px] text-[var(--color-hex-444444)]">
+                            <div className="border-border mt-3 flex flex-col gap-1 border-t">
+                                <div className="text-muted-foreground mb-1 text-xs tracking-widest">
                                     LESSONS LEARNED
                                 </div>
                                 {f.lessons.map((l) => (
                                     <div key={l} className="flex items-start gap-2">
-                                        <span className="mt-[1px] text-base text-[var(--color-warning)]">
-                                            ◆
-                                        </span>
-                                        <span className="text-lg-tight leading-normal text-[var(--color-hex-555555)]">
+                                        <span className="text-warning mt-px text-base">◆</span>
+                                        <span className="text-muted-foreground text-base leading-normal">
                                             {l}
                                         </span>
                                     </div>

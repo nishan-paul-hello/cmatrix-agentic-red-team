@@ -2,6 +2,13 @@
 
 import { useState } from "react";
 
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 import MemoryPage from "@/features/memory/components/MemoryPage";
 import { type MemTab } from "@/features/memory/data/mockData";
 import {
@@ -24,39 +31,35 @@ export default function MemoryBrowser({ initialTab }: { initialTab?: MemTab }) {
     const isAggregate = selected === ALL_MISSIONS_OPTION;
 
     return (
-        <div className="flex h-full min-h-[0px] flex-col">
+        <div className="flex h-full min-h-0 flex-col">
             {/* Browser header — matches TrajectoryBrowser header pattern exactly */}
-            <div
-                className="flex-shrink-0 px-6 pt-5 pb-4"
-                style={{ borderBottom: "1px solid var(--color-hex-1e1e1e)" }}
-            >
-                <div className="tracking-widest-2 mb-[3px] text-base text-[var(--color-hex-666666)]">
+            <div className="border-border flex-shrink-0 border-b px-6 pt-5 pb-4">
+                <div className="text-muted-foreground mb-0.5 text-base tracking-widest">
                     KNOWLEDGE
                 </div>
                 <div className="flex items-baseline justify-between">
-                    <h1 className="text-9xl font-bold tracking-wide text-[var(--color-fg)]">
+                    <h1 className="text-foreground text-xs font-bold tracking-wide">
                         MEMORY BROWSER
                     </h1>
                     <div className="flex items-center gap-2">
-                        <span className="tracking-wider-3 text-sm text-[var(--color-hex-444444)]">
-                            SCOPE
-                        </span>
-                        <select
-                            value={selected}
-                            onChange={(e) => setSelected(e.target.value)}
-                            className="font-inherit cursor-pointer rounded-[2px] border-[1px] border-solid border-[var(--color-hex-292929)] bg-[var(--color-hex-111111)] px-[8px] py-[4px] text-lg tracking-tight text-[var(--color-hex-a0a0a0)] outline-none"
-                        >
-                            {MISSION_OPTIONS.map((m) => (
-                                <option key={m} value={m}>
-                                    {m}
-                                </option>
-                            ))}
-                        </select>
+                        <span className="text-muted-foreground text-sm tracking-widest">SCOPE</span>
+                        <Select value={selected} onValueChange={(val) => val && setSelected(val)}>
+                            <SelectTrigger className="bg-card text-muted-foreground h-auto w-[140px] rounded-sm px-2 py-1 text-xs tracking-tight focus:ring-0">
+                                <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {MISSION_OPTIONS.map((m) => (
+                                    <SelectItem key={m} value={m}>
+                                        {m}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
                     </div>
                 </div>
                 {/* C2 cross-mission label — visible when aggregate mode is active */}
                 {isAggregate && (
-                    <div className="tracking-wider-2 mt-[6px] text-sm text-[var(--color-success)]">
+                    <div className="text-success mt-1.5 text-sm tracking-widest">
                         ◈ CROSS-MISSION AGGREGATE — skill promotion and 3-tier memory transfer
                         across all missions (§10.2 / C2)
                     </div>
@@ -64,7 +67,7 @@ export default function MemoryBrowser({ initialTab }: { initialTab?: MemTab }) {
             </div>
 
             {/* Content: pass missionId only when a specific mission is selected */}
-            <div className="min-h-[0px] flex-1 overflow-hidden">
+            <div className="min-h-0 flex-1 overflow-hidden">
                 <MemoryPage
                     key={selected}
                     initialTab={initialTab}

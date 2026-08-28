@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import ContextUtilization from "@/features/memory/components/ContextUtilization";
 import FailureMemory from "@/features/memory/components/FailureMemory";
 import SkillLibrary from "@/features/memory/components/SkillLibrary";
@@ -30,41 +31,33 @@ export default function MemoryPage({
         "CONTEXT UTILIZATION",
     ];
     return (
-        <div className="flex h-full min-h-[0px] flex-col">
-            <div
-                className="flex-shrink-0 px-6 pt-5 pb-0"
-                style={{
-                    borderBottom: "1px solid var(--color-hex-1e1e1e)",
-                }}
-            >
-                <div className="tracking-widest-2 mb-[3px] text-base text-[var(--color-hex-666666)]">
+        <div className="flex h-full min-h-0 flex-col">
+            <div className="border-border flex-shrink-0 border-b px-6 pt-5 pb-0">
+                <div className="text-muted-foreground mb-0.5 text-base tracking-widest">
                     {missionId ? `MISSION / ${missionId}` : "KNOWLEDGE"}
                 </div>
-                <h1 className="mb-[12px] text-9xl font-bold tracking-wide text-[var(--color-fg)]">
-                    MEMORY
-                </h1>
+                <h1 className="text-foreground mb-3 text-xs font-bold tracking-wide">MEMORY</h1>
                 <div className="flex overflow-x-auto">
                     {tabs.map((t) => (
-                        <button
+                        <Button
                             key={t}
+                            variant="ghost"
                             onClick={() => setActiveTab(t)}
-                            className="font-inherit text-base-tight cursor-pointer border-none bg-[transparent] px-[14px] py-[5px] tracking-wide whitespace-nowrap"
+                            className="flex h-auto items-center gap-1 rounded-none px-3.5 py-1 text-sm tracking-wide whitespace-nowrap hover:bg-transparent"
                             style={{
                                 borderBottom:
                                     t === activeTab
-                                        ? "2px solid var(--color-brand)"
+                                        ? "2px solid var(--primary)"
                                         : "2px solid transparent",
                                 color:
-                                    t === activeTab ? "var(--color-fg)" : "var(--color-hex-444444)",
+                                    t === activeTab
+                                        ? "var(--foreground)"
+                                        : "var(--muted-foreground)",
                                 marginBottom: -1,
-                                display: "flex",
-                                alignItems: "center",
-                                gap: 4,
                             }}
                         >
                             {t}
-                            {}
-                            <span className="text-sm-tight ml-[4px] rounded-[2px] bg-[var(--color-hex-1a1a1a)] px-[4px] py-[0px] text-[var(--color-hex-444444)]">
+                            <span className="bg-card text-muted-foreground ml-1 rounded-sm px-1 py-0 text-xs">
                                 {(() => {
                                     if (t === "CONTEXT UTILIZATION") {
                                         return "T1";
@@ -75,34 +68,27 @@ export default function MemoryPage({
                                     return "T2";
                                 })()}
                             </span>
-                        </button>
+                        </Button>
                     ))}
                 </div>
             </div>
             {/* G2: Tier legend row */}
-            <div
-                className="shrink-0 px-[24px] py-[6px]"
-                style={{
-                    borderBottom: "1px solid var(--color-hex-141414)",
-                    display: "flex",
-                    gap: 20,
-                }}
-            >
+            <div className="border-border shrink-0 border-b px-6 py-1.5">
                 {[
                     {
                         n: 1,
                         label: "WORKING CONTEXT",
-                        color: "var(--color-warning)",
+                        color: "var(--warning)",
                     },
                     {
                         n: 2,
                         label: "EPISODIC MEMORY",
-                        color: "var(--color-hex-666666)",
+                        color: "var(--muted-foreground)",
                     },
                     {
                         n: 3,
                         label: "SKILL LIBRARY",
-                        color: "var(--color-brand)",
+                        color: "var(--primary)",
                     },
                 ].map((t) => (
                     <div
@@ -114,12 +100,12 @@ export default function MemoryPage({
                         }}
                     >
                         <div
-                            className="h-[6px] w-[6px] rounded-[1px]"
+                            className="h-1.5 w-1.5 rounded-none"
                             style={{
                                 background: t.color,
                             }}
                         />
-                        <span className="text-sm-tight tracking-wider-2 text-[var(--color-hex-444444)]">
+                        <span className="text-muted-foreground text-xs tracking-widest">
                             TIER {t.n} — {t.label}
                         </span>
                     </div>
@@ -134,13 +120,13 @@ export default function MemoryPage({
                             marginLeft: "auto",
                         }}
                     >
-                        <span className="text-sm-tight tracking-wider-2 text-[var(--color-success)]">
+                        <span className="text-success text-xs tracking-widest">
                             ◈ CROSS-MISSION AGGREGATE
                         </span>
                     </div>
                 )}
             </div>
-            <div className="flex-1 overflow-auto bg-[var(--color-hex-0b0b0b)]">
+            <div className="bg-background flex-1 overflow-auto">
                 {activeTab === "VULNERABILITY PATTERNS" && <VulnPatterns />}
                 {activeTab === "STRATEGY BRANCHING" && <StrategyBranching />}
                 {activeTab === "TECHNICAL ACTIONS" && <TechnicalActions />}
