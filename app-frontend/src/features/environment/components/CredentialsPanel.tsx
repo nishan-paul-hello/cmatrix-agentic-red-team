@@ -35,22 +35,22 @@ export default function CredentialsPanel() {
                     borderBottom: "1px solid var(--color-hex-1e1e1e)",
                 }}
             >
-                <span className="text-[8.5px] tracking-[0.16em] text-[var(--color-hex-444444)]">
+                <span className="text-base-tight tracking-wider-2 text-[var(--color-hex-444444)]">
                     {CREDS.length} CREDENTIALS EXTRACTED · SOURCE: DB DUMP + RESPONSE BODY ·
                     OBSERVED
                 </span>
-                <span className="text-[8px] tracking-[0.14em] text-[var(--color-hex-d29922)]">
+                <span className="tracking-wider-1 text-sm text-[var(--color-warning)]">
                     4 CRACKED · 2 UNCRACKED
                 </span>
             </div>
-            <table className="w-full border-collapse text-[10.5px]">
+            <table className="text-xl-tight w-full border-collapse">
                 <thead>
                     <tr className="bg-[var(--color-hex-0f0f0f)]">
                         {["USERNAME", "PASSWORD / HASH", "SOURCE", "SCOPE", "STATUS", ""].map(
                             (h) => (
                                 <th
                                     key={h}
-                                    className="px-[16px] py-[6px] text-left text-[8px] font-semibold tracking-[0.18em] whitespace-nowrap text-[var(--color-hex-444444)]"
+                                    className="tracking-wider-3 px-[16px] py-[6px] text-left text-sm font-semibold whitespace-nowrap text-[var(--color-hex-444444)]"
                                     style={{
                                         borderBottom: "1px solid var(--color-hex-1a1a1a)",
                                     }}
@@ -78,38 +78,38 @@ export default function CredentialsPanel() {
                                     (e.currentTarget.style.background = "transparent")
                                 }
                             >
-                                <td className="px-[16px] py-[8px] font-semibold tracking-[0.06em] text-[var(--color-hex-a0a0a0)]">
+                                <td className="tracking-tight-1 px-[16px] py-[8px] font-semibold text-[var(--color-hex-a0a0a0)]">
                                     {row.username}
                                 </td>
                                 <td className="px-[16px] py-[8px]">
                                     {isRev && cracked ? (
-                                        <span className="tracking-[0.06em] text-[var(--color-hex-e31b23)]">
+                                        <span className="tracking-tight-1 text-[var(--color-brand)]">
                                             {row.plain}
                                         </span>
                                     ) : (
-                                        <span className="font-inherit tracking-[0.12em] text-[var(--color-hex-333333)]">
+                                        <span className="font-inherit tracking-wide text-[var(--color-hex-333333)]">
                                             {"●".repeat(12)}
                                         </span>
                                     )}
                                     {!cracked && (
-                                        <span className="ml-[8px] text-[9px] tracking-[0.06em] text-[var(--color-hex-333333)]">
+                                        <span className="tracking-tight-1 ml-[8px] text-base text-[var(--color-hex-333333)]">
                                             {row.hash.slice(0, 16)}…
                                         </span>
                                     )}
                                 </td>
-                                <td className="px-[16px] py-[8px] text-[9px] text-[var(--color-hex-444444)]">
+                                <td className="px-[16px] py-[8px] text-base text-[var(--color-hex-444444)]">
                                     {row.source}
                                 </td>
                                 <td className="px-[16px] py-[8px]">
                                     <span
-                                        className="text-[9px] tracking-[0.12em]"
+                                        className="text-base tracking-wide"
                                         style={{
                                             color: (() => {
                                                 if (row.scope === "ADMIN") {
-                                                    return "var(--color-hex-e31b23)";
+                                                    return "var(--color-brand)";
                                                 }
                                                 if (row.scope === "SERVICE") {
-                                                    return "var(--color-hex-d29922)";
+                                                    return "var(--color-warning)";
                                                 }
                                                 return "var(--color-hex-666666)";
                                             })(),
@@ -120,10 +120,10 @@ export default function CredentialsPanel() {
                                 </td>
                                 <td className="px-[16px] py-[8px]">
                                     <span
-                                        className="text-[9px] font-semibold tracking-[0.12em]"
+                                        className="text-base font-semibold tracking-wide"
                                         style={{
                                             color: cracked
-                                                ? "var(--color-hex-3fb950)"
+                                                ? "var(--color-success)"
                                                 : "var(--color-hex-555555)",
                                         }}
                                     >
@@ -134,7 +134,7 @@ export default function CredentialsPanel() {
                                     {cracked && (
                                         <button
                                             onClick={() => toggle(row.username)}
-                                            className="font-inherit cursor-pointer rounded-[2px] border-[1px] border-solid border-[var(--color-hex-292929)] bg-[var(--color-hex-111111)] px-[8px] py-[2px] text-[8.5px] tracking-[0.12em] text-[var(--color-hex-666666)] hover:border-[var(--color-hex-e31b23)]"
+                                            className="font-inherit text-base-tight cursor-pointer rounded-[2px] border-[1px] border-solid border-[var(--color-hex-292929)] bg-[var(--color-hex-111111)] px-[8px] py-[2px] tracking-wide text-[var(--color-hex-666666)] hover:border-[var(--color-brand)]"
                                         >
                                             {isRev ? "HIDE" : "REVEAL"}
                                         </button>

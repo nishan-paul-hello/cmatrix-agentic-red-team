@@ -31,14 +31,14 @@ function EnvironmentalLayerInner() {
                     borderBottom: "1px solid var(--color-hex-1e1e1e)",
                 }}
             >
-                <div className="mb-[3px] text-[9px] tracking-[0.22em] text-[var(--color-hex-666666)]">
+                <div className="tracking-widest-2 mb-[3px] text-base text-[var(--color-hex-666666)]">
                     ENVIRONMENT
                 </div>
                 <div className="mb-3 flex items-baseline gap-3">
-                    <h1 className="text-[20px] font-bold tracking-[0.12em] text-[var(--color-hex-f2f2f2)]">
+                    <h1 className="text-9xl font-bold tracking-wide text-[var(--color-fg)]">
                         ENVIRONMENTAL LAYER
                     </h1>
-                    <span className="rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1a4a20)] bg-[var(--color-hex-0a1a10)] px-[7px] py-[1px] text-[9px] tracking-[0.16em] text-[var(--color-hex-3fb950)]">
+                    <span className="tracking-wider-2 rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1a4a20)] bg-[var(--color-hex-0a1a10)] px-[7px] py-[1px] text-base text-[var(--color-success)]">
                         CONFIRMED
                     </span>
                 </div>
@@ -48,15 +48,15 @@ function EnvironmentalLayerInner() {
                         <button
                             key={t}
                             onClick={() => setActiveTab(t)}
-                            className={`font-inherit relative cursor-pointer bg-transparent px-[24px] py-[12px] text-[9.5px] font-bold tracking-[0.2em] transition-colors duration-150 ${
+                            className={`font-inherit text-lg-tight relative cursor-pointer bg-transparent px-[24px] py-[12px] font-bold tracking-widest transition-colors duration-150 ${
                                 activeTab === t
-                                    ? "text-[var(--color-hex-f2f2f2)]"
+                                    ? "text-[var(--color-fg)]"
                                     : "text-[var(--color-hex-555555)] hover:text-[var(--color-hex-a0a0a0)]"
                             }`}
                         >
                             {t}
                             {activeTab === t && (
-                                <div className="absolute bottom-0 left-0 h-[2px] w-full bg-[var(--color-hex-e31b23)]" />
+                                <div className="absolute bottom-0 left-0 h-[2px] w-full bg-[var(--color-brand)]" />
                             )}
                         </button>
                     ))}

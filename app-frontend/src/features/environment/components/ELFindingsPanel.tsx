@@ -23,14 +23,14 @@ export default function ELFindingsPanel() {
                     borderBottom: "1px solid var(--color-hex-141414)",
                 }}
             >
-                <span className="text-[8px] tracking-[0.18em] text-[var(--color-hex-444444)]">
+                <span className="tracking-wider-3 text-sm text-[var(--color-hex-444444)]">
                     EL FINDINGS CROSS-REFERENCE
                 </span>
-                <span className="ml-[8px] text-[8px] text-[var(--color-hex-555555)]">
+                <span className="ml-[8px] text-sm text-[var(--color-hex-555555)]">
                     confirmed findings linked to EL evidence artifacts
                 </span>
             </div>
-            <table className="w-full border-collapse text-[10.5px]">
+            <table className="text-xl-tight w-full border-collapse">
                 <thead>
                     <tr className="sticky top-0 bg-[var(--color-hex-0f0f0f)]">
                         {[
@@ -43,7 +43,7 @@ export default function ELFindingsPanel() {
                         ].map((h) => (
                             <th
                                 key={h}
-                                className="px-[12px] py-[6px] text-left text-[8px] font-semibold tracking-[0.16em] whitespace-nowrap text-[var(--color-hex-444444)]"
+                                className="tracking-wider-2 px-[12px] py-[6px] text-left text-sm font-semibold whitespace-nowrap text-[var(--color-hex-444444)]"
                                 style={{
                                     borderBottom: "1px solid var(--color-hex-1a1a1a)",
                                 }}
@@ -69,19 +69,19 @@ export default function ELFindingsPanel() {
                                     i % 2 ? "var(--color-hex-0b0b0b)" : "transparent")
                             }
                         >
-                            <td className="px-[12px] py-[7px] text-[9px] font-bold text-[var(--color-hex-e31b23)]">
+                            <td className="px-[12px] py-[7px] text-base font-bold text-[var(--color-brand)]">
                                 {f.id}
                             </td>
                             <td className="px-[12px] py-[7px] text-[var(--color-hex-a0a0a0)]">
                                 {f.type}
                             </td>
-                            <td className="px-[12px] py-[7px] text-[9px] text-[var(--color-hex-555555)]">
+                            <td className="px-[12px] py-[7px] text-base text-[var(--color-hex-555555)]">
                                 {f.target}
                             </td>
                             <td className="px-[12px] py-[7px] text-[var(--color-hex-666666)]">
                                 {f.eord}/5
                             </td>
-                            <td className="px-[12px] py-[7px] text-[9px] font-bold text-[var(--color-hex-e31b23)]">
+                            <td className="px-[12px] py-[7px] text-base font-bold text-[var(--color-brand)]">
                                 {f.vdgNode}
                             </td>
                             <td className="px-[12px] py-[7px]">
@@ -89,7 +89,7 @@ export default function ELFindingsPanel() {
                                     {f.evidence.map((e: string) => (
                                         <span
                                             key={e}
-                                            className="rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)] bg-[var(--color-hex-111111)] px-[5px] py-[1px] text-[7.5px] tracking-[0.08em] text-[var(--color-hex-444444)]"
+                                            className="text-sm-tight rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)] bg-[var(--color-hex-111111)] px-[5px] py-[1px] tracking-tight text-[var(--color-hex-444444)]"
                                         >
                                             {e}
                                         </span>

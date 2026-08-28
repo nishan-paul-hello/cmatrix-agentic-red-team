@@ -23,14 +23,14 @@ export default function CVECandidatesPanel() {
                     borderBottom: "1px solid var(--color-hex-141414)",
                 }}
             >
-                <span className="text-[8px] tracking-[0.18em] text-[var(--color-hex-444444)]">
+                <span className="tracking-wider-3 text-sm text-[var(--color-hex-444444)]">
                     VDG HYPOTHESIS CANDIDATES
                 </span>
-                <span className="ml-auto text-[8px] tracking-[0.12em] text-[var(--color-hex-d29922)]">
+                <span className="ml-auto text-sm tracking-wide text-[var(--color-warning)]">
                     {CVE_CANDIDATES.filter((c) => c.poc).length} WITH PoC
                 </span>
             </div>
-            <table className="w-full border-collapse text-[10.5px]">
+            <table className="text-xl-tight w-full border-collapse">
                 <thead>
                     <tr className="sticky top-0 bg-[var(--color-hex-0f0f0f)]">
                         {[
@@ -44,7 +44,7 @@ export default function CVECandidatesPanel() {
                         ].map((h) => (
                             <th
                                 key={h}
-                                className="px-[12px] py-[6px] text-left text-[8px] font-semibold tracking-[0.16em] whitespace-nowrap text-[var(--color-hex-444444)]"
+                                className="tracking-wider-2 px-[12px] py-[6px] text-left text-sm font-semibold whitespace-nowrap text-[var(--color-hex-444444)]"
                                 style={{
                                     borderBottom: "1px solid var(--color-hex-1a1a1a)",
                                 }}
@@ -70,25 +70,25 @@ export default function CVECandidatesPanel() {
                                     (e.currentTarget.style.background = "transparent")
                                 }
                             >
-                                <td className="px-[12px] py-[7px] text-[9px] font-bold tracking-[0.06em] text-[var(--color-hex-e31b23)]">
+                                <td className="tracking-tight-1 px-[12px] py-[7px] text-base font-bold text-[var(--color-brand)]">
                                     {c.id}
                                 </td>
                                 <td className="px-[12px] py-[7px] text-[var(--color-hex-a0a0a0)]">
                                     {c.tech}
                                 </td>
-                                <td className="px-[12px] py-[7px] text-[9px] text-[var(--color-hex-666666)]">
+                                <td className="px-[12px] py-[7px] text-base text-[var(--color-hex-666666)]">
                                     {c.class}
                                 </td>
                                 <td className="px-[12px] py-[7px]">
                                     <span
-                                        className="text-[10px] font-bold"
+                                        className="text-lg font-bold"
                                         style={{
                                             color: (() => {
                                                 if (c.epss > 0.5) {
-                                                    return "var(--color-hex-ff2a32)";
+                                                    return "var(--color-danger)";
                                                 }
                                                 if (c.epss > 0.3) {
-                                                    return "var(--color-hex-d29922)";
+                                                    return "var(--color-warning)";
                                                 }
                                                 return "var(--color-hex-555555)";
                                             })(),
@@ -99,10 +99,10 @@ export default function CVECandidatesPanel() {
                                 </td>
                                 <td className="px-[12px] py-[7px]">
                                     <span
-                                        className="text-[8.5px] tracking-[0.12em]"
+                                        className="text-base-tight tracking-wide"
                                         style={{
                                             color: c.poc
-                                                ? "var(--color-hex-3fb950)"
+                                                ? "var(--color-success)"
                                                 : "var(--color-hex-333333)",
                                         }}
                                     >
@@ -110,11 +110,11 @@ export default function CVECandidatesPanel() {
                                     </span>
                                 </td>
                                 <td
-                                    className="px-[12px] py-[7px] text-[9px]"
+                                    className="px-[12px] py-[7px] text-base"
                                     style={{
                                         color:
                                             c.node !== "—"
-                                                ? "var(--color-hex-e31b23)"
+                                                ? "var(--color-brand)"
                                                 : "var(--color-hex-333333)",
                                         fontWeight: c.node !== "—" ? 700 : 400,
                                     }}

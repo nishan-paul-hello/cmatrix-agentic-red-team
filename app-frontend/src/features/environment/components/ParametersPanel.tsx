@@ -23,14 +23,14 @@ export default function ParametersPanel() {
                     borderBottom: "1px solid var(--color-hex-141414)",
                 }}
             >
-                <span className="text-[8px] tracking-[0.18em] text-[var(--color-hex-444444)]">
+                <span className="tracking-wider-3 text-sm text-[var(--color-hex-444444)]">
                     DISCOVERED PARAMETERS
                 </span>
-                <span className="ml-auto text-[8px] tracking-[0.12em] text-[var(--color-hex-e31b23)]">
+                <span className="ml-auto text-sm tracking-wide text-[var(--color-brand)]">
                     {PARAMS.filter((p) => p.injectable).length} INJECTION ELIGIBLE
                 </span>
             </div>
-            <table className="w-full border-collapse text-[10.5px]">
+            <table className="text-xl-tight w-full border-collapse">
                 <thead>
                     <tr className="sticky top-0 bg-[var(--color-hex-0f0f0f)]">
                         {[
@@ -44,7 +44,7 @@ export default function ParametersPanel() {
                         ].map((h) => (
                             <th
                                 key={h}
-                                className="px-[12px] py-[6px] text-left text-[8px] font-semibold tracking-[0.16em] whitespace-nowrap text-[var(--color-hex-444444)]"
+                                className="tracking-wider-2 px-[12px] py-[6px] text-left text-sm font-semibold whitespace-nowrap text-[var(--color-hex-444444)]"
                                 style={{
                                     borderBottom: "1px solid var(--color-hex-1a1a1a)",
                                 }}
@@ -70,34 +70,34 @@ export default function ParametersPanel() {
                                     i % 2 ? "var(--color-hex-0b0b0b)" : "transparent")
                             }
                         >
-                            <td className="px-[12px] py-[7px] text-[9px] font-bold text-[var(--color-hex-e31b23)]">
+                            <td className="px-[12px] py-[7px] text-base font-bold text-[var(--color-brand)]">
                                 {p.id}
                             </td>
-                            <td className="px-[12px] py-[7px] text-[9px] text-[var(--color-hex-555555)]">
+                            <td className="px-[12px] py-[7px] text-base text-[var(--color-hex-555555)]">
                                 {p.endpoint}
                             </td>
                             <td className="px-[12px] py-[7px] font-semibold text-[var(--color-hex-a0a0a0)]">
                                 {p.param}
                             </td>
-                            <td className="px-[12px] py-[7px] text-[9px] text-[var(--color-hex-666666)]">
+                            <td className="px-[12px] py-[7px] text-base text-[var(--color-hex-666666)]">
                                 {p.type}
                             </td>
-                            <td className="px-[12px] py-[7px] text-[9px] text-[var(--color-hex-555555)]">
+                            <td className="px-[12px] py-[7px] text-base text-[var(--color-hex-555555)]">
                                 {p.source}
                             </td>
                             <td className="px-[12px] py-[7px]">
                                 <span
-                                    className="text-[8.5px] font-semibold tracking-[0.12em]"
+                                    className="text-base-tight font-semibold tracking-wide"
                                     style={{
                                         color: p.injectable
-                                            ? "var(--color-hex-ff2a32)"
+                                            ? "var(--color-danger)"
                                             : "var(--color-hex-333333)",
                                     }}
                                 >
                                     {p.injectable ? "YES" : "—"}
                                 </span>
                             </td>
-                            <td className="px-[12px] py-[7px] text-[9px] text-[var(--color-hex-444444)]">
+                            <td className="px-[12px] py-[7px] text-base text-[var(--color-hex-444444)]">
                                 {p.lastVal}
                             </td>
                         </tr>

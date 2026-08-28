@@ -18,10 +18,10 @@ export function HostTopologyDiagram({
             }}
         >
             <div className="mb-6 flex items-center gap-3">
-                <span className="rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1a4a2044)] bg-[var(--color-hex-0a1a10)] px-[8px] py-[2px] text-[8.5px] tracking-[0.16em] text-[var(--color-hex-3fb950)]">
+                <span className="text-base-tight tracking-wider-2 rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1a4a2044)] bg-[var(--color-hex-0a1a10)] px-[8px] py-[2px] text-[var(--color-success)]">
                     CONFIRMED TOPOLOGY
                 </span>
-                <span className="text-[8px] tracking-[0.14em] text-[var(--color-hex-444444)]">
+                <span className="tracking-wider-1 text-sm text-[var(--color-hex-444444)]">
                     SOURCE: NMAP + CREDENTIAL REUSE · E_ord ≥ 3
                 </span>
             </div>
@@ -45,7 +45,7 @@ export function HostTopologyDiagram({
                                     background: isSel
                                         ? "var(--color-hex-120608)"
                                         : "var(--color-hex-0d0d0d)",
-                                    border: `1px solid ${isSel ? "var(--color-hex-e31b23)" : "var(--color-hex-292929)"}`,
+                                    border: `1px solid ${isSel ? "var(--color-brand)" : "var(--color-hex-292929)"}`,
                                     transition: "border-color 0.1s, background 0.1s",
                                 }}
                                 onMouseEnter={(e) => {
@@ -75,17 +75,17 @@ export function HostTopologyDiagram({
                                     <div
                                         className="h-[10px] w-[10px] rounded-[2px]"
                                         style={{
-                                            border: `1px solid ${isSel ? "var(--color-hex-e31b23)" : "var(--color-hex-333333)"}`,
+                                            border: `1px solid ${isSel ? "var(--color-brand)" : "var(--color-hex-333333)"}`,
                                             background: isSel
-                                                ? "var(--color-hex-e31b23)"
+                                                ? "var(--color-brand)"
                                                 : "var(--color-hex-151515)",
                                         }}
                                     />
                                     <span
-                                        className="text-[8px] font-bold tracking-[0.1em]"
+                                        className="text-sm font-bold tracking-normal"
                                         style={{
                                             color: isSel
-                                                ? "var(--color-hex-e31b23)"
+                                                ? "var(--color-brand)"
                                                 : "var(--color-hex-444444)",
                                         }}
                                     >
@@ -97,20 +97,20 @@ export function HostTopologyDiagram({
                                 <div className="flex-1">
                                     <div className="mb-1 flex items-center gap-2">
                                         <span
-                                            className="text-[11px] font-bold tracking-[0.08em]"
+                                            className="text-xl font-bold tracking-tight"
                                             style={{
                                                 color: isSel
-                                                    ? "var(--color-hex-f2f2f2)"
+                                                    ? "var(--color-fg)"
                                                     : "var(--color-hex-888888)",
                                             }}
                                         >
                                             {host.ip}
                                         </span>
-                                        <span className="text-[9px] text-[var(--color-hex-555555)]">
+                                        <span className="text-base text-[var(--color-hex-555555)]">
                                             ·
                                         </span>
                                         <span
-                                            className="text-[10px] tracking-[0.04em]"
+                                            className="text-lg tracking-tighter"
                                             style={{
                                                 color: isSel
                                                     ? "var(--color-hex-a0a0a0)"
@@ -120,14 +120,14 @@ export function HostTopologyDiagram({
                                             {host.hostname}
                                         </span>
                                     </div>
-                                    <div className="mb-[8px] text-[9px] tracking-[0.14em] text-[var(--color-hex-444444)]">
+                                    <div className="tracking-wider-1 mb-[8px] text-base text-[var(--color-hex-444444)]">
                                         {host.role}
                                     </div>
                                     <div className="flex flex-wrap gap-1">
                                         {host.services.map((s: string) => (
                                             <span
                                                 key={s}
-                                                className="rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)] bg-[var(--color-hex-111111)] px-[5px] py-[1px] text-[8px] tracking-[0.08em] text-[var(--color-hex-555555)]"
+                                                className="rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)] bg-[var(--color-hex-111111)] px-[5px] py-[1px] text-sm tracking-tight text-[var(--color-hex-555555)]"
                                             >
                                                 {s}
                                             </span>
@@ -138,7 +138,7 @@ export function HostTopologyDiagram({
                                 {/* Right: status + eord */}
                                 <div className="flex flex-shrink-0 flex-col items-end gap-2">
                                     <span
-                                        className="rounded-[2px] px-[6px] py-[1px] text-[8px] font-semibold tracking-[0.14em]"
+                                        className="tracking-wider-1 rounded-[2px] px-[6px] py-[1px] text-sm font-semibold"
                                         style={{
                                             color: sb.color,
                                             background: sb.bg,
@@ -148,11 +148,11 @@ export function HostTopologyDiagram({
                                         {host.status}
                                     </span>
                                     <div className="flex items-center gap-1">
-                                        <span className="text-[7.5px] tracking-[0.1em] text-[var(--color-hex-444444)]">
+                                        <span className="text-sm-tight tracking-normal text-[var(--color-hex-444444)]">
                                             E_ord
                                         </span>
                                         <span
-                                            className="text-[10px] font-bold"
+                                            className="text-lg font-bold"
                                             style={{
                                                 color: EORD_COLOR[host.eord],
                                             }}
@@ -160,7 +160,7 @@ export function HostTopologyDiagram({
                                             {host.eord}/5
                                         </span>
                                     </div>
-                                    <span className="text-[8px] tracking-[0.1em] text-[var(--color-hex-333333)]">
+                                    <span className="text-sm tracking-normal text-[var(--color-hex-333333)]">
                                         {host.os}
                                     </span>
                                 </div>
@@ -185,17 +185,17 @@ export function HostTopologyDiagram({
                                         }}
                                     >
                                         <div className="flex items-center gap-2">
-                                            <span className="text-[8px] tracking-[0.1em] text-[var(--color-hex-e31b23)]">
+                                            <span className="text-sm tracking-normal text-[var(--color-brand)]">
                                                 →
                                             </span>
-                                            <span className="text-[9px] font-semibold tracking-[0.1em] text-[var(--color-hex-555555)]">
+                                            <span className="text-base font-semibold tracking-normal text-[var(--color-hex-555555)]">
                                                 {edge.label.toUpperCase()}
                                             </span>
-                                            <span className="text-[8px] tracking-[0.08em] text-[var(--color-hex-333333)]">
+                                            <span className="text-sm tracking-tight text-[var(--color-hex-333333)]">
                                                 {edge.detail}
                                             </span>
                                             <span
-                                                className="text-[7.5px] tracking-[0.1em]"
+                                                className="text-sm-tight tracking-normal"
                                                 style={{
                                                     color: EORD_COLOR[edge.eord],
                                                 }}
@@ -213,8 +213,8 @@ export function HostTopologyDiagram({
 
             {/* Caption */}
             <div className="mt-8 flex max-w-[480px] items-start gap-2 rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)] bg-[var(--color-hex-0b0b0b)] px-[14px] py-[10px]">
-                <span className="shrink-0 text-[10px] text-[var(--color-hex-e31b23)]">ⓘ</span>
-                <span className="text-[9px] leading-[1.7] tracking-[0.06em] text-[var(--color-hex-444444)]">
+                <span className="shrink-0 text-lg text-[var(--color-brand)]">ⓘ</span>
+                <span className="tracking-tight-1 text-base leading-relaxed text-[var(--color-hex-444444)]">
                     Topology represents{" "}
                     <strong className="text-[var(--color-hex-666666)]">confirmed facts</strong> from
                     the Environmental Layer only. Dashed edges are inferred from network scan data

@@ -25,14 +25,14 @@ export default function FailuresPanel() {
                         borderBottom: "1px solid var(--color-hex-141414)",
                     }}
                 >
-                    <span className="text-[8px] tracking-[0.18em] text-[var(--color-hex-444444)]">
+                    <span className="tracking-wider-3 text-sm text-[var(--color-hex-444444)]">
                         SPECIALIST FAILURE LOG
                     </span>
-                    <span className="ml-auto text-[8px] tracking-[0.12em] text-[var(--color-hex-d29922)]">
+                    <span className="ml-auto text-sm tracking-wide text-[var(--color-warning)]">
                         {FAILURE_LOG.filter((f) => !f.resolved).length} UNRESOLVED
                     </span>
                 </div>
-                <table className="w-full border-collapse text-[10.5px]">
+                <table className="text-xl-tight w-full border-collapse">
                     <thead>
                         <tr className="sticky top-0 bg-[var(--color-hex-0f0f0f)]">
                             {[
@@ -47,7 +47,7 @@ export default function FailuresPanel() {
                             ].map((h) => (
                                 <th
                                     key={h}
-                                    className="px-[12px] py-[6px] text-left text-[8px] font-semibold tracking-[0.16em] whitespace-nowrap text-[var(--color-hex-444444)]"
+                                    className="tracking-wider-2 px-[12px] py-[6px] text-left text-sm font-semibold whitespace-nowrap text-[var(--color-hex-444444)]"
                                     style={{
                                         borderBottom: "1px solid var(--color-hex-1a1a1a)",
                                     }}
@@ -90,22 +90,22 @@ export default function FailuresPanel() {
                                     })())
                                 }
                             >
-                                <td className="px-[12px] py-[7px] text-[9px] font-bold text-[var(--color-hex-e31b23)]">
+                                <td className="px-[12px] py-[7px] text-base font-bold text-[var(--color-brand)]">
                                     {f.id}
                                 </td>
-                                <td className="px-[12px] py-[7px] text-[9px] text-[var(--color-hex-444444)]">
+                                <td className="px-[12px] py-[7px] text-base text-[var(--color-hex-444444)]">
                                     {f.ts}
                                 </td>
-                                <td className="px-[12px] py-[7px] text-[9px] font-semibold text-[var(--color-hex-a0a0a0)]">
+                                <td className="px-[12px] py-[7px] text-base font-semibold text-[var(--color-hex-a0a0a0)]">
                                     {f.spec}
                                 </td>
-                                <td className="px-[12px] py-[7px] text-[9px] text-[var(--color-hex-666666)]">
+                                <td className="px-[12px] py-[7px] text-base text-[var(--color-hex-666666)]">
                                     {f.action}
                                 </td>
-                                <td className="px-[12px] py-[7px] text-[9px] text-[var(--color-hex-555555)]">
+                                <td className="px-[12px] py-[7px] text-base text-[var(--color-hex-555555)]">
                                     {f.target}
                                 </td>
-                                <td className="px-[12px] py-[7px] text-[9px] text-[var(--color-hex-666666)]">
+                                <td className="px-[12px] py-[7px] text-base text-[var(--color-hex-666666)]">
                                     {f.error}
                                 </td>
                                 <td className="px-[12px] py-[7px] text-[var(--color-hex-555555)]">
@@ -113,11 +113,11 @@ export default function FailuresPanel() {
                                 </td>
                                 <td className="px-[12px] py-[7px]">
                                     <span
-                                        className="text-[8.5px] font-semibold tracking-[0.12em]"
+                                        className="text-base-tight font-semibold tracking-wide"
                                         style={{
                                             color: f.resolved
-                                                ? "var(--color-hex-3fb950)"
-                                                : "var(--color-hex-d29922)",
+                                                ? "var(--color-success)"
+                                                : "var(--color-warning)",
                                         }}
                                     >
                                         {f.resolved ? "YES" : "NO"}
@@ -130,7 +130,7 @@ export default function FailuresPanel() {
             </div>
             {selId && (
                 <div
-                    className="w-[280px] shrink-0 overflow-y-auto bg-[var(--color-hex-0a0a0a)] px-[14px] py-[16px]"
+                    className="w-panel-sm shrink-0 overflow-y-auto bg-[var(--color-hex-0a0a0a)] px-[14px] py-[16px]"
                     style={{
                         borderLeft: "1px solid var(--color-hex-1e1e1e)",
                     }}
@@ -142,7 +142,7 @@ export default function FailuresPanel() {
                         }
                         return (
                             <>
-                                <div className="mb-[12px] text-[8px] tracking-[0.2em] text-[var(--color-hex-444444)]">
+                                <div className="mb-[12px] text-sm tracking-widest text-[var(--color-hex-444444)]">
                                     FAILURE DETAIL
                                 </div>
                                 {[
@@ -176,18 +176,18 @@ export default function FailuresPanel() {
                                     },
                                 ].map((r) => (
                                     <div key={r.k} className="mb-[8px]">
-                                        <div className="mb-[2px] text-[7.5px] tracking-[0.16em] text-[var(--color-hex-444444)]">
+                                        <div className="text-sm-tight tracking-wider-2 mb-[2px] text-[var(--color-hex-444444)]">
                                             {r.k}
                                         </div>
                                         <div
-                                            className="text-[10px]"
+                                            className="text-lg"
                                             style={{
                                                 color: (() => {
                                                     if (r.k === "RESOLVED" && f.resolved) {
-                                                        return "var(--color-hex-3fb950)";
+                                                        return "var(--color-success)";
                                                     }
                                                     if (r.k === "RESOLVED") {
-                                                        return "var(--color-hex-d29922)";
+                                                        return "var(--color-warning)";
                                                     }
                                                     return "var(--color-hex-888888)";
                                                 })(),
@@ -197,7 +197,7 @@ export default function FailuresPanel() {
                                         </div>
                                     </div>
                                 ))}
-                                <div className="mt-[12px] rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)] bg-[var(--color-hex-111111)] px-[10px] py-[8px] text-[9px] leading-[1.7] text-[var(--color-hex-ff2a32)]">
+                                <div className="mt-[12px] rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)] bg-[var(--color-hex-111111)] px-[10px] py-[8px] text-base leading-relaxed text-[var(--color-danger)]">
                                     {f.error}
                                 </div>
                             </>

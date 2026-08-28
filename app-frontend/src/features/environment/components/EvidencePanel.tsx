@@ -25,21 +25,21 @@ export default function EvidencePanel() {
                         borderBottom: "1px solid var(--color-hex-141414)",
                     }}
                 >
-                    <span className="text-[8px] tracking-[0.18em] text-[var(--color-hex-444444)]">
+                    <span className="tracking-wider-3 text-sm text-[var(--color-hex-444444)]">
                         RAW EVIDENCE ARTIFACTS
                     </span>
-                    <span className="ml-auto text-[8px] text-[var(--color-hex-555555)]">
+                    <span className="ml-auto text-sm text-[var(--color-hex-555555)]">
                         {EVIDENCE_ARTIFACTS.length} ARTIFACTS
                     </span>
                 </div>
-                <table className="w-full border-collapse text-[10.5px]">
+                <table className="text-xl-tight w-full border-collapse">
                     <thead>
                         <tr className="sticky top-0 bg-[var(--color-hex-0f0f0f)]">
                             {["ARTIFACT ID", "TYPE", "FINDING", "TIMESTAMP", "SIZE", "NOTE"].map(
                                 (h) => (
                                     <th
                                         key={h}
-                                        className="px-[12px] py-[6px] text-left text-[8px] font-semibold tracking-[0.16em] whitespace-nowrap text-[var(--color-hex-444444)]"
+                                        className="tracking-wider-2 px-[12px] py-[6px] text-left text-sm font-semibold whitespace-nowrap text-[var(--color-hex-444444)]"
                                         style={{
                                             borderBottom: "1px solid var(--color-hex-1a1a1a)",
                                         }}
@@ -83,19 +83,19 @@ export default function EvidencePanel() {
                                     })())
                                 }
                             >
-                                <td className="px-[12px] py-[7px] text-[9px] font-bold text-[var(--color-hex-e31b23)]">
+                                <td className="px-[12px] py-[7px] text-base font-bold text-[var(--color-brand)]">
                                     {a.id}
                                 </td>
-                                <td className="px-[12px] py-[7px] text-[9px] text-[var(--color-hex-666666)]">
+                                <td className="px-[12px] py-[7px] text-base text-[var(--color-hex-666666)]">
                                     {a.type}
                                 </td>
-                                <td className="px-[12px] py-[7px] text-[9px] font-bold text-[var(--color-hex-e31b23)]">
+                                <td className="px-[12px] py-[7px] text-base font-bold text-[var(--color-brand)]">
                                     {a.finding}
                                 </td>
-                                <td className="px-[12px] py-[7px] text-[9px] text-[var(--color-hex-444444)]">
+                                <td className="px-[12px] py-[7px] text-base text-[var(--color-hex-444444)]">
                                     {a.ts}
                                 </td>
-                                <td className="px-[12px] py-[7px] text-right text-[9px] text-[var(--color-hex-444444)]">
+                                <td className="px-[12px] py-[7px] text-right text-base text-[var(--color-hex-444444)]">
                                     {a.size}
                                 </td>
                                 <td className="px-[12px] py-[7px] text-[var(--color-hex-555555)]">
@@ -108,7 +108,7 @@ export default function EvidencePanel() {
             </div>
             {sel && (
                 <div
-                    className="w-[280px] shrink-0 overflow-y-auto bg-[var(--color-hex-0a0a0a)] px-[14px] py-[16px]"
+                    className="w-panel-sm shrink-0 overflow-y-auto bg-[var(--color-hex-0a0a0a)] px-[14px] py-[16px]"
                     style={{
                         borderLeft: "1px solid var(--color-hex-1e1e1e)",
                     }}
@@ -120,7 +120,7 @@ export default function EvidencePanel() {
                         }
                         return (
                             <>
-                                <div className="mb-[12px] text-[8px] tracking-[0.2em] text-[var(--color-hex-444444)]">
+                                <div className="mb-[12px] text-sm tracking-widest text-[var(--color-hex-444444)]">
                                     ARTIFACT DETAIL
                                 </div>
                                 {[
@@ -146,15 +146,15 @@ export default function EvidencePanel() {
                                     },
                                 ].map((r) => (
                                     <div key={r.k} className="mb-[8px]">
-                                        <div className="mb-[2px] text-[7.5px] tracking-[0.16em] text-[var(--color-hex-444444)]">
+                                        <div className="text-sm-tight tracking-wider-2 mb-[2px] text-[var(--color-hex-444444)]">
                                             {r.k}
                                         </div>
-                                        <div className="text-[10px] text-[var(--color-hex-888888)]">
+                                        <div className="text-lg text-[var(--color-hex-888888)]">
                                             {r.v}
                                         </div>
                                     </div>
                                 ))}
-                                <div className="mt-[12px] rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)] bg-[var(--color-hex-111111)] px-[10px] py-[8px] text-[9px] leading-[1.8] text-[var(--color-hex-555555)]">
+                                <div className="mt-[12px] rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)] bg-[var(--color-hex-111111)] px-[10px] py-[8px] text-base leading-loose text-[var(--color-hex-555555)]">
                                     {a.note}
                                 </div>
                             </>

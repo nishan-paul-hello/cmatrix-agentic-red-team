@@ -24,20 +24,20 @@ export default function ServicesPanel() {
                     borderBottom: "1px solid var(--color-hex-1e1e1e)",
                 }}
             >
-                <span className="text-[8.5px] tracking-[0.16em] text-[var(--color-hex-444444)]">
+                <span className="text-base-tight tracking-wider-2 text-[var(--color-hex-444444)]">
                     {SERVICES.length} SERVICES DETECTED · SOURCE: NMAP 7.94 · DISCOVERED
                 </span>
-                <span className="text-[8px] tracking-[0.14em] text-[var(--color-hex-3fb950)]">
+                <span className="tracking-wider-1 text-sm text-[var(--color-success)]">
                     E_ord ≥ 4 — CONFIRMED
                 </span>
             </div>
-            <table className="w-full border-collapse text-[10.5px]">
+            <table className="text-xl-tight w-full border-collapse">
                 <thead>
                     <tr className="bg-[var(--color-hex-0f0f0f)]">
                         {["HOST", "PORT", "SERVICE", "VERSION", "BANNER", "STATUS"].map((h) => (
                             <th
                                 key={h}
-                                className="px-[16px] py-[6px] text-left text-[8px] font-semibold tracking-[0.18em] whitespace-nowrap text-[var(--color-hex-444444)]"
+                                className="tracking-wider-3 px-[16px] py-[6px] text-left text-sm font-semibold whitespace-nowrap text-[var(--color-hex-444444)]"
                                 style={{
                                     borderBottom: "1px solid var(--color-hex-1a1a1a)",
                                 }}
@@ -66,18 +66,18 @@ export default function ServicesPanel() {
                             <td className="px-[16px] py-[7px] text-right font-bold text-[var(--color-hex-a0a0a0)]">
                                 {row.port}
                             </td>
-                            <td className="px-[16px] py-[7px] tracking-[0.08em] text-[var(--color-hex-a0a0a0)]">
+                            <td className="px-[16px] py-[7px] tracking-tight text-[var(--color-hex-a0a0a0)]">
                                 {row.service}
                             </td>
-                            <td className="px-[16px] py-[7px] text-[9.5px] text-[var(--color-hex-555555)]">
+                            <td className="text-lg-tight px-[16px] py-[7px] text-[var(--color-hex-555555)]">
                                 {row.version}
                             </td>
-                            <td className="px-[16px] py-[7px] text-[9px] text-[var(--color-hex-444444)]">
+                            <td className="px-[16px] py-[7px] text-base text-[var(--color-hex-444444)]">
                                 {row.banner}
                             </td>
                             <td className="px-[16px] py-[7px] whitespace-nowrap">
                                 <span
-                                    className="text-[9px] font-semibold tracking-[0.12em]"
+                                    className="text-base font-semibold tracking-wide"
                                     style={{
                                         color: STATUS_COLOR[row.status],
                                     }}
