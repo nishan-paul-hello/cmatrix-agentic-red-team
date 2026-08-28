@@ -22,16 +22,16 @@ export default function FindingDetail({ f, onBack }: { f: Finding; onBack: () =>
             >
                 <button
                     onClick={onBack}
-                    className="font-inherit mb-[10px] cursor-pointer border-none bg-[transparent] p-[0px] text-[9px] tracking-[0.14em] text-[var(--color-hex-666666)] hover:text-[var(--color-hex-a0a0a0)]"
+                    className="font-inherit tracking-wider-1 mb-[10px] cursor-pointer border-none bg-[transparent] p-[0px] text-base text-[var(--color-hex-666666)] hover:text-[var(--color-hex-a0a0a0)]"
                 >
                     ← FINDINGS
                 </button>
                 <div className="mb-3 flex items-center gap-3">
-                    <h1 className="text-[18px] font-bold tracking-[0.12em] text-[var(--color-hex-f2f2f2)]">
+                    <h1 className="text-8xl font-bold tracking-wide text-[var(--color-fg)]">
                         {f.id}
                     </h1>
                     <span
-                        className="rounded-[2px] px-[7px] py-[2px] text-[9px] font-semibold tracking-[0.14em]"
+                        className="tracking-wider-1 rounded-[2px] px-[7px] py-[2px] text-base font-semibold"
                         style={{
                             color: sc.color,
                             background: sc.bg,
@@ -41,7 +41,7 @@ export default function FindingDetail({ f, onBack }: { f: Finding; onBack: () =>
                         {f.severity}
                     </span>
                     <span
-                        className="text-[9px] font-semibold tracking-[0.12em]"
+                        className="text-base font-semibold tracking-wide"
                         style={{
                             color: stc,
                         }}
@@ -56,16 +56,13 @@ export default function FindingDetail({ f, onBack }: { f: Finding; onBack: () =>
                         <button
                             key={t}
                             onClick={() => setTab(t)}
-                            className="font-inherit cursor-pointer border-none bg-[transparent] px-[14px] py-[5px] text-[9px] tracking-[0.14em] whitespace-nowrap"
+                            className="font-inherit tracking-wider-1 cursor-pointer border-none bg-[transparent] px-[14px] py-[5px] text-base whitespace-nowrap"
                             style={{
                                 borderBottom:
                                     t === tab
-                                        ? "2px solid var(--color-hex-e31b23)"
+                                        ? "2px solid var(--color-brand)"
                                         : "2px solid transparent",
-                                color:
-                                    t === tab
-                                        ? "var(--color-hex-f2f2f2)"
-                                        : "var(--color-hex-444444)",
+                                color: t === tab ? "var(--color-fg)" : "var(--color-hex-444444)",
                                 marginBottom: -1,
                             }}
                         >
@@ -128,7 +125,7 @@ export default function FindingDetail({ f, onBack }: { f: Finding; onBack: () =>
                                         }}
                                     >
                                         <div
-                                            className="w-[140px] shrink-0 px-[14px] py-[9px] text-[8.5px] font-semibold tracking-[0.18em] text-[var(--color-hex-444444)]"
+                                            className="text-base-tight tracking-wider-3 w-[140px] shrink-0 px-[14px] py-[9px] font-semibold text-[var(--color-hex-444444)]"
                                             style={{
                                                 borderRight: "1px solid var(--color-hex-141414)",
                                             }}
@@ -136,7 +133,7 @@ export default function FindingDetail({ f, onBack }: { f: Finding; onBack: () =>
                                             {r.k}
                                         </div>
                                         <div
-                                            className="flex-1 px-[14px] py-[9px] text-[10px]"
+                                            className="flex-1 px-[14px] py-[9px] text-lg"
                                             style={{
                                                 color: (() => {
                                                     if (r.k === "STATUS") {
@@ -154,20 +151,20 @@ export default function FindingDetail({ f, onBack }: { f: Finding; onBack: () =>
                                     </div>
                                 ))}
                             </div>
-                            <div className="mb-[14px] text-[9px] tracking-[0.2em] text-[var(--color-hex-444444)]">
+                            <div className="mb-[14px] text-base tracking-widest text-[var(--color-hex-444444)]">
                                 ATTACK PATH
                             </div>
                             <AttackPath nodes={f.path} />
                             <div className="mt-6 flex gap-3">
                                 <button
                                     onClick={() => setEvOpen(true)}
-                                    className="font-inherit cursor-pointer rounded-[2px] border-none bg-[var(--color-hex-e31b23)] px-[18px] py-[7px] text-[9.5px] tracking-[0.14em] text-[var(--color-hex-f2f2f2)] hover:bg-[var(--color-hex-ff2a32)]"
+                                    className="font-inherit text-lg-tight tracking-wider-1 cursor-pointer rounded-[2px] border-none bg-[var(--color-brand)] px-[18px] py-[7px] text-[var(--color-fg)] hover:bg-[var(--color-danger)]"
                                 >
                                     VIEW EVIDENCE
                                 </button>
                                 <button
                                     onClick={() => setTab("ATTACK PATH")}
-                                    className="font-inherit cursor-pointer rounded-[2px] border-[1px] border-solid border-[var(--color-hex-292929)] bg-[transparent] px-[18px] py-[7px] text-[9.5px] tracking-[0.14em] text-[var(--color-hex-a0a0a0)] hover:border-[var(--color-hex-a0a0a0)]"
+                                    className="font-inherit text-lg-tight tracking-wider-1 cursor-pointer rounded-[2px] border-[1px] border-solid border-[var(--color-hex-292929)] bg-[transparent] px-[18px] py-[7px] text-[var(--color-hex-a0a0a0)] hover:border-[var(--color-hex-a0a0a0)]"
                                 >
                                     VIEW PATH
                                 </button>
@@ -214,12 +211,12 @@ export default function FindingDetail({ f, onBack }: { f: Finding; onBack: () =>
                                 borderBottom: "1px solid var(--color-hex-1e1e1e)",
                             }}
                         >
-                            <span className="text-[12px] font-bold tracking-[0.1em] text-[var(--color-hex-f2f2f2)]">
+                            <span className="text-2xl font-bold tracking-normal text-[var(--color-fg)]">
                                 EVIDENCE VIEWER
                             </span>
                             <button
                                 onClick={() => setEvOpen(false)}
-                                className="cursor-pointer border-none bg-[transparent] text-[14px] text-[var(--color-hex-444444)]"
+                                className="cursor-pointer border-none bg-[transparent] text-4xl text-[var(--color-hex-444444)]"
                             >
                                 ✕
                             </button>

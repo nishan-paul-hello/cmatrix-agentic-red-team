@@ -34,7 +34,7 @@ export default function ValidationTab({ f }: { f: Finding }) {
                 paddingBottom: 24,
             }}
         >
-            <div className="mb-[16px] text-[8px] tracking-[0.2em] text-[var(--color-hex-444444)]">
+            <div className="mb-[16px] text-sm tracking-widest text-[var(--color-hex-444444)]">
                 VALIDATION LIFECYCLE
             </div>
             {steps.map((s, i) => (
@@ -52,13 +52,13 @@ export default function ValidationTab({ f }: { f: Finding }) {
                                 borderRadius: "50%",
                                 background: (() => {
                                     if (s.eord === 5) {
-                                        return "var(--color-hex-3fb950)";
+                                        return "var(--color-success)";
                                     }
                                     if (s.eord >= 4) {
-                                        return "var(--color-hex-ff2a32)";
+                                        return "var(--color-danger)";
                                     }
                                     if (s.eord >= 3) {
-                                        return "var(--color-hex-d29922)";
+                                        return "var(--color-warning)";
                                     }
                                     return "var(--color-hex-333333)";
                                 })(),
@@ -80,31 +80,31 @@ export default function ValidationTab({ f }: { f: Finding }) {
                     >
                         <div className="mb-1 flex items-center gap-3">
                             <span
-                                className="text-[8.5px] font-bold tracking-[0.1em]"
+                                className="text-base-tight font-bold tracking-normal"
                                 style={{
                                     color:
                                         s.eord === 5
-                                            ? "var(--color-hex-3fb950)"
+                                            ? "var(--color-success)"
                                             : "var(--color-hex-a0a0a0)",
                                 }}
                             >
                                 {s.label}
                             </span>
-                            <span className="text-[7.5px] text-[var(--color-hex-444444)]">
+                            <span className="text-sm-tight text-[var(--color-hex-444444)]">
                                 {s.ts}
                             </span>
                             <span
-                                className="text-[8px] font-semibold tracking-[0.1em]"
+                                className="text-sm font-semibold tracking-normal"
                                 style={{
                                     color: (() => {
                                         if (s.eord === 5) {
-                                            return "var(--color-hex-3fb950)";
+                                            return "var(--color-success)";
                                         }
                                         if (s.eord >= 4) {
-                                            return "var(--color-hex-ff2a32)";
+                                            return "var(--color-danger)";
                                         }
                                         if (s.eord >= 3) {
-                                            return "var(--color-hex-d29922)";
+                                            return "var(--color-warning)";
                                         }
                                         return "var(--color-hex-555555)";
                                     })(),
@@ -113,14 +113,14 @@ export default function ValidationTab({ f }: { f: Finding }) {
                                 E_ord {s.eord} — {eord_labels[s.eord]}
                             </span>
                         </div>
-                        <div className="text-[9.5px] leading-[1.7] text-[var(--color-hex-555555)]">
+                        <div className="text-lg-tight leading-relaxed text-[var(--color-hex-555555)]">
                             {s.note}
                         </div>
                     </div>
                 </div>
             ))}
             <div className="mt-[8px] rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)] bg-[var(--color-hex-0a0a0a)] px-[16px] py-[14px]">
-                <div className="mb-[8px] text-[8px] tracking-[0.2em] text-[var(--color-hex-444444)]">
+                <div className="mb-[8px] text-sm tracking-widest text-[var(--color-hex-444444)]">
                     ORACLE RESULT
                 </div>
                 <div className="flex gap-6">
@@ -143,17 +143,17 @@ export default function ValidationTab({ f }: { f: Finding }) {
                         },
                     ].map((r) => (
                         <div key={r.k}>
-                            <div className="mb-[2px] text-[7.5px] tracking-[0.14em] text-[var(--color-hex-444444)]">
+                            <div className="text-sm-tight tracking-wider-1 mb-[2px] text-[var(--color-hex-444444)]">
                                 {r.k}
                             </div>
                             <div
-                                className="text-[10px] font-bold"
+                                className="text-lg font-bold"
                                 style={{
                                     color: (() => {
                                         if (r.k === "RESULT") {
                                             return f.status === "ORACLE_CONFIRMED"
-                                                ? "var(--color-hex-3fb950)"
-                                                : "var(--color-hex-d29922)";
+                                                ? "var(--color-success)"
+                                                : "var(--color-warning)";
                                         }
                                         return "var(--color-hex-888888)";
                                     })(),

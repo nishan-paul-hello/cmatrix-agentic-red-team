@@ -19,14 +19,13 @@ export default function EvidenceViewer({ inline }: { inline?: boolean }) {
                     <button
                         key={t}
                         onClick={() => setTab(t)}
-                        className="font-inherit cursor-pointer border-none bg-[transparent] px-[16px] py-[5px] text-[9px] tracking-[0.14em]"
+                        className="font-inherit tracking-wider-1 cursor-pointer border-none bg-[transparent] px-[16px] py-[5px] text-base"
                         style={{
                             borderBottom:
                                 t === tab
-                                    ? "2px solid var(--color-hex-e31b23)"
+                                    ? "2px solid var(--color-brand)"
                                     : "2px solid transparent",
-                            color:
-                                t === tab ? "var(--color-hex-f2f2f2)" : "var(--color-hex-444444)",
+                            color: t === tab ? "var(--color-fg)" : "var(--color-hex-444444)",
                         }}
                     >
                         {t}
@@ -37,17 +36,17 @@ export default function EvidenceViewer({ inline }: { inline?: boolean }) {
                 {tab === "RESPONSE" && (
                     <div>
                         <div className="mb-4 flex items-center gap-3">
-                            <span className="rounded-[2px] border-[1px] border-solid border-[var(--color-hex-3fb95044)] bg-[var(--color-hex-0a1a10)] px-[7px] py-[2px] text-[9px] font-semibold tracking-[0.12em] text-[var(--color-hex-3fb950)]">
+                            <span className="rounded-[2px] border-[1px] border-solid border-[var(--color-hex-3fb95044)] bg-[var(--color-hex-0a1a10)] px-[7px] py-[2px] text-base font-semibold tracking-wide text-[var(--color-success)]">
                                 HTTP 200 OK
                             </span>
-                            <span className="text-[8.5px] tracking-[0.1em] text-[var(--color-hex-444444)]">
+                            <span className="text-base-tight tracking-normal text-[var(--color-hex-444444)]">
                                 4.18s · 1,247 bytes
                             </span>
-                            <span className="ml-auto text-[8px] tracking-[0.1em] text-[var(--color-hex-333333)]">
+                            <span className="ml-auto text-sm tracking-normal text-[var(--color-hex-333333)]">
                                 artifact:ev-00483-resp · 06:30:51
                             </span>
                         </div>
-                        <div className="font-inherit rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1a1a1a)] bg-[var(--color-hex-080808)] px-[14px] py-[12px] text-[9px] leading-[1.8] text-[var(--color-hex-555555)]">
+                        <div className="font-inherit rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1a1a1a)] bg-[var(--color-bg)] px-[14px] py-[12px] text-base leading-loose text-[var(--color-hex-555555)]">
                             <div className="mb-[8px] text-[var(--color-hex-333333)]">
                                 HTTP/1.1 200 OK
                             </div>
@@ -70,7 +69,7 @@ export default function EvidenceViewer({ inline }: { inline?: boolean }) {
                                 }}
                             >
                                 <div
-                                    className="absolute right-[6px] bg-[var(--color-hex-1a0608)] text-[7.5px] tracking-[0.1em] text-[var(--color-hex-e31b23)]"
+                                    className="text-sm-tight absolute right-[6px] bg-[var(--color-hex-1a0608)] tracking-normal text-[var(--color-brand)]"
                                     style={{
                                         top: -8,
                                         padding: "0 4px",
@@ -79,7 +78,7 @@ export default function EvidenceViewer({ inline }: { inline?: boolean }) {
                                     REDACTED — SENSITIVE DATA
                                 </div>
                                 <span
-                                    className="tracking-[0.04em] text-[var(--color-hex-e31b23)]"
+                                    className="tracking-tighter text-[var(--color-brand)]"
                                     style={{
                                         filter: "blur(3px)",
                                         userSelect: "none",
@@ -98,7 +97,7 @@ export default function EvidenceViewer({ inline }: { inline?: boolean }) {
                 )}
                 {tab === "REQUEST" && (
                     <pre
-                        className="font-inherit text-[9px] leading-[1.8] text-[var(--color-hex-555555)]"
+                        className="font-inherit text-base leading-loose text-[var(--color-hex-555555)]"
                         style={{
                             margin: 0,
                         }}
@@ -149,12 +148,10 @@ id=1' AND SLEEP(4)-- -`}
                             },
                         ].map((r) => (
                             <div key={r.k}>
-                                <div className="mb-[1px] text-[7.5px] tracking-[0.18em] text-[var(--color-hex-444444)]">
+                                <div className="text-sm-tight tracking-wider-3 mb-[1px] text-[var(--color-hex-444444)]">
                                     {r.k}
                                 </div>
-                                <div className="text-[10px] text-[var(--color-hex-888888)]">
-                                    {r.v}
-                                </div>
+                                <div className="text-lg text-[var(--color-hex-888888)]">{r.v}</div>
                             </div>
                         ))}
                     </div>
@@ -162,11 +159,11 @@ id=1' AND SLEEP(4)-- -`}
                 {tab === "ORACLE" && (
                     <div>
                         <div className="mb-5 flex items-center gap-3">
-                            <span className="text-[13px] font-bold tracking-[0.1em] text-[var(--color-hex-3fb950)]">
+                            <span className="text-3xl font-bold tracking-normal text-[var(--color-success)]">
                                 PASS
                             </span>
                             <div className="h-[20px] w-[1px] bg-[var(--color-hex-1e1e1e)]" />
-                            <span className="text-[10px] tracking-[0.08em] text-[var(--color-hex-a0a0a0)]">
+                            <span className="text-lg tracking-tight text-[var(--color-hex-a0a0a0)]">
                                 CVE-BENCH ORACLE
                             </span>
                         </div>
@@ -193,15 +190,15 @@ id=1' AND SLEEP(4)-- -`}
                             },
                         ].map((r) => (
                             <div key={r.k} className="mb-[8px]">
-                                <div className="mb-[1px] text-[7.5px] tracking-[0.18em] text-[var(--color-hex-444444)]">
+                                <div className="text-sm-tight tracking-wider-3 mb-[1px] text-[var(--color-hex-444444)]">
                                     {r.k}
                                 </div>
                                 <div
-                                    className="text-[10px]"
+                                    className="text-lg"
                                     style={{
                                         color:
                                             r.k === "RESULT"
-                                                ? "var(--color-hex-3fb950)"
+                                                ? "var(--color-success)"
                                                 : "var(--color-hex-888888)",
                                     }}
                                 >

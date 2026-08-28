@@ -10,7 +10,7 @@ export default function AttackPath({ nodes, large }: { nodes: string[]; large?: 
                 <div key={n} className="flex flex-col items-start">
                     {i > 0 && (
                         <div
-                            className="ml-[12px] h-[16px] w-[1px] bg-[var(--color-hex-e31b23)]"
+                            className="ml-[12px] h-[16px] w-[1px] bg-[var(--color-brand)]"
                             style={{
                                 opacity: 0.5,
                             }}
@@ -26,13 +26,13 @@ export default function AttackPath({ nodes, large }: { nodes: string[]; large?: 
                         }}
                     >
                         <div
-                            className="h-[6px] w-[6px] shrink-0 bg-[var(--color-hex-e31b23)]"
+                            className="h-[6px] w-[6px] shrink-0 bg-[var(--color-brand)]"
                             style={{
                                 borderRadius: "50%",
                             }}
                         />
                         <span
-                            className="font-semibold tracking-[0.08em] text-[var(--color-hex-a0a0a0)]"
+                            className="font-semibold tracking-tight text-[var(--color-hex-a0a0a0)]"
                             style={{
                                 fontSize: large ? 11 : 10,
                             }}

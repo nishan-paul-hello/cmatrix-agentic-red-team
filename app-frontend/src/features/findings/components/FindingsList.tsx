@@ -24,10 +24,10 @@ export default function FindingsList({
                     borderBottom: "1px solid var(--color-hex-1e1e1e)",
                 }}
             >
-                <div className="mb-[3px] text-[9px] tracking-[0.22em] text-[var(--color-hex-666666)]">
+                <div className="tracking-widest-2 mb-[3px] text-base text-[var(--color-hex-666666)]">
                     MISSION / CVE-001
                 </div>
-                <h1 className="text-[20px] font-bold tracking-[0.12em] text-[var(--color-hex-f2f2f2)]">
+                <h1 className="text-9xl font-bold tracking-wide text-[var(--color-fg)]">
                     VALIDATED FINDINGS
                 </h1>
             </div>
@@ -46,11 +46,11 @@ export default function FindingsList({
                             borderRight: i < 3 ? "1px solid var(--color-hex-1e1e1e)" : "none",
                         }}
                     >
-                        <div className="mb-[6px] text-[8px] tracking-[0.2em] text-[var(--color-hex-444444)]">
+                        <div className="mb-[6px] text-sm tracking-widest text-[var(--color-hex-444444)]">
                             {s}
                         </div>
                         <div
-                            className="text-[28px] leading-[1] font-bold"
+                            className="text-13xl leading-none font-bold"
                             style={{
                                 color: SEV_C[s].color,
                             }}
@@ -62,7 +62,7 @@ export default function FindingsList({
             </div>
             {/* Table */}
             <div className="flex-1 overflow-auto">
-                <table className="w-full border-collapse text-[10.5px]">
+                <table className="text-xl-tight w-full border-collapse">
                     <thead>
                         <tr className="sticky top-0 bg-[var(--color-hex-0f0f0f)]">
                             {[
@@ -77,7 +77,7 @@ export default function FindingsList({
                             ].map((h) => (
                                 <th
                                     key={h}
-                                    className="px-[14px] py-[6px] text-left text-[8px] font-semibold tracking-[0.16em] whitespace-nowrap text-[var(--color-hex-444444)]"
+                                    className="tracking-wider-2 px-[14px] py-[6px] text-left text-sm font-semibold whitespace-nowrap text-[var(--color-hex-444444)]"
                                     style={{
                                         borderBottom: "1px solid var(--color-hex-1a1a1a)",
                                     }}
@@ -107,18 +107,18 @@ export default function FindingsList({
                                         (e.currentTarget.style.background = "transparent")
                                     }
                                 >
-                                    <td className="px-[14px] py-[8px] font-bold tracking-[0.08em] text-[var(--color-hex-e31b23)]">
+                                    <td className="px-[14px] py-[8px] font-bold tracking-tight text-[var(--color-brand)]">
                                         {f.id}
                                     </td>
                                     <td className="px-[14px] py-[8px] text-[var(--color-hex-a0a0a0)]">
                                         {f.type}
                                     </td>
-                                    <td className="px-[14px] py-[8px] text-[9.5px] text-[var(--color-hex-555555)]">
+                                    <td className="text-lg-tight px-[14px] py-[8px] text-[var(--color-hex-555555)]">
                                         {f.target}
                                     </td>
                                     <td className="px-[14px] py-[8px]">
                                         <span
-                                            className="rounded-[2px] px-[5px] py-[1px] text-[9px] font-semibold tracking-[0.1em]"
+                                            className="rounded-[2px] px-[5px] py-[1px] text-base font-semibold tracking-normal"
                                             style={{
                                                 color: sc.color,
                                                 background: sc.bg,
@@ -133,7 +133,7 @@ export default function FindingsList({
                                     </td>
                                     <td className="px-[14px] py-[8px]">
                                         <span
-                                            className="text-[9px] font-semibold tracking-[0.1em]"
+                                            className="text-base font-semibold tracking-normal"
                                             style={{
                                                 color: stc,
                                             }}
@@ -141,10 +141,10 @@ export default function FindingsList({
                                             {f.status}
                                         </span>
                                     </td>
-                                    <td className="px-[14px] py-[8px] text-[9px] text-[var(--color-hex-444444)]">
+                                    <td className="px-[14px] py-[8px] text-base text-[var(--color-hex-444444)]">
                                         {f.first}
                                     </td>
-                                    <td className="px-[14px] py-[8px] text-[9px] text-[var(--color-hex-444444)]">
+                                    <td className="px-[14px] py-[8px] text-base text-[var(--color-hex-444444)]">
                                         {f.validated}
                                     </td>
                                 </tr>
@@ -156,12 +156,12 @@ export default function FindingsList({
 
             {/* Pagination Controls */}
             <div className="mt-2 flex items-center justify-between px-6 pb-4">
-                <div className="text-[10px] tracking-[0.1em] text-[var(--color-hex-666666)]">
+                <div className="text-lg tracking-normal text-[var(--color-hex-666666)]">
                     PAGE {page}
                 </div>
                 <div className="flex gap-2">
                     <button
-                        className="font-inherit cursor-pointer rounded-[2px] border-none bg-[var(--color-hex-111111)] px-[12px] py-[6px] text-[9px] font-semibold tracking-[0.16em] text-[var(--color-hex-f2f2f2)]"
+                        className="font-inherit tracking-wider-2 cursor-pointer rounded-[2px] border-none bg-[var(--color-hex-111111)] px-[12px] py-[6px] text-base font-semibold text-[var(--color-fg)]"
                         onClick={() => setPage((p) => Math.max(1, p - 1))}
                         disabled={page === 1}
                         style={{ opacity: page === 1 ? 0.5 : 1 }}
@@ -169,7 +169,7 @@ export default function FindingsList({
                         PREV
                     </button>
                     <button
-                        className="font-inherit cursor-pointer rounded-[2px] border-none bg-[var(--color-hex-111111)] px-[12px] py-[6px] text-[9px] font-semibold tracking-[0.16em] text-[var(--color-hex-f2f2f2)]"
+                        className="font-inherit tracking-wider-2 cursor-pointer rounded-[2px] border-none bg-[var(--color-hex-111111)] px-[12px] py-[6px] text-base font-semibold text-[var(--color-fg)]"
                         onClick={() => setPage((p) => p + 1)}
                         disabled={findings.length < 50}
                         style={{ opacity: findings.length < 50 ? 0.5 : 1 }}
