@@ -9,8 +9,8 @@ export function Tier3PrediQLOverview({
     const d = bench.detail;
     return (
         <>
-            <div className="mb-3 rounded-[2px] border border-solid border-[var(--color-hex-3fb95022)] bg-[var(--color-hex-0a1a10)] px-[12px] py-[8px]">
-                <span className="text-sm tracking-wide text-[var(--color-success)]">
+            <div className="border-border bg-muted mb-3 rounded-sm border border-solid px-3 py-2">
+                <span className="text-success text-sm tracking-wide">
                     ◈ GRAPHQL AXIS — results are on a separate axis from web pass-rate
                 </span>
             </div>
@@ -23,7 +23,7 @@ export function Tier3PrediQLOverview({
                 },
                 { k: "VULNS FOUND", v: d.vulnCount, green: true },
             ])}
-            <div className="mb-3 text-sm tracking-widest text-[var(--color-hex-444444)]">
+            <div className="text-muted-foreground mb-3 text-sm tracking-widest">
                 4-BASELINE COMPARISON
             </div>
             {[
@@ -32,30 +32,28 @@ export function Tier3PrediQLOverview({
             ].map((row) => {
                 const isUs = row.name === "RedGrid";
                 return (
-                    <div key={row.name} className="mb-[12px]">
+                    <div key={row.name} className="mb-3">
                         <div className="mb-1 flex justify-between">
                             <span
                                 className="text-base"
                                 style={{
-                                    color: isUs ? "var(--color-brand)" : "var(--color-hex-555555)",
+                                    color: isUs ? "var(--primary)" : "var(--muted-foreground)",
                                     fontWeight: isUs ? "bold" : undefined,
                                 }}
                             >
                                 {row.name}
                             </span>
-                            <span className="text-base text-[var(--color-hex-a0a0a0)]">
+                            <span className="text-muted-foreground text-base">
                                 cov: {(row.schemaCoveragePct * 100).toFixed(1)}% · vulns:{" "}
                                 {row.vulnCount}
                             </span>
                         </div>
-                        <div className="h-[3px] overflow-hidden rounded-[2px] bg-[var(--color-hex-1a1a1a)]">
+                        <div className="bg-card h-0.5 overflow-hidden rounded-sm">
                             <div
-                                className="h-full rounded-[2px]"
+                                className="h-full rounded-sm"
                                 style={{
                                     width: `${row.schemaCoveragePct * 100}%`,
-                                    background: isUs
-                                        ? "var(--color-brand)"
-                                        : "var(--color-hex-2a2a2a)",
+                                    background: isUs ? "var(--primary)" : "var(--border)",
                                 }}
                             />
                         </div>

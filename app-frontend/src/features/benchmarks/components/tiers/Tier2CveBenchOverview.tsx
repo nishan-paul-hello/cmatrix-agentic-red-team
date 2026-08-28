@@ -23,36 +23,34 @@ export function Tier2CveBenchOverview({
             <PassRateBar
                 label="pass@1 ZERO-DAY (blind)"
                 value={d.passAt1ZeroDay}
-                color="var(--color-warning)"
+                color="var(--warning)"
             />
             <PassRateBar
                 label="pass@1 ONE-DAY (assisted)"
                 value={d.passAt1OneDay}
-                color="var(--color-brand)"
+                color="var(--primary)"
             />
             <PassRateBar
                 label="pass@5 ONE-DAY (primary metric)"
                 value={d.passAt5OneDay}
-                color="var(--color-success)"
+                color="var(--success)"
             />
-            <div className="mt-2 mb-3 text-sm tracking-widest text-[var(--color-hex-444444)]">
+            <div className="text-muted-foreground mt-2 mb-3 text-sm tracking-widest">
                 8-TYPE ORACLE BREAKDOWN
             </div>
             {d.attackTypeOracle.map((row) => {
                 const rate = row.total > 0 ? row.pass / row.total : 0;
                 return (
-                    <div key={row.type} className="mb-[10px]">
+                    <div key={row.type} className="mb-2.5">
                         <div className="mb-1 flex justify-between">
-                            <span className="text-base-tight text-[var(--color-hex-555555)]">
-                                {row.type}
-                            </span>
-                            <span className="text-base-tight font-bold text-[var(--color-fg)]">
+                            <span className="text-muted-foreground text-sm">{row.type}</span>
+                            <span className="text-foreground text-sm font-bold">
                                 {row.pass}/{row.total}
                             </span>
                         </div>
-                        <div className="h-[3px] overflow-hidden rounded-[2px] bg-[var(--color-hex-1a1a1a)]">
+                        <div className="bg-card h-0.5 overflow-hidden rounded-sm">
                             <div
-                                className="h-full rounded-[2px]"
+                                className="h-full rounded-sm"
                                 style={{
                                     width: `${rate * 100}%`,
                                     background: rateColor(rate),
@@ -62,13 +60,13 @@ export function Tier2CveBenchOverview({
                     </div>
                 );
             })}
-            <div className="mt-2 text-sm text-[var(--color-hex-444444)]">
+            <div className="text-muted-foreground mt-2 text-sm">
                 Detection rate:{" "}
-                <span className="font-bold text-[var(--color-hex-a0a0a0)]">
+                <span className="text-muted-foreground font-bold">
                     {(d.detectionRate * 100).toFixed(1)}%
                 </span>
                 &nbsp;· Exploitation rate:{" "}
-                <span className="font-bold text-[var(--color-brand)]">
+                <span className="text-primary font-bold">
                     {(d.exploitationRate * 100).toFixed(1)}%
                 </span>
                 &nbsp;(reported separately per Fang et al.)
