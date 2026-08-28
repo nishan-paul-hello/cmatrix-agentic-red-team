@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import StatusBadge from "@/components/ui/StatusBadge";
 import { useMissionsData } from "@/features/missions/hooks/useMissionsData";
@@ -42,56 +43,56 @@ export default function MissionsPage({ onNewMission, onOpenMission }: MissionsPa
     return (
         <div className="flex h-full min-h-0 flex-col">
             {/* Page header */}
-            <div className="flex-shrink-0 border-b border-[var(--color-hex-1e1e1e)] px-6 pt-5 pb-4">
+            <div className="border-border flex-shrink-0 border-b px-6 pt-5 pb-4">
                 <div className="page-eyebrow">OPERATIONS</div>
                 <div className="flex items-baseline justify-between">
-                    <h1 className="text-9xl font-bold tracking-wide text-[var(--color-fg)]">
-                        MISSIONS
-                    </h1>
-                    <button
+                    <h1 className="text-foreground text-xs font-bold tracking-wide">MISSIONS</h1>
+                    <Button
+                        variant="outline"
                         onClick={onNewMission}
-                        className="tracking-wider-1 cursor-pointer rounded-[2px] border border-[var(--color-hex-6f171b)] bg-transparent px-[12px] py-[4px] text-base font-semibold text-[var(--color-brand)] transition-colors duration-100 hover:border-[var(--color-brand)] hover:bg-[var(--color-hex-1a0608)]"
+                        className="text-primary hover:border-primary hover:bg-muted h-auto rounded-sm px-3 py-1 text-base font-semibold tracking-widest transition-colors duration-100"
                     >
                         NEW MISSION →
-                    </button>
+                    </Button>
                 </div>
             </div>
 
             {/* Filter strip */}
             <div
-                className="flex flex-shrink-0 items-center gap-1 border-b border-[var(--color-hex-1e1e1e)] bg-[var(--color-hex-0b0b0b)] px-6 py-3"
+                className="border-border bg-background flex flex-shrink-0 items-center gap-1 border-b px-6 py-3"
                 role="group"
                 aria-label="Filter missions by status"
             >
                 {FILTERS.map((f) => (
-                    <button
+                    <Button
                         key={f}
+                        variant="outline"
                         onClick={() => setFilter(f)}
                         aria-pressed={filter === f}
                         className={[
-                            "filter-btn transition-colors duration-100",
+                            "filter-btn h-auto transition-colors duration-100",
                             filter === f
-                                ? "border-[var(--color-brand)] bg-[var(--color-hex-120608)] text-[var(--color-danger)]"
-                                : "border-[var(--color-hex-1e1e1e)] bg-transparent text-[var(--color-hex-555555)] hover:text-[var(--color-hex-a0a0a0)]",
+                                ? "border-primary bg-muted text-destructive"
+                                : "text-muted-foreground hover:text-muted-foreground bg-transparent",
                         ].join(" ")}
                     >
                         {f}
-                    </button>
+                    </Button>
                 ))}
-                <span className="text-base-tight ml-auto tracking-wide text-[var(--color-hex-444444)]">
+                <span className="text-muted-foreground ml-auto text-sm tracking-wide">
                     {filtered.length} MISSIONS
                 </span>
             </div>
 
             {/* Missions table */}
             <div className="flex-1 overflow-auto">
-                <table className="w-full border-collapse text-xl">
+                <table className="w-full border-collapse text-xs">
                     <thead>
-                        <tr className="sticky top-0 z-10 bg-[var(--color-hex-111111)]">
+                        <tr className="bg-card sticky top-0 z-10">
                             {TABLE_HEADERS.map((h) => (
                                 <th
                                     key={h}
-                                    className="text-base-tight tracking-wider-3 border-b border-[var(--color-hex-1e1e1e)] px-[16px] py-[6px] text-left font-semibold whitespace-nowrap text-[var(--color-hex-444444)]"
+                                    className="border-border text-muted-foreground border-b px-4 py-1.5 text-left text-sm font-semibold tracking-widest whitespace-nowrap"
                                 >
                                     {h}
                                 </th>
@@ -114,42 +115,42 @@ export default function MissionsPage({ onNewMission, onOpenMission }: MissionsPa
                                 <tr
                                     key={m.id}
                                     onClick={() => onOpenMission?.(m.id)}
-                                    className="cursor-pointer border-b border-[var(--color-hex-191919)] transition-colors duration-75 hover:bg-[var(--color-hex-131313)]"
+                                    className="border-border hover:bg-muted cursor-pointer border-b transition-colors duration-75"
                                 >
-                                    <td className="px-[16px] py-[8px] font-semibold tracking-tight whitespace-nowrap text-[var(--color-brand)]">
+                                    <td className="text-primary px-4 py-2 font-semibold tracking-tight whitespace-nowrap">
                                         {m.id}
                                     </td>
-                                    <td className="cell-truncate max-w-[var(--width-cell-max)] px-[16px] py-[8px] whitespace-nowrap text-[var(--color-hex-a0a0a0)]">
+                                    <td className="cell-truncate text-muted-foreground max-w-[var(--width-cell-max)] px-4 py-2 whitespace-nowrap">
                                         {m.target}
                                     </td>
-                                    <td className="px-[16px] py-[8px] text-lg whitespace-nowrap text-[var(--color-hex-666666)]">
+                                    <td className="text-muted-foreground px-4 py-2 text-xs whitespace-nowrap">
                                         {m.surface}
                                     </td>
-                                    <td className="px-[16px] py-[8px] text-lg whitespace-nowrap text-[var(--color-hex-666666)]">
+                                    <td className="text-muted-foreground px-4 py-2 text-xs whitespace-nowrap">
                                         {m.mode}
                                     </td>
-                                    <td className="px-[16px] py-[8px] whitespace-nowrap">
+                                    <td className="px-4 py-2 whitespace-nowrap">
                                         <StatusBadge status={m.status} />
                                     </td>
-                                    <td className="px-[16px] py-[8px] text-right text-[var(--color-hex-a0a0a0)]">
+                                    <td className="text-muted-foreground px-4 py-2 text-right">
                                         {m.nodes}
                                     </td>
                                     <td
-                                        className="px-[16px] py-[8px] text-right"
+                                        className="px-4 py-2 text-right"
                                         style={{
                                             color:
                                                 m.findings > 0
-                                                    ? "var(--color-danger)"
-                                                    : "var(--color-hex-666666)",
+                                                    ? "var(--destructive)"
+                                                    : "var(--muted-foreground)",
                                             fontWeight: m.findings > 0 ? 600 : 400,
                                         }}
                                     >
                                         {m.findings}
                                     </td>
-                                    <td className="px-[16px] py-[8px] text-right text-[var(--color-hex-a0a0a0)]">
+                                    <td className="text-muted-foreground px-4 py-2 text-right">
                                         {m.cost}
                                     </td>
-                                    <td className="text-lg-tight px-[16px] py-[8px] whitespace-nowrap text-[var(--color-hex-555555)]">
+                                    <td className="text-muted-foreground px-4 py-2 text-base whitespace-nowrap">
                                         {m.started}
                                     </td>
                                 </tr>
