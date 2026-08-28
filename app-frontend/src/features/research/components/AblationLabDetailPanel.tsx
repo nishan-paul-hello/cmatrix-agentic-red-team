@@ -10,65 +10,52 @@ export function AblationLabDetailPanel({ sel }: { sel: AblationSpec }) {
     const bestDelta = Math.abs(worst.delta);
 
     return (
-        <div
-            className="flex w-[260px] flex-shrink-0 flex-col overflow-y-auto px-[14px] py-[16px]"
-            style={{
-                borderLeft: "1px solid var(--color-hex-1e1e1e)",
-            }}
-        >
-            <div className="mb-[4px] text-xl font-bold tracking-normal text-[var(--color-fg)]">
-                {sel.id}
-            </div>
-            <div className="mb-[8px] text-base leading-snug text-[var(--color-hex-a0a0a0)]">
-                {sel.name}
-            </div>
+        <div className="border-border flex w-[260px] flex-shrink-0 flex-col overflow-y-auto border-l px-3.5 py-4">
+            <div className="text-foreground mb-1 text-xs font-bold tracking-normal">{sel.id}</div>
+            <div className="text-muted-foreground mb-2 text-base leading-snug">{sel.name}</div>
 
             {/* Category badge */}
             <div
-                className="text-sm-tight tracking-wider-2 mb-[14px] inline-flex rounded-[2px] px-[6px] py-[2px] font-semibold"
+                className="mb-3.5 inline-flex rounded-sm px-1.5 py-0.5 text-xs font-semibold tracking-widest"
                 style={{
-                    background:
-                        sel.category === "CORE"
-                            ? "var(--color-hex-1a0608)"
-                            : "var(--color-hex-1a1a1a)",
-                    color:
-                        sel.category === "CORE" ? "var(--color-brand)" : "var(--color-hex-666666)",
+                    background: sel.category === "CORE" ? "var(--border)" : "var(--border)",
+                    color: sel.category === "CORE" ? "var(--primary)" : "var(--muted-foreground)",
                     border:
                         sel.category === "CORE"
-                            ? "1px solid var(--color-hex-e31b2333)"
-                            : "1px solid var(--color-hex-222222)",
+                            ? "1px solid var(--border)"
+                            : "1px solid var(--border)",
                     alignSelf: "flex-start",
                 }}
             >
                 {sel.category}
             </div>
 
-            <div className="mb-[16px] h-[1px] bg-[var(--color-hex-1a1a1a)]" />
+            <div className="bg-card mb-4 h-px" />
 
             {/* Condition scorecards */}
             {sel.conditions.map((cond) => {
                 const isBase = !!cond.isBaseline;
                 return (
-                    <div key={cond.label} className="mb-[12px]">
+                    <div key={cond.label} className="mb-3">
                         <div
-                            className="text-sm-tight mb-[3px] tracking-wide"
+                            className="mb-0.5 text-xs tracking-wide"
                             style={{
-                                color: isBase ? "var(--color-success)" : "var(--color-hex-444444)",
+                                color: isBase ? "var(--success)" : "var(--muted-foreground)",
                             }}
                         >
                             {cond.label}
                         </div>
                         <div
-                            className="text-4xl font-bold"
+                            className="text-sm font-bold"
                             style={{
                                 color: (() => {
                                     if (cond.score > 0.75) {
-                                        return "var(--color-success)";
+                                        return "var(--success)";
                                     }
                                     if (cond.score > 0.55) {
-                                        return "var(--color-warning)";
+                                        return "var(--warning)";
                                     }
-                                    return "var(--color-danger)";
+                                    return "var(--destructive)";
                                 })(),
                             }}
                         >
@@ -76,16 +63,16 @@ export function AblationLabDetailPanel({ sel }: { sel: AblationSpec }) {
                         </div>
                         {!isBase && (
                             <div
-                                className="text-lg font-bold"
+                                className="text-xs font-bold"
                                 style={{
                                     color: (() => {
                                         if (cond.delta < -0.1) {
-                                            return "var(--color-danger)";
+                                            return "var(--destructive)";
                                         }
                                         if (cond.delta < -0.05) {
-                                            return "var(--color-warning)";
+                                            return "var(--warning)";
                                         }
-                                        return "var(--color-hex-555555)";
+                                        return "var(--muted-foreground)";
                                     })(),
                                 }}
                             >
@@ -98,30 +85,28 @@ export function AblationLabDetailPanel({ sel }: { sel: AblationSpec }) {
                 );
             })}
 
-            <div className="mb-[16px] h-[1px] bg-[var(--color-hex-1a1a1a)]" />
+            <div className="bg-card mb-4 h-px" />
 
             {/* Worst delta callout */}
-            <div className="mt-[8px] rounded-[2px] border-[1px] border-solid border-[var(--color-hex-e31b2333)] bg-[var(--color-hex-120608)] px-[12px] py-[10px]">
-                <div className="tracking-wider-2 mb-[4px] text-sm text-[var(--color-brand)]">
-                    MAX DEGRADATION
-                </div>
-                <div className="text-6xl font-bold text-[var(--color-danger)]">
+            <div className="border-border bg-muted mt-2 rounded-sm border-[1px] border-solid px-3 py-2.5">
+                <div className="text-primary mb-1 text-sm tracking-widest">MAX DEGRADATION</div>
+                <div className="text-destructive text-base font-bold">
                     -{(bestDelta * 100).toFixed(1)}pp
                 </div>
-                <div className="text-sm-tight mt-[2px] leading-tight tracking-tight text-[var(--color-hex-333333)]">
+                <div className="text-muted-foreground mt-0.5 text-xs leading-tight tracking-tight">
                     {worst.label}
                 </div>
             </div>
 
             {/* Baseline scores */}
-            <div className="mt-[12px]">
-                <div className="text-sm-tight tracking-wider-3 mb-[3px] text-[var(--color-hex-444444)]">
+            <div className="mt-3">
+                <div className="text-muted-foreground mb-0.5 text-xs tracking-widest">
                     BASELINE (full system)
                 </div>
-                <div className="text-4xl font-bold text-[var(--color-success)]">
+                <div className="text-success text-sm font-bold">
                     {(baseline.score * 100).toFixed(1)}%
                 </div>
-                <div className="mt-[2px] text-sm text-[var(--color-hex-555555)]">
+                <div className="text-muted-foreground mt-0.5 text-sm">
                     {baseline.avgCost} · {baseline.avgTime}
                 </div>
             </div>
