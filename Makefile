@@ -1,4 +1,4 @@
-.PHONY: help install dev build docker-build up down clean paper ppt clean-paper format format-check lint lint-fix audit typecheck
+.PHONY: help install dev build docker-build up down clean paper ppt clean-paper format format-check lint lint-fix audit typecheck test
 
 ROOT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 LATEXMK := latexmk -f -cd -pdf -pdflatex="pdflatex -interaction=nonstopmode -halt-on-error %O %S"
@@ -15,6 +15,7 @@ help:
 	@echo "  make lint                   Lint codebase with ESLint"
 	@echo "  make audit                  Audit codebase dependencies"
 	@echo "  make typecheck              Typecheck codebase with TypeScript"
+	@echo "  make test                   Run frontend tests with Vitest"
 	@echo "  make docker-build           Build Docker images"
 	@echo "  make up                     Start Docker containers"
 	@echo "  make down                   Stop Docker containers"
@@ -50,6 +51,10 @@ audit:
 typecheck:
 	@echo "🩺 Typechecking frontend code..."
 	cd app-frontend && npx tsc --noEmit
+
+test:
+	@echo "🧪 Running frontend tests..."
+	cd app-frontend && npm run test
 
 docker-build:
 	@echo "🐳 Building Docker images..."
