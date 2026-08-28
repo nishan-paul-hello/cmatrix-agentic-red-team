@@ -12,8 +12,7 @@ import {
 } from "@/features/missions/domain/Orchestrator";
 import { useElapsed } from "@/features/missions/hooks/useElapsed";
 import { useTelemetry } from "@/hooks/useTelemetry";
-import { MissionRepository } from "@/repositories/MissionRepository";
-import { SpecialistRepository } from "@/repositories/SpecialistRepository";
+import { useServices } from "@/lib/services-context";
 import { MISSION_STATUS } from "@/types/domain-types";
 import { canTransitionMission } from "@/utils/FSM";
 
@@ -62,21 +61,22 @@ export default function MissionWorkspaceContainer({
     const { logEvent } = useTelemetry();
     const [orchestrator, setOrchestrator] = useState<MissionOrchestratorModel | null>(null);
 
+    const { missionRepository, specialistRepository } = useServices();
+
     useEffect(() => {
-        const missionRepo = new MissionRepository();
-        const specialistRepo = new SpecialistRepository();
-        void Promise.all([missionRepo.fetch(missionId), specialistRepo.fetchAll()]).then(
-            ([mission, specialists]) => {
-                const workers: WorkerSpecialist[] = specialists.map((s) => ({
-                    id: s.id,
-                    role: s.role,
-                    status: s.status,
-                    missionId: mission.id,
-                }));
-                setOrchestrator(new MissionOrchestratorModel(mission.id, mission.status, workers));
-            },
-        );
-    }, [missionId]);
+        void Promise.all([
+            missionRepository.fetch(missionId),
+            specialistRepository.fetchAll(),
+        ]).then(([mission, specialists]) => {
+            const workers: WorkerSpecialist[] = specialists.map((s) => ({
+                id: s.id,
+                role: s.role,
+                status: s.status,
+                missionId: mission.id,
+            }));
+            setOrchestrator(new MissionOrchestratorModel(mission.id, mission.status, workers));
+        });
+    }, [missionId, missionRepository, specialistRepository]);
 
     const [state, rawDispatch] = useReducer(workspaceReducer, {
         subNav: "overview",

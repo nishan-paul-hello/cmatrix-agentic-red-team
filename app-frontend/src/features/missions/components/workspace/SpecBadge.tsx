@@ -5,7 +5,7 @@ export default function SpecBadge({ status }: { status: Specialist["status"] }) 
     const color = specialistStatusDot(status);
     return (
         <span
-            className="text-[8.5px] tracking-[0.12em]"
+            className="text-base-tight tracking-wide"
             style={{
                 color,
             }}

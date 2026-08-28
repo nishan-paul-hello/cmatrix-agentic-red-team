@@ -35,15 +35,13 @@ export default function MissionSubNavPanel({
                         <button
                             key={item.id}
                             onClick={() => dispatch({ type: "SET_SUB_NAV", payload: item.id })}
-                            className="font-inherit flex w-full cursor-pointer items-center px-4 py-2 text-left text-[10.5px] tracking-[0.06em] uppercase"
+                            className="font-inherit text-xl-tight tracking-tight-1 flex w-full cursor-pointer items-center px-4 py-2 text-left uppercase"
                             style={{
                                 background: active ? "var(--color-hex-160809)" : "transparent",
                                 borderLeft: active
-                                    ? "2px solid var(--color-hex-e31b23)"
+                                    ? "2px solid var(--color-brand)"
                                     : "2px solid transparent",
-                                color: active
-                                    ? "var(--color-hex-f2f2f2)"
-                                    : "var(--color-hex-555555)",
+                                color: active ? "var(--color-fg)" : "var(--color-hex-555555)",
                             }}
                             onMouseEnter={(e) => {
                                 if (!active) {
@@ -62,7 +60,7 @@ export default function MissionSubNavPanel({
                                         <span className="flex items-center gap-1.5">
                                             {item.label}
                                             <span
-                                                className="rounded-[2px] border-[1px] border-solid border-[var(--color-hex-6f171b)] bg-[var(--color-hex-1a0608)] text-[8px] tracking-[0.1em] text-[var(--color-hex-e31b23)]"
+                                                className="rounded-[2px] border-[1px] border-solid border-[var(--color-hex-6f171b)] bg-[var(--color-hex-1a0608)] text-sm tracking-normal text-[var(--color-brand)]"
                                                 style={{
                                                     padding: "0 4px",
                                                 }}
@@ -77,7 +75,7 @@ export default function MissionSubNavPanel({
                                         <span className="flex items-center gap-1.5">
                                             {item.label}
                                             <span
-                                                className="rounded-[2px] border-[1px] border-solid border-[var(--color-hex-ff2a3266)] bg-[var(--color-hex-1a0608)] text-[8px] tracking-[0.1em] text-[var(--color-hex-ff2a32)]"
+                                                className="rounded-[2px] border-[1px] border-solid border-[var(--color-hex-ff2a3266)] bg-[var(--color-hex-1a0608)] text-sm tracking-normal text-[var(--color-danger)]"
                                                 style={{
                                                     padding: "0 4px",
                                                 }}
@@ -102,7 +100,7 @@ export default function MissionSubNavPanel({
                 }}
             >
                 <button
-                    className="font-inherit w-full cursor-pointer rounded-[2px] bg-[var(--color-hex-111111)] text-[9.5px] font-semibold tracking-[0.16em]"
+                    className="font-inherit text-lg-tight tracking-wider-2 w-full cursor-pointer rounded-[2px] bg-[var(--color-hex-111111)] font-semibold"
                     onClick={() => {
                         const newPausedState = !paused;
                         dispatch({ type: "SET_PAUSED", payload: newPausedState });
@@ -119,23 +117,23 @@ export default function MissionSubNavPanel({
                             });
                     }}
                     style={{
-                        border: `1px solid ${paused ? "var(--color-hex-d29922)" : "var(--color-hex-333333)"}`,
-                        color: paused ? "var(--color-hex-d29922)" : "var(--color-hex-d29922)",
+                        border: `1px solid ${paused ? "var(--color-warning)" : "var(--color-hex-333333)"}`,
+                        color: paused ? "var(--color-warning)" : "var(--color-warning)",
                         padding: "7px 0",
                     }}
                     onMouseEnter={(e) =>
-                        (e.currentTarget.style.borderColor = "var(--color-hex-d29922)")
+                        (e.currentTarget.style.borderColor = "var(--color-warning)")
                     }
                     onMouseLeave={(e) =>
                         (e.currentTarget.style.borderColor = paused
-                            ? "var(--color-hex-d29922)"
+                            ? "var(--color-warning)"
                             : "var(--color-hex-333333)")
                     }
                 >
                     {paused ? "▶ RESUME" : "⏸ PAUSE"}
                 </button>
                 <button
-                    className="font-inherit w-full rounded-[2px] text-[9.5px] font-semibold tracking-[0.16em]"
+                    className="font-inherit text-lg-tight tracking-wider-2 w-full rounded-[2px] font-semibold"
                     onClick={() => {
                         dispatch({ type: "SET_PAUSED", payload: true });
                         dispatch({ type: "SET_TERMINATED", payload: true });
@@ -156,14 +154,14 @@ export default function MissionSubNavPanel({
                             ? "var(--color-hex-0d0808)"
                             : "var(--color-hex-110808)",
                         border: `1px solid ${terminated ? "var(--color-hex-333333)" : "var(--color-hex-6f171b)"}`,
-                        color: terminated ? "var(--color-hex-555555)" : "var(--color-hex-e31b23)",
+                        color: terminated ? "var(--color-hex-555555)" : "var(--color-brand)",
                         padding: "7px 0",
                         cursor: terminated ? "not-allowed" : "pointer",
                     }}
                     onMouseEnter={(e) => {
                         if (!terminated) {
                             e.currentTarget.style.background = "var(--color-hex-1a0a0b)";
-                            e.currentTarget.style.borderColor = "var(--color-hex-e31b23)";
+                            e.currentTarget.style.borderColor = "var(--color-brand)";
                         }
                     }}
                     onMouseLeave={(e) => {

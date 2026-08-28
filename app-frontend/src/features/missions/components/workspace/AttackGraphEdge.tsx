@@ -24,12 +24,12 @@ export const AttackGraphEdge = React.memo(function AttackGraphEdgeBase({
     const isActive = edge.active && dst.status === "IN_PROGRESS";
     const color = (() => {
         if (isActive) {
-            return "var(--color-hex-ff2a32)";
+            return "var(--color-danger)";
         }
         if (isDim) {
             return "var(--color-hex-252525)";
         }
-        return "var(--color-hex-e31b23)";
+        return "var(--color-brand)";
     })();
     const marker = (() => {
         if (isActive) {

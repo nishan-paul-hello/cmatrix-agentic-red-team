@@ -32,19 +32,17 @@ export function AttackGraphToolbar({
         >
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                    <span className="text-[9px] tracking-[0.2em] text-[var(--color-hex-444444)]">
+                    <span className="text-base tracking-widest text-[var(--color-hex-444444)]">
                         ATTACK GRAPH
                     </span>
-                    <span className="text-[8.5px] tracking-[0.12em] text-[var(--color-hex-292929)]">
+                    <span className="text-base-tight tracking-wide text-[var(--color-hex-292929)]">
                         VDG / CVE-001 · {nodeCount} NODES · {edgeCount} EDGES
                     </span>
                 </div>
                 <button
-                    className="font-inherit cursor-pointer rounded-[2px] border-[1px] border-solid border-[var(--color-hex-333333)] bg-[var(--color-hex-151515)] px-[12px] py-[4px] text-[9px] tracking-[0.14em] text-[var(--color-hex-a0a0a0)]"
+                    className="font-inherit tracking-wider-1 cursor-pointer rounded-[2px] border-[1px] border-solid border-[var(--color-hex-333333)] bg-[var(--color-hex-151515)] px-[12px] py-[4px] text-base text-[var(--color-hex-a0a0a0)]"
                     onClick={onFocusHighestScore}
-                    onMouseEnter={(e) =>
-                        (e.currentTarget.style.borderColor = "var(--color-hex-e31b23)")
-                    }
+                    onMouseEnter={(e) => (e.currentTarget.style.borderColor = "var(--color-brand)")}
                     onMouseLeave={(e) =>
                         (e.currentTarget.style.borderColor = "var(--color-hex-333333)")
                     }

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import AttackGraphCanvasView from "@/features/missions/components/workspace/AttackGraphCanvasView";
 import { AttackGraphRepository } from "@/features/missions/data/AttackGraphRepository";
@@ -9,7 +9,7 @@ import {
     type VulnFilter,
 } from "@/features/missions/data/fixtures/attackGraphMockData";
 
-export default function AttackGraphCanvasContainer() {
+export default React.memo(function AttackGraphCanvasContainer() {
     const [statusFilter, setStatusFilter] = useState<FilterStatus>("ALL");
     const [vulnFilter, setVulnFilter] = useState<VulnFilter>("ALL");
     const [hovered, setHovered] = useState<string | null>(null);
@@ -74,4 +74,4 @@ export default function AttackGraphCanvasContainer() {
             dims={dims}
         />
     );
-}
+});

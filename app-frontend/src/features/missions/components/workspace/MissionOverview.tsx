@@ -20,7 +20,7 @@ export default function MissionOverview({
         <>
             {/* CENTER TOP: attack graph canvas */}
             <div
-                className="relative flex-shrink-0 overflow-hidden bg-[var(--color-hex-080808)]"
+                className="relative flex-shrink-0 overflow-hidden bg-[var(--color-bg)]"
                 style={{
                     height: "54%",
                     borderBottom: "1px solid var(--color-hex-1e1e1e)",
@@ -38,10 +38,10 @@ export default function MissionOverview({
 
                 {/* Canvas label */}
                 <div className="absolute top-3 left-4 flex items-center gap-2">
-                    <span className="text-[8.5px] tracking-[0.2em] text-[var(--color-hex-333333)]">
+                    <span className="text-base-tight tracking-widest text-[var(--color-hex-333333)]">
                         ATTACK GRAPH — OVERVIEW (4 OF 12 NODES)
                     </span>
-                    <span className="text-[8px] tracking-[0.12em] text-[var(--color-hex-1e1e1e)]">
+                    <span className="text-sm tracking-wide text-[var(--color-hex-1e1e1e)]">
                         VDG / CVE-001
                     </span>
                 </div>
@@ -55,7 +55,7 @@ export default function MissionOverview({
                                 payload: "attack-graph",
                             })
                         }
-                        className="font-inherit cursor-pointer rounded-[2px] border-[1px] border-solid border-[var(--color-hex-292929)] bg-[var(--color-hex-111111)] px-[10px] py-[3px] text-[8.5px] tracking-[0.14em] text-[var(--color-hex-666666)]"
+                        className="font-inherit text-base-tight tracking-wider-1 cursor-pointer rounded-[2px] border-[1px] border-solid border-[var(--color-hex-292929)] bg-[var(--color-hex-111111)] px-[10px] py-[3px] text-[var(--color-hex-666666)]"
                     >
                         FOCUS HIGHEST-SCORE PATH
                     </button>
@@ -80,10 +80,15 @@ export default function MissionOverview({
                                             className="h-[20px] w-[1px]"
                                             style={{
                                                 background:
-                                                    node.status === "DEPENDENT"
+                                                    node.status === "INFEASIBLE" ||
+                                                    node.status === "BLOCKED"
                                                         ? "var(--color-hex-222222)"
-                                                        : "var(--color-hex-e31b23)",
-                                                opacity: node.status === "DEPENDENT" ? 0.4 : 1,
+                                                        : "var(--color-brand)",
+                                                opacity:
+                                                    node.status === "INFEASIBLE" ||
+                                                    node.status === "BLOCKED"
+                                                        ? 0.4
+                                                        : 1,
                                             }}
                                         >
                                             {/* arrow tip */}
@@ -96,9 +101,13 @@ export default function MissionOverview({
                                             style={{
                                                 borderLeft: "4px solid transparent",
                                                 borderRight: "4px solid transparent",
-                                                borderTop: `5px solid ${node.status === "DEPENDENT" ? "var(--color-hex-222222)" : "var(--color-hex-e31b23)"}`,
+                                                borderTop: `5px solid ${node.status === "INFEASIBLE" || node.status === "BLOCKED" ? "var(--color-hex-222222)" : "var(--color-brand)"}`,
                                                 marginBottom: -1,
-                                                opacity: node.status === "DEPENDENT" ? 0.4 : 1,
+                                                opacity:
+                                                    node.status === "INFEASIBLE" ||
+                                                    node.status === "BLOCKED"
+                                                        ? 0.4
+                                                        : 1,
                                             }}
                                         />
                                     )}
@@ -142,7 +151,7 @@ export default function MissionOverview({
 
                                         <div className="mb-1.5 flex items-center justify-between">
                                             <span
-                                                className="text-[10px] font-bold tracking-[0.12em]"
+                                                className="text-lg font-bold tracking-wide"
                                                 style={{
                                                     color: s.labelColor,
                                                 }}
@@ -150,7 +159,7 @@ export default function MissionOverview({
                                                 {node.id}
                                             </span>
                                             <span
-                                                className="rounded-[2px] px-[5px] py-[1px] text-[8px] font-semibold tracking-[0.14em]"
+                                                className="tracking-wider-1 rounded-[2px] px-[5px] py-[1px] text-sm font-semibold"
                                                 style={{
                                                     color: badge.color,
                                                     background: badge.bg,
@@ -162,7 +171,7 @@ export default function MissionOverview({
                                         </div>
 
                                         <div
-                                            className="text-[8.5px] tracking-[0.16em]"
+                                            className="text-base-tight tracking-wider-2"
                                             style={{
                                                 color: s.typeColor,
                                                 marginBottom: node.ucb !== undefined ? 8 : 0,
@@ -218,20 +227,20 @@ export default function MissionOverview({
                     }}
                 >
                     <div
-                        className="h-[6px] w-[6px] bg-[var(--color-hex-ff2a32)]"
+                        className="h-[6px] w-[6px] bg-[var(--color-danger)]"
                         style={{
                             borderRadius: "50%",
                             animation: "pulse 1.4s ease infinite",
                         }}
                     />
-                    <span className="text-[9.5px] font-semibold tracking-[0.18em] text-[var(--color-hex-666666)]">
+                    <span className="text-lg-tight tracking-wider-3 font-semibold text-[var(--color-hex-666666)]">
                         EXECUTION LOG
                     </span>
-                    <span className="ml-auto text-[8.5px] tracking-[0.1em] text-[var(--color-hex-333333)]">
+                    <span className="text-base-tight ml-auto tracking-normal text-[var(--color-hex-333333)]">
                         LIVE STREAM
                     </span>
                 </div>
-                <div className="flex-1 overflow-y-auto bg-[var(--color-hex-080808)]">
+                <div className="flex-1 overflow-y-auto bg-[var(--color-bg)]">
                     {log.map((entry) => (
                         <div
                             key={entry.id}
@@ -241,7 +250,7 @@ export default function MissionOverview({
                             }}
                         >
                             <span
-                                className="shrink-0 text-[9px] tracking-[0.06em] text-[var(--color-hex-333333)]"
+                                className="tracking-tight-1 shrink-0 text-base text-[var(--color-hex-333333)]"
                                 style={{
                                     paddingTop: 1,
                                 }}
@@ -249,7 +258,7 @@ export default function MissionOverview({
                                 {entry.ts}
                             </span>
                             <span
-                                className="min-w-[88px] shrink-0 text-[8.5px] font-semibold tracking-[0.12em] text-[var(--color-hex-e31b23)]"
+                                className="text-base-tight min-w-[88px] shrink-0 font-semibold tracking-wide text-[var(--color-brand)]"
                                 style={{
                                     paddingTop: 1,
                                 }}
@@ -257,7 +266,7 @@ export default function MissionOverview({
                                 {entry.agent}
                             </span>
                             <span
-                                className="min-w-[108px] shrink-0 text-[8.5px] tracking-[0.1em] text-[var(--color-hex-333333)]"
+                                className="text-base-tight min-w-[108px] shrink-0 tracking-normal text-[var(--color-hex-333333)]"
                                 style={{
                                     paddingTop: 1,
                                 }}
@@ -265,7 +274,7 @@ export default function MissionOverview({
                                 {entry.action}
                             </span>
                             <span
-                                className="text-[9.5px] leading-[1.4] tracking-[0.02em]"
+                                className="text-lg-tight tracking-tighter-2 leading-tight"
                                 style={{
                                     color: entry.color,
                                 }}

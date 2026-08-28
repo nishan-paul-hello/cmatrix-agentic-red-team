@@ -13,11 +13,14 @@ export function VDGNodeDrawerHeader() {
         >
             <div>
                 <div className="mb-1 flex items-center gap-2">
-                    <span className="text-[13px] font-bold tracking-[0.12em] text-[var(--color-hex-f2f2f2)]">
+                    <span
+                        id="vdg-node-drawer-title"
+                        className="text-3xl font-bold tracking-wide text-[var(--color-fg)]"
+                    >
                         {node.id}
                     </span>
                     <span
-                        className="rounded-[2px] px-[6px] py-[1px] text-[8.5px] font-semibold tracking-[0.14em]"
+                        className="text-base-tight tracking-wider-1 rounded-[2px] px-[6px] py-[1px] font-semibold"
                         style={{
                             color: statusColor,
                             background: statusBg,
@@ -27,13 +30,13 @@ export function VDGNodeDrawerHeader() {
                         {node.status}
                     </span>
                 </div>
-                <div className="text-[9px] tracking-[0.18em] text-[var(--color-hex-6f171b)]">
+                <div className="tracking-wider-3 text-base text-[var(--color-hex-6f171b)]">
                     {node.type}
                 </div>
             </div>
             <button
                 onClick={onClose}
-                className="cursor-pointer border-none bg-[transparent] p-[2px] text-[14px] leading-[1] text-[var(--color-hex-444444)] hover:text-[var(--color-hex-a0a0a0)]"
+                className="cursor-pointer border-none bg-[transparent] p-[2px] text-4xl leading-none text-[var(--color-hex-444444)] hover:text-[var(--color-hex-a0a0a0)]"
             >
                 ✕
             </button>

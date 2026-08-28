@@ -31,18 +31,18 @@ export const AttackGraphNode = React.memo(function AttackGraphNodeBase({
     x: number;
     y: number;
     width: number;
-    onMouseEnter: () => void;
-    onMouseLeave: () => void;
-    onClick: () => void;
+    onMouseEnter: (id: string) => void;
+    onMouseLeave: (id: null) => void;
+    onClick: (node: VDGNode) => void;
 }) {
     return (
         <div
-            onMouseEnter={onMouseEnter}
-            onMouseLeave={onMouseLeave}
-            onClick={onClick}
+            onMouseEnter={() => onMouseEnter(node.id)}
+            onMouseLeave={() => onMouseLeave(null)}
+            onClick={() => onClick(node)}
             onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " ") {
-                    onClick();
+                    onClick(node);
                 }
             }}
             role="button"
@@ -53,7 +53,7 @@ export const AttackGraphNode = React.memo(function AttackGraphNodeBase({
                 top: y,
                 width,
                 background: style.bg,
-                border: `1px solid ${isHov && isVis ? "var(--color-hex-ff2a32)" : style.border}`,
+                border: `1px solid ${isHov && isVis ? "var(--color-danger)" : style.border}`,
                 opacity: isVis ? 1 : 0.12,
                 zIndex: isHov ? 10 : 1,
                 transition: "opacity 0.15s, border-color 0.1s",
@@ -71,7 +71,7 @@ export const AttackGraphNode = React.memo(function AttackGraphNodeBase({
             )}
             <div className="mb-1 flex items-center justify-between">
                 <span
-                    className="text-[9.5px] font-bold tracking-[0.1em]"
+                    className="text-lg-tight font-bold tracking-normal"
                     style={{
                         color: style.labelColor,
                     }}
@@ -79,7 +79,7 @@ export const AttackGraphNode = React.memo(function AttackGraphNodeBase({
                     {node.id}
                 </span>
                 <span
-                    className="text-[8px] text-[var(--color-hex-ff2a32)]"
+                    className="text-sm text-[var(--color-danger)]"
                     style={{
                         animation:
                             node.status === "IN_PROGRESS" ? "blink 1s ease infinite" : "none",
@@ -100,7 +100,7 @@ export const AttackGraphNode = React.memo(function AttackGraphNodeBase({
                 </span>
             </div>
             <div
-                className="mb-[6px] text-[7.5px] leading-[1.2] tracking-[0.14em]"
+                className="text-sm-tight leading-tight-2 tracking-wider-1 mb-[6px]"
                 style={{
                     color: style.typeColor,
                 }}
@@ -122,7 +122,7 @@ export const AttackGraphNode = React.memo(function AttackGraphNodeBase({
                 <NodeStat label="E_ord" value={`${node.eord}/5`} color={style.labelColor} />
                 <div className="ml-auto">
                     <span
-                        className="rounded-[2px] px-[4px] py-[1px] text-[7.5px] font-semibold tracking-[0.1em]"
+                        className="text-sm-tight rounded-[2px] px-[4px] py-[1px] font-semibold tracking-normal"
                         style={{
                             color: style.badgeColor,
                             background: style.badgeBg,

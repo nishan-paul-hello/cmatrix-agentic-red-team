@@ -9,11 +9,11 @@ export default function Stat({
 }) {
     return (
         <div className="flex flex-col gap-0.5">
-            <span className="text-[7.5px] tracking-[0.16em] text-[var(--color-hex-444444)]">
+            <span className="text-sm-tight tracking-wider-2 text-[var(--color-hex-444444)]">
                 {label}
             </span>
             <span
-                className="text-[10px] font-bold tracking-[0.06em]"
+                className="tracking-tight-1 text-lg font-bold"
                 style={{
                     color,
                 }}

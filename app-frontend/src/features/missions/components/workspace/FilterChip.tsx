@@ -16,14 +16,14 @@ export function FilterChip({
     return (
         <button
             onClick={onClick}
-            className="font-inherit cursor-pointer rounded-[2px] px-[7px] py-[2px] text-[8.5px] tracking-[0.12em]"
+            className="font-inherit text-base-tight cursor-pointer rounded-[2px] px-[7px] py-[2px] tracking-wide"
             style={{
                 color: (() => {
                     if (active && red) {
-                        return "var(--color-hex-ff2a32)";
+                        return "var(--color-danger)";
                     }
                     if (active) {
-                        return "var(--color-hex-f2f2f2)";
+                        return "var(--color-fg)";
                     }
                     if (dim) {
                         return "var(--color-hex-383838)";

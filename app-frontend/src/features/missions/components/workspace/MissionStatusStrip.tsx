@@ -27,10 +27,10 @@ export default function MissionStatusStrip({
                 }}
             >
                 <div className="flex items-center gap-2">
-                    <span className="text-[9px] tracking-[0.2em] text-[var(--color-hex-444444)]">
+                    <span className="text-base tracking-widest text-[var(--color-hex-444444)]">
                         MISSION
                     </span>
-                    <span className="text-[9px] font-bold tracking-[0.16em] text-[var(--color-hex-e31b23)]">
+                    <span className="tracking-wider-2 text-base font-bold text-[var(--color-brand)]">
                         {missionId}
                     </span>
                 </div>
@@ -41,13 +41,13 @@ export default function MissionStatusStrip({
                 <Sep />
                 <div className="ml-auto flex items-center gap-1.5">
                     <div
-                        className="h-[6px] w-[6px] bg-[var(--color-hex-3fb950)]"
+                        className="h-[6px] w-[6px] bg-[var(--color-success)]"
                         style={{
                             borderRadius: "50%",
                             animation: "pulse 1.4s ease infinite",
                         }}
                     />
-                    <span className="text-[9px] font-semibold tracking-[0.16em] text-[var(--color-hex-3fb950)]">
+                    <span className="tracking-wider-2 text-base font-semibold text-[var(--color-success)]">
                         {MISSION_STATUS.RUNNING}
                     </span>
                 </div>
@@ -82,7 +82,7 @@ export default function MissionStatusStrip({
                         key={m.label}
                         label={m.label}
                         value={m.value}
-                        valueColor={m.red ? "var(--color-hex-e31b23)" : "var(--color-hex-a0a0a0)"}
+                        valueColor={m.red ? "var(--color-brand)" : "var(--color-hex-a0a0a0)"}
                         variant="inline"
                         borderRight
                     />

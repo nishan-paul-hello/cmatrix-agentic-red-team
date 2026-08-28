@@ -71,9 +71,9 @@ export default function MissionWorkspaceView({
                     {subNav === "evaluation" && <EvaluationScreen />}
                     {subNav === "validation" && <ValidationCenter />}
                     {subNav === "findings" && <FindingsDashboard />}
-                    {subNav === "memory" && <MemoryPage />}
+                    {subNav === "memory" && <MemoryPage missionId={missionId} />}
                     {subNav === "trajectory" && <TrajectoryPage />}
-                    {subNav === "cost" && <CostDashboard />}
+                    {subNav === "cost" && <CostDashboard missionId={missionId} />}
                     {subNav === "team-manager" && <TeamManagerDashboard />}
                     {subNav === "escalation" && <HumanEscalation />}
                     {subNav !== "attack-graph" &&

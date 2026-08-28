@@ -8,7 +8,7 @@ export function VDGNodeDrawerIntent() {
     const { detail } = useNodeDrawerContext();
     return (
         <Section label="ATTACK INTENT">
-            <p className="text-[10px] leading-[1.7] tracking-[0.04em] text-[var(--color-hex-666666)]">
+            <p className="text-lg leading-relaxed tracking-tighter text-[var(--color-hex-666666)]">
                 {detail.intent}
             </p>
         </Section>
@@ -72,15 +72,13 @@ export function VDGNodeDrawerMetrics() {
                                 i % 2 === 0 ? "var(--color-hex-0d0d0d)" : "var(--color-hex-0b0b0b)",
                         }}
                     >
-                        <div className="mb-[2px] text-[7.5px] tracking-[0.16em] text-[var(--color-hex-444444)]">
+                        <div className="text-sm-tight tracking-wider-2 mb-[2px] text-[var(--color-hex-444444)]">
                             {r.k}
                         </div>
                         <div
-                            className="text-[12px] font-bold"
+                            className="text-2xl font-bold"
                             style={{
-                                color: r.red
-                                    ? "var(--color-hex-e31b23)"
-                                    : "var(--color-hex-a0a0a0)",
+                                color: r.red ? "var(--color-brand)" : "var(--color-hex-a0a0a0)",
                             }}
                         >
                             {r.v}
@@ -107,24 +105,24 @@ export function VDGNodeDrawerPrerequisites() {
         <Section label="PREREQUISITES">
             <div className="flex flex-col gap-1.5">
                 {detail.prerequisites.length === 0 ? (
-                    <span className="text-[10px] tracking-[0.08em] text-[var(--color-hex-333333)]">
+                    <span className="text-lg tracking-tight text-[var(--color-hex-333333)]">
                         None
                     </span>
                 ) : (
                     detail.prerequisites.map((p) => (
                         <div key={p.id} className="flex items-center gap-2">
                             <span
-                                className="text-[10px]"
+                                className="text-lg"
                                 style={{
                                     color: p.done
-                                        ? "var(--color-hex-3fb950)"
+                                        ? "var(--color-success)"
                                         : "var(--color-hex-444444)",
                                 }}
                             >
                                 {p.done ? "✓" : "○"}
                             </span>
                             <span
-                                className="text-[10px] tracking-[0.08em]"
+                                className="text-lg tracking-tight"
                                 style={{
                                     color: p.done
                                         ? "var(--color-hex-a0a0a0)"
@@ -134,10 +132,10 @@ export function VDGNodeDrawerPrerequisites() {
                                 {p.id}
                             </span>
                             <span
-                                className="ml-auto text-[8px] tracking-[0.12em]"
+                                className="ml-auto text-sm tracking-wide"
                                 style={{
                                     color: p.done
-                                        ? "var(--color-hex-3fb950)"
+                                        ? "var(--color-success)"
                                         : "var(--color-hex-333333)",
                                 }}
                             >
@@ -157,14 +155,14 @@ export function VDGNodeDrawerEnables() {
         <Section label="ENABLES">
             <div className="flex flex-col gap-1.5">
                 {detail.enables.length === 0 ? (
-                    <span className="text-[10px] tracking-[0.08em] text-[var(--color-hex-333333)]">
+                    <span className="text-lg tracking-tight text-[var(--color-hex-333333)]">
                         None
                     </span>
                 ) : (
                     detail.enables.map((id) => (
                         <div key={id} className="flex items-center gap-2">
-                            <span className="text-[9px] text-[var(--color-hex-e31b23)]">→</span>
-                            <span className="text-[10px] tracking-[0.08em] text-[var(--color-hex-666666)]">
+                            <span className="text-base text-[var(--color-brand)]">→</span>
+                            <span className="text-lg tracking-tight text-[var(--color-hex-666666)]">
                                 {id}
                             </span>
                         </div>
@@ -181,7 +179,7 @@ export function VDGNodeDrawerFacts() {
         <Section label="SOURCE ENVIRONMENT FACTS">
             <div className="flex flex-col gap-0 overflow-hidden rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)]">
                 {detail.facts.length === 0 ? (
-                    <div className="px-[10px] py-[6px] text-[9px] text-[var(--color-hex-333333)]">
+                    <div className="px-[10px] py-[6px] text-base text-[var(--color-hex-333333)]">
                         No facts available
                     </div>
                 ) : (
@@ -194,10 +192,10 @@ export function VDGNodeDrawerFacts() {
                                     i < a.length - 1 ? "1px solid var(--color-hex-141414)" : "none",
                             }}
                         >
-                            <span className="min-w-[72px] shrink-0 text-[8.5px] tracking-[0.14em] text-[var(--color-hex-444444)]">
+                            <span className="text-base-tight tracking-wider-1 min-w-[72px] shrink-0 text-[var(--color-hex-444444)]">
                                 {r.k}
                             </span>
-                            <span className="text-[9px] leading-[1.4] tracking-[0.04em] text-[var(--color-hex-666666)]">
+                            <span className="text-base leading-tight tracking-tighter text-[var(--color-hex-666666)]">
                                 {r.v}
                             </span>
                         </div>
@@ -221,22 +219,22 @@ export function VDGNodeDrawerLifecycle() {
                     {
                         ts: "06:18:31",
                         event: "ELIGIBLE",
-                        color: "var(--color-hex-e31b23)",
+                        color: "var(--color-brand)",
                     },
                     {
                         ts: "06:28:47",
                         event: "IN_PROGRESS",
-                        color: "var(--color-hex-ff2a32)",
+                        color: "var(--color-danger)",
                     },
                     {
                         ts: "06:29:03",
                         event: "RETRY 1",
-                        color: "var(--color-hex-d29922)",
+                        color: "var(--color-warning)",
                     },
                     {
                         ts: "06:30:58",
                         event: "IN_PROGRESS",
-                        color: "var(--color-hex-ff2a32)",
+                        color: "var(--color-danger)",
                     },
                 ].map((t, i, a) => (
                     <div key={t.ts} className="flex items-start gap-3">
@@ -254,11 +252,11 @@ export function VDGNodeDrawerLifecycle() {
                             )}
                         </div>
                         <div className="flex items-center gap-2">
-                            <span className="text-[8.5px] tracking-[0.06em] text-[var(--color-hex-333333)]">
+                            <span className="text-base-tight tracking-tight-1 text-[var(--color-hex-333333)]">
                                 {t.ts}
                             </span>
                             <span
-                                className="text-[9px] font-semibold tracking-[0.12em]"
+                                className="text-base font-semibold tracking-wide"
                                 style={{
                                     color: t.color,
                                 }}

@@ -30,7 +30,7 @@ function ly(y: number, ch: number) {
     return (y / LOGIC_H) * ch;
 }
 
-export default function AttackGraphCanvasView(props: {
+export default React.memo(function AttackGraphCanvasView(props: {
     nodes: VDGNode[];
     edges: Edge[];
     statusFilter: FilterStatus;
@@ -49,7 +49,7 @@ export default function AttackGraphCanvasView(props: {
             <AttackGraphCanvasViewInner {...props} />
         </PanelErrorBoundary>
     );
-}
+});
 
 const AttackGraphCanvasViewInner = React.memo(function ({
     nodes,
@@ -103,6 +103,10 @@ const AttackGraphCanvasViewInner = React.memo(function ({
                 statusFilters={STATUS_FILTERS}
                 vulnFilters={VULN_FILTERS}
                 onFocusHighestScore={() => {
+                    if (drawerNode !== null) {
+                        setDrawerNode(null);
+                        return;
+                    }
                     const top = [...nodes]
                         .filter((n) => n.status === "ELIGIBLE")
                         .sort((a, b) => b.ucb - a.ucb)[0] as VDGNode | undefined;
@@ -117,7 +121,7 @@ const AttackGraphCanvasViewInner = React.memo(function ({
                 {/* Canvas */}
                 <div
                     ref={containerRef}
-                    className="relative flex-1 overflow-hidden bg-[var(--color-hex-080808)]"
+                    className="relative flex-1 overflow-hidden bg-[var(--color-bg)]"
                 >
                     {/* Grid */}
                     <div
@@ -142,7 +146,7 @@ const AttackGraphCanvasViewInner = React.memo(function ({
                             >
                                 <path
                                     d="M0,0 L0,6 L6,3 z"
-                                    fill="var(--color-hex-e31b23)"
+                                    fill="var(--color-brand)"
                                     opacity="0.7"
                                 />
                             </marker>
@@ -164,7 +168,7 @@ const AttackGraphCanvasViewInner = React.memo(function ({
                                 refY="3"
                                 orient="auto"
                             >
-                                <path d="M0,0 L0,6 L6,3 z" fill="var(--color-hex-ff2a32)" />
+                                <path d="M0,0 L0,6 L6,3 z" fill="var(--color-danger)" />
                             </marker>
                         </defs>
                         {edges.map((edge) => {
@@ -204,9 +208,9 @@ const AttackGraphCanvasViewInner = React.memo(function ({
                                 x={lx(node.cx, w) - NODE_W / 2}
                                 y={ly(node.cy, h)}
                                 width={NODE_W}
-                                onMouseEnter={() => setHovered(node.id)}
-                                onMouseLeave={() => setHovered(null)}
-                                onClick={() => setDrawerNode(node)}
+                                onMouseEnter={setHovered}
+                                onMouseLeave={setHovered}
+                                onClick={setDrawerNode}
                             />
                         );
                     })}

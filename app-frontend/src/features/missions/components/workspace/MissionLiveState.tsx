@@ -21,7 +21,7 @@ const MissionLiveState = React.memo(function ({ time }: { time: string }) {
                     borderBottom: "1px solid var(--color-hex-1e1e1e)",
                 }}
             >
-                <div className="px-4 pt-4 pb-2 text-[8.5px] tracking-[0.2em] text-[var(--color-hex-444444)]">
+                <div className="text-base-tight px-4 pt-4 pb-2 tracking-widest text-[var(--color-hex-444444)]">
                     LIVE STATE
                 </div>
                 <div className="grid grid-cols-2 gap-0">
@@ -58,20 +58,18 @@ const MissionLiveState = React.memo(function ({ time }: { time: string }) {
                                 borderBottom: i < 2 ? "1px solid var(--color-hex-151515)" : "none",
                             }}
                         >
-                            <div className="mb-[4px] text-[7.5px] tracking-[0.2em] text-[var(--color-hex-444444)]">
+                            <div className="text-sm-tight mb-[4px] tracking-widest text-[var(--color-hex-444444)]">
                                 {s.label}
                             </div>
                             <div
-                                className="text-[20px] leading-[1] font-bold tracking-[0.04em]"
+                                className="text-9xl leading-none font-bold tracking-tighter"
                                 style={{
-                                    color: s.red
-                                        ? "var(--color-hex-e31b23)"
-                                        : "var(--color-hex-f2f2f2)",
+                                    color: s.red ? "var(--color-brand)" : "var(--color-fg)",
                                 }}
                             >
                                 {s.value}
                             </div>
-                            <div className="mt-[3px] text-[7.5px] tracking-[0.1em] text-[var(--color-hex-333333)]">
+                            <div className="text-sm-tight mt-[3px] tracking-normal text-[var(--color-hex-333333)]">
                                 {s.sub}
                             </div>
                         </div>
@@ -85,18 +83,18 @@ const MissionLiveState = React.memo(function ({ time }: { time: string }) {
                     }}
                 >
                     <div>
-                        <div className="mb-[2px] text-[7.5px] tracking-[0.2em] text-[var(--color-hex-444444)]">
+                        <div className="text-sm-tight mb-[2px] tracking-widest text-[var(--color-hex-444444)]">
                             ELAPSED TIME
                         </div>
-                        <div className="text-[18px] leading-[1] font-bold tracking-[0.1em] text-[var(--color-hex-a0a0a0)]">
+                        <div className="text-8xl leading-none font-bold tracking-normal text-[var(--color-hex-a0a0a0)]">
                             {time}
                         </div>
                     </div>
                     <div className="ml-auto">
-                        <div className="mb-[2px] text-[7.5px] tracking-[0.2em] text-[var(--color-hex-444444)]">
+                        <div className="text-sm-tight mb-[2px] tracking-widest text-[var(--color-hex-444444)]">
                             STEP
                         </div>
-                        <div className="text-[18px] leading-[1] font-bold tracking-[0.06em] text-[var(--color-hex-555555)]">
+                        <div className="tracking-tight-1 text-8xl leading-none font-bold text-[var(--color-hex-555555)]">
                             014
                         </div>
                     </div>
@@ -111,10 +109,10 @@ const MissionLiveState = React.memo(function ({ time }: { time: string }) {
                         borderBottom: "1px solid var(--color-hex-1e1e1e)",
                     }}
                 >
-                    <span className="text-[8.5px] tracking-[0.2em] text-[var(--color-hex-444444)]">
+                    <span className="text-base-tight tracking-widest text-[var(--color-hex-444444)]">
                         SPECIALISTS
                     </span>
-                    <span className="text-[8px] tracking-[0.12em] text-[var(--color-hex-e31b23)]">
+                    <span className="text-sm tracking-wide text-[var(--color-brand)]">
                         1 RUNNING
                     </span>
                 </div>
@@ -143,7 +141,7 @@ const MissionLiveState = React.memo(function ({ time }: { time: string }) {
                                         }}
                                     />
                                     <span
-                                        className="text-[9.5px] font-semibold tracking-[0.08em]"
+                                        className="text-lg-tight font-semibold tracking-tight"
                                         style={{
                                             color:
                                                 spec.status === SPEC_STATUS.IDLE
@@ -156,7 +154,7 @@ const MissionLiveState = React.memo(function ({ time }: { time: string }) {
                                 </div>
                                 <SpecBadge status={spec.status} />
                             </div>
-                            <div className="mb-[2px] text-[8.5px] tracking-[0.08em] text-[var(--color-hex-333333)]">
+                            <div className="text-base-tight mb-[2px] tracking-tight text-[var(--color-hex-333333)]">
                                 {spec.task !== "—" && (
                                     <span className="text-[var(--color-hex-555555)]">
                                         {spec.task}
@@ -166,12 +164,12 @@ const MissionLiveState = React.memo(function ({ time }: { time: string }) {
                             </div>
                             <div className="flex items-center gap-3">
                                 {spec.context !== "—" && (
-                                    <span className="text-[7.5px] tracking-[0.12em] text-[var(--color-hex-333333)]">
+                                    <span className="text-sm-tight tracking-wide text-[var(--color-hex-333333)]">
                                         CTX: {spec.context}
                                     </span>
                                 )}
                                 {spec.evidence > 0 && (
-                                    <span className="text-[7.5px] tracking-[0.1em] text-[var(--color-hex-444444)]">
+                                    <span className="text-sm-tight tracking-normal text-[var(--color-hex-444444)]">
                                         EL: {spec.evidence}
                                     </span>
                                 )}
