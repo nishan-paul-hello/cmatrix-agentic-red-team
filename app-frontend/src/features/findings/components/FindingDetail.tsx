@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import { Button } from "@/components/ui/button";
 import AttackPath from "@/features/findings/components/AttackPath";
 import EvidenceViewer from "@/features/findings/components/EvidenceViewer";
 import TrajectoryTab from "@/features/findings/components/TrajectoryTab";
@@ -11,27 +12,21 @@ export default function FindingDetail({ f, onBack }: { f: Finding; onBack: () =>
     const [tab, setTab] = useState<Tab>("OVERVIEW");
     const [evOpen, setEvOpen] = useState(false);
     const sc = SEV_C[f.severity];
-    const stc = STATUS_C[f.status] ?? "var(--color-hex-666666)";
+    const stc = STATUS_C[f.status] ?? "var(--muted-foreground)";
     return (
-        <div className="flex h-full min-h-[0px] flex-col">
-            <div
-                className="flex-shrink-0 px-6 pt-5 pb-0"
-                style={{
-                    borderBottom: "1px solid var(--color-hex-1e1e1e)",
-                }}
-            >
-                <button
+        <div className="flex h-full min-h-0 flex-col">
+            <div className="border-border flex-shrink-0 border-b px-6 pt-5 pb-0">
+                <Button
+                    variant="ghost"
                     onClick={onBack}
-                    className="font-inherit tracking-wider-1 mb-[10px] cursor-pointer border-none bg-[transparent] p-[0px] text-base text-[var(--color-hex-666666)] hover:text-[var(--color-hex-a0a0a0)]"
+                    className="text-muted-foreground hover:text-muted-foreground mb-2.5 h-auto p-0 text-base tracking-widest hover:bg-transparent"
                 >
                     ← FINDINGS
-                </button>
+                </Button>
                 <div className="mb-3 flex items-center gap-3">
-                    <h1 className="text-8xl font-bold tracking-wide text-[var(--color-fg)]">
-                        {f.id}
-                    </h1>
+                    <h1 className="text-foreground text-xs font-bold tracking-wide">{f.id}</h1>
                     <span
-                        className="tracking-wider-1 rounded-[2px] px-[7px] py-[2px] text-base font-semibold"
+                        className="rounded-sm px-1.5 py-0.5 text-base font-semibold tracking-widest"
                         style={{
                             color: sc.color,
                             background: sc.bg,
@@ -53,29 +48,30 @@ export default function FindingDetail({ f, onBack }: { f: Finding; onBack: () =>
                     {(
                         ["OVERVIEW", "EVIDENCE", "ATTACK PATH", "VALIDATION", "TRAJECTORY"] as Tab[]
                     ).map((t) => (
-                        <button
+                        <Button
                             key={t}
+                            variant="ghost"
                             onClick={() => setTab(t)}
-                            className="font-inherit tracking-wider-1 cursor-pointer border-none bg-[transparent] px-[14px] py-[5px] text-base whitespace-nowrap"
+                            className="h-auto rounded-none px-3.5 py-1 text-base tracking-widest whitespace-nowrap hover:bg-transparent"
                             style={{
                                 borderBottom:
                                     t === tab
-                                        ? "2px solid var(--color-brand)"
+                                        ? "2px solid var(--primary)"
                                         : "2px solid transparent",
-                                color: t === tab ? "var(--color-fg)" : "var(--color-hex-444444)",
+                                color: t === tab ? "var(--foreground)" : "var(--muted-foreground)",
                                 marginBottom: -1,
                             }}
                         >
                             {t}
-                        </button>
+                        </Button>
                     ))}
                 </div>
             </div>
-            <div className="flex min-h-[0px] flex-1 overflow-hidden">
+            <div className="flex min-h-0 flex-1 overflow-hidden">
                 <div className="flex-1 overflow-y-auto px-6 py-6">
                     {tab === "OVERVIEW" && (
                         <>
-                            <div className="mb-[20px] overflow-hidden rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)]">
+                            <div className="border-border mb-5 overflow-hidden rounded-sm border-[1px] border-solid">
                                 {[
                                     {
                                         k: "FINDING ID",
@@ -109,31 +105,13 @@ export default function FindingDetail({ f, onBack }: { f: Finding; onBack: () =>
                                         k: "VALIDATED",
                                         v: f.validated,
                                     },
-                                ].map((r, i, a) => (
-                                    <div
-                                        key={r.k}
-                                        className="flex"
-                                        style={{
-                                            borderBottom:
-                                                i < a.length - 1
-                                                    ? "1px solid var(--color-hex-141414)"
-                                                    : "none",
-                                            background:
-                                                i % 2
-                                                    ? "var(--color-hex-0b0b0b)"
-                                                    : "var(--color-hex-0d0d0d)",
-                                        }}
-                                    >
-                                        <div
-                                            className="text-base-tight tracking-wider-3 w-[140px] shrink-0 px-[14px] py-[9px] font-semibold text-[var(--color-hex-444444)]"
-                                            style={{
-                                                borderRight: "1px solid var(--color-hex-141414)",
-                                            }}
-                                        >
+                                ].map((r) => (
+                                    <div key={r.k} className="border-border flex border-b">
+                                        <div className="text-muted-foreground border-border w-[140px] shrink-0 border-r px-3.5 py-2 text-sm font-semibold tracking-widest">
                                             {r.k}
                                         </div>
                                         <div
-                                            className="flex-1 px-[14px] py-[9px] text-lg"
+                                            className="flex-1 px-3.5 py-2 text-xs"
                                             style={{
                                                 color: (() => {
                                                     if (r.k === "STATUS") {
@@ -142,7 +120,7 @@ export default function FindingDetail({ f, onBack }: { f: Finding; onBack: () =>
                                                     if (r.k === "SEVERITY") {
                                                         return sc.color;
                                                     }
-                                                    return "var(--color-hex-888888)";
+                                                    return "var(--muted-foreground)";
                                                 })(),
                                             }}
                                         >
@@ -151,23 +129,24 @@ export default function FindingDetail({ f, onBack }: { f: Finding; onBack: () =>
                                     </div>
                                 ))}
                             </div>
-                            <div className="mb-[14px] text-base tracking-widest text-[var(--color-hex-444444)]">
+                            <div className="text-muted-foreground mb-3.5 text-base tracking-widest">
                                 ATTACK PATH
                             </div>
                             <AttackPath nodes={f.path} />
                             <div className="mt-6 flex gap-3">
-                                <button
+                                <Button
                                     onClick={() => setEvOpen(true)}
-                                    className="font-inherit text-lg-tight tracking-wider-1 cursor-pointer rounded-[2px] border-none bg-[var(--color-brand)] px-[18px] py-[7px] text-[var(--color-fg)] hover:bg-[var(--color-danger)]"
+                                    className="bg-primary text-foreground hover:bg-destructive h-auto rounded-sm px-4 py-1.5 text-base tracking-widest"
                                 >
                                     VIEW EVIDENCE
-                                </button>
-                                <button
+                                </Button>
+                                <Button
+                                    variant="outline"
                                     onClick={() => setTab("ATTACK PATH")}
-                                    className="font-inherit text-lg-tight tracking-wider-1 cursor-pointer rounded-[2px] border-[1px] border-solid border-[var(--color-hex-292929)] bg-[transparent] px-[18px] py-[7px] text-[var(--color-hex-a0a0a0)] hover:border-[var(--color-hex-a0a0a0)]"
+                                    className="h-auto rounded-sm px-4 py-1.5 text-base tracking-widest"
                                 >
                                     VIEW PATH
-                                </button>
+                                </Button>
                             </div>
                         </>
                     )}
@@ -179,7 +158,7 @@ export default function FindingDetail({ f, onBack }: { f: Finding; onBack: () =>
             </div>
             {evOpen && (
                 <div
-                    className="fixed inset-0 flex items-center justify-center bg-[var(--color-hex-00000099)]"
+                    className="bg-muted fixed inset-0 flex items-center justify-center"
                     style={{
                         zIndex: 60,
                     }}
@@ -199,27 +178,24 @@ export default function FindingDetail({ f, onBack }: { f: Finding; onBack: () =>
                                 e.stopPropagation();
                             }
                         }}
-                        className="w-[700px] overflow-auto rounded-[2px] border-[1px] border-solid border-[var(--color-hex-292929)] bg-[var(--color-hex-0d0d0d)]"
+                        className="border-border bg-background w-full max-w-[700px] overflow-auto rounded-sm border-[1px] border-solid sm:w-[700px]"
                         style={{
                             maxHeight: "80vh",
                         }}
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <div
-                            className="flex justify-between px-5 pt-4 pb-3"
-                            style={{
-                                borderBottom: "1px solid var(--color-hex-1e1e1e)",
-                            }}
-                        >
-                            <span className="text-2xl font-bold tracking-normal text-[var(--color-fg)]">
+                        <div className="border-border flex justify-between border-b px-5 pt-4 pb-3">
+                            <span className="text-foreground text-xs font-bold tracking-normal">
                                 EVIDENCE VIEWER
                             </span>
-                            <button
+                            <Button
+                                variant="ghost"
+                                size="icon-xs"
                                 onClick={() => setEvOpen(false)}
-                                className="cursor-pointer border-none bg-[transparent] text-4xl text-[var(--color-hex-444444)]"
+                                className="text-muted-foreground hover:text-muted-foreground h-auto p-0.5 text-sm hover:bg-transparent"
                             >
                                 ✕
-                            </button>
+                            </Button>
                         </div>
                         <EvidenceViewer />
                     </div>

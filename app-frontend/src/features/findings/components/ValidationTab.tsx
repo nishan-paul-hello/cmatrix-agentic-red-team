@@ -34,7 +34,7 @@ export default function ValidationTab({ f }: { f: Finding }) {
                 paddingBottom: 24,
             }}
         >
-            <div className="mb-[16px] text-sm tracking-widest text-[var(--color-hex-444444)]">
+            <div className="text-muted-foreground mb-4 text-sm tracking-widest">
                 VALIDATION LIFECYCLE
             </div>
             {steps.map((s, i) => (
@@ -45,28 +45,28 @@ export default function ValidationTab({ f }: { f: Finding }) {
                         marginBottom: i < steps.length - 1 ? 0 : 0,
                     }}
                 >
-                    <div className="flex w-[24px] shrink-0 flex-col items-center">
+                    <div className="flex w-6 shrink-0 flex-col items-center">
                         <div
-                            className="h-[8px] w-[8px] shrink-0 border-[1px] border-solid border-[transparent]"
+                            className="h-2 w-2 shrink-0 border-[1px] border-solid border-[transparent]"
                             style={{
                                 borderRadius: "50%",
                                 background: (() => {
                                     if (s.eord === 5) {
-                                        return "var(--color-success)";
+                                        return "var(--success)";
                                     }
                                     if (s.eord >= 4) {
-                                        return "var(--color-danger)";
+                                        return "var(--destructive)";
                                     }
                                     if (s.eord >= 3) {
-                                        return "var(--color-warning)";
+                                        return "var(--warning)";
                                     }
-                                    return "var(--color-hex-333333)";
+                                    return "var(--border)";
                                 })(),
                             }}
                         />
                         {i < steps.length - 1 && (
                             <div
-                                className="min-h-[24px] w-[1px] flex-1 bg-[var(--color-hex-1e1e1e)]"
+                                className="bg-muted min-h-6 w-px flex-1"
                                 style={{
                                     margin: "4px 0",
                                 }}
@@ -80,47 +80,43 @@ export default function ValidationTab({ f }: { f: Finding }) {
                     >
                         <div className="mb-1 flex items-center gap-3">
                             <span
-                                className="text-base-tight font-bold tracking-normal"
+                                className="text-sm font-bold tracking-normal"
                                 style={{
                                     color:
-                                        s.eord === 5
-                                            ? "var(--color-success)"
-                                            : "var(--color-hex-a0a0a0)",
+                                        s.eord === 5 ? "var(--success)" : "var(--muted-foreground)",
                                 }}
                             >
                                 {s.label}
                             </span>
-                            <span className="text-sm-tight text-[var(--color-hex-444444)]">
-                                {s.ts}
-                            </span>
+                            <span className="text-muted-foreground text-xs">{s.ts}</span>
                             <span
                                 className="text-sm font-semibold tracking-normal"
                                 style={{
                                     color: (() => {
                                         if (s.eord === 5) {
-                                            return "var(--color-success)";
+                                            return "var(--success)";
                                         }
                                         if (s.eord >= 4) {
-                                            return "var(--color-danger)";
+                                            return "var(--destructive)";
                                         }
                                         if (s.eord >= 3) {
-                                            return "var(--color-warning)";
+                                            return "var(--warning)";
                                         }
-                                        return "var(--color-hex-555555)";
+                                        return "var(--muted-foreground)";
                                     })(),
                                 }}
                             >
                                 E_ord {s.eord} — {eord_labels[s.eord]}
                             </span>
                         </div>
-                        <div className="text-lg-tight leading-relaxed text-[var(--color-hex-555555)]">
+                        <div className="text-muted-foreground text-base leading-relaxed">
                             {s.note}
                         </div>
                     </div>
                 </div>
             ))}
-            <div className="mt-[8px] rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)] bg-[var(--color-hex-0a0a0a)] px-[16px] py-[14px]">
-                <div className="mb-[8px] text-sm tracking-widest text-[var(--color-hex-444444)]">
+            <div className="border-border bg-background mt-2 rounded-sm border-[1px] border-solid px-4 py-3.5">
+                <div className="text-muted-foreground mb-2 text-sm tracking-widest">
                     ORACLE RESULT
                 </div>
                 <div className="flex gap-6">
@@ -143,19 +139,19 @@ export default function ValidationTab({ f }: { f: Finding }) {
                         },
                     ].map((r) => (
                         <div key={r.k}>
-                            <div className="text-sm-tight tracking-wider-1 mb-[2px] text-[var(--color-hex-444444)]">
+                            <div className="text-muted-foreground mb-0.5 text-xs tracking-widest">
                                 {r.k}
                             </div>
                             <div
-                                className="text-lg font-bold"
+                                className="text-xs font-bold"
                                 style={{
                                     color: (() => {
                                         if (r.k === "RESULT") {
                                             return f.status === "ORACLE_CONFIRMED"
-                                                ? "var(--color-success)"
-                                                : "var(--color-warning)";
+                                                ? "var(--success)"
+                                                : "var(--warning)";
                                         }
-                                        return "var(--color-hex-888888)";
+                                        return "var(--muted-foreground)";
                                     })(),
                                 }}
                             >
