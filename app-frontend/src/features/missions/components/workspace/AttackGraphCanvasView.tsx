@@ -91,7 +91,7 @@ const AttackGraphCanvasViewInner = React.memo(function ({
     }
 
     return (
-        <div className="flex h-full min-h-[0px] flex-col">
+        <div className="flex h-full min-h-0 flex-col">
             {/* Toolbar */}
             <AttackGraphToolbar
                 nodeCount={nodes.length}
@@ -117,12 +117,9 @@ const AttackGraphCanvasViewInner = React.memo(function ({
             />
 
             {/* Canvas row */}
-            <div className="flex min-h-[0px] flex-1 overflow-hidden">
+            <div className="flex min-h-0 flex-1 overflow-hidden">
                 {/* Canvas */}
-                <div
-                    ref={containerRef}
-                    className="relative flex-1 overflow-hidden bg-[var(--color-bg)]"
-                >
+                <div ref={containerRef} className="bg-background relative flex-1 overflow-hidden">
                     {/* Grid */}
                     <div
                         className="pointer-events-none absolute inset-0"
@@ -144,11 +141,7 @@ const AttackGraphCanvasViewInner = React.memo(function ({
                                 refY="3"
                                 orient="auto"
                             >
-                                <path
-                                    d="M0,0 L0,6 L6,3 z"
-                                    fill="var(--color-brand)"
-                                    opacity="0.7"
-                                />
+                                <path d="M0,0 L0,6 L6,3 z" fill="var(--primary)" opacity="0.7" />
                             </marker>
                             <marker
                                 id="arr-dim"
@@ -158,7 +151,7 @@ const AttackGraphCanvasViewInner = React.memo(function ({
                                 refY="3"
                                 orient="auto"
                             >
-                                <path d="M0,0 L0,6 L6,3 z" fill="var(--color-hex-252525)" />
+                                <path d="M0,0 L0,6 L6,3 z" fill="var(--border)" />
                             </marker>
                             <marker
                                 id="arr-active"
@@ -168,7 +161,7 @@ const AttackGraphCanvasViewInner = React.memo(function ({
                                 refY="3"
                                 orient="auto"
                             >
-                                <path d="M0,0 L0,6 L6,3 z" fill="var(--color-danger)" />
+                                <path d="M0,0 L0,6 L6,3 z" fill="var(--destructive)" />
                             </marker>
                         </defs>
                         {edges.map((edge) => {

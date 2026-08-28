@@ -1,5 +1,7 @@
 import React from "react";
 
+import { Button } from "@/components/ui/button";
+
 export function FilterChip({
     label,
     active,
@@ -14,56 +16,54 @@ export function FilterChip({
     dim?: boolean;
 }) {
     return (
-        <button
+        <Button
+            variant="outline"
             onClick={onClick}
-            className="font-inherit text-base-tight cursor-pointer rounded-[2px] px-[7px] py-[2px] tracking-wide"
+            className="h-auto rounded-sm px-1.5 py-0.5 text-sm tracking-wide"
             style={{
                 color: (() => {
                     if (active && red) {
-                        return "var(--color-danger)";
+                        return "var(--destructive)";
                     }
                     if (active) {
-                        return "var(--color-fg)";
+                        return "var(--foreground)";
                     }
                     if (dim) {
-                        return "var(--color-hex-383838)";
+                        return "var(--border)";
                     }
-                    return "var(--color-hex-555555)";
+                    return "var(--muted-foreground)";
                 })(),
                 background: (() => {
                     if (active && red) {
-                        return "var(--color-hex-1a0608)";
+                        return "var(--border)";
                     }
                     if (active) {
-                        return "var(--color-hex-191919)";
+                        return "var(--border)";
                     }
                     return "transparent";
                 })(),
                 border: `1px solid ${(() => {
                     if (active && red) {
-                        return "var(--color-hex-6f171b)";
+                        return "var(--border)";
                     }
                     if (active) {
-                        return "var(--color-hex-333333)";
+                        return "var(--border)";
                     }
-                    return "var(--color-hex-1e1e1e)";
+                    return "var(--border)";
                 })()}`,
-                whiteSpace: "nowrap" as const,
             }}
             onMouseEnter={(e) => {
                 if (!active) {
-                    e.currentTarget.style.color = "var(--color-hex-888888)";
+                    e.currentTarget.style.color = "var(--muted-foreground)";
                 }
             }}
             onMouseLeave={(e) => {
                 if (!active) {
-                    e.currentTarget.style.color = dim
-                        ? "var(--color-hex-383838)"
-                        : "var(--color-hex-555555)";
+                    e.currentTarget.style.color = dim ? "var(--border)" : "var(--muted-foreground)";
                 }
             }}
         >
             {label}
-        </button>
+        </Button>
     );
 }

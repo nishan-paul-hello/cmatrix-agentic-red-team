@@ -1,3 +1,5 @@
+import { Separator } from "@/components/ui/separator";
+
 export default function Sep() {
-    return <div className="h-[12px] w-[1px] bg-[var(--color-hex-222222)]" />;
+    return <Separator orientation="vertical" className="bg-muted h-3" />;
 }

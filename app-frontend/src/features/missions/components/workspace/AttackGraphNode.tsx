@@ -1,6 +1,6 @@
 import React from "react";
 
-import { NodeStat } from "@/features/missions/components/workspace/NodeStat";
+import { KPIStrip } from "@/components/ui/KPIStrip";
 import { type VDGNode } from "@/features/missions/data/fixtures/attackGraphMockData";
 
 interface NodeStyleProps {
@@ -47,13 +47,13 @@ export const AttackGraphNode = React.memo(function AttackGraphNodeBase({
             }}
             role="button"
             tabIndex={0}
-            className="absolute cursor-pointer rounded-[2px] px-[10px] py-[8px]"
+            className="absolute cursor-pointer rounded-sm px-2.5 py-2"
             style={{
                 left: x,
                 top: y,
                 width,
                 background: style.bg,
-                border: `1px solid ${isHov && isVis ? "var(--color-danger)" : style.border}`,
+                border: `1px solid ${isHov && isVis ? "var(--destructive)" : style.border}`,
                 opacity: isVis ? 1 : 0.12,
                 zIndex: isHov ? 10 : 1,
                 transition: "opacity 0.15s, border-color 0.1s",
@@ -61,7 +61,7 @@ export const AttackGraphNode = React.memo(function AttackGraphNodeBase({
         >
             {node.status === "ELIGIBLE" && isVis && (
                 <div
-                    className="absolute rounded-[3px] border-[1px] border-solid border-[var(--color-hex-e31b2330)]"
+                    className="border-border absolute rounded-[3px] border-[1px] border-solid"
                     style={{
                         inset: -4,
                         pointerEvents: "none",
@@ -71,7 +71,7 @@ export const AttackGraphNode = React.memo(function AttackGraphNodeBase({
             )}
             <div className="mb-1 flex items-center justify-between">
                 <span
-                    className="text-lg-tight font-bold tracking-normal"
+                    className="text-base font-bold tracking-normal"
                     style={{
                         color: style.labelColor,
                     }}
@@ -79,7 +79,7 @@ export const AttackGraphNode = React.memo(function AttackGraphNodeBase({
                     {node.id}
                 </span>
                 <span
-                    className="text-sm text-[var(--color-danger)]"
+                    className="text-destructive text-sm"
                     style={{
                         animation:
                             node.status === "IN_PROGRESS" ? "blink 1s ease infinite" : "none",
@@ -100,7 +100,7 @@ export const AttackGraphNode = React.memo(function AttackGraphNodeBase({
                 </span>
             </div>
             <div
-                className="text-sm-tight leading-tight-2 tracking-wider-1 mb-[6px]"
+                className="leading-tight-2 mb-1.5 text-xs tracking-widest"
                 style={{
                     color: style.typeColor,
                 }}
@@ -114,15 +114,21 @@ export const AttackGraphNode = React.memo(function AttackGraphNodeBase({
                     paddingTop: 5,
                 }}
             >
-                <NodeStat
-                    label="UCB"
-                    value={node.status === "EXPLOITED" ? "—" : node.ucb.toFixed(3)}
-                    color={style.labelColor}
+                <KPIStrip
+                    variant="inline"
+                    className="gap-3"
+                    items={[
+                        {
+                            k: "UCB",
+                            v: node.status === "EXPLOITED" ? "—" : node.ucb.toFixed(3),
+                            c: style.labelColor,
+                        },
+                        { k: "E_ord", v: `${node.eord}/5`, c: style.labelColor },
+                    ]}
                 />
-                <NodeStat label="E_ord" value={`${node.eord}/5`} color={style.labelColor} />
                 <div className="ml-auto">
                     <span
-                        className="text-sm-tight rounded-[2px] px-[4px] py-[1px] font-semibold tracking-normal"
+                        className="rounded-sm px-1 py-px text-xs font-semibold tracking-normal"
                         style={{
                             color: style.badgeColor,
                             background: style.badgeBg,

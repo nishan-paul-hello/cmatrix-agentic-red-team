@@ -12,10 +12,10 @@ export function EOrdIndicator({ value }: { value: number }) {
                 }}
             >
                 {/* track */}
-                <div className="absolute top-[6px] right-[4px] left-[4px] h-[1px] bg-[var(--color-hex-292929)]" />
+                <div className="bg-muted absolute top-1.5 right-1 left-1 h-px" />
                 {/* filled */}
                 <div
-                    className="absolute top-[6px] left-[4px] h-[1px] bg-[var(--color-brand)]"
+                    className="bg-primary absolute top-1.5 left-1 h-px"
                     style={{
                         width: `${(value / 5) * 92}%`,
                     }}
@@ -29,15 +29,15 @@ export function EOrdIndicator({ value }: { value: number }) {
                         }}
                     >
                         <div
-                            className="mb-[2px] h-[6px] w-[6px] rounded-[1px]"
+                            className="mb-0.5 h-1.5 w-1.5 rounded-none"
                             style={{
-                                border: `1px solid ${i <= value ? "var(--color-brand)" : "var(--color-hex-292929)"}`,
+                                border: `1px solid ${i <= value ? "var(--primary)" : "var(--border)"}`,
                                 background: (() => {
                                     if (i < value) {
-                                        return "var(--color-brand)";
+                                        return "var(--primary)";
                                     }
                                     if (i === value) {
-                                        return "var(--color-danger)";
+                                        return "var(--destructive)";
                                     }
                                     return "transparent";
                                 })(),
@@ -45,19 +45,18 @@ export function EOrdIndicator({ value }: { value: number }) {
                         />
                         {i === value && (
                             <div
-                                className="absolute top-[10px] h-[0px] w-[0px]"
+                                className="absolute top-2.5 h-0 w-0"
                                 style={{
                                     borderLeft: "4px solid transparent",
                                     borderRight: "4px solid transparent",
-                                    borderTop: "5px solid var(--color-danger)",
+                                    borderTop: "5px solid var(--destructive)",
                                 }}
                             />
                         )}
                         <span
-                            className="text-2xs mt-[14px] tracking-normal whitespace-nowrap"
+                            className="mt-3.5 text-xs tracking-normal whitespace-nowrap"
                             style={{
-                                color:
-                                    i === value ? "var(--color-brand)" : "var(--color-hex-333333)",
+                                color: i === value ? "var(--primary)" : "var(--border)",
                             }}
                         >
                             {lbl}
@@ -65,9 +64,9 @@ export function EOrdIndicator({ value }: { value: number }) {
                     </div>
                 ))}
             </div>
-            <div className="text-base-tight mt-[4px] tracking-normal text-[var(--color-hex-666666)]">
+            <div className="text-muted-foreground mt-1 text-sm tracking-normal">
                 Current:{" "}
-                <span className="text-[var(--color-brand)]">
+                <span className="text-primary">
                     E_ord {value} — {EORD_LABELS[value]}
                 </span>
             </div>

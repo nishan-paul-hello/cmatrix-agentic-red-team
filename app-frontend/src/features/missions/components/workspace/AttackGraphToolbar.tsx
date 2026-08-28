@@ -1,5 +1,6 @@
 import React from "react";
 
+import { Button } from "@/components/ui/button";
 import { FilterChip } from "@/features/missions/components/workspace/FilterChip";
 
 export function AttackGraphToolbar({
@@ -24,31 +25,23 @@ export function AttackGraphToolbar({
     vulnFilters: string[];
 }) {
     return (
-        <div
-            className="flex flex-shrink-0 flex-col gap-2 bg-[var(--color-hex-0b0b0b)] px-4 py-3"
-            style={{
-                borderBottom: "1px solid var(--color-hex-1e1e1e)",
-            }}
-        >
+        <div className="bg-background border-border flex flex-shrink-0 flex-col gap-2 border-b px-4 py-3">
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                    <span className="text-base tracking-widest text-[var(--color-hex-444444)]">
+                    <span className="text-muted-foreground text-base tracking-widest">
                         ATTACK GRAPH
                     </span>
-                    <span className="text-base-tight tracking-wide text-[var(--color-hex-292929)]">
+                    <span className="text-muted-foreground text-sm tracking-wide">
                         VDG / CVE-001 · {nodeCount} NODES · {edgeCount} EDGES
                     </span>
                 </div>
-                <button
-                    className="font-inherit tracking-wider-1 cursor-pointer rounded-[2px] border-[1px] border-solid border-[var(--color-hex-333333)] bg-[var(--color-hex-151515)] px-[12px] py-[4px] text-base text-[var(--color-hex-a0a0a0)]"
+                <Button
+                    variant="outline"
+                    className="border-border bg-muted text-muted-foreground hover:border-primary hover:bg-muted hover:text-muted-foreground h-auto rounded-sm px-3 py-1 text-base tracking-widest transition-colors duration-100"
                     onClick={onFocusHighestScore}
-                    onMouseEnter={(e) => (e.currentTarget.style.borderColor = "var(--color-brand)")}
-                    onMouseLeave={(e) =>
-                        (e.currentTarget.style.borderColor = "var(--color-hex-333333)")
-                    }
                 >
                     ◈ FOCUS HIGHEST-SCORE PATH
-                </button>
+                </Button>
             </div>
             <div className="flex flex-wrap items-center gap-4">
                 <div className="flex items-center gap-1">
@@ -62,7 +55,7 @@ export function AttackGraphToolbar({
                         />
                     ))}
                 </div>
-                <div className="h-[16px] w-[1px] bg-[var(--color-hex-222222)]" />
+                <div className="bg-muted h-4 w-px" />
                 <div className="flex flex-wrap items-center gap-1">
                     {vulnFilters.map((f) => (
                         <FilterChip

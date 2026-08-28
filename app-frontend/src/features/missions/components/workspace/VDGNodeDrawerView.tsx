@@ -154,22 +154,22 @@ export default function VDGNodeDrawerView({
     const detail = NODE_DETAIL[node.id] ?? DEFAULT_DETAIL;
     const statusColor = (() => {
         if (node.status === "ELIGIBLE") {
-            return "var(--color-danger)";
+            return "var(--destructive)";
         }
         if (node.status === "EXPLOITED") {
-            return "var(--color-brand)";
+            return "var(--primary)";
         }
         if (node.status === "IN_PROGRESS") {
-            return "var(--color-danger)";
+            return "var(--destructive)";
         }
-        return "var(--color-hex-a0a0a0)";
+        return "var(--muted-foreground)";
     })();
     const statusBg = ["ELIGIBLE", "EXPLOITED", "IN_PROGRESS"].includes(node.status)
-        ? "var(--color-hex-1a0608)"
-        : "var(--color-hex-111111)";
+        ? "var(--border)"
+        : "var(--border)";
     const statusBorder = ["ELIGIBLE", "EXPLOITED", "IN_PROGRESS"].includes(node.status)
-        ? "var(--color-hex-6f171b)"
-        : "var(--color-hex-292929)";
+        ? "var(--border)"
+        : "var(--border)";
     return (
         <FocusTrap focusTrapOptions={{ escapeDeactivates: false, clickOutsideDeactivates: false }}>
             <NodeDrawerContext.Provider
@@ -180,10 +180,7 @@ export default function VDGNodeDrawerView({
                     role="dialog"
                     aria-modal="true"
                     aria-labelledby="vdg-node-drawer-title"
-                    className="flex h-full w-[var(--width-drawer-md)] shrink-0 flex-col bg-[var(--color-hex-0d0d0d)]"
-                    style={{
-                        borderLeft: "1px solid var(--color-hex-292929)",
-                    }}
+                    className="bg-background border-border flex h-full w-full max-w-[var(--width-drawer-md)] shrink-0 flex-col border-l"
                 >
                     <VDGNodeDrawerHeader />
                     <div className="flex-1 overflow-y-auto">

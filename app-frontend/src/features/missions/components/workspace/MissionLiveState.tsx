@@ -9,22 +9,17 @@ const MissionLiveState = React.memo(function ({ time }: { time: string }) {
     const { specialists } = useWorkspaceData();
 
     return (
-        <div
-            className="flex w-[256px] flex-shrink-0 flex-col overflow-hidden bg-[var(--color-hex-0b0b0b)]"
-            style={{
-                borderLeft: "1px solid var(--color-hex-1e1e1e)",
-            }}
-        >
+        <div className="bg-background border-border flex w-[256px] flex-shrink-0 flex-col overflow-hidden border-l">
             {/* Live state stats */}
             <div
                 style={{
-                    borderBottom: "1px solid var(--color-hex-1e1e1e)",
+                    borderBottom: "1px solid var(--border)",
                 }}
             >
-                <div className="text-base-tight px-4 pt-4 pb-2 tracking-widest text-[var(--color-hex-444444)]">
+                <div className="text-muted-foreground px-4 pt-4 pb-2 text-sm tracking-widest">
                     LIVE STATE
                 </div>
-                <div className="grid grid-cols-2 gap-0">
+                <div className="grid grid-cols-1 gap-0 sm:grid-cols-2">
                     {[
                         {
                             label: "VDG NODES",
@@ -48,53 +43,40 @@ const MissionLiveState = React.memo(function ({ time }: { time: string }) {
                             sub: "/ $10.00 CEI",
                             red: true,
                         },
-                    ].map((s, i) => (
-                        <div
-                            key={s.label}
-                            className="px-[16px] py-[10px]"
-                            style={{
-                                borderRight:
-                                    i % 2 === 0 ? "1px solid var(--color-hex-151515)" : "none",
-                                borderBottom: i < 2 ? "1px solid var(--color-hex-151515)" : "none",
-                            }}
-                        >
-                            <div className="text-sm-tight mb-[4px] tracking-widest text-[var(--color-hex-444444)]">
+                    ].map((s) => (
+                        <div key={s.label} className="border-border border-b px-4 py-2.5">
+                            <div className="text-muted-foreground mb-1 text-xs tracking-widest">
                                 {s.label}
                             </div>
                             <div
-                                className="text-9xl leading-none font-bold tracking-tighter"
+                                className="text-xs leading-none font-bold tracking-tighter"
                                 style={{
-                                    color: s.red ? "var(--color-brand)" : "var(--color-fg)",
+                                    color: s.red ? "var(--primary)" : "var(--foreground)",
                                 }}
                             >
                                 {s.value}
                             </div>
-                            <div className="text-sm-tight mt-[3px] tracking-normal text-[var(--color-hex-333333)]">
+                            <div className="text-muted-foreground mt-0.5 text-xs tracking-normal">
                                 {s.sub}
                             </div>
                         </div>
                     ))}
                 </div>
                 {/* Time */}
-                <div
-                    className="flex items-center gap-3 px-4 py-2.5"
-                    style={{
-                        borderTop: "1px solid var(--color-hex-151515)",
-                    }}
-                >
+                <div className="border-border flex items-center gap-3 border-t px-4 py-2.5">
                     <div>
-                        <div className="text-sm-tight mb-[2px] tracking-widest text-[var(--color-hex-444444)]">
+                        <div className="text-muted-foreground mb-0.5 text-xs tracking-widest">
                             ELAPSED TIME
                         </div>
-                        <div className="text-8xl leading-none font-bold tracking-normal text-[var(--color-hex-a0a0a0)]">
+                        <div className="text-muted-foreground text-xs leading-none font-bold tracking-normal">
                             {time}
                         </div>
                     </div>
                     <div className="ml-auto">
-                        <div className="text-sm-tight mb-[2px] tracking-widest text-[var(--color-hex-444444)]">
+                        <div className="text-muted-foreground mb-0.5 text-xs tracking-widest">
                             STEP
                         </div>
-                        <div className="tracking-tight-1 text-8xl leading-none font-bold text-[var(--color-hex-555555)]">
+                        <div className="text-muted-foreground text-xs leading-none font-bold tracking-tight">
                             014
                         </div>
                     </div>
@@ -102,33 +84,20 @@ const MissionLiveState = React.memo(function ({ time }: { time: string }) {
             </div>
 
             {/* Specialists */}
-            <div className="flex min-h-[0px] flex-1 flex-col overflow-hidden">
-                <div
-                    className="flex flex-shrink-0 items-center justify-between px-4 pt-3 pb-2"
-                    style={{
-                        borderBottom: "1px solid var(--color-hex-1e1e1e)",
-                    }}
-                >
-                    <span className="text-base-tight tracking-widest text-[var(--color-hex-444444)]">
+            <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
+                <div className="border-border flex flex-shrink-0 items-center justify-between border-b px-4 pt-3 pb-2">
+                    <span className="text-muted-foreground text-sm tracking-widest">
                         SPECIALISTS
                     </span>
-                    <span className="text-sm tracking-wide text-[var(--color-brand)]">
-                        1 RUNNING
-                    </span>
+                    <span className="text-primary text-sm tracking-wide">1 RUNNING</span>
                 </div>
                 <div className="flex-1 overflow-y-auto">
                     {specialists.map((spec) => (
-                        <div
-                            key={spec.id}
-                            className="px-4 py-3"
-                            style={{
-                                borderBottom: "1px solid var(--color-hex-111111)",
-                            }}
-                        >
+                        <div key={spec.id} className="border-border border-b px-4 py-3">
                             <div className="mb-1.5 flex items-center justify-between">
                                 <div className="flex items-center gap-2">
                                     <div
-                                        className="h-[6px] shrink-0"
+                                        className="h-1.5 shrink-0"
                                         style={{
                                             width: spec.status === SPEC_STATUS.IDLE ? 6 : 6,
                                             borderRadius: "50%",
@@ -141,12 +110,12 @@ const MissionLiveState = React.memo(function ({ time }: { time: string }) {
                                         }}
                                     />
                                     <span
-                                        className="text-lg-tight font-semibold tracking-tight"
+                                        className="text-base font-semibold tracking-tight"
                                         style={{
                                             color:
                                                 spec.status === SPEC_STATUS.IDLE
-                                                    ? "var(--color-hex-444444)"
-                                                    : "var(--color-hex-a0a0a0)",
+                                                    ? "var(--muted-foreground)"
+                                                    : "var(--muted-foreground)",
                                         }}
                                     >
                                         {spec.role}
@@ -154,22 +123,20 @@ const MissionLiveState = React.memo(function ({ time }: { time: string }) {
                                 </div>
                                 <SpecBadge status={spec.status} />
                             </div>
-                            <div className="text-base-tight mb-[2px] tracking-tight text-[var(--color-hex-333333)]">
+                            <div className="text-muted-foreground mb-0.5 text-sm tracking-tight">
                                 {spec.task !== "—" && (
-                                    <span className="text-[var(--color-hex-555555)]">
-                                        {spec.task}
-                                    </span>
+                                    <span className="text-muted-foreground">{spec.task}</span>
                                 )}
                                 {spec.task === "—" && <span>—</span>}
                             </div>
                             <div className="flex items-center gap-3">
                                 {spec.context !== "—" && (
-                                    <span className="text-sm-tight tracking-wide text-[var(--color-hex-333333)]">
+                                    <span className="text-muted-foreground text-xs tracking-wide">
                                         CTX: {spec.context}
                                     </span>
                                 )}
                                 {spec.evidence > 0 && (
-                                    <span className="text-sm-tight tracking-normal text-[var(--color-hex-444444)]">
+                                    <span className="text-muted-foreground text-xs tracking-normal">
                                         EL: {spec.evidence}
                                     </span>
                                 )}

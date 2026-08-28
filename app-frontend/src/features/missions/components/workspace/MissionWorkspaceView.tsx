@@ -47,12 +47,12 @@ export default function MissionWorkspaceView({
     orchestrator?: MissionOrchestratorModel | null;
 }) {
     return (
-        <div className="flex h-full min-h-[0px] flex-col">
+        <div className="flex h-full min-h-0 flex-col">
             {/* ── Mission status strip ── */}
             <MissionStatusStrip missionId={missionId} time={time} />
 
             {/* ── Three-column workspace ── */}
-            <div className="flex min-h-[0px] flex-1 overflow-hidden">
+            <div className="flex min-h-0 flex-1 flex-col overflow-hidden lg:flex-row">
                 {/* LEFT: mission sub-nav */}
                 <MissionSubNavPanel
                     missionId={missionId}
@@ -63,7 +63,7 @@ export default function MissionWorkspaceView({
                 />
 
                 {/* CENTER: overview split or full-bleed graph */}
-                <div className="flex min-h-[0px] flex-1 flex-col overflow-hidden">
+                <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
                     {subNav === "attack-graph" && <AttackGraphCanvas />}
                     {subNav === "environment" && <EnvironmentalLayer />}
                     {subNav === "specialists" && <Specialists />}

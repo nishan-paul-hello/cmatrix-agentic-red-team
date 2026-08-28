@@ -1,26 +1,22 @@
 import React from "react";
 
+import { Button } from "@/components/ui/button";
 import { useNodeDrawerContext } from "@/features/missions/components/workspace/VDGNodeDrawerContext";
 
 export function VDGNodeDrawerHeader() {
     const { node, onClose, statusColor, statusBg, statusBorder } = useNodeDrawerContext();
     return (
-        <div
-            className="flex items-start justify-between px-4 pt-4 pb-3"
-            style={{
-                borderBottom: "1px solid var(--color-hex-1e1e1e)",
-            }}
-        >
+        <div className="border-border flex items-start justify-between border-b px-4 pt-4 pb-3">
             <div>
                 <div className="mb-1 flex items-center gap-2">
                     <span
                         id="vdg-node-drawer-title"
-                        className="text-3xl font-bold tracking-wide text-[var(--color-fg)]"
+                        className="text-foreground text-sm font-bold tracking-wide"
                     >
                         {node.id}
                     </span>
                     <span
-                        className="text-base-tight tracking-wider-1 rounded-[2px] px-[6px] py-[1px] font-semibold"
+                        className="rounded-sm px-1.5 py-px text-sm font-semibold tracking-widest"
                         style={{
                             color: statusColor,
                             background: statusBg,
@@ -30,16 +26,16 @@ export function VDGNodeDrawerHeader() {
                         {node.status}
                     </span>
                 </div>
-                <div className="tracking-wider-3 text-base text-[var(--color-hex-6f171b)]">
-                    {node.type}
-                </div>
+                <div className="text-muted-foreground text-base tracking-widest">{node.type}</div>
             </div>
-            <button
+            <Button
+                variant="ghost"
+                size="icon-xs"
                 onClick={onClose}
-                className="cursor-pointer border-none bg-[transparent] p-[2px] text-4xl leading-none text-[var(--color-hex-444444)] hover:text-[var(--color-hex-a0a0a0)]"
+                className="text-muted-foreground hover:text-muted-foreground h-auto p-0.5 text-sm leading-none hover:bg-transparent"
             >
                 ✕
-            </button>
+            </Button>
         </div>
     );
 }
