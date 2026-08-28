@@ -1,21 +1,19 @@
 import { describe, expect, it } from "vitest";
 
+import { getStatusColor } from "@/components/ui/StatusBadge";
 import { navItemForPath } from "@/lib/nav-paths";
 import { sanitizeInput } from "@/utils/sanitize";
-import { getStatusColor } from "@/utils/statusColors";
 
 describe("statusColors", () => {
     it("returns the correct color for SUCCESS", () => {
         expect(getStatusColor("SUCCESS")).toEqual({
-            color: "var(--color-success)",
-            bg: "var(--color-hex-0a1a10)",
+            color: "var(--success)",
         });
     });
 
     it("returns the fallback color for unknown status", () => {
         expect(getStatusColor("UNKNOWN_STATUS")).toEqual({
-            color: "var(--color-hex-666666)",
-            bg: "var(--color-hex-111111)",
+            color: "var(--muted-foreground)",
         });
     });
 });
