@@ -6,7 +6,7 @@ export interface EmptyStateProps {
 
 export function EmptyState({ message, colSpan = 1, isTable = false }: EmptyStateProps) {
     const className =
-        "px-6 py-8 text-center text-[10px] tracking-[0.1em] text-[var(--color-hex-666666)]";
+        "px-6 py-8 text-center text-lg tracking-normal text-[var(--color-hex-666666)]";
 
     if (isTable) {
         return (

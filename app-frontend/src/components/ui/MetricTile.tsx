@@ -12,7 +12,7 @@ export interface MetricTileProps {
 export function MetricTile({
     label,
     value,
-    valueColor = "var(--color-hex-f2f2f2)",
+    valueColor = "var(--color-fg)",
     variant = "card",
     borderRight = false,
     sub,
@@ -25,17 +25,14 @@ export function MetricTile({
                     borderRight: borderRight ? "1px solid var(--color-hex-151515)" : "none",
                 }}
             >
-                <span className="text-[8px] tracking-[0.2em] text-[var(--color-hex-444444)]">
+                <span className="text-sm tracking-widest text-[var(--color-hex-444444)]">
                     {label}
                 </span>
-                <span
-                    className="text-[11px] font-bold tracking-[0.06em]"
-                    style={{ color: valueColor }}
-                >
+                <span className="tracking-tight-1 text-xl font-bold" style={{ color: valueColor }}>
                     {value}
                 </span>
                 {sub && (
-                    <span className="text-[11px] tracking-[0.06em] text-[var(--color-hex-333333)]">
+                    <span className="tracking-tight-1 text-xl text-[var(--color-hex-333333)]">
                         {sub}
                     </span>
                 )}
@@ -51,17 +48,17 @@ export function MetricTile({
                     borderRight: borderRight ? "1px solid var(--color-hex-1e1e1e)" : "none",
                 }}
             >
-                <div className="mb-[6px] text-[8.5px] tracking-[0.2em] text-[var(--color-hex-444444)]">
+                <div className="text-base-tight mb-[6px] tracking-widest text-[var(--color-hex-444444)]">
                     {label}
                 </div>
                 <div
-                    className="text-[26px] leading-none font-bold tracking-[0.04em]"
+                    className="text-12xl leading-none font-bold tracking-tighter"
                     style={{ color: valueColor }}
                 >
                     {value}
                 </div>
                 {sub && (
-                    <div className="mt-[2px] text-[8px] tracking-[0.1em] text-[var(--color-hex-333333)]">
+                    <div className="mt-[2px] text-sm tracking-normal text-[var(--color-hex-333333)]">
                         {sub}
                     </div>
                 )}
@@ -71,14 +68,14 @@ export function MetricTile({
 
     return (
         <div className="rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)] bg-[var(--color-hex-0d0d0d)] px-[16px] py-[10px]">
-            <div className="mb-[4px] text-[7.5px] tracking-[0.18em] text-[var(--color-hex-444444)]">
+            <div className="text-sm-tight tracking-wider-3 mb-[4px] text-[var(--color-hex-444444)]">
                 {label}
             </div>
-            <div className="text-[18px] font-bold" style={{ color: valueColor }}>
+            <div className="text-8xl font-bold" style={{ color: valueColor }}>
                 {value}
             </div>
             {sub && (
-                <div className="mt-[2px] text-[8px] tracking-[0.1em] text-[var(--color-hex-333333)]">
+                <div className="mt-[2px] text-sm tracking-normal text-[var(--color-hex-333333)]">
                     {sub}
                 </div>
             )}
