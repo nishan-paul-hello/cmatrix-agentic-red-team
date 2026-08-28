@@ -1,12 +1,12 @@
 "use client";
 
 import { PanelErrorBoundary } from "@/components/PanelErrorBoundary";
-import CostDashboard from "@/features/cost/components/CostDashboard";
+import CostBrowser from "@/features/cost/components/CostBrowser";
 
 export default function CostUsage() {
     return (
         <PanelErrorBoundary>
-            <CostDashboard />
+            <CostBrowser />
         </PanelErrorBoundary>
     );
 }
