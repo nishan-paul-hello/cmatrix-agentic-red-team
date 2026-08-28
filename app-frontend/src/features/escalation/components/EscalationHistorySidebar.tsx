@@ -8,7 +8,7 @@ export function EscalationHistorySidebar({ history }: { history: EscalationHisto
                 borderLeft: "1px solid var(--color-hex-1e1e1e)",
             }}
         >
-            <div className="mb-[14px] text-[8px] tracking-[0.2em] text-[var(--color-hex-444444)]">
+            <div className="mb-[14px] text-sm tracking-widest text-[var(--color-hex-444444)]">
                 ESCALATION HISTORY
             </div>
             {history.map((h) => (
@@ -20,25 +20,25 @@ export function EscalationHistorySidebar({ history }: { history: EscalationHisto
                         borderBottom: "1px solid var(--color-hex-141414)",
                     }}
                 >
-                    <div className="mb-[3px] text-[8px] tracking-[0.1em] text-[var(--color-hex-333333)]">
+                    <div className="mb-[3px] text-sm tracking-normal text-[var(--color-hex-333333)]">
                         {h.ts}
                     </div>
-                    <div className="mb-[2px] text-[9px] font-semibold tracking-[0.08em] text-[var(--color-hex-666666)]">
+                    <div className="mb-[2px] text-base font-semibold tracking-tight text-[var(--color-hex-666666)]">
                         {h.type}
                     </div>
-                    <div className="mb-[1px] text-[8.5px] tracking-[0.1em] text-[var(--color-hex-3fb950)]">
+                    <div className="text-base-tight mb-[1px] tracking-normal text-[var(--color-success)]">
                         {h.status}
                     </div>
-                    <div className="text-[8.5px] text-[var(--color-hex-444444)] italic">
+                    <div className="text-base-tight text-[var(--color-hex-444444)] italic">
                         &quot;{h.response}&quot;
                     </div>
                 </div>
             ))}
             <div className="mt-[8px] rounded-[2px] border-[1px] border-solid border-[var(--color-hex-d2992233)] bg-[var(--color-hex-110e00)] px-[12px] py-[10px]">
-                <div className="mb-[4px] text-[8px] tracking-[0.16em] text-[var(--color-hex-d29922)]">
+                <div className="tracking-wider-2 mb-[4px] text-sm text-[var(--color-warning)]">
                     AGENT PAUSED
                 </div>
-                <div className="text-[8.5px] leading-[1.7] text-[var(--color-hex-444444)]">
+                <div className="text-base-tight leading-relaxed text-[var(--color-hex-444444)]">
                     All specialist threads suspended. Execution agent idle. Awaiting human
                     authorization.
                 </div>

@@ -77,22 +77,22 @@ export default function HumanEscalation() {
                     borderBottom: "1px solid var(--color-hex-1e1e1e)",
                 }}
             >
-                <div className="mb-[3px] text-[9px] tracking-[0.22em] text-[var(--color-hex-666666)]">
+                <div className="tracking-widest-2 mb-[3px] text-base text-[var(--color-hex-666666)]">
                     MISSION / CVE-001
                 </div>
                 <div className="flex items-baseline gap-4">
-                    <h1 className="text-[20px] font-bold tracking-[0.12em] text-[var(--color-hex-f2f2f2)]">
+                    <h1 className="text-9xl font-bold tracking-wide text-[var(--color-fg)]">
                         HUMAN ESCALATION
                     </h1>
                     <div className="flex items-center gap-2">
                         <div
-                            className="h-[7px] w-[7px] bg-[var(--color-hex-ff2a32)]"
+                            className="h-[7px] w-[7px] bg-[var(--color-danger)]"
                             style={{
                                 borderRadius: "50%",
                                 animation: "pulse 1.2s ease infinite",
                             }}
                         />
-                        <span className="text-[9px] font-bold tracking-[0.16em] text-[var(--color-hex-ff2a32)]">
+                        <span className="tracking-wider-2 text-base font-bold text-[var(--color-danger)]">
                             AWAITING RESPONSE
                         </span>
                     </div>
@@ -123,7 +123,7 @@ function EscalationSubmitted() {
     return (
         <div className="flex h-full min-h-[0px] flex-col items-center justify-center gap-5">
             <div
-                className="h-[40px] w-[40px] border-[2px] border-solid border-[var(--color-hex-3fb950)]"
+                className="h-[40px] w-[40px] border-[2px] border-solid border-[var(--color-success)]"
                 style={{
                     borderRadius: "50%",
                     display: "flex",
@@ -131,12 +131,12 @@ function EscalationSubmitted() {
                     justifyContent: "center",
                 }}
             >
-                <span className="text-[18px] text-[var(--color-hex-3fb950)]">✓</span>
+                <span className="text-8xl text-[var(--color-success)]">✓</span>
             </div>
-            <div className="text-[13px] font-bold tracking-[0.1em] text-[var(--color-hex-f2f2f2)]">
+            <div className="text-3xl font-bold tracking-normal text-[var(--color-fg)]">
                 RESPONSE SUBMITTED
             </div>
-            <div className="text-[9px] tracking-[0.14em] text-[var(--color-hex-444444)]">
+            <div className="tracking-wider-1 text-base text-[var(--color-hex-444444)]">
                 AGENT RESUMING — SPECIALISTS REACTIVATED
             </div>
         </div>
