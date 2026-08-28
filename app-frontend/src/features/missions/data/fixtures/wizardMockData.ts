@@ -101,7 +101,7 @@ export const MODE_OPTIONS: {
         value: "ONE-DAY",
         hint: "CVE HINT AVAILABLE",
         badge: "ASSISTED",
-        badgeColor: "var(--color-warning)",
+        badgeColor: "var(--warning)",
         difficulty: "STANDARD",
         icon: "◈",
         description:
@@ -133,7 +133,7 @@ export const MODE_OPTIONS: {
         value: "ZERO-DAY",
         hint: "NO CVE HINT",
         badge: "BLIND",
-        badgeColor: "var(--color-brand)",
+        badgeColor: "var(--primary)",
         difficulty: "HARD",
         icon: "◆",
         description:

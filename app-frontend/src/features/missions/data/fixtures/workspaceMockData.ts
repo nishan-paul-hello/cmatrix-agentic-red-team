@@ -301,7 +301,7 @@ export const INITIAL_LOG: LogEntry[] = [
         agent: "TEAM-MGR",
         action: "UCB_SELECT",
         desc: "SQLI-001 selected — UCB 0.824, path 0.612, E_ord 3/5",
-        color: "var(--color-brand)",
+        color: "var(--primary)",
     },
     {
         id: 11,
@@ -309,7 +309,7 @@ export const INITIAL_LOG: LogEntry[] = [
         agent: "INJECT-SPEC",
         action: "TOOL_CALL",
         desc: "sqlmap --time-sec=4 --technique=T -u /api/users",
-        color: "var(--color-hex-a0a0a0)",
+        color: "var(--color-zinc-400)",
     },
     {
         id: 10,
@@ -317,7 +317,7 @@ export const INITIAL_LOG: LogEntry[] = [
         agent: "VALID-AGENT",
         action: "ORACLE_PASS",
         desc: "AUTH-001 oracle confirmed — CVE-BENCH PASS",
-        color: "var(--color-success)",
+        color: "var(--success)",
     },
     {
         id: 9,
@@ -325,7 +325,7 @@ export const INITIAL_LOG: LogEntry[] = [
         agent: "EVAL-AGENT",
         action: "E_ORD_UPDATE",
         desc: "AUTH-001 evidence raised E_ord 3 → 4 (CONFIRMED)",
-        color: "var(--color-success)",
+        color: "var(--success)",
     },
     {
         id: 8,
@@ -333,7 +333,7 @@ export const INITIAL_LOG: LogEntry[] = [
         agent: "INJECT-SPEC",
         action: "PAYLOAD_SENT",
         desc: "Time-based blind payload dispatched — 4.2s delta observed",
-        color: "var(--color-hex-a0a0a0)",
+        color: "var(--color-zinc-400)",
     },
     {
         id: 7,
@@ -341,7 +341,7 @@ export const INITIAL_LOG: LogEntry[] = [
         agent: "TEAM-MGR",
         action: "EL_SNAPSHOT",
         desc: "Environmental Layer snapshot: 87 confirmed facts",
-        color: "var(--color-hex-a0a0a0)",
+        color: "var(--color-zinc-400)",
     },
     {
         id: 6,
@@ -349,7 +349,7 @@ export const INITIAL_LOG: LogEntry[] = [
         agent: "AUTH-SPEC",
         action: "CREDENTIAL_FOUND",
         desc: "admin@targetcorp.com extracted from /api/auth",
-        color: "var(--color-success)",
+        color: "var(--success)",
     },
     {
         id: 5,
@@ -357,7 +357,7 @@ export const INITIAL_LOG: LogEntry[] = [
         agent: "TEAM-MGR",
         action: "PATH_SCORE",
         desc: "RECON→AUTH→SQLI→DB-ACCESS path scored 0.612",
-        color: "var(--color-hex-a0a0a0)",
+        color: "var(--color-zinc-400)",
     },
     {
         id: 4,
@@ -365,7 +365,7 @@ export const INITIAL_LOG: LogEntry[] = [
         agent: "INJECT-SPEC",
         action: "SPAWN",
         desc: "INJECTION SPECIALIST spawned — FRESH context, node SQLI-001",
-        color: "var(--color-hex-666666)",
+        color: "var(--color-zinc-500)",
     },
     {
         id: 3,
@@ -373,7 +373,7 @@ export const INITIAL_LOG: LogEntry[] = [
         agent: "EVAL-AGENT",
         action: "E_ORD_UPDATE",
         desc: "AUTH-001 evidence raised E_ord 2 → 3 (WEAK → CLEAR)",
-        color: "var(--color-hex-a0a0a0)",
+        color: "var(--color-zinc-400)",
     },
     {
         id: 2,
@@ -381,7 +381,7 @@ export const INITIAL_LOG: LogEntry[] = [
         agent: "AUTH-SPEC",
         action: "EXPLOIT_ATTEMPT",
         desc: "Credential stuffing /api/login — 200 OK, session token returned",
-        color: "var(--color-hex-a0a0a0)",
+        color: "var(--color-zinc-400)",
     },
     {
         id: 1,
@@ -389,7 +389,7 @@ export const INITIAL_LOG: LogEntry[] = [
         agent: "RECON-SPEC",
         action: "TOOL_RESULT",
         desc: "nmap complete: 3 open ports, 14 endpoints enumerated",
-        color: "var(--color-hex-666666)",
+        color: "var(--color-zinc-500)",
     },
 ];
 export const SUB_NAV: {
@@ -455,21 +455,21 @@ export const STREAM_EVENTS: Omit<LogEntry, "id">[] = [
         agent: "INJECT-SPEC",
         action: "RESPONSE_PARSE",
         desc: "Response time 4.18s — timing injection confirmed",
-        color: "var(--color-success)",
+        color: "var(--success)",
     },
     {
         ts: "06:31:14",
         agent: "TEAM-MGR",
         action: "UCB_UPDATE",
         desc: "SQLI-001 UCB raised to 0.891 post-evidence",
-        color: "var(--color-brand)",
+        color: "var(--primary)",
     },
     {
         ts: "06:31:19",
         agent: "EVAL-AGENT",
         action: "E_ORD_UPDATE",
         desc: "SQLI-001 evidence raised E_ord 3 → 4 (CONFIRMED)",
-        color: "var(--color-success)",
+        color: "var(--success)",
     },
 ];
 
