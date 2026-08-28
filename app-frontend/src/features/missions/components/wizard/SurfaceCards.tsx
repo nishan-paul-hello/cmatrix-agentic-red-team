@@ -23,7 +23,7 @@ export default function SurfaceCards({
                     <button
                         key={opt.value}
                         onClick={() => onChange(opt.value)}
-                        className={`font-inherit relative flex flex-1 cursor-pointer flex-col rounded-[2px] border border-solid text-left transition-colors duration-100 ${selected ? "border-[var(--color-hex-e31b23)] bg-[var(--color-hex-120608)]" : "border-[var(--color-hex-292929)] bg-[var(--color-hex-0d0d0d)] hover:border-[var(--color-hex-444444)] hover:bg-[var(--color-hex-111111)]"}`}
+                        className={`font-inherit relative flex flex-1 cursor-pointer flex-col rounded-[2px] border border-solid text-left transition-colors duration-100 ${selected ? "border-[var(--color-brand)] bg-[var(--color-hex-120608)]" : "border-[var(--color-hex-292929)] bg-[var(--color-hex-0d0d0d)] hover:border-[var(--color-hex-444444)] hover:bg-[var(--color-hex-111111)]"}`}
                         style={{
                             padding: "18px 16px 16px",
                         }}
@@ -31,7 +31,7 @@ export default function SurfaceCards({
                         {/* Selected indicator */}
                         {selected && (
                             <div
-                                className="absolute top-[10px] right-[10px] h-[8px] w-[8px] bg-[var(--color-hex-e31b23)]"
+                                className="absolute top-[10px] right-[10px] h-[8px] w-[8px] bg-[var(--color-brand)]"
                                 style={{
                                     borderRadius: "50%",
                                 }}
@@ -41,21 +41,19 @@ export default function SurfaceCards({
                         {/* Icon + name */}
                         <div className="mb-2 flex items-center gap-2">
                             <span
-                                className="text-[16px]"
+                                className="text-6xl"
                                 style={{
                                     color: selected
-                                        ? "var(--color-hex-e31b23)"
+                                        ? "var(--color-brand)"
                                         : "var(--color-hex-444444)",
                                 }}
                             >
                                 {opt.icon}
                             </span>
                             <span
-                                className="text-[11px] font-bold tracking-[0.16em]"
+                                className="tracking-wider-2 text-xl font-bold"
                                 style={{
-                                    color: selected
-                                        ? "var(--color-hex-f2f2f2)"
-                                        : "var(--color-hex-666666)",
+                                    color: selected ? "var(--color-fg)" : "var(--color-hex-666666)",
                                 }}
                             >
                                 {opt.value}
@@ -64,7 +62,7 @@ export default function SurfaceCards({
 
                         {/* Protocol */}
                         <div
-                            className="mb-[12px] text-[9px] font-semibold tracking-[0.16em]"
+                            className="tracking-wider-2 mb-[12px] text-base font-semibold"
                             style={{
                                 color: selected
                                     ? "var(--color-hex-9e1118)"
@@ -85,7 +83,7 @@ export default function SurfaceCards({
                         />
 
                         {/* Description */}
-                        <div className="mb-[14px] grow text-[9.5px] leading-[1.65] tracking-[0.05em] text-[var(--color-hex-555555)]">
+                        <div className="text-lg-tight leading-normal-2 tracking-tight-2 mb-[14px] grow text-[var(--color-hex-555555)]">
                             {opt.description}
                         </div>
 
@@ -94,10 +92,10 @@ export default function SurfaceCards({
                             {opt.tags.map((tag: string) => (
                                 <span
                                     key={tag}
-                                    className="rounded-[2px] px-[5px] py-[1px] text-[8.5px] tracking-[0.1em] whitespace-nowrap"
+                                    className="text-base-tight rounded-[2px] px-[5px] py-[1px] tracking-normal whitespace-nowrap"
                                     style={{
                                         color: selected
-                                            ? "var(--color-hex-e31b23)"
+                                            ? "var(--color-brand)"
                                             : "var(--color-hex-444444)",
                                         background: selected
                                             ? "var(--color-hex-1a0608)"
@@ -122,14 +120,14 @@ export default function SurfaceCards({
 
                         {/* Specialists */}
                         <div>
-                            <div className="mb-[6px] text-[8px] tracking-[0.18em] text-[var(--color-hex-444444)]">
+                            <div className="tracking-wider-3 mb-[6px] text-sm text-[var(--color-hex-444444)]">
                                 SPECIALISTS
                             </div>
                             <div className="flex flex-wrap gap-1">
                                 {opt.specialists.map((s: string) => (
                                     <span
                                         key={s}
-                                        className="text-[8px] tracking-[0.12em]"
+                                        className="text-sm tracking-wide"
                                         style={{
                                             color: selected
                                                 ? "var(--color-hex-a0a0a0)"

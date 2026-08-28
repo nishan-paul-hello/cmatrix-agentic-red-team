@@ -9,7 +9,7 @@ export function Step3() {
     return (
         <>
             <StepHeading step={3} label="ATTACK SURFACE" />
-            <div className="mb-[20px] text-[9.5px] leading-[1.7] tracking-[0.14em] text-[var(--color-hex-666666)]">
+            <div className="text-lg-tight tracking-wider-1 mb-[20px] leading-relaxed text-[var(--color-hex-666666)]">
                 Select the attack surface to engage. This determines which specialist agents are
                 spawned and which vulnerability classes are eligible for testing.
             </div>

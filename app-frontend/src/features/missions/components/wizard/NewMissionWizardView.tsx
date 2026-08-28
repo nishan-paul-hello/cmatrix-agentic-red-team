@@ -49,14 +49,14 @@ export default function NewMissionWizardView(props: WizardContextType) {
                         borderBottom: "1px solid var(--color-hex-1e1e1e)",
                     }}
                 >
-                    <div className="mb-[3px] text-[9px] tracking-[0.22em] text-[var(--color-hex-666666)]">
+                    <div className="tracking-widest-2 mb-[3px] text-base text-[var(--color-hex-666666)]">
                         MISSIONS
                     </div>
                     <div className="flex items-baseline gap-3">
-                        <h1 className="text-[20px] font-bold tracking-[0.12em] text-[var(--color-hex-f2f2f2)]">
+                        <h1 className="text-9xl font-bold tracking-wide text-[var(--color-fg)]">
                             NEW MISSION
                         </h1>
-                        <span className="text-[10px] tracking-[0.18em] text-[var(--color-hex-444444)]">
+                        <span className="tracking-wider-3 text-lg text-[var(--color-hex-444444)]">
                             MISSION CONFIGURATION WIZARD
                         </span>
                     </div>
@@ -68,7 +68,7 @@ export default function NewMissionWizardView(props: WizardContextType) {
                 {/* Body */}
                 <div className="flex min-h-[0px] flex-1 overflow-hidden">
                     <div className="flex-1 overflow-y-auto px-6 py-8">
-                        <div className="max-w-[600px]">
+                        <div className="max-w-panel-xl">
                             {/* ── STEPS ── */}
                             {step === 1 && <NewMissionWizardView.Step1 />}
                             {step === 2 && <NewMissionWizardView.Step2 />}
@@ -102,7 +102,7 @@ export default function NewMissionWizardView(props: WizardContextType) {
                 >
                     <button
                         onClick={onCancel}
-                        className="font-inherit cursor-pointer rounded-[2px] border-[1px] border-solid border-[var(--color-hex-292929)] bg-[transparent] px-[18px] py-[7px] text-[10px] tracking-[0.18em] text-[var(--color-hex-666666)] hover:border-[var(--color-hex-444444)]"
+                        className="font-inherit tracking-wider-3 cursor-pointer rounded-[2px] border-[1px] border-solid border-[var(--color-hex-292929)] bg-[transparent] px-[18px] py-[7px] text-lg text-[var(--color-hex-666666)] hover:border-[var(--color-hex-444444)]"
                     >
                         CANCEL
                     </button>
@@ -110,7 +110,7 @@ export default function NewMissionWizardView(props: WizardContextType) {
                         {step > 1 && (
                             <button
                                 onClick={() => setStep(step - 1)}
-                                className="font-inherit cursor-pointer rounded-[2px] border-[1px] border-solid border-[var(--color-hex-292929)] bg-[transparent] px-[18px] py-[7px] text-[10px] tracking-[0.18em] text-[var(--color-hex-a0a0a0)] hover:border-[var(--color-hex-444444)]"
+                                className="font-inherit tracking-wider-3 cursor-pointer rounded-[2px] border-[1px] border-solid border-[var(--color-hex-292929)] bg-[transparent] px-[18px] py-[7px] text-lg text-[var(--color-hex-a0a0a0)] hover:border-[var(--color-hex-444444)]"
                             >
                                 ← BACK
                             </button>
@@ -145,7 +145,7 @@ export default function NewMissionWizardView(props: WizardContextType) {
                                     onStart?.();
                                 }
                             }}
-                            className="font-inherit cursor-pointer rounded-[2px] border-none bg-[var(--color-hex-e31b23)] text-[10px] font-semibold tracking-[0.18em] text-[var(--color-hex-f2f2f2)] hover:bg-[var(--color-hex-ff2a32)]"
+                            className="font-inherit tracking-wider-3 cursor-pointer rounded-[2px] border-none bg-[var(--color-brand)] text-lg font-semibold text-[var(--color-fg)] hover:bg-[var(--color-danger)]"
                             style={{
                                 padding: step === 5 ? "8px 32px" : "8px 24px",
                             }}

@@ -53,7 +53,7 @@ export function Step1() {
             {/* F8: Benchmark sub-form — visible only when BENCHMARK ENVIRONMENT is selected */}
             {targetType === "BENCHMARK ENVIRONMENT" && (
                 <div className="mt-[16px] rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)] bg-[var(--color-hex-0d0d0d)] px-[16px] py-[14px]">
-                    <div className="mb-[12px] text-[8px] tracking-[0.2em] text-[var(--color-hex-444444)]">
+                    <div className="mb-[12px] text-sm tracking-widest text-[var(--color-hex-444444)]">
                         BENCHMARK SUITE
                     </div>
                     <div
@@ -67,16 +67,16 @@ export function Step1() {
                             <button
                                 key={s}
                                 onClick={() => setBenchSuite(s)}
-                                className="font-inherit cursor-pointer rounded-[2px] px-[12px] py-[4px] text-[9px] tracking-[0.12em]"
+                                className="font-inherit cursor-pointer rounded-[2px] px-[12px] py-[4px] text-base tracking-wide"
                                 style={{
                                     background:
                                         benchSuite === s
                                             ? "var(--color-hex-1a0608)"
                                             : "transparent",
-                                    border: `1px solid ${benchSuite === s ? "var(--color-hex-e31b23)" : "var(--color-hex-292929)"}`,
+                                    border: `1px solid ${benchSuite === s ? "var(--color-brand)" : "var(--color-hex-292929)"}`,
                                     color:
                                         benchSuite === s
-                                            ? "var(--color-hex-ff2a32)"
+                                            ? "var(--color-danger)"
                                             : "var(--color-hex-555555)",
                                 }}
                             >
@@ -84,14 +84,14 @@ export function Step1() {
                             </button>
                         ))}
                     </div>
-                    <div className="mb-[8px] text-[8px] tracking-[0.2em] text-[var(--color-hex-444444)]">
+                    <div className="mb-[8px] text-sm tracking-widest text-[var(--color-hex-444444)]">
                         TASK / CVE ID
                     </div>
                     <input
                         value={benchTaskId}
                         onChange={(e) => setBenchTaskId(e.target.value)}
                         placeholder="e.g. CVE-2023-44487 or leave blank for full suite"
-                        className="font-inherit box-border w-full rounded-[2px] border-[1px] border-solid border-[var(--color-hex-292929)] bg-[var(--color-hex-080808)] px-[10px] py-[7px] text-[10px] tracking-[0.04em] text-[var(--color-hex-a0a0a0)] outline-none focus:border-[var(--color-hex-e31b23)]"
+                        className="font-inherit box-border w-full rounded-[2px] border-[1px] border-solid border-[var(--color-hex-292929)] bg-[var(--color-bg)] px-[10px] py-[7px] text-lg tracking-tighter text-[var(--color-hex-a0a0a0)] outline-none focus:border-[var(--color-brand)]"
                     />
                 </div>
             )}

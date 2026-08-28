@@ -27,7 +27,7 @@ export function WizardStepIndicator({
                                     className="h-[1px] w-[40px] shrink-0"
                                     style={{
                                         background: done
-                                            ? "var(--color-hex-e31b23)"
+                                            ? "var(--color-brand)"
                                             : "var(--color-hex-292929)",
                                     }}
                                 />
@@ -45,7 +45,7 @@ export function WizardStepIndicator({
                                     }}
                                 >
                                     <div
-                                        className="h-[26px] w-[26px] shrink-0 border-[1px] border-solid border-[var(--color-hex-9e1118)] bg-[var(--color-hex-120608)] text-[10px] font-bold tracking-[0.06em] text-[var(--color-hex-9e1118)]"
+                                        className="tracking-tight-1 h-[26px] w-[26px] shrink-0 border-[1px] border-solid border-[var(--color-hex-9e1118)] bg-[var(--color-hex-120608)] text-lg font-bold text-[var(--color-hex-9e1118)]"
                                         style={{
                                             borderRadius: "50%",
                                             display: "flex",
@@ -55,34 +55,34 @@ export function WizardStepIndicator({
                                     >
                                         ✓
                                     </div>
-                                    <span className="text-[7.5px] tracking-[0.16em] whitespace-nowrap text-[var(--color-hex-6f171b)]">
+                                    <span className="text-sm-tight tracking-wider-2 whitespace-nowrap text-[var(--color-hex-6f171b)]">
                                         {s.label}
                                     </span>
                                 </button>
                             ) : (
                                 <div className="flex flex-col items-center gap-1.5">
                                     <div
-                                        className="h-[26px] w-[26px] shrink-0 text-[10px] font-bold tracking-[0.06em]"
+                                        className="tracking-tight-1 h-[26px] w-[26px] shrink-0 text-lg font-bold"
                                         style={{
                                             borderRadius: "50%",
                                             display: "flex",
                                             alignItems: "center",
                                             justifyContent: "center",
                                             border: active
-                                                ? "1px solid var(--color-hex-e31b23)"
+                                                ? "1px solid var(--color-brand)"
                                                 : "1px solid var(--color-hex-292929)",
                                             background: active
                                                 ? "var(--color-hex-1a0a0b)"
                                                 : "var(--color-hex-111111)",
                                             color: active
-                                                ? "var(--color-hex-ff2a32)"
+                                                ? "var(--color-danger)"
                                                 : "var(--color-hex-444444)",
                                         }}
                                     >
                                         {s.index}
                                     </div>
                                     <span
-                                        className="text-[7.5px] tracking-[0.16em] whitespace-nowrap"
+                                        className="text-sm-tight tracking-wider-2 whitespace-nowrap"
                                         style={{
                                             color: active
                                                 ? "var(--color-hex-a0a0a0)"

@@ -38,7 +38,7 @@ export default function ReviewStep({
         {
             label: "TARGET",
             value: target || "—",
-            valueColor: "var(--color-hex-e31b23)",
+            valueColor: "var(--color-brand)",
             mono: true,
         },
         {
@@ -52,7 +52,7 @@ export default function ReviewStep({
         {
             label: "MODE",
             value: mode,
-            valueColor: mode === "ZERO-DAY" ? "var(--color-hex-ff2a32)" : "var(--color-hex-d29922)",
+            valueColor: mode === "ZERO-DAY" ? "var(--color-danger)" : "var(--color-warning)",
         },
         {
             label: "MAX RUNTIME",
@@ -61,7 +61,7 @@ export default function ReviewStep({
         {
             label: "COST CEILING",
             value: `$${parseFloat(costCeiling).toFixed(2)}`,
-            valueColor: costNum > 50 ? "var(--color-hex-d29922)" : "var(--color-hex-f2f2f2)",
+            valueColor: costNum > 50 ? "var(--color-warning)" : "var(--color-fg)",
             warn: costNum > 50,
         },
         {
@@ -88,7 +88,7 @@ export default function ReviewStep({
     return (
         <>
             <StepHeading step={5} label="REVIEW & CONFIRM" />
-            <div className="mb-[24px] text-[9.5px] leading-[1.7] tracking-[0.12em] text-[var(--color-hex-666666)]">
+            <div className="text-lg-tight mb-[24px] leading-relaxed tracking-wide text-[var(--color-hex-666666)]">
                 Review the full mission configuration before launch. Once started, cost ceiling and
                 rules of engagement cannot be modified.
             </div>
@@ -107,7 +107,7 @@ export default function ReviewStep({
                         }}
                     >
                         <div
-                            className="w-[148px] shrink-0 px-[16px] py-[10px] text-[9px] font-semibold tracking-[0.2em] text-[var(--color-hex-444444)]"
+                            className="w-[148px] shrink-0 px-[16px] py-[10px] text-base font-semibold tracking-widest text-[var(--color-hex-444444)]"
                             style={{
                                 borderRight: "1px solid var(--color-hex-1a1a1a)",
                                 display: "flex",
@@ -117,7 +117,7 @@ export default function ReviewStep({
                             {row.label}
                         </div>
                         <div
-                            className="flex-1 px-[16px] py-[10px] text-[10.5px] leading-[1.5] tracking-[0.05em]"
+                            className="text-xl-tight tracking-tight-2 flex-1 px-[16px] py-[10px] leading-snug"
                             style={{
                                 color: row.valueColor ?? "var(--color-hex-a0a0a0)",
                                 display: "flex",
@@ -127,7 +127,7 @@ export default function ReviewStep({
                         >
                             <span className="font-inherit">{row.value}</span>
                             {row.warn && (
-                                <span className="shrink-0 rounded-[2px] border-[1px] border-solid border-[var(--color-hex-d2992244)] bg-[var(--color-hex-1a1200)] px-[5px] py-[1px] text-[8.5px] tracking-[0.12em] text-[var(--color-hex-d29922)]">
+                                <span className="text-base-tight shrink-0 rounded-[2px] border-[1px] border-solid border-[var(--color-hex-d2992244)] bg-[var(--color-hex-1a1200)] px-[5px] py-[1px] tracking-wide text-[var(--color-warning)]">
                                     HIGH
                                 </span>
                             )}
@@ -139,14 +139,14 @@ export default function ReviewStep({
             {/* ROE block */}
             <div className="mb-[24px] overflow-hidden rounded-[2px] border-[1px] border-solid border-[var(--color-hex-292929)]">
                 <div
-                    className="bg-[var(--color-hex-111111)] px-[16px] py-[8px] text-[9px] font-semibold tracking-[0.2em] text-[var(--color-hex-444444)]"
+                    className="bg-[var(--color-hex-111111)] px-[16px] py-[8px] text-base font-semibold tracking-widest text-[var(--color-hex-444444)]"
                     style={{
                         borderBottom: "1px solid var(--color-hex-1a1a1a)",
                     }}
                 >
                     RULES OF ENGAGEMENT
                 </div>
-                <div className="bg-[var(--color-hex-0d0d0d)] px-[16px] py-[12px] text-[10px] leading-[1.75] tracking-[0.04em] text-[var(--color-hex-555555)]">
+                <div className="leading-relaxed-2 bg-[var(--color-hex-0d0d0d)] px-[16px] py-[12px] text-lg tracking-tighter text-[var(--color-hex-555555)]">
                     {roe || "—"}
                 </div>
             </div>
@@ -154,7 +154,7 @@ export default function ReviewStep({
             {/* System confirmations */}
             <div className="mb-[8px] overflow-hidden rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)]">
                 <div
-                    className="bg-[var(--color-hex-0b0b0b)] px-[16px] py-[8px] text-[9px] font-semibold tracking-[0.2em] text-[var(--color-hex-444444)]"
+                    className="bg-[var(--color-hex-0b0b0b)] px-[16px] py-[8px] text-base font-semibold tracking-widest text-[var(--color-hex-444444)]"
                     style={{
                         borderBottom: "1px solid var(--color-hex-1a1a1a)",
                     }}
@@ -199,26 +199,22 @@ export default function ReviewStep({
                         }}
                     >
                         <span
-                            className="shrink-0 text-[11px]"
+                            className="shrink-0 text-xl"
                             style={{
-                                color: chk.ok
-                                    ? "var(--color-hex-3fb950)"
-                                    : "var(--color-hex-d29922)",
+                                color: chk.ok ? "var(--color-success)" : "var(--color-warning)",
                             }}
                         >
                             {chk.ok ? "✓" : "⚠"}
                         </span>
                         <span
-                            className="min-w-[200px] text-[10px] tracking-[0.08em]"
+                            className="min-w-[200px] text-lg tracking-tight"
                             style={{
-                                color: chk.ok
-                                    ? "var(--color-hex-a0a0a0)"
-                                    : "var(--color-hex-d29922)",
+                                color: chk.ok ? "var(--color-hex-a0a0a0)" : "var(--color-warning)",
                             }}
                         >
                             {chk.label}
                         </span>
-                        <span className="text-[9px] tracking-[0.06em] text-[var(--color-hex-444444)]">
+                        <span className="tracking-tight-1 text-base text-[var(--color-hex-444444)]">
                             {chk.detail}
                         </span>
                     </div>

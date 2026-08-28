@@ -23,7 +23,7 @@ export default function ModeCards({
                     <button
                         key={opt.value}
                         onClick={() => onChange(opt.value)}
-                        className={`font-inherit relative flex flex-1 cursor-pointer flex-col rounded-[2px] border border-solid text-left transition-colors duration-100 ${selected ? "border-[var(--color-hex-e31b23)] bg-[var(--color-hex-120608)]" : "border-[var(--color-hex-292929)] bg-[var(--color-hex-0d0d0d)] hover:border-[var(--color-hex-444444)] hover:bg-[var(--color-hex-111111)]"}`}
+                        className={`font-inherit relative flex flex-1 cursor-pointer flex-col rounded-[2px] border border-solid text-left transition-colors duration-100 ${selected ? "border-[var(--color-brand)] bg-[var(--color-hex-120608)]" : "border-[var(--color-hex-292929)] bg-[var(--color-hex-0d0d0d)] hover:border-[var(--color-hex-444444)] hover:bg-[var(--color-hex-111111)]"}`}
                         style={{
                             padding: "22px 20px 18px",
                         }}
@@ -32,20 +32,20 @@ export default function ModeCards({
                         <div className="mb-1 flex items-start justify-between">
                             <div className="flex items-center gap-2.5">
                                 <span
-                                    className="text-[18px] leading-[1]"
+                                    className="text-8xl leading-none"
                                     style={{
                                         color: selected
-                                            ? "var(--color-hex-e31b23)"
+                                            ? "var(--color-brand)"
                                             : "var(--color-hex-444444)",
                                     }}
                                 >
                                     {opt.icon}
                                 </span>
                                 <span
-                                    className="text-[16px] font-bold tracking-[0.14em]"
+                                    className="tracking-wider-1 text-6xl font-bold"
                                     style={{
                                         color: selected
-                                            ? "var(--color-hex-f2f2f2)"
+                                            ? "var(--color-fg)"
                                             : "var(--color-hex-555555)",
                                     }}
                                 >
@@ -54,7 +54,7 @@ export default function ModeCards({
                             </div>
                             {selected && (
                                 <div
-                                    className="mt-[4px] h-[8px] w-[8px] shrink-0 bg-[var(--color-hex-e31b23)]"
+                                    className="mt-[4px] h-[8px] w-[8px] shrink-0 bg-[var(--color-brand)]"
                                     style={{
                                         borderRadius: "50%",
                                     }}
@@ -65,7 +65,7 @@ export default function ModeCards({
                         {/* Hint + badges row */}
                         <div className="mb-5 flex items-center gap-2">
                             <span
-                                className="text-[9px] font-semibold tracking-[0.2em]"
+                                className="text-base font-semibold tracking-widest"
                                 style={{
                                     color: selected
                                         ? "var(--color-hex-9e1118)"
@@ -75,7 +75,7 @@ export default function ModeCards({
                                 {opt.hint}
                             </span>
                             <span
-                                className="rounded-[2px] px-[6px] py-[1px] text-[8.5px] font-semibold tracking-[0.16em]"
+                                className="text-base-tight tracking-wider-2 rounded-[2px] px-[6px] py-[1px] font-semibold"
                                 style={{
                                     color: opt.badgeColor,
                                     background: `${opt.badgeColor}18`,
@@ -84,7 +84,7 @@ export default function ModeCards({
                             >
                                 {opt.badge}
                             </span>
-                            <span className="rounded-[2px] border-[1px] border-solid border-[var(--color-hex-222222)] bg-[var(--color-hex-151515)] px-[6px] py-[1px] text-[8.5px] tracking-[0.14em] text-[var(--color-hex-555555)]">
+                            <span className="text-base-tight tracking-wider-1 rounded-[2px] border-[1px] border-solid border-[var(--color-hex-222222)] bg-[var(--color-hex-151515)] px-[6px] py-[1px] text-[var(--color-hex-555555)]">
                                 {opt.difficulty}
                             </span>
                         </div>
@@ -100,7 +100,7 @@ export default function ModeCards({
                         />
 
                         {/* Description */}
-                        <div className="mb-[20px] grow text-[10px] leading-[1.7] tracking-[0.04em] text-[var(--color-hex-555555)]">
+                        <div className="mb-[20px] grow text-lg leading-relaxed tracking-tighter text-[var(--color-hex-555555)]">
                             {opt.description}
                         </div>
 
@@ -119,16 +119,16 @@ export default function ModeCards({
                             {opt.implications.map((imp: { label: string; detail: string }) => (
                                 <div key={imp.label} className="flex items-start gap-2">
                                     <span
-                                        className="min-w-[96px] shrink-0 text-[8.5px] font-semibold tracking-[0.16em]"
+                                        className="text-base-tight tracking-wider-2 min-w-[96px] shrink-0 font-semibold"
                                         style={{
                                             color: selected
-                                                ? "var(--color-hex-e31b23)"
+                                                ? "var(--color-brand)"
                                                 : "var(--color-hex-333333)",
                                         }}
                                     >
                                         {imp.label}
                                     </span>
-                                    <span className="text-[8.5px] leading-[1.5] tracking-[0.06em] text-[var(--color-hex-444444)]">
+                                    <span className="text-base-tight tracking-tight-1 leading-snug text-[var(--color-hex-444444)]">
                                         {imp.detail}
                                     </span>
                                 </div>

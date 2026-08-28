@@ -9,13 +9,13 @@ export default function MetaRow({
 }) {
     return (
         <div>
-            <div className="mb-[1px] text-[8px] tracking-[0.18em] text-[var(--color-hex-444444)]">
+            <div className="tracking-wider-3 mb-[1px] text-sm text-[var(--color-hex-444444)]">
                 {label}
             </div>
             <div
-                className="text-[10px] tracking-[0.06em]"
+                className="tracking-tight-1 text-lg"
                 style={{
-                    color: highlight ? "var(--color-hex-e31b23)" : "var(--color-hex-666666)",
+                    color: highlight ? "var(--color-brand)" : "var(--color-hex-666666)",
                     wordBreak: "break-all",
                 }}
             >

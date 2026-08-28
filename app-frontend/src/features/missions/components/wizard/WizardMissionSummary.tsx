@@ -25,7 +25,7 @@ export function WizardMissionSummary({
 }) {
     return (
         <div
-            className="flex w-[264px] flex-shrink-0 flex-col overflow-y-auto bg-[var(--color-hex-0b0b0b)]"
+            className="flex w-[var(--width-drawer-sm)] flex-shrink-0 flex-col overflow-y-auto bg-[var(--color-hex-0b0b0b)]"
             style={{
                 borderLeft: "1px solid var(--color-hex-1e1e1e)",
             }}
@@ -36,7 +36,7 @@ export function WizardMissionSummary({
                     borderBottom: "1px solid var(--color-hex-1e1e1e)",
                 }}
             >
-                <div className="mb-[10px] text-[9px] tracking-[0.2em] text-[var(--color-hex-444444)]">
+                <div className="mb-[10px] text-base tracking-widest text-[var(--color-hex-444444)]">
                     MISSION SUMMARY
                 </div>
                 <div className="flex flex-col gap-3">
@@ -62,11 +62,11 @@ export function WizardMissionSummary({
                         borderBottom: "1px solid var(--color-hex-1e1e1e)",
                     }}
                 >
-                    <div className="mb-[8px] text-[9px] tracking-[0.2em] text-[var(--color-hex-444444)]">
+                    <div className="mb-[8px] text-base tracking-widest text-[var(--color-hex-444444)]">
                         ROE PREVIEW
                     </div>
                     <div
-                        className="overflow-hidden text-[9px] leading-[1.7] tracking-[0.06em] text-[var(--color-hex-333333)]"
+                        className="tracking-tight-1 overflow-hidden text-base leading-relaxed text-[var(--color-hex-333333)]"
                         style={{
                             display: "-webkit-box",
                             WebkitLineClamp: 6,
@@ -79,10 +79,10 @@ export function WizardMissionSummary({
             )}
 
             <div className="px-5 pt-4">
-                <div className="mb-[8px] text-[9px] tracking-[0.2em] text-[var(--color-hex-444444)]">
+                <div className="mb-[8px] text-base tracking-widest text-[var(--color-hex-444444)]">
                     VALIDATION
                 </div>
-                <div className="text-[9px] leading-[1.8] tracking-[0.1em] text-[var(--color-hex-333333)]">
+                <div className="text-base leading-loose tracking-normal text-[var(--color-hex-333333)]">
                     Oracle validation available for BENCHMARK ENVIRONMENT targets.
                 </div>
             </div>
