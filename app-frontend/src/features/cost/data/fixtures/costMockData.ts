@@ -7,6 +7,10 @@ export interface SpecialistCost {
     outputTok: number;
     cost: number;
     pct: number;
+    /** Attack surface this specialist operated on — used for per-surface cost rollup (§12.2) */
+    surface: "WEB" | "GRAPHQL" | "MULTI-HOST";
+    /** Mission this cost entry belongs to */
+    missionId: string;
 }
 export interface CostTimeline {
     ts: string;
@@ -14,7 +18,44 @@ export interface CostTimeline {
     cost: number;
 }
 
-export type CostTab = "COST & USAGE" | "MODEL BREAKDOWN" | "CONTEXT STATE";
+export type CostTab = "COST & USAGE" | "MODEL BREAKDOWN" | "CONTEXT STATE" | "PER-SURFACE ROLLUP";
+
+/** Per-surface cost-per-exploit rollup — required by §12.2:
+ *  "cost reporting: cost_per_run / pass@1_rate reported alongside every pass-rate number, per surface" */
+export interface SurfaceRollupRow {
+    surface: "WEB" | "GRAPHQL" | "MULTI-HOST";
+    totalCost: string;
+    runs: number;
+    passAt1Rate: number;
+    costPerExploit: string;
+    avgTimeMin: number;
+}
+export const PER_SURFACE_ROLLUP: SurfaceRollupRow[] = [
+    {
+        surface: "WEB",
+        totalCost: "$4.21",
+        runs: 18,
+        passAt1Rate: 0.681,
+        costPerExploit: "$0.343",
+        avgTimeMin: 18,
+    },
+    {
+        surface: "GRAPHQL",
+        totalCost: "$1.84",
+        runs: 6,
+        passAt1Rate: 0.612,
+        costPerExploit: "$0.501",
+        avgTimeMin: 28,
+    },
+    {
+        surface: "MULTI-HOST",
+        totalCost: "$3.12",
+        runs: 4,
+        passAt1Rate: 0.422,
+        costPerExploit: "$1.849",
+        avgTimeMin: 47,
+    },
+];
 
 /* ── Data ── */
 export const SPECIALISTS_COST: SpecialistCost[] = [
@@ -27,6 +68,8 @@ export const SPECIALISTS_COST: SpecialistCost[] = [
         outputTok: 38400,
         cost: 0.0842,
         pct: 38,
+        surface: "WEB",
+        missionId: "CVE-001",
     },
     {
         id: "S-02",
@@ -37,6 +80,8 @@ export const SPECIALISTS_COST: SpecialistCost[] = [
         outputTok: 21000,
         cost: 0.0541,
         pct: 24,
+        surface: "WEB",
+        missionId: "CVE-001",
     },
     {
         id: "S-01",
@@ -47,6 +92,8 @@ export const SPECIALISTS_COST: SpecialistCost[] = [
         outputTok: 18200,
         cost: 0.0449,
         pct: 20,
+        surface: "WEB",
+        missionId: "CVE-001",
     },
     {
         id: "S-04",
@@ -57,6 +104,8 @@ export const SPECIALISTS_COST: SpecialistCost[] = [
         outputTok: 9400,
         cost: 0.0112,
         pct: 5,
+        surface: "WEB",
+        missionId: "CVE-001",
     },
     {
         id: "S-05",
@@ -67,6 +116,8 @@ export const SPECIALISTS_COST: SpecialistCost[] = [
         outputTok: 4100,
         cost: 0.0052,
         pct: 2,
+        surface: "WEB",
+        missionId: "CVE-001",
     },
     {
         id: "SYS",
@@ -77,8 +128,11 @@ export const SPECIALISTS_COST: SpecialistCost[] = [
         outputTok: 22800,
         cost: 0.0234,
         pct: 11,
+        surface: "WEB",
+        missionId: "CVE-001",
     },
 ];
+
 export type ModelRow = (typeof MODEL_ROWS)[0];
 export const MODEL_ROWS = [
     {
