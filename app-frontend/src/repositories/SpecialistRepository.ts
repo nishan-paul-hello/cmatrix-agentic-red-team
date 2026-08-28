@@ -3,16 +3,21 @@ import { type DataSource } from "@/types/adapters";
 import { type Specialist } from "@/types/domain-types";
 
 export class SpecialistRepository implements DataSource<Specialist> {
-    private static mockData: Specialist[] = [...SPECIALISTS];
+    private mockData: Specialist[];
 
-    static seed(data: Specialist[]) {
-        this.mockData = data;
+    constructor(initialData?: Specialist[]) {
+        this.mockData = initialData ? [...initialData] : [...SPECIALISTS];
+    }
+
+    static seed(_data: Specialist[]) {
+        // Obsolete static seed: repositories should now be instantiated per-session
+        console.warn("SpecialistRepository.seed() called but mock data is now instance-bound");
     }
 
     async fetch(id: string): Promise<Specialist> {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
-                const specialist = SpecialistRepository.mockData.find((s) => s.id === id);
+                const specialist = this.mockData.find((s) => s.id === id);
                 if (specialist) {
                     // VALIDATION SEAM: insert schema.parse(data) here once a real backend replaces mock data
                     resolve(specialist);
@@ -23,18 +28,14 @@ export class SpecialistRepository implements DataSource<Specialist> {
         });
     }
 
-    async fetchAll<U = Specialist>(options?: {
-        page?: number;
-        limit?: number;
-        collection?: string;
-    }): Promise<U[]> {
+    async fetchAll(options?: { page?: number; limit?: number }): Promise<Specialist[]> {
         return new Promise((resolve) => {
             setTimeout(() => {
                 const { page = 1, limit = 50 } = options ?? {};
                 const start = (page - 1) * limit;
-                const data = SpecialistRepository.mockData.slice(start, start + limit);
+                const data = this.mockData.slice(start, start + limit);
                 // VALIDATION SEAM: insert schema.parse(data) here once a real backend replaces mock data
-                resolve(data as unknown as U[]);
+                resolve(data);
             }, 300);
         });
     }
@@ -43,7 +44,7 @@ export class SpecialistRepository implements DataSource<Specialist> {
         return new Promise((resolve) => {
             setTimeout(() => {
                 const newSpecialist = { ...data, id: `S-${Date.now()}` };
-                SpecialistRepository.mockData.push(newSpecialist);
+                this.mockData.push(newSpecialist);
                 resolve(newSpecialist);
             }, 100);
         });
@@ -52,13 +53,13 @@ export class SpecialistRepository implements DataSource<Specialist> {
     async update(id: string, data: Partial<Specialist>): Promise<Specialist> {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
-                const idx = SpecialistRepository.mockData.findIndex((s) => s.id === id);
+                const idx = this.mockData.findIndex((s) => s.id === id);
                 if (idx >= 0) {
-                    SpecialistRepository.mockData[idx] = {
-                        ...SpecialistRepository.mockData[idx],
+                    this.mockData[idx] = {
+                        ...this.mockData[idx],
                         ...data,
                     };
-                    resolve(SpecialistRepository.mockData[idx]);
+                    resolve(this.mockData[idx]);
                 } else {
                     reject(new Error("Specialist not found"));
                 }
@@ -69,18 +70,11 @@ export class SpecialistRepository implements DataSource<Specialist> {
     async delete(id: string): Promise<boolean> {
         return new Promise((resolve) => {
             setTimeout(() => {
-                const initialLength = SpecialistRepository.mockData.length;
-                SpecialistRepository.mockData = SpecialistRepository.mockData.filter(
-                    (s) => s.id !== id,
-                );
-                resolve(SpecialistRepository.mockData.length < initialLength);
+                const initialLength = this.mockData.length;
+                this.mockData = this.mockData.filter((s) => s.id !== id);
+                resolve(this.mockData.length < initialLength);
             }, 100);
         });
-    }
-
-    static async getSpecialists(): Promise<Specialist[]> {
-        const repo = new SpecialistRepository();
-        return repo.fetchAll({ limit: 1000 }); // Return all for now
     }
 
     static async getTimeline(): Promise<{ ts: string; event: string; detail: string }[]> {

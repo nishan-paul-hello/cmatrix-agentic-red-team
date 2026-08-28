@@ -3,16 +3,21 @@ import { type DataSource } from "@/types/adapters";
 import { type Mission } from "@/types/domain-types";
 
 export class MissionRepository implements DataSource<Mission> {
-    private static mockData: Mission[] = [...MISSIONS];
+    private mockData: Mission[];
 
-    static seed(data: Mission[]) {
-        this.mockData = data;
+    constructor(initialData?: Mission[]) {
+        this.mockData = initialData ? [...initialData] : [...MISSIONS];
+    }
+
+    static seed(_data: Mission[]) {
+        // Obsolete static seed: repositories should now be instantiated per-session
+        console.warn("MissionRepository.seed() called but mock data is now instance-bound");
     }
 
     async fetch(id: string): Promise<Mission> {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
-                const mission = MissionRepository.mockData.find((m) => m.id === id);
+                const mission = this.mockData.find((m) => m.id === id);
                 if (mission) {
                     // VALIDATION SEAM: insert schema.parse(data) here once a real backend replaces mock data
                     resolve(mission);
@@ -23,18 +28,14 @@ export class MissionRepository implements DataSource<Mission> {
         });
     }
 
-    async fetchAll<U = Mission>(options?: {
-        page?: number;
-        limit?: number;
-        collection?: string;
-    }): Promise<U[]> {
+    async fetchAll(options?: { page?: number; limit?: number }): Promise<Mission[]> {
         return new Promise((resolve) => {
             setTimeout(() => {
                 const { page = 1, limit = 50 } = options ?? {};
                 const start = (page - 1) * limit;
-                const data = MissionRepository.mockData.slice(start, start + limit);
+                const data = this.mockData.slice(start, start + limit);
                 // VALIDATION SEAM: insert schema.parse(data) here once a real backend replaces mock data
-                resolve(data as unknown as U[]);
+                resolve(data);
             }, 300);
         });
     }
@@ -43,7 +44,7 @@ export class MissionRepository implements DataSource<Mission> {
         return new Promise((resolve) => {
             setTimeout(() => {
                 const newMission = { ...data, id: `M-${Date.now()}` };
-                MissionRepository.mockData.push(newMission);
+                this.mockData.push(newMission);
                 resolve(newMission);
             }, 100);
         });
@@ -52,13 +53,13 @@ export class MissionRepository implements DataSource<Mission> {
     async update(id: string, data: Partial<Mission>): Promise<Mission> {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
-                const idx = MissionRepository.mockData.findIndex((m) => m.id === id);
+                const idx = this.mockData.findIndex((m) => m.id === id);
                 if (idx >= 0) {
-                    MissionRepository.mockData[idx] = {
-                        ...MissionRepository.mockData[idx],
+                    this.mockData[idx] = {
+                        ...this.mockData[idx],
                         ...data,
                     };
-                    resolve(MissionRepository.mockData[idx]);
+                    resolve(this.mockData[idx]);
                 } else {
                     reject(new Error("Mission not found"));
                 }
@@ -69,24 +70,10 @@ export class MissionRepository implements DataSource<Mission> {
     async delete(id: string): Promise<boolean> {
         return new Promise((resolve) => {
             setTimeout(() => {
-                const initialLength = MissionRepository.mockData.length;
-                MissionRepository.mockData = MissionRepository.mockData.filter((m) => m.id !== id);
-                resolve(MissionRepository.mockData.length < initialLength);
+                const initialLength = this.mockData.length;
+                this.mockData = this.mockData.filter((m) => m.id !== id);
+                resolve(this.mockData.length < initialLength);
             }, 100);
         });
-    }
-
-    static async getMissions(): Promise<Mission[]> {
-        const repo = new MissionRepository();
-        return repo.fetchAll({ limit: 1000 }); // Return all for now to not break existing calls
-    }
-
-    static async getMissionById(id: string): Promise<Mission | null> {
-        try {
-            const repo = new MissionRepository();
-            return await repo.fetch(id);
-        } catch {
-            return null;
-        }
     }
 }
