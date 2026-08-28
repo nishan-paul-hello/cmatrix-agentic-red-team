@@ -30,10 +30,10 @@ export class PanelErrorBoundary extends Component<Props, State> {
                 return this.props.fallback;
             }
             return (
-                <div className="flex h-full w-full items-center justify-center border border-[var(--color-danger)] bg-[var(--color-hex-0b0b0b)] p-4 font-mono text-lg text-[var(--color-danger)]">
+                <div className="border-destructive bg-background text-destructive flex h-full w-full items-center justify-center border p-4 font-mono text-xs">
                     <div className="text-center">
                         <div className="mb-2 font-bold tracking-widest uppercase">Panel Error</div>
-                        <div className="text-base text-[var(--color-hex-a0a0a0)]">
+                        <div className="text-muted-foreground text-base">
                             {this.state.error?.message}
                         </div>
                     </div>
