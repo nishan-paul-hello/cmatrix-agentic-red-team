@@ -56,7 +56,7 @@ export default function CommandPaletteView(props: CommandPaletteContextType) {
                     role="dialog"
                     aria-modal="true"
                     aria-label="Command palette"
-                    className="w-[600px] overflow-hidden rounded-[3px] border border-[var(--color-hex-292929)] bg-[var(--color-hex-0d0d0d)]"
+                    className="w-panel-xl overflow-hidden rounded-[3px] border border-[var(--color-hex-292929)] bg-[var(--color-hex-0d0d0d)]"
                     style={{ boxShadow: "0 24px 48px var(--color-hex-000000cc)" }}
                 >
                     <CommandPaletteView.SearchInput />
@@ -72,7 +72,7 @@ CommandPaletteView.SearchInput = function SearchInput() {
     const { query, updateQuery, inputRef, handleKey } = useCommandPaletteContext();
     return (
         <div className="flex h-[48px] items-center gap-3 border-b border-[var(--color-hex-1e1e1e)] px-4">
-            <span className="text-[14px] text-[var(--color-hex-333333)]" aria-hidden="true">
+            <span className="text-4xl text-[var(--color-hex-333333)]" aria-hidden="true">
                 ⌘
             </span>
             <input
@@ -83,18 +83,18 @@ CommandPaletteView.SearchInput = function SearchInput() {
                 placeholder="Search missions, findings, actions…"
                 aria-label="Search command palette"
                 aria-autocomplete="list"
-                className="flex-1 border-none bg-transparent text-[12px] tracking-[0.04em] text-[var(--color-hex-f2f2f2)] outline-none"
+                className="flex-1 border-none bg-transparent text-2xl tracking-tighter text-[var(--color-fg)] outline-none"
             />
             {query && (
                 <button
                     onClick={() => updateQuery("")}
                     aria-label="Clear search"
-                    className="cursor-pointer border-none bg-transparent text-[12px] text-[var(--color-hex-333333)] transition-colors duration-100 hover:text-[var(--color-hex-666666)]"
+                    className="cursor-pointer border-none bg-transparent text-2xl text-[var(--color-hex-333333)] transition-colors duration-100 hover:text-[var(--color-hex-666666)]"
                 >
                     ✕
                 </button>
             )}
-            <kbd className="rounded-[2px] border border-[var(--color-hex-1e1e1e)] bg-[var(--color-hex-111111)] px-[6px] py-[2px] text-[8px] text-[var(--color-hex-333333)]">
+            <kbd className="rounded-[2px] border border-[var(--color-hex-1e1e1e)] bg-[var(--color-hex-111111)] px-[6px] py-[2px] text-sm text-[var(--color-hex-333333)]">
                 ESC
             </kbd>
         </div>
@@ -109,12 +109,12 @@ CommandPaletteView.ResultList = function ResultList() {
             {filtered.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-10">
                     <div
-                        className="mb-[8px] text-[20px] text-[var(--color-hex-1e1e1e)]"
+                        className="mb-[8px] text-9xl text-[var(--color-hex-1e1e1e)]"
                         aria-hidden="true"
                     >
                         ◇
                     </div>
-                    <div className="text-[10px] tracking-[0.14em] text-[var(--color-hex-333333)]">
+                    <div className="tracking-wider-1 text-lg text-[var(--color-hex-333333)]">
                         NO RESULTS
                     </div>
                 </div>
@@ -122,7 +122,7 @@ CommandPaletteView.ResultList = function ResultList() {
                 cats.map((cat) => (
                     <div key={cat}>
                         {/* Category header */}
-                        <div className="border-t border-[var(--color-hex-111111)] bg-[var(--color-hex-0a0a0a)] px-[16px] py-[6px] pb-[3px] text-[7.5px] tracking-[0.2em] text-[var(--color-hex-333333)]">
+                        <div className="text-sm-tight border-t border-[var(--color-hex-111111)] bg-[var(--color-hex-0a0a0a)] px-[16px] py-[6px] pb-[3px] tracking-widest text-[var(--color-hex-333333)]">
                             {cat}
                         </div>
 
@@ -153,13 +153,13 @@ CommandPaletteView.ResultList = function ResultList() {
                                         className={[
                                             "flex cursor-pointer items-center gap-3 border-l-2 px-[16px] py-[9px] transition-colors duration-75",
                                             active
-                                                ? "border-[var(--color-hex-e31b23)] bg-[var(--color-hex-141414)]"
+                                                ? "border-[var(--color-brand)] bg-[var(--color-hex-141414)]"
                                                 : "border-transparent",
                                         ].join(" ")}
                                     >
                                         {/* Category badge */}
                                         <span
-                                            className="shrink-0 rounded-[2px] px-[6px] py-[1px] text-[9px] font-semibold tracking-[0.1em]"
+                                            className="shrink-0 rounded-[2px] px-[6px] py-[1px] text-base font-semibold tracking-normal"
                                             style={{
                                                 color: cc.color,
                                                 background: cc.bg,
@@ -172,24 +172,24 @@ CommandPaletteView.ResultList = function ResultList() {
                                         {/* Label + sub */}
                                         <div className="min-w-0 flex-1">
                                             <div
-                                                className="overflow-hidden text-[10.5px] tracking-[0.04em] text-ellipsis whitespace-nowrap"
+                                                className="text-xl-tight overflow-hidden tracking-tighter text-ellipsis whitespace-nowrap"
                                                 style={{
                                                     color: active
-                                                        ? "var(--color-hex-f2f2f2)"
+                                                        ? "var(--color-fg)"
                                                         : "var(--color-hex-a0a0a0)",
                                                     fontWeight: active ? 700 : 400,
                                                 }}
                                             >
                                                 {item.label}
                                             </div>
-                                            <div className="mt-[1px] overflow-hidden text-[8.5px] tracking-[0.04em] text-ellipsis whitespace-nowrap text-[var(--color-hex-444444)]">
+                                            <div className="text-base-tight mt-[1px] overflow-hidden tracking-tighter text-ellipsis whitespace-nowrap text-[var(--color-hex-444444)]">
                                                 {item.sub}
                                             </div>
                                         </div>
 
                                         {/* Keyboard shortcut */}
                                         {item.kbd && (
-                                            <kbd className="shrink-0 rounded-[2px] border border-[var(--color-hex-1e1e1e)] bg-[var(--color-hex-111111)] px-[6px] py-[2px] text-[8px] text-[var(--color-hex-333333)]">
+                                            <kbd className="shrink-0 rounded-[2px] border border-[var(--color-hex-1e1e1e)] bg-[var(--color-hex-111111)] px-[6px] py-[2px] text-sm text-[var(--color-hex-333333)]">
                                                 {item.kbd}
                                             </kbd>
                                         )}
@@ -210,16 +210,16 @@ CommandPaletteView.FooterHint = function FooterHint() {
             <div className="flex items-center gap-4">
                 {HELP_KEYS.map((h) => (
                     <div key={h.k} className="flex items-center gap-1">
-                        <kbd className="rounded-[2px] border border-[var(--color-hex-1e1e1e)] bg-[var(--color-hex-111111)] px-[5px] py-[1px] text-[7.5px] text-[var(--color-hex-333333)]">
+                        <kbd className="text-sm-tight rounded-[2px] border border-[var(--color-hex-1e1e1e)] bg-[var(--color-hex-111111)] px-[5px] py-[1px] text-[var(--color-hex-333333)]">
                             {h.k}
                         </kbd>
-                        <span className="text-[7.5px] tracking-[0.1em] text-[var(--color-hex-333333)]">
+                        <span className="text-sm-tight tracking-normal text-[var(--color-hex-333333)]">
                             {h.v}
                         </span>
                     </div>
                 ))}
             </div>
-            <span className="text-[7.5px] tracking-[0.12em] text-[var(--color-hex-222222)]">
+            <span className="text-sm-tight tracking-wide text-[var(--color-hex-222222)]">
                 {filtered.length} RESULTS
             </span>
         </div>

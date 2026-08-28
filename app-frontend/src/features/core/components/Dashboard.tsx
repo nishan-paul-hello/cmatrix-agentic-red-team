@@ -11,8 +11,7 @@ import {
     type ActivityEntry,
 } from "@/features/core/components/DashboardConstants";
 import { MissionOrchestratorModel } from "@/features/missions/domain/Orchestrator";
-import { MissionRepository } from "@/repositories/MissionRepository";
-import { SpecialistRepository } from "@/repositories/SpecialistRepository";
+import { useServices } from "@/lib/services-context";
 import { type Mission } from "@/types/domain-types";
 
 // ─── Component ────────────────────────────────────────────────────────────────
@@ -29,6 +28,7 @@ export default function Dashboard({ onNewMission, onOpenMission }: DashboardProp
         {},
     );
     const [isLoading, setIsLoading] = useState(true);
+    const { missionRepository, specialistRepository } = useServices();
     const nextId = useRef(INITIAL_ACTIVITY.length + 1);
     const eventQueue = useRef([...NEW_EVENTS]);
 
@@ -47,8 +47,8 @@ export default function Dashboard({ onNewMission, onOpenMission }: DashboardProp
 
     useEffect(() => {
         void Promise.all([
-            MissionRepository.getMissions(),
-            SpecialistRepository.getSpecialists(),
+            missionRepository.fetchAll({ limit: 1000 }),
+            specialistRepository.fetchAll(),
         ]).then(([missionData, specsData]) => {
             setMissions(missionData);
             const orchs: Record<string, MissionOrchestratorModel> = {};
@@ -64,7 +64,7 @@ export default function Dashboard({ onNewMission, onOpenMission }: DashboardProp
             setOrchestrators(orchs);
             setIsLoading(false);
         });
-    }, []);
+    }, [missionRepository, specialistRepository]);
 
     return (
         <div className="flex h-full min-h-0 flex-col">
@@ -72,7 +72,7 @@ export default function Dashboard({ onNewMission, onOpenMission }: DashboardProp
             <div className="flex-shrink-0 border-b border-[var(--color-hex-1e1e1e)] px-6 pt-5 pb-4">
                 <div className="page-eyebrow">OPERATIONS</div>
                 <div className="flex items-baseline gap-3">
-                    <h1 className="text-[20px] font-bold tracking-[0.12em] text-[var(--color-hex-f2f2f2)]">
+                    <h1 className="text-9xl font-bold tracking-wide text-[var(--color-fg)]">
                         COMMAND CENTER
                     </h1>
                 </div>
@@ -87,7 +87,7 @@ export default function Dashboard({ onNewMission, onOpenMission }: DashboardProp
                         value={kpi.value}
                         variant="dashboard"
                         borderRight={i < 5}
-                        valueColor={kpi.red ? "var(--color-hex-e31b23)" : "var(--color-hex-f2f2f2)"}
+                        valueColor={kpi.red ? "var(--color-brand)" : "var(--color-fg)"}
                     />
                 ))}
             </div>
@@ -97,25 +97,25 @@ export default function Dashboard({ onNewMission, onOpenMission }: DashboardProp
                 {/* Active missions table */}
                 <div className="flex flex-1 flex-col overflow-hidden border-r border-[var(--color-hex-1e1e1e)]">
                     <div className="flex flex-shrink-0 items-center justify-between border-b border-[var(--color-hex-1e1e1e)] px-6 py-3">
-                        <span className="text-[11px] font-semibold tracking-[0.16em] text-[var(--color-hex-a0a0a0)]">
+                        <span className="tracking-wider-2 text-xl font-semibold text-[var(--color-hex-a0a0a0)]">
                             ACTIVE MISSIONS
                         </span>
                         <button
                             onClick={onNewMission}
-                            className="cursor-pointer rounded-[2px] border border-[var(--color-hex-6f171b)] bg-transparent px-[8px] py-[2px] text-[9px] tracking-[0.14em] text-[var(--color-hex-e31b23)] transition-colors duration-100 hover:border-[var(--color-hex-e31b23)] hover:bg-[var(--color-hex-1a0608)]"
+                            className="tracking-wider-1 cursor-pointer rounded-[2px] border border-[var(--color-hex-6f171b)] bg-transparent px-[8px] py-[2px] text-base text-[var(--color-brand)] transition-colors duration-100 hover:border-[var(--color-brand)] hover:bg-[var(--color-hex-1a0608)]"
                         >
                             + NEW MISSION
                         </button>
                     </div>
 
                     <div className="flex-1 overflow-auto">
-                        <table className="w-full border-collapse text-[11px]">
+                        <table className="w-full border-collapse text-xl">
                             <thead>
                                 <tr className="bg-[var(--color-hex-111111)]">
                                     {TABLE_HEADERS.map((h) => (
                                         <th
                                             key={h}
-                                            className="border-b border-[var(--color-hex-1e1e1e)] px-[16px] py-[6px] text-left text-[8.5px] font-semibold tracking-[0.18em] whitespace-nowrap text-[var(--color-hex-444444)]"
+                                            className="text-base-tight tracking-wider-3 border-b border-[var(--color-hex-1e1e1e)] px-[16px] py-[6px] text-left font-semibold whitespace-nowrap text-[var(--color-hex-444444)]"
                                         >
                                             {h}
                                         </th>
@@ -148,16 +148,16 @@ export default function Dashboard({ onNewMission, onOpenMission }: DashboardProp
                                             onClick={() => onOpenMission?.(m.id)}
                                             className="cursor-pointer border-b border-[var(--color-hex-191919)] transition-colors duration-75 hover:bg-[var(--color-hex-131313)]"
                                         >
-                                            <td className="px-[16px] py-[8px] font-semibold tracking-[0.08em] whitespace-nowrap text-[var(--color-hex-e31b23)]">
+                                            <td className="px-[16px] py-[8px] font-semibold tracking-tight whitespace-nowrap text-[var(--color-brand)]">
                                                 {m.id}
                                             </td>
-                                            <td className="cell-truncate max-w-[180px] px-[16px] py-[8px] whitespace-nowrap text-[var(--color-hex-a0a0a0)]">
+                                            <td className="cell-truncate max-w-[var(--width-cell-max)] px-[16px] py-[8px] whitespace-nowrap text-[var(--color-hex-a0a0a0)]">
                                                 {m.target}
                                             </td>
-                                            <td className="px-[16px] py-[8px] text-[10px] whitespace-nowrap text-[var(--color-hex-666666)]">
+                                            <td className="px-[16px] py-[8px] text-lg whitespace-nowrap text-[var(--color-hex-666666)]">
                                                 {m.surface}
                                             </td>
-                                            <td className="px-[16px] py-[8px] text-[10px] whitespace-nowrap text-[var(--color-hex-666666)]">
+                                            <td className="px-[16px] py-[8px] text-lg whitespace-nowrap text-[var(--color-hex-666666)]">
                                                 {m.mode}
                                             </td>
                                             <td className="px-[16px] py-[8px] whitespace-nowrap">
@@ -171,7 +171,7 @@ export default function Dashboard({ onNewMission, onOpenMission }: DashboardProp
                                                 style={{
                                                     color:
                                                         m.findings > 0
-                                                            ? "var(--color-hex-ff2a32)"
+                                                            ? "var(--color-danger)"
                                                             : "var(--color-hex-666666)",
                                                     fontWeight: m.findings > 0 ? 600 : 400,
                                                 }}
@@ -183,11 +183,11 @@ export default function Dashboard({ onNewMission, onOpenMission }: DashboardProp
                                             </td>
                                             <td className="px-[16px] py-[8px] text-center text-[var(--color-hex-a0a0a0)]">
                                                 {orchestrators[m.id].hasActiveWorkers() ? (
-                                                    <span className="text-[9px] font-semibold tracking-[0.1em] text-[var(--color-hex-3fb950)]">
+                                                    <span className="text-base font-semibold tracking-normal text-[var(--color-success)]">
                                                         ACTIVE
                                                     </span>
                                                 ) : (
-                                                    <span className="text-[9px] tracking-[0.1em] text-[var(--color-hex-666666)]">
+                                                    <span className="text-base tracking-normal text-[var(--color-hex-666666)]">
                                                         IDLE
                                                     </span>
                                                 )}
@@ -201,14 +201,14 @@ export default function Dashboard({ onNewMission, onOpenMission }: DashboardProp
                 </div>
 
                 {/* Live activity feed */}
-                <div className="flex w-[340px] flex-shrink-0 flex-col overflow-hidden">
+                <div className="flex w-[var(--width-drawer-lg)] flex-shrink-0 flex-col overflow-hidden">
                     <div className="flex flex-shrink-0 items-center gap-2 border-b border-[var(--color-hex-1e1e1e)] px-4 py-3">
                         <div
-                            className="h-[6px] w-[6px] shrink-0 rounded-full bg-[var(--color-hex-ff2a32)]"
+                            className="h-[6px] w-[6px] shrink-0 rounded-full bg-[var(--color-danger)]"
                             style={{ animation: "pulse 1.4s ease-in-out infinite" }}
                             aria-hidden="true"
                         />
-                        <span className="text-[11px] font-semibold tracking-[0.16em] text-[var(--color-hex-a0a0a0)]">
+                        <span className="tracking-wider-2 text-xl font-semibold text-[var(--color-hex-a0a0a0)]">
                             LIVE ACTIVITY
                         </span>
                     </div>
@@ -224,24 +224,24 @@ export default function Dashboard({ onNewMission, onOpenMission }: DashboardProp
                                 className="border-b border-[var(--color-hex-111111)] px-4 py-2"
                             >
                                 <div className="mb-0.5 flex items-center gap-2">
-                                    <span className="shrink-0 text-[9px] tracking-[0.06em] text-[var(--color-hex-444444)]">
+                                    <span className="tracking-tight-1 shrink-0 text-base text-[var(--color-hex-444444)]">
                                         {entry.ts}
                                     </span>
-                                    <span className="text-[9px] font-semibold tracking-[0.1em] text-[var(--color-hex-e31b23)]">
+                                    <span className="text-base font-semibold tracking-normal text-[var(--color-brand)]">
                                         {entry.agent}
                                     </span>
                                     <span
-                                        className="text-[9px] tracking-[0.1em] text-[var(--color-hex-333333)]"
+                                        className="text-base tracking-normal text-[var(--color-hex-333333)]"
                                         aria-hidden="true"
                                     >
                                         ·
                                     </span>
-                                    <span className="text-[9px] tracking-[0.1em] text-[var(--color-hex-555555)]">
+                                    <span className="text-base tracking-normal text-[var(--color-hex-555555)]">
                                         {entry.action}
                                     </span>
                                 </div>
                                 <div
-                                    className="text-[10px] leading-[1.4] tracking-[0.02em]"
+                                    className="tracking-tighter-2 text-lg leading-tight"
                                     style={{ color: entry.color }}
                                 >
                                     {entry.desc}

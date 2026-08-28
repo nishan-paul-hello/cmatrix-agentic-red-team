@@ -82,7 +82,7 @@ const NAV_ICONS: Record<NavItem, string> = {
 
 function NavIcon({ id }: { id: NavItem }) {
     return (
-        <span className="inline-block w-[14px] text-[10px]" aria-hidden="true">
+        <span className="inline-block w-[14px] text-lg" aria-hidden="true">
             {NAV_ICONS[id]}
         </span>
     );
@@ -99,11 +99,11 @@ function TopbarStat({
 }) {
     return (
         <div className="flex items-center gap-1.5">
-            <span className="text-[8.5px] tracking-[0.14em] text-[var(--color-hex-444444)]">
+            <span className="text-base-tight tracking-wider-1 text-[var(--color-hex-444444)]">
                 {label}
             </span>
             <span
-                className="text-[9.5px] tracking-[0.08em]"
+                className="text-lg-tight tracking-tight"
                 style={{ color: valueColor ?? "var(--color-hex-a0a0a0)" }}
             >
                 {value}
@@ -130,7 +130,7 @@ export default function Shell({
     missionId = "CVE-001",
 }: ShellProps) {
     return (
-        <div className="flex h-screen overflow-hidden bg-[var(--color-hex-080808)] text-[var(--color-hex-f2f2f2)]">
+        <div className="flex h-screen overflow-hidden bg-[var(--color-bg)] text-[var(--color-fg)]">
             {/* ── Sidebar ────────────────────────────────────────────────────── */}
             <aside
                 className="relative flex w-[200px] flex-shrink-0 flex-col overflow-y-auto border-r border-[var(--color-hex-1e1e1e)] bg-[var(--color-hex-0b0b0b)]"
@@ -138,7 +138,7 @@ export default function Shell({
             >
                 {/* Red accent stripe */}
                 <div
-                    className="absolute top-0 bottom-0 left-0 w-[2px] bg-[var(--color-hex-e31b23)]"
+                    className="absolute top-0 bottom-0 left-0 w-[2px] bg-[var(--color-brand)]"
                     aria-hidden="true"
                 />
 
@@ -146,7 +146,7 @@ export default function Shell({
                 <div className="flex items-center gap-2.5 border-b border-[var(--color-hex-1e1e1e)] px-4 py-4">
                     <GeometricMark size={20} />
                     <div className="flex flex-col">
-                        <span className="text-[12px] font-bold tracking-[0.2em] text-[var(--color-hex-f2f2f2)]">
+                        <span className="text-2xl font-bold tracking-widest text-[var(--color-fg)]">
                             RedGrid
                         </span>
                     </div>
@@ -162,7 +162,7 @@ export default function Shell({
                                     aria-hidden="true"
                                 />
                             )}
-                            <div className="px-4 pt-2 pb-1 text-[8px] font-semibold tracking-[0.22em] text-[var(--color-hex-444444)]">
+                            <div className="tracking-widest-2 px-4 pt-2 pb-1 text-sm font-semibold text-[var(--color-hex-444444)]">
                                 {group.label}
                             </div>
                             {group.items.map((item) => {
@@ -173,10 +173,10 @@ export default function Shell({
                                         onClick={() => onNavChange(item.id)}
                                         aria-current={active ? "page" : undefined}
                                         className={[
-                                            "flex w-full cursor-pointer items-center gap-2 px-4 py-1.5 text-left text-[10.5px] tracking-[0.02em] uppercase",
+                                            "text-xl-tight tracking-tighter-2 flex w-full cursor-pointer items-center gap-2 px-4 py-1.5 text-left uppercase",
                                             "border-l-2 transition-colors duration-100",
                                             active
-                                                ? "border-[var(--color-hex-e31b23)] bg-[var(--color-hex-1a0a0b)] text-[var(--color-hex-f2f2f2)]"
+                                                ? "border-[var(--color-brand)] bg-[var(--color-hex-1a0a0b)] text-[var(--color-fg)]"
                                                 : "border-transparent text-[var(--color-hex-666666)] hover:text-[var(--color-hex-a0a0a0)]",
                                         ].join(" ")}
                                     >
@@ -191,10 +191,10 @@ export default function Shell({
 
                 {/* Ctrl+K hint */}
                 <div className="flex items-center gap-2 border-t border-[var(--color-hex-1e1e1e)] px-4 py-3">
-                    <kbd className="rounded-[2px] border border-[var(--color-hex-1e1e1e)] bg-[var(--color-hex-111111)] px-[5px] py-[1px] text-[8px] text-[var(--color-hex-333333)]">
+                    <kbd className="rounded-[2px] border border-[var(--color-hex-1e1e1e)] bg-[var(--color-hex-111111)] px-[5px] py-[1px] text-sm text-[var(--color-hex-333333)]">
                         ⌘K
                     </kbd>
-                    <span className="text-[8px] tracking-[0.1em] text-[var(--color-hex-333333)]">
+                    <span className="text-sm tracking-normal text-[var(--color-hex-333333)]">
                         COMMAND PALETTE
                     </span>
                 </div>
@@ -207,22 +207,20 @@ export default function Shell({
                     className="flex h-[36px] flex-shrink-0 items-center justify-between border-b border-[var(--color-hex-1e1e1e)] bg-[var(--color-hex-0d0d0d)] px-4"
                     aria-label="Mission context bar"
                 >
-                    <span className="text-[10px] tracking-[0.14em] text-[var(--color-hex-a0a0a0)]">
+                    <span className="tracking-wider-1 text-lg text-[var(--color-hex-a0a0a0)]">
                         MISSION /{" "}
-                        <span className="font-bold text-[var(--color-hex-e31b23)]">
-                            {missionId}
-                        </span>
+                        <span className="font-bold text-[var(--color-brand)]">{missionId}</span>
                     </span>
 
                     <div className="flex items-center gap-5">
                         {/* System status indicator */}
                         <div className="flex items-center gap-1.5">
                             <div
-                                className="h-[6px] w-[6px] shrink-0 rounded-full bg-[var(--color-hex-3fb950)]"
+                                className="h-[6px] w-[6px] shrink-0 rounded-full bg-[var(--color-success)]"
                                 style={{ animation: "pulse 1.4s ease-in-out infinite" }}
                                 aria-hidden="true"
                             />
-                            <span className="text-[9.5px] tracking-[0.14em] text-[var(--color-hex-3fb950)]">
+                            <span className="text-lg-tight tracking-wider-1 text-[var(--color-success)]">
                                 SYSTEM ONLINE
                             </span>
                         </div>
@@ -230,7 +228,7 @@ export default function Shell({
                         <TopbarStat
                             label="STATUS"
                             value={MISSION_STATUS.RUNNING}
-                            valueColor="var(--color-hex-3fb950)"
+                            valueColor="var(--color-success)"
                         />
                         <TopbarStat label="MODEL" value="SONNET-5" />
                         <TopbarStat label="COST" value="$1.42" />
@@ -240,13 +238,13 @@ export default function Shell({
                         <div className="ml-2 flex items-center gap-2 border-l border-[var(--color-hex-1e1e1e)] pl-3">
                             <button
                                 aria-label="Settings"
-                                className="flex h-[22px] w-[22px] cursor-pointer items-center justify-center rounded-[2px] border border-[var(--color-hex-292929)] bg-[var(--color-hex-191919)] text-[10px] text-[var(--color-hex-666666)] transition-colors duration-100 hover:text-[var(--color-hex-a0a0a0)]"
+                                className="flex h-[22px] w-[22px] cursor-pointer items-center justify-center rounded-[2px] border border-[var(--color-hex-292929)] bg-[var(--color-hex-191919)] text-lg text-[var(--color-hex-666666)] transition-colors duration-100 hover:text-[var(--color-hex-a0a0a0)]"
                             >
                                 ⚙
                             </button>
                             <button
                                 aria-label="User profile"
-                                className="flex h-[22px] w-[22px] cursor-pointer items-center justify-center rounded-full border border-[var(--color-hex-292929)] bg-[var(--color-hex-1e1e1e)] text-[10px] text-[var(--color-hex-a0a0a0)] transition-colors duration-100 hover:text-[var(--color-hex-f2f2f2)]"
+                                className="flex h-[22px] w-[22px] cursor-pointer items-center justify-center rounded-full border border-[var(--color-hex-292929)] bg-[var(--color-hex-1e1e1e)] text-lg text-[var(--color-hex-a0a0a0)] transition-colors duration-100 hover:text-[var(--color-fg)]"
                             >
                                 R
                             </button>

@@ -22,7 +22,7 @@ export const INITIAL_ACTIVITY: ActivityEntry[] = [
         agent: "TEAM-MGR",
         action: "UCB_SELECT",
         desc: "SQLI-007 selected, UCB=0.824, path=0.612",
-        color: "var(--color-hex-e31b23)",
+        color: "var(--color-brand)",
     },
     {
         id: 3,
@@ -30,7 +30,7 @@ export const INITIAL_ACTIVITY: ActivityEntry[] = [
         agent: "EVAL-AGENT",
         action: "E_ORD_UPDATE",
         desc: "AUTH-003 evidence raised to E_ord 4 (CONFIRMED)",
-        color: "var(--color-hex-3fb950)",
+        color: "var(--color-success)",
     },
     {
         id: 4,
@@ -46,7 +46,7 @@ export const INITIAL_ACTIVITY: ActivityEntry[] = [
         agent: "VALID-AGENT",
         action: "ORACLE_TEST",
         desc: "CVE-BENCH oracle invoked for SQLI-004",
-        color: "var(--color-hex-d29922)",
+        color: "var(--color-warning)",
     },
     {
         id: 6,
@@ -62,7 +62,7 @@ export const INITIAL_ACTIVITY: ActivityEntry[] = [
         agent: "RECON-SPEC",
         action: "CREDENTIAL_FOUND",
         desc: "Credential extracted: admin@targetcorp.com",
-        color: "var(--color-hex-3fb950)",
+        color: "var(--color-success)",
     },
     {
         id: 8,
@@ -70,7 +70,7 @@ export const INITIAL_ACTIVITY: ActivityEntry[] = [
         agent: "VALID-AGENT",
         action: "VALIDATED",
         desc: "SQLI-004 ORACLE CONFIRMED — severity CRITICAL",
-        color: "var(--color-hex-ff2a32)",
+        color: "var(--color-danger)",
     },
     {
         id: 9,
@@ -86,7 +86,7 @@ export const INITIAL_ACTIVITY: ActivityEntry[] = [
         agent: "TEAM-MGR",
         action: "COMPACTION",
         desc: "Context at 81% — scheduling FULLCOMPACT",
-        color: "var(--color-hex-d29922)",
+        color: "var(--color-warning)",
     },
     {
         id: 11,
@@ -119,14 +119,14 @@ export const NEW_EVENTS: Omit<ActivityEntry, "id">[] = [
         agent: "EVAL-AGENT",
         action: "RESPONSE_PARSE",
         desc: "Response delta 4.2s — timing confirmed",
-        color: "var(--color-hex-3fb950)",
+        color: "var(--color-success)",
     },
     {
         ts: "14:22:17",
         agent: "TEAM-MGR",
         action: "UCB_UPDATE",
         desc: "SQLI-007 UCB updated to 0.891 post-evidence",
-        color: "var(--color-hex-e31b23)",
+        color: "var(--color-brand)",
     },
 ];
 
