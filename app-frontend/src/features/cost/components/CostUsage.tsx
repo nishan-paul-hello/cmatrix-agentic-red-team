@@ -58,7 +58,7 @@ export default function CostUsage() {
                         label={m.k}
                         value={m.v}
                         sub={m.sub}
-                        valueColor={m.red ? "var(--color-hex-e31b23)" : "var(--color-hex-f2f2f2)"}
+                        valueColor={m.red ? "var(--color-brand)" : "var(--color-fg)"}
                         variant="dashboard"
                         borderRight={i < a.length - 1}
                     />
@@ -68,33 +68,33 @@ export default function CostUsage() {
             {/* Burn rate bar */}
             <div className="mb-[24px]">
                 <div className="mb-2 flex justify-between">
-                    <span className="text-[8px] tracking-[0.18em] text-[var(--color-hex-444444)]">
+                    <span className="tracking-wider-3 text-sm text-[var(--color-hex-444444)]">
                         COST CEILING UTILIZATION
                     </span>
-                    <span className="text-[8px] tracking-[0.1em] text-[var(--color-hex-3fb950)]">
+                    <span className="text-sm tracking-normal text-[var(--color-success)]">
                         {((TOTAL / CEILING) * 100).toFixed(1)}%
                     </span>
                 </div>
                 <div className="h-[6px] overflow-hidden rounded-[3px] bg-[var(--color-hex-1a1a1a)]">
                     <div
-                        className="h-full rounded-[3px] bg-[var(--color-hex-3fb950)]"
+                        className="h-full rounded-[3px] bg-[var(--color-success)]"
                         style={{
                             width: `${(TOTAL / CEILING) * 100}%`,
                         }}
                     />
                 </div>
                 <div className="mt-1 flex justify-between">
-                    <span className="text-[7.5px] text-[var(--color-hex-333333)]">
+                    <span className="text-sm-tight text-[var(--color-hex-333333)]">
                         ${TOTAL.toFixed(4)} spent
                     </span>
-                    <span className="text-[7.5px] text-[var(--color-hex-333333)]">
+                    <span className="text-sm-tight text-[var(--color-hex-333333)]">
                         ${CEILING.toFixed(2)} ceiling
                     </span>
                 </div>
             </div>
 
             {/* Cost by specialist */}
-            <div className="mb-[12px] text-[8px] tracking-[0.2em] text-[var(--color-hex-444444)]">
+            <div className="mb-[12px] text-sm tracking-widest text-[var(--color-hex-444444)]">
                 COST BY SPECIALIST
             </div>
             <div className="mb-[24px] overflow-hidden rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)]">
@@ -108,7 +108,7 @@ export default function CostUsage() {
                         (h) => (
                             <div
                                 key={h}
-                                className="px-[12px] py-[5px] text-[7.5px] font-semibold tracking-[0.16em] text-[var(--color-hex-444444)]"
+                                className="text-sm-tight tracking-wider-2 px-[12px] py-[5px] font-semibold text-[var(--color-hex-444444)]"
                                 style={{
                                     flex: h === "SPECIALIST" || h === "MODEL" ? 2 : 1,
                                     textAlign:
@@ -138,7 +138,7 @@ export default function CostUsage() {
                             }}
                         >
                             <div
-                                className="px-[12px] py-[8px] text-[10px] font-bold tracking-[0.06em] text-[var(--color-hex-e31b23)]"
+                                className="tracking-tight-1 px-[12px] py-[8px] text-lg font-bold text-[var(--color-brand)]"
                                 style={{
                                     flex: 2,
                                 }}
@@ -146,23 +146,23 @@ export default function CostUsage() {
                                 {s.role}
                             </div>
                             <div
-                                className="px-[12px] py-[8px] text-[9px] text-[var(--color-hex-444444)]"
+                                className="px-[12px] py-[8px] text-base text-[var(--color-hex-444444)]"
                                 style={{
                                     flex: 2,
                                 }}
                             >
                                 {s.model}
                             </div>
-                            <div className="flex-1 px-[12px] py-[8px] text-right text-[9px] text-[var(--color-hex-666666)]">
+                            <div className="flex-1 px-[12px] py-[8px] text-right text-base text-[var(--color-hex-666666)]">
                                 {s.calls}
                             </div>
-                            <div className="flex-1 px-[12px] py-[8px] text-right text-[9px] text-[var(--color-hex-555555)]">
+                            <div className="flex-1 px-[12px] py-[8px] text-right text-base text-[var(--color-hex-555555)]">
                                 {(s.inputTok / 1000).toFixed(0)}K
                             </div>
-                            <div className="flex-1 px-[12px] py-[8px] text-right text-[9px] text-[var(--color-hex-555555)]">
+                            <div className="flex-1 px-[12px] py-[8px] text-right text-base text-[var(--color-hex-555555)]">
                                 {(s.outputTok / 1000).toFixed(0)}K
                             </div>
-                            <div className="flex-1 px-[12px] py-[8px] text-right text-[10px] font-bold text-[var(--color-hex-f2f2f2)]">
+                            <div className="flex-1 px-[12px] py-[8px] text-right text-lg font-bold text-[var(--color-fg)]">
                                 ${s.cost.toFixed(4)}
                             </div>
                             <div className="flex-1 px-[12px] py-[8px] text-right">
@@ -175,13 +175,13 @@ export default function CostUsage() {
                                 >
                                     <div className="h-[3px] w-[40px] overflow-hidden rounded-[2px] bg-[var(--color-hex-1a1a1a)]">
                                         <div
-                                            className="h-full bg-[var(--color-hex-e31b23)]"
+                                            className="h-full bg-[var(--color-brand)]"
                                             style={{
                                                 width: `${s.pct}%`,
                                             }}
                                         />
                                     </div>
-                                    <span className="text-[8.5px] text-[var(--color-hex-555555)]">
+                                    <span className="text-base-tight text-[var(--color-hex-555555)]">
                                         {s.pct}%
                                     </span>
                                 </div>
@@ -192,7 +192,7 @@ export default function CostUsage() {
             </div>
 
             {/* Cost timeline */}
-            <div className="mb-[12px] text-[8px] tracking-[0.2em] text-[var(--color-hex-444444)]">
+            <div className="mb-[12px] text-sm tracking-widest text-[var(--color-hex-444444)]">
                 SPEND TIMELINE
             </div>
             <div className="relative mb-[4px] h-[80px] overflow-hidden rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1a1a1a)] bg-[var(--color-hex-0a0a0a)]">
@@ -217,7 +217,7 @@ export default function CostUsage() {
                                         height: barH > 0 ? `${barH}px` : "1px",
                                         background:
                                             barH > 0
-                                                ? "var(--color-hex-e31b23)"
+                                                ? "var(--color-brand)"
                                                 : "var(--color-hex-292929)",
                                         borderRadius: "1px 1px 0 0",
                                     }}
@@ -227,7 +227,7 @@ export default function CostUsage() {
                     })()
                 )}
             </div>
-            <div className="flex justify-between text-[7.5px] text-[var(--color-hex-333333)]">
+            <div className="text-sm-tight flex justify-between text-[var(--color-hex-333333)]">
                 {TIMELINE.length > 0 ? (
                     <>
                         <span>{TIMELINE[0].ts}</span>

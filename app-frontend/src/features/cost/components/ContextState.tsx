@@ -17,8 +17,8 @@ export default function ContextState() {
     }, []);
 
     const stc: Record<string, string | undefined> = {
-        COMPACTED: "var(--color-hex-d29922)",
-        ACTIVE: "var(--color-hex-3fb950)",
+        COMPACTED: "var(--color-warning)",
+        ACTIVE: "var(--color-success)",
         IDLE: "var(--color-hex-444444)",
     };
 
@@ -68,12 +68,12 @@ export default function ContextState() {
                     const pct = Math.round((s.used / s.max) * 100);
                     const bc = (() => {
                         if (pct > 85) {
-                            return "var(--color-hex-ff2a32)";
+                            return "var(--color-danger)";
                         }
                         if (pct > 60) {
-                            return "var(--color-hex-d29922)";
+                            return "var(--color-warning)";
                         }
-                        return "var(--color-hex-3fb950)";
+                        return "var(--color-success)";
                     })();
                     const isSel = sel.id === s.id;
                     return (
@@ -101,11 +101,11 @@ export default function ContextState() {
                             }
                         >
                             <div className="mb-3 flex items-center gap-3">
-                                <span className="flex-1 text-[10px] font-bold tracking-[0.08em] text-[var(--color-hex-a0a0a0)]">
+                                <span className="flex-1 text-lg font-bold tracking-tight text-[var(--color-hex-a0a0a0)]">
                                     {s.role}
                                 </span>
                                 <span
-                                    className="text-[8px] font-semibold tracking-[0.14em]"
+                                    className="tracking-wider-1 text-sm font-semibold"
                                     style={{
                                         color: stc[s.state],
                                     }}
@@ -113,12 +113,12 @@ export default function ContextState() {
                                     {s.state}
                                 </span>
                                 {s.compacted > 0 && (
-                                    <span className="text-[8px] tracking-[0.1em] text-[var(--color-hex-d29922)]">
+                                    <span className="text-sm tracking-normal text-[var(--color-warning)]">
                                         COMPACTED ×{s.compacted}
                                     </span>
                                 )}
                                 <span
-                                    className="text-[9px] font-bold"
+                                    className="text-base font-bold"
                                     style={{
                                         color: bc,
                                     }}
@@ -136,10 +136,10 @@ export default function ContextState() {
                                 />
                             </div>
                             <div className="flex justify-between">
-                                <span className="text-[8px] text-[var(--color-hex-333333)]">
+                                <span className="text-sm text-[var(--color-hex-333333)]">
                                     {(s.used / 1024).toFixed(0)}K / {s.max / 1024}K tokens
                                 </span>
-                                <span className="text-[8px] text-[var(--color-hex-333333)]">
+                                <span className="text-sm text-[var(--color-hex-333333)]">
                                     ${s.cost.toFixed(4)} this session
                                 </span>
                             </div>
@@ -155,11 +155,11 @@ export default function ContextState() {
                     borderLeft: "1px solid var(--color-hex-1e1e1e)",
                 }}
             >
-                <div className="mb-[4px] text-[11px] font-bold tracking-[0.1em] text-[var(--color-hex-f2f2f2)]">
+                <div className="mb-[4px] text-xl font-bold tracking-normal text-[var(--color-fg)]">
                     {sel.role}
                 </div>
                 <div
-                    className="mb-[16px] text-[8.5px] font-semibold tracking-[0.14em]"
+                    className="text-base-tight tracking-wider-1 mb-[16px] font-semibold"
                     style={{
                         color: stc[sel.state],
                     }}
@@ -193,12 +193,10 @@ export default function ContextState() {
                     },
                 ].map((r) => (
                     <div key={r.k} className="mb-[12px]">
-                        <div className="mb-[3px] text-[7.5px] tracking-[0.18em] text-[var(--color-hex-444444)]">
+                        <div className="text-sm-tight tracking-wider-3 mb-[3px] text-[var(--color-hex-444444)]">
                             {r.k}
                         </div>
-                        <div className="text-[13px] font-bold text-[var(--color-hex-f2f2f2)]">
-                            {r.v}
-                        </div>
+                        <div className="text-3xl font-bold text-[var(--color-fg)]">{r.v}</div>
                     </div>
                 ))}
                 {/* Context state diagram */}
@@ -209,7 +207,7 @@ export default function ContextState() {
                         paddingTop: 14,
                     }}
                 >
-                    <div className="mb-[12px] text-[8px] tracking-[0.2em] text-[var(--color-hex-444444)]">
+                    <div className="mb-[12px] text-sm tracking-widest text-[var(--color-hex-444444)]">
                         CONTEXT LIFECYCLE
                     </div>
                     {[
@@ -237,28 +235,28 @@ export default function ContextState() {
                                         border: "1px solid",
                                         borderColor: (() => {
                                             if (sel.compacted > 0 && i === 4) {
-                                                return "var(--color-hex-3fb950)";
+                                                return "var(--color-success)";
                                             }
                                             if (i === 0 && sel.state === "ACTIVE") {
-                                                return "var(--color-hex-e31b23)";
+                                                return "var(--color-brand)";
                                             }
                                             return "var(--color-hex-333333)";
                                         })(),
                                         background:
                                             i === 4 && sel.compacted > 0
-                                                ? "var(--color-hex-3fb950)"
+                                                ? "var(--color-success)"
                                                 : "transparent",
                                     }}
                                 />
                                 <span
-                                    className="text-[8.5px] tracking-[0.06em]"
+                                    className="text-base-tight tracking-tight-1"
                                     style={{
                                         color: (() => {
                                             if (i === 0 && sel.state === "ACTIVE") {
-                                                return "var(--color-hex-e31b23)";
+                                                return "var(--color-brand)";
                                             }
                                             if (i === 4 && sel.compacted > 0) {
-                                                return "var(--color-hex-3fb950)";
+                                                return "var(--color-success)";
                                             }
                                             return "var(--color-hex-333333)";
                                         })(),

@@ -11,9 +11,9 @@ export default function ModelBreakdown() {
     }, []);
 
     const MODEL_C: Record<string, string | undefined> = {
-        "claude-sonnet-5": "var(--color-hex-e31b23)",
-        "claude-haiku-4-5": "var(--color-hex-d29922)",
-        "claude-opus-5": "var(--color-hex-3fb950)",
+        "claude-sonnet-5": "var(--color-brand)",
+        "claude-haiku-4-5": "var(--color-warning)",
+        "claude-opus-5": "var(--color-success)",
     };
 
     if (models.length === 0) {
@@ -46,14 +46,14 @@ export default function ModelBreakdown() {
                                     background: MODEL_C[m.model] ?? "var(--color-hex-555555)",
                                 }}
                             />
-                            <span className="flex-1 text-[12px] font-bold tracking-[0.08em] text-[var(--color-hex-f2f2f2)]">
+                            <span className="flex-1 text-2xl font-bold tracking-tight text-[var(--color-fg)]">
                                 {m.model}
                             </span>
-                            <span className="text-[9px] tracking-[0.1em] text-[var(--color-hex-444444)]">
+                            <span className="text-base tracking-normal text-[var(--color-hex-444444)]">
                                 {m.provider}
                             </span>
                             <span
-                                className="text-[14px] font-bold"
+                                className="text-4xl font-bold"
                                 style={{
                                     color: MODEL_C[m.model] ?? "var(--color-hex-555555)",
                                 }}
@@ -96,10 +96,10 @@ export default function ModelBreakdown() {
                                             paddingRight: i < a.length - 1 ? 24 : 0,
                                         }}
                                     >
-                                        <div className="mb-[3px] text-[7.5px] tracking-[0.18em] text-[var(--color-hex-444444)]">
+                                        <div className="text-sm-tight tracking-wider-3 mb-[3px] text-[var(--color-hex-444444)]">
                                             {stat.k}
                                         </div>
-                                        <div className="text-[14px] font-bold text-[var(--color-hex-a0a0a0)]">
+                                        <div className="text-4xl font-bold text-[var(--color-hex-a0a0a0)]">
                                             {stat.v}
                                         </div>
                                     </div>
@@ -113,18 +113,18 @@ export default function ModelBreakdown() {
                                 }}
                             >
                                 <div>
-                                    <div className="mb-[2px] text-[7.5px] tracking-[0.18em] text-[var(--color-hex-444444)]">
+                                    <div className="text-sm-tight tracking-wider-3 mb-[2px] text-[var(--color-hex-444444)]">
                                         INPUT COST
                                     </div>
-                                    <div className="text-[12px] font-bold text-[var(--color-hex-555555)]">
+                                    <div className="text-2xl font-bold text-[var(--color-hex-555555)]">
                                         ${m.inputCost.toFixed(4)}
                                     </div>
                                 </div>
                                 <div>
-                                    <div className="mb-[2px] text-[7.5px] tracking-[0.18em] text-[var(--color-hex-444444)]">
+                                    <div className="text-sm-tight tracking-wider-3 mb-[2px] text-[var(--color-hex-444444)]">
                                         OUTPUT COST
                                     </div>
-                                    <div className="text-[12px] font-bold text-[var(--color-hex-555555)]">
+                                    <div className="text-2xl font-bold text-[var(--color-hex-555555)]">
                                         ${m.outputCost.toFixed(4)}
                                     </div>
                                 </div>
@@ -134,7 +134,7 @@ export default function ModelBreakdown() {
                 ))}
             </div>
             {/* Summary table */}
-            <div className="mb-[10px] text-[8px] tracking-[0.2em] text-[var(--color-hex-444444)]">
+            <div className="mb-[10px] text-sm tracking-widest text-[var(--color-hex-444444)]">
                 PRICING REFERENCE
             </div>
             <div className="overflow-hidden rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)]">
@@ -147,7 +147,7 @@ export default function ModelBreakdown() {
                     {["MODEL", "INPUT $/1M", "OUTPUT $/1M"].map((h) => (
                         <div
                             key={h}
-                            className="px-[14px] py-[5px] text-[7.5px] font-semibold tracking-[0.16em] text-[var(--color-hex-444444)]"
+                            className="text-sm-tight tracking-wider-2 px-[14px] py-[5px] font-semibold text-[var(--color-hex-444444)]"
                             style={{
                                 flex: h === "MODEL" ? 2 : 1,
                             }}
@@ -183,17 +183,17 @@ export default function ModelBreakdown() {
                         }}
                     >
                         <div
-                            className="px-[14px] py-[8px] text-[10px] font-semibold text-[var(--color-hex-666666)]"
+                            className="px-[14px] py-[8px] text-lg font-semibold text-[var(--color-hex-666666)]"
                             style={{
                                 flex: 2,
                             }}
                         >
                             {r.m}
                         </div>
-                        <div className="flex-1 px-[14px] py-[8px] text-[10px] text-[var(--color-hex-555555)]">
+                        <div className="flex-1 px-[14px] py-[8px] text-lg text-[var(--color-hex-555555)]">
                             {r.i}
                         </div>
-                        <div className="flex-1 px-[14px] py-[8px] text-[10px] text-[var(--color-hex-555555)]">
+                        <div className="flex-1 px-[14px] py-[8px] text-lg text-[var(--color-hex-555555)]">
                             {r.o}
                         </div>
                     </div>
