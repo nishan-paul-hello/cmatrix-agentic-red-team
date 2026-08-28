@@ -1,18 +1,19 @@
 import { useEffect, useState } from "react";
 
-import { SpecialistRepository } from "@/repositories/SpecialistRepository";
+import { useServices } from "@/lib/services-context";
 import { type Specialist } from "@/types/domain-types";
 
 export function useSpecialistsData() {
     const [specialists, setSpecialists] = useState<Specialist[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const { specialistRepository } = useServices();
 
     useEffect(() => {
-        void SpecialistRepository.getSpecialists().then((data) => {
+        void specialistRepository.fetchAll({ limit: 1000 }).then((data) => {
             setSpecialists(data);
             setIsLoading(false);
         });
-    }, []);
+    }, [specialistRepository]);
 
     return { specialists, isLoading };
 }
