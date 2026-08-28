@@ -2,43 +2,27 @@ import { type EscalationHistoryEntry } from "@/features/escalation/domain/Escala
 
 export function EscalationHistorySidebar({ history }: { history: EscalationHistoryEntry[] }) {
     return (
-        <div
-            className="flex w-[240px] flex-shrink-0 flex-col overflow-y-auto px-[14px] py-[16px]"
-            style={{
-                borderLeft: "1px solid var(--color-hex-1e1e1e)",
-            }}
-        >
-            <div className="mb-[14px] text-sm tracking-widest text-[var(--color-hex-444444)]">
+        <div className="border-border flex w-full flex-shrink-0 flex-col overflow-y-auto border-t px-3.5 py-4 lg:w-[240px] lg:border-t-0 lg:border-l">
+            <div className="text-muted-foreground mb-3.5 text-sm tracking-widest">
                 ESCALATION HISTORY
             </div>
             {history.map((h) => (
-                <div
-                    key={h.ts}
-                    className="mb-[12px]"
-                    style={{
-                        paddingBottom: 12,
-                        borderBottom: "1px solid var(--color-hex-141414)",
-                    }}
-                >
-                    <div className="mb-[3px] text-sm tracking-normal text-[var(--color-hex-333333)]">
+                <div key={h.ts} className="border-border mb-3 border-b">
+                    <div className="text-muted-foreground mb-0.5 text-sm tracking-normal">
                         {h.ts}
                     </div>
-                    <div className="mb-[2px] text-base font-semibold tracking-tight text-[var(--color-hex-666666)]">
+                    <div className="text-muted-foreground mb-0.5 text-base font-semibold tracking-tight">
                         {h.type}
                     </div>
-                    <div className="text-base-tight mb-[1px] tracking-normal text-[var(--color-success)]">
-                        {h.status}
-                    </div>
-                    <div className="text-base-tight text-[var(--color-hex-444444)] italic">
+                    <div className="text-success mb-px text-sm tracking-normal">{h.status}</div>
+                    <div className="text-muted-foreground text-sm italic">
                         &quot;{h.response}&quot;
                     </div>
                 </div>
             ))}
-            <div className="mt-[8px] rounded-[2px] border-[1px] border-solid border-[var(--color-hex-d2992233)] bg-[var(--color-hex-110e00)] px-[12px] py-[10px]">
-                <div className="tracking-wider-2 mb-[4px] text-sm text-[var(--color-warning)]">
-                    AGENT PAUSED
-                </div>
-                <div className="text-base-tight leading-relaxed text-[var(--color-hex-444444)]">
+            <div className="border-border bg-muted mt-2 rounded-sm border-[1px] border-solid px-3 py-2.5">
+                <div className="text-warning mb-1 text-sm tracking-widest">AGENT PAUSED</div>
+                <div className="text-muted-foreground text-sm leading-relaxed">
                     All specialist threads suspended. Execution agent idle. Awaiting human
                     authorization.
                 </div>
