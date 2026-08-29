@@ -3,6 +3,14 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { KPIStrip } from "@/components/ui/KPIStrip";
 import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
+import {
     FAILURE_CLUSTERS,
     FAILURE_TIMELINE,
 } from "@/features/research/data/fixtures/researchMockData";
@@ -115,53 +123,62 @@ export default function FailureAnalysis() {
                 <div className="text-muted-foreground mt-5 mb-3 text-sm tracking-widest">
                     RECENT FAILURES
                 </div>
-                <div className="border-border overflow-x-auto rounded-sm border-[1px] border-solid">
-                    <div className="bg-card border-border flex w-full min-w-fit border-b">
-                        {["TIME", "TYPE", "RUN", "TASK", "COST", "ATTEMPTS", "RESOLVED"].map(
-                            (h) => (
-                                <div
-                                    key={h}
-                                    className={`text-muted-foreground px-3 py-1 text-xs font-semibold tracking-widest ${h === "TYPE" ? "flex-[2]" : "flex-1"}`}
-                                >
-                                    {h}
-                                </div>
-                            ),
-                        )}
-                    </div>
-                    {FAILURE_TIMELINE.map((f) => (
-                        <div
-                            key={f.ts}
-                            className="border-border flex w-full min-w-fit items-center border-b"
-                        >
-                            <div className="text-muted-foreground cell-truncate flex-1 px-3 py-1.5 text-sm">
-                                {f.ts}
-                            </div>
-                            <div className="text-muted-foreground cell-truncate flex-[2] px-3 py-1.5 text-base font-semibold tracking-tight">
-                                {f.type}
-                            </div>
-                            <div className="text-primary cell-truncate flex-1 px-3 py-1.5 text-base">
-                                {f.run}
-                            </div>
-                            <div className="text-muted-foreground cell-truncate flex-1 px-3 py-1.5 text-base">
-                                {f.task}
-                            </div>
-                            <div className="text-muted-foreground cell-truncate flex-1 px-3 py-1.5 text-base">
-                                {f.cost}
-                            </div>
-                            <div
-                                className={`cell-truncate flex-1 px-3 py-1.5 text-base ${f.attempts > 2 ? "text-warning" : "text-muted-foreground"}`}
-                            >
-                                {f.attempts}
-                            </div>
-                            <div className="flex-1 px-3 py-1.5">
-                                <span
-                                    className={`text-sm font-bold ${f.resolved ? "text-success" : "text-border"}`}
-                                >
-                                    {f.resolved ? "YES" : "-"}
-                                </span>
-                            </div>
-                        </div>
-                    ))}
+                <div className="border-border overflow-hidden rounded-sm border-[1px] border-solid">
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                {[
+                                    "TIME",
+                                    "TYPE",
+                                    "RUN",
+                                    "TASK",
+                                    "COST",
+                                    "ATTEMPTS",
+                                    "RESOLVED",
+                                ].map((h) => (
+                                    <TableHead
+                                        key={h}
+                                        className={`px-3 py-1 text-xs tracking-widest ${h === "TYPE" ? "w-[25%]" : "w-[12.5%]"}`}
+                                    >
+                                        {h}
+                                    </TableHead>
+                                ))}
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {FAILURE_TIMELINE.map((f) => (
+                                <TableRow key={f.ts}>
+                                    <TableCell className="cell-truncate text-muted-foreground px-3 py-1.5">
+                                        {f.ts}
+                                    </TableCell>
+                                    <TableCell className="cell-truncate text-muted-foreground px-3 py-1.5 font-semibold tracking-tight">
+                                        {f.type}
+                                    </TableCell>
+                                    <TableCell className="cell-truncate text-primary px-3 py-1.5">
+                                        {f.run}
+                                    </TableCell>
+                                    <TableCell className="cell-truncate text-muted-foreground px-3 py-1.5">
+                                        {f.task}
+                                    </TableCell>
+                                    <TableCell className="cell-truncate text-muted-foreground px-3 py-1.5">
+                                        {f.cost}
+                                    </TableCell>
+                                    <TableCell
+                                        className={`cell-truncate px-3 py-1.5 ${f.attempts > 2 ? "text-warning" : "text-muted-foreground"}`}
+                                    >
+                                        {f.attempts}
+                                    </TableCell>
+                                    <TableCell className="px-3 py-1.5">
+                                        <span
+                                            className={`font-bold ${f.resolved ? "text-success" : "text-border"}`}
+                                        >
+                                            {f.resolved ? "YES" : "-"}
+                                        </span>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
                 </div>
             </div>
         </div>

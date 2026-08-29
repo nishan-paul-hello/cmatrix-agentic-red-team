@@ -10,6 +10,14 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import CostDashboard from "@/features/cost/components/CostDashboard";
 import { CostRepository } from "@/features/cost/data/CostRepository";
@@ -126,60 +134,63 @@ export default function CostBrowser() {
                             excluded.
                         </div>
                         {/* Table */}
-                        <div className="border-border overflow-x-auto rounded-sm border-[1px] border-solid">
-                            <div className="bg-card border-border flex w-full min-w-fit border-b">
-                                {[
-                                    "SURFACE",
-                                    "TOTAL COST",
-                                    "RUNS",
-                                    "pass@1 RATE",
-                                    "COST / EXPLOIT",
-                                    "AVG TIME",
-                                ].map((h) => (
-                                    <div
-                                        key={h}
-                                        className={`text-muted-foreground flex-1 px-3 py-1 text-xs font-semibold tracking-widest ${h === "SURFACE" ? "text-left" : "text-right"}`}
-                                    >
-                                        {h}
-                                    </div>
-                                ))}
-                            </div>
-                            {PER_SURFACE_ROLLUP.map((row) => {
-                                let rateColor = "text-destructive";
-                                if (row.passAt1Rate >= 0.6) {
-                                    rateColor = "text-success";
-                                } else if (row.passAt1Rate >= 0.4) {
-                                    rateColor = "text-warning";
-                                }
+                        <div className="border-border overflow-hidden rounded-sm border-[1px] border-solid">
+                            <Table>
+                                <TableHeader>
+                                    <TableRow>
+                                        {[
+                                            "SURFACE",
+                                            "TOTAL COST",
+                                            "RUNS",
+                                            "pass@1 RATE",
+                                            "COST / EXPLOIT",
+                                            "AVG TIME",
+                                        ].map((h) => (
+                                            <TableHead
+                                                key={h}
+                                                className={`px-3 py-1 text-xs tracking-widest ${h === "SURFACE" ? "text-left" : "text-right"}`}
+                                            >
+                                                {h}
+                                            </TableHead>
+                                        ))}
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {PER_SURFACE_ROLLUP.map((row) => {
+                                        let rateColor = "text-destructive";
+                                        if (row.passAt1Rate >= 0.6) {
+                                            rateColor = "text-success";
+                                        } else if (row.passAt1Rate >= 0.4) {
+                                            rateColor = "text-warning";
+                                        }
 
-                                return (
-                                    <div
-                                        key={row.surface}
-                                        className="border-border flex w-full min-w-fit items-center border-b"
-                                    >
-                                        <div className="text-muted-foreground flex-1 px-3 py-2 text-base font-bold">
-                                            {row.surface}
-                                        </div>
-                                        <div className="text-foreground cell-truncate flex-1 px-3 py-2 text-right text-xs">
-                                            {row.totalCost}
-                                        </div>
-                                        <div className="text-muted-foreground cell-truncate flex-1 px-3 py-2 text-right text-xs">
-                                            {row.runs}
-                                        </div>
-                                        <div
-                                            className={`cell-truncate flex-1 px-3 py-2 text-right text-xs font-bold ${rateColor}`}
-                                        >
-                                            {(row.passAt1Rate * 100).toFixed(1)}%
-                                        </div>
-                                        <div className="text-primary cell-truncate flex-1 px-3 py-2 text-right text-xs font-bold">
-                                            {row.costPerExploit}
-                                        </div>
-                                        <div className="text-muted-foreground cell-truncate flex-1 px-3 py-2 text-right text-xs">
-                                            {row.avgTimeMin}m
-                                        </div>
-                                    </div>
-                                );
-                            })}
+                                        return (
+                                            <TableRow key={row.surface}>
+                                                <TableCell className="text-muted-foreground px-3 py-2 font-bold">
+                                                    {row.surface}
+                                                </TableCell>
+                                                <TableCell className="cell-truncate text-foreground px-3 py-2 text-right">
+                                                    {row.totalCost}
+                                                </TableCell>
+                                                <TableCell className="cell-truncate text-muted-foreground px-3 py-2 text-right">
+                                                    {row.runs}
+                                                </TableCell>
+                                                <TableCell
+                                                    className={`cell-truncate px-3 py-2 text-right font-bold ${rateColor}`}
+                                                >
+                                                    {(row.passAt1Rate * 100).toFixed(1)}%
+                                                </TableCell>
+                                                <TableCell className="cell-truncate text-primary px-3 py-2 text-right font-bold">
+                                                    {row.costPerExploit}
+                                                </TableCell>
+                                                <TableCell className="cell-truncate text-muted-foreground px-3 py-2 text-right">
+                                                    {row.avgTimeMin}m
+                                                </TableCell>
+                                            </TableRow>
+                                        );
+                                    })}
+                                </TableBody>
+                            </Table>
                         </div>
                     </div>
                 )}

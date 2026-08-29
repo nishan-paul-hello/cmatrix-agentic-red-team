@@ -54,7 +54,12 @@ export default function StateMachineModal({
                     </div>
                 </DialogHeader>
                 <div className="relative h-[min(530px,70vh)]">
-                    <svg className="absolute inset-0" width="100%" height="100%">
+                    <svg
+                        className="absolute inset-0"
+                        width="100%"
+                        height="100%"
+                        viewBox="0 0 620 530"
+                    >
                         {edges.map((e) => (
                             <g key={`${e.x1}-${e.y1}-${e.x2}-${e.y2}`}>
                                 <line
@@ -121,10 +126,10 @@ export default function StateMachineModal({
                                 key={n.id}
                                 className="absolute rounded-sm"
                                 style={{
-                                    left: n.x,
-                                    top: n.y,
-                                    width: n.w,
-                                    height: n.h,
+                                    left: `${(n.x / 620) * 100}%`,
+                                    top: `${(n.y / 530) * 100}%`,
+                                    width: `${(n.w / 620) * 100}%`,
+                                    height: `${(n.h / 530) * 100}%`,
                                     background: isActive ? "var(--primary)" : n.color,
                                     border: `1px solid ${isActive ? "var(--destructive)" : (n.border ?? "var(--border)")}`,
                                     display: "flex",

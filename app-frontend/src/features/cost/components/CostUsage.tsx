@@ -2,6 +2,14 @@ import React from "react";
 
 import { EmptyState } from "@/components/ui/EmptyState";
 import { KPIStrip } from "@/components/ui/KPIStrip";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
 import { CostRepository } from "@/features/cost/data/CostRepository";
 import { type CostTimeline, type SpecialistCost } from "@/features/cost/data/fixtures/costMockData";
 
@@ -74,61 +82,76 @@ export default function CostUsage() {
             <div className="text-muted-foreground mb-3 text-sm tracking-widest">
                 COST BY SPECIALIST
             </div>
-            <div className="border-border mb-6 overflow-x-auto rounded-sm border-[1px] border-solid">
-                <div className="bg-card border-border flex w-full min-w-fit border-b">
-                    {["SPECIALIST", "MODEL", "CALLS", "INPUT", "OUTPUT", "COST", "SHARE"].map(
-                        (h) => (
-                            <div
-                                key={h}
-                                className={`text-muted-foreground px-3 py-1 text-xs font-semibold tracking-widest ${h === "SPECIALIST" || h === "MODEL" ? "flex-[2]" : "flex-1"} ${h === "COST" || h === "SHARE" || h === "CALLS" ? "text-right" : "text-left"}`}
-                            >
-                                {h}
-                            </div>
-                        ),
-                    )}
-                </div>
-                {SPECIALISTS_COST.length === 0 ? (
-                    <EmptyState message="NO SPECIALIST COST DATA" />
-                ) : (
-                    SPECIALISTS_COST.map((s) => (
-                        <div
-                            key={s.id}
-                            className="border-border flex w-full min-w-fit items-center border-b"
-                        >
-                            <div className="text-primary cell-truncate flex-[2] px-3 py-2 text-xs font-bold tracking-tight">
-                                {s.role}
-                            </div>
-                            <div className="text-muted-foreground cell-truncate flex-[2] px-3 py-2 text-base">
-                                {s.model}
-                            </div>
-                            <div className="text-muted-foreground cell-truncate flex-1 px-3 py-2 text-right text-base">
-                                {s.calls}
-                            </div>
-                            <div className="text-muted-foreground cell-truncate flex-1 px-3 py-2 text-right text-base">
-                                {(s.inputTok / 1000).toFixed(0)}K
-                            </div>
-                            <div className="text-muted-foreground cell-truncate flex-1 px-3 py-2 text-right text-base">
-                                {(s.outputTok / 1000).toFixed(0)}K
-                            </div>
-                            <div className="text-foreground cell-truncate flex-1 px-3 py-2 text-right text-xs font-bold">
-                                ${s.cost.toFixed(4)}
-                            </div>
-                            <div className="flex-1 px-3 py-2 text-right">
-                                <div className="inline-flex items-center gap-1.5">
-                                    <div className="bg-card h-0.5 w-10 overflow-hidden rounded-sm">
-                                        <div
-                                            className="bg-primary h-full"
-                                            style={{
-                                                width: `${s.pct}%`,
-                                            }}
-                                        />
-                                    </div>
-                                    <span className="text-muted-foreground text-sm">{s.pct}%</span>
-                                </div>
-                            </div>
-                        </div>
-                    ))
-                )}
+            <div className="border-border mb-6 overflow-hidden rounded-sm border-[1px] border-solid">
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            {[
+                                "SPECIALIST",
+                                "MODEL",
+                                "CALLS",
+                                "INPUT",
+                                "OUTPUT",
+                                "COST",
+                                "SHARE",
+                            ].map((h) => (
+                                <TableHead
+                                    key={h}
+                                    className={`px-3 py-1 text-xs tracking-widest ${h === "SPECIALIST" || h === "MODEL" ? "w-[20%]" : "w-[10%]"} ${h === "COST" || h === "SHARE" || h === "CALLS" ? "text-right" : "text-left"}`}
+                                >
+                                    {h}
+                                </TableHead>
+                            ))}
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {SPECIALISTS_COST.length === 0 ? (
+                            <TableRow>
+                                <TableCell colSpan={7} className="p-0">
+                                    <EmptyState message="NO SPECIALIST COST DATA" />
+                                </TableCell>
+                            </TableRow>
+                        ) : (
+                            SPECIALISTS_COST.map((s) => (
+                                <TableRow key={s.id}>
+                                    <TableCell className="cell-truncate text-primary px-3 py-2 font-bold tracking-tight">
+                                        {s.role}
+                                    </TableCell>
+                                    <TableCell className="cell-truncate text-muted-foreground px-3 py-2">
+                                        {s.model}
+                                    </TableCell>
+                                    <TableCell className="cell-truncate text-muted-foreground px-3 py-2 text-right">
+                                        {s.calls}
+                                    </TableCell>
+                                    <TableCell className="cell-truncate text-muted-foreground px-3 py-2 text-right">
+                                        {(s.inputTok / 1000).toFixed(0)}K
+                                    </TableCell>
+                                    <TableCell className="cell-truncate text-muted-foreground px-3 py-2 text-right">
+                                        {(s.outputTok / 1000).toFixed(0)}K
+                                    </TableCell>
+                                    <TableCell className="cell-truncate text-foreground px-3 py-2 text-right font-bold">
+                                        ${s.cost.toFixed(4)}
+                                    </TableCell>
+                                    <TableCell className="px-3 py-2 text-right">
+                                        <div className="inline-flex w-full items-center justify-end gap-1.5">
+                                            <div className="bg-card h-0.5 w-10 overflow-hidden rounded-sm">
+                                                <div
+                                                    className="bg-primary h-full"
+                                                    style={{
+                                                        width: `${s.pct}%`,
+                                                    }}
+                                                />
+                                            </div>
+                                            <span className="text-muted-foreground text-sm">
+                                                {s.pct}%
+                                            </span>
+                                        </div>
+                                    </TableCell>
+                                </TableRow>
+                            ))
+                        )}
+                    </TableBody>
+                </Table>
             </div>
 
             {/* Cost timeline */}

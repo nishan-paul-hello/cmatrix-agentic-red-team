@@ -125,45 +125,43 @@ export default React.memo(function AuditLogPage() {
             <div className="flex min-h-0 flex-1 flex-col overflow-hidden lg:flex-row">
                 {/* Table */}
                 <div ref={parentRef} className="flex flex-1 flex-col overflow-y-auto">
-                    <div className="w-full overflow-x-auto">
-                        <Table className="w-full border-collapse">
-                            <TableHeader>
-                                <TableRow className="bg-card z-sticky sticky top-0">
-                                    {TABLE_HEADERS.map((h) => (
-                                        <TableHead
-                                            key={h}
-                                            className="border-border text-muted-foreground border-b px-3 py-1 text-left text-xs font-semibold tracking-widest whitespace-nowrap"
-                                        >
-                                            {h}
-                                        </TableHead>
-                                    ))}
+                    <Table className="w-full border-collapse">
+                        <TableHeader>
+                            <TableRow className="bg-card z-sticky sticky top-0">
+                                {TABLE_HEADERS.map((h) => (
+                                    <TableHead
+                                        key={h}
+                                        className="border-border text-muted-foreground border-b px-3 py-1 text-left text-xs font-semibold tracking-widest whitespace-nowrap"
+                                    >
+                                        {h}
+                                    </TableHead>
+                                ))}
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {paddingTop > 0 && (
+                                <TableRow>
+                                    <TableCell style={{ height: `${paddingTop}px` }} />
                                 </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {paddingTop > 0 && (
-                                    <TableRow>
-                                        <TableCell style={{ height: `${paddingTop}px` }} />
-                                    </TableRow>
-                                )}
-                                {virtualItems.map((virtualRow) => {
-                                    const e = visible[virtualRow.index];
-                                    return (
-                                        <AuditLogRow
-                                            key={e.id}
-                                            e={e}
-                                            isSelected={sel?.id === e.id}
-                                            onClick={toggleSel}
-                                        />
-                                    );
-                                })}
-                                {paddingBottom > 0 && (
-                                    <TableRow>
-                                        <TableCell style={{ height: `${paddingBottom}px` }} />
-                                    </TableRow>
-                                )}
-                            </TableBody>
-                        </Table>
-                    </div>
+                            )}
+                            {virtualItems.map((virtualRow) => {
+                                const e = visible[virtualRow.index];
+                                return (
+                                    <AuditLogRow
+                                        key={e.id}
+                                        e={e}
+                                        isSelected={sel?.id === e.id}
+                                        onClick={toggleSel}
+                                    />
+                                );
+                            })}
+                            {paddingBottom > 0 && (
+                                <TableRow>
+                                    <TableCell style={{ height: `${paddingBottom}px` }} />
+                                </TableRow>
+                            )}
+                        </TableBody>
+                    </Table>
                 </div>
 
                 {/* Detail drawer */}

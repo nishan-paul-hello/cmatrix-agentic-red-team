@@ -1,6 +1,14 @@
 import { useEffect, useState } from "react";
 
 import { EmptyState } from "@/components/ui/EmptyState";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
 import { CostRepository } from "@/features/cost/data/CostRepository";
 import { type ModelRow } from "@/features/cost/data/fixtures/costMockData";
 
@@ -117,46 +125,52 @@ export default function ModelBreakdown() {
             <div className="text-muted-foreground mb-2.5 text-sm tracking-widest">
                 PRICING REFERENCE
             </div>
-            <div className="border-border overflow-x-auto rounded-sm border-[1px] border-solid">
-                <div className="bg-card border-border flex w-full min-w-fit border-b">
-                    {["MODEL", "INPUT $/1M", "OUTPUT $/1M"].map((h) => (
-                        <div
-                            key={h}
-                            className={`text-muted-foreground px-3.5 py-1 text-xs font-semibold tracking-widest ${h === "MODEL" ? "flex-[2]" : "flex-1"}`}
-                        >
-                            {h}
-                        </div>
-                    ))}
-                </div>
-                {[
-                    {
-                        m: "claude-sonnet-5",
-                        i: "$3.00",
-                        o: "$15.00",
-                    },
-                    {
-                        m: "claude-haiku-4-5",
-                        i: "$0.80",
-                        o: "$4.00",
-                    },
-                    {
-                        m: "claude-opus-5",
-                        i: "$15.00",
-                        o: "$75.00",
-                    },
-                ].map((r) => (
-                    <div key={r.m} className="border-border flex w-full min-w-fit border-b">
-                        <div className="text-muted-foreground cell-truncate flex-[2] px-3.5 py-2 text-xs font-semibold">
-                            {r.m}
-                        </div>
-                        <div className="text-muted-foreground cell-truncate flex-1 px-3.5 py-2 text-xs">
-                            {r.i}
-                        </div>
-                        <div className="text-muted-foreground cell-truncate flex-1 px-3.5 py-2 text-xs">
-                            {r.o}
-                        </div>
-                    </div>
-                ))}
+            <div className="border-border overflow-hidden rounded-sm border-[1px] border-solid">
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            {["MODEL", "INPUT $/1M", "OUTPUT $/1M"].map((h) => (
+                                <TableHead
+                                    key={h}
+                                    className={`px-3.5 py-1 text-xs tracking-widest ${h === "MODEL" ? "w-[50%]" : "w-[25%]"}`}
+                                >
+                                    {h}
+                                </TableHead>
+                            ))}
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {[
+                            {
+                                m: "claude-sonnet-5",
+                                i: "$3.00",
+                                o: "$15.00",
+                            },
+                            {
+                                m: "claude-haiku-4-5",
+                                i: "$0.80",
+                                o: "$4.00",
+                            },
+                            {
+                                m: "claude-opus-5",
+                                i: "$15.00",
+                                o: "$75.00",
+                            },
+                        ].map((r) => (
+                            <TableRow key={r.m}>
+                                <TableCell className="cell-truncate text-muted-foreground px-3.5 py-2 font-semibold">
+                                    {r.m}
+                                </TableCell>
+                                <TableCell className="cell-truncate text-muted-foreground px-3.5 py-2">
+                                    {r.i}
+                                </TableCell>
+                                <TableCell className="cell-truncate text-muted-foreground px-3.5 py-2">
+                                    {r.o}
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
             </div>
         </div>
     );
