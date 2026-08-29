@@ -1,29 +1,29 @@
 import { useState } from "react";
 
-import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-export default function EvidenceViewer({ inline }: { inline?: boolean }) {
+export default function EvidenceViewer({ inline: _inline }: { inline?: boolean }) {
     const [tab, setTab] = useState<"REQUEST" | "RESPONSE" | "EVIDENCE" | "ORACLE">("RESPONSE");
     return (
-        <div
-            style={{
-                padding: inline ? 0 : "0",
-            }}
+        <Tabs
+            value={tab}
+            onValueChange={(v: string) =>
+                setTab(v as "REQUEST" | "RESPONSE" | "EVIDENCE" | "ORACLE")
+            }
         >
-            <div className="border-border flex border-b">
+            <TabsList variant="line" className="flex justify-start border-b p-0">
                 {(["REQUEST", "RESPONSE", "EVIDENCE", "ORACLE"] as const).map((t) => (
-                    <Button
+                    <TabsTrigger
                         key={t}
-                        variant="ghost"
-                        onClick={() => setTab(t)}
-                        className={`-mb-px h-auto rounded-none border-b-2 px-4 py-1 text-base tracking-widest hover:bg-transparent ${t === tab ? "border-primary text-foreground" : "text-muted-foreground border-transparent"}`}
+                        value={t}
+                        className="h-auto rounded-none px-4 py-1 text-base tracking-widest"
                     >
                         {t}
-                    </Button>
+                    </TabsTrigger>
                 ))}
-            </div>
+            </TabsList>
             <div className="px-5 py-4">
-                {tab === "RESPONSE" && (
+                <TabsContent value="RESPONSE" className="m-0">
                     <div>
                         <div className="mb-4 flex items-center gap-3">
                             <span className="border-border bg-muted text-success rounded-sm border-[1px] border-solid px-1.5 py-0.5 text-base font-semibold tracking-wide">
@@ -60,8 +60,8 @@ export default function EvidenceViewer({ inline }: { inline?: boolean }) {
                             {"}"}
                         </div>
                     </div>
-                )}
-                {tab === "REQUEST" && (
+                </TabsContent>
+                <TabsContent value="REQUEST" className="m-0">
                     <pre className="font-inherit text-muted-foreground m-0 text-base leading-loose">
                         {`GET /api/users?id=1 HTTP/1.1
 Host: app.targetcorp.com
@@ -71,8 +71,8 @@ Authorization: Bearer <REDACTED>
 -- INJECTED PAYLOAD --
 id=1' AND SLEEP(4)-- -`}
                     </pre>
-                )}
-                {tab === "EVIDENCE" && (
+                </TabsContent>
+                <TabsContent value="EVIDENCE" className="m-0">
                     <div className="flex flex-col gap-3">
                         {[
                             {
@@ -116,8 +116,8 @@ id=1' AND SLEEP(4)-- -`}
                             </div>
                         ))}
                     </div>
-                )}
-                {tab === "ORACLE" && (
+                </TabsContent>
+                <TabsContent value="ORACLE" className="m-0">
                     <div>
                         <div className="mb-5 flex items-center gap-3">
                             <span className="text-success text-sm font-bold tracking-normal">
@@ -162,8 +162,8 @@ id=1' AND SLEEP(4)-- -`}
                             </div>
                         ))}
                     </div>
-                )}
+                </TabsContent>
             </div>
-        </div>
+        </Tabs>
     );
 }

@@ -58,21 +58,23 @@ export default function Dashboard({ onNewMission, onOpenMission }: DashboardProp
         void Promise.all([
             missionRepository.fetchAll({ limit: 1000 }),
             specialistRepository.fetchAll(),
-        ]).then(([missionData, specsData]) => {
-            setMissions(missionData);
-            const orchs: Record<string, MissionOrchestratorModel> = {};
-            missionData.forEach((m) => {
-                const workers = specsData.map((s) => ({
-                    id: s.id,
-                    role: s.role,
-                    status: s.status,
-                    missionId: m.id,
-                }));
-                orchs[m.id] = new MissionOrchestratorModel(m.id, m.status, workers);
-            });
-            setOrchestrators(orchs);
-            setIsLoading(false);
-        });
+        ])
+            .then(([missionData, specsData]) => {
+                setMissions(missionData);
+                const orchs: Record<string, MissionOrchestratorModel> = {};
+                missionData.forEach((m) => {
+                    const workers = specsData.map((s) => ({
+                        id: s.id,
+                        role: s.role,
+                        status: s.status,
+                        missionId: m.id,
+                    }));
+                    orchs[m.id] = new MissionOrchestratorModel(m.id, m.status, workers);
+                });
+                setOrchestrators(orchs);
+                setIsLoading(false);
+            })
+            .catch(console.error);
     }, [missionRepository, specialistRepository]);
 
     return (

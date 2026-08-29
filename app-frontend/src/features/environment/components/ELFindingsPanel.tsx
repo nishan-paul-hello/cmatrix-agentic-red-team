@@ -16,7 +16,8 @@ export default function ELFindingsPanel() {
     useEffect(() => {
         void new EnvironmentRepository()
             .fetchAll<ElFinding>({ collection: "EL_FINDINGS", limit: 1000 })
-            .then(setData);
+            .then(setData)
+            .catch(console.error);
     }, []);
 
     if (EL_FINDINGS.length === 0) {

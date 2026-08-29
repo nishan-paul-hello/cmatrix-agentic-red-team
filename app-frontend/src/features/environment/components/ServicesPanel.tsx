@@ -17,7 +17,8 @@ export default function ServicesPanel() {
     useEffect(() => {
         void new EnvironmentRepository()
             .fetchAll<Service>({ collection: "SERVICES", limit: 1000 })
-            .then(setData);
+            .then(setData)
+            .catch(console.error);
     }, []);
 
     if (SERVICES.length === 0) {

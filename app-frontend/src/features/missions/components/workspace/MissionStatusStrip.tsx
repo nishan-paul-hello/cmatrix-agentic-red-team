@@ -15,7 +15,7 @@ export default function MissionStatusStrip({
     return (
         <div className="bg-background border-border flex-shrink-0 border-b">
             {/* Identity row */}
-            <div className="border-border flex items-center gap-6 border-b px-4 py-2">
+            <div className="border-border flex items-center gap-6 overflow-x-auto border-b px-4 py-2">
                 <div className="flex items-center gap-2">
                     <span className="text-muted-foreground text-base tracking-widest">MISSION</span>
                     <span className="text-primary text-base font-bold tracking-widest">
@@ -28,7 +28,7 @@ export default function MissionStatusStrip({
                 <Meta label="SURFACE" value="WEB APPLICATION" />
                 <Sep />
                 <div className="ml-auto flex items-center gap-1.5">
-                    <div className="bg-success h-1.5 w-1.5 pulse-dot rounded-full" />
+                    <div className="bg-success pulse-dot h-1.5 w-1.5 rounded-full" />
                     <span className="text-success text-base font-semibold tracking-widest">
                         {MISSION_STATUS.RUNNING}
                     </span>

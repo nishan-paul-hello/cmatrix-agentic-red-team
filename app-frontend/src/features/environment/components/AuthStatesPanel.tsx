@@ -16,7 +16,8 @@ export default function AuthStatesPanel() {
     useEffect(() => {
         void new EnvironmentRepository()
             .fetchAll<AuthState>({ collection: "AUTH_STATES", limit: 1000 })
-            .then(setData);
+            .then(setData)
+            .catch(console.error);
     }, []);
 
     if (AUTH_STATES.length === 0) {

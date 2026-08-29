@@ -9,7 +9,8 @@ export default function VulnPatterns() {
     useEffect(() => {
         void new MemoryRepository()
             .fetchAll<MemoryNode>({ collection: "PATTERNS", limit: 1000 })
-            .then(setData);
+            .then(setData)
+            .catch(console.error);
     }, []);
 
     const [selId, setSelId] = useState<string | null>(null);
@@ -20,8 +21,8 @@ export default function VulnPatterns() {
 
     const sel = PATTERNS.find((p) => p.id === selId) ?? PATTERNS[0];
     return (
-        <div className="flex min-h-0 flex-1 overflow-hidden">
-            <div className="w-panel-md border-border flex-shrink-0 overflow-y-auto border-r">
+        <div className="flex min-h-0 flex-1 flex-col overflow-hidden lg:flex-row">
+            <div className="lg:w-panel-md border-border w-full flex-shrink-0 overflow-y-auto border-b lg:border-r lg:border-b-0">
                 <div className="text-muted-foreground border-border border-b text-sm tracking-widest">
                     {PATTERNS.length} PATTERNS
                 </div>

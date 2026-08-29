@@ -48,22 +48,11 @@ export default function EvaluationScreen({
                             </span>
                         </div>
                         <div
-                            className="text-xs leading-loose tracking-tighter whitespace-pre-wrap"
-                            style={{
-                                color: block.color,
-                                marginBottom: i < arr.length - 1 ? 0 : 24,
-                            }}
+                            className={`text-xs leading-loose tracking-tighter whitespace-pre-wrap ${block.color} ${i < arr.length - 1 ? "mb-0" : "mb-6"}`}
                         >
                             {block.content}
                         </div>
-                        {i < arr.length - 1 && (
-                            <div
-                                className="bg-card h-px"
-                                style={{
-                                    margin: "24px 0",
-                                }}
-                            />
-                        )}
+                        {i < arr.length - 1 && <div className="bg-card my-6 h-px" />}
                     </div>
                 ))}
 
@@ -72,12 +61,7 @@ export default function EvaluationScreen({
                     <div className="text-muted-foreground mb-5 text-sm tracking-widest">
                         EVIDENCE LEVEL INDICATOR
                     </div>
-                    <div
-                        className="relative"
-                        style={{
-                            paddingBottom: 32,
-                        }}
-                    >
+                    <div className="relative pb-8">
                         {/* Track */}
                         <div className="bg-muted absolute top-1.5 right-0 left-0 h-px" />
                         <div
@@ -89,27 +73,17 @@ export default function EvaluationScreen({
                         {/* Ticks — F3: fix ORACLE (i===5) label overflow */}
                         <div className="flex justify-between">
                             {EORD_LABELS.map((lbl, i) => (
-                                <div
-                                    key={lbl}
-                                    className="flex flex-col items-center"
-                                    style={{
-                                        zIndex: 1,
-                                    }}
-                                >
+                                <div key={lbl} className="z-10 flex flex-col items-center">
                                     <div
-                                        className="h-1.5 w-1.5 rounded-none"
-                                        style={{
-                                            border: `1px solid ${i <= VALUE ? "text-primary" : "text-border"}`,
-                                            background: (() => {
-                                                if (i < VALUE) {
-                                                    return "text-primary";
-                                                }
-                                                if (i === VALUE) {
-                                                    return "text-destructive";
-                                                }
-                                                return "transparent";
-                                            })(),
-                                        }}
+                                        className={`h-1.5 w-1.5 rounded-none border border-solid ${i <= VALUE ? "border-primary" : "border-border"} ${(() => {
+                                            if (i < VALUE) {
+                                                return "bg-primary";
+                                            }
+                                            if (i === VALUE) {
+                                                return "bg-destructive";
+                                            }
+                                            return "bg-transparent";
+                                        })()}`}
                                     />
                                     {i === VALUE && (
                                         <div className="text-destructive mt-0.5 text-sm font-bold">
@@ -117,9 +91,8 @@ export default function EvaluationScreen({
                                         </div>
                                     )}
                                     <div
-                                        className="absolute bottom-0 text-xs tracking-normal whitespace-nowrap"
+                                        className={`absolute bottom-0 text-xs tracking-normal whitespace-nowrap ${i === VALUE ? "text-primary" : "text-muted-foreground"}`}
                                         style={{
-                                            color: i === VALUE ? "text-primary" : "text-border",
                                             transform: (() => {
                                                 if (i === 5) {
                                                     return "translateX(-90%)";

@@ -16,7 +16,8 @@ export default function CVECandidatesPanel() {
     useEffect(() => {
         void new EnvironmentRepository()
             .fetchAll<CveCandidate>({ collection: "CVE_CANDIDATES", limit: 1000 })
-            .then(setData);
+            .then(setData)
+            .catch(console.error);
     }, []);
 
     if (CVE_CANDIDATES.length === 0) {

@@ -1,41 +1,15 @@
 export default function AttackPath({ nodes, large }: { nodes: string[]; large?: boolean }) {
     return (
-        <div
-            className="flex flex-col items-start"
-            style={{
-                gap: 0,
-            }}
-        >
+        <div className="flex flex-col items-start">
             {nodes.map((n, i) => (
                 <div key={n} className="flex flex-col items-start">
-                    {i > 0 && (
-                        <div
-                            className="bg-primary ml-3 h-4 w-px"
-                            style={{
-                                opacity: 0.5,
-                            }}
-                        />
-                    )}
+                    {i > 0 && <div className="bg-primary/50 ml-3 h-4 w-px" />}
                     <div
-                        className="border-border bg-muted rounded-sm border-[1px] border-solid"
-                        style={{
-                            padding: large ? "10px 16px" : "7px 12px",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 8,
-                        }}
+                        className={`border-border bg-muted flex items-center gap-2 rounded-sm border-[1px] border-solid ${large ? "px-4 py-2.5" : "px-3 py-[7px]"}`}
                     >
-                        <div
-                            className="bg-primary h-1.5 w-1.5 shrink-0"
-                            style={{
-                                borderRadius: "50%",
-                            }}
-                        />
+                        <div className="bg-primary h-1.5 w-1.5 shrink-0 rounded-full" />
                         <span
-                            className="text-muted-foreground font-semibold tracking-tight"
-                            style={{
-                                fontSize: large ? 11 : 10,
-                            }}
+                            className={`text-muted-foreground font-semibold tracking-tight ${large ? "text-[11px]" : "text-[10px]"}`}
                         >
                             {n}
                         </span>

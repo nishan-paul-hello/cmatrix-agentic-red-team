@@ -13,7 +13,8 @@ export default function ContextUtilization() {
     useEffect(() => {
         void new MemoryRepository()
             .fetchAll<CtxSpecEntry>({ collection: "CTX_SPECS", limit: 1000 })
-            .then(setData);
+            .then(setData)
+            .catch(console.error);
     }, []);
 
     const [selId, setSelId] = useState<string | null>(null);
@@ -33,7 +34,7 @@ export default function ContextUtilization() {
         IDLE: "text-muted-foreground",
     };
     return (
-        <div className="flex min-h-0 flex-1 overflow-hidden">
+        <div className="flex min-h-0 flex-1 flex-col overflow-hidden lg:flex-row">
             <div className="flex-1 overflow-y-auto px-6 py-5">
                 <KPIStrip
                     className="mb-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
@@ -132,7 +133,7 @@ export default function ContextUtilization() {
                     </div>
                 </div>
             </div>
-            <div className="w-panel-sm border-border flex flex-shrink-0 flex-col overflow-y-auto border-l p-4">
+            <div className="lg:w-panel-sm border-border flex w-full flex-shrink-0 flex-col overflow-y-auto border-t p-4 lg:border-t-0 lg:border-l">
                 <div className="text-foreground mb-1 text-xs font-bold tracking-normal">
                     {sel.role}
                 </div>

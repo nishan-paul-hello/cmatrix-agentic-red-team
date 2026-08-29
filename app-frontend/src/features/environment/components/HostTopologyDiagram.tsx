@@ -22,12 +22,7 @@ export function HostTopologyDiagram({
                 </span>
             </div>
 
-            <div
-                className="flex flex-col items-start"
-                style={{
-                    gap: 0,
-                }}
-            >
+            <div className="flex flex-col items-start">
                 {hosts.map((host) => {
                     const isSel = selected === host.id;
                     const sb = STATUS_BADGE[host.status];
@@ -40,12 +35,7 @@ export function HostTopologyDiagram({
                                 className={`max-w-panel-md-wide sm:w-panel-md-wide flex h-auto w-full cursor-pointer items-start justify-start gap-4 rounded-sm border border-solid px-4 py-3.5 text-left font-normal whitespace-normal transition-colors ${isSel ? "bg-border border-primary" : "bg-background border-border"} hover:bg-border hover:border-muted-foreground`}
                             >
                                 {/* Left: id + status dot */}
-                                <div
-                                    className="flex flex-shrink-0 flex-col items-center gap-1.5"
-                                    style={{
-                                        paddingTop: 2,
-                                    }}
-                                >
+                                <div className="flex flex-shrink-0 flex-col items-center gap-1.5 pt-0.5">
                                     <div
                                         className={`h-2.5 w-2.5 rounded-sm border ${isSel ? "border-primary bg-primary" : "border-border bg-border"}`}
                                     />

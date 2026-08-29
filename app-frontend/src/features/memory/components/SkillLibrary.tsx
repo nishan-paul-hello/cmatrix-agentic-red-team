@@ -20,8 +20,8 @@ export default function SkillLibrary() {
     );
     const sel = (selId ? skills.find((s) => s.id === selId) : skills[0]) as unknown as SkillEntry;
     return (
-        <div className="flex min-h-0 flex-1 overflow-hidden">
-            <div className="w-panel-sm border-border flex flex-shrink-0 flex-col overflow-hidden border-r">
+        <div className="flex min-h-0 flex-1 flex-col overflow-hidden lg:flex-row">
+            <div className="lg:w-panel-sm border-border flex w-full flex-shrink-0 flex-col overflow-hidden border-b lg:border-r lg:border-b-0">
                 <div className="border-border border-b px-3 py-2.5">
                     <Input
                         value={filter}

@@ -11,19 +11,10 @@ export default function TrajectoryTab({ f }: { f: Finding }) {
                     <div className="flex w-6 shrink-0 flex-col items-center">
                         <div className="bg-primary mt-0.5 h-2 w-2 shrink-0 rounded-none" />
                         {i < f.path.length - 1 && (
-                            <div
-                                className="bg-muted min-h-5 w-px flex-1"
-                                style={{
-                                    margin: "4px 0",
-                                }}
-                            />
+                            <div className="bg-muted my-1 min-h-5 w-px flex-1" />
                         )}
                     </div>
-                    <div
-                        style={{
-                            paddingBottom: i < f.path.length - 1 ? 12 : 0,
-                        }}
-                    >
+                    <div className={i < f.path.length - 1 ? "pb-3" : "pb-0"}>
                         <div className="text-muted-foreground mb-0.5 text-xs font-bold tracking-tight">
                             {node}
                         </div>

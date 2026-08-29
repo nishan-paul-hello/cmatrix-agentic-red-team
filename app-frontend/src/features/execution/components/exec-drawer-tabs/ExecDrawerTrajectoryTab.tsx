@@ -4,11 +4,7 @@ import { type ExecEntry } from "@/types/domain-types";
 
 export function ExecDrawerTrajectoryTab({ entry }: { entry: ExecEntry }) {
     return (
-        <div
-            style={{
-                paddingTop: 4,
-            }}
-        >
+        <div className="pt-1">
             <div className="text-muted-foreground mb-2.5 text-sm tracking-widest">
                 TRAJECTORY CONTRIBUTION
             </div>
@@ -22,11 +18,7 @@ export function ExecDrawerTrajectoryTab({ entry }: { entry: ExecEntry }) {
             ].map((r) => (
                 <div
                     key={r.step}
-                    className="border-border overflow-hidden rounded-sm border-[1px] border-solid"
-                    style={{
-                        display: "flex",
-                        gap: 0,
-                    }}
+                    className="border-border flex gap-0 overflow-hidden rounded-sm border-[1px] border-solid"
                 >
                     {[
                         ["STEP", r.step],

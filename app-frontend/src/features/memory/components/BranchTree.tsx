@@ -8,7 +8,8 @@ export default function BranchTree({ nodes, depth = 0 }: { nodes: BranchEntry[];
     useEffect(() => {
         void new MemoryRepository()
             .fetchAll<BranchEntry>({ collection: "BRANCHES", limit: 1000 })
-            .then(setData);
+            .then(setData)
+            .catch(console.error);
     }, []);
 
     if (BRANCHES.length === 0) {

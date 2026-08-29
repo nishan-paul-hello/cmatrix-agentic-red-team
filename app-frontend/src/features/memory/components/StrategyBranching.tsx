@@ -9,7 +9,8 @@ export default function StrategyBranching() {
     useEffect(() => {
         void new MemoryRepository()
             .fetchAll<BranchEntry>({ collection: "BRANCHES", limit: 1000 })
-            .then(setData);
+            .then(setData)
+            .catch(console.error);
     }, []);
 
     if (BRANCHES.length === 0) {

@@ -10,7 +10,7 @@ export function AblationLabDetailPanel({ sel }: { sel: AblationSpec }) {
     const bestDelta = Math.abs(worst.delta);
 
     return (
-        <div className="border-border w-panel-sm-alt flex flex-shrink-0 flex-col overflow-y-auto border-l px-3.5 py-4">
+        <div className="border-border lg:w-panel-sm-alt flex w-full flex-shrink-0 flex-col overflow-y-auto border-t px-3.5 py-4 lg:border-t-0 lg:border-l">
             <div className="text-foreground mb-1 text-xs font-bold tracking-normal">{sel.id}</div>
             <div className="text-muted-foreground mb-2 text-base leading-snug">{sel.name}</div>
 

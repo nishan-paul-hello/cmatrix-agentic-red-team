@@ -46,7 +46,7 @@ export function ReportPreviewPane({
                     </div>
                     {sel.status === "GENERATING" ? (
                         <div className="flex flex-1 flex-col items-center justify-center gap-3">
-                            <div className="bg-primary h-2 w-2 pulse-dot rounded-full" />
+                            <div className="bg-primary pulse-dot h-2 w-2 rounded-full" />
                             <div className="text-muted-foreground text-base tracking-widest">
                                 GENERATING REPORT...
                             </div>

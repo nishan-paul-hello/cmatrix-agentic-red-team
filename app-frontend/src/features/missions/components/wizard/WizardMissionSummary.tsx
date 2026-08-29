@@ -49,14 +49,7 @@ export function WizardMissionSummary({
                     <div className="text-muted-foreground mb-2 text-base tracking-widest">
                         ROE PREVIEW
                     </div>
-                    <div
-                        className="text-muted-foreground overflow-hidden text-base leading-relaxed tracking-tight"
-                        style={{
-                            display: "-webkit-box",
-                            WebkitLineClamp: 6,
-                            WebkitBoxOrient: "vertical" as const,
-                        }}
-                    >
+                    <div className="text-muted-foreground line-clamp-6 overflow-hidden text-base leading-relaxed tracking-tight">
                         {roe}
                     </div>
                 </div>

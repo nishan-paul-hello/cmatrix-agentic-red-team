@@ -64,18 +64,17 @@ export default function MissionWorkspaceContainer({
     const { missionRepository, specialistRepository } = useServices();
 
     useEffect(() => {
-        void Promise.all([
-            missionRepository.fetch(missionId),
-            specialistRepository.fetchAll(),
-        ]).then(([mission, specialists]) => {
-            const workers: WorkerSpecialist[] = specialists.map((s) => ({
-                id: s.id,
-                role: s.role,
-                status: s.status,
-                missionId: mission.id,
-            }));
-            setOrchestrator(new MissionOrchestratorModel(mission.id, mission.status, workers));
-        });
+        void Promise.all([missionRepository.fetch(missionId), specialistRepository.fetchAll()])
+            .then(([mission, specialists]) => {
+                const workers: WorkerSpecialist[] = specialists.map((s) => ({
+                    id: s.id,
+                    role: s.role,
+                    status: s.status,
+                    missionId: mission.id,
+                }));
+                setOrchestrator(new MissionOrchestratorModel(mission.id, mission.status, workers));
+            })
+            .catch(console.error);
     }, [missionId, missionRepository, specialistRepository]);
 
     const [state, rawDispatch] = useReducer(workspaceReducer, {
@@ -127,12 +126,14 @@ export default function MissionWorkspaceContainer({
         void Promise.all([
             WorkspaceRepository.getInitialLog(),
             WorkspaceRepository.getStreamEvents(),
-        ]).then(([initialLog, streamEvents]) => {
-            dispatch({ type: "SET_LOG", payload: initialLog });
-            nextId.current = initialLog.length + 1;
-            queue.current = [...streamEvents];
-            setDataLoaded(true);
-        });
+        ])
+            .then(([initialLog, streamEvents]) => {
+                dispatch({ type: "SET_LOG", payload: initialLog });
+                nextId.current = initialLog.length + 1;
+                queue.current = [...streamEvents];
+                setDataLoaded(true);
+            })
+            .catch(console.error);
     }, [dispatch]);
 
     const time = useElapsed(0);

@@ -136,10 +136,7 @@ export default function NewMissionWizardView(props: WizardContextType) {
                                         onStart?.();
                                     }
                                 }}
-                                className="text-foreground hover:bg-destructive h-auto rounded-sm text-xs font-semibold tracking-widest"
-                                style={{
-                                    padding: step === 5 ? "8px 32px" : "8px 24px",
-                                }}
+                                className={`text-foreground hover:bg-destructive h-auto rounded-sm py-2 text-xs font-semibold tracking-widest ${step === 5 ? "px-8" : "px-6"}`}
                             >
                                 {step === 5 ? "START MISSION →" : "NEXT →"}
                             </Button>

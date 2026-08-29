@@ -97,7 +97,7 @@ export default function MissionsPage({ onNewMission, onOpenMission }: MissionsPa
             <div className="flex-1 overflow-auto">
                 <Table className="w-full border-collapse text-xs">
                     <TableHeader>
-                        <TableRow className="bg-card z-header sticky top-0">
+                        <TableRow className="bg-card z-sticky sticky top-0">
                             {TABLE_HEADERS.map((h) => (
                                 <TableHead
                                     key={h}

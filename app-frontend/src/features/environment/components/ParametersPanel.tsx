@@ -16,7 +16,8 @@ export default function ParametersPanel() {
     useEffect(() => {
         void new EnvironmentRepository()
             .fetchAll<Parameter>({ collection: "PARAMS", limit: 1000 })
-            .then(setData);
+            .then(setData)
+            .catch(console.error);
     }, []);
 
     if (PARAMS.length === 0) {

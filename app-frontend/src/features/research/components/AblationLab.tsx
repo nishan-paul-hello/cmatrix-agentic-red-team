@@ -9,7 +9,7 @@ import { AblationLabTable } from "./AblationLabTable";
 export default function AblationLab() {
     const [sel, setSel] = useState<AblationSpec>(ABLATIONS[0]);
     return (
-        <div className="flex min-h-0 flex-1 overflow-hidden">
+        <div className="flex min-h-0 flex-1 flex-col overflow-hidden lg:flex-row">
             {/* Left: 8-ablation list + selected table */}
             <div className="flex-1 overflow-y-auto px-6 py-5">
                 {/* A1-A8 selection buttons */}

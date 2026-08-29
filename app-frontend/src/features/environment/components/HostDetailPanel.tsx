@@ -2,7 +2,7 @@ import { type HostNode } from "@/types/domain-types";
 
 export function HostDetailPanel({ sel }: { sel: HostNode | undefined }) {
     return (
-        <div className="w-panel-sm bg-background flex-shrink-0 overflow-y-auto">
+        <div className="lg:w-panel-sm bg-background border-border w-full flex-shrink-0 overflow-y-auto border-t lg:border-t-0 lg:border-l">
             {sel ? (
                 <>
                     <div className="border-border border-b px-5 pt-5 pb-4">
@@ -54,12 +54,7 @@ export function HostDetailPanel({ sel }: { sel: HostNode | undefined }) {
                         <div className="flex flex-col gap-1.5">
                             {sel.services.map((s: string) => (
                                 <div key={s} className="flex items-center gap-2">
-                                    <div
-                                        className="bg-success h-1 w-1 shrink-0"
-                                        style={{
-                                            borderRadius: "50%",
-                                        }}
-                                    />
+                                    <div className="bg-success h-1 w-1 shrink-0 rounded-full" />
                                     <span className="text-muted-foreground text-base tracking-tight">
                                         {s}
                                     </span>

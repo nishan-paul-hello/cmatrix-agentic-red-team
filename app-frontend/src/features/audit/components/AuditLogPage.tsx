@@ -126,7 +126,7 @@ export default React.memo(function AuditLogPage() {
                     <div className="w-full overflow-x-auto">
                         <Table className="w-full border-collapse">
                             <TableHeader>
-                                <TableRow className="bg-card z-header sticky top-0">
+                                <TableRow className="bg-card z-sticky sticky top-0">
                                     {TABLE_HEADERS.map((h) => (
                                         <TableHead
                                             key={h}

@@ -2,12 +2,7 @@ import React from "react";
 
 export function ExecDrawerRawTab() {
     return (
-        <pre
-            className="font-inherit text-muted-foreground text-base leading-relaxed whitespace-pre-wrap"
-            style={{
-                margin: 0,
-            }}
-        >
+        <pre className="font-inherit text-muted-foreground m-0 text-base leading-relaxed whitespace-pre-wrap">
             {`$ nmap -sV -p 22,80,443,5432,6379 app.targetcorp.com
 Starting Nmap 7.94 at 2026-08-19 06:28:47
 Nmap scan report for app.targetcorp.com (104.21.3.212)

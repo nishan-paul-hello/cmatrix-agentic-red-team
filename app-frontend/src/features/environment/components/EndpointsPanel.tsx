@@ -16,7 +16,8 @@ export default function EndpointsPanel() {
     useEffect(() => {
         void new EnvironmentRepository()
             .fetchAll<Endpoint>({ collection: "ENDPOINTS", limit: 1000 })
-            .then(setData);
+            .then(setData)
+            .catch(console.error);
     }, []);
 
     if (ENDPOINTS.length === 0) {

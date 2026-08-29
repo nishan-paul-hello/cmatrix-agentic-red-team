@@ -11,7 +11,8 @@ export default function HostTopology() {
     useEffect(() => {
         void new EnvironmentRepository()
             .fetchAll<HostNode>({ collection: "HOSTS", limit: 1000 })
-            .then(setData);
+            .then(setData)
+            .catch(console.error);
     }, []);
 
     const [selected, setSelected] = useState<string | null>("HOST-01");
@@ -21,7 +22,7 @@ export default function HostTopology() {
     }
     const sel = HOSTS.find((h) => h.id === selected);
     return (
-        <div className="flex h-full min-h-0">
+        <div className="flex h-full min-h-0 flex-col lg:flex-row">
             {/* Topology diagram */}
             <HostTopologyDiagram hosts={HOSTS} selected={selected} setSelected={setSelected} />
 

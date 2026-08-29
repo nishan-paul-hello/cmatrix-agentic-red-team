@@ -17,7 +17,8 @@ export default function CredentialsPanel() {
     useEffect(() => {
         void new EnvironmentRepository()
             .fetchAll<CredentialEntry>({ collection: "CREDS", limit: 1000 })
-            .then(setData);
+            .then(setData)
+            .catch(console.error);
     }, []);
 
     const [revealed, setRevealed] = useState<Set<string>>(new Set());

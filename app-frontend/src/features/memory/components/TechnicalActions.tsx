@@ -17,7 +17,8 @@ export default function TechnicalActions() {
     useEffect(() => {
         void new MemoryRepository()
             .fetchAll<ActionEntry>({ collection: "ACTIONS", limit: 1000 })
-            .then(setData);
+            .then(setData)
+            .catch(console.error);
     }, []);
 
     const [selId, setSelId] = useState<string | null>(null);

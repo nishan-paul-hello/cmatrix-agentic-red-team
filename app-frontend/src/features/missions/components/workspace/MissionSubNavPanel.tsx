@@ -32,29 +32,14 @@ export default function MissionSubNavPanel({
                             key={item.id}
                             variant="ghost"
                             onClick={() => dispatch({ type: "SET_SUB_NAV", payload: item.id })}
-                            className="border-border h-auto w-max shrink-0 justify-start rounded-none border-l px-4 py-2 text-left text-xs tracking-tight uppercase lg:w-full"
-                            onMouseEnter={(e) => {
-                                if (!active) {
-                                    e.currentTarget.style.color = "var(--muted-foreground)";
-                                }
-                            }}
-                            onMouseLeave={(e) => {
-                                if (!active) {
-                                    e.currentTarget.style.color = "var(--muted-foreground)";
-                                }
-                            }}
+                            className={`border-border h-auto w-max shrink-0 justify-start rounded-none border-l px-4 py-2 text-left text-xs tracking-tight uppercase lg:w-full ${active ? "text-primary" : "text-muted-foreground hover:text-muted-foreground"}`}
                         >
                             {(() => {
                                 if (item.id === "findings") {
                                     return (
                                         <span className="flex items-center gap-1.5">
                                             {item.label}
-                                            <span
-                                                className="border-border bg-muted text-primary rounded-sm border-[1px] border-solid text-sm tracking-normal"
-                                                style={{
-                                                    padding: "0 4px",
-                                                }}
-                                            >
+                                            <span className="border-border bg-muted text-primary rounded-sm border-[1px] border-solid px-1 text-sm tracking-normal">
                                                 7
                                             </span>
                                         </span>
@@ -64,12 +49,7 @@ export default function MissionSubNavPanel({
                                     return (
                                         <span className="flex items-center gap-1.5">
                                             {item.label}
-                                            <span
-                                                className="border-border bg-muted text-destructive rounded-sm border-[1px] border-solid text-sm tracking-normal"
-                                                style={{
-                                                    padding: "0 4px",
-                                                }}
-                                            >
+                                            <span className="border-border bg-muted text-destructive rounded-sm border-[1px] border-solid px-1 text-sm tracking-normal">
                                                 !
                                             </span>
                                         </span>
@@ -86,7 +66,7 @@ export default function MissionSubNavPanel({
             <div className="border-border flex flex-row gap-2 border-t p-3 lg:flex-col">
                 <Button
                     variant="outline"
-                    className="bg-card hover:bg-card h-auto w-full rounded-sm text-base font-semibold tracking-widest"
+                    className={`bg-card hover:bg-card hover:border-warning h-auto w-full rounded-sm py-[7px] text-base font-semibold tracking-widest ${paused ? "border-warning text-warning" : "border-border text-muted-foreground"}`}
                     onClick={() => {
                         const newPausedState = !paused;
                         dispatch({ type: "SET_PAUSED", payload: newPausedState });
@@ -102,23 +82,16 @@ export default function MissionSubNavPanel({
                                 dispatch({ type: "SET_PAUSED", payload: !newPausedState });
                             });
                     }}
-                    style={{
-                        border: `1px solid ${paused ? "var(--warning)" : "var(--border)"}`,
-                        color: paused ? "var(--warning)" : "var(--warning)",
-                        padding: "7px 0",
-                    }}
-                    onMouseEnter={(e) => (e.currentTarget.style.borderColor = "var(--warning)")}
-                    onMouseLeave={(e) =>
-                        (e.currentTarget.style.borderColor = paused
-                            ? "var(--warning)"
-                            : "var(--border)")
-                    }
                 >
                     {paused ? "▶ RESUME" : "⏸ PAUSE"}
                 </Button>
                 <Button
                     variant="outline"
-                    className="h-auto w-full rounded-sm text-base font-semibold tracking-widest"
+                    className={`h-auto w-full rounded-sm py-[7px] text-base font-semibold tracking-widest ${
+                        terminated
+                            ? "bg-border border-border text-muted-foreground cursor-not-allowed"
+                            : "border-primary text-primary hover:bg-border hover:border-primary cursor-pointer bg-transparent"
+                    }`}
                     onClick={() => {
                         dispatch({ type: "SET_PAUSED", payload: true });
                         dispatch({ type: "SET_TERMINATED", payload: true });
@@ -134,25 +107,6 @@ export default function MissionSubNavPanel({
                             });
                     }}
                     disabled={terminated}
-                    style={{
-                        background: terminated ? "var(--border)" : "var(--border)",
-                        border: `1px solid ${terminated ? "var(--border)" : "var(--border)"}`,
-                        color: terminated ? "var(--muted-foreground)" : "var(--primary)",
-                        padding: "7px 0",
-                        cursor: terminated ? "not-allowed" : "pointer",
-                    }}
-                    onMouseEnter={(e) => {
-                        if (!terminated) {
-                            e.currentTarget.style.background = "var(--border)";
-                            e.currentTarget.style.borderColor = "var(--primary)";
-                        }
-                    }}
-                    onMouseLeave={(e) => {
-                        if (!terminated) {
-                            e.currentTarget.style.background = "var(--border)";
-                            e.currentTarget.style.borderColor = "var(--border)";
-                        }
-                    }}
                 >
                     {terminated ? "— TERMINATED" : "✕ TERMINATE"}
                 </Button>

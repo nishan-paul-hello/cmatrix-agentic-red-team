@@ -16,7 +16,8 @@ export default function EvidencePanel() {
     useEffect(() => {
         void new EnvironmentRepository()
             .fetchAll<EvidenceArtifact>({ collection: "EVIDENCE_ARTIFACTS", limit: 1000 })
-            .then(setData);
+            .then(setData)
+            .catch(console.error);
     }, []);
 
     const [sel, setSel] = useState<string | null>(null);
@@ -25,7 +26,7 @@ export default function EvidencePanel() {
         return null;
     }
     return (
-        <div className="flex min-h-0 flex-1 overflow-hidden">
+        <div className="flex min-h-0 flex-1 flex-col overflow-hidden lg:flex-row">
             <div className="flex min-w-0 flex-1 flex-col overflow-y-auto">
                 <div className="bg-background border-border flex flex-shrink-0 items-center gap-2 border-b px-4 py-2">
                     <span className="text-muted-foreground text-sm tracking-widest">
@@ -89,7 +90,7 @@ export default function EvidencePanel() {
                 </Table>
             </div>
             {sel && (
-                <div className="w-panel-sm bg-background border-border shrink-0 overflow-y-auto border-l px-3.5 py-4">
+                <div className="lg:w-panel-sm bg-background border-border w-full shrink-0 overflow-y-auto border-t px-3.5 py-4 lg:border-t-0 lg:border-l">
                     {(() => {
                         const a = EVIDENCE_ARTIFACTS.find((x) => x.id === sel);
                         if (!a) {
