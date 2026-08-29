@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { ArrowDownRight } from "lucide-react";
 import { EORD_COLOR, STATUS_BADGE } from "@/features/environment/data/mockData";
 import { type HostNode } from "@/types/domain-types";
 
@@ -32,7 +33,7 @@ export function HostTopologyDiagram({
                             <Button
                                 variant="outline"
                                 onClick={() => setSelected(isSel ? null : host.id)}
-                                className={`max-w-panel-md-wide sm:w-panel-md-wide flex h-auto w-full cursor-pointer items-start justify-start gap-4 rounded-sm border border-solid px-4 py-3.5 text-left font-normal whitespace-normal transition-colors ${isSel ? "bg-border border-primary" : "bg-background border-border"} hover:bg-border hover:border-muted-foreground`}
+                                className={`max-w-3xl flex h-auto w-full cursor-pointer items-start justify-start gap-4 rounded-sm border border-solid px-5 py-4 text-left font-normal whitespace-normal transition-colors ${isSel ? "bg-border border-primary" : "bg-background border-border"} hover:bg-border hover:border-muted-foreground`}
                             >
                                 {/* Left: id + status dot */}
                                 <div className="flex flex-shrink-0 flex-col items-center gap-1.5 pt-0.5">
@@ -105,41 +106,49 @@ export function HostTopologyDiagram({
                                 </div>
                             </Button>
 
-                            {host.edges.map((edge) => (
-                                <div key={edge.to} className="ml-7 flex items-stretch">
-                                    {/* Vertical line */}
-                                    <div className="bg-muted ml-1 w-px shrink-0" />
-                                    {/* Edge label */}
-                                    <div className="flex flex-col justify-center pt-1.5 pb-1.5 pl-4">
-                                        <div className="flex items-center gap-2">
-                                            <span className="text-primary text-sm tracking-normal">
-                                                {"\u2192"}
-                                            </span>
-                                            <span className="text-muted-foreground text-base font-semibold tracking-normal">
-                                                {edge.label.toUpperCase()}
-                                            </span>
-                                            <span className="text-muted-foreground text-sm tracking-tight">
-                                                {edge.detail}
-                                            </span>
-                                            <span
-                                                className="text-xs tracking-normal"
-                                                style={{
-                                                    color: EORD_COLOR[edge.eord],
-                                                }}
-                                            >
-                                                E_ord {edge.eord}
-                                            </span>
+                            {host.edges.length > 0 && (
+                                <div className="relative flex flex-col w-full py-2">
+                                    {/* Main continuous vertical line from host card center */}
+                                    <div className="absolute left-[25px] top-0 bottom-0 w-px bg-border/80" />
+
+                                    {host.edges.map((edge) => (
+                                        <div key={edge.to} className="relative flex items-center py-2.5">
+                                            {/* Branch line from main vertical line to edge label */}
+                                            <div className="absolute left-[25px] top-1/2 w-6 h-[1px] bg-border/80 -translate-y-1/2" />
+                                            
+                                            {/* Edge label as a modern pill */}
+                                            <div className="ml-12 z-10 flex items-center gap-3">
+                                                <div className="flex items-center gap-2.5 border border-border bg-card/80 backdrop-blur-sm hover:bg-accent/50 transition-colors px-3.5 py-1.5 rounded-full shadow-sm">
+                                                    <span className="text-primary text-[11px] font-bold tracking-widest flex items-center gap-1.5">
+                                                        <ArrowDownRight className="w-3.5 h-3.5" />
+                                                        {edge.label.toUpperCase()}
+                                                    </span>
+                                                    <div className="w-[1px] h-3.5 bg-border" />
+                                                    <span className="text-muted-foreground text-xs font-medium">
+                                                        {edge.detail}
+                                                    </span>
+                                                    <div className="w-[1px] h-3.5 bg-border" />
+                                                    <span
+                                                        className="text-[10px] font-bold px-2 py-0.5 rounded bg-background/50 border border-border/50"
+                                                        style={{
+                                                            color: EORD_COLOR[edge.eord],
+                                                        }}
+                                                    >
+                                                        E_ord {edge.eord}
+                                                    </span>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
+                                    ))}
                                 </div>
-                            ))}
+                            )}
                         </div>
                     );
                 })}
             </div>
 
             {/* Caption */}
-            <div className="border-border bg-background max-w-panel-md-wide mt-8 flex items-start gap-2 rounded-sm border-[1px] border-solid px-3.5 py-2.5">
+            <div className="border-border bg-background max-w-3xl mt-8 flex items-start gap-2 rounded-sm border-[1px] border-solid px-4 py-3">
                 <span className="text-primary shrink-0 text-xs">ⓘ</span>
                 <span className="text-muted-foreground text-base leading-relaxed tracking-tight">
                     Topology represents{" "}
