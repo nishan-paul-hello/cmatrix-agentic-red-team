@@ -1,4 +1,12 @@
 import { Button } from "@/components/ui/button";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
 import { SB, type VFinding } from "@/features/validation/data/fixtures/validationMockData";
 
 export function ValidationTable({
@@ -12,61 +20,57 @@ export function ValidationTable({
 }) {
     return (
         <div className="flex-1 overflow-auto">
-            <table className="w-full border-collapse text-xs">
-                <thead>
-                    <tr className="bg-card sticky top-0">
+            <Table className="text-xs">
+                <TableHeader>
+                    <TableRow className="bg-card hover:bg-card sticky top-0">
                         {["FINDING", "TYPE", "EVIDENCE", "RETRY", "STATUS", "ORACLE", ""].map(
                             (h) => (
-                                <th
+                                <TableHead
                                     key={h}
-                                    className="text-muted-foreground border-border border-b px-4 py-1.5 text-left text-sm font-semibold tracking-widest whitespace-nowrap"
+                                    className="text-muted-foreground border-border border-b px-4 py-1.5 text-left text-sm font-semibold tracking-widest"
                                 >
                                     {h}
-                                </th>
+                                </TableHead>
                             ),
                         )}
-                    </tr>
-                </thead>
-                <tbody>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
                     {findings.map((f) => {
                         const sb = SB[f.status];
                         const isSelected = selected?.id === f.id;
                         return (
-                            <tr
+                            <TableRow
                                 key={f.id}
-                                className="border-border cursor-pointer border-b"
+                                className={`border-border hover:bg-border focus-visible:bg-border cursor-pointer border-b focus-visible:outline-none ${isSelected ? "bg-border" : "bg-transparent"}`}
+                                tabIndex={0}
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter" || e.key === " ") {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        setSelected(f);
+                                    }
+                                }}
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     setSelected(f);
                                 }}
-                                onMouseEnter={(e) =>
-                                    (e.currentTarget.style.background = "var(--border)")
-                                }
-                                onMouseLeave={(e) =>
-                                    (e.currentTarget.style.background = isSelected
-                                        ? "var(--border)"
-                                        : "transparent")
-                                }
                             >
-                                <td className="text-primary px-4 py-2 font-bold tracking-tight">
+                                <TableCell className="text-primary px-4 py-2 font-bold tracking-tight">
                                     {f.id}
-                                </td>
-                                <td className="text-muted-foreground px-4 py-2">{f.type}</td>
-                                <td className="text-muted-foreground px-4 py-2 text-base">
+                                </TableCell>
+                                <TableCell className="text-muted-foreground px-4 py-2">
+                                    {f.type}
+                                </TableCell>
+                                <TableCell className="text-muted-foreground px-4 py-2 text-base">
                                     {f.evidence}
-                                </td>
-                                <td
-                                    className="px-4 py-2 text-right"
-                                    style={{
-                                        color:
-                                            f.retry > 0
-                                                ? "var(--warning)"
-                                                : "var(--muted-foreground)",
-                                    }}
+                                </TableCell>
+                                <TableCell
+                                    className={`px-4 py-2 text-right ${f.retry > 0 ? "text-warning" : "text-muted-foreground"}`}
                                 >
                                     {f.retry}
-                                </td>
-                                <td className="px-4 py-2">
+                                </TableCell>
+                                <TableCell className="px-4 py-2">
                                     <span
                                         className="rounded-sm px-1.5 py-px text-base font-semibold tracking-wide"
                                         style={{
@@ -77,11 +81,11 @@ export function ValidationTable({
                                     >
                                         {f.status}
                                     </span>
-                                </td>
-                                <td className="text-muted-foreground px-4 py-2 text-base">
+                                </TableCell>
+                                <TableCell className="text-muted-foreground px-4 py-2 text-base">
                                     {f.oracle}
-                                </td>
-                                <td className="px-4 py-2">
+                                </TableCell>
+                                <TableCell className="px-4 py-2">
                                     <Button
                                         variant="outline"
                                         size="sm"
@@ -93,12 +97,12 @@ export function ValidationTable({
                                     >
                                         DETAIL
                                     </Button>
-                                </td>
-                            </tr>
+                                </TableCell>
+                            </TableRow>
                         );
                     })}
-                </tbody>
-            </table>
+                </TableBody>
+            </Table>
         </div>
     );
 }

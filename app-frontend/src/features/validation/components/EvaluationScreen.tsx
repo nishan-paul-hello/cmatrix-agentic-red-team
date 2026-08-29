@@ -21,22 +21,22 @@ export default function EvaluationScreen({
                 </div>
             </div>
 
-            <div className="max-w-[760px] flex-1 overflow-y-auto px-6 py-6">
+            <div className="max-w-panel-3xl flex-1 overflow-y-auto px-6 py-6">
                 {/* Three labeled blocks */}
                 {[
                     {
                         label: "WHAT HAPPENED",
-                        color: "var(--muted-foreground)",
+                        color: "text-muted-foreground",
                         content: entry.whatHappened,
                     },
                     {
                         label: "EXPECTED VS ACTUAL",
-                        color: "var(--muted-foreground)",
+                        color: "text-muted-foreground",
                         content: entry.expectedVsActual,
                     },
                     {
                         label: "NEXT STEP",
-                        color: "var(--muted-foreground)",
+                        color: "text-muted-foreground",
                         content: entry.nextStep,
                     },
                 ].map((block, i, arr) => (
@@ -99,13 +99,13 @@ export default function EvaluationScreen({
                                     <div
                                         className="h-1.5 w-1.5 rounded-none"
                                         style={{
-                                            border: `1px solid ${i <= VALUE ? "var(--primary)" : "var(--border)"}`,
+                                            border: `1px solid ${i <= VALUE ? "text-primary" : "text-border"}`,
                                             background: (() => {
                                                 if (i < VALUE) {
-                                                    return "var(--primary)";
+                                                    return "text-primary";
                                                 }
                                                 if (i === VALUE) {
-                                                    return "var(--destructive)";
+                                                    return "text-destructive";
                                                 }
                                                 return "transparent";
                                             })(),
@@ -119,7 +119,7 @@ export default function EvaluationScreen({
                                     <div
                                         className="absolute bottom-0 text-xs tracking-normal whitespace-nowrap"
                                         style={{
-                                            color: i === VALUE ? "var(--primary)" : "var(--border)",
+                                            color: i === VALUE ? "text-primary" : "text-border",
                                             transform: (() => {
                                                 if (i === 5) {
                                                     return "translateX(-90%)";

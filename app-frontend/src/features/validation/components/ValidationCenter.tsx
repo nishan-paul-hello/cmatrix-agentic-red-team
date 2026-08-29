@@ -27,22 +27,22 @@ export default function ValidationCenter() {
         {
             label: "PENDING VALIDATION",
             value: "08",
-            color: "var(--warning)",
+            color: "text-warning",
         },
         {
             label: "VALIDATED",
             value: "21",
-            color: "var(--success)",
+            color: "text-success",
         },
         {
             label: "RULED OUT",
             value: "13",
-            color: "var(--muted-foreground)",
+            color: "text-muted-foreground",
         },
         {
             label: "RETRIES",
             value: "17",
-            color: "var(--destructive)",
+            color: "text-destructive",
         },
     ];
     return (

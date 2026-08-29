@@ -58,13 +58,7 @@ export default function OraclePanel({ onClose }: { onClose: () => void }) {
                             {o.oracle}
                         </span>
                         <span
-                            className="rounded-sm px-1.5 py-px text-base font-bold tracking-wide"
-                            style={{
-                                color:
-                                    o.result === "PASS" ? "var(--success)" : "var(--destructive)",
-                                background: o.result === "PASS" ? "var(--border)" : "var(--border)",
-                                border: `1px solid ${o.result === "PASS" ? "var(--border)" : "var(--border)"}`,
-                            }}
+                            className={`rounded-sm border border-solid px-1.5 py-px text-base font-bold tracking-wide ${o.result === "PASS" ? "text-success bg-border border-border" : "text-destructive bg-border border-border"}`}
                         >
                             {o.result}
                         </span>
