@@ -56,49 +56,23 @@ export function EscalationDetailPane({
             </div>
             <div className="mb-6 flex flex-col gap-2">
                 {ESCALATION_CATEGORIES.map((r) => (
-                    <div
+                    <button
+                        type="button"
                         key={r.id}
                         onClick={() => setActiveReason(r.id)}
-                        onKeyDown={(e) => {
-                            if (e.key === "Enter" || e.key === " ") {
-                                setActiveReason(r.id);
-                            }
-                        }}
-                        role="button"
-                        tabIndex={0}
-                        className="cursor-pointer rounded-sm px-3.5 py-2.5"
-                        style={{
-                            border: `1px solid ${activeReason === r.id ? `${r.color}66` : "var(--border)"}`,
-                            background: activeReason === r.id ? "var(--background)" : "transparent",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 12,
-                        }}
-                        onMouseEnter={(e) =>
-                            (e.currentTarget.style.background = "var(--background)")
-                        }
-                        onMouseLeave={(e) =>
-                            (e.currentTarget.style.background =
-                                activeReason === r.id ? "var(--background)" : "transparent")
-                        }
+                        className={`focus:ring-primary hover:bg-background flex w-full cursor-pointer items-center gap-3 rounded-sm border border-solid px-3.5 py-2.5 text-left transition-colors focus:ring-1 focus:outline-none ${activeReason === r.id ? "bg-background" : "border-border bg-transparent"}`}
+                        style={activeReason === r.id ? { borderColor: `${r.color}66` } : undefined}
                     >
                         <div
-                            className="h-2 w-2 shrink-0"
+                            className={`h-2 w-2 shrink-0 rounded-full ${activeReason === r.id ? "" : "bg-transparent"}`}
                             style={{
-                                borderRadius: "50%",
                                 border: `2px solid ${r.color}`,
-                                background: activeReason === r.id ? r.color : "transparent",
+                                backgroundColor: activeReason === r.id ? r.color : undefined,
                             }}
                         />
                         <div className="flex-1">
                             <div
-                                className="text-base font-bold tracking-tight"
-                                style={{
-                                    color:
-                                        activeReason === r.id
-                                            ? "var(--foreground)"
-                                            : "var(--muted-foreground)",
-                                }}
+                                className={`text-base font-bold tracking-tight ${activeReason === r.id ? "text-foreground" : "text-muted-foreground"}`}
                             >
                                 {r.label}
                             </div>
@@ -108,7 +82,7 @@ export function EscalationDetailPane({
                                 </div>
                             )}
                         </div>
-                    </div>
+                    </button>
                 ))}
             </div>
 
@@ -132,12 +106,7 @@ export function EscalationDetailPane({
             {/* Agent question */}
             <div className="text-muted-foreground mb-3 text-sm tracking-widest">AGENT QUESTION</div>
             <div className="border-border bg-background mb-5 rounded-sm border-[1px] border-solid px-4 py-4">
-                <p
-                    className="leading-loose-2 text-muted-foreground text-xs"
-                    style={{
-                        margin: 0,
-                    }}
-                >
+                <p className="leading-loose-2 text-muted-foreground m-0 text-xs">
                     I have confirmed SQL injection in{" "}
                     <span className="text-foreground font-bold">/api/users?id=</span> via time-based
                     blind technique (E_ord 4, CONFIRMED). The next step is full schema extraction
@@ -158,28 +127,13 @@ export function EscalationDetailPane({
                 value={response}
                 onChange={(e) => setResponse(e.target.value)}
                 placeholder="Type your instructions…"
-                className="bg-background text-muted-foreground focus-visible:border-primary min-h-[96px] w-full rounded-sm px-3.5 py-2.5 text-xs leading-loose tracking-tighter shadow-none"
-                style={{
-                    resize: "vertical",
-                    boxSizing: "border-box",
-                }}
+                className="bg-background text-muted-foreground focus-visible:border-primary box-border min-h-[96px] w-full resize-y rounded-sm px-3.5 py-2.5 text-xs leading-loose tracking-tighter shadow-none"
             />
             <div className="mt-4 flex gap-3">
                 <Button
                     onClick={() => response.trim() && handleSubmit("RESPONSE")}
                     disabled={!response.trim() || !canApprove("RESPONSE")}
-                    className="text-foreground h-auto rounded-sm border-none px-5 py-2 text-base tracking-widest"
-                    style={{
-                        background: response.trim() ? "var(--primary)" : "var(--border)",
-                        cursor: response.trim() ? "pointer" : "not-allowed",
-                        transition: "background 0.15s",
-                    }}
-                    onMouseEnter={(e) =>
-                        response.trim() && (e.currentTarget.style.background = "var(--destructive)")
-                    }
-                    onMouseLeave={(e) =>
-                        response.trim() && (e.currentTarget.style.background = "var(--primary)")
-                    }
+                    className={`text-foreground h-auto rounded-sm border-none px-5 py-2 text-base tracking-widest transition-colors duration-150 ${response.trim() ? "bg-primary hover:bg-destructive cursor-pointer" : "bg-border hover:bg-border cursor-not-allowed"}`}
                 >
                     SEND RESPONSE
                 </Button>
