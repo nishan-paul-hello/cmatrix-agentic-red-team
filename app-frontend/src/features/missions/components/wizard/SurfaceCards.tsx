@@ -20,7 +20,7 @@ export default function SurfaceCards({
                         key={opt.value}
                         variant="outline"
                         onClick={() => onChange?.(opt.value)}
-                        className={`h-[160px] flex-1 flex-col items-start justify-start rounded-sm border border-solid px-5 pt-5 pb-4 text-left whitespace-normal transition-colors duration-100 ${selected ? "border-primary bg-muted" : "border-border bg-background hover:border-muted-foreground hover:bg-card"}`}
+                        className={`h-auto min-h-[160px] flex-1 flex-col items-start justify-start rounded-sm border border-solid px-5 pt-5 pb-4 text-left whitespace-normal transition-colors duration-100 ${selected ? "border-primary bg-transparent" : "border-border bg-background hover:border-muted-foreground hover:bg-card"}`}
                     >
                         {/* Selected indicator */}
                         {selected && (
@@ -35,52 +35,46 @@ export default function SurfaceCards({
                                 {opt.icon}
                             </span>
                             <span
-                                className={`text-xs font-bold tracking-widest ${selected ? "text-foreground" : "text-muted-foreground"}`}
+                                className={`text-xs font-bold tracking-widest ${selected ? "text-primary" : "text-muted-foreground"}`}
                             >
                                 {opt.value}
                             </span>
                         </div>
 
                         {/* Protocol */}
-                        <div className="text-border mb-3 text-base font-semibold tracking-widest">
+                        <div className={`mb-3 text-xs font-semibold uppercase tracking-widest ${selected ? "text-primary" : "text-muted-foreground"}`}>
                             {opt.proto}
                         </div>
 
-                        {/* Divider */}
-                        <div className="bg-border mb-3 h-px" />
-
                         {/* Description */}
-                        <div className="leading-normal-2 text-muted-foreground mb-3.5 grow text-base tracking-tight">
+                        <div className="text-muted-foreground mb-4 text-xs leading-relaxed tracking-normal">
                             {opt.description}
                         </div>
 
                         {/* Vuln class tags */}
-                        <div className="mb-4 flex flex-wrap gap-1">
+                        <div className="mb-5 flex flex-wrap gap-1">
                             {opt.tags.map((tag: string) => (
                                 <span
                                     key={tag}
-                                    className={`rounded-sm border border-solid px-1 py-px text-sm tracking-normal whitespace-nowrap ${selected ? "text-primary bg-border border-border" : "text-muted-foreground bg-border border-border"}`}
+                                    className={`rounded-sm border border-solid px-1.5 py-0.5 text-[10px] font-semibold tracking-widest uppercase whitespace-nowrap ${selected ? "border-primary text-primary bg-transparent" : "border-border text-muted-foreground bg-transparent"}`}
                                 >
                                     {tag}
                                 </span>
                             ))}
                         </div>
 
-                        {/* Divider */}
-                        <div className="bg-border mb-2.5 h-px" />
-
                         {/* Specialists */}
-                        <div>
-                            <div className="text-muted-foreground mb-1.5 text-sm tracking-widest">
+                        <div className="mt-auto">
+                            <div className="text-muted-foreground mb-1 text-[10px] font-semibold tracking-widest uppercase">
                                 SPECIALISTS
                             </div>
                             <div className="flex flex-wrap gap-1">
                                 {opt.specialists.map((s: string) => (
                                     <span
                                         key={s}
-                                        className={`text-sm tracking-wide ${selected ? "text-muted-foreground" : "text-border"}`}
+                                        className={`text-[10px] font-semibold tracking-widest uppercase ${selected ? "text-muted-foreground" : "text-muted-foreground/60"}`}
                                     >
-                                        {s}{" "}
+                                        {s}
                                     </span>
                                 ))}
                             </div>

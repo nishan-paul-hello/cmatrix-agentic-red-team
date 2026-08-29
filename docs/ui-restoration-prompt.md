@@ -92,3 +92,7 @@ For each page you process, report:
 - **Radio Groups**: Use `text-xs leading-relaxed` for option descriptions instead of `text-base leading-snug tracking-tight` for a tighter density matching the old UI. — first applied on missions/new
 - **Wizard/Forms**: MetaRow key-value pairs should use `text-xs` for both the uppercase label and the value, instead of `text-sm`, to match the old UI sidebar density. — first applied on missions/new (Step 2)
 - **Wizard/Forms**: Input unit suffixes and prefixes (like `$`, `sec`, `attempts`) should use `text-xs` instead of `text-base` to match the tighter density of their corresponding inputs. — first applied on missions/new (Step 2)
+- **Surface Cards**: Remove internal hairlines/dividers and use transparent backgrounds on tags/chips for a cleaner, denser look. — first applied on missions/new (Step 3)
+- **Surface Cards**: Sub-headers (like protocol or specialists) should use `text-[10px] font-semibold uppercase tracking-widest` rather than `text-sm` or `text-base` for tighter typographic density. — first applied on missions/new (Step 3)
+- **Surface Cards**: The primary title of a selected card should use `text-primary` rather than `text-foreground` to match the old UI's vibrant selected state. — first applied on missions/new (Step 3)
+- **Tags/Chips**: Within dense cards, use `text-[10px] uppercase tracking-widest` rather than `text-sm` for secondary tags, with a tighter `px-1.5 py-0.5` padding. — first applied on missions/new (Step 3)
