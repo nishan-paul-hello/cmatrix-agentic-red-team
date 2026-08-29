@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { getStatusColor } from "@/components/ui/StatusBadge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { type ExecEntry } from "@/types/domain-types";
@@ -26,19 +25,8 @@ export function ExecDrawer({
     >("SUMMARY");
     const sc = getStatusColor(entry.status).color;
     return (
-        <Sheet
-            open
-            onOpenChange={(open) => {
-                if (!open) {
-                    onClose();
-                }
-            }}
-        >
-            <SheetContent
-                side="right"
-                className="bg-background border-border lg:max-w-drawer-lg flex w-full flex-col overflow-hidden border-l p-0"
-            >
-                <div className="border-border flex items-center justify-between border-b px-4 pt-4 pb-3">
+        <div className="bg-background border-border flex w-full lg:w-[480px] xl:w-[560px] flex-col overflow-hidden border-l shrink-0 h-full">
+            <div className="border-border flex items-center justify-between border-b px-4 pt-4 pb-3">
                     <div>
                         <div
                             id="exec-drawer-title"
@@ -117,7 +105,6 @@ export function ExecDrawer({
                         </TabsContent>
                     </div>
                 </Tabs>
-            </SheetContent>
-        </Sheet>
+        </div>
     );
 }

@@ -67,11 +67,11 @@ export default function ExecutionConsoleView({
                     ref={parentRef}
                 >
                     {/* Header row */}
-                    <div className="bg-background border-border sticky top-0 flex min-w-fit gap-0 border-b">
+                    <div className="bg-muted/30 border-border sticky top-0 z-10 flex min-w-fit gap-4 border-b py-1 shadow-sm">
                         {EXECUTION_COLUMNS.map(({ h, w }) => (
                             <div
                                 key={h}
-                                className={`text-muted-foreground shrink-0 px-3 py-1 text-xs font-semibold tracking-widest ${w}`}
+                                className={`text-muted-foreground px-3 py-1 text-xs font-bold uppercase tracking-widest ${w}`}
                             >
                                 {h}
                             </div>
