@@ -219,9 +219,8 @@ export function VDGNodeDrawerLifecycle() {
                     <div key={t.ts} className="flex items-start gap-3">
                         <div className="flex shrink-0 flex-col items-center">
                             <div
-                                className="mt-0.5 h-1.5 w-1.5"
+                                className="mt-0.5 h-1.5 w-1.5 rounded-full"
                                 style={{
-                                    borderRadius: "50%",
                                     border: `1px solid ${t.color}`,
                                     background: i === a.length - 1 ? t.color : "transparent",
                                 }}

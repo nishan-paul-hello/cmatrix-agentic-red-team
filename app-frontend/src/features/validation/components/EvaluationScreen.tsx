@@ -1,3 +1,4 @@
+import { EOrdIndicator } from "@/features/missions/components/workspace/EOrdIndicator";
 import { globalSupervisor, type EvaluationDecision } from "@/features/validation/domain/Supervisor";
 import { EORD_LABELS } from "@/lib/constants";
 
@@ -61,68 +62,20 @@ export default function EvaluationScreen({
                     <div className="text-muted-foreground mb-5 text-sm tracking-widest">
                         EVIDENCE LEVEL INDICATOR
                     </div>
-                    <div className="relative pb-8">
-                        {/* Track */}
-                        <div className="bg-muted absolute top-1.5 right-0 left-0 h-px" />
-                        <div
-                            className="bg-primary absolute top-1.5 left-0 h-px"
-                            style={{
-                                width: `${(VALUE / 5) * 100}%`,
-                            }}
-                        />
-                        {/* Ticks — F3: fix ORACLE (i===5) label overflow */}
-                        <div className="flex justify-between">
-                            {EORD_LABELS.map((lbl, i) => (
-                                <div
-                                    key={lbl}
-                                    className="z-node-base relative flex flex-col items-center"
-                                >
-                                    <div
-                                        className={`h-1.5 w-1.5 rounded-none border border-solid ${i <= VALUE ? "border-primary" : "border-border"} ${(() => {
-                                            if (i < VALUE) {
-                                                return "bg-primary";
-                                            }
-                                            if (i === VALUE) {
-                                                return "bg-destructive";
-                                            }
-                                            return "bg-transparent";
-                                        })()}`}
-                                    />
-                                    {i === VALUE && (
-                                        <div className="text-destructive mt-0.5 text-sm font-bold">
-                                            ▲
-                                        </div>
-                                    )}
-                                    <div
-                                        className={`absolute bottom-0 text-xs tracking-normal whitespace-nowrap ${i === VALUE ? "text-primary" : "text-muted-foreground"}`}
-                                        style={{
-                                            transform: (() => {
-                                                if (i === 5) {
-                                                    return "translateX(-90%)";
-                                                }
-                                                if (i === 0) {
-                                                    return "translateX(-10%)";
-                                                }
-                                                return "translateX(-50%)";
-                                            })(),
-                                            left: `${(i / 5) * 100}%`,
-                                        }}
-                                    >
-                                        {lbl}
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                    <div className="mt-2 flex items-center gap-3">
-                        <span className="text-primary text-xs font-bold tracking-tight">
-                            E_ord {VALUE} — {EORD_LABELS[VALUE]}
-                        </span>
-                        <span className="text-muted-foreground text-base tracking-tight">
-                            Raised from {VALUE - 1} ({EORD_LABELS[VALUE - 1]}) after timing
-                            confirmation
-                        </span>
-                    </div>
+                    <EOrdIndicator
+                        value={VALUE}
+                        caption={
+                            <div className="mt-2 flex items-center gap-3">
+                                <span className="text-primary text-xs font-bold tracking-tight">
+                                    E_ord {VALUE} — {EORD_LABELS[VALUE]}
+                                </span>
+                                <span className="text-muted-foreground text-base tracking-tight">
+                                    Raised from {VALUE - 1} ({EORD_LABELS[VALUE - 1]}) after timing
+                                    confirmation
+                                </span>
+                            </div>
+                        }
+                    />
                 </div>
             </div>
         </div>

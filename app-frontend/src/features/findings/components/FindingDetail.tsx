@@ -160,7 +160,7 @@ export default function FindingDetail({ f, onBack }: { f: Finding; onBack: () =>
                 </div>
             </div>
             <Dialog open={evOpen} onOpenChange={setEvOpen}>
-                <DialogContent className="border-border bg-background flex max-h-[80vh] max-w-[700px] flex-col overflow-hidden p-0">
+                <DialogContent className="border-border bg-background w-panel-3xl sm:max-w-panel-3xl flex max-h-[80vh] max-w-full flex-col overflow-hidden p-0">
                     <DialogHeader className="border-border border-b px-5 py-4">
                         <DialogTitle className="text-foreground text-xs font-bold tracking-normal uppercase">
                             EVIDENCE VIEWER

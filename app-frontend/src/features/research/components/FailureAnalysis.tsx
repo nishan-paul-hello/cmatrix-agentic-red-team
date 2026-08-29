@@ -121,10 +121,7 @@ export default function FailureAnalysis() {
                             (h) => (
                                 <div
                                     key={h}
-                                    className="text-muted-foreground px-3 py-1 text-xs font-semibold tracking-widest"
-                                    style={{
-                                        flex: h === "TYPE" ? 2 : 1,
-                                    }}
+                                    className={`text-muted-foreground px-3 py-1 text-xs font-semibold tracking-widest ${h === "TYPE" ? "flex-[2]" : "flex-1"}`}
                                 >
                                     {h}
                                 </div>

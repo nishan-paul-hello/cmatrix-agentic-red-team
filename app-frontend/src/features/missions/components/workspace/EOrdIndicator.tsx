@@ -2,7 +2,7 @@ import React from "react";
 
 import { EORD_LABELS } from "@/lib/constants";
 
-export function EOrdIndicator({ value }: { value: number }) {
+export function EOrdIndicator({ value, caption }: { value: number; caption?: React.ReactNode }) {
     return (
         <div>
             <div className="relative flex items-end justify-between pb-5">
@@ -39,12 +39,16 @@ export function EOrdIndicator({ value }: { value: number }) {
                     </div>
                 ))}
             </div>
-            <div className="text-muted-foreground mt-1 text-sm tracking-normal">
-                Current:{" "}
-                <span className="text-primary">
-                    E_ord {value} - {EORD_LABELS[value]}
-                </span>
-            </div>
+            {caption !== undefined ? (
+                caption
+            ) : (
+                <div className="text-muted-foreground mt-1 text-sm tracking-normal">
+                    Current:{" "}
+                    <span className="text-primary">
+                        E_ord {value} - {EORD_LABELS[value]}
+                    </span>
+                </div>
+            )}
         </div>
     );
 }

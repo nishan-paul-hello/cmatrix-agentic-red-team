@@ -2,7 +2,6 @@ import React from "react";
 import { type Virtualizer } from "@tanstack/react-virtual";
 
 import { ExecDrawer } from "@/features/execution/components/ExecDrawer";
-import { EXEC_COLUMN_WIDTHS } from "@/features/execution/components/ExecutionConsoleConstants";
 import { ExecutionEntryRow } from "@/features/execution/components/ExecutionEntryRow";
 import { type ExecEntry } from "@/types/domain-types";
 
@@ -67,22 +66,18 @@ export default function ExecutionConsoleView({
                     {/* Header row */}
                     <div className="bg-background border-border sticky top-0 flex min-w-fit gap-0 border-b">
                         {[
-                            "#",
-                            "TIMESTAMP",
-                            "SPECIALIST",
-                            "TASK",
-                            "TOOL",
-                            "DURATION",
-                            "STATUS",
-                            "OUTPUT",
-                        ].map((h, i) => (
+                            { h: "#", w: "w-[48px]" },
+                            { h: "TIMESTAMP", w: "w-[80px]" },
+                            { h: "SPECIALIST", w: "w-[108px]" },
+                            { h: "TASK", w: "w-[160px]" },
+                            { h: "TOOL", w: "w-[72px]" },
+                            { h: "DURATION", w: "w-[64px]" },
+                            { h: "STATUS", w: "w-[72px]" },
+                            { h: "OUTPUT", w: "flex-1" },
+                        ].map(({ h, w }) => (
                             <div
                                 key={h}
-                                className="text-muted-foreground shrink-0 px-3 py-1 text-xs font-semibold tracking-widest"
-                                style={{
-                                    width: EXEC_COLUMN_WIDTHS[i],
-                                    flex: i === 7 ? 1 : undefined,
-                                }}
+                                className={`text-muted-foreground shrink-0 px-3 py-1 text-xs font-semibold tracking-widest ${w}`}
                             >
                                 {h}
                             </div>

@@ -17,7 +17,7 @@ export default function NotFound() {
         <div className="bg-background flex min-h-dvh flex-col items-center justify-center p-6">
             {/* Decorative grid background */}
             <div
-                className="grid-bg-lg pointer-events-none absolute inset-0 z-0 opacity-20"
+                className="grid-bg-lg pointer-events-none absolute inset-0 opacity-20"
                 aria-hidden="true"
             />
 

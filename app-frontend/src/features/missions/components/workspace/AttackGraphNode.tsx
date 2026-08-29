@@ -61,13 +61,7 @@ export function AttackGraphNode<T extends BaseVDGNode>({
                 title="Click to open Attack Graph"
             >
                 {node.status === "ELIGIBLE" && isVis && (
-                    <div
-                        className="border-border node-ring-pulse absolute rounded-xs border-[1px] border-solid"
-                        style={{
-                            inset: -3,
-                            pointerEvents: "none",
-                        }}
-                    />
+                    <div className="border-border node-ring-pulse pointer-events-none absolute -inset-[3px] rounded-xs border-[1px] border-solid" />
                 )}
 
                 <div className="mb-1.5 flex items-center justify-between">
@@ -145,13 +139,7 @@ export function AttackGraphNode<T extends BaseVDGNode>({
             }}
         >
             {node.status === "ELIGIBLE" && isVis && (
-                <div
-                    className="border-border node-ring-pulse absolute rounded-xs border-[1px] border-solid"
-                    style={{
-                        inset: -4,
-                        pointerEvents: "none",
-                    }}
-                />
+                <div className="border-border node-ring-pulse pointer-events-none absolute -inset-[4px] rounded-xs border-[1px] border-solid" />
             )}
             <div className="mb-1 flex w-full items-center justify-between px-3 pt-2">
                 <span

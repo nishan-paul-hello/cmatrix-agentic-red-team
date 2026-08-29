@@ -4,8 +4,6 @@ import { getStatusColor } from "@/components/ui/StatusBadge";
 import { formatCommand } from "@/features/execution/domain/TaskCommand";
 import { type ExecEntry } from "@/types/domain-types";
 
-import { EXEC_COLUMN_WIDTHS } from "./ExecutionConsoleConstants";
-
 export const ExecutionEntryRow = React.memo(function ExecutionEntryRowInner({
     e,
     onClick,
@@ -22,43 +20,25 @@ export const ExecutionEntryRow = React.memo(function ExecutionEntryRowInner({
                 onClick();
             }}
         >
-            <div
-                className="text-muted-foreground shrink-0 px-3 py-1.5 text-base"
-                style={{ width: EXEC_COLUMN_WIDTHS[0] }}
-            >
+            <div className="text-muted-foreground w-[48px] shrink-0 px-3 py-1.5 text-base">
                 {e.id}
             </div>
-            <div
-                className="text-muted-foreground shrink-0 px-3 py-1.5 text-base tracking-tighter"
-                style={{ width: EXEC_COLUMN_WIDTHS[1] }}
-            >
+            <div className="text-muted-foreground w-[80px] shrink-0 px-3 py-1.5 text-base tracking-tighter">
                 {e.ts}
             </div>
-            <div
-                className="text-primary shrink-0 px-3 py-1.5 text-base font-semibold tracking-tight"
-                style={{ width: EXEC_COLUMN_WIDTHS[2] }}
-            >
+            <div className="text-primary w-[108px] shrink-0 px-3 py-1.5 text-base font-semibold tracking-tight">
                 {e.specialist}
             </div>
-            <div
-                className="text-muted-foreground shrink-0 overflow-hidden px-3 py-1.5 text-base tracking-tighter text-ellipsis whitespace-nowrap"
-                style={{ width: EXEC_COLUMN_WIDTHS[3] }}
-            >
+            <div className="text-muted-foreground w-[160px] shrink-0 overflow-hidden px-3 py-1.5 text-base tracking-tighter text-ellipsis whitespace-nowrap">
                 {formatCommand(e.command)}
             </div>
-            <div
-                className="text-muted-foreground shrink-0 px-3 py-1.5 text-base"
-                style={{ width: EXEC_COLUMN_WIDTHS[4] }}
-            >
+            <div className="text-muted-foreground w-[72px] shrink-0 px-3 py-1.5 text-base">
                 {e.command.tool.id}
             </div>
-            <div
-                className="text-muted-foreground shrink-0 px-3 py-1.5 text-right text-base"
-                style={{ width: EXEC_COLUMN_WIDTHS[5] }}
-            >
+            <div className="text-muted-foreground w-[64px] shrink-0 px-3 py-1.5 text-right text-base">
                 {e.duration}
             </div>
-            <div className="shrink-0 px-3 py-1.5" style={{ width: EXEC_COLUMN_WIDTHS[6] }}>
+            <div className="w-[72px] shrink-0 px-3 py-1.5">
                 <span
                     className="text-sm font-semibold tracking-normal"
                     style={{
