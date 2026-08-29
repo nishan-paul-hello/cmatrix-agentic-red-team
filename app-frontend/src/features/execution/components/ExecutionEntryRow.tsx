@@ -4,15 +4,18 @@ import { getStatusColor } from "@/components/ui/StatusBadge";
 import { formatCommand } from "@/features/execution/domain/TaskCommand";
 import { type ExecEntry } from "@/types/domain-types";
 
+export const gridTemplateColumns =
+    "84px 80px minmax(100px, 1.5fr) minmax(140px, 2.5fr) minmax(80px, 1fr) 80px 80px minmax(150px, 3fr)";
+
 export const EXECUTION_COLUMNS = [
-    { h: "#", w: "w-[84px] shrink-0" },
-    { h: "TIMESTAMP", w: "w-[80px] shrink-0" },
-    { h: "SPECIALIST", w: "flex-[1] min-w-[100px]" },
-    { h: "TASK", w: "flex-[2] min-w-[140px]" },
-    { h: "TOOL", w: "flex-[1] min-w-[80px]" },
-    { h: "DURATION", w: "w-[80px] shrink-0" },
-    { h: "STATUS", w: "w-[80px] shrink-0" },
-    { h: "OUTPUT", w: "flex-[3] min-w-[150px]" },
+    { h: "#" },
+    { h: "TIMESTAMP" },
+    { h: "SPECIALIST" },
+    { h: "TASK" },
+    { h: "TOOL" },
+    { h: "DURATION" },
+    { h: "STATUS" },
+    { h: "OUTPUT" },
 ] as const;
 
 export const ExecutionEntryRow = React.memo(function ExecutionEntryRowInner({
@@ -25,43 +28,32 @@ export const ExecutionEntryRow = React.memo(function ExecutionEntryRowInner({
     return (
         <button
             type="button"
-            className="border-border focus:ring-primary hover:bg-background flex w-full min-w-fit cursor-pointer items-start gap-4 border-b text-left transition-colors focus:ring-1 focus:outline-none"
+            className="border-border focus:ring-primary hover:bg-background grid w-full min-w-fit cursor-pointer items-start gap-4 border-b text-left transition-colors focus:ring-1 focus:outline-none"
+            style={{ gridTemplateColumns }}
             onClick={(ev) => {
                 ev.stopPropagation();
                 onClick();
             }}
         >
-            <div
-                className={`text-muted-foreground px-3 py-1.5 text-base ${EXECUTION_COLUMNS[0].w}`}
-            >
+            <div className="text-muted-foreground truncate px-3 py-1.5 text-base">
                 {e.id}
             </div>
-            <div
-                className={`text-muted-foreground px-3 py-1.5 text-base tracking-tighter ${EXECUTION_COLUMNS[1].w}`}
-            >
+            <div className="text-muted-foreground truncate px-3 py-1.5 text-base tracking-tighter">
                 {e.ts}
             </div>
-            <div
-                className={`text-primary overflow-hidden px-3 py-1.5 text-base font-semibold tracking-tight text-ellipsis whitespace-nowrap ${EXECUTION_COLUMNS[2].w}`}
-            >
+            <div className="text-primary truncate px-3 py-1.5 text-base font-semibold tracking-tight">
                 {e.specialist}
             </div>
-            <div
-                className={`text-muted-foreground overflow-hidden px-3 py-1.5 text-base tracking-tighter text-ellipsis whitespace-nowrap ${EXECUTION_COLUMNS[3].w}`}
-            >
+            <div className="text-muted-foreground truncate px-3 py-1.5 text-base tracking-tighter">
                 {formatCommand(e.command)}
             </div>
-            <div
-                className={`text-muted-foreground overflow-hidden px-3 py-1.5 text-base text-ellipsis whitespace-nowrap ${EXECUTION_COLUMNS[4].w}`}
-            >
+            <div className="text-muted-foreground truncate px-3 py-1.5 text-base">
                 {e.command.tool.id}
             </div>
-            <div
-                className={`text-muted-foreground px-3 py-1.5 text-right text-base ${EXECUTION_COLUMNS[5].w}`}
-            >
+            <div className="text-muted-foreground truncate px-3 py-1.5 text-right text-base">
                 {e.duration}
             </div>
-            <div className={`px-3 py-1.5 ${EXECUTION_COLUMNS[6].w}`}>
+            <div className="truncate px-3 py-1.5">
                 <span
                     className="text-sm font-semibold tracking-normal"
                     style={{
@@ -71,9 +63,7 @@ export const ExecutionEntryRow = React.memo(function ExecutionEntryRowInner({
                     {e.status}
                 </span>
             </div>
-            <div
-                className={`text-muted-foreground overflow-hidden px-3 py-1.5 text-base leading-tight tracking-tighter text-ellipsis whitespace-nowrap ${EXECUTION_COLUMNS[7].w}`}
-            >
+            <div className="text-muted-foreground truncate px-3 py-1.5 text-base leading-tight tracking-tighter">
                 {e.output || <span className="text-muted-foreground">IN PROGRESS…</span>}
             </div>
         </button>

@@ -5,6 +5,7 @@ import { ExecDrawer } from "@/features/execution/components/ExecDrawer";
 import {
     EXECUTION_COLUMNS,
     ExecutionEntryRow,
+    gridTemplateColumns,
 } from "@/features/execution/components/ExecutionEntryRow";
 import { type ExecEntry } from "@/types/domain-types";
 
@@ -67,11 +68,14 @@ export default function ExecutionConsoleView({
                     ref={parentRef}
                 >
                     {/* Header row */}
-                    <div className="bg-muted/30 border-border sticky top-0 z-10 flex min-w-fit gap-4 border-b py-1 shadow-sm">
-                        {EXECUTION_COLUMNS.map(({ h, w }) => (
+                    <div
+                        className="bg-muted/30 border-border sticky top-0 z-10 grid min-w-fit gap-4 border-b py-1 shadow-sm"
+                        style={{ gridTemplateColumns }}
+                    >
+                        {EXECUTION_COLUMNS.map(({ h }) => (
                             <div
                                 key={h}
-                                className={`text-muted-foreground px-3 py-1 text-xs font-bold uppercase tracking-widest ${w}`}
+                                className="text-muted-foreground truncate px-3 py-1 text-xs font-bold uppercase tracking-widest"
                             >
                                 {h}
                             </div>
