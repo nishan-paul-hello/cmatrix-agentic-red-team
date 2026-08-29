@@ -1,11 +1,8 @@
 "use client";
 
 import React from "react";
-import { Toggle as TogglePrimitive } from "@base-ui/react/toggle";
-import { ToggleGroup as ToggleGroupPrimitive } from "@base-ui/react/toggle-group";
 
-import { toggleVariants } from "@/components/ui/toggle";
-import { cn } from "@/lib/utils";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
 export function Chips({
     options,
@@ -17,7 +14,7 @@ export function Chips({
     onChange?: (v: string) => void;
 }) {
     return (
-        <ToggleGroupPrimitive
+        <ToggleGroup
             multiple={false}
             value={value ? [value] : []}
             onValueChange={(values) => {
@@ -26,20 +23,19 @@ export function Chips({
                     onChange?.(next);
                 }
             }}
+            variant="outline"
+            size="sm"
             className="flex flex-wrap gap-2"
         >
             {options.map((o) => (
-                <TogglePrimitive
+                <ToggleGroupItem
                     key={o}
                     value={o}
-                    className={cn(
-                        toggleVariants({ variant: "outline", size: "sm" }),
-                        "data-[state=on]:border-primary data-[state=on]:text-destructive text-xs tracking-wide uppercase",
-                    )}
+                    className="data-[state=on]:border-primary data-[state=on]:text-destructive text-xs tracking-wide uppercase"
                 >
                     {o}
-                </TogglePrimitive>
+                </ToggleGroupItem>
             ))}
-        </ToggleGroupPrimitive>
+        </ToggleGroup>
     );
 }
