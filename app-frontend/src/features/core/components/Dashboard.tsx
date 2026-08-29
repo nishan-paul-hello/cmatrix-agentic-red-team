@@ -141,13 +141,13 @@ export default function Dashboard({ onNewMission, onOpenMission }: DashboardProp
                     </div>
 
                     <div className="flex-1 overflow-auto">
-                        <Table className="w-full border-collapse text-xs">
+                        <Table className="w-full border-collapse text-2xs">
                             <TableHeader>
                                 <TableRow className="bg-card">
                                     {TABLE_HEADERS.map((h) => (
                                         <TableHead
                                             key={h}
-                                            className="border-border text-muted-foreground border-b px-4 py-1.5 text-left text-sm font-semibold tracking-widest whitespace-nowrap"
+                                            className="border-border text-muted-foreground border-b px-4 py-1 text-left text-2xs font-semibold tracking-widest whitespace-nowrap"
                                         >
                                             {h}
                                         </TableHead>
@@ -180,39 +180,39 @@ export default function Dashboard({ onNewMission, onOpenMission }: DashboardProp
                                             onClick={() => handleOpenMission(m.id)}
                                             className="border-border hover:bg-muted cursor-pointer border-b transition-colors duration-75"
                                         >
-                                            <TableCell className="text-primary px-4 py-2 font-semibold tracking-tight whitespace-nowrap">
+                                            <TableCell className="text-primary px-4 py-1.5 font-semibold tracking-tight whitespace-nowrap">
                                                 {m.id}
                                             </TableCell>
-                                            <TableCell className="cell-truncate text-muted-foreground max-w-cell-max px-4 py-2 whitespace-nowrap">
+                                            <TableCell className="cell-truncate text-muted-foreground max-w-cell-max px-4 py-1.5 whitespace-nowrap">
                                                 {m.target}
                                             </TableCell>
-                                            <TableCell className="text-muted-foreground px-4 py-2 text-xs whitespace-nowrap">
+                                            <TableCell className="text-muted-foreground px-4 py-1.5 text-2xs whitespace-nowrap">
                                                 {m.surface}
                                             </TableCell>
-                                            <TableCell className="text-muted-foreground px-4 py-2 text-xs whitespace-nowrap">
+                                            <TableCell className="text-muted-foreground px-4 py-1.5 text-2xs whitespace-nowrap">
                                                 {m.mode}
                                             </TableCell>
-                                            <TableCell className="px-4 py-2 whitespace-nowrap">
+                                            <TableCell className="px-4 py-1.5 whitespace-nowrap">
                                                 <StatusBadge status={m.status} />
                                             </TableCell>
-                                            <TableCell className="text-muted-foreground px-4 py-2 text-right">
+                                            <TableCell className="text-muted-foreground px-4 py-1.5 text-right">
                                                 {m.nodes}
                                             </TableCell>
                                             <TableCell
-                                                className={`px-4 py-2 text-right ${m.findings > 0 ? "text-destructive font-semibold" : "text-muted-foreground font-normal"}`}
+                                                className={`px-4 py-1.5 text-right ${m.findings > 0 ? "text-destructive font-semibold" : "text-muted-foreground font-normal"}`}
                                             >
                                                 {m.findings}
                                             </TableCell>
-                                            <TableCell className="text-muted-foreground px-4 py-2 text-right">
+                                            <TableCell className="text-muted-foreground px-4 py-1.5 text-right">
                                                 {m.cost}
                                             </TableCell>
-                                            <TableCell className="text-muted-foreground px-4 py-2 text-center">
+                                            <TableCell className="text-muted-foreground px-4 py-1.5 text-center">
                                                 {orchestrators[m.id].hasActiveWorkers() ? (
-                                                    <span className="text-success text-base font-semibold tracking-normal">
+                                                    <span className="text-success text-xs font-semibold tracking-normal">
                                                         ACTIVE
                                                     </span>
                                                 ) : (
-                                                    <span className="text-muted-foreground text-base tracking-normal">
+                                                    <span className="text-muted-foreground text-xs tracking-normal">
                                                         IDLE
                                                     </span>
                                                 )}
@@ -244,26 +244,26 @@ export default function Dashboard({ onNewMission, onOpenMission }: DashboardProp
                         aria-label="Live agent activity feed"
                     >
                         {activity.map((entry) => (
-                            <div key={entry.id} className="border-border border-b px-4 py-2">
+                            <div key={entry.id} className="border-border border-b px-4 py-1.5">
                                 <div className="mb-0.5 flex items-center gap-2">
-                                    <span className="text-muted-foreground shrink-0 text-base tracking-tight">
+                                    <span className="text-muted-foreground shrink-0 text-xs tracking-tight">
                                         {entry.ts}
                                     </span>
-                                    <span className="text-primary text-base font-semibold tracking-normal">
+                                    <span className="text-primary text-xs font-semibold tracking-normal">
                                         {entry.agent}
                                     </span>
                                     <span
-                                        className="text-muted-foreground text-base tracking-normal"
+                                        className="text-muted-foreground text-xs tracking-normal"
                                         aria-hidden="true"
                                     >
                                         ·
                                     </span>
-                                    <span className="text-muted-foreground text-base tracking-normal">
+                                    <span className="text-muted-foreground text-xs tracking-normal">
                                         {entry.action}
                                     </span>
                                 </div>
                                 <div
-                                    className="text-xs leading-tight tracking-tighter"
+                                    className="text-2xs leading-tight tracking-tighter"
                                     style={{ color: entry.color }}
                                 >
                                     {entry.desc}

@@ -3,6 +3,12 @@
 @import "shadcn/tailwind.css";
 
 @theme inline {
+    --text-3xs: 0.55rem;
+    --text-3xs--line-height: 0.75rem;
+    --text-2xs: 0.625rem;
+    --text-2xs--line-height: 0.875rem;
+    --text-metric: 1.5rem;
+    --text-metric--line-height: 1.75rem;
     --font-mono: var(--font-mono);
     --font-heading: var(--font-sans);
     --font-sans: var(--font-sans);

@@ -66,7 +66,7 @@ export default function RootLayout({
              * dark-mode detection, causing a harmless mismatch on first hydration.
              */}
             <body suppressHydrationWarning>
-                <div className="bg-background mx-auto min-h-dvh max-w-[1400px]">
+                <div className="bg-background mx-auto min-h-dvh w-full">
                     <ServicesProvider>
                         <AuthProvider>
                             <TooltipProvider>{children}</TooltipProvider>
