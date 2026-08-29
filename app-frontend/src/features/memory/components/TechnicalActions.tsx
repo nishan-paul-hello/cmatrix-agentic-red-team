@@ -1,6 +1,14 @@
 import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
 import { MemoryRepository } from "@/features/memory/data/MemoryRepository";
 import { TASK_STATUS, type ActionEntry } from "@/types/domain-types";
 
@@ -20,17 +28,17 @@ export default function TechnicalActions() {
 
     const sel = ACTIONS.find((a) => a.id === selId) ?? ACTIONS[0];
     const sc: Record<string, string> = {
-        [TASK_STATUS.SUCCESS]: "var(--success)",
-        [TASK_STATUS.TIMEOUT]: "var(--warning)",
-        [TASK_STATUS.FAILED]: "var(--destructive)",
-        [TASK_STATUS.RUNNING]: "var(--primary)",
+        [TASK_STATUS.SUCCESS]: "text-success",
+        [TASK_STATUS.TIMEOUT]: "text-warning",
+        [TASK_STATUS.FAILED]: "text-destructive",
+        [TASK_STATUS.RUNNING]: "text-primary",
     };
     return (
         <div className="flex min-h-0 flex-1 overflow-hidden">
             <div className="flex-1 overflow-y-auto">
-                <table className="w-full border-collapse text-xs">
-                    <thead>
-                        <tr className="bg-card sticky top-0">
+                <Table className="w-full border-collapse text-xs">
+                    <TableHeader>
+                        <TableRow className="bg-card sticky top-0">
                             {[
                                 "ID",
                                 "TIME",
@@ -41,73 +49,56 @@ export default function TechnicalActions() {
                                 "E_ORD",
                                 "STATUS",
                             ].map((h) => (
-                                <th
+                                <TableHead
                                     key={h}
                                     className="text-muted-foreground border-border border-b px-3 py-1.5 text-left text-xs font-semibold tracking-widest whitespace-nowrap"
                                 >
                                     {h}
-                                </th>
+                                </TableHead>
                             ))}
-                        </tr>
-                    </thead>
-                    <tbody>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
                         {ACTIONS.map((a: ActionEntry) => (
-                            <tr
+                            <TableRow
                                 key={a.id}
                                 onClick={() => setSelId(a.id)}
-                                className="border-border cursor-pointer border-b"
-                                onMouseEnter={(e) =>
-                                    (e.currentTarget.style.background = "var(--background)")
-                                }
-                                onMouseLeave={(e) =>
-                                    (e.currentTarget.style.background = "transparent")
-                                }
+                                className="border-border hover:bg-background cursor-pointer border-b transition-colors"
                             >
-                                <td className="text-muted-foreground px-3 py-1.5 text-base">
+                                <TableCell className="text-muted-foreground px-3 py-1.5 text-base">
                                     {a.id}
-                                </td>
-                                <td className="text-muted-foreground px-3 py-1.5 text-base">
+                                </TableCell>
+                                <TableCell className="text-muted-foreground px-3 py-1.5 text-base">
                                     {a.ts}
-                                </td>
-                                <td className="text-primary px-3 py-1.5 text-base font-bold tracking-tight">
+                                </TableCell>
+                                <TableCell className="text-primary px-3 py-1.5 text-base font-bold tracking-tight">
                                     {a.spec}
-                                </td>
-                                <td className="font-inherit text-muted-foreground px-3 py-1.5 text-base">
+                                </TableCell>
+                                <TableCell className="font-inherit text-muted-foreground px-3 py-1.5 text-base">
                                     {a.action}
-                                </td>
-                                <td className="text-muted-foreground px-3 py-1.5 text-base">
+                                </TableCell>
+                                <TableCell className="text-muted-foreground px-3 py-1.5 text-base">
                                     {a.tool}
-                                </td>
-                                <td
-                                    className="text-muted-foreground max-w-[240px] overflow-hidden px-3 py-1.5 text-base whitespace-nowrap"
-                                    style={{
-                                        textOverflow: "ellipsis",
-                                    }}
-                                >
+                                </TableCell>
+                                <TableCell className="text-muted-foreground max-w-[var(--width-panel-sm)] overflow-hidden px-3 py-1.5 text-base text-ellipsis whitespace-nowrap">
                                     {a.result}
-                                </td>
-                                <td
-                                    className="px-3 py-1.5 text-base font-semibold"
-                                    style={{
-                                        color: a.eord !== "—" ? "var(--success)" : "var(--border)",
-                                    }}
+                                </TableCell>
+                                <TableCell
+                                    className={`px-3 py-1.5 text-base font-semibold ${a.eord !== "—" ? "text-success" : "text-border"}`}
                                 >
                                     {a.eord}
-                                </td>
-                                <td className="px-3 py-1.5">
+                                </TableCell>
+                                <TableCell className="px-3 py-1.5">
                                     <span
-                                        className="text-sm font-semibold tracking-normal"
-                                        style={{
-                                            color: sc[a.status] ?? "var(--muted-foreground)",
-                                        }}
+                                        className={`text-sm font-semibold tracking-normal ${sc[a.status] ?? "text-muted-foreground"}`}
                                     >
                                         {a.status}
                                     </span>
-                                </td>
-                            </tr>
+                                </TableCell>
+                            </TableRow>
                         ))}
-                    </tbody>
-                </table>
+                    </TableBody>
+                </Table>
             </div>
             <div className="bg-background border-border flex w-[var(--width-drawer-md)] flex-shrink-0 flex-col overflow-y-auto border-l">
                 <div className="border-border flex items-start justify-between border-b px-4 pt-4 pb-3">
@@ -169,12 +160,7 @@ export default function TechnicalActions() {
                                 {r.k}
                             </div>
                             <div
-                                className="text-xs leading-normal"
-                                style={{
-                                    color:
-                                        r.col ??
-                                        (r.red ? "var(--success)" : "var(--muted-foreground)"),
-                                }}
+                                className={`text-xs leading-normal ${r.col?.replace("var(--", "text-").replace(")", "") ?? (r.red ? "text-success" : "text-muted-foreground")}`}
                             >
                                 {r.v}
                             </div>

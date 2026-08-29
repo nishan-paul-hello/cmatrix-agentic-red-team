@@ -26,27 +26,11 @@ export default function VulnPatterns() {
                     {PATTERNS.length} PATTERNS
                 </div>
                 {PATTERNS.map((p) => (
-                    <div
+                    <button
+                        type="button"
                         key={p.id}
-                        role="button"
-                        tabIndex={0}
                         onClick={() => setSelId(p.id)}
-                        onKeyDown={(e) => {
-                            if (e.key === "Enter" || e.key === " ") {
-                                setSelId(p.id);
-                            }
-                        }}
-                        className="border-border cursor-pointer border-b px-4 py-3"
-                        onMouseEnter={(e) => {
-                            if (sel.id !== p.id) {
-                                e.currentTarget.style.background = "var(--background)";
-                            }
-                        }}
-                        onMouseLeave={(e) => {
-                            if (sel.id !== p.id) {
-                                e.currentTarget.style.background = "transparent";
-                            }
-                        }}
+                        className={`border-border focus:ring-primary hover:bg-background block w-full cursor-pointer border-b px-4 py-3 text-left transition-colors focus:ring-1 focus:outline-none ${sel.id === p.id ? "bg-background" : "bg-transparent"}`}
                     >
                         <div className="mb-1 flex justify-between">
                             <span className="text-primary text-xs font-bold tracking-tight">
@@ -58,11 +42,11 @@ export default function VulnPatterns() {
                         <div className="text-muted-foreground text-sm">{p.subtype}</div>
                         <div className="mt-2 flex gap-3">
                             <span className="text-muted-foreground text-xs tracking-normal">
-                                ×{p.uses} USES
+                                x{p.uses} USES
                             </span>
                             <span className="text-muted-foreground text-xs">{p.lastSeen}</span>
                         </div>
-                    </div>
+                    </button>
                 ))}
             </div>
             <div className="flex-1 overflow-y-auto px-6 py-5">
@@ -95,10 +79,7 @@ export default function VulnPatterns() {
                                 {m.k}
                             </div>
                             <div
-                                className="text-base font-bold"
-                                style={{
-                                    color: m.red ? "var(--primary)" : "var(--foreground)",
-                                }}
+                                className={`text-base font-bold ${m.red ? "text-primary" : "text-foreground"}`}
                             >
                                 {m.v}
                             </div>
@@ -108,15 +89,7 @@ export default function VulnPatterns() {
                 <Sub label="TECHNIQUE SEQUENCE">
                     {sel.techniques.map((t: string, i: number) => (
                         <div key={t} className="mb-2 flex items-center gap-3">
-                            <div
-                                className="border-border h-4 w-4 shrink-0 border-[1px] border-solid"
-                                style={{
-                                    borderRadius: "50%",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                }}
-                            >
+                            <div className="border-border flex h-4 w-4 shrink-0 items-center justify-center rounded-full border-[1px] border-solid">
                                 <span className="text-muted-foreground text-xs">{i + 1}</span>
                             </div>
                             <span className="text-muted-foreground text-xs">{t}</span>
@@ -126,12 +99,7 @@ export default function VulnPatterns() {
                 <Sub label="DETECTION INDICATORS">
                     {sel.indicators.map((ind: string) => (
                         <div key={ind} className="mb-2 flex items-center gap-2">
-                            <div
-                                className="bg-primary h-1 w-1 shrink-0"
-                                style={{
-                                    borderRadius: "50%",
-                                }}
-                            />
+                            <div className="bg-primary h-1 w-1 shrink-0 rounded-full" />
                             <span className="text-muted-foreground text-xs">{ind}</span>
                         </div>
                     ))}
@@ -146,14 +114,7 @@ export default function VulnPatterns() {
                             <div key={ev.ts} className="flex items-start gap-3">
                                 <div className="flex shrink-0 flex-col items-center">
                                     <div
-                                        className="border-primary mt-0.5 h-1.5 w-1.5 border-[1px] border-solid"
-                                        style={{
-                                            borderRadius: "50%",
-                                            background:
-                                                i === a.length - 1
-                                                    ? "var(--primary)"
-                                                    : "transparent",
-                                        }}
+                                        className={`border-primary mt-0.5 h-1.5 w-1.5 rounded-full border-[1px] border-solid ${i === a.length - 1 ? "bg-primary" : "bg-transparent"}`}
                                     />
                                     {i < a.length - 1 && <div className="bg-muted h-5 w-px" />}
                                 </div>

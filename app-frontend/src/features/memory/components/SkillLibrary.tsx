@@ -26,36 +26,17 @@ export default function SkillLibrary() {
                     <Input
                         value={filter}
                         onChange={(e) => setFilter(e.target.value)}
-                        placeholder="FILTER SKILLS…"
-                        className="bg-card text-muted-foreground focus-visible:border-primary h-auto w-full rounded-sm px-2 py-1 text-base tracking-tight shadow-none"
-                        style={{
-                            boxSizing: "border-box",
-                        }}
+                        placeholder="FILTER SKILLS..."
+                        className="bg-card text-muted-foreground focus-visible:border-primary box-border h-auto w-full rounded-sm px-2 py-1 text-base tracking-tight shadow-none"
                     />
                 </div>
                 <div className="flex-1 overflow-y-auto">
                     {filtered.map((sk) => (
-                        <div
+                        <button
+                            type="button"
                             key={sk.id}
-                            role="button"
-                            tabIndex={0}
                             onClick={() => setSelId(sk.id)}
-                            onKeyDown={(e) => {
-                                if (e.key === "Enter" || e.key === " ") {
-                                    setSelId(sk.id);
-                                }
-                            }}
-                            className="border-border cursor-pointer border-b px-3.5 py-2.5"
-                            onMouseEnter={(e) => {
-                                if (sel.id !== sk.id) {
-                                    e.currentTarget.style.background = "var(--background)";
-                                }
-                            }}
-                            onMouseLeave={(e) => {
-                                if (sel.id !== sk.id) {
-                                    e.currentTarget.style.background = "transparent";
-                                }
-                            }}
+                            className={`border-border focus:ring-primary hover:bg-background block w-full cursor-pointer border-b px-3.5 py-2.5 text-left transition-colors focus:ring-1 focus:outline-none ${sel.id === sk.id ? "bg-background" : "bg-transparent"}`}
                         >
                             <div className="font-inherit text-muted-foreground mb-0.5 text-xs font-bold tracking-tight">
                                 {sk.name}()
@@ -68,7 +49,7 @@ export default function SkillLibrary() {
                                     {sk.success}/{sk.calls} OK
                                 </span>
                             </div>
-                        </div>
+                        </button>
                     ))}
                 </div>
             </div>
@@ -88,14 +69,7 @@ export default function SkillLibrary() {
                     </span>
                 </div>
                 <Sub label="DESCRIPTION">
-                    <p
-                        className="text-muted-foreground text-xs leading-loose"
-                        style={{
-                            margin: 0,
-                        }}
-                    >
-                        {sel.desc}
-                    </p>
+                    <p className="text-muted-foreground m-0 text-xs leading-loose">{sel.desc}</p>
                 </Sub>
                 <Sub label="PARAMETERS">
                     <div className="border-border overflow-hidden rounded-sm border-[1px] border-solid">
@@ -143,18 +117,15 @@ export default function SkillLibrary() {
                                     {m.k}
                                 </div>
                                 <div
-                                    className="text-sm font-bold"
-                                    style={{
-                                        color: (() => {
-                                            if (m.k === "SUCCESS") {
-                                                return "var(--success)";
-                                            }
-                                            if (m.k === "E_ORD DELTA") {
-                                                return "var(--primary)";
-                                            }
-                                            return "var(--foreground)";
-                                        })(),
-                                    }}
+                                    className={`text-sm font-bold ${(() => {
+                                        if (m.k === "SUCCESS") {
+                                            return "text-success";
+                                        }
+                                        if (m.k === "E_ORD DELTA") {
+                                            return "text-primary";
+                                        }
+                                        return "text-foreground";
+                                    })()}`}
                                 >
                                     {m.v}
                                 </div>

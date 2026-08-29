@@ -9,15 +9,15 @@ export default function FailureMemory() {
     const failures: FailureLogEntry[] = blackboard.readFailures();
     const [selId, setSelId] = useState<string | null>(null);
     const tc: Record<string, string> = {
-        TIMEOUT: "var(--warning)",
-        FAILED: "var(--destructive)",
-        ERROR: "var(--destructive)",
+        TIMEOUT: "text-warning",
+        FAILED: "text-destructive",
+        ERROR: "text-destructive",
     };
     const sc: Record<string, string> = {
-        LOW: "var(--muted-foreground)",
-        MEDIUM: "var(--warning)",
-        HIGH: "var(--destructive)",
-        CRITICAL: "var(--destructive)",
+        LOW: "text-muted-foreground",
+        MEDIUM: "text-warning",
+        HIGH: "text-destructive",
+        CRITICAL: "text-destructive",
     };
     const sel = (selId ? failures.find((f) => f.id === selId) : failures[0]) ?? null;
     return (
@@ -34,27 +34,11 @@ export default function FailureMemory() {
                     ]}
                 />
                 {failures.map((f) => (
-                    <div
+                    <button
+                        type="button"
                         key={f.id}
-                        role="button"
-                        tabIndex={0}
                         onClick={() => setSelId(f.id === selId ? null : f.id)}
-                        onKeyDown={(e) => {
-                            if (e.key === "Enter" || e.key === " ") {
-                                setSelId(f.id === selId ? null : f.id);
-                            }
-                        }}
-                        className="border-border mb-2.5 cursor-pointer rounded-sm border-[1px] border-solid"
-                        style={{
-                            background: sel?.id === f.id ? "var(--background)" : "transparent",
-                        }}
-                        onMouseEnter={(e) =>
-                            (e.currentTarget.style.background = "var(--background)")
-                        }
-                        onMouseLeave={(e) =>
-                            (e.currentTarget.style.background =
-                                sel?.id === f.id ? "var(--background)" : "transparent")
-                        }
+                        className={`border-border focus:ring-primary hover:bg-background mb-2.5 block w-full cursor-pointer rounded-sm border-[1px] border-solid text-left transition-colors focus:ring-1 focus:outline-none ${sel?.id === f.id ? "bg-background" : "bg-transparent"}`}
                     >
                         <div className="border-border flex items-center gap-3 border-b px-4 py-3">
                             <span className="text-primary text-base font-bold tracking-normal">
@@ -62,18 +46,12 @@ export default function FailureMemory() {
                             </span>
                             <span className="text-muted-foreground text-sm">{f.action}</span>
                             <span
-                                className="ml-auto text-sm font-semibold tracking-wide"
-                                style={{
-                                    color: tc[f.type] ?? "var(--muted-foreground)",
-                                }}
+                                className={`ml-auto text-sm font-semibold tracking-wide ${tc[f.type] ?? "text-muted-foreground"}`}
                             >
                                 {f.type}
                             </span>
                             <span
-                                className="text-sm font-semibold tracking-normal"
-                                style={{
-                                    color: sc[f.severity],
-                                }}
+                                className={`text-sm font-semibold tracking-normal ${sc[f.severity]}`}
                             >
                                 {f.severity}
                             </span>
@@ -93,12 +71,7 @@ export default function FailureMemory() {
                                     RESOLUTION ·{" "}
                                 </span>
                                 <span
-                                    className="text-base leading-relaxed"
-                                    style={{
-                                        color: f.correctable
-                                            ? "var(--success)"
-                                            : "var(--muted-foreground)",
-                                    }}
+                                    className={`text-base leading-relaxed ${f.correctable ? "text-success" : "text-muted-foreground"}`}
                                 >
                                     {f.resolution}
                                 </span>
@@ -117,7 +90,7 @@ export default function FailureMemory() {
                                 ))}
                             </div>
                         </div>
-                    </div>
+                    </button>
                 ))}
             </div>
         </div>

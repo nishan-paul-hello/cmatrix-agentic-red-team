@@ -24,13 +24,7 @@ export default function BranchTree({ nodes, depth = 0 }: { nodes: BranchEntry[];
                         marginLeft: depth * 24,
                     }}
                 >
-                    <div
-                        style={{
-                            display: "flex",
-                            alignItems: "stretch",
-                            gap: 0,
-                        }}
-                    >
+                    <div className="flex items-stretch gap-0">
                         {depth > 0 && <div className="border-border mb-2 w-5 shrink-0 border-b" />}
                         <div className="border-border mb-2.5 flex-1 overflow-hidden rounded-sm border-[1px] border-solid">
                             <div className="bg-background border-border flex items-center gap-3 border-b px-4 py-2">
@@ -42,21 +36,18 @@ export default function BranchTree({ nodes, depth = 0 }: { nodes: BranchEntry[];
                                 </span>
                                 <span className="text-muted-foreground text-sm">{b.ts}</span>
                                 <span
-                                    className="text-sm font-semibold tracking-wide"
-                                    style={{
-                                        color: (() => {
-                                            if (b.outcome === "SUCCESS") {
-                                                return "var(--success)";
-                                            }
-                                            if (
-                                                b.outcome === "IN PROGRESS" ||
-                                                b.outcome === "RUNNING"
-                                            ) {
-                                                return "var(--warning)";
-                                            }
-                                            return "var(--primary)";
-                                        })(),
-                                    }}
+                                    className={`text-sm font-semibold tracking-wide ${(() => {
+                                        if (b.outcome === "SUCCESS") {
+                                            return "text-success";
+                                        }
+                                        if (
+                                            b.outcome === "IN PROGRESS" ||
+                                            b.outcome === "RUNNING"
+                                        ) {
+                                            return "text-warning";
+                                        }
+                                        return "text-primary";
+                                    })()}`}
                                 >
                                     {b.outcome}
                                 </span>
@@ -78,10 +69,7 @@ export default function BranchTree({ nodes, depth = 0 }: { nodes: BranchEntry[];
                                         {b.alternatives.map((a: string) => (
                                             <span
                                                 key={a}
-                                                className="border-border bg-card text-muted-foreground rounded-sm border-[1px] border-solid px-1.5 py-0.5 text-sm"
-                                                style={{
-                                                    textDecoration: "line-through",
-                                                }}
+                                                className="border-border bg-card text-muted-foreground rounded-sm border-[1px] border-solid px-1.5 py-0.5 text-sm line-through"
                                             >
                                                 {a}
                                             </span>

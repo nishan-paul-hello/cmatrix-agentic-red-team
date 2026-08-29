@@ -44,7 +44,7 @@ export default function MemoryBrowser({ initialTab }: { initialTab?: MemTab }) {
                     <div className="flex items-center gap-2">
                         <span className="text-muted-foreground text-sm tracking-widest">SCOPE</span>
                         <Select value={selected} onValueChange={(val) => val && setSelected(val)}>
-                            <SelectTrigger className="bg-card text-muted-foreground h-auto w-[140px] rounded-sm px-2 py-1 text-xs tracking-tight focus:ring-0">
+                            <SelectTrigger className="bg-card text-muted-foreground w-panel-2xs h-auto rounded-sm px-2 py-1 text-xs tracking-tight focus:ring-0">
                                 <SelectValue />
                             </SelectTrigger>
                             <SelectContent>

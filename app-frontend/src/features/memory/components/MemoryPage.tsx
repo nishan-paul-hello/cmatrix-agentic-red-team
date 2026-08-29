@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ContextUtilization from "@/features/memory/components/ContextUtilization";
 import FailureMemory from "@/features/memory/components/FailureMemory";
 import SkillLibrary from "@/features/memory/components/SkillLibrary";
@@ -31,30 +31,22 @@ export default function MemoryPage({
         "CONTEXT UTILIZATION",
     ];
     return (
-        <div className="flex h-full min-h-0 flex-col">
+        <Tabs
+            value={activeTab}
+            onValueChange={(v) => setActiveTab(v as MemTab)}
+            className="flex h-full min-h-0 flex-col"
+        >
             <div className="border-border flex-shrink-0 border-b px-6 pt-5 pb-0">
                 <div className="text-muted-foreground mb-0.5 text-base tracking-widest">
                     {missionId ? `MISSION / ${missionId}` : "KNOWLEDGE"}
                 </div>
                 <h1 className="text-foreground mb-3 text-xs font-bold tracking-wide">MEMORY</h1>
-                <div className="flex overflow-x-auto">
+                <TabsList variant="line" className="flex justify-start overflow-x-auto p-0">
                     {tabs.map((t) => (
-                        <Button
+                        <TabsTrigger
                             key={t}
-                            variant="ghost"
-                            onClick={() => setActiveTab(t)}
-                            className="flex h-auto items-center gap-1 rounded-none px-3.5 py-1 text-sm tracking-wide whitespace-nowrap hover:bg-transparent"
-                            style={{
-                                borderBottom:
-                                    t === activeTab
-                                        ? "2px solid var(--primary)"
-                                        : "2px solid transparent",
-                                color:
-                                    t === activeTab
-                                        ? "var(--foreground)"
-                                        : "var(--muted-foreground)",
-                                marginBottom: -1,
-                            }}
+                            value={t}
+                            className="flex h-auto items-center gap-1 rounded-none px-3.5 py-1 text-sm tracking-wide"
                         >
                             {t}
                             <span className="bg-card text-muted-foreground ml-1 rounded-sm px-1 py-0 text-xs">
@@ -68,9 +60,9 @@ export default function MemoryPage({
                                     return "T2";
                                 })()}
                             </span>
-                        </Button>
+                        </TabsTrigger>
                     ))}
-                </div>
+                </TabsList>
             </div>
             {/* G2: Tier legend row */}
             <div className="border-border shrink-0 border-b px-6 py-1.5">
@@ -78,48 +70,29 @@ export default function MemoryPage({
                     {
                         n: 1,
                         label: "WORKING CONTEXT",
-                        color: "var(--warning)",
+                        color: "bg-warning",
                     },
                     {
                         n: 2,
                         label: "EPISODIC MEMORY",
-                        color: "var(--muted-foreground)",
+                        color: "bg-muted-foreground",
                     },
                     {
                         n: 3,
                         label: "SKILL LIBRARY",
-                        color: "var(--primary)",
+                        color: "bg-primary",
                     },
                 ].map((t) => (
-                    <div
-                        key={t.n}
-                        style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 5,
-                        }}
-                    >
-                        <div
-                            className="h-1.5 w-1.5 rounded-none"
-                            style={{
-                                background: t.color,
-                            }}
-                        />
+                    <div key={t.n} className="flex items-center gap-[5px]">
+                        <div className={`h-1.5 w-1.5 rounded-none ${t.color}`} />
                         <span className="text-muted-foreground text-xs tracking-widest">
-                            TIER {t.n} — {t.label}
+                            TIER {t.n} - {t.label}
                         </span>
                     </div>
                 ))}
                 {/* Cross-mission scope indicator — only shown in global (no missionId) view */}
                 {!missionId && (
-                    <div
-                        style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 5,
-                            marginLeft: "auto",
-                        }}
-                    >
+                    <div className="ml-auto flex items-center gap-[5px]">
                         <span className="text-success text-xs tracking-widest">
                             ◈ CROSS-MISSION AGGREGATE
                         </span>
@@ -127,13 +100,25 @@ export default function MemoryPage({
                 )}
             </div>
             <div className="bg-background flex-1 overflow-auto">
-                {activeTab === "VULNERABILITY PATTERNS" && <VulnPatterns />}
-                {activeTab === "STRATEGY BRANCHING" && <StrategyBranching />}
-                {activeTab === "TECHNICAL ACTIONS" && <TechnicalActions />}
-                {activeTab === "FAILURE MEMORY" && <FailureMemory />}
-                {activeTab === "SKILL LIBRARY" && <SkillLibrary />}
-                {activeTab === "CONTEXT UTILIZATION" && <ContextUtilization />}
+                <TabsContent value="VULNERABILITY PATTERNS" className="m-0 h-full">
+                    <VulnPatterns />
+                </TabsContent>
+                <TabsContent value="STRATEGY BRANCHING" className="m-0 h-full">
+                    <StrategyBranching />
+                </TabsContent>
+                <TabsContent value="TECHNICAL ACTIONS" className="m-0 h-full">
+                    <TechnicalActions />
+                </TabsContent>
+                <TabsContent value="FAILURE MEMORY" className="m-0 h-full">
+                    <FailureMemory />
+                </TabsContent>
+                <TabsContent value="SKILL LIBRARY" className="m-0 h-full">
+                    <SkillLibrary />
+                </TabsContent>
+                <TabsContent value="CONTEXT UTILIZATION" className="m-0 h-full">
+                    <ContextUtilization />
+                </TabsContent>
             </div>
-        </div>
+        </Tabs>
     );
 }

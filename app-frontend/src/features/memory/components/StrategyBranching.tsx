@@ -26,25 +26,19 @@ export default function StrategyBranching() {
                     {[
                         {
                             l: "SUCCESS",
-                            c: "var(--success)",
+                            c: "bg-success",
                         },
                         {
                             l: "IN PROGRESS",
-                            c: "var(--warning)",
+                            c: "bg-warning",
                         },
                         {
                             l: "RUNNING",
-                            c: "var(--warning)",
+                            c: "bg-warning",
                         },
                     ].map((x) => (
                         <div key={x.l} className="flex items-center gap-2">
-                            <div
-                                className="h-1.5 w-1.5"
-                                style={{
-                                    borderRadius: "50%",
-                                    background: x.c,
-                                }}
-                            />
+                            <div className={`h-1.5 w-1.5 rounded-full ${x.c}`} />
                             <span className="text-muted-foreground text-sm tracking-wide">
                                 {x.l}
                             </span>

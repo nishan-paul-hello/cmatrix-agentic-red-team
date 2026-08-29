@@ -28,9 +28,9 @@ export default function ContextUtilization() {
     const longTermSkills: (SkillRecord & { tier: string })[] = blackboard.readSkills();
     const longTermFailures: (FailureRecord & { tier: string })[] = blackboard.readFailures();
     const stc: Record<string, string> = {
-        COMPACTED: "var(--warning)",
-        ACTIVE: "var(--success)",
-        IDLE: "var(--muted-foreground)",
+        COMPACTED: "text-warning",
+        ACTIVE: "text-success",
+        IDLE: "text-muted-foreground",
     };
     return (
         <div className="flex min-h-0 flex-1 overflow-hidden">
@@ -59,45 +59,26 @@ export default function ContextUtilization() {
                     const pct = Math.round((s.used / s.max) * 100);
                     const barColor = (() => {
                         if (pct > 85) {
-                            return "var(--destructive)";
+                            return "bg-destructive";
                         }
                         if (pct > 60) {
-                            return "var(--warning)";
+                            return "bg-warning";
                         }
-                        return "var(--success)";
+                        return "bg-success";
                     })();
                     return (
-                        <div
+                        <button
+                            type="button"
                             key={s.id}
-                            role="button"
-                            tabIndex={0}
                             onClick={() => setSelId(s.id)}
-                            onKeyDown={(e) => {
-                                if (e.key === "Enter" || e.key === " ") {
-                                    setSelId(s.id);
-                                }
-                            }}
-                            className="border-border mb-2 cursor-pointer rounded-sm border-[1px] border-solid px-4 py-3"
-                            style={{
-                                background: sel.id === s.id ? "var(--background)" : "transparent",
-                            }}
-                            onMouseEnter={(e) =>
-                                (e.currentTarget.style.background = "var(--background)")
-                            }
-                            onMouseLeave={(e) =>
-                                (e.currentTarget.style.background =
-                                    sel.id === s.id ? "var(--background)" : "transparent")
-                            }
+                            className={`border-border focus:ring-primary hover:bg-background mb-2 block w-full cursor-pointer rounded-sm border-[1px] border-solid px-4 py-3 text-left transition-colors focus:ring-1 focus:outline-none ${sel.id === s.id ? "bg-background" : "bg-transparent"}`}
                         >
                             <div className="mb-3 flex items-center gap-3">
                                 <span className="text-muted-foreground text-xs font-bold tracking-tight">
                                     {s.role}
                                 </span>
                                 <span
-                                    className="ml-auto text-sm font-semibold tracking-widest"
-                                    style={{
-                                        color: stc[s.state],
-                                    }}
+                                    className={`ml-auto text-sm font-semibold tracking-widest ${stc[s.state]}`}
                                 >
                                     {s.state}
                                 </span>
@@ -105,10 +86,9 @@ export default function ContextUtilization() {
                             </div>
                             <div className="bg-card h-1 overflow-hidden rounded-sm">
                                 <div
-                                    className="h-full rounded-sm"
+                                    className={`h-full rounded-sm ${barColor}`}
                                     style={{
                                         width: `${pct}%`,
-                                        background: barColor,
                                         transition: "width 0.3s",
                                     }}
                                 />
@@ -119,14 +99,14 @@ export default function ContextUtilization() {
                                 </span>
                                 {s.compacted > 0 && (
                                     <span className="text-warning text-sm tracking-normal">
-                                        COMPACTED ×{s.compacted}
+                                        COMPACTED x{s.compacted}
                                     </span>
                                 )}
                                 <span className="text-muted-foreground ml-auto text-sm">
                                     THIS SESSION: {(s.tokens / 1000).toFixed(1)}K
                                 </span>
                             </div>
-                        </div>
+                        </button>
                     );
                 })}
 
@@ -194,7 +174,7 @@ export default function ContextUtilization() {
                             COMPACTION NOTE
                         </div>
                         <div className="text-muted-foreground text-base leading-relaxed">
-                            Context was compacted {sel.compacted}× to preserve working memory.
+                            Context was compacted {sel.compacted}x to preserve working memory.
                             Historical tool outputs summarized. Active state preserved.
                         </div>
                     </div>
