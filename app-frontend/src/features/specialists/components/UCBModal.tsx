@@ -94,15 +94,16 @@ export function UCBModal({
                                         {b.desc}
                                     </div>
                                 </div>
-                                <span
-                                    className={cn("text-base font-bold", b.color)}
-                                >
+                                <span className={cn("text-base font-bold", b.color)}>
                                     {b.value.toFixed(3)}
                                 </span>
                             </div>
                             <div className="bg-card h-1 overflow-hidden rounded-sm">
                                 <div
-                                    className={cn("h-full rounded-sm", b.color.replace("text-", "bg-"))}
+                                    className={cn(
+                                        "h-full rounded-sm",
+                                        b.color.replace("text-", "bg-"),
+                                    )}
                                     style={{
                                         width: `${b.value * 100}%`,
                                     }}

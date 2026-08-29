@@ -1,9 +1,9 @@
 import Btn from "@/features/validation/components/Btn";
-import { cn } from "@/lib/utils";
 import OraclePanel from "@/features/validation/components/OraclePanel";
 import StateMachineModal from "@/features/validation/components/StateMachineModal";
 import { useValidationData } from "@/features/validation/hooks/useValidationData";
 import { useTelemetry } from "@/hooks/useTelemetry";
+import { cn } from "@/lib/utils";
 
 import { FindingDetailDrawer } from "./FindingDetailDrawer";
 import { ValidationTable } from "./ValidationTable";
@@ -76,9 +76,7 @@ export default function ValidationCenter() {
                         <div className="text-muted-foreground mb-1.5 text-sm tracking-widest">
                             {m.label}
                         </div>
-                        <div
-                            className={cn("text-sm leading-none font-bold", m.color)}
-                        >
+                        <div className={cn("text-sm leading-none font-bold", m.color)}>
                             {m.value}
                         </div>
                     </div>
