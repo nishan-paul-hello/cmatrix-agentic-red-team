@@ -155,7 +155,7 @@ const AttackGraphCanvasViewInner = React.memo(function ({
                 {/* Canvas Wrapper */}
                 <div className="relative flex-1 overflow-hidden bg-background">
                     {/* Canvas Viewport */}
-                    {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
+                    { }
                     <div
                         ref={containerRef}
                         role="presentation"
