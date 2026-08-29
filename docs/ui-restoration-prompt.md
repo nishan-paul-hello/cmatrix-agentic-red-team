@@ -86,3 +86,7 @@ For each page you process, report:
 ## Decisions made so far
 
 *(Agent: append one bullet per reusable decision here as pages are completed. Format: `**<surface type>**: <decision> — first applied on <page>`.)*
+
+- **Wizard/Forms**: Use `text-xs font-semibold uppercase tracking-widest` for block labels and step headings, and `text-xs` for descriptions/hints instead of `text-base` for tighter typographic density. — first applied on missions/new
+- **Wizard/Forms**: Text inputs should use `text-sm` without tight tracking for readability while maintaining a compact height. — first applied on missions/new
+- **Radio Groups**: Use `text-xs leading-relaxed` for option descriptions instead of `text-base leading-snug tracking-tight` for a tighter density matching the old UI. — first applied on missions/new

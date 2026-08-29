@@ -37,7 +37,7 @@ export default function RadioGroup<T extends string>({
                             >
                                 {opt.value}
                             </div>
-                            <div className="text-muted-foreground text-base leading-snug tracking-tight">
+                            <div className="text-muted-foreground text-xs leading-relaxed">
                                 {opt.desc}
                             </div>
                         </div>
