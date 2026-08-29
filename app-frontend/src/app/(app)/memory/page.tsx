@@ -1,5 +1,3 @@
-"use client";
-
 import { PanelErrorBoundary } from "@/components/PanelErrorBoundary";
 import MemoryBrowser from "@/features/memory/components/MemoryBrowser";
 

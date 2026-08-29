@@ -115,8 +115,8 @@ export default function FailureAnalysis() {
                 <div className="text-muted-foreground mt-5 mb-3 text-sm tracking-widest">
                     RECENT FAILURES
                 </div>
-                <div className="border-border overflow-hidden rounded-sm border-[1px] border-solid">
-                    <div className="bg-card border-border flex border-b">
+                <div className="border-border overflow-x-auto rounded-sm border-[1px] border-solid">
+                    <div className="bg-card border-border flex w-full min-w-fit border-b">
                         {["TIME", "TYPE", "RUN", "TASK", "COST", "ATTEMPTS", "RESOLVED"].map(
                             (h) => (
                                 <div
@@ -129,22 +129,27 @@ export default function FailureAnalysis() {
                         )}
                     </div>
                     {FAILURE_TIMELINE.map((f) => (
-                        <div key={f.ts} className="border-border flex items-center border-b">
-                            <div className="text-muted-foreground flex-1 px-3 py-1.5 text-sm">
+                        <div
+                            key={f.ts}
+                            className="border-border flex w-full min-w-fit items-center border-b"
+                        >
+                            <div className="text-muted-foreground cell-truncate flex-1 px-3 py-1.5 text-sm">
                                 {f.ts}
                             </div>
-                            <div className="text-muted-foreground flex-[2] px-3 py-1.5 text-base font-semibold tracking-tight">
+                            <div className="text-muted-foreground cell-truncate flex-[2] px-3 py-1.5 text-base font-semibold tracking-tight">
                                 {f.type}
                             </div>
-                            <div className="text-primary flex-1 px-3 py-1.5 text-base">{f.run}</div>
-                            <div className="text-muted-foreground flex-1 px-3 py-1.5 text-base">
+                            <div className="text-primary cell-truncate flex-1 px-3 py-1.5 text-base">
+                                {f.run}
+                            </div>
+                            <div className="text-muted-foreground cell-truncate flex-1 px-3 py-1.5 text-base">
                                 {f.task}
                             </div>
-                            <div className="text-muted-foreground flex-1 px-3 py-1.5 text-base">
+                            <div className="text-muted-foreground cell-truncate flex-1 px-3 py-1.5 text-base">
                                 {f.cost}
                             </div>
                             <div
-                                className={`flex-1 px-3 py-1.5 text-base ${f.attempts > 2 ? "text-warning" : "text-muted-foreground"}`}
+                                className={`cell-truncate flex-1 px-3 py-1.5 text-base ${f.attempts > 2 ? "text-warning" : "text-muted-foreground"}`}
                             >
                                 {f.attempts}
                             </div>

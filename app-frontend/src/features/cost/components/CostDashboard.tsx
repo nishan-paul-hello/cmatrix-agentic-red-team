@@ -1,19 +1,18 @@
 import { useEffect, useState } from "react";
 
-import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ContextState from "@/features/cost/components/ContextState";
 import CostUsage from "@/features/cost/components/CostUsage";
 import ModelBreakdown from "@/features/cost/components/ModelBreakdown";
 import { CostRepository } from "@/features/cost/data/CostRepository";
 import { type CostTab } from "@/features/cost/data/fixtures/costMockData";
-import { useCostData } from "@/features/cost/hooks/useCostData";
 
 export default function CostDashboard({
     missionId,
     hideHeader = false,
-    tab: tabProp,
-    setTab: setTabProp,
+    value,
+    onValueChange,
 }: {
     /**
      * When provided, this is a per-mission view (inside a mission workspace).
@@ -29,14 +28,9 @@ export default function CostDashboard({
      * tab/setTab instead of its own internal state — allows CostBrowser to keep a
      * single shared tab selection across the header tabs and the embedded dashboard.
      */
-    tab?: CostTab;
-    setTab?: (t: CostTab) => void;
+    value?: string;
+    onValueChange?: (t: string) => void;
 } = {}) {
-    // Fallback to own state when no controlled props are provided (standalone use).
-    const ownState = useCostData();
-    const tab = tabProp ?? ownState.tab;
-    const setTab = setTabProp ?? ownState.setTab;
-
     const [dataLoaded, setDataLoaded] = useState(false);
 
     useEffect(() => {
@@ -53,7 +47,12 @@ export default function CostDashboard({
     }
 
     return (
-        <div className="flex h-full min-h-0 flex-col">
+        <Tabs
+            value={value}
+            onValueChange={onValueChange}
+            defaultValue="COST & USAGE"
+            className="flex h-full min-h-0 flex-col"
+        >
             {!hideHeader && (
                 <div className="border-border flex-shrink-0 border-b px-6 pt-5 pb-0">
                     <div className="text-muted-foreground mb-0.5 text-base tracking-widest">
@@ -62,25 +61,32 @@ export default function CostDashboard({
                     <h1 className="text-foreground mb-3 text-xs font-bold tracking-wide">
                         COST &amp; USAGE
                     </h1>
-                    <div className="flex">
+                    <TabsList variant="line" className="flex justify-start overflow-x-auto p-0">
                         {(["COST & USAGE", "MODEL BREAKDOWN", "CONTEXT STATE"] as CostTab[]).map(
                             (t) => (
-                                <Button
+                                <TabsTrigger
                                     key={t}
-                                    variant="ghost"
-                                    onClick={() => setTab(t)}
-                                    className={`-mb-px h-auto rounded-none border-b-2 border-solid px-4 py-1 text-base tracking-widest whitespace-nowrap hover:bg-transparent ${t === tab ? "border-primary text-foreground" : "text-muted-foreground border-transparent"}`}
+                                    value={t}
+                                    className="h-auto rounded-none px-4 py-1 text-base tracking-widest whitespace-nowrap"
                                 >
                                     {t}
-                                </Button>
+                                </TabsTrigger>
                             ),
                         )}
-                    </div>
+                    </TabsList>
                 </div>
             )}
-            {tab === "COST & USAGE" && <CostUsage />}
-            {tab === "MODEL BREAKDOWN" && <ModelBreakdown />}
-            {tab === "CONTEXT STATE" && <ContextState />}
-        </div>
+            <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
+                <TabsContent value="COST & USAGE" className="m-0 flex min-h-0 flex-1 flex-col">
+                    <CostUsage />
+                </TabsContent>
+                <TabsContent value="MODEL BREAKDOWN" className="m-0 flex min-h-0 flex-1 flex-col">
+                    <ModelBreakdown />
+                </TabsContent>
+                <TabsContent value="CONTEXT STATE" className="m-0 flex min-h-0 flex-1 flex-col">
+                    <ContextState />
+                </TabsContent>
+            </div>
+        </Tabs>
     );
 }

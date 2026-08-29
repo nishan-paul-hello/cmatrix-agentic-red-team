@@ -10,10 +10,16 @@ export default function ModelBreakdown() {
         void CostRepository.getModels().then((data) => setModels(data));
     }, []);
 
-    const MODEL_C: Record<string, string> = {
-        "claude-sonnet-5": "primary",
-        "claude-haiku-4-5": "warning",
-        "claude-opus-5": "success",
+    const MODEL_BG: Record<string, string> = {
+        "claude-sonnet-5": "bg-primary",
+        "claude-haiku-4-5": "bg-warning",
+        "claude-opus-5": "bg-success",
+    };
+
+    const MODEL_TEXT: Record<string, string> = {
+        "claude-sonnet-5": "text-primary",
+        "claude-haiku-4-5": "text-warning",
+        "claude-opus-5": "text-success",
     };
 
     if (models.length === 0) {
@@ -35,7 +41,7 @@ export default function ModelBreakdown() {
                     >
                         <div className="bg-background border-border flex items-center gap-4 border-b px-5 py-3">
                             <div
-                                className={`h-2 w-2 shrink-0 rounded-full bg-${MODEL_C[m.model] ?? "muted-foreground"}`}
+                                className={`h-2 w-2 shrink-0 rounded-full ${MODEL_BG[m.model] ?? "bg-muted-foreground"}`}
                             />
                             <span className="text-foreground flex-1 text-xs font-bold tracking-tight">
                                 {m.model}
@@ -44,7 +50,7 @@ export default function ModelBreakdown() {
                                 {m.provider}
                             </span>
                             <span
-                                className={`text-sm font-bold text-${MODEL_C[m.model] ?? "muted-foreground"}`}
+                                className={`text-sm font-bold ${MODEL_TEXT[m.model] ?? "text-muted-foreground"}`}
                             >
                                 ${m.total.toFixed(4)}
                             </span>
@@ -52,7 +58,7 @@ export default function ModelBreakdown() {
                         <div className="px-5 py-4">
                             <div className="bg-card mb-4 h-0.5 overflow-hidden rounded-sm">
                                 <div
-                                    className={`h-full rounded-sm bg-${MODEL_C[m.model] ?? "muted-foreground"}`}
+                                    className={`h-full rounded-sm ${MODEL_BG[m.model] ?? "bg-muted-foreground"}`}
                                     style={{ width: `${m.pct}%` }}
                                 />
                             </div>
@@ -111,8 +117,8 @@ export default function ModelBreakdown() {
             <div className="text-muted-foreground mb-2.5 text-sm tracking-widest">
                 PRICING REFERENCE
             </div>
-            <div className="border-border overflow-hidden rounded-sm border-[1px] border-solid">
-                <div className="bg-card border-border flex border-b">
+            <div className="border-border overflow-x-auto rounded-sm border-[1px] border-solid">
+                <div className="bg-card border-border flex w-full min-w-fit border-b">
                     {["MODEL", "INPUT $/1M", "OUTPUT $/1M"].map((h) => (
                         <div
                             key={h}
@@ -139,14 +145,14 @@ export default function ModelBreakdown() {
                         o: "$75.00",
                     },
                 ].map((r) => (
-                    <div key={r.m} className="border-border flex border-b">
-                        <div className="text-muted-foreground flex-[2] px-3.5 py-2 text-xs font-semibold">
+                    <div key={r.m} className="border-border flex w-full min-w-fit border-b">
+                        <div className="text-muted-foreground cell-truncate flex-[2] px-3.5 py-2 text-xs font-semibold">
                             {r.m}
                         </div>
-                        <div className="text-muted-foreground flex-1 px-3.5 py-2 text-xs">
+                        <div className="text-muted-foreground cell-truncate flex-1 px-3.5 py-2 text-xs">
                             {r.i}
                         </div>
-                        <div className="text-muted-foreground flex-1 px-3.5 py-2 text-xs">
+                        <div className="text-muted-foreground cell-truncate flex-1 px-3.5 py-2 text-xs">
                             {r.o}
                         </div>
                     </div>

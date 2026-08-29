@@ -32,8 +32,8 @@ export default function StatisticalEval() {
             <div className="text-muted-foreground mb-3 text-sm tracking-widest">
                 METRIC COMPARISON TABLE
             </div>
-            <div className="border-border mb-2 overflow-hidden rounded-sm border-[1px] border-solid">
-                <div className="bg-card border-border flex border-b">
+            <div className="border-border mb-2 overflow-x-auto rounded-sm border-[1px] border-solid">
+                <div className="bg-card border-border flex w-full min-w-fit border-b">
                     {[
                         "METRIC",
                         "FULL SYSTEM",
@@ -53,30 +53,33 @@ export default function StatisticalEval() {
                     ))}
                 </div>
                 {STAT_DATA.map((row) => (
-                    <div key={row.metric} className="border-border flex items-center border-b">
+                    <div
+                        key={row.metric}
+                        className="border-border flex w-full min-w-fit items-center border-b"
+                    >
                         <div className="text-muted-foreground flex-[2.5] px-2.5 py-2 text-base">
                             <div>{row.metric}</div>
                             {/* Wilson CI inline under full-system value */}
                         </div>
                         {/* FULL SYSTEM — shows Wilson CI */}
-                        <div className="flex flex-1 flex-col items-end px-2.5 py-1.5">
+                        <div className="cell-truncate flex flex-1 flex-col items-end px-2.5 py-1.5">
                             <span className="text-success text-xs font-bold">{row.full}</span>
                             <span className="text-muted-foreground text-xs">
                                 [{row.wilsonCI[0].toFixed(3)}, {row.wilsonCI[1].toFixed(3)}]
                             </span>
                         </div>
-                        <div className="text-muted-foreground flex-1 px-2.5 py-2 text-right text-xs">
+                        <div className="text-muted-foreground cell-truncate flex-1 px-2.5 py-2 text-right text-xs">
                             {row.noUCB}
                         </div>
-                        <div className="text-muted-foreground flex-1 px-2.5 py-2 text-right text-xs">
+                        <div className="text-muted-foreground cell-truncate flex-1 px-2.5 py-2 text-right text-xs">
                             {row.noEord}
                         </div>
-                        <div className="text-muted-foreground flex-1 px-2.5 py-2 text-right text-xs">
+                        <div className="text-muted-foreground cell-truncate flex-1 px-2.5 py-2 text-right text-xs">
                             {row.baseline}
                         </div>
                         {/* McNemar p (renamed from p-VALUE) */}
                         <div
-                            className={`flex-1 px-2.5 py-2 text-right text-base ${(() => {
+                            className={`cell-truncate flex-1 px-2.5 py-2 text-right text-base ${(() => {
                                 if (row.mcNemarP < 0.01) {
                                     return "text-success";
                                 }
@@ -90,7 +93,7 @@ export default function StatisticalEval() {
                         </div>
                         {/* Δ pp column — new */}
                         <div
-                            className={`flex-1 px-2.5 py-2 text-right text-base font-bold ${(() => {
+                            className={`cell-truncate flex-1 px-2.5 py-2 text-right text-base font-bold ${(() => {
                                 if (row.deltaPp > 0) {
                                     return "text-success";
                                 }

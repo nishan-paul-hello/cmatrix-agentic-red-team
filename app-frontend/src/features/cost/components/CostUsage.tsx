@@ -74,8 +74,8 @@ export default function CostUsage() {
             <div className="text-muted-foreground mb-3 text-sm tracking-widest">
                 COST BY SPECIALIST
             </div>
-            <div className="border-border mb-6 overflow-hidden rounded-sm border-[1px] border-solid">
-                <div className="bg-card border-border flex border-b">
+            <div className="border-border mb-6 overflow-x-auto rounded-sm border-[1px] border-solid">
+                <div className="bg-card border-border flex w-full min-w-fit border-b">
                     {["SPECIALIST", "MODEL", "CALLS", "INPUT", "OUTPUT", "COST", "SHARE"].map(
                         (h) => (
                             <div
@@ -91,23 +91,26 @@ export default function CostUsage() {
                     <EmptyState message="NO SPECIALIST COST DATA" />
                 ) : (
                     SPECIALISTS_COST.map((s) => (
-                        <div key={s.id} className="border-border flex items-center border-b">
-                            <div className="text-primary flex-[2] px-3 py-2 text-xs font-bold tracking-tight">
+                        <div
+                            key={s.id}
+                            className="border-border flex w-full min-w-fit items-center border-b"
+                        >
+                            <div className="text-primary cell-truncate flex-[2] px-3 py-2 text-xs font-bold tracking-tight">
                                 {s.role}
                             </div>
-                            <div className="text-muted-foreground flex-[2] px-3 py-2 text-base">
+                            <div className="text-muted-foreground cell-truncate flex-[2] px-3 py-2 text-base">
                                 {s.model}
                             </div>
-                            <div className="text-muted-foreground flex-1 px-3 py-2 text-right text-base">
+                            <div className="text-muted-foreground cell-truncate flex-1 px-3 py-2 text-right text-base">
                                 {s.calls}
                             </div>
-                            <div className="text-muted-foreground flex-1 px-3 py-2 text-right text-base">
+                            <div className="text-muted-foreground cell-truncate flex-1 px-3 py-2 text-right text-base">
                                 {(s.inputTok / 1000).toFixed(0)}K
                             </div>
-                            <div className="text-muted-foreground flex-1 px-3 py-2 text-right text-base">
+                            <div className="text-muted-foreground cell-truncate flex-1 px-3 py-2 text-right text-base">
                                 {(s.outputTok / 1000).toFixed(0)}K
                             </div>
-                            <div className="text-foreground flex-1 px-3 py-2 text-right text-xs font-bold">
+                            <div className="text-foreground cell-truncate flex-1 px-3 py-2 text-right text-xs font-bold">
                                 ${s.cost.toFixed(4)}
                             </div>
                             <div className="flex-1 px-3 py-2 text-right">
