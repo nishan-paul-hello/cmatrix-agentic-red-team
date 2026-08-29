@@ -1,3 +1,5 @@
+import { TableCell, TableRow } from "@/components/ui/table";
+
 export interface EmptyStateProps {
     message: string;
     colSpan?: number;
@@ -9,11 +11,11 @@ export function EmptyState({ message, colSpan = 1, isTable = false }: EmptyState
 
     if (isTable) {
         return (
-            <tr>
-                <td colSpan={colSpan} className={className}>
+            <TableRow>
+                <TableCell colSpan={colSpan} className={className}>
                     {message}
-                </td>
-            </tr>
+                </TableCell>
+            </TableRow>
         );
     }
 
