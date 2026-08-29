@@ -22,8 +22,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const [authenticated, setAuthenticated] = useState(false);
     const [role] = useState<"ANALYST" | "ADMIN" | null>("ANALYST");
 
-    const login = useCallback(() => setAuthenticated(true), []);
-    const logout = useCallback(() => setAuthenticated(false), []);
+    const login = useCallback(() => {
+        document.cookie = "auth=1; path=/; max-age=86400";
+        setAuthenticated(true);
+    }, []);
+    const logout = useCallback(() => {
+        document.cookie = "auth=; path=/; max-age=0";
+        setAuthenticated(false);
+    }, []);
     const canApprove = useCallback((_action: string) => true, []);
 
     return (
