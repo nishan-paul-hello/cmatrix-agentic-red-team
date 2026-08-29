@@ -38,27 +38,11 @@ export default function FailureAnalysis() {
                     FAILURE CLUSTERS
                 </div>
                 {FAILURE_CLUSTERS.map((c) => (
-                    <div
+                    <button
+                        type="button"
                         key={c.id}
-                        role="button"
-                        tabIndex={0}
                         onClick={() => setSel(sel?.id === c.id ? null : c)}
-                        onKeyDown={(e) => {
-                            if (e.key === "Enter" || e.key === " ") {
-                                setSel(sel?.id === c.id ? null : c);
-                            }
-                        }}
-                        className="border-border mb-2 cursor-pointer rounded-sm border-[1px] border-solid"
-                        style={{
-                            background: sel?.id === c.id ? "var(--background)" : "transparent",
-                        }}
-                        onMouseEnter={(e) =>
-                            (e.currentTarget.style.background = "var(--background)")
-                        }
-                        onMouseLeave={(e) =>
-                            (e.currentTarget.style.background =
-                                sel?.id === c.id ? "var(--background)" : "transparent")
-                        }
+                        className={`border-border focus:ring-primary hover:bg-background mb-2 block w-full cursor-pointer rounded-sm border-[1px] border-solid text-left transition-colors focus:ring-1 focus:outline-none ${sel?.id === c.id ? "bg-background" : "bg-transparent"}`}
                     >
                         <div className="flex items-center gap-3 px-4 py-3">
                             <div
@@ -83,11 +67,7 @@ export default function FailureAnalysis() {
                             </span>
                         </div>
                         <div
-                            className="bg-card h-0.5 overflow-hidden rounded-sm"
-                            style={{
-                                margin: "0 16px 0",
-                                marginBottom: sel?.id === c.id ? 0 : 10,
-                            }}
+                            className={`bg-card mx-4 h-0.5 overflow-hidden rounded-sm ${sel?.id === c.id ? "mb-0" : "mb-[10px]"}`}
                         >
                             <div
                                 className="h-full"
@@ -120,7 +100,7 @@ export default function FailureAnalysis() {
                                 </div>
                                 <div className="flex items-start gap-2">
                                     <span className="text-success shrink-0 text-sm font-bold tracking-widest">
-                                        FIX →
+                                        FIX
                                     </span>
                                     <span className="text-success text-base leading-relaxed">
                                         {c.fix}
@@ -128,7 +108,7 @@ export default function FailureAnalysis() {
                                 </div>
                             </div>
                         )}
-                    </div>
+                    </button>
                 ))}
                 {/* Failure timeline */}
                 <div className="text-muted-foreground mt-5 mb-3 text-sm tracking-widest">
@@ -171,24 +151,15 @@ export default function FailureAnalysis() {
                                 {f.cost}
                             </div>
                             <div
-                                className="flex-1 px-3 py-1.5 text-base"
-                                style={{
-                                    color:
-                                        f.attempts > 2
-                                            ? "var(--warning)"
-                                            : "var(--muted-foreground)",
-                                }}
+                                className={`flex-1 px-3 py-1.5 text-base ${f.attempts > 2 ? "text-warning" : "text-muted-foreground"}`}
                             >
                                 {f.attempts}
                             </div>
                             <div className="flex-1 px-3 py-1.5">
                                 <span
-                                    className="text-sm font-bold"
-                                    style={{
-                                        color: f.resolved ? "var(--success)" : "var(--border)",
-                                    }}
+                                    className={`text-sm font-bold ${f.resolved ? "text-success" : "text-border"}`}
                                 >
-                                    {f.resolved ? "YES" : "—"}
+                                    {f.resolved ? "YES" : "-"}
                                 </span>
                             </div>
                         </div>

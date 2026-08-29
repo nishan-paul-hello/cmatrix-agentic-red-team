@@ -10,22 +10,13 @@ export function AblationLabDetailPanel({ sel }: { sel: AblationSpec }) {
     const bestDelta = Math.abs(worst.delta);
 
     return (
-        <div className="border-border flex w-[260px] flex-shrink-0 flex-col overflow-y-auto border-l px-3.5 py-4">
+        <div className="border-border w-panel-sm-alt flex flex-shrink-0 flex-col overflow-y-auto border-l px-3.5 py-4">
             <div className="text-foreground mb-1 text-xs font-bold tracking-normal">{sel.id}</div>
             <div className="text-muted-foreground mb-2 text-base leading-snug">{sel.name}</div>
 
             {/* Category badge */}
             <div
-                className="mb-3.5 inline-flex rounded-sm px-1.5 py-0.5 text-xs font-semibold tracking-widest"
-                style={{
-                    background: sel.category === "CORE" ? "var(--border)" : "var(--border)",
-                    color: sel.category === "CORE" ? "var(--primary)" : "var(--muted-foreground)",
-                    border:
-                        sel.category === "CORE"
-                            ? "1px solid var(--border)"
-                            : "1px solid var(--border)",
-                    alignSelf: "flex-start",
-                }}
+                className={`border-border bg-border mb-3.5 inline-flex self-start rounded-sm border border-solid px-1.5 py-0.5 text-xs font-semibold tracking-widest ${sel.category === "CORE" ? "text-primary" : "text-muted-foreground"}`}
             >
                 {sel.category}
             </div>
@@ -35,47 +26,32 @@ export function AblationLabDetailPanel({ sel }: { sel: AblationSpec }) {
             {/* Condition scorecards */}
             {sel.conditions.map((cond) => {
                 const isBase = !!cond.isBaseline;
+                let scoreColor = "text-destructive";
+                if (cond.score > 0.75) {
+                    scoreColor = "text-success";
+                } else if (cond.score > 0.55) {
+                    scoreColor = "text-warning";
+                }
+
+                let deltaColor = "text-muted-foreground";
+                if (cond.delta < -0.1) {
+                    deltaColor = "text-destructive";
+                } else if (cond.delta < -0.05) {
+                    deltaColor = "text-warning";
+                }
+
                 return (
                     <div key={cond.label} className="mb-3">
                         <div
-                            className="mb-0.5 text-xs tracking-wide"
-                            style={{
-                                color: isBase ? "var(--success)" : "var(--muted-foreground)",
-                            }}
+                            className={`mb-0.5 text-xs tracking-wide ${isBase ? "text-success" : "text-muted-foreground"}`}
                         >
                             {cond.label}
                         </div>
-                        <div
-                            className="text-sm font-bold"
-                            style={{
-                                color: (() => {
-                                    if (cond.score > 0.75) {
-                                        return "var(--success)";
-                                    }
-                                    if (cond.score > 0.55) {
-                                        return "var(--warning)";
-                                    }
-                                    return "var(--destructive)";
-                                })(),
-                            }}
-                        >
+                        <div className={`text-sm font-bold ${scoreColor}`}>
                             {(cond.score * 100).toFixed(1)}%
                         </div>
                         {!isBase && (
-                            <div
-                                className="text-xs font-bold"
-                                style={{
-                                    color: (() => {
-                                        if (cond.delta < -0.1) {
-                                            return "var(--destructive)";
-                                        }
-                                        if (cond.delta < -0.05) {
-                                            return "var(--warning)";
-                                        }
-                                        return "var(--muted-foreground)";
-                                    })(),
-                                }}
-                            >
+                            <div className={`text-xs font-bold ${deltaColor}`}>
                                 {cond.delta === 0
                                     ? "baseline"
                                     : `${(cond.delta * 100).toFixed(1)}pp`}

@@ -46,11 +46,7 @@ export default function StatisticalEval() {
                     ].map((h) => (
                         <div
                             key={h}
-                            className="text-muted-foreground px-2.5 py-1 text-xs font-semibold tracking-widest"
-                            style={{
-                                flex: h === "METRIC" ? 2.5 : 1,
-                                textAlign: h === "METRIC" ? "left" : "right",
-                            }}
+                            className={`text-muted-foreground px-2.5 py-1 text-xs font-semibold tracking-widest ${h === "METRIC" ? "flex-[2.5] text-left" : "flex-1 text-right"}`}
                         >
                             {h}
                         </div>
@@ -58,10 +54,7 @@ export default function StatisticalEval() {
                 </div>
                 {STAT_DATA.map((row) => (
                     <div key={row.metric} className="border-border flex items-center border-b">
-                        <div
-                            className="text-muted-foreground px-2.5 py-2 text-base"
-                            style={{ flex: 2.5 }}
-                        >
+                        <div className="text-muted-foreground flex-[2.5] px-2.5 py-2 text-base">
                             <div>{row.metric}</div>
                             {/* Wilson CI inline under full-system value */}
                         </div>
@@ -83,35 +76,29 @@ export default function StatisticalEval() {
                         </div>
                         {/* McNemar p (renamed from p-VALUE) */}
                         <div
-                            className="flex-1 px-2.5 py-2 text-right text-base"
-                            style={{
-                                color: (() => {
-                                    if (row.mcNemarP < 0.01) {
-                                        return "var(--success)";
-                                    }
-                                    if (row.mcNemarP < 0.05) {
-                                        return "var(--warning)";
-                                    }
-                                    return "var(--muted-foreground)";
-                                })(),
-                            }}
+                            className={`flex-1 px-2.5 py-2 text-right text-base ${(() => {
+                                if (row.mcNemarP < 0.01) {
+                                    return "text-success";
+                                }
+                                if (row.mcNemarP < 0.05) {
+                                    return "text-warning";
+                                }
+                                return "text-muted-foreground";
+                            })()}`}
                         >
                             {row.mcNemarP.toFixed(3)}
                         </div>
                         {/* Δ pp column — new */}
                         <div
-                            className="flex-1 px-2.5 py-2 text-right text-base font-bold"
-                            style={{
-                                color: (() => {
-                                    if (row.deltaPp > 0) {
-                                        return "var(--success)";
-                                    }
-                                    if (Math.abs(row.deltaPp) < 20) {
-                                        return "var(--warning)";
-                                    }
-                                    return "var(--destructive)";
-                                })(),
-                            }}
+                            className={`flex-1 px-2.5 py-2 text-right text-base font-bold ${(() => {
+                                if (row.deltaPp > 0) {
+                                    return "text-success";
+                                }
+                                if (Math.abs(row.deltaPp) < 20) {
+                                    return "text-warning";
+                                }
+                                return "text-destructive";
+                            })()}`}
                         >
                             {row.deltaPp > 0 ? "+" : ""}
                             {row.deltaPp.toFixed(1)}pp
@@ -119,18 +106,15 @@ export default function StatisticalEval() {
                         {/* SIG stars */}
                         <div className="flex-1 px-2.5 py-2 text-right">
                             <span
-                                className="text-base font-bold"
-                                style={{
-                                    color: (() => {
-                                        if (row.mcNemarP < 0.01) {
-                                            return "var(--success)";
-                                        }
-                                        if (row.mcNemarP < 0.05) {
-                                            return "var(--warning)";
-                                        }
-                                        return "var(--muted-foreground)";
-                                    })(),
-                                }}
+                                className={`text-base font-bold ${(() => {
+                                    if (row.mcNemarP < 0.01) {
+                                        return "text-success";
+                                    }
+                                    if (row.mcNemarP < 0.05) {
+                                        return "text-warning";
+                                    }
+                                    return "text-muted-foreground";
+                                })()}`}
                             >
                                 {(() => {
                                     if (row.mcNemarP < 0.01) {
