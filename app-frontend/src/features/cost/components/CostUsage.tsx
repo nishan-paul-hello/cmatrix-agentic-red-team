@@ -171,7 +171,7 @@ export default function CostUsage() {
                                 <div
                                     key={`timeline-${t.ts}-${t.event}`}
                                     title={`${t.ts} · ${t.event} · $${t.cost.toFixed(4)}`}
-                                    className={`absolute bottom-0 cursor-default rounded-t-[1px] ${barH > 0 ? "bg-primary" : "bg-border"}`}
+                                    className={`absolute bottom-0 cursor-default rounded-t-xs ${barH > 0 ? "bg-primary" : "bg-border"}`}
                                     style={{
                                         left: `${(i / TIMELINE.length) * 100}%`,
                                         width: `${(1 / TIMELINE.length) * 100 - 1}%`,
