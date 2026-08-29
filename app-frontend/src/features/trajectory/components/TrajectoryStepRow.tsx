@@ -5,35 +5,57 @@ import { type TrajStep } from "@/features/trajectory/data/fixtures/trajectoryMoc
 import { TASK_STATUS } from "@/types/domain-types";
 
 export const TYPE_C: Record<
-    TrajStep["type"],
-    {
-        color: string;
-        bg: string;
-    }
+    TrajStep["type"] | "ALL",
+    { text: string; bg: string; bgSolid: string; border: string; borderAlpha: string }
 > = {
+    ALL: {
+        text: "text-foreground",
+        bg: "bg-border",
+        bgSolid: "bg-foreground",
+        border: "border-foreground",
+        borderAlpha: "border-foreground/30",
+    },
     DECISION: {
-        color: "var(--primary)",
-        bg: "var(--border)",
+        text: "text-primary",
+        bg: "bg-border",
+        bgSolid: "bg-primary",
+        border: "border-primary",
+        borderAlpha: "border-primary/30",
     },
     EXECUTION: {
-        color: "var(--muted-foreground)",
-        bg: "var(--background)",
+        text: "text-muted-foreground",
+        bg: "bg-background",
+        bgSolid: "bg-muted-foreground",
+        border: "border-muted-foreground",
+        borderAlpha: "border-muted-foreground/30",
     },
     EVALUATION: {
-        color: "var(--muted-foreground)",
-        bg: "var(--border)",
+        text: "text-muted-foreground",
+        bg: "bg-border",
+        bgSolid: "bg-muted-foreground",
+        border: "border-muted-foreground",
+        borderAlpha: "border-muted-foreground/30",
     },
     BRANCH: {
-        color: "var(--warning)",
-        bg: "var(--border)",
+        text: "text-warning",
+        bg: "bg-border",
+        bgSolid: "bg-warning",
+        border: "border-warning",
+        borderAlpha: "border-warning/30",
     },
     COMPACTION: {
-        color: "var(--border)",
-        bg: "var(--border)",
+        text: "text-border",
+        bg: "bg-border",
+        bgSolid: "bg-border",
+        border: "border-border",
+        borderAlpha: "border-border/30",
     },
     VALIDATION: {
-        color: "var(--success)",
-        bg: "var(--border)",
+        text: "text-success",
+        bg: "bg-border",
+        bgSolid: "bg-success",
+        border: "border-success",
+        borderAlpha: "border-success/30",
     },
 };
 
@@ -54,62 +76,33 @@ export const TrajectoryStepRow = React.memo(function TrajectoryStepRowInner({
             {/* Spine */}
             <div className="mt-0.5 flex w-8 flex-shrink-0 flex-col items-center">
                 <div
-                    className="h-2.5 w-2.5 shrink-0"
-                    style={{
-                        borderRadius: "50%",
-                        border: `1px solid ${tc.color}`,
-                        background: (() => {
-                            if (isSel) {
-                                return tc.color;
-                            }
-                            if (step.status === TASK_STATUS.RUNNING) {
-                                return tc.color;
-                            }
-                            return "transparent";
-                        })(),
-                        zIndex: 1,
-                    }}
+                    className={`z-header h-2.5 w-2.5 shrink-0 rounded-full border border-solid ${tc.border} ${(() => {
+                        if (isSel) {
+                            return tc.bgSolid;
+                        }
+                        if (step.status === TASK_STATUS.RUNNING) {
+                            return tc.bgSolid;
+                        }
+                        return "bg-transparent";
+                    })()}`}
                 />
                 {!isLast && <div className="bg-card min-h-7 w-px flex-1" />}
             </div>
             {/* Card */}
-            <div
-                role="button"
-                tabIndex={0}
-                onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                        onClick(step);
-                    }
-                }}
+            <button
+                type="button"
                 onClick={() => onClick(step)}
-                className="flex-1 cursor-pointer"
-                style={{
-                    marginBottom: !isLast ? 0 : 0,
-                    paddingBottom: !isLast ? 12 : 0,
-                }}
+                className={`focus:ring-primary block w-full flex-1 cursor-pointer text-left focus:ring-1 focus:outline-none ${!isLast ? "pb-3" : "pb-0"} mb-0`}
             >
                 <div
-                    className="border-border overflow-hidden rounded-sm border-[1px] border-solid"
-                    style={{
-                        background: isSel ? "var(--background)" : "transparent",
-                    }}
-                    onMouseEnter={(e) => (e.currentTarget.style.background = "var(--background)")}
-                    onMouseLeave={(e) =>
-                        (e.currentTarget.style.background = isSel
-                            ? "var(--background)"
-                            : "transparent")
-                    }
+                    className={`border-border hover:bg-background overflow-hidden rounded-sm border-[1px] border-solid transition-colors ${isSel ? "bg-background" : "bg-transparent"}`}
                 >
                     <div className="border-border flex items-center gap-3 border-b px-4 py-2">
                         <span className="text-muted-foreground min-w-5 text-sm tracking-wide">
                             #{String(step.step).padStart(2, "0")}
                         </span>
                         <span
-                            className="rounded-sm px-1.5 py-px text-sm font-bold tracking-widest"
-                            style={{
-                                color: tc.color,
-                                border: `1px solid ${tc.color}44`,
-                            }}
+                            className={`rounded-sm border border-solid px-1.5 py-px text-sm font-bold tracking-widest ${tc.text} ${tc.borderAlpha}`}
                         >
                             {step.type}
                         </span>
@@ -118,21 +111,14 @@ export const TrajectoryStepRow = React.memo(function TrajectoryStepRowInner({
                         </span>
                         <span className="text-muted-foreground ml-auto text-sm">{step.ts}</span>
                         <span
-                            className="text-sm font-semibold tracking-wide"
-                            style={{
-                                color: getStatusColor(step.status).color,
-                            }}
+                            className={`text-sm font-semibold tracking-wide ${getStatusColor(step.status).color}`}
                         >
                             {step.status}
                         </span>
                     </div>
                     <div className="px-4 py-3">
                         <p
-                            className="text-muted-foreground text-xs leading-relaxed"
-                            style={{
-                                margin: 0,
-                                marginBottom: isSel ? 10 : 0,
-                            }}
+                            className={`text-muted-foreground m-0 text-xs leading-relaxed ${isSel ? "mb-2.5" : "mb-0"}`}
                         >
                             {step.summary}
                         </p>
@@ -165,18 +151,15 @@ export const TrajectoryStepRow = React.memo(function TrajectoryStepRowInner({
                                             {r.k}
                                         </div>
                                         <div
-                                            className="text-xs"
-                                            style={{
-                                                color: (() => {
-                                                    if (r.k === "COST" || r.k === "TOKENS") {
-                                                        return "var(--muted-foreground)";
-                                                    }
-                                                    if (r.k === "E_ORD DELTA" && r.v !== "—") {
-                                                        return "var(--success)";
-                                                    }
-                                                    return "var(--muted-foreground)";
-                                                })(),
-                                            }}
+                                            className={`text-xs ${(() => {
+                                                if (r.k === "COST" || r.k === "TOKENS") {
+                                                    return "text-muted-foreground";
+                                                }
+                                                if (r.k === "E_ORD DELTA" && r.v !== "—") {
+                                                    return "text-success";
+                                                }
+                                                return "text-muted-foreground";
+                                            })()}`}
                                         >
                                             {r.v}
                                         </div>
@@ -186,7 +169,7 @@ export const TrajectoryStepRow = React.memo(function TrajectoryStepRowInner({
                         )}
                     </div>
                 </div>
-            </div>
+            </button>
         </div>
     );
 });

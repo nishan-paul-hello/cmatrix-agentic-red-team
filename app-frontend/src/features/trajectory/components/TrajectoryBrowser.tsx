@@ -29,7 +29,7 @@ export default function TrajectoryBrowser() {
                             MISSION
                         </span>
                         <Select value={mission} onValueChange={(val) => val && setMission(val)}>
-                            <SelectTrigger className="bg-card text-muted-foreground h-auto w-[140px] rounded-sm px-2 py-1 text-xs tracking-tight focus:ring-0">
+                            <SelectTrigger className="bg-card text-muted-foreground w-panel-2xs h-auto rounded-sm px-2 py-1 text-xs tracking-tight focus:ring-0">
                                 <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
