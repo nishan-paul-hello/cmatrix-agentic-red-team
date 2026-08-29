@@ -66,7 +66,7 @@ export function ExecDrawer({
                     {/* Tabs */}
                     <TabsList
                         variant="line"
-                        className="border-border flex flex-shrink-0 justify-start overflow-x-auto border-b p-0"
+                        className="border-border flex flex-shrink-0 flex-wrap justify-start border-b p-0"
                     >
                         {(
                             [

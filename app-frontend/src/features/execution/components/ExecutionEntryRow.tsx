@@ -5,7 +5,7 @@ import { formatCommand } from "@/features/execution/domain/TaskCommand";
 import { type ExecEntry } from "@/types/domain-types";
 
 export const gridTemplateColumns =
-    "84px 80px minmax(100px, 1.5fr) minmax(140px, 2.5fr) minmax(80px, 1fr) 80px 80px minmax(150px, 3fr)";
+    "84px 80px minmax(180px, 1.5fr) minmax(280px, 2.5fr) minmax(120px, 1fr) 80px 80px minmax(400px, 3fr)";
 
 export const EXECUTION_COLUMNS = [
     { h: "#" },
@@ -28,7 +28,7 @@ export const ExecutionEntryRow = React.memo(function ExecutionEntryRowInner({
     return (
         <button
             type="button"
-            className="border-border focus:ring-primary hover:bg-background grid w-full min-w-fit cursor-pointer items-start gap-4 border-b text-left transition-colors focus:ring-1 focus:outline-none"
+            className="border-border focus:ring-primary hover:bg-background grid w-full cursor-pointer items-start gap-4 border-b text-left transition-colors focus:ring-1 focus:outline-none"
             style={{ gridTemplateColumns }}
             onClick={(ev) => {
                 ev.stopPropagation();

@@ -67,42 +67,44 @@ export default function ExecutionConsoleView({
                     className="bg-background flex-1 overflow-x-auto overflow-y-auto"
                     ref={parentRef}
                 >
-                    {/* Header row */}
-                    <div
-                        className="bg-muted/30 border-border sticky top-0 z-10 grid min-w-fit gap-4 border-b py-1 shadow-sm"
-                        style={{ gridTemplateColumns }}
-                    >
-                        {EXECUTION_COLUMNS.map(({ h }) => (
-                            <div
-                                key={h}
-                                className="text-muted-foreground truncate px-3 py-1 text-xs font-bold uppercase tracking-widest"
-                            >
-                                {h}
-                            </div>
-                        ))}
-                    </div>
-
-                    {rowVirtualizer.getVirtualItems().length > 0 && (
-                        <div style={{ height: `${rowVirtualizer.getVirtualItems()[0].start}px` }} />
-                    )}
-                    {rowVirtualizer.getVirtualItems().map((virtualRow) => {
-                        const e = entries[virtualRow.index];
-                        return (
-                            <ExecutionEntryRow key={e.id} e={e} onClick={() => handleRowClick(e)} />
-                        );
-                    })}
-                    {rowVirtualizer.getVirtualItems().length > 0 && (
+                    <div className="min-w-[1420px] w-full flex flex-col">
+                        {/* Header row */}
                         <div
-                            style={{
-                                height: `${
-                                    rowVirtualizer.getTotalSize() -
-                                    rowVirtualizer.getVirtualItems()[
-                                        rowVirtualizer.getVirtualItems().length - 1
-                                    ].end
-                                }px`,
-                            }}
-                        />
-                    )}
+                            className="bg-muted/30 border-border sticky top-0 z-10 grid gap-4 border-b py-1 shadow-sm"
+                            style={{ gridTemplateColumns }}
+                        >
+                            {EXECUTION_COLUMNS.map(({ h }) => (
+                                <div
+                                    key={h}
+                                    className="text-muted-foreground truncate px-3 py-1 text-xs font-bold uppercase tracking-widest"
+                                >
+                                    {h}
+                                </div>
+                            ))}
+                        </div>
+
+                        {rowVirtualizer.getVirtualItems().length > 0 && (
+                            <div style={{ height: `${rowVirtualizer.getVirtualItems()[0].start}px` }} />
+                        )}
+                        {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+                            const e = entries[virtualRow.index];
+                            return (
+                                <ExecutionEntryRow key={e.id} e={e} onClick={() => handleRowClick(e)} />
+                            );
+                        })}
+                        {rowVirtualizer.getVirtualItems().length > 0 && (
+                            <div
+                                style={{
+                                    height: `${
+                                        rowVirtualizer.getTotalSize() -
+                                        rowVirtualizer.getVirtualItems()[
+                                            rowVirtualizer.getVirtualItems().length - 1
+                                        ].end
+                                    }px`,
+                                }}
+                            />
+                        )}
+                    </div>
                 </div>
             </div>
 
