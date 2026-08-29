@@ -25,7 +25,7 @@ export function ReportPreviewPane({
                     <div className="bg-background border-border flex flex-shrink-0 items-center justify-between border-b px-6 py-3">
                         <div>
                             <div className="text-foreground text-xs font-bold tracking-tight">
-                                {sel.id} — {sel.type}
+                                {sel.id} - {sel.type}
                             </div>
                             <div className="text-muted-foreground mt-0.5 text-sm tracking-normal">
                                 {sel.mission} · {sel.generated}
@@ -46,14 +46,9 @@ export function ReportPreviewPane({
                     </div>
                     {sel.status === "GENERATING" ? (
                         <div className="flex flex-1 flex-col items-center justify-center gap-3">
-                            <div
-                                style={{
-                                    borderRadius: "50%",
-                                }}
-                                className="bg-primary h-2 w-2 animate-pulse"
-                            />
+                            <div className="bg-primary h-2 w-2 animate-pulse rounded-full" />
                             <div className="text-muted-foreground text-base tracking-widest">
-                                GENERATING REPORT…
+                                GENERATING REPORT...
                             </div>
                         </div>
                     ) : (
@@ -70,7 +65,7 @@ export function ReportPreviewPane({
                                     <div className="text-primary mb-3 text-base tracking-normal">
                                         MISSION {sel.mission}
                                     </div>
-                                    <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 sm:gap-6">
+                                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4 md:gap-6">
                                         {(
                                             [
                                                 {
@@ -101,12 +96,7 @@ export function ReportPreviewPane({
                                                     {m.k}
                                                 </div>
                                                 <div
-                                                    className="text-xs font-bold"
-                                                    style={{
-                                                        color: m.red
-                                                            ? "var(--destructive)"
-                                                            : "var(--foreground)",
-                                                    }}
+                                                    className={`text-xs font-bold ${m.red ? "text-destructive" : "text-foreground"}`}
                                                 >
                                                     {m.v}
                                                 </div>
@@ -123,12 +113,7 @@ export function ReportPreviewPane({
                                             </span>
                                         </div>
                                         {s.content && (
-                                            <p
-                                                className="text-muted-foreground mb-3 text-sm leading-relaxed whitespace-pre-line last:mb-0"
-                                                style={{
-                                                    wordBreak: "break-word",
-                                                }}
-                                            >
+                                            <p className="text-muted-foreground mb-3 text-sm leading-relaxed break-words whitespace-pre-line last:mb-0">
                                                 {s.content}
                                             </p>
                                         )}
@@ -140,13 +125,7 @@ export function ReportPreviewPane({
                                                         className="border-border grid grid-cols-[auto_auto_1fr_auto_auto] items-center gap-4 border-b px-3.5 py-2 text-sm sm:grid-cols-[60px_50px_1fr_auto_auto]"
                                                     >
                                                         <span
-                                                            className="min-w-[60px] text-sm font-bold tracking-wide"
-                                                            style={{
-                                                                color:
-                                                                    item.sev === "CRITICAL"
-                                                                        ? "var(--destructive)"
-                                                                        : "var(--primary)",
-                                                            }}
+                                                            className={`min-w-[60px] text-sm font-bold tracking-wide ${item.sev === "CRITICAL" ? "text-destructive" : "text-primary"}`}
                                                         >
                                                             {item.sev}
                                                         </span>

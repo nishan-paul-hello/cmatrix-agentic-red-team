@@ -24,40 +24,18 @@ export function ReportListSidebar({
                     <EmptyState message="NO REPORTS FOUND" />
                 ) : (
                     filtered.map((r) => (
-                        <div
+                        <button
+                            type="button"
                             key={r.id}
-                            role="button"
-                            tabIndex={0}
                             onClick={() => setSel(r)}
-                            onKeyDown={(e) => {
-                                if (e.key === "Enter" || e.key === " ") {
-                                    setSel(r);
-                                }
-                            }}
-                            className="border-border cursor-pointer border-b px-4 py-3"
-                            onMouseEnter={(e) => {
-                                if (sel?.id !== r.id) {
-                                    e.currentTarget.style.background = "var(--background)";
-                                }
-                            }}
-                            onMouseLeave={(e) => {
-                                if (sel?.id !== r.id) {
-                                    e.currentTarget.style.background = "transparent";
-                                }
-                            }}
+                            className={`border-border focus:ring-primary hover:bg-background block w-full cursor-pointer border-b px-4 py-3 text-left transition-colors focus:ring-1 focus:outline-none ${sel?.id === r.id ? "bg-background" : "bg-transparent"}`}
                         >
                             <div className="mb-1 flex items-center justify-between">
                                 <span className="text-primary text-base font-bold tracking-tight">
                                     {r.id}
                                 </span>
                                 <span
-                                    className="text-sm font-semibold tracking-wide"
-                                    style={{
-                                        color:
-                                            r.status === "READY"
-                                                ? "var(--success)"
-                                                : "var(--warning)",
-                                    }}
+                                    className={`text-sm font-semibold tracking-wide ${r.status === "READY" ? "text-success" : "text-warning"}`}
                                 >
                                     {r.status}
                                 </span>
@@ -83,7 +61,7 @@ export function ReportListSidebar({
                                     </span>
                                 )}
                             </div>
-                        </div>
+                        </button>
                     ))
                 )}
             </div>
