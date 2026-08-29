@@ -26,7 +26,7 @@ export function WizardMissionSummary({
     return (
         <div className="bg-background border-border lg:w-drawer-sm flex w-full flex-shrink-0 flex-col overflow-y-auto border-t lg:border-t-0 lg:border-l">
             <div className="border-border border-b px-5 pt-5 pb-4">
-                <div className="text-muted-foreground mb-2.5 text-xs font-semibold uppercase tracking-widest">
+                <div className="text-muted-foreground mb-2.5 text-xs font-semibold tracking-widest uppercase">
                     MISSION SUMMARY
                 </div>
                 <div className="flex flex-col gap-3">
@@ -46,7 +46,7 @@ export function WizardMissionSummary({
             {/* ROE preview */}
             {step >= 2 && roe && (
                 <div className="border-border border-b px-5 pt-4 pb-4">
-                    <div className="text-muted-foreground mb-2 text-xs font-semibold uppercase tracking-widest">
+                    <div className="text-muted-foreground mb-2 text-xs font-semibold tracking-widest uppercase">
                         ROE PREVIEW
                     </div>
                     <div className="text-muted-foreground line-clamp-6 overflow-hidden text-xs leading-relaxed tracking-tight">
@@ -56,7 +56,7 @@ export function WizardMissionSummary({
             )}
 
             <div className="px-5 pt-4">
-                <div className="text-muted-foreground mb-2 text-xs font-semibold uppercase tracking-widest">
+                <div className="text-muted-foreground mb-2 text-xs font-semibold tracking-widest uppercase">
                     VALIDATION
                 </div>
                 <div className="text-muted-foreground text-xs leading-loose tracking-normal">

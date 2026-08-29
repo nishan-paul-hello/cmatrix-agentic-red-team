@@ -20,11 +20,13 @@ export function MissionOverviewAttackGraph({
             <div className="grid-bg-sm pointer-events-none absolute inset-0 opacity-40" />
 
             {/* Canvas label */}
-            <div className="absolute top-3 left-4 flex items-center gap-2 z-10">
+            <div className="absolute top-3 left-4 z-10 flex items-center gap-2">
                 <span className="text-muted-foreground text-[10px] font-semibold tracking-widest uppercase">
                     ATTACK GRAPH — OVERVIEW (4 OF 12 NODES)
                 </span>
-                <span className="text-muted-foreground text-[10px] font-semibold tracking-wide uppercase">VDG / CVE-001</span>
+                <span className="text-muted-foreground text-[10px] font-semibold tracking-wide uppercase">
+                    VDG / CVE-001
+                </span>
             </div>
 
             {/* Focus path button */}
@@ -44,7 +46,7 @@ export function MissionOverviewAttackGraph({
             </div>
 
             {/* Node chain — centered and scrollable */}
-            <div className="absolute inset-0 flex flex-col overflow-y-auto py-12 custom-scrollbar">
+            <div className="custom-scrollbar absolute inset-0 flex flex-col overflow-y-auto py-12">
                 <div className="m-auto flex flex-col items-center gap-0">
                     {nodes.map((node, i) => {
                         const s = nodeStyle(node.status);

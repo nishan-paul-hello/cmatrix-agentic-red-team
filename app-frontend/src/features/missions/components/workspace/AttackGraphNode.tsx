@@ -84,7 +84,7 @@ export function AttackGraphNode<T extends BaseVDGNode>({
                 </div>
 
                 <div
-                    className={`text-[10px] uppercase tracking-widest ${node.ucb !== undefined ? "mb-2" : "mb-0"}`}
+                    className={`text-[10px] tracking-widest uppercase ${node.ucb !== undefined ? "mb-2" : "mb-0"}`}
                     style={{
                         color: style.typeColor,
                     }}
@@ -166,7 +166,7 @@ export function AttackGraphNode<T extends BaseVDGNode>({
                 </span>
             </div>
             <div
-                className="leading-tight-2 mb-1.5 w-full px-2 text-left text-[10px] uppercase tracking-widest"
+                className="leading-tight-2 mb-1.5 w-full px-2 text-left text-[10px] tracking-widest uppercase"
                 style={{
                     color: style.typeColor,
                 }}

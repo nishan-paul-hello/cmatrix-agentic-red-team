@@ -17,7 +17,9 @@ export function Step4() {
             </div>
             <ModeCards
                 value={mode}
-                onChange={(v) => form.setValue("mode", v, { shouldValidate: true, shouldDirty: true })}
+                onChange={(v) =>
+                    form.setValue("mode", v, { shouldValidate: true, shouldDirty: true })
+                }
             />
         </>
     );

@@ -17,7 +17,9 @@ export function Step3() {
             </div>
             <SurfaceCards
                 value={surface}
-                onChange={(v) => form.setValue("surface", v, { shouldValidate: true, shouldDirty: true })}
+                onChange={(v) =>
+                    form.setValue("surface", v, { shouldValidate: true, shouldDirty: true })
+                }
             />
         </>
     );

@@ -141,13 +141,13 @@ export default function Dashboard({ onNewMission, onOpenMission }: DashboardProp
                     </div>
 
                     <div className="flex-1 overflow-auto">
-                        <Table className="w-full border-collapse text-2xs">
+                        <Table className="text-2xs w-full border-collapse">
                             <TableHeader>
                                 <TableRow className="bg-card">
                                     {TABLE_HEADERS.map((h) => (
                                         <TableHead
                                             key={h}
-                                            className="border-border text-muted-foreground border-b px-4 py-1 text-left text-2xs font-semibold tracking-widest whitespace-nowrap"
+                                            className="border-border text-muted-foreground text-2xs border-b px-4 py-1 text-left font-semibold tracking-widest whitespace-nowrap"
                                         >
                                             {h}
                                         </TableHead>
@@ -186,10 +186,10 @@ export default function Dashboard({ onNewMission, onOpenMission }: DashboardProp
                                             <TableCell className="cell-truncate text-muted-foreground max-w-cell-max px-4 py-1.5 whitespace-nowrap">
                                                 {m.target}
                                             </TableCell>
-                                            <TableCell className="text-muted-foreground px-4 py-1.5 text-2xs whitespace-nowrap">
+                                            <TableCell className="text-muted-foreground text-2xs px-4 py-1.5 whitespace-nowrap">
                                                 {m.surface}
                                             </TableCell>
-                                            <TableCell className="text-muted-foreground px-4 py-1.5 text-2xs whitespace-nowrap">
+                                            <TableCell className="text-muted-foreground text-2xs px-4 py-1.5 whitespace-nowrap">
                                                 {m.mode}
                                             </TableCell>
                                             <TableCell className="px-4 py-1.5 whitespace-nowrap">

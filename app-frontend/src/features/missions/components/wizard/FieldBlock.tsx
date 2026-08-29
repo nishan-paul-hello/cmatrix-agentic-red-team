@@ -33,7 +33,7 @@ export default function FieldBlock({
 
                     return (
                         <FormItem className={mb ? "mb-7 space-y-0" : "space-y-0"}>
-                            <FormLabel className="text-muted-foreground mb-2 text-xs font-semibold uppercase tracking-widest">
+                            <FormLabel className="text-muted-foreground mb-2 text-xs font-semibold tracking-widest uppercase">
                                 {label}
                             </FormLabel>
                             <FormControl>
@@ -53,13 +53,11 @@ export default function FieldBlock({
 
     return (
         <div className={mb ? "mb-7" : ""}>
-            <label className="text-muted-foreground mb-2 block text-xs font-semibold uppercase tracking-widest">
+            <label className="text-muted-foreground mb-2 block text-xs font-semibold tracking-widest uppercase">
                 {label}
             </label>
             {children}
-            {hint && (
-                <div className="text-muted-foreground mt-1.5 text-xs">{hint}</div>
-            )}
+            {hint && <div className="text-muted-foreground mt-1.5 text-xs">{hint}</div>}
         </div>
     );
 }

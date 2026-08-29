@@ -31,7 +31,7 @@ export function Step2() {
             <Divider />
 
             {/* Numeric fields */}
-            <div className="text-muted-foreground mb-4 text-xs font-semibold uppercase tracking-widest">
+            <div className="text-muted-foreground mb-4 text-xs font-semibold tracking-widest uppercase">
                 OPERATIONAL LIMITS
             </div>
 

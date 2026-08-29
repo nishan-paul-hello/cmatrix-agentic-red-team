@@ -51,11 +51,13 @@ export default function ModeCards({
 
                         {/* Hint + badges row */}
                         <div className="mb-4 flex items-center gap-2">
-                            <span className={`text-[10px] font-semibold uppercase tracking-widest ${selected ? "text-primary" : "text-muted-foreground"}`}>
+                            <span
+                                className={`text-[10px] font-semibold tracking-widest uppercase ${selected ? "text-primary" : "text-muted-foreground"}`}
+                            >
                                 {opt.hint}
                             </span>
                             <span
-                                className="rounded-sm px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-widest"
+                                className="rounded-sm px-1.5 py-0.5 text-[10px] font-semibold tracking-widest uppercase"
                                 style={{
                                     color: opt.badgeColor,
                                     background: `${opt.badgeColor}18`,
@@ -64,7 +66,7 @@ export default function ModeCards({
                             >
                                 {opt.badge}
                             </span>
-                            <span className="border-border bg-transparent text-muted-foreground rounded-sm border-[1px] border-solid px-1.5 py-0.5 text-[10px] uppercase tracking-widest">
+                            <span className="border-border text-muted-foreground rounded-sm border-[1px] border-solid bg-transparent px-1.5 py-0.5 text-[10px] tracking-widest uppercase">
                                 {opt.difficulty}
                             </span>
                         </div>
@@ -79,7 +81,7 @@ export default function ModeCards({
                             {opt.implications.map((imp: { label: string; detail: string }) => (
                                 <div key={imp.label} className="flex items-start gap-2">
                                     <span
-                                        className={`min-w-[96px] shrink-0 text-[10px] font-semibold uppercase tracking-widest ${selected ? "text-primary" : "text-muted-foreground"}`}
+                                        className={`min-w-[96px] shrink-0 text-[10px] font-semibold tracking-widest uppercase ${selected ? "text-primary" : "text-muted-foreground"}`}
                                     >
                                         {imp.label}
                                     </span>

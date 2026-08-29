@@ -75,7 +75,7 @@ export function KPIStrip({ items, className, variant = "default", ...props }: KP
         >
             {items.map((m) => (
                 <div key={m.k} className="bg-transparent px-4 py-2">
-                    <div className="text-muted-foreground mb-0.5 text-2xs tracking-widest uppercase">
+                    <div className="text-muted-foreground text-2xs mb-0.5 tracking-widest uppercase">
                         {m.k}
                     </div>
                     <div

@@ -103,7 +103,9 @@ const AttackGraphCanvasViewInner = React.memo(function ({
     };
 
     const handleMouseMove = (e: React.MouseEvent) => {
-        if (!isDragging.current) {return;}
+        if (!isDragging.current) {
+            return;
+        }
         const dx = e.clientX - startPos.current.x;
         const dy = e.clientY - startPos.current.y;
         const container = containerRef.current;
@@ -153,120 +155,127 @@ const AttackGraphCanvasViewInner = React.memo(function ({
             {/* Canvas row */}
             <div className="flex min-h-0 flex-1 overflow-hidden">
                 {/* Canvas Wrapper */}
-                <div className="relative flex-1 overflow-hidden bg-background">
+                <div className="bg-background relative flex-1 overflow-hidden">
                     {/* Canvas Viewport */}
-                    { }
+                    {}
                     <div
                         ref={containerRef}
                         role="presentation"
-                        className="relative h-full w-full overflow-auto cursor-grab active:cursor-grabbing [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+                        className="relative h-full w-full cursor-grab [scrollbar-width:none] overflow-auto [-ms-overflow-style:none] active:cursor-grabbing [&::-webkit-scrollbar]:hidden"
                         onMouseDown={handleMouseDown}
                         onMouseMove={handleMouseMove}
                         onMouseUp={handleMouseUp}
                         onMouseLeave={handleMouseUp}
                     >
-                    <div style={{ width: canvasW, height: canvasH, position: "relative" }}>
-                        {/* Grid */}
-                        <div className="grid-bg pointer-events-none absolute inset-0 opacity-50" />
+                        <div style={{ width: canvasW, height: canvasH, position: "relative" }}>
+                            {/* Grid */}
+                            <div className="grid-bg pointer-events-none absolute inset-0 opacity-50" />
 
-                        {/* SVG edges */}
-                        <svg className="pointer-events-none absolute inset-0" width={canvasW} height={canvasH}>
-                        <defs>
-                            <marker
-                                id="arr-red"
-                                markerWidth="6"
-                                markerHeight="6"
-                                refX="5"
-                                refY="3"
-                                orient="auto"
+                            {/* SVG edges */}
+                            <svg
+                                className="pointer-events-none absolute inset-0"
+                                width={canvasW}
+                                height={canvasH}
                             >
-                                <path d="M0,0 L0,6 L6,3 z" fill="var(--primary)" opacity="0.7" />
-                            </marker>
-                            <marker
-                                id="arr-dim"
-                                markerWidth="6"
-                                markerHeight="6"
-                                refX="5"
-                                refY="3"
-                                orient="auto"
-                            >
-                                <path d="M0,0 L0,6 L6,3 z" fill="var(--border)" />
-                            </marker>
-                            <marker
-                                id="arr-active"
-                                markerWidth="6"
-                                markerHeight="6"
-                                refX="5"
-                                refY="3"
-                                orient="auto"
-                            >
-                                <path d="M0,0 L0,6 L6,3 z" fill="var(--destructive)" />
-                            </marker>
-                        </defs>
-                        {edges.map((edge) => {
-                            const src = nodeMap[edge.from];
-                            const dst = nodeMap[edge.to];
-                            if (!src || !dst) {
-                                return null;
-                            }
-                            const vis = visible(src) && visible(dst);
-                            return (
-                                <AttackGraphEdge
-                                    key={`${edge.from}-${edge.to}`}
-                                    edge={edge}
-                                    dst={dst}
-                                    vis={vis}
-                                    x1={lx(src.cx, canvasW)}
-                                    y1={ly(src.cy, canvasH) + NODE_H}
-                                    x2={lx(dst.cx, canvasW)}
-                                    y2={ly(dst.cy, canvasH) - 4}
-                                />
-                            );
-                        })}
-                    </svg>
+                                <defs>
+                                    <marker
+                                        id="arr-red"
+                                        markerWidth="6"
+                                        markerHeight="6"
+                                        refX="5"
+                                        refY="3"
+                                        orient="auto"
+                                    >
+                                        <path
+                                            d="M0,0 L0,6 L6,3 z"
+                                            fill="var(--primary)"
+                                            opacity="0.7"
+                                        />
+                                    </marker>
+                                    <marker
+                                        id="arr-dim"
+                                        markerWidth="6"
+                                        markerHeight="6"
+                                        refX="5"
+                                        refY="3"
+                                        orient="auto"
+                                    >
+                                        <path d="M0,0 L0,6 L6,3 z" fill="var(--border)" />
+                                    </marker>
+                                    <marker
+                                        id="arr-active"
+                                        markerWidth="6"
+                                        markerHeight="6"
+                                        refX="5"
+                                        refY="3"
+                                        orient="auto"
+                                    >
+                                        <path d="M0,0 L0,6 L6,3 z" fill="var(--destructive)" />
+                                    </marker>
+                                </defs>
+                                {edges.map((edge) => {
+                                    const src = nodeMap[edge.from];
+                                    const dst = nodeMap[edge.to];
+                                    if (!src || !dst) {
+                                        return null;
+                                    }
+                                    const vis = visible(src) && visible(dst);
+                                    return (
+                                        <AttackGraphEdge
+                                            key={`${edge.from}-${edge.to}`}
+                                            edge={edge}
+                                            dst={dst}
+                                            vis={vis}
+                                            x1={lx(src.cx, canvasW)}
+                                            y1={ly(src.cy, canvasH) + NODE_H}
+                                            x2={lx(dst.cx, canvasW)}
+                                            y2={ly(dst.cy, canvasH) - 4}
+                                        />
+                                    );
+                                })}
+                            </svg>
 
-                    {/* Node cards */}
-                    {nodes.map((node) => {
-                        const style = NODE_STYLE[node.status];
-                        const isVis = visible(node);
-                        const isHov = hovered === node.id;
-                        return (
-                            <AttackGraphNode
-                                key={node.id}
-                                node={node}
-                                style={style}
-                                isVis={isVis}
-                                isHov={isHov}
-                                x={lx(node.cx, canvasW) - NODE_W / 2}
-                                y={ly(node.cy, canvasH)}
-                                width={NODE_W}
-                                onMouseEnter={setHovered}
-                                onMouseLeave={setHovered}
-                                onClick={setDrawerNode}
+                            {/* Node cards */}
+                            {nodes.map((node) => {
+                                const style = NODE_STYLE[node.status];
+                                const isVis = visible(node);
+                                const isHov = hovered === node.id;
+                                return (
+                                    <AttackGraphNode
+                                        key={node.id}
+                                        node={node}
+                                        style={style}
+                                        isVis={isVis}
+                                        isHov={isHov}
+                                        x={lx(node.cx, canvasW) - NODE_W / 2}
+                                        y={ly(node.cy, canvasH)}
+                                        width={NODE_W}
+                                        onMouseEnter={setHovered}
+                                        onMouseLeave={setHovered}
+                                        onClick={setDrawerNode}
+                                    />
+                                );
+                            })}
+                        </div>
+                    </div>{" "}
+                    {/* Closes viewport */}
+                    {/* Legend (Positioned relative to wrapper) */}
+                    <div className="pointer-events-none absolute inset-0">
+                        <div className="pointer-events-auto">
+                            <AttackGraphLegend
+                                nodeStatuses={[
+                                    "ELIGIBLE",
+                                    "IN_PROGRESS",
+                                    "EXPLOITED",
+                                    "BLOCKED",
+                                    "INFEASIBLE",
+                                    "DEPRIORITIZED",
+                                ]}
+                                nodeStyles={NODE_STYLE}
                             />
-                        );
-                    })}
-
-                    </div>
-                </div> {/* Closes viewport */}
-                
-                {/* Legend (Positioned relative to wrapper) */}
-                <div className="pointer-events-none absolute inset-0">
-                    <div className="pointer-events-auto">
-                        <AttackGraphLegend
-                            nodeStatuses={[
-                                "ELIGIBLE",
-                                "IN_PROGRESS",
-                                "EXPLOITED",
-                                "BLOCKED",
-                                "INFEASIBLE",
-                                "DEPRIORITIZED",
-                            ]}
-                            nodeStyles={NODE_STYLE}
-                        />
+                        </div>
                     </div>
                 </div>
-            </div>
 
                 {/* Node detail drawer */}
                 {drawerNode && (

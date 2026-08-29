@@ -42,7 +42,9 @@ export default function SurfaceCards({
                         </div>
 
                         {/* Protocol */}
-                        <div className={`mb-3 text-xs font-semibold uppercase tracking-widest ${selected ? "text-primary" : "text-muted-foreground"}`}>
+                        <div
+                            className={`mb-3 text-xs font-semibold tracking-widest uppercase ${selected ? "text-primary" : "text-muted-foreground"}`}
+                        >
                             {opt.proto}
                         </div>
 
@@ -56,7 +58,7 @@ export default function SurfaceCards({
                             {opt.tags.map((tag: string) => (
                                 <span
                                     key={tag}
-                                    className={`rounded-sm border border-solid px-1.5 py-0.5 text-[10px] font-semibold tracking-widest uppercase whitespace-nowrap ${selected ? "border-primary text-primary bg-transparent" : "border-border text-muted-foreground bg-transparent"}`}
+                                    className={`rounded-sm border border-solid px-1.5 py-0.5 text-[10px] font-semibold tracking-widest whitespace-nowrap uppercase ${selected ? "border-primary text-primary bg-transparent" : "border-border text-muted-foreground bg-transparent"}`}
                                 >
                                     {tag}
                                 </span>

@@ -97,7 +97,7 @@ export default function ReviewStep({
             <div className="border-border mb-5 overflow-hidden rounded-sm border-[1px] border-solid">
                 {rows.map((row) => (
                     <div key={row.label} className="border-border flex border-b">
-                        <div className="text-muted-foreground border-border w-panel-2xs shrink-0 border-r px-4 py-2.5 text-xs font-semibold uppercase tracking-widest">
+                        <div className="text-muted-foreground border-border w-panel-2xs shrink-0 border-r px-4 py-2.5 text-xs font-semibold tracking-widest uppercase">
                             {row.label}
                         </div>
                         <div
@@ -116,7 +116,7 @@ export default function ReviewStep({
 
             {/* ROE block */}
             <div className="border-border mb-6 overflow-hidden rounded-sm border-[1px] border-solid">
-                <div className="bg-card text-muted-foreground border-border border-b px-4 py-2 text-xs font-semibold uppercase tracking-widest">
+                <div className="bg-card text-muted-foreground border-border border-b px-4 py-2 text-xs font-semibold tracking-widest uppercase">
                     RULES OF ENGAGEMENT
                 </div>
                 <div className="leading-relaxed-2 bg-background text-muted-foreground px-4 py-3 text-xs tracking-tighter">
@@ -126,7 +126,7 @@ export default function ReviewStep({
 
             {/* System confirmations */}
             <div className="border-border mb-2 overflow-hidden rounded-sm border-[1px] border-solid">
-                <div className="bg-background text-muted-foreground border-border border-b px-4 py-2 text-xs font-semibold uppercase tracking-widest">
+                <div className="bg-background text-muted-foreground border-border border-b px-4 py-2 text-xs font-semibold tracking-widest uppercase">
                     PRE-FLIGHT CHECKS
                 </div>
                 {[
