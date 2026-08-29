@@ -1,6 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import StatusBadge from "@/components/ui/StatusBadge";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
 import { useMissionsData } from "@/features/missions/hooks/useMissionsData";
 import { type MissionFilter } from "@/features/missions/utils";
 import { MISSION_STATUS } from "@/types/domain-types";
@@ -86,20 +94,23 @@ export default function MissionsPage({ onNewMission, onOpenMission }: MissionsPa
 
             {/* Missions table */}
             <div className="flex-1 overflow-auto">
-                <table className="w-full border-collapse text-xs">
-                    <thead>
-                        <tr className="bg-card sticky top-0 z-10">
+                <Table
+                    className="w-full border-collapse text-xs"
+                    containerClassName="overflow-visible"
+                >
+                    <TableHeader>
+                        <TableRow className="bg-card z-header sticky top-0">
                             {TABLE_HEADERS.map((h) => (
-                                <th
+                                <TableHead
                                     key={h}
                                     className="border-border text-muted-foreground border-b px-4 py-1.5 text-left text-sm font-semibold tracking-widest whitespace-nowrap"
                                 >
                                     {h}
-                                </th>
+                                </TableHead>
                             ))}
-                        </tr>
-                    </thead>
-                    <tbody>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
                         {(() => {
                             if (isLoading) {
                                 return (
@@ -112,52 +123,45 @@ export default function MissionsPage({ onNewMission, onOpenMission }: MissionsPa
                                 );
                             }
                             return filtered.map((m) => (
-                                <tr
+                                <TableRow
                                     key={m.id}
                                     onClick={() => onOpenMission?.(m.id)}
                                     className="border-border hover:bg-muted cursor-pointer border-b transition-colors duration-75"
                                 >
-                                    <td className="text-primary px-4 py-2 font-semibold tracking-tight whitespace-nowrap">
+                                    <TableCell className="text-primary px-4 py-2 font-semibold tracking-tight whitespace-nowrap">
                                         {m.id}
-                                    </td>
-                                    <td className="cell-truncate text-muted-foreground max-w-[var(--width-cell-max)] px-4 py-2 whitespace-nowrap">
+                                    </TableCell>
+                                    <TableCell className="cell-truncate text-muted-foreground max-w-[var(--width-cell-max)] px-4 py-2 whitespace-nowrap">
                                         {m.target}
-                                    </td>
-                                    <td className="text-muted-foreground px-4 py-2 text-xs whitespace-nowrap">
+                                    </TableCell>
+                                    <TableCell className="text-muted-foreground px-4 py-2 text-xs whitespace-nowrap">
                                         {m.surface}
-                                    </td>
-                                    <td className="text-muted-foreground px-4 py-2 text-xs whitespace-nowrap">
+                                    </TableCell>
+                                    <TableCell className="text-muted-foreground px-4 py-2 text-xs whitespace-nowrap">
                                         {m.mode}
-                                    </td>
-                                    <td className="px-4 py-2 whitespace-nowrap">
+                                    </TableCell>
+                                    <TableCell className="px-4 py-2 whitespace-nowrap">
                                         <StatusBadge status={m.status} />
-                                    </td>
-                                    <td className="text-muted-foreground px-4 py-2 text-right">
+                                    </TableCell>
+                                    <TableCell className="text-muted-foreground px-4 py-2 text-right">
                                         {m.nodes}
-                                    </td>
-                                    <td
-                                        className="px-4 py-2 text-right"
-                                        style={{
-                                            color:
-                                                m.findings > 0
-                                                    ? "var(--destructive)"
-                                                    : "var(--muted-foreground)",
-                                            fontWeight: m.findings > 0 ? 600 : 400,
-                                        }}
+                                    </TableCell>
+                                    <TableCell
+                                        className={`px-4 py-2 text-right ${m.findings > 0 ? "text-destructive font-[600]" : "text-muted-foreground font-[400]"}`}
                                     >
                                         {m.findings}
-                                    </td>
-                                    <td className="text-muted-foreground px-4 py-2 text-right">
+                                    </TableCell>
+                                    <TableCell className="text-muted-foreground px-4 py-2 text-right">
                                         {m.cost}
-                                    </td>
-                                    <td className="text-muted-foreground px-4 py-2 text-base whitespace-nowrap">
+                                    </TableCell>
+                                    <TableCell className="text-muted-foreground px-4 py-2 text-base whitespace-nowrap">
                                         {m.started}
-                                    </td>
-                                </tr>
+                                    </TableCell>
+                                </TableRow>
                             ));
                         })()}
-                    </tbody>
-                </table>
+                    </TableBody>
+                </Table>
             </div>
         </div>
     );
