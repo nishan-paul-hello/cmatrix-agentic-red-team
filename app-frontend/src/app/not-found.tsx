@@ -14,7 +14,7 @@ export const metadata: Metadata = {
  */
 export default function NotFound() {
     return (
-        <div className="bg-background text-foreground flex min-h-screen flex-col items-center justify-center">
+        <div className="bg-background flex min-h-dvh flex-col items-center justify-center p-6">
             {/* Decorative grid background */}
             <div
                 className="pointer-events-none absolute inset-0"

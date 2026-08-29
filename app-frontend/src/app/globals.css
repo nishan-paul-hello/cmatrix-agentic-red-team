@@ -1,12 +1,9 @@
-@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-@custom-variant dark (&:is(.dark *));
-
 @theme inline {
-    --font-mono: "JetBrains Mono", "IBM Plex Mono", "Roboto Mono", monospace;
+    --font-mono: var(--font-mono);
     --font-heading: var(--font-sans);
     --font-sans: var(--font-sans);
     --color-sidebar-ring: var(--sidebar-ring);
@@ -56,12 +53,26 @@
 }
 
 @theme {
+    /* Z-Index Scale */
+    --z-tooltip: 100;
+    --z-modal: 50;
+    --z-drawer: 40;
+    --z-header: 30;
+    --z-node-hover: 10;
+    --z-node-base: 1;
+
     /* Panel Widths */
+    --width-panel-2xs: 140px;
+    --width-panel-xs: 168px;
+    --width-panel-sm-narrow: 220px;
+    --width-panel-sm-alt: 260px;
     --width-panel-sm: 280px;
     --width-panel-md: 300px;
+    --width-panel-md-wide: 480px;
     --width-panel-lg: 540px;
     --width-panel-xl: 600px;
     --width-panel-2xl: 620px;
+    --width-panel-3xl: 760px;
     --width-drawer-sm: 264px;
     --width-drawer-md: 320px;
     --width-drawer-lg: 340px;
