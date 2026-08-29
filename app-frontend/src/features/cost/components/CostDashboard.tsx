@@ -69,18 +69,7 @@ export default function CostDashboard({
                                     key={t}
                                     variant="ghost"
                                     onClick={() => setTab(t)}
-                                    className="h-auto rounded-none px-4 py-1 text-base tracking-widest whitespace-nowrap hover:bg-transparent"
-                                    style={{
-                                        borderBottom:
-                                            t === tab
-                                                ? "2px solid var(--primary)"
-                                                : "2px solid transparent",
-                                        color:
-                                            t === tab
-                                                ? "var(--foreground)"
-                                                : "var(--muted-foreground)",
-                                        marginBottom: -1,
-                                    }}
+                                    className={`-mb-px h-auto rounded-none border-b-2 border-solid px-4 py-1 text-base tracking-widest whitespace-nowrap hover:bg-transparent ${t === tab ? "border-primary text-foreground" : "text-muted-foreground border-transparent"}`}
                                 >
                                     {t}
                                 </Button>

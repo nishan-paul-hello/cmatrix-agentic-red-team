@@ -36,7 +36,7 @@ export default function CostUsage() {
                         k: "TOTAL COST",
                         v: `$${TOTAL.toFixed(4)}`,
                         sub: `${((TOTAL / CEILING) * 100).toFixed(1)}% of ceiling`,
-                        c: "var(--primary)",
+                        c: "text-primary",
                     },
                     { k: "COST CEILING", v: `$${CEILING.toFixed(2)}`, sub: "mission limit" },
                     { k: "TOTAL CALLS", v: "56", sub: "LLM calls" },
@@ -80,14 +80,7 @@ export default function CostUsage() {
                         (h) => (
                             <div
                                 key={h}
-                                className="text-muted-foreground px-3 py-1 text-xs font-semibold tracking-widest"
-                                style={{
-                                    flex: h === "SPECIALIST" || h === "MODEL" ? 2 : 1,
-                                    textAlign:
-                                        h === "COST" || h === "SHARE" || h === "CALLS"
-                                            ? "right"
-                                            : "left",
-                                }}
+                                className={`text-muted-foreground px-3 py-1 text-xs font-semibold tracking-widest ${h === "SPECIALIST" || h === "MODEL" ? "flex-[2]" : "flex-1"} ${h === "COST" || h === "SHARE" || h === "CALLS" ? "text-right" : "text-left"}`}
                             >
                                 {h}
                             </div>
@@ -99,20 +92,10 @@ export default function CostUsage() {
                 ) : (
                     SPECIALISTS_COST.map((s) => (
                         <div key={s.id} className="border-border flex items-center border-b">
-                            <div
-                                className="text-primary px-3 py-2 text-xs font-bold tracking-tight"
-                                style={{
-                                    flex: 2,
-                                }}
-                            >
+                            <div className="text-primary flex-[2] px-3 py-2 text-xs font-bold tracking-tight">
                                 {s.role}
                             </div>
-                            <div
-                                className="text-muted-foreground px-3 py-2 text-base"
-                                style={{
-                                    flex: 2,
-                                }}
-                            >
+                            <div className="text-muted-foreground flex-[2] px-3 py-2 text-base">
                                 {s.model}
                             </div>
                             <div className="text-muted-foreground flex-1 px-3 py-2 text-right text-base">
@@ -128,13 +111,7 @@ export default function CostUsage() {
                                 ${s.cost.toFixed(4)}
                             </div>
                             <div className="flex-1 px-3 py-2 text-right">
-                                <div
-                                    style={{
-                                        display: "inline-flex",
-                                        alignItems: "center",
-                                        gap: 6,
-                                    }}
-                                >
+                                <div className="inline-flex items-center gap-1.5">
                                     <div className="bg-card h-0.5 w-10 overflow-hidden rounded-sm">
                                         <div
                                             className="bg-primary h-full"
@@ -168,13 +145,11 @@ export default function CostUsage() {
                                 <div
                                     key={`timeline-${t.ts}-${t.event}`}
                                     title={`${t.ts} · ${t.event} · $${t.cost.toFixed(4)}`}
-                                    className="absolute bottom-0 cursor-default"
+                                    className={`absolute bottom-0 cursor-default rounded-t-[1px] ${barH > 0 ? "bg-primary" : "bg-border"}`}
                                     style={{
                                         left: `${(i / TIMELINE.length) * 100}%`,
                                         width: `${(1 / TIMELINE.length) * 100 - 1}%`,
                                         height: barH > 0 ? `${barH}px` : "1px",
-                                        background: barH > 0 ? "var(--primary)" : "var(--border)",
-                                        borderRadius: "1px 1px 0 0",
                                     }}
                                 />
                             );

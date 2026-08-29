@@ -10,10 +10,10 @@ export default function ModelBreakdown() {
         void CostRepository.getModels().then((data) => setModels(data));
     }, []);
 
-    const MODEL_C: Record<string, string | undefined> = {
-        "claude-sonnet-5": "var(--primary)",
-        "claude-haiku-4-5": "var(--warning)",
-        "claude-opus-5": "var(--success)",
+    const MODEL_C: Record<string, string> = {
+        "claude-sonnet-5": "primary",
+        "claude-haiku-4-5": "warning",
+        "claude-opus-5": "success",
     };
 
     if (models.length === 0) {
@@ -35,11 +35,7 @@ export default function ModelBreakdown() {
                     >
                         <div className="bg-background border-border flex items-center gap-4 border-b px-5 py-3">
                             <div
-                                className="h-2 w-2 shrink-0"
-                                style={{
-                                    borderRadius: "50%",
-                                    background: MODEL_C[m.model] ?? "var(--muted-foreground)",
-                                }}
+                                className={`h-2 w-2 shrink-0 rounded-full bg-${MODEL_C[m.model] ?? "muted-foreground"}`}
                             />
                             <span className="text-foreground flex-1 text-xs font-bold tracking-tight">
                                 {m.model}
@@ -48,10 +44,7 @@ export default function ModelBreakdown() {
                                 {m.provider}
                             </span>
                             <span
-                                className="text-sm font-bold"
-                                style={{
-                                    color: MODEL_C[m.model] ?? "var(--muted-foreground)",
-                                }}
+                                className={`text-sm font-bold text-${MODEL_C[m.model] ?? "muted-foreground"}`}
                             >
                                 ${m.total.toFixed(4)}
                             </span>
@@ -59,11 +52,8 @@ export default function ModelBreakdown() {
                         <div className="px-5 py-4">
                             <div className="bg-card mb-4 h-0.5 overflow-hidden rounded-sm">
                                 <div
-                                    className="h-full rounded-sm"
-                                    style={{
-                                        width: `${m.pct}%`,
-                                        background: MODEL_C[m.model] ?? "var(--muted-foreground)",
-                                    }}
+                                    className={`h-full rounded-sm bg-${MODEL_C[m.model] ?? "muted-foreground"}`}
+                                    style={{ width: `${m.pct}%` }}
                                 />
                             </div>
                             <div className="grid grid-cols-1 gap-0 sm:grid-cols-2 lg:grid-cols-4">
@@ -85,12 +75,7 @@ export default function ModelBreakdown() {
                                         v: `${m.pct}%`,
                                     },
                                 ].map((stat, i, a) => (
-                                    <div
-                                        key={stat.k}
-                                        style={{
-                                            paddingRight: i < a.length - 1 ? 24 : 0,
-                                        }}
-                                    >
+                                    <div key={stat.k} className={i < a.length - 1 ? "pr-6" : ""}>
                                         <div className="text-muted-foreground mb-0.5 text-xs tracking-widest">
                                             {stat.k}
                                         </div>
@@ -131,10 +116,7 @@ export default function ModelBreakdown() {
                     {["MODEL", "INPUT $/1M", "OUTPUT $/1M"].map((h) => (
                         <div
                             key={h}
-                            className="text-muted-foreground px-3.5 py-1 text-xs font-semibold tracking-widest"
-                            style={{
-                                flex: h === "MODEL" ? 2 : 1,
-                            }}
+                            className={`text-muted-foreground px-3.5 py-1 text-xs font-semibold tracking-widest ${h === "MODEL" ? "flex-[2]" : "flex-1"}`}
                         >
                             {h}
                         </div>
@@ -158,12 +140,7 @@ export default function ModelBreakdown() {
                     },
                 ].map((r) => (
                     <div key={r.m} className="border-border flex border-b">
-                        <div
-                            className="text-muted-foreground px-3.5 py-2 text-xs font-semibold"
-                            style={{
-                                flex: 2,
-                            }}
-                        >
+                        <div className="text-muted-foreground flex-[2] px-3.5 py-2 text-xs font-semibold">
                             {r.m}
                         </div>
                         <div className="text-muted-foreground flex-1 px-3.5 py-2 text-xs">

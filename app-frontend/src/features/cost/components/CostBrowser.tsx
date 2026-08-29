@@ -82,7 +82,7 @@ export default function CostBrowser() {
                             value={selected}
                             onValueChange={(val) => val && handleSelectMission(val)}
                         >
-                            <SelectTrigger className="bg-card text-muted-foreground h-auto w-[140px] rounded-sm px-2 py-1 text-xs tracking-tight focus:ring-0">
+                            <SelectTrigger className="bg-card text-muted-foreground w-panel-2xs h-auto rounded-sm px-2 py-1 text-xs tracking-tight focus:ring-0">
                                 <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
@@ -101,15 +101,7 @@ export default function CostBrowser() {
                             key={t}
                             variant="ghost"
                             onClick={() => setTab(t)}
-                            className="h-auto rounded-none px-4 py-1 text-base tracking-widest whitespace-nowrap hover:bg-transparent"
-                            style={{
-                                borderBottom:
-                                    t === tab
-                                        ? "2px solid var(--primary)"
-                                        : "2px solid transparent",
-                                color: t === tab ? "var(--foreground)" : "var(--muted-foreground)",
-                                marginBottom: -1,
-                            }}
+                            className={`-mb-px h-auto rounded-none border-b-2 border-solid px-4 py-1 text-base tracking-widest whitespace-nowrap hover:bg-transparent ${t === tab ? "border-primary text-foreground" : "text-muted-foreground border-transparent"}`}
                         >
                             {t}
                         </Button>
@@ -141,51 +133,48 @@ export default function CostBrowser() {
                             ].map((h) => (
                                 <div
                                     key={h}
-                                    className="text-muted-foreground flex-1 px-3 py-1 text-xs font-semibold tracking-widest"
-                                    style={{ textAlign: h === "SURFACE" ? "left" : "right" }}
+                                    className={`text-muted-foreground flex-1 px-3 py-1 text-xs font-semibold tracking-widest ${h === "SURFACE" ? "text-left" : "text-right"}`}
                                 >
                                     {h}
                                 </div>
                             ))}
                         </div>
-                        {PER_SURFACE_ROLLUP.map((row) => (
-                            <div
-                                key={row.surface}
-                                className="border-border flex items-center border-b"
-                            >
-                                <div className="text-muted-foreground flex-1 px-3 py-2 text-base font-bold">
-                                    {row.surface}
-                                </div>
-                                <div className="text-foreground flex-1 px-3 py-2 text-right text-xs">
-                                    {row.totalCost}
-                                </div>
-                                <div className="text-muted-foreground flex-1 px-3 py-2 text-right text-xs">
-                                    {row.runs}
-                                </div>
+                        {PER_SURFACE_ROLLUP.map((row) => {
+                            let rateColor = "text-destructive";
+                            if (row.passAt1Rate >= 0.6) {
+                                rateColor = "text-success";
+                            } else if (row.passAt1Rate >= 0.4) {
+                                rateColor = "text-warning";
+                            }
+
+                            return (
                                 <div
-                                    className="flex-1 px-3 py-2 text-right text-xs font-bold"
-                                    style={{
-                                        color: (() => {
-                                            if (row.passAt1Rate >= 0.6) {
-                                                return "var(--success)";
-                                            }
-                                            if (row.passAt1Rate >= 0.4) {
-                                                return "var(--warning)";
-                                            }
-                                            return "var(--destructive)";
-                                        })(),
-                                    }}
+                                    key={row.surface}
+                                    className="border-border flex items-center border-b"
                                 >
-                                    {(row.passAt1Rate * 100).toFixed(1)}%
+                                    <div className="text-muted-foreground flex-1 px-3 py-2 text-base font-bold">
+                                        {row.surface}
+                                    </div>
+                                    <div className="text-foreground flex-1 px-3 py-2 text-right text-xs">
+                                        {row.totalCost}
+                                    </div>
+                                    <div className="text-muted-foreground flex-1 px-3 py-2 text-right text-xs">
+                                        {row.runs}
+                                    </div>
+                                    <div
+                                        className={`flex-1 px-3 py-2 text-right text-xs font-bold ${rateColor}`}
+                                    >
+                                        {(row.passAt1Rate * 100).toFixed(1)}%
+                                    </div>
+                                    <div className="text-primary flex-1 px-3 py-2 text-right text-xs font-bold">
+                                        {row.costPerExploit}
+                                    </div>
+                                    <div className="text-muted-foreground flex-1 px-3 py-2 text-right text-xs">
+                                        {row.avgTimeMin}m
+                                    </div>
                                 </div>
-                                <div className="text-primary flex-1 px-3 py-2 text-right text-xs font-bold">
-                                    {row.costPerExploit}
-                                </div>
-                                <div className="text-muted-foreground flex-1 px-3 py-2 text-right text-xs">
-                                    {row.avgTimeMin}m
-                                </div>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 </div>
             )}

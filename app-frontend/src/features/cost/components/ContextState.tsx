@@ -17,9 +17,9 @@ export default function ContextState() {
     }, []);
 
     const stc: Record<string, string | undefined> = {
-        COMPACTED: "var(--warning)",
-        ACTIVE: "var(--success)",
-        IDLE: "var(--muted-foreground)",
+        COMPACTED: "text-warning",
+        ACTIVE: "text-success",
+        IDLE: "text-muted-foreground",
     };
 
     if (!sel) {
@@ -48,70 +48,51 @@ export default function ContextState() {
                     const pct = Math.round((s.used / s.max) * 100);
                     const bc = (() => {
                         if (pct > 85) {
-                            return "var(--destructive)";
+                            return "bg-destructive";
                         }
                         if (pct > 60) {
-                            return "var(--warning)";
+                            return "bg-warning";
                         }
-                        return "var(--success)";
+                        return "bg-success";
+                    })();
+                    const tc = (() => {
+                        if (pct > 85) {
+                            return "text-destructive";
+                        }
+                        if (pct > 60) {
+                            return "text-warning";
+                        }
+                        return "text-success";
                     })();
                     const isSel = sel.id === s.id;
                     return (
-                        <div
+                        <button
+                            type="button"
                             key={s.id}
                             onClick={() => setSel(s)}
-                            onKeyDown={(ev) => {
-                                if (ev.key === "Enter" || ev.key === " ") {
-                                    setSel(s);
-                                }
-                            }}
-                            role="button"
-                            tabIndex={0}
-                            className="border-border mb-2 cursor-pointer rounded-sm border-[1px] border-solid px-4 py-3.5"
-                            style={{
-                                background: isSel ? "var(--background)" : "transparent",
-                            }}
-                            onMouseEnter={(e) =>
-                                (e.currentTarget.style.background = "var(--background)")
-                            }
-                            onMouseLeave={(e) =>
-                                (e.currentTarget.style.background = isSel
-                                    ? "var(--background)"
-                                    : "transparent")
-                            }
+                            className={`border-border hover:bg-background focus:ring-primary mb-2 w-full cursor-pointer rounded-sm border-[1px] border-solid px-4 py-3.5 text-left focus:ring-1 focus:outline-none ${isSel ? "bg-background" : "bg-transparent"}`}
                         >
                             <div className="mb-3 flex items-center gap-3">
                                 <span className="text-muted-foreground flex-1 text-xs font-bold tracking-tight">
                                     {s.role}
                                 </span>
                                 <span
-                                    className="text-sm font-semibold tracking-widest"
-                                    style={{
-                                        color: stc[s.state],
-                                    }}
+                                    className={`text-sm font-semibold tracking-widest ${stc[s.state]}`}
                                 >
                                     {s.state}
                                 </span>
                                 {s.compacted > 0 && (
                                     <span className="text-warning text-sm tracking-normal">
-                                        COMPACTED ×{s.compacted}
+                                        COMPACTED x{s.compacted}
                                     </span>
                                 )}
-                                <span
-                                    className="text-base font-bold"
-                                    style={{
-                                        color: bc,
-                                    }}
-                                >
-                                    {pct}%
-                                </span>
+                                <span className={`text-base font-bold ${tc}`}>{pct}%</span>
                             </div>
                             <div className="bg-card mb-1.5 h-1 overflow-hidden rounded-sm">
                                 <div
-                                    className="h-full rounded-sm"
+                                    className={`h-full rounded-sm ${bc}`}
                                     style={{
                                         width: `${pct}%`,
-                                        background: bc,
                                     }}
                                 />
                             </div>
@@ -123,22 +104,17 @@ export default function ContextState() {
                                     ${s.cost.toFixed(4)} this session
                                 </span>
                             </div>
-                        </div>
+                        </button>
                     );
                 })}
             </div>
 
             {/* Detail */}
-            <div className="border-border flex w-[260px] flex-shrink-0 flex-col overflow-y-auto border-l px-3.5 py-4">
+            <div className="border-border w-panel-sm-alt flex flex-shrink-0 flex-col overflow-y-auto border-l px-3.5 py-4">
                 <div className="text-foreground mb-1 text-xs font-bold tracking-normal">
                     {sel.role}
                 </div>
-                <div
-                    className="mb-4 text-sm font-semibold tracking-widest"
-                    style={{
-                        color: stc[sel.state],
-                    }}
-                >
+                <div className={`mb-4 text-sm font-semibold tracking-widest ${stc[sel.state]}`}>
                     {sel.state}
                 </div>
                 {[
@@ -181,53 +157,35 @@ export default function ContextState() {
                     </div>
                     {[
                         "FULL CONTEXT",
-                        "→ COMPACTION TRIGGER",
+                        "-> COMPACTION TRIGGER",
                         "SUMMARY GENERATED",
-                        "→ CONTEXT REPLACED",
+                        "-> CONTEXT REPLACED",
                         "ACTIVE TASK PRESERVED",
                     ].map((node, i) => (
                         <div key={`lifecycle-${node}`} className="flex flex-col items-start">
                             {i > 0 && <div className="bg-muted ml-2 h-3 w-px" />}
-                            <div
-                                style={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    gap: 8,
-                                }}
-                            >
+                            <div className="flex items-center gap-2">
                                 <div
-                                    className="h-1.5 w-1.5 shrink-0"
-                                    style={{
-                                        borderRadius: "50%",
-                                        border: "1px solid",
-                                        borderColor: (() => {
-                                            if (sel.compacted > 0 && i === 4) {
-                                                return "var(--success)";
-                                            }
-                                            if (i === 0 && sel.state === "ACTIVE") {
-                                                return "var(--primary)";
-                                            }
-                                            return "var(--border)";
-                                        })(),
-                                        background:
-                                            i === 4 && sel.compacted > 0
-                                                ? "var(--success)"
-                                                : "transparent",
-                                    }}
+                                    className={`h-1.5 w-1.5 shrink-0 rounded-full border border-solid ${(() => {
+                                        if (sel.compacted > 0 && i === 4) {
+                                            return "border-success bg-success";
+                                        }
+                                        if (i === 0 && sel.state === "ACTIVE") {
+                                            return "border-primary bg-transparent";
+                                        }
+                                        return "border-border bg-transparent";
+                                    })()}`}
                                 />
                                 <span
-                                    className="text-sm tracking-tight"
-                                    style={{
-                                        color: (() => {
-                                            if (i === 0 && sel.state === "ACTIVE") {
-                                                return "var(--primary)";
-                                            }
-                                            if (i === 4 && sel.compacted > 0) {
-                                                return "var(--success)";
-                                            }
-                                            return "var(--border)";
-                                        })(),
-                                    }}
+                                    className={`text-sm tracking-tight ${(() => {
+                                        if (i === 0 && sel.state === "ACTIVE") {
+                                            return "text-primary";
+                                        }
+                                        if (i === 4 && sel.compacted > 0) {
+                                            return "text-success";
+                                        }
+                                        return "text-border";
+                                    })()}`}
                                 >
                                     {node}
                                 </span>
