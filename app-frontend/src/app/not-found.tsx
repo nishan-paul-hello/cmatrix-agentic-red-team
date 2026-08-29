@@ -17,12 +17,7 @@ export default function NotFound() {
         <div className="bg-background flex min-h-dvh flex-col items-center justify-center p-6">
             {/* Decorative grid background */}
             <div
-                className="pointer-events-none absolute inset-0"
-                style={{
-                    backgroundImage:
-                        "linear-gradient(rgba(41,41,41,0.18) 1px, transparent 1px), linear-gradient(90deg, rgba(41,41,41,0.18) 1px, transparent 1px)",
-                    backgroundSize: "48px 48px",
-                }}
+                className="grid-bg-lg pointer-events-none absolute inset-0 z-0 opacity-20"
                 aria-hidden="true"
             />
 

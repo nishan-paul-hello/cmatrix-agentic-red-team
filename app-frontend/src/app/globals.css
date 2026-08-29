@@ -108,11 +108,55 @@ input:-webkit-autofill:focus {
         opacity: 0.3;
     }
 }
+@keyframes nodeRing {
+    0%,
+    100% {
+        opacity: 0.5;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.1;
+        transform: scale(1.03);
+    }
+}
+@keyframes blink {
+    0%,
+    100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.3;
+    }
+}
 
 /* ─── Reusable utilities ─────────────────────────────────────────────────── */
 
 @utility pulse-dot {
     animation: pulse 1.4s ease infinite;
+}
+@utility node-ring-pulse {
+    animation: nodeRing 2s ease infinite;
+}
+@utility blink {
+    animation: blink 1s ease infinite;
+}
+@utility grid-bg-sm {
+    background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 32px 32px;
+}
+@utility grid-bg {
+    background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 40px 40px;
+}
+@utility grid-bg-lg {
+    background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 48px 48px;
 }
 
 /* Page header breadcrumb label */
