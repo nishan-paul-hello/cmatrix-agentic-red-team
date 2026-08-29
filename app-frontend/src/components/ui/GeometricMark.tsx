@@ -17,9 +17,9 @@ export default function GeometricMark({ size = 28 }: GeometricMarkProps) {
             width={size}
             height={size}
             alt=""
+            className="block"
             aria-hidden="true"
             draggable={false}
-            style={{ display: "block" }}
         />
     );
 }
