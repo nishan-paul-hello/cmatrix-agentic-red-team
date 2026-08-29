@@ -6,6 +6,7 @@ import GeometricMark from "@/components/ui/GeometricMark";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { SidebarContent } from "@/features/core/components/SidebarContent";
 import { MISSION_STATUS } from "@/types/domain-types";
+import { cn } from "@/lib/utils";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -68,6 +69,7 @@ export default function Shell({
     missionId = "CVE-001",
 }: ShellProps) {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
     return (
         <div className="bg-background text-foreground flex h-dvh flex-col overflow-hidden lg:flex-row">
@@ -101,7 +103,7 @@ export default function Shell({
             <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
                 <SheetContent
                     side="left"
-                    className="bg-background w-[220px] flex max-w-[80vw] flex-col border-r p-0"
+                    className="bg-background w-[200px] flex max-w-[80vw] flex-col border-r p-0"
                 >
                     <SidebarContent
                         activeNav={activeNav}
@@ -113,13 +115,15 @@ export default function Shell({
 
             {/* ── Desktop Sidebar ────────────────────────────────────────────── */}
             <aside
-                className="border-border bg-background w-[220px] relative hidden flex-shrink-0 flex-col overflow-y-auto border-r lg:flex"
+                className={cn("border-border bg-background relative hidden flex-shrink-0 flex-col overflow-y-auto border-r lg:flex transition-all duration-300", isSidebarCollapsed ? "w-[64px]" : "w-[200px]")}
                 aria-label="Main navigation"
             >
                 <SidebarContent
                     activeNav={activeNav}
                     onNavChange={onNavChange}
                     setMobileMenuOpen={setMobileMenuOpen}
+                    isCollapsed={isSidebarCollapsed}
+                    toggleCollapse={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
                 />
             </aside>
 

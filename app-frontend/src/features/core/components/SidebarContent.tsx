@@ -14,6 +14,8 @@ import {
     Target,
     Wrench,
     X,
+    ChevronLeft,
+    ChevronRight,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -62,10 +64,14 @@ export function SidebarContent({
     activeNav,
     onNavChange,
     setMobileMenuOpen,
+    isCollapsed = false,
+    toggleCollapse,
 }: {
     activeNav: NavItem;
     onNavChange: (id: NavItem) => void;
     setMobileMenuOpen: (open: boolean) => void;
+    isCollapsed?: boolean;
+    toggleCollapse?: () => void;
 }) {
     return (
         <>
@@ -73,14 +79,16 @@ export function SidebarContent({
             <div className="bg-primary absolute top-0 bottom-0 left-0 w-0.5" aria-hidden="true" />
 
             {/* Logo */}
-            <div className="border-border flex items-center justify-between gap-2.5 border-b px-4 py-4 lg:py-3">
-                <div className="flex items-center gap-2.5">
+            <div className={cn("border-border flex items-center border-b py-4 lg:py-3", isCollapsed ? "justify-center px-2" : "justify-between gap-2.5 px-4")}>
+                <div className={cn("flex items-center gap-2.5", isCollapsed && "justify-center w-full")}>
                     <GeometricMark size={20} />
-                    <div className="flex flex-col">
-                        <span className="text-foreground text-xs font-bold tracking-widest">
-                            RedGrid
-                        </span>
-                    </div>
+                    {!isCollapsed && (
+                        <div className="flex flex-col">
+                            <span className="text-foreground text-xs font-bold tracking-widest">
+                                RedGrid
+                            </span>
+                        </div>
+                    )}
                 </div>
                 {/* Mobile close button inside drawer */}
                 <Button
@@ -95,13 +103,19 @@ export function SidebarContent({
             </div>
 
             {/* Nav groups */}
-            <nav className="flex flex-1 flex-col py-2" aria-label="Sections">
+            <nav className="flex flex-1 flex-col py-2 overflow-y-auto overflow-x-hidden scrollbar-none" aria-label="Sections">
                 {NAV_GROUPS.map((group, gi) => (
                     <div key={group.label}>
                         {gi > 0 && <div className="bg-muted mx-4 my-2 h-px" aria-hidden="true" />}
-                        <div className="text-muted-foreground px-4 pt-2 pb-1 text-sm font-semibold tracking-widest">
-                            {group.label}
-                        </div>
+                        
+                        {!isCollapsed ? (
+                            <div className="text-muted-foreground px-4 pt-2 pb-1 text-sm font-semibold tracking-widest whitespace-nowrap">
+                                {group.label}
+                            </div>
+                        ) : (
+                            <div className="pt-2 pb-1" />
+                        )}
+
                         {group.items.map((item) => {
                             const active = activeNav === item.id;
                             const Icon = item.icon;
@@ -113,17 +127,19 @@ export function SidebarContent({
                                         onNavChange(item.id);
                                         setMobileMenuOpen(false);
                                     }}
+                                    title={isCollapsed ? item.label : undefined}
                                     aria-current={active ? "page" : undefined}
                                     className={cn(
-                                        "flex w-full items-center justify-start gap-2.5 rounded-none px-4 py-1.5 text-left text-xs tracking-tighter uppercase",
+                                        "flex w-full items-center gap-2.5 rounded-none py-1.5 text-xs tracking-tighter uppercase",
                                         "border-l-2 transition-colors duration-100",
+                                        isCollapsed ? "justify-center px-0" : "justify-start text-left px-4",
                                         active
                                             ? "border-primary bg-muted text-foreground"
                                             : "text-muted-foreground hover:text-muted-foreground border-transparent hover:bg-transparent",
                                     )}
                                 >
-                                    <Icon className="size-3.5" aria-hidden="true" />
-                                    {item.label}
+                                    <Icon className={cn("shrink-0", isCollapsed ? "size-5" : "size-3.5")} aria-hidden="true" />
+                                    {!isCollapsed && <span className="whitespace-nowrap">{item.label}</span>}
                                 </Button>
                             );
                         })}
@@ -131,14 +147,28 @@ export function SidebarContent({
                 ))}
             </nav>
 
-            {/* Ctrl+K hint */}
-            <div className="border-border flex items-center gap-2 border-t px-4 py-3">
-                <kbd className="border-border bg-card text-muted-foreground rounded-sm border px-1 py-px text-sm">
-                    ⌘K
-                </kbd>
-                <span className="text-muted-foreground text-xs tracking-normal sm:text-sm">
-                    COMMAND PALETTE
-                </span>
+            {/* Bottom Actions */}
+            <div className="border-border flex flex-col border-t bg-background">
+                {toggleCollapse && (
+                    <Button
+                        variant="ghost"
+                        onClick={toggleCollapse}
+                        className={cn("hidden lg:flex w-full items-center rounded-none px-4 py-3 h-auto gap-2.5 text-muted-foreground hover:text-foreground", isCollapsed ? "justify-center px-0" : "justify-start")}
+                        title={isCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
+                    >
+                        {isCollapsed ? <ChevronRight className="size-5" /> : <><ChevronLeft className="size-4" /> <span className="text-xs font-bold tracking-widest">COLLAPSE</span></>}
+                    </Button>
+                )}
+                {!isCollapsed && (
+                    <div className="border-border flex items-center gap-2 border-t px-4 py-3">
+                        <kbd className="border-border bg-card text-muted-foreground rounded-sm border px-1 py-px text-sm">
+                            ⌘K
+                        </kbd>
+                        <span className="text-muted-foreground text-xs tracking-normal sm:text-sm whitespace-nowrap">
+                            COMMAND PALETTE
+                        </span>
+                    </div>
+                )}
             </div>
         </>
     );
