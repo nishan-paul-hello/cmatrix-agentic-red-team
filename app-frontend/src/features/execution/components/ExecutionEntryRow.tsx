@@ -5,7 +5,7 @@ import { formatCommand } from "@/features/execution/domain/TaskCommand";
 import { type ExecEntry } from "@/types/domain-types";
 
 export const gridTemplateColumns =
-    "84px 80px minmax(180px, 1.5fr) minmax(280px, 2.5fr) minmax(120px, 1fr) 80px 80px minmax(400px, 3fr)";
+    "84px 100px minmax(180px, 1.5fr) minmax(280px, 2.5fr) minmax(120px, 1fr) 100px 100px minmax(400px, 3fr)";
 
 export const EXECUTION_COLUMNS = [
     { h: "#" },

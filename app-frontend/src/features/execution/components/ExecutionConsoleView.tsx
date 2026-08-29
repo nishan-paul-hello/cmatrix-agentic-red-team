@@ -67,7 +67,7 @@ export default function ExecutionConsoleView({
                     className="bg-background flex-1 overflow-x-auto overflow-y-auto"
                     ref={parentRef}
                 >
-                    <div className="min-w-[1420px] w-full flex flex-col">
+                    <div className="min-w-[1480px] w-full flex flex-col">
                         {/* Header row */}
                         <div
                             className="bg-muted/30 border-border sticky top-0 z-10 grid gap-4 border-b py-1 shadow-sm"
