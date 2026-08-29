@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
     TIER_META,
     type BenchRecord,
@@ -26,7 +27,11 @@ export default function BenchmarkDetail({
     const hasAxisNote = !!tierMeta.axisNote;
 
     return (
-        <div className="flex h-full min-h-0 flex-col">
+        <Tabs
+            value={tab}
+            onValueChange={(v) => setTab(v as "OVERVIEW" | "TASKS" | "CATEGORIES")}
+            className="flex h-full min-h-0 flex-col"
+        >
             <div className="border-border flex-shrink-0 border-b px-6 pt-5 pb-0">
                 <Button
                     variant="ghost"
@@ -61,32 +66,29 @@ export default function BenchmarkDetail({
                         </span>
                     </div>
                 )}
-                <div className="flex">
+                <TabsList variant="line" className="flex justify-start p-0">
                     {(["OVERVIEW", "TASKS", "CATEGORIES"] as const).map((t) => (
-                        <Button
+                        <TabsTrigger
                             key={t}
-                            variant="ghost"
-                            onClick={() => setTab(t)}
-                            className="h-auto rounded-none px-3.5 py-1 text-base tracking-widest hover:bg-transparent"
-                            style={{
-                                borderBottom:
-                                    t === tab
-                                        ? "2px solid var(--primary)"
-                                        : "2px solid transparent",
-                                color: t === tab ? "var(--foreground)" : "var(--muted-foreground)",
-                                marginBottom: -1,
-                            }}
+                            value={t}
+                            className="h-auto rounded-none px-3.5 py-1 text-base tracking-widest"
                         >
                             {t}
-                        </Button>
+                        </TabsTrigger>
                     ))}
-                </div>
+                </TabsList>
             </div>
             <div className="flex-1 overflow-y-auto px-6 py-5">
-                {tab === "OVERVIEW" && <BenchmarkOverviewTab bench={bench} />}
-                {tab === "TASKS" && <BenchmarkTasksTab tasks={tasks} />}
-                {tab === "CATEGORIES" && <BenchmarkCategoriesTab catStats={catStats} />}
+                <TabsContent value="OVERVIEW" className="m-0 h-full">
+                    <BenchmarkOverviewTab bench={bench} />
+                </TabsContent>
+                <TabsContent value="TASKS" className="m-0 h-full">
+                    <BenchmarkTasksTab tasks={tasks} />
+                </TabsContent>
+                <TabsContent value="CATEGORIES" className="m-0 h-full">
+                    <BenchmarkCategoriesTab catStats={catStats} />
+                </TabsContent>
             </div>
-        </div>
+        </Tabs>
     );
 }

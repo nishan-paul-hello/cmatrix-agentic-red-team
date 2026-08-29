@@ -3,34 +3,34 @@ import { type BenchRecord } from "@/features/benchmarks/data/fixtures/benchmarks
 /** Returns the color token for green/warn/red/neutral priority */
 export function kvColor(green?: boolean, warn?: boolean, red?: boolean): string {
     if (green) {
-        return "var(--success)";
+        return "text-success";
     }
     if (warn) {
-        return "var(--warning)";
+        return "text-warning";
     }
     if (red) {
-        return "var(--destructive)";
+        return "text-destructive";
     }
-    return "var(--foreground)";
+    return "text-foreground";
 }
 
 /** Returns color for a 0-1 rate: ≥0.8 green, ≥0.5 amber, else red */
 export function rateColor(rate: number): string {
     if (rate >= 0.8) {
-        return "var(--success)";
+        return "text-success";
     }
     if (rate >= 0.5) {
-        return "var(--warning)";
+        return "text-warning";
     }
-    return "var(--destructive)";
+    return "text-destructive";
 }
 
 /** Returns color for ADM gate: pass=green, fail=red, non-gate=white */
 export function gateColor(isGate: boolean, passed: boolean): string {
     if (!isGate) {
-        return "var(--foreground)";
+        return "text-foreground";
     }
-    return passed ? "var(--success)" : "var(--destructive)";
+    return passed ? "text-success" : "text-destructive";
 }
 
 export type FailureClass = (typeof FAILURE_CLASSES)[number];
@@ -48,10 +48,7 @@ export function KvGrid(
             {items.map((m) => (
                 <div key={m.k} className="bg-background border-border border-r px-4 py-3.5">
                     <div className="text-muted-foreground mb-1 text-xs tracking-widest">{m.k}</div>
-                    <div
-                        className="text-xs font-bold"
-                        style={{ color: kvColor(m.green, m.warn, m.red) }}
-                    >
+                    <div className={`text-xs font-bold ${kvColor(m.green, m.warn, m.red)}`}>
                         {m.v}
                     </div>
                 </div>
@@ -90,14 +87,12 @@ export function PassRateBar({
         <div className="mb-3.5">
             <div className="mb-2 flex justify-between">
                 <span className="text-muted-foreground text-base tracking-widest">{label}</span>
-                <span className="text-xs font-bold" style={{ color }}>
-                    {(value * 100).toFixed(1)}%
-                </span>
+                <span className={`text-xs font-bold ${color}`}>{(value * 100).toFixed(1)}%</span>
             </div>
             <div className="bg-card h-1 overflow-hidden rounded-sm">
                 <div
-                    className="h-full rounded-sm"
-                    style={{ width: `${value * 100}%`, background: color }}
+                    className={`h-full rounded-sm ${color.replace("text-", "bg-")}`}
+                    style={{ width: `${value * 100}%` }}
                 />
             </div>
         </div>

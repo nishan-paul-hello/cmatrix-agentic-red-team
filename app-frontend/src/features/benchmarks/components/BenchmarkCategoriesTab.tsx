@@ -18,36 +18,32 @@ export function BenchmarkCategoriesTab({ catStats }: { catStats: CategoryStat[] 
                                     {c.cat}
                                 </span>
                                 <span
-                                    className="text-xs font-bold"
-                                    style={{
-                                        color: (() => {
-                                            if (pct > 80) {
-                                                return "var(--success)";
-                                            }
-                                            if (pct > 50) {
-                                                return "var(--warning)";
-                                            }
-                                            return "var(--destructive)";
-                                        })(),
-                                    }}
+                                    className={`text-xs font-bold ${(() => {
+                                        if (pct > 80) {
+                                            return "text-success";
+                                        }
+                                        if (pct > 50) {
+                                            return "text-warning";
+                                        }
+                                        return "text-destructive";
+                                    })()}`}
                                 >
                                     {pct}%
                                 </span>
                             </div>
                             <div className="bg-card h-0.5 overflow-hidden rounded-sm">
                                 <div
-                                    className="h-full"
+                                    className={`h-full ${(() => {
+                                        if (pct > 80) {
+                                            return "bg-success";
+                                        }
+                                        if (pct > 50) {
+                                            return "bg-warning";
+                                        }
+                                        return "bg-destructive";
+                                    })()}`}
                                     style={{
                                         width: `${pct}%`,
-                                        background: (() => {
-                                            if (pct > 80) {
-                                                return "var(--success)";
-                                            }
-                                            if (pct > 50) {
-                                                return "var(--warning)";
-                                            }
-                                            return "var(--destructive)";
-                                        })(),
                                     }}
                                 />
                             </div>

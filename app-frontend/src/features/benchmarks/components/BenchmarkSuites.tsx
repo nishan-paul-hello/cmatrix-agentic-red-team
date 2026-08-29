@@ -57,15 +57,15 @@ export function BenchmarkSuites() {
                 {TIERS.map((t) => {
                     const scoreColor = (() => {
                         if (t.score === null) {
-                            return "var(--border)";
+                            return "text-border";
                         }
                         if (t.score >= 0.75) {
-                            return "var(--success)";
+                            return "text-success";
                         }
                         if (t.score >= 0.5) {
-                            return "var(--warning)";
+                            return "text-warning";
                         }
-                        return "var(--border)";
+                        return "text-border";
                     })();
                     return (
                         <div

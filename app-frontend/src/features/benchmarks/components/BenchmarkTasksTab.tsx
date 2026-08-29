@@ -1,47 +1,53 @@
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
 import { type Task } from "@/features/benchmarks/data/fixtures/benchmarksMockData";
 
 export function BenchmarkTasksTab({ tasks }: { tasks: Task[] }) {
     return (
-        <table className="w-full border-collapse">
-            <thead>
-                <tr className="bg-card">
+        <Table className="w-full border-collapse">
+            <TableHeader>
+                <TableRow className="bg-card">
                     {["TASK", "CATEGORY", "RESULT", "COST", "TIME", "E_ORD", "ATTEMPTS"].map(
                         (h) => (
-                            <th
+                            <TableHead
                                 key={h}
                                 className="text-muted-foreground border-border border-b px-3 py-1 text-left text-xs font-semibold tracking-widest"
                             >
                                 {h}
-                            </th>
+                            </TableHead>
                         ),
                     )}
-                </tr>
-            </thead>
-            <tbody>
+                </TableRow>
+            </TableHeader>
+            <TableBody>
                 {tasks.map((t, i) => (
-                    <tr
+                    <TableRow
                         key={t.id}
-                        style={{
-                            borderBottom: "1px solid var(--border)",
-                            background: i % 2 ? "var(--background)" : "transparent",
-                        }}
+                        className={`border-border border-b ${i % 2 ? "bg-background" : "bg-transparent"}`}
                     >
-                        <td className="text-primary px-3 py-2 text-base font-bold">{t.id}</td>
-                        <td className="text-muted-foreground px-3 py-2 text-base">{t.name}</td>
-                        <td className="px-3 py-2">
+                        <TableCell className="text-primary px-3 py-2 text-base font-bold">
+                            {t.id}
+                        </TableCell>
+                        <TableCell className="text-muted-foreground px-3 py-2 text-base">
+                            {t.name}
+                        </TableCell>
+                        <TableCell className="px-3 py-2">
                             <span
-                                className="text-sm font-bold tracking-wide"
-                                style={{
-                                    color: (() => {
-                                        if (t.solved) {
-                                            return "var(--success)";
-                                        }
-                                        if (t.partial) {
-                                            return "var(--warning)";
-                                        }
-                                        return "var(--destructive)";
-                                    })(),
-                                }}
+                                className={`text-sm font-bold tracking-wide ${(() => {
+                                    if (t.solved) {
+                                        return "text-success";
+                                    }
+                                    if (t.partial) {
+                                        return "text-warning";
+                                    }
+                                    return "text-destructive";
+                                })()}`}
                             >
                                 {(() => {
                                     if (t.solved) {
@@ -53,22 +59,24 @@ export function BenchmarkTasksTab({ tasks }: { tasks: Task[] }) {
                                     return "FAILED";
                                 })()}
                             </span>
-                        </td>
-                        <td className="text-muted-foreground px-3 py-2 text-base">{t.cost}</td>
-                        <td className="text-muted-foreground px-3 py-2 text-base">{t.time}</td>
-                        <td className="text-muted-foreground px-3 py-2 text-base">{t.eord}/5</td>
-                        <td
-                            className="px-3 py-2 text-base"
-                            style={{
-                                color:
-                                    t.attempts > 2 ? "var(--warning)" : "var(--muted-foreground)",
-                            }}
+                        </TableCell>
+                        <TableCell className="text-muted-foreground px-3 py-2 text-base">
+                            {t.cost}
+                        </TableCell>
+                        <TableCell className="text-muted-foreground px-3 py-2 text-base">
+                            {t.time}
+                        </TableCell>
+                        <TableCell className="text-muted-foreground px-3 py-2 text-base">
+                            {t.eord}/5
+                        </TableCell>
+                        <TableCell
+                            className={`px-3 py-2 text-base ${t.attempts > 2 ? "text-warning" : "text-muted-foreground"}`}
                         >
                             {t.attempts}
-                        </td>
-                    </tr>
+                        </TableCell>
+                    </TableRow>
                 ))}
-            </tbody>
-        </table>
+            </TableBody>
+        </Table>
     );
 }

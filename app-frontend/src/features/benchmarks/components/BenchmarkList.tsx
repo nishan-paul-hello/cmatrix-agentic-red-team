@@ -61,15 +61,7 @@ export default function BenchmarkList({ onSelect }: { onSelect: (b: BenchRecord)
                             onClick={() => setTierFilter("ALL")}
                             aria-pressed={tierFilter === "ALL"}
                             aria-label="Show all tiers"
-                            className="h-auto rounded-sm px-2.5 py-0.5 text-sm tracking-wide"
-                            style={{
-                                background: tierFilter === "ALL" ? "var(--primary)" : "transparent",
-                                border: `1px solid ${tierFilter === "ALL" ? "var(--primary)" : "var(--border)"}`,
-                                color:
-                                    tierFilter === "ALL"
-                                        ? "var(--foreground)"
-                                        : "var(--muted-foreground)",
-                            }}
+                            className={`h-auto rounded-sm border px-2.5 py-0.5 text-sm tracking-wide ${tierFilter === "ALL" ? "bg-primary border-primary text-foreground" : "border-border text-muted-foreground bg-transparent"}`}
                         >
                             ALL
                         </Button>
@@ -83,14 +75,7 @@ export default function BenchmarkList({ onSelect }: { onSelect: (b: BenchRecord)
                                     onClick={() => setTierFilter(t)}
                                     aria-pressed={isActive}
                                     aria-label={`Filter by ${meta.label}`}
-                                    className="h-auto rounded-sm px-2 py-0.5 text-xs tracking-normal"
-                                    style={{
-                                        background: isActive ? meta.color : "transparent",
-                                        border: `1px solid ${isActive ? meta.color : "var(--border)"}`,
-                                        color: isActive
-                                            ? "var(--foreground)"
-                                            : "var(--muted-foreground)",
-                                    }}
+                                    className={`h-auto rounded-sm border px-2 py-0.5 text-xs tracking-normal ${isActive ? `text-foreground ${meta.color.replace("text-", "bg-")} ${meta.color.replace("text-", "border-")}` : "text-muted-foreground border-border bg-transparent"}`}
                                 >
                                     {meta.label.split(" — ")[0]}
                                 </Button>
@@ -140,10 +125,7 @@ export default function BenchmarkList({ onSelect }: { onSelect: (b: BenchRecord)
                             {m.k}
                         </div>
                         <div
-                            className="mb-0.5 text-xs font-bold"
-                            style={{
-                                color: m.red ? "var(--primary)" : "var(--foreground)",
-                            }}
+                            className={`mb-0.5 text-xs font-bold ${m.red ? "text-primary" : "text-foreground"}`}
                         >
                             {m.v}
                         </div>
