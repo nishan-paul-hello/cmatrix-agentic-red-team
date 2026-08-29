@@ -101,7 +101,7 @@ export default function Shell({
             <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
                 <SheetContent
                     side="left"
-                    className="bg-background w-panel-sm flex max-w-[80vw] flex-col border-r p-0"
+                    className="bg-background w-[220px] flex max-w-[80vw] flex-col border-r p-0"
                 >
                     <SidebarContent
                         activeNav={activeNav}
@@ -113,7 +113,7 @@ export default function Shell({
 
             {/* ── Desktop Sidebar ────────────────────────────────────────────── */}
             <aside
-                className="border-border bg-background w-panel-sm relative hidden flex-shrink-0 flex-col overflow-y-auto border-r lg:flex"
+                className="border-border bg-background w-[220px] relative hidden flex-shrink-0 flex-col overflow-y-auto border-r lg:flex"
                 aria-label="Main navigation"
             >
                 <SidebarContent
