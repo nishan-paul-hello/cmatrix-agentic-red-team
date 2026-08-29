@@ -20,7 +20,7 @@ import {
 
 const LOGIC_W = 1000,
     LOGIC_H = 560,
-    NODE_W = 180,
+    NODE_W = 200,
     NODE_H = 92;
 
 function lx(x: number, cw: number) {
@@ -99,12 +99,15 @@ const AttackGraphCanvasViewInner = React.memo(function ({
         const container = containerRef.current;
         // w > 100 ensures we don't center during a tiny transient mounting state
         if (container && !hasManuallyScrolled.current && canvasW > 0 && w > 100) {
-            const rootCx = 500; // The logical center of the root node (RECON-001)
-            const centerPx = lx(rootCx, graphW);
+            const minCx = nodes.length > 0 ? Math.min(...nodes.map((n) => n.cx)) : 500;
+            const maxCx = nodes.length > 0 ? Math.max(...nodes.map((n) => n.cx)) : 500;
+            const centerCx = (minCx + maxCx) / 2;
+            const centerPx = lx(centerCx, graphW);
+            
             const minCy = nodes.length > 0 ? Math.min(...nodes.map((n) => n.cy)) : 50;
             const topPx = ly(minCy, graphH);
             
-            // Exactly center the root node horizontally
+            // Exactly center the visual mass of the tree horizontally
             container.scrollLeft = offsetX + centerPx - w / 2;
             // Exactly place the topmost node 40px from the top
             container.scrollTop = offsetY + topPx - 40;
