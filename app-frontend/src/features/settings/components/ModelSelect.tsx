@@ -25,7 +25,7 @@ export function ModelSelect({
             onValueChange={(v) => onChange(sanitizeInput(v as string))}
             {...props}
         >
-            <SelectTrigger className="text-muted-foreground w-[220px] text-xs">
+            <SelectTrigger className="text-muted-foreground w-panel-sm-narrow text-xs">
                 <SelectValue />
             </SelectTrigger>
             <SelectContent>

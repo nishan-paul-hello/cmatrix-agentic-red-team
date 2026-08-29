@@ -8,7 +8,7 @@ import { Chips } from "@/features/settings/components/Chips";
 import { Field } from "@/features/settings/components/Field";
 import { SaveBar } from "@/features/settings/components/SaveBar";
 import { SectionHead } from "@/features/settings/components/SectionHead";
-import { TextInput } from "@/features/settings/components/TextInput";
+import { SettingsTextInput } from "@/features/settings/components/SettingsTextInput";
 import { ToggleRow } from "@/features/settings/components/ToggleRow";
 
 export function GeneralSettings() {
@@ -17,13 +17,13 @@ export function GeneralSettings() {
         <div className="max-w-panel-xl flex-1 overflow-y-auto px-6 py-6">
             <SectionHead label="OPERATOR" />
             <Field label="OPERATOR ID" name="general.operatorId">
-                <TextInput />
+                <SettingsTextInput />
             </Field>
             <Field label="DISPLAY NAME" name="general.displayName">
-                <TextInput />
+                <SettingsTextInput />
             </Field>
             <Field label="ORGANIZATION" name="general.organization">
-                <TextInput />
+                <SettingsTextInput />
             </Field>
             <SectionHead label="INTERFACE" />
             <ToggleRow label="AUTO-REFRESH LIVE FEED" name="general.autoRefresh" />
@@ -41,7 +41,7 @@ export function GeneralSettings() {
                         </FormLabel>
                         <FormControl>
                             <div className="flex items-center gap-2">
-                                <TextInput
+                                <SettingsTextInput
                                     {...field}
                                     className="text-muted-foreground w-[72px] text-right text-xs"
                                 />
@@ -61,7 +61,7 @@ export function GeneralSettings() {
                         </FormLabel>
                         <FormControl>
                             <div className="flex items-center gap-2">
-                                <TextInput
+                                <SettingsTextInput
                                     {...field}
                                     className="text-muted-foreground w-[72px] text-right text-xs"
                                 />

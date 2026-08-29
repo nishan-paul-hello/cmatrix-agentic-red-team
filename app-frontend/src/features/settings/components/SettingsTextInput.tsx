@@ -2,7 +2,11 @@ import React from "react";
 
 import { Input } from "@/components/ui/input";
 
-export function TextInput({ value, onChange, ...props }: React.ComponentProps<typeof Input>) {
+export function SettingsTextInput({
+    value,
+    onChange,
+    ...props
+}: React.ComponentProps<typeof Input>) {
     return (
         <Input
             value={value}
