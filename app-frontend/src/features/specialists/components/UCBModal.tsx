@@ -3,6 +3,7 @@ import React from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { STATUS_C } from "@/features/specialists/constants";
 import { type VDGEntry } from "@/features/specialists/data/fixtures/teamDashboardMockData";
+import { cn } from "@/lib/utils";
 
 export function UCBModal({
     entry,
@@ -94,20 +95,16 @@ export function UCBModal({
                                     </div>
                                 </div>
                                 <span
-                                    className="text-base font-bold"
-                                    style={{
-                                        color: b.color,
-                                    }}
+                                    className={cn("text-base font-bold", b.color)}
                                 >
                                     {b.value.toFixed(3)}
                                 </span>
                             </div>
                             <div className="bg-card h-1 overflow-hidden rounded-sm">
                                 <div
-                                    className="h-full rounded-sm"
+                                    className={cn("h-full rounded-sm", b.color.replace("text-", "bg-"))}
                                     style={{
                                         width: `${b.value * 100}%`,
-                                        background: b.color,
                                     }}
                                 />
                             </div>

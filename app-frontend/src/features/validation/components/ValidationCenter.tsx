@@ -1,4 +1,5 @@
 import Btn from "@/features/validation/components/Btn";
+import { cn } from "@/lib/utils";
 import OraclePanel from "@/features/validation/components/OraclePanel";
 import StateMachineModal from "@/features/validation/components/StateMachineModal";
 import { useValidationData } from "@/features/validation/hooks/useValidationData";
@@ -76,10 +77,7 @@ export default function ValidationCenter() {
                             {m.label}
                         </div>
                         <div
-                            className="text-sm leading-none font-bold"
-                            style={{
-                                color: m.color,
-                            }}
+                            className={cn("text-sm leading-none font-bold", m.color)}
                         >
                             {m.value}
                         </div>
