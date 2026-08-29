@@ -104,3 +104,6 @@ For each page you process, report:
 - **Data-Dense Surfaces**: Attack graph headers and action buttons should follow the `text-[10px] font-semibold tracking-widest uppercase` pattern to maintain tight density. — first applied on missions/NEW-001
 - **Layouts**: Ensure split-pane layouts like the Attack Graph have explicit flex-basis (e.g., `basis-[45%]`) to prevent collapsing. — first applied on missions/NEW-001
 - **Color Usage**: Introduce `muted-dim`, `muted-dimmer`, and `muted-dimmest` semantic tokens for secondary text to recreate the old UI's gradation for inactive/infeasible states while preserving legible contrast. — first applied on missions/NEW-001
+- **Node Graphs**: Node backgrounds for active states (EXPLOITED, ELIGIBLE, IN_PROGRESS) should be `transparent` rather than a solid color to maintain the dark visual theme of the graph background. — first applied on missions/NEW-001
+- **Node Graphs**: Node typography should use `text-xs font-bold tracking-wide` for IDs and `text-[10px] uppercase tracking-widest` for types to match the tight density of the old UI. — first applied on missions/NEW-001
+- **Node Graphs**: Status badges on nodes should use `bg-transparent` rather than a solid background to recreate the text-only look while preserving the pill badge shape via border and rounded corners. — first applied on missions/NEW-001

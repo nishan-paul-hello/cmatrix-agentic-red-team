@@ -1,4 +1,3 @@
-import { Sheet, SheetContent } from "@/components/ui/sheet";
 import {
     NodeDrawerContext,
     type DrawerNode,
@@ -157,33 +156,21 @@ export default function VDGNodeDrawerView({
         : "var(--border)";
 
     return (
-        <Sheet
-            open
-            onOpenChange={(open) => {
-                if (!open) {
-                    onClose();
-                }
-            }}
-        >
-            <SheetContent
-                side="right"
-                className="border-border sm:max-w-drawer-md flex w-full flex-col gap-0 border-l p-0"
+        <aside className="border-border bg-background flex h-full w-[var(--width-drawer-md)] shrink-0 flex-col gap-0 border-l p-0 shadow-[-10px_0_30px_rgba(0,0,0,0.5)]">
+            <NodeDrawerContext.Provider
+                value={{ node, detail, onClose, statusColor, statusBg, statusBorder }}
             >
-                <NodeDrawerContext.Provider
-                    value={{ node, detail, onClose, statusColor, statusBg, statusBorder }}
-                >
-                    <VDGNodeDrawerHeader />
-                    <div className="flex-1 overflow-y-auto">
-                        <VDGNodeDrawerIntent />
-                        <VDGNodeDrawerMetrics />
-                        <VDGNodeDrawerEvidence />
-                        <VDGNodeDrawerPrerequisites />
-                        <VDGNodeDrawerEnables />
-                        <VDGNodeDrawerFacts />
-                        <VDGNodeDrawerLifecycle />
-                    </div>
-                </NodeDrawerContext.Provider>
-            </SheetContent>
-        </Sheet>
+                <VDGNodeDrawerHeader />
+                <div className="flex-1 overflow-y-auto">
+                    <VDGNodeDrawerIntent />
+                    <VDGNodeDrawerMetrics />
+                    <VDGNodeDrawerEvidence />
+                    <VDGNodeDrawerPrerequisites />
+                    <VDGNodeDrawerEnables />
+                    <VDGNodeDrawerFacts />
+                    <VDGNodeDrawerLifecycle />
+                </div>
+            </NodeDrawerContext.Provider>
+        </aside>
     );
 }

@@ -84,7 +84,7 @@ export function AttackGraphNode<T extends BaseVDGNode>({
                 </div>
 
                 <div
-                    className={`text-sm tracking-widest ${node.ucb !== undefined ? "mb-2" : "mb-0"}`}
+                    className={`text-[10px] uppercase tracking-widest ${node.ucb !== undefined ? "mb-2" : "mb-0"}`}
                     style={{
                         color: style.typeColor,
                     }}
@@ -139,9 +139,9 @@ export function AttackGraphNode<T extends BaseVDGNode>({
             {node.status === "ELIGIBLE" && isVis && (
                 <div className="border-border node-ring-pulse pointer-events-none absolute -inset-[4px] rounded-xs border-[1px] border-solid" />
             )}
-            <div className="mb-1 flex w-full items-center justify-between px-3 pt-2">
+            <div className="mb-1 flex w-full items-center justify-between px-2 pt-2">
                 <span
-                    className="text-base font-bold tracking-normal"
+                    className="truncate text-xs font-bold tracking-wide"
                     style={{
                         color: style.labelColor,
                     }}
@@ -166,7 +166,7 @@ export function AttackGraphNode<T extends BaseVDGNode>({
                 </span>
             </div>
             <div
-                className="leading-tight-2 mb-1.5 w-full px-3 text-left text-xs tracking-widest"
+                className="leading-tight-2 mb-1.5 w-full truncate px-2 text-left text-[10px] uppercase tracking-widest"
                 style={{
                     color: style.typeColor,
                 }}
@@ -174,7 +174,7 @@ export function AttackGraphNode<T extends BaseVDGNode>({
                 {node.type}
             </div>
             <div
-                className="flex w-full items-center gap-3 px-3 pb-2"
+                className="flex w-full items-center gap-2 px-2 pb-2"
                 style={{
                     borderTop: `1px solid ${style.border}`,
                     paddingTop: 5,
@@ -182,7 +182,7 @@ export function AttackGraphNode<T extends BaseVDGNode>({
             >
                 <KPIStrip
                     variant="inline"
-                    className="gap-3"
+                    className="gap-2"
                     items={[
                         {
                             k: "UCB",
@@ -197,7 +197,7 @@ export function AttackGraphNode<T extends BaseVDGNode>({
                 />
                 <div className="ml-auto">
                     <span
-                        className="rounded-sm px-1 py-px text-xs font-semibold tracking-normal"
+                        className="rounded-sm px-1.5 py-0.5 text-[10px] font-semibold tracking-widest"
                         style={{
                             color: style.badgeColor,
                             background: style.badgeBg,

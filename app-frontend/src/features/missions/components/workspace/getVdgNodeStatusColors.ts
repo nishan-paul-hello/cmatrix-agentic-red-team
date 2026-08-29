@@ -8,15 +8,15 @@ export default function getVdgNodeStatusColors(status: VdgNodeStatus): {
     const map: Record<VdgNodeStatus, { color: string; bg: string }> = {
         [VDG_NODE_STATUS.EXPLOITED]: {
             color: "var(--primary)",
-            bg: "var(--border)",
+            bg: "transparent",
         },
         [VDG_NODE_STATUS.ELIGIBLE]: {
             color: "var(--destructive)",
-            bg: "var(--border)",
+            bg: "transparent",
         },
         [VDG_NODE_STATUS.IN_PROGRESS]: {
             color: "var(--destructive)",
-            bg: "var(--border)",
+            bg: "transparent",
         },
         [VDG_NODE_STATUS.INFEASIBLE]: {
             color: "var(--muted-dimmer)",

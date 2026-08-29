@@ -171,7 +171,7 @@ const AttackGraphCanvasViewInner = React.memo(function ({
                                     dst={dst}
                                     vis={vis}
                                     x1={lx(src.cx, w)}
-                                    y1={ly(src.cy, h) + NODE_H / 2}
+                                    y1={ly(src.cy, h) + NODE_H}
                                     x2={lx(dst.cx, w)}
                                     y2={ly(dst.cy, h) - 4}
                                 />
