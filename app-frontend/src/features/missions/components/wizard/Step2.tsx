@@ -31,7 +31,7 @@ export function Step2() {
             <Divider />
 
             {/* Numeric fields */}
-            <div className="text-muted-foreground mb-4 text-base tracking-widest">
+            <div className="text-muted-foreground mb-4 text-xs font-semibold uppercase tracking-widest">
                 OPERATIONAL LIMITS
             </div>
 
@@ -42,7 +42,7 @@ export function Step2() {
                         <div className="text-muted-foreground mb-0.5 text-xs font-semibold tracking-widest">
                             MAXIMUM RUNTIME
                         </div>
-                        <div className="text-muted-foreground text-base tracking-normal">
+                        <div className="text-muted-foreground text-xs tracking-normal">
                             Minutes allowed per vulnerability before the specialist is retired.
                         </div>
                     </div>
@@ -54,7 +54,7 @@ export function Step2() {
                             max={120}
                             className="bg-muted text-foreground focus-visible:border-primary h-auto w-14 rounded-sm px-2 py-1.5 text-right text-sm font-semibold tracking-tighter shadow-none"
                         />
-                        <span className="text-muted-foreground text-base tracking-wide whitespace-nowrap">
+                        <span className="text-muted-foreground text-xs tracking-wide whitespace-nowrap">
                             min / vuln
                         </span>
                     </div>
@@ -66,7 +66,7 @@ export function Step2() {
                         <div className="text-muted-foreground mb-0.5 text-xs font-semibold tracking-widest">
                             COST CEILING
                         </div>
-                        <div className="text-muted-foreground text-base tracking-normal">
+                        <div className="text-muted-foreground text-xs tracking-normal">
                             Maximum total LLM spend before human escalation is triggered.
                         </div>
                     </div>
@@ -88,7 +88,7 @@ export function Step2() {
                         <div className="text-muted-foreground mb-0.5 text-xs font-semibold tracking-widest">
                             TOOL TIMEOUT
                         </div>
-                        <div className="text-muted-foreground text-base tracking-normal">
+                        <div className="text-muted-foreground text-xs tracking-normal">
                             Maximum wall-clock seconds a single tool invocation may run.
                         </div>
                     </div>
@@ -101,7 +101,7 @@ export function Step2() {
                             step={10}
                             className="bg-muted text-foreground focus-visible:border-primary h-auto w-14 rounded-sm px-2 py-1.5 text-right text-sm font-semibold tracking-tighter shadow-none"
                         />
-                        <span className="text-muted-foreground text-base tracking-wide">sec</span>
+                        <span className="text-muted-foreground text-xs tracking-wide">sec</span>
                     </div>
                 </div>
 
@@ -111,7 +111,7 @@ export function Step2() {
                         <div className="text-muted-foreground mb-0.5 text-xs font-semibold tracking-widest">
                             MAX RETRIES
                         </div>
-                        <div className="text-muted-foreground text-base tracking-normal">
+                        <div className="text-muted-foreground text-xs tracking-normal">
                             Maximum retry attempts per VDG node before it is deprioritized.
                         </div>
                     </div>
@@ -123,7 +123,7 @@ export function Step2() {
                             max={10}
                             className="bg-muted text-foreground focus-visible:border-primary h-auto w-14 rounded-sm px-2 py-1.5 text-right text-sm font-semibold tracking-tighter shadow-none"
                         />
-                        <span className="text-muted-foreground text-base tracking-wide">
+                        <span className="text-muted-foreground text-xs tracking-wide">
                             attempts
                         </span>
                     </div>
@@ -134,7 +134,7 @@ export function Step2() {
             {costNum > 50 && (
                 <div className="border-warning bg-muted mt-4 flex items-start gap-3 rounded-sm border-[1px] border-solid px-3.5 py-2.5">
                     <span className="text-warning shrink-0 text-xs">⚠</span>
-                    <span className="text-warning text-base leading-normal tracking-tight">
+                    <span className="text-warning text-xs leading-normal tracking-tight">
                         Cost ceiling above $50 — human escalation will only trigger at high spend.
                         Ensure this is intentional.
                     </span>

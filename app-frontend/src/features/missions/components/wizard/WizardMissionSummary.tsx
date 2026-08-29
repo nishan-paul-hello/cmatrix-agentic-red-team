@@ -26,7 +26,7 @@ export function WizardMissionSummary({
     return (
         <div className="bg-background border-border lg:w-drawer-sm flex w-full flex-shrink-0 flex-col overflow-y-auto border-t lg:border-t-0 lg:border-l">
             <div className="border-border border-b px-5 pt-5 pb-4">
-                <div className="text-muted-foreground mb-2.5 text-base tracking-widest">
+                <div className="text-muted-foreground mb-2.5 text-xs font-semibold uppercase tracking-widest">
                     MISSION SUMMARY
                 </div>
                 <div className="flex flex-col gap-3">
@@ -46,20 +46,20 @@ export function WizardMissionSummary({
             {/* ROE preview */}
             {step >= 2 && roe && (
                 <div className="border-border border-b px-5 pt-4 pb-4">
-                    <div className="text-muted-foreground mb-2 text-base tracking-widest">
+                    <div className="text-muted-foreground mb-2 text-xs font-semibold uppercase tracking-widest">
                         ROE PREVIEW
                     </div>
-                    <div className="text-muted-foreground line-clamp-6 overflow-hidden text-base leading-relaxed tracking-tight">
+                    <div className="text-muted-foreground line-clamp-6 overflow-hidden text-xs leading-relaxed tracking-tight">
                         {roe}
                     </div>
                 </div>
             )}
 
             <div className="px-5 pt-4">
-                <div className="text-muted-foreground mb-2 text-base tracking-widest">
+                <div className="text-muted-foreground mb-2 text-xs font-semibold uppercase tracking-widest">
                     VALIDATION
                 </div>
-                <div className="text-muted-foreground text-base leading-loose tracking-normal">
+                <div className="text-muted-foreground text-xs leading-loose tracking-normal">
                     Oracle validation available for BENCHMARK ENVIRONMENT targets.
                 </div>
             </div>

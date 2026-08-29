@@ -90,3 +90,5 @@ For each page you process, report:
 - **Wizard/Forms**: Use `text-xs font-semibold uppercase tracking-widest` for block labels and step headings, and `text-xs` for descriptions/hints instead of `text-base` for tighter typographic density. — first applied on missions/new
 - **Wizard/Forms**: Text inputs should use `text-sm` without tight tracking for readability while maintaining a compact height. — first applied on missions/new
 - **Radio Groups**: Use `text-xs leading-relaxed` for option descriptions instead of `text-base leading-snug tracking-tight` for a tighter density matching the old UI. — first applied on missions/new
+- **Wizard/Forms**: MetaRow key-value pairs should use `text-xs` for both the uppercase label and the value, instead of `text-sm`, to match the old UI sidebar density. — first applied on missions/new (Step 2)
+- **Wizard/Forms**: Input unit suffixes and prefixes (like `$`, `sec`, `attempts`) should use `text-xs` instead of `text-base` to match the tighter density of their corresponding inputs. — first applied on missions/new (Step 2)
