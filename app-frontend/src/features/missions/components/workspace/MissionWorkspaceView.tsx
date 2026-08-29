@@ -46,6 +46,21 @@ export default function MissionWorkspaceView({
     dispatch: React.Dispatch<WorkspaceAction>;
     orchestrator?: MissionOrchestratorModel | null;
 }) {
+    const SUBNAV_VIEWS: Partial<Record<MissionSubNav, React.ReactNode>> = {
+        "attack-graph": <AttackGraphCanvas />,
+        environment: <EnvironmentalLayer />,
+        specialists: <Specialists />,
+        execution: <ExecutionConsole />,
+        evaluation: <EvaluationScreen />,
+        validation: <ValidationCenter />,
+        findings: <FindingsDashboard />,
+        memory: <MemoryPage missionId={missionId} />,
+        trajectory: <TrajectoryPage />,
+        cost: <CostDashboard missionId={missionId} />,
+        "team-manager": <TeamManagerDashboard />,
+        escalation: <HumanEscalation />,
+    };
+
     return (
         <div className="flex h-full min-h-0 flex-col">
             {/* ── Mission status strip ── */}
@@ -64,49 +79,15 @@ export default function MissionWorkspaceView({
 
                 {/* CENTER: overview split or full-bleed graph */}
                 <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
-                    {subNav === "attack-graph" && <AttackGraphCanvas />}
-                    {subNav === "environment" && <EnvironmentalLayer />}
-                    {subNav === "specialists" && <Specialists />}
-                    {subNav === "execution" && <ExecutionConsole />}
-                    {subNav === "evaluation" && <EvaluationScreen />}
-                    {subNav === "validation" && <ValidationCenter />}
-                    {subNav === "findings" && <FindingsDashboard />}
-                    {subNav === "memory" && <MemoryPage missionId={missionId} />}
-                    {subNav === "trajectory" && <TrajectoryPage />}
-                    {subNav === "cost" && <CostDashboard missionId={missionId} />}
-                    {subNav === "team-manager" && <TeamManagerDashboard />}
-                    {subNav === "escalation" && <HumanEscalation />}
-                    {subNav !== "attack-graph" &&
-                        subNav !== "environment" &&
-                        subNav !== "specialists" &&
-                        subNav !== "execution" &&
-                        subNav !== "evaluation" &&
-                        subNav !== "validation" &&
-                        subNav !== "findings" &&
-                        subNav !== "memory" &&
-                        subNav !== "trajectory" &&
-                        subNav !== "cost" &&
-                        subNav !== "team-manager" &&
-                        subNav !== "escalation" && (
-                            <MissionOverview log={log} dispatch={dispatch} />
-                        )}
+                    {subNav === "overview" ? (
+                        <MissionOverview log={log} dispatch={dispatch} />
+                    ) : (
+                        SUBNAV_VIEWS[subNav]
+                    )}
                 </div>
 
                 {/* RIGHT: stats + specialists — hidden in full-bleed views */}
-                {![
-                    "attack-graph",
-                    "environment",
-                    "specialists",
-                    "execution",
-                    "evaluation",
-                    "validation",
-                    "findings",
-                    "memory",
-                    "trajectory",
-                    "cost",
-                    "team-manager",
-                    "escalation",
-                ].includes(subNav) && <MissionLiveState time={time} />}
+                {subNav === "overview" && <MissionLiveState time={time} />}
             </div>
         </div>
     );

@@ -36,27 +36,18 @@ export const AttackGraphNode = React.memo(function AttackGraphNodeBase({
     onClick: (node: VDGNode) => void;
 }) {
     return (
-        <div
+        <button
+            type="button"
             onMouseEnter={() => onMouseEnter(node.id)}
             onMouseLeave={() => onMouseLeave(null)}
             onClick={() => onClick(node)}
-            onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                    onClick(node);
-                }
-            }}
-            role="button"
-            tabIndex={0}
-            className="absolute cursor-pointer rounded-sm px-2.5 py-2"
+            className={`absolute flex cursor-pointer flex-col items-center justify-center rounded-sm transition-all duration-150 ${isHov ? "z-node-hover" : "z-node-base"} ${isVis ? "opacity-100" : "opacity-12"}`}
             style={{
-                left: x,
                 top: y,
+                left: x,
                 width,
                 background: style.bg,
                 border: `1px solid ${isHov && isVis ? "var(--destructive)" : style.border}`,
-                opacity: isVis ? 1 : 0.12,
-                zIndex: isHov ? 10 : 1,
-                transition: "opacity 0.15s, border-color 0.1s",
             }}
         >
             {node.status === "ELIGIBLE" && isVis && (
@@ -147,6 +138,6 @@ export const AttackGraphNode = React.memo(function AttackGraphNodeBase({
                     </span>
                 </div>
             </div>
-        </div>
+        </button>
     );
 });

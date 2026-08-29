@@ -9,17 +9,13 @@ const MissionLiveState = React.memo(function ({ time }: { time: string }) {
     const { specialists } = useWorkspaceData();
 
     return (
-        <div className="bg-background border-border flex w-[256px] flex-shrink-0 flex-col overflow-hidden border-l">
+        <div className="bg-background border-border flex w-full flex-shrink-0 flex-col overflow-hidden border-t lg:w-[256px] lg:border-t-0 lg:border-l">
             {/* Live state stats */}
-            <div
-                style={{
-                    borderBottom: "1px solid var(--border)",
-                }}
-            >
+            <div className="border-border border-b border-solid">
                 <div className="text-muted-foreground px-4 pt-4 pb-2 text-sm tracking-widest">
                     LIVE STATE
                 </div>
-                <div className="grid grid-cols-1 gap-0 sm:grid-cols-2">
+                <div className="grid grid-cols-1 gap-0 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
                     {[
                         {
                             label: "VDG NODES",
@@ -49,10 +45,7 @@ const MissionLiveState = React.memo(function ({ time }: { time: string }) {
                                 {s.label}
                             </div>
                             <div
-                                className="text-xs leading-none font-bold tracking-tighter"
-                                style={{
-                                    color: s.red ? "var(--primary)" : "var(--foreground)",
-                                }}
+                                className={`text-xs leading-none font-bold tracking-tighter ${s.red ? "text-primary" : "text-foreground"}`}
                             >
                                 {s.value}
                             </div>
@@ -97,27 +90,9 @@ const MissionLiveState = React.memo(function ({ time }: { time: string }) {
                             <div className="mb-1.5 flex items-center justify-between">
                                 <div className="flex items-center gap-2">
                                     <div
-                                        className="h-1.5 shrink-0"
-                                        style={{
-                                            width: spec.status === SPEC_STATUS.IDLE ? 6 : 6,
-                                            borderRadius: "50%",
-                                            border: `1px solid ${specialistStatusDot(spec.status)}`,
-                                            background:
-                                                spec.status !== SPEC_STATUS.IDLE &&
-                                                spec.status !== SPEC_STATUS.WAITING
-                                                    ? specialistStatusDot(spec.status)
-                                                    : "transparent",
-                                        }}
+                                        className={`h-1.5 w-[6px] shrink-0 rounded-full border border-solid ${specialistStatusDot(spec.status).replace("text-", "border-")} ${spec.status !== SPEC_STATUS.IDLE && spec.status !== SPEC_STATUS.WAITING ? specialistStatusDot(spec.status).replace("text-", "bg-") : "bg-transparent"}`}
                                     />
-                                    <span
-                                        className="text-base font-semibold tracking-tight"
-                                        style={{
-                                            color:
-                                                spec.status === SPEC_STATUS.IDLE
-                                                    ? "var(--muted-foreground)"
-                                                    : "var(--muted-foreground)",
-                                        }}
-                                    >
+                                    <span className="text-muted-foreground text-base font-semibold tracking-tight">
                                         {spec.role}
                                     </span>
                                 </div>

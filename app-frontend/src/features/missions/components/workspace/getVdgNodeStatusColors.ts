@@ -1,7 +1,10 @@
 import { VDG_NODE_STATUS, type VdgNodeStatus } from "@/types/domain-types";
 
 /** Maps all 6 architecture VDG node statuses to visual badge colors */
-export default function StatusBadge(status: VdgNodeStatus): { color: string; bg: string } {
+export default function getVdgNodeStatusColors(status: VdgNodeStatus): {
+    color: string;
+    bg: string;
+} {
     const map: Record<VdgNodeStatus, { color: string; bg: string }> = {
         [VDG_NODE_STATUS.EXPLOITED]: {
             color: "var(--primary)",

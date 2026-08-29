@@ -1,6 +1,4 @@
-import React from "react";
-import { FocusTrap } from "focus-trap-react";
-
+import { Sheet, SheetContent } from "@/components/ui/sheet";
 import {
     NodeDrawerContext,
     type DrawerNode,
@@ -138,19 +136,6 @@ export default function VDGNodeDrawerView({
     node: DrawerNode;
     onClose: () => void;
 }) {
-    const drawerRef = React.useRef<HTMLDivElement>(null);
-    React.useEffect(() => {
-        function handler(e: KeyboardEvent) {
-            if (e.key === "Escape") {
-                onClose();
-            }
-        }
-        document.addEventListener("keydown", handler);
-        return () => {
-            document.removeEventListener("keydown", handler);
-        };
-    }, [onClose]);
-
     const detail = NODE_DETAIL[node.id] ?? DEFAULT_DETAIL;
     const statusColor = (() => {
         if (node.status === "ELIGIBLE") {
@@ -170,17 +155,22 @@ export default function VDGNodeDrawerView({
     const statusBorder = ["ELIGIBLE", "EXPLOITED", "IN_PROGRESS"].includes(node.status)
         ? "var(--border)"
         : "var(--border)";
+
     return (
-        <FocusTrap focusTrapOptions={{ escapeDeactivates: false, clickOutsideDeactivates: false }}>
-            <NodeDrawerContext.Provider
-                value={{ node, detail, onClose, statusColor, statusBg, statusBorder }}
+        <Sheet
+            open
+            onOpenChange={(open) => {
+                if (!open) {
+                    onClose();
+                }
+            }}
+        >
+            <SheetContent
+                side="right"
+                className="border-border flex w-full flex-col gap-0 border-l p-0 sm:max-w-[var(--width-drawer-md)]"
             >
-                <div
-                    ref={drawerRef}
-                    role="dialog"
-                    aria-modal="true"
-                    aria-labelledby="vdg-node-drawer-title"
-                    className="bg-background border-border flex h-full w-full max-w-[var(--width-drawer-md)] shrink-0 flex-col border-l"
+                <NodeDrawerContext.Provider
+                    value={{ node, detail, onClose, statusColor, statusBg, statusBorder }}
                 >
                     <VDGNodeDrawerHeader />
                     <div className="flex-1 overflow-y-auto">
@@ -192,8 +182,8 @@ export default function VDGNodeDrawerView({
                         <VDGNodeDrawerFacts />
                         <VDGNodeDrawerLifecycle />
                     </div>
-                </div>
-            </NodeDrawerContext.Provider>
-        </FocusTrap>
+                </NodeDrawerContext.Provider>
+            </SheetContent>
+        </Sheet>
     );
 }

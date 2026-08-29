@@ -28,13 +28,7 @@ export default function MissionStatusStrip({
                 <Meta label="SURFACE" value="WEB APPLICATION" />
                 <Sep />
                 <div className="ml-auto flex items-center gap-1.5">
-                    <div
-                        className="bg-success h-1.5 w-1.5"
-                        style={{
-                            borderRadius: "50%",
-                            animation: "pulse 1.4s ease infinite",
-                        }}
-                    />
+                    <div className="bg-success h-1.5 w-1.5 animate-[pulse_1.4s_ease_infinite] rounded-full" />
                     <span className="text-success text-base font-semibold tracking-widest">
                         {MISSION_STATUS.RUNNING}
                     </span>

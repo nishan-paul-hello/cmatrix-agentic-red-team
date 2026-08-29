@@ -2,9 +2,9 @@ import React from "react";
 
 import { Button } from "@/components/ui/button";
 import { KPIStrip } from "@/components/ui/KPIStrip";
+import getVdgNodeStatusColors from "@/features/missions/components/workspace/getVdgNodeStatusColors";
 import { type WorkspaceAction } from "@/features/missions/components/workspace/MissionWorkspaceContainer";
 import nodeStyle from "@/features/missions/components/workspace/NodeStyle";
-import statusBadge from "@/features/missions/components/workspace/StatusBadge";
 import { useWorkspaceData } from "@/features/missions/hooks/useWorkspaceData";
 
 export function MissionOverviewAttackGraph({
@@ -60,25 +60,13 @@ export function MissionOverviewAttackGraph({
                 >
                     {nodes.map((node, i) => {
                         const s = nodeStyle(node.status);
-                        const badge = statusBadge(node.status);
+                        const badge = getVdgNodeStatusColors(node.status);
                         return (
                             <div key={node.id} className="flex flex-col items-center">
                                 {/* Connector from previous */}
                                 {i > 0 && (
                                     <div
-                                        className="h-5 w-px"
-                                        style={{
-                                            background:
-                                                node.status === "INFEASIBLE" ||
-                                                node.status === "BLOCKED"
-                                                    ? "var(--border)"
-                                                    : "var(--primary)",
-                                            opacity:
-                                                node.status === "INFEASIBLE" ||
-                                                node.status === "BLOCKED"
-                                                    ? 0.4
-                                                    : 1,
-                                        }}
+                                        className={`h-5 w-px ${node.status === "INFEASIBLE" || node.status === "BLOCKED" ? "bg-border opacity-40" : "bg-primary opacity-100"}`}
                                     >
                                         {/* arrow tip */}
                                     </div>
@@ -86,40 +74,20 @@ export function MissionOverviewAttackGraph({
                                 {/* Arrow tip */}
                                 {i > 0 && (
                                     <div
-                                        className="h-0 w-0"
-                                        style={{
-                                            borderLeft: "4px solid transparent",
-                                            borderRight: "4px solid transparent",
-                                            borderTop: `5px solid ${node.status === "INFEASIBLE" || node.status === "BLOCKED" ? "var(--border)" : "var(--primary)"}`,
-                                            marginBottom: -1,
-                                            opacity:
-                                                node.status === "INFEASIBLE" ||
-                                                node.status === "BLOCKED"
-                                                    ? 0.4
-                                                    : 1,
-                                        }}
+                                        className={`mb-[-1px] h-0 w-0 border-t-[5px] border-r-[4px] border-l-[4px] border-r-transparent border-l-transparent ${node.status === "INFEASIBLE" || node.status === "BLOCKED" ? "border-t-border opacity-40" : "border-t-primary opacity-100"}`}
                                     />
                                 )}
 
                                 {/* Node card */}
-                                <div
+                                <button
+                                    type="button"
                                     onClick={() =>
                                         dispatch({
                                             type: "SET_SUB_NAV",
                                             payload: "attack-graph",
                                         })
                                     }
-                                    onKeyDown={(e) => {
-                                        if (e.key === "Enter" || e.key === " ") {
-                                            dispatch({
-                                                type: "SET_SUB_NAV",
-                                                payload: "attack-graph",
-                                            });
-                                        }
-                                    }}
-                                    role="button"
-                                    tabIndex={0}
-                                    className="relative w-[224px] cursor-pointer rounded-sm px-3 py-2.5"
+                                    className="focus-visible:ring-primary relative w-[224px] cursor-pointer rounded-sm px-3 py-2.5 text-left focus-visible:ring-1 focus-visible:outline-none"
                                     style={{
                                         background: s.bg,
                                         border: `1px solid ${s.border}`,
@@ -195,7 +163,7 @@ export function MissionOverviewAttackGraph({
                                             />
                                         </div>
                                     )}
-                                </div>
+                                </button>
                             </div>
                         );
                     })}
