@@ -7,6 +7,10 @@ export default function OraclePanel({ onClose }: { onClose: () => void }) {
     useEffect(() => {
         function onKey(e: KeyboardEvent) {
             if (e.key === "Escape") {
+                // Do not close if a dialog or other modal is open
+                if (document.querySelector('[role="dialog"]')) {
+                    return;
+                }
                 onClose();
             }
         }

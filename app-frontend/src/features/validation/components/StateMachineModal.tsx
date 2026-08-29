@@ -54,14 +54,7 @@ export default function StateMachineModal({
                     </div>
                 </DialogHeader>
                 <div className="relative h-[min(530px,70vh)]">
-                    <svg
-                        className="absolute"
-                        style={{
-                            inset: 0,
-                        }}
-                        width="100%"
-                        height="100%"
-                    >
+                    <svg className="absolute inset-0" width="100%" height="100%">
                         {edges.map((e) => (
                             <g key={`${e.x1}-${e.y1}-${e.x2}-${e.y2}`}>
                                 <line

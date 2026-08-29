@@ -121,14 +121,7 @@ const AttackGraphCanvasViewInner = React.memo(function ({
                 {/* Canvas */}
                 <div ref={containerRef} className="bg-background relative flex-1 overflow-hidden">
                     {/* Grid */}
-                    <div
-                        className="pointer-events-none absolute inset-0"
-                        style={{
-                            backgroundImage:
-                                "linear-gradient(rgba(28,28,28,0.5) 1px,transparent 1px),linear-gradient(90deg,rgba(28,28,28,0.5) 1px,transparent 1px)",
-                            backgroundSize: "40px 40px",
-                        }}
-                    />
+                    <div className="grid-bg pointer-events-none absolute inset-0 opacity-50" />
 
                     {/* SVG edges */}
                     <svg className="pointer-events-none absolute inset-0" width={w} height={h}>
@@ -220,11 +213,6 @@ const AttackGraphCanvasViewInner = React.memo(function ({
                         ]}
                         nodeStyles={NODE_STYLE}
                     />
-
-                    <style>{`
-            @keyframes nodeRing { 0%,100%{opacity:.5;transform:scale(1)} 50%{opacity:.1;transform:scale(1.03)} }
-            @keyframes blink    { 0%,100%{opacity:1} 50%{opacity:.3} }
-          `}</style>
                 </div>
 
                 {/* Node detail drawer */}

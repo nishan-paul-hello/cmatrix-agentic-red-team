@@ -20,28 +20,13 @@ export function MissionOverviewLogStream({ log }: { log: LogEntry[] }) {
                         key={entry.id}
                         className="border-border flex items-start gap-3 border-b px-4 py-1.5"
                     >
-                        <span
-                            className="text-muted-foreground shrink-0 text-base tracking-tight"
-                            style={{
-                                paddingTop: 1,
-                            }}
-                        >
+                        <span className="text-muted-foreground shrink-0 pt-px text-base tracking-tight">
                             {entry.ts}
                         </span>
-                        <span
-                            className="text-primary min-w-[88px] shrink-0 text-sm font-semibold tracking-wide"
-                            style={{
-                                paddingTop: 1,
-                            }}
-                        >
+                        <span className="text-primary min-w-[88px] shrink-0 pt-px text-sm font-semibold tracking-wide">
                             {entry.agent}
                         </span>
-                        <span
-                            className="text-muted-foreground min-w-[108px] shrink-0 text-sm tracking-normal"
-                            style={{
-                                paddingTop: 1,
-                            }}
-                        >
+                        <span className="text-muted-foreground min-w-[108px] shrink-0 pt-px text-sm tracking-normal">
                             {entry.action}
                         </span>
                         <span

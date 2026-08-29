@@ -16,13 +16,7 @@ export function EOrdIndicator({ value }: { value: number }) {
                     }}
                 />
                 {EORD_LABELS.map((lbl, i) => (
-                    <div
-                        key={lbl}
-                        className="flex flex-col items-center"
-                        style={{
-                            zIndex: 1,
-                        }}
-                    >
+                    <div key={lbl} className="z-node-base flex flex-col items-center">
                         <div
                             className={`mb-0.5 h-1.5 w-1.5 rounded-none border border-solid ${i <= value ? "border-primary" : "border-border"} ${(() => {
                                 if (i < value) {

@@ -160,7 +160,7 @@ export default function Dashboard({ onNewMission, onOpenMission }: DashboardProp
                                             <TableCell className="text-primary px-4 py-2 font-semibold tracking-tight whitespace-nowrap">
                                                 {m.id}
                                             </TableCell>
-                                            <TableCell className="cell-truncate text-muted-foreground max-w-[var(--width-cell-max)] px-4 py-2 whitespace-nowrap">
+                                            <TableCell className="cell-truncate text-muted-foreground max-w-cell-max px-4 py-2 whitespace-nowrap">
                                                 {m.target}
                                             </TableCell>
                                             <TableCell className="text-muted-foreground px-4 py-2 text-xs whitespace-nowrap">

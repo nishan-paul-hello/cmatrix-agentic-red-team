@@ -2,6 +2,7 @@ import React from "react";
 import { type Virtualizer } from "@tanstack/react-virtual";
 
 import { ExecDrawer } from "@/features/execution/components/ExecDrawer";
+import { EXEC_COLUMN_WIDTHS } from "@/features/execution/components/ExecutionConsoleConstants";
 import { ExecutionEntryRow } from "@/features/execution/components/ExecutionEntryRow";
 import { type ExecEntry } from "@/types/domain-types";
 
@@ -59,9 +60,12 @@ export default function ExecutionConsoleView({
                 </div>
 
                 {/* Console log */}
-                <div className="bg-background flex-1 overflow-y-auto" ref={parentRef}>
+                <div
+                    className="bg-background flex-1 overflow-x-auto overflow-y-auto"
+                    ref={parentRef}
+                >
                     {/* Header row */}
-                    <div className="bg-background border-border sticky top-0 flex gap-0 border-b">
+                    <div className="bg-background border-border sticky top-0 flex min-w-fit gap-0 border-b">
                         {[
                             "#",
                             "TIMESTAMP",
@@ -76,7 +80,7 @@ export default function ExecutionConsoleView({
                                 key={h}
                                 className="text-muted-foreground shrink-0 px-3 py-1 text-xs font-semibold tracking-widest"
                                 style={{
-                                    width: [48, 80, 108, 160, 72, 64, 72, undefined][i],
+                                    width: EXEC_COLUMN_WIDTHS[i],
                                     flex: i === 7 ? 1 : undefined,
                                 }}
                             >

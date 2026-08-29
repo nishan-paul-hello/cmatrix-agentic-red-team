@@ -48,12 +48,7 @@ export function BenchmarkSuites() {
             <div className="text-muted-foreground mb-3 text-sm tracking-widest">
                 BENCHMARK SUITES
             </div>
-            <div
-                style={{
-                    display: "flex",
-                    gap: 8,
-                }}
-            >
+            <div className="flex gap-2">
                 {TIERS.map((t) => {
                     const scoreColor = (() => {
                         if (t.score === null) {
@@ -75,12 +70,7 @@ export function BenchmarkSuites() {
                             <div className="text-muted-foreground text-xs tracking-widest">
                                 TIER {t.n}
                             </div>
-                            <div
-                                className="text-foreground mt-1 overflow-hidden text-xs font-bold tracking-normal whitespace-nowrap"
-                                style={{
-                                    textOverflow: "ellipsis",
-                                }}
-                            >
+                            <div className="text-foreground cell-truncate mt-1 text-xs font-bold tracking-normal">
                                 {t.name}
                             </div>
                             <div className="text-muted-foreground mt-0.5 text-sm">{t.desc}</div>

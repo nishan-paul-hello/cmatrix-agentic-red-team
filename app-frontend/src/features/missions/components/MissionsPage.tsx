@@ -129,7 +129,7 @@ export default function MissionsPage({ onNewMission, onOpenMission }: MissionsPa
                                     <TableCell className="text-primary px-4 py-2 font-semibold tracking-tight whitespace-nowrap">
                                         {m.id}
                                     </TableCell>
-                                    <TableCell className="cell-truncate text-muted-foreground max-w-[var(--width-cell-max)] px-4 py-2 whitespace-nowrap">
+                                    <TableCell className="cell-truncate text-muted-foreground max-w-cell-max px-4 py-2 whitespace-nowrap">
                                         <Tooltip>
                                             <TooltipTrigger render={<span className="truncate" />}>
                                                 {m.target}

@@ -32,6 +32,7 @@ export default function MissionSubNavPanel({
                             key={item.id}
                             variant="ghost"
                             onClick={() => dispatch({ type: "SET_SUB_NAV", payload: item.id })}
+                            aria-current={active ? "page" : undefined}
                             className={`border-border h-auto w-max shrink-0 justify-start rounded-none border-l px-4 py-2 text-left text-xs tracking-tight uppercase lg:w-full ${active ? "text-primary" : "text-muted-foreground hover:text-muted-foreground"}`}
                         >
                             {(() => {

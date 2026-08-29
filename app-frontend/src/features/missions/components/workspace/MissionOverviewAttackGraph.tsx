@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Button } from "@/components/ui/button";
-import { KPIStrip } from "@/components/ui/KPIStrip";
+import { AttackGraphNode } from "@/features/missions/components/workspace/AttackGraphNode";
 import getVdgNodeStatusColors from "@/features/missions/components/workspace/getVdgNodeStatusColors";
 import { type WorkspaceAction } from "@/features/missions/components/workspace/MissionWorkspaceContainer";
 import nodeStyle from "@/features/missions/components/workspace/NodeStyle";
@@ -17,14 +17,7 @@ export function MissionOverviewAttackGraph({
     return (
         <div className="bg-background border-border relative flex-shrink-0 overflow-hidden border-b">
             {/* Grid */}
-            <div
-                className="pointer-events-none absolute inset-0"
-                style={{
-                    backgroundImage:
-                        "linear-gradient(rgba(30,30,30,0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(30,30,30,0.4) 1px, transparent 1px)",
-                    backgroundSize: "32px 32px",
-                }}
-            />
+            <div className="grid-bg-sm pointer-events-none absolute inset-0 opacity-40" />
 
             {/* Canvas label */}
             <div className="absolute top-3 left-4 flex items-center gap-2">
@@ -78,102 +71,29 @@ export function MissionOverviewAttackGraph({
                                     />
                                 )}
 
-                                {/* Node card */}
-                                <button
-                                    type="button"
+                                <AttackGraphNode
+                                    node={node}
+                                    style={{
+                                        bg: s.bg,
+                                        border: s.border,
+                                        labelColor: s.labelColor,
+                                        typeColor: s.typeColor,
+                                        badgeColor: badge.color,
+                                        badgeBg: badge.bg,
+                                    }}
+                                    variant="overview"
                                     onClick={() =>
                                         dispatch({
                                             type: "SET_SUB_NAV",
                                             payload: "attack-graph",
                                         })
                                     }
-                                    className="focus-visible:ring-primary relative w-[224px] cursor-pointer rounded-sm px-3 py-2.5 text-left focus-visible:ring-1 focus-visible:outline-none"
-                                    style={{
-                                        background: s.bg,
-                                        border: `1px solid ${s.border}`,
-                                    }}
-                                    title="Click to open Attack Graph"
-                                >
-                                    {/* Active pulse ring for ELIGIBLE */}
-                                    {node.status === "ELIGIBLE" && (
-                                        <div
-                                            className="border-border absolute rounded-xs border-[1px] border-solid"
-                                            style={{
-                                                inset: -3,
-                                                pointerEvents: "none",
-                                                animation: "nodeRing 2s ease infinite",
-                                            }}
-                                        />
-                                    )}
-
-                                    <div className="mb-1.5 flex items-center justify-between">
-                                        <span
-                                            className="text-xs font-bold tracking-wide"
-                                            style={{
-                                                color: s.labelColor,
-                                            }}
-                                        >
-                                            {node.id}
-                                        </span>
-                                        <span
-                                            className="rounded-sm px-1 py-px text-sm font-semibold tracking-widest"
-                                            style={{
-                                                color: badge.color,
-                                                background: badge.bg,
-                                                border: `1px solid ${badge.color}44`,
-                                            }}
-                                        >
-                                            {node.status}
-                                        </span>
-                                    </div>
-
-                                    <div
-                                        className="text-sm tracking-widest"
-                                        style={{
-                                            color: s.typeColor,
-                                            marginBottom: node.ucb !== undefined ? 8 : 0,
-                                        }}
-                                    >
-                                        {node.type}
-                                    </div>
-
-                                    {node.ucb !== undefined && (
-                                        <div
-                                            className="flex items-center gap-4"
-                                            style={{
-                                                borderTop: `1px solid ${s.border}`,
-                                                paddingTop: 7,
-                                            }}
-                                        >
-                                            <KPIStrip
-                                                variant="inline"
-                                                items={[
-                                                    {
-                                                        k: "UCB",
-                                                        v: node.ucb.toFixed(3),
-                                                        c: s.labelColor,
-                                                    },
-                                                    {
-                                                        k: "E_ord",
-                                                        v: `${node.eord}/${node.eordMax}`,
-                                                        c: s.labelColor,
-                                                    },
-                                                    { k: "PATH", v: "0.612", c: s.typeColor },
-                                                ]}
-                                            />
-                                        </div>
-                                    )}
-                                </button>
+                                />
                             </div>
                         );
                     })}
                 </div>
             </div>
-
-            <style>{`
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
-  @keyframes nodeRing { 0%,100%{opacity:.4;transform:scale(1)} 50%{opacity:.1;transform:scale(1.02)} }
-`}</style>
         </div>
     );
 }

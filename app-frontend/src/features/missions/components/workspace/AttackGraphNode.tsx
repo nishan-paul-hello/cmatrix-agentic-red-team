@@ -1,7 +1,15 @@
 import React from "react";
 
 import { KPIStrip } from "@/components/ui/KPIStrip";
-import { type VDGNode } from "@/features/missions/data/fixtures/attackGraphMockData";
+
+export interface BaseVDGNode {
+    id: string;
+    type: string;
+    status: string;
+    ucb?: number;
+    eord?: number;
+    eordMax?: number;
+}
 
 interface NodeStyleProps {
     border: string;
@@ -12,35 +20,121 @@ interface NodeStyleProps {
     badgeBg: string;
 }
 
-export const AttackGraphNode = React.memo(function AttackGraphNodeBase({
+export function AttackGraphNode<T extends BaseVDGNode>({
     node,
     style,
-    isVis,
-    isHov,
+    isVis = true,
+    isHov = false,
     x,
     y,
     width,
+    variant = "default",
     onMouseEnter,
     onMouseLeave,
     onClick,
 }: {
-    node: VDGNode;
+    node: T;
     style: NodeStyleProps;
-    isVis: boolean;
-    isHov: boolean;
-    x: number;
-    y: number;
-    width: number;
-    onMouseEnter: (id: string) => void;
-    onMouseLeave: (id: null) => void;
-    onClick: (node: VDGNode) => void;
+    isVis?: boolean;
+    isHov?: boolean;
+    x?: number;
+    y?: number;
+    width?: number;
+    variant?: "default" | "overview";
+    onMouseEnter?: (id: string) => void;
+    onMouseLeave?: (id: null) => void;
+    onClick?: (node: T) => void;
 }) {
+    if (variant === "overview") {
+        return (
+            <button
+                type="button"
+                onClick={() => onClick?.(node)}
+                onMouseEnter={() => onMouseEnter?.(node.id)}
+                onMouseLeave={() => onMouseLeave?.(null)}
+                className={`focus-visible:ring-primary relative cursor-pointer rounded-sm px-3 py-2.5 text-left transition-all duration-150 focus-visible:ring-1 focus-visible:outline-none ${isHov ? "z-node-hover" : "z-node-base"} ${isVis ? "opacity-100" : "opacity-12"}`}
+                style={{
+                    width: width ?? 224,
+                    background: style.bg,
+                    border: `1px solid ${isHov && isVis ? "var(--destructive)" : style.border}`,
+                }}
+                title="Click to open Attack Graph"
+            >
+                {node.status === "ELIGIBLE" && isVis && (
+                    <div
+                        className="border-border node-ring-pulse absolute rounded-xs border-[1px] border-solid"
+                        style={{
+                            inset: -3,
+                            pointerEvents: "none",
+                        }}
+                    />
+                )}
+
+                <div className="mb-1.5 flex items-center justify-between">
+                    <span
+                        className="text-xs font-bold tracking-wide"
+                        style={{ color: style.labelColor }}
+                    >
+                        {node.id}
+                    </span>
+                    <span
+                        className="rounded-sm px-1 py-px text-sm font-semibold tracking-widest"
+                        style={{
+                            color: style.badgeColor,
+                            background: style.badgeBg,
+                            border: `1px solid ${style.badgeColor}44`,
+                        }}
+                    >
+                        {node.status}
+                    </span>
+                </div>
+
+                <div
+                    className="text-sm tracking-widest"
+                    style={{
+                        color: style.typeColor,
+                        marginBottom: node.ucb !== undefined ? 8 : 0,
+                    }}
+                >
+                    {node.type}
+                </div>
+
+                {node.ucb !== undefined && (
+                    <div
+                        className="flex items-center gap-4"
+                        style={{
+                            borderTop: `1px solid ${style.border}`,
+                            paddingTop: 7,
+                        }}
+                    >
+                        <KPIStrip
+                            variant="inline"
+                            items={[
+                                {
+                                    k: "UCB",
+                                    v: node.ucb.toFixed(3),
+                                    c: style.labelColor,
+                                },
+                                {
+                                    k: "E_ord",
+                                    v: `${node.eord ?? 0}/${node.eordMax ?? 5}`,
+                                    c: style.labelColor,
+                                },
+                                { k: "PATH", v: "0.612", c: style.typeColor },
+                            ]}
+                        />
+                    </div>
+                )}
+            </button>
+        );
+    }
+
     return (
         <button
             type="button"
-            onMouseEnter={() => onMouseEnter(node.id)}
-            onMouseLeave={() => onMouseLeave(null)}
-            onClick={() => onClick(node)}
+            onMouseEnter={() => onMouseEnter?.(node.id)}
+            onMouseLeave={() => onMouseLeave?.(null)}
+            onClick={() => onClick?.(node)}
             className={`absolute flex cursor-pointer flex-col items-center justify-center rounded-sm transition-all duration-150 ${isHov ? "z-node-hover" : "z-node-base"} ${isVis ? "opacity-100" : "opacity-12"}`}
             style={{
                 top: y,
@@ -52,15 +146,14 @@ export const AttackGraphNode = React.memo(function AttackGraphNodeBase({
         >
             {node.status === "ELIGIBLE" && isVis && (
                 <div
-                    className="border-border absolute rounded-xs border-[1px] border-solid"
+                    className="border-border node-ring-pulse absolute rounded-xs border-[1px] border-solid"
                     style={{
                         inset: -4,
                         pointerEvents: "none",
-                        animation: "nodeRing 2.2s ease infinite",
                     }}
                 />
             )}
-            <div className="mb-1 flex items-center justify-between">
+            <div className="mb-1 flex w-full items-center justify-between px-3 pt-2">
                 <span
                     className="text-base font-bold tracking-normal"
                     style={{
@@ -70,11 +163,7 @@ export const AttackGraphNode = React.memo(function AttackGraphNodeBase({
                     {node.id}
                 </span>
                 <span
-                    className="text-destructive text-sm"
-                    style={{
-                        animation:
-                            node.status === "IN_PROGRESS" ? "blink 1s ease infinite" : "none",
-                    }}
+                    className={`text-destructive text-sm ${node.status === "IN_PROGRESS" ? "blink" : ""}`}
                 >
                     {(() => {
                         if (node.status === "EXPLOITED") {
@@ -91,7 +180,7 @@ export const AttackGraphNode = React.memo(function AttackGraphNodeBase({
                 </span>
             </div>
             <div
-                className="leading-tight-2 mb-1.5 text-xs tracking-widest"
+                className="leading-tight-2 mb-1.5 w-full px-3 text-left text-xs tracking-widest"
                 style={{
                     color: style.typeColor,
                 }}
@@ -99,7 +188,7 @@ export const AttackGraphNode = React.memo(function AttackGraphNodeBase({
                 {node.type}
             </div>
             <div
-                className="flex items-center gap-3"
+                className="flex w-full items-center gap-3 px-3 pb-2"
                 style={{
                     borderTop: `1px solid ${style.border}`,
                     paddingTop: 5,
@@ -111,7 +200,10 @@ export const AttackGraphNode = React.memo(function AttackGraphNodeBase({
                     items={[
                         {
                             k: "UCB",
-                            v: node.status === "EXPLOITED" ? "—" : node.ucb.toFixed(3),
+                            v:
+                                node.status === "EXPLOITED"
+                                    ? "—"
+                                    : (node.ucb?.toFixed(3) ?? "0.000"),
                             c: style.labelColor,
                         },
                         { k: "E_ord", v: `${node.eord}/5`, c: style.labelColor },
@@ -140,4 +232,4 @@ export const AttackGraphNode = React.memo(function AttackGraphNodeBase({
             </div>
         </button>
     );
-});
+}

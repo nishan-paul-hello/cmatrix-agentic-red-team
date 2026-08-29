@@ -59,7 +59,7 @@ function SpecCard({
             className={`bg-background relative flex h-auto w-full cursor-pointer flex-col items-start rounded-sm border border-solid px-3.5 pt-3.5 pb-3 text-left font-normal transition-colors duration-100 ${running ? "border-primary hover:border-destructive" : "border-border hover:border-border"}`}
         >
             {running && (
-                <div className="border-border pointer-events-none absolute -inset-[3px] animate-[ring_2s_ease_infinite] rounded-xs border-[1px] border-solid" />
+                <div className="border-border node-ring-pulse pointer-events-none absolute -inset-[3px] rounded-xs border-[1px] border-solid" />
             )}
             {/* Layer badge — top-left micro-label */}
             {layerAccent && (
@@ -212,7 +212,6 @@ export function SpecGrid({
                     </>
                 )}
             </div>
-            <style>{`@keyframes ring{0%,100%{opacity:.5}50%{opacity:.1}} @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}`}</style>
         </div>
     );
 }

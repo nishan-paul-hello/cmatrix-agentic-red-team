@@ -104,22 +104,13 @@ export default function HumanEscalation() {
                 {/* Right: escalation history */}
                 <EscalationHistorySidebar history={history} />
             </div>
-            <style>{`@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}`}</style>
         </div>
     );
 }
 function EscalationSubmitted() {
     return (
         <div className="flex h-full min-h-0 flex-col items-center justify-center gap-5">
-            <div
-                className="border-success h-10 w-10 border-[2px] border-solid"
-                style={{
-                    borderRadius: "50%",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                }}
-            >
+            <div className="border-success flex h-10 w-10 items-center justify-center rounded-full border-[2px] border-solid">
                 <span className="text-success text-xs">✓</span>
             </div>
             <div className="text-foreground text-sm font-bold tracking-normal">

@@ -48,12 +48,7 @@ export default function Login({ onLogin }: LoginProps) {
         <div className="bg-background flex min-h-dvh flex-col items-center justify-center">
             {/* Decorative grid background */}
             <div
-                className="pointer-events-none absolute inset-0 opacity-20"
-                style={{
-                    backgroundImage:
-                        "linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px)",
-                    backgroundSize: "48px 48px",
-                }}
+                className="grid-bg-lg pointer-events-none absolute inset-0 z-0 opacity-20"
                 aria-hidden="true"
             />
 

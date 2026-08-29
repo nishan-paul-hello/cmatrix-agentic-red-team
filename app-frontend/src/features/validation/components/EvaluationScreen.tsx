@@ -73,7 +73,10 @@ export default function EvaluationScreen({
                         {/* Ticks — F3: fix ORACLE (i===5) label overflow */}
                         <div className="flex justify-between">
                             {EORD_LABELS.map((lbl, i) => (
-                                <div key={lbl} className="z-10 flex flex-col items-center">
+                                <div
+                                    key={lbl}
+                                    className="z-node-base relative flex flex-col items-center"
+                                >
                                     <div
                                         className={`h-1.5 w-1.5 rounded-none border border-solid ${i <= VALUE ? "border-primary" : "border-border"} ${(() => {
                                             if (i < VALUE) {
