@@ -3,6 +3,11 @@
 import React, { createContext, useContext } from "react";
 
 import { Button } from "@/components/ui/button";
+// ─── Props ────────────────────────────────────────────────────────────────────
+
+// ─── Component ────────────────────────────────────────────────────────────────
+
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -32,41 +37,30 @@ export function useCommandPaletteContext() {
     return ctx;
 }
 
-// ─── Props ────────────────────────────────────────────────────────────────────
-
-// ─── Component ────────────────────────────────────────────────────────────────
-
 export default function CommandPaletteView(props: CommandPaletteContextType) {
     const { onClose } = props;
 
     return (
         <CommandPaletteContext.Provider value={props}>
-            <div
-                className="bg-muted fixed inset-0 z-[100] flex items-start justify-center pt-[120px]"
-                onClick={(e) => {
-                    if (e.target === e.currentTarget) {
+            <Dialog
+                open
+                onOpenChange={(open) => {
+                    if (!open) {
                         onClose();
                     }
                 }}
-                onKeyDown={(e) => {
-                    if (e.key === "Escape") {
-                        onClose();
-                    }
-                }}
-                role="presentation"
             >
-                <div
-                    role="dialog"
-                    aria-modal="true"
+                <DialogContent
+                    showCloseButton={false}
                     aria-label="Command palette"
-                    className="w-panel-xl border-border bg-background overflow-hidden rounded-[3px] border"
+                    className="border-border bg-background sm:w-panel-xl sm:max-w-panel-xl top-6 w-[calc(100%-2rem)] max-w-[calc(100%-2rem)] translate-y-0 gap-0 overflow-hidden rounded-[3px] border p-0 sm:top-[120px]"
                     style={{ boxShadow: "0 24px 48px var(--border)" }}
                 >
                     <CommandPaletteView.SearchInput />
                     <CommandPaletteView.ResultList />
                     <CommandPaletteView.FooterHint />
-                </div>
-            </div>
+                </DialogContent>
+            </Dialog>
         </CommandPaletteContext.Provider>
     );
 }

@@ -1,9 +1,9 @@
-import { useEffect, useState, type ReactNode } from "react";
-import FocusTrap from "focus-trap-react";
+import { useState, type ReactNode } from "react";
 import { Menu, Settings } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import GeometricMark from "@/components/ui/GeometricMark";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { SidebarContent } from "@/features/core/components/SidebarContent";
 import { MISSION_STATUS } from "@/types/domain-types";
 
@@ -42,8 +42,7 @@ function TopbarStat({
                 {label}
             </span>
             <span
-                className="text-sm tracking-tight sm:text-base"
-                style={{ color: valueColor ?? "var(--muted-foreground)" }}
+                className={`text-sm tracking-tight sm:text-base ${valueColor ?? "text-muted-foreground"}`}
             >
                 {value}
             </span>
@@ -70,19 +69,8 @@ export default function Shell({
 }: ShellProps) {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-    // Close mobile menu on escape key
-    useEffect(() => {
-        const handleKeyDown = (e: KeyboardEvent) => {
-            if (e.key === "Escape" && mobileMenuOpen) {
-                setMobileMenuOpen(false);
-            }
-        };
-        window.addEventListener("keydown", handleKeyDown);
-        return () => window.removeEventListener("keydown", handleKeyDown);
-    }, [mobileMenuOpen]);
-
     return (
-        <div className="bg-background text-foreground flex h-screen flex-col overflow-hidden lg:flex-row">
+        <div className="bg-background text-foreground flex h-dvh flex-col overflow-hidden lg:flex-row">
             {/* ── Mobile Header ──────────────────────────────────────────────── */}
             <header className="border-border bg-background flex h-14 flex-shrink-0 items-center justify-between border-b px-4 lg:hidden">
                 <div className="flex items-center gap-2.5">
@@ -110,31 +98,22 @@ export default function Shell({
             </header>
 
             {/* ── Mobile Off-Canvas Drawer ───────────────────────────────────── */}
-            {mobileMenuOpen && (
-                <div className="fixed inset-0 z-50 flex lg:hidden">
-                    <div
-                        className="fixed inset-0 bg-black/50 backdrop-blur-sm"
-                        aria-hidden="true"
-                        onClick={() => setMobileMenuOpen(false)}
+            <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+                <SheetContent
+                    side="left"
+                    className="bg-background flex w-[var(--width-panel-sm)] max-w-[80vw] flex-col border-r p-0"
+                >
+                    <SidebarContent
+                        activeNav={activeNav}
+                        onNavChange={onNavChange}
+                        setMobileMenuOpen={setMobileMenuOpen}
                     />
-                    <FocusTrap active={mobileMenuOpen}>
-                        <aside
-                            className="border-border bg-background animate-in slide-in-from-left relative z-50 flex h-full w-[280px] max-w-[80vw] flex-col overflow-y-auto border-r shadow-2xl"
-                            aria-label="Mobile navigation"
-                        >
-                            <SidebarContent
-                                activeNav={activeNav}
-                                onNavChange={onNavChange}
-                                setMobileMenuOpen={setMobileMenuOpen}
-                            />
-                        </aside>
-                    </FocusTrap>
-                </div>
-            )}
+                </SheetContent>
+            </Sheet>
 
             {/* ── Desktop Sidebar ────────────────────────────────────────────── */}
             <aside
-                className="border-border bg-background relative hidden w-[240px] flex-shrink-0 flex-col overflow-y-auto border-r lg:flex"
+                className="border-border bg-background relative hidden w-[var(--width-panel-sm)] flex-shrink-0 flex-col overflow-y-auto border-r lg:flex"
                 aria-label="Main navigation"
             >
                 <SidebarContent
@@ -174,7 +153,7 @@ export default function Shell({
                             <TopbarStat
                                 label="STATUS"
                                 value={MISSION_STATUS.RUNNING}
-                                valueColor="var(--success)"
+                                valueColor="text-success"
                             />
                             <TopbarStat label="MODEL" value="SONNET-5" />
                             <TopbarStat label="COST" value="$1.42" />

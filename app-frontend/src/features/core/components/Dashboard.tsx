@@ -5,6 +5,14 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { KPIStrip } from "@/components/ui/KPIStrip";
 import StatusBadge from "@/components/ui/StatusBadge";
 import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
+import {
     INITIAL_ACTIVITY,
     KPI_ITEMS,
     NEW_EVENTS,
@@ -85,14 +93,14 @@ export default function Dashboard({ onNewMission, onOpenMission }: DashboardProp
                 items={KPI_ITEMS.map((kpi) => ({
                     k: kpi.label,
                     v: kpi.value,
-                    c: kpi.red ? "var(--primary)" : "var(--foreground)",
+                    c: kpi.red ? "text-primary" : "var(--foreground)",
                 }))}
             />
 
             {/* Body: missions table + live feed */}
-            <div className="flex min-h-0 flex-1 overflow-hidden">
+            <div className="flex min-h-0 flex-1 flex-col overflow-hidden lg:flex-row">
                 {/* Active missions table */}
-                <div className="border-border flex flex-1 flex-col overflow-hidden border-r">
+                <div className="border-border flex flex-1 flex-col overflow-hidden border-b lg:border-r lg:border-b-0">
                     <div className="border-border flex flex-shrink-0 items-center justify-between border-b px-6 py-3">
                         <span className="text-muted-foreground text-xs font-semibold tracking-widest">
                             ACTIVE MISSIONS
@@ -108,20 +116,20 @@ export default function Dashboard({ onNewMission, onOpenMission }: DashboardProp
                     </div>
 
                     <div className="flex-1 overflow-auto">
-                        <table className="w-full border-collapse text-xs">
-                            <thead>
-                                <tr className="bg-card">
+                        <Table className="w-full border-collapse text-xs">
+                            <TableHeader>
+                                <TableRow className="bg-card">
                                     {TABLE_HEADERS.map((h) => (
-                                        <th
+                                        <TableHead
                                             key={h}
                                             className="border-border text-muted-foreground border-b px-4 py-1.5 text-left text-sm font-semibold tracking-widest whitespace-nowrap"
                                         >
                                             {h}
-                                        </th>
+                                        </TableHead>
                                     ))}
-                                </tr>
-                            </thead>
-                            <tbody>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
                                 {(() => {
                                     if (isLoading) {
                                         return (
@@ -142,45 +150,38 @@ export default function Dashboard({ onNewMission, onOpenMission }: DashboardProp
                                         );
                                     }
                                     return missions.map((m) => (
-                                        <tr
+                                        <TableRow
                                             key={m.id}
                                             onClick={() => onOpenMission?.(m.id)}
                                             className="border-border hover:bg-muted cursor-pointer border-b transition-colors duration-75"
                                         >
-                                            <td className="text-primary px-4 py-2 font-semibold tracking-tight whitespace-nowrap">
+                                            <TableCell className="text-primary px-4 py-2 font-semibold tracking-tight whitespace-nowrap">
                                                 {m.id}
-                                            </td>
-                                            <td className="cell-truncate text-muted-foreground max-w-[var(--width-cell-max)] px-4 py-2 whitespace-nowrap">
+                                            </TableCell>
+                                            <TableCell className="cell-truncate text-muted-foreground max-w-[var(--width-cell-max)] px-4 py-2 whitespace-nowrap">
                                                 {m.target}
-                                            </td>
-                                            <td className="text-muted-foreground px-4 py-2 text-xs whitespace-nowrap">
+                                            </TableCell>
+                                            <TableCell className="text-muted-foreground px-4 py-2 text-xs whitespace-nowrap">
                                                 {m.surface}
-                                            </td>
-                                            <td className="text-muted-foreground px-4 py-2 text-xs whitespace-nowrap">
+                                            </TableCell>
+                                            <TableCell className="text-muted-foreground px-4 py-2 text-xs whitespace-nowrap">
                                                 {m.mode}
-                                            </td>
-                                            <td className="px-4 py-2 whitespace-nowrap">
+                                            </TableCell>
+                                            <TableCell className="px-4 py-2 whitespace-nowrap">
                                                 <StatusBadge status={m.status} />
-                                            </td>
-                                            <td className="text-muted-foreground px-4 py-2 text-right">
+                                            </TableCell>
+                                            <TableCell className="text-muted-foreground px-4 py-2 text-right">
                                                 {m.nodes}
-                                            </td>
-                                            <td
-                                                className="px-4 py-2 text-right"
-                                                style={{
-                                                    color:
-                                                        m.findings > 0
-                                                            ? "var(--destructive)"
-                                                            : "var(--muted-foreground)",
-                                                    fontWeight: m.findings > 0 ? 600 : 400,
-                                                }}
+                                            </TableCell>
+                                            <TableCell
+                                                className={`px-4 py-2 text-right ${m.findings > 0 ? "text-destructive font-semibold" : "text-muted-foreground font-normal"}`}
                                             >
                                                 {m.findings}
-                                            </td>
-                                            <td className="text-muted-foreground px-4 py-2 text-right">
+                                            </TableCell>
+                                            <TableCell className="text-muted-foreground px-4 py-2 text-right">
                                                 {m.cost}
-                                            </td>
-                                            <td className="text-muted-foreground px-4 py-2 text-center">
+                                            </TableCell>
+                                            <TableCell className="text-muted-foreground px-4 py-2 text-center">
                                                 {orchestrators[m.id].hasActiveWorkers() ? (
                                                     <span className="text-success text-base font-semibold tracking-normal">
                                                         ACTIVE
@@ -190,17 +191,17 @@ export default function Dashboard({ onNewMission, onOpenMission }: DashboardProp
                                                         IDLE
                                                     </span>
                                                 )}
-                                            </td>
-                                        </tr>
+                                            </TableCell>
+                                        </TableRow>
                                     ));
                                 })()}
-                            </tbody>
-                        </table>
+                            </TableBody>
+                        </Table>
                     </div>
                 </div>
 
                 {/* Live activity feed */}
-                <div className="flex w-[var(--width-drawer-lg)] flex-shrink-0 flex-col overflow-hidden">
+                <div className="flex w-full flex-shrink-0 flex-col overflow-hidden lg:w-[var(--width-drawer-lg)]">
                     <div className="border-border flex flex-shrink-0 items-center gap-2 border-b px-4 py-3">
                         <div
                             className="bg-destructive h-1.5 w-1.5 shrink-0 rounded-full"
