@@ -43,6 +43,7 @@
     --color-warning-foreground: var(--warning-foreground);
     --color-accent-purple: var(--accent-purple);
     --color-info: var(--info);
+    --radius-xs: calc(var(--radius) * 0.3);
     --radius-sm: calc(var(--radius) * 0.6);
     --radius-md: calc(var(--radius) * 0.8);
     --radius-lg: var(--radius);
@@ -109,6 +110,10 @@ input:-webkit-autofill:focus {
 
 /* ─── Reusable utilities ─────────────────────────────────────────────────── */
 
+@utility pulse-dot {
+    animation: pulse 1.4s ease infinite;
+}
+
 /* Page header breadcrumb label */
 @utility page-eyebrow {
     font-size: 9px;
@@ -134,6 +139,10 @@ input:-webkit-autofill:focus {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+}
+
+@utility shadow-panel {
+    box-shadow: 0 24px 48px var(--border);
 }
 
 :root {
