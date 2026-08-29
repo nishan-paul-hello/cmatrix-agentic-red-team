@@ -33,6 +33,10 @@
     --color-accent: var(--accent);
     --color-muted-foreground: var(--muted-foreground);
     --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-muted-dim: var(--muted-dim);
+    --color-muted-dimmer: var(--muted-dimmer);
+    --color-muted-dimmest: var(--muted-dimmest);
     --color-secondary-foreground: var(--secondary-foreground);
     --color-secondary: var(--secondary);
     --color-primary-foreground: var(--primary-foreground);
@@ -209,6 +213,9 @@ input:-webkit-autofill:focus {
     --secondary-foreground: #f2f2f2;
     --muted: #111111;
     --muted-foreground: #666666;
+    --muted-dim: #777777;
+    --muted-dimmer: #555555;
+    --muted-dimmest: #333333;
     --accent: #1e1e1e;
     --accent-foreground: #f2f2f2;
     --destructive: #ff2a32;

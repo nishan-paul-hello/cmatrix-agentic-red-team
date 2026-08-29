@@ -19,15 +19,15 @@ export default function getVdgNodeStatusColors(status: VdgNodeStatus): {
             bg: "var(--border)",
         },
         [VDG_NODE_STATUS.INFEASIBLE]: {
-            color: "var(--border)",
+            color: "var(--muted-dimmer)",
             bg: "transparent",
         },
         [VDG_NODE_STATUS.BLOCKED]: {
-            color: "var(--border)",
-            bg: "var(--border)",
+            color: "var(--destructive)",
+            bg: "var(--muted)",
         },
         [VDG_NODE_STATUS.DEPRIORITIZED]: {
-            color: "var(--border)",
+            color: "var(--muted-dim)",
             bg: "transparent",
         },
     };

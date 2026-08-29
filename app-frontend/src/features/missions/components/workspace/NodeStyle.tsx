@@ -35,34 +35,33 @@ export default function NodeStyle(status: VdgNodeStatus): {
             };
         case VDG_NODE_STATUS.INFEASIBLE:
             return {
-                border: "var(--border)",
+                border: "var(--muted-dimmest)",
                 bg: "var(--background)",
-                labelColor: "var(--border)",
-                typeColor: "var(--border)",
+                labelColor: "var(--muted-dimmer)",
+                typeColor: "var(--muted-dimmest)",
             };
         case VDG_NODE_STATUS.BLOCKED:
-            // Muted-dark adjacent to INFEASIBLE — darker red-tinted background to signal
-            // blocked-by-failure-propagation (required for A4 ablation visibility)
+            // Dark muted red tint to indicate blocked-by-failure-propagation
             return {
-                border: "var(--border)",
-                bg: "var(--border)",
-                labelColor: "var(--border)",
-                typeColor: "var(--border)",
+                border: "var(--muted-dimmest)",
+                bg: "var(--muted)",
+                labelColor: "var(--destructive)",
+                typeColor: "var(--muted-dimmest)",
             };
         case VDG_NODE_STATUS.DEPRIORITIZED:
-            // Slightly lighter than INFEASIBLE to visually distinguish "low priority" vs "impossible"
+            // Visually distinguishable from impossible
             return {
-                border: "var(--border)",
-                bg: "var(--border)",
-                labelColor: "var(--border)",
-                typeColor: "var(--border)",
+                border: "var(--muted-dimmest)",
+                bg: "var(--background)",
+                labelColor: "var(--muted-dim)",
+                typeColor: "var(--muted-dimmer)",
             };
         default:
             return {
-                border: "var(--border)",
+                border: "var(--muted-dimmest)",
                 bg: "var(--background)",
-                labelColor: "var(--border)",
-                typeColor: "var(--border)",
+                labelColor: "var(--muted-dimmer)",
+                typeColor: "var(--muted-dimmest)",
             };
     }
 }

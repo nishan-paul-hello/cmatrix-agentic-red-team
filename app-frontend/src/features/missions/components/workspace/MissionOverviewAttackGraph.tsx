@@ -15,20 +15,20 @@ export function MissionOverviewAttackGraph({
     const { nodes } = useWorkspaceData();
 
     return (
-        <div className="bg-background border-border relative flex-shrink-0 overflow-hidden border-b">
+        <div className="bg-background border-border relative flex-shrink-0 basis-[45%] overflow-hidden border-b">
             {/* Grid */}
             <div className="grid-bg-sm pointer-events-none absolute inset-0 opacity-40" />
 
             {/* Canvas label */}
-            <div className="absolute top-3 left-4 flex items-center gap-2">
-                <span className="text-muted-foreground text-sm tracking-widest">
+            <div className="absolute top-3 left-4 flex items-center gap-2 z-10">
+                <span className="text-muted-foreground text-[10px] font-semibold tracking-widest uppercase">
                     ATTACK GRAPH — OVERVIEW (4 OF 12 NODES)
                 </span>
-                <span className="text-muted-foreground text-sm tracking-wide">VDG / CVE-001</span>
+                <span className="text-muted-foreground text-[10px] font-semibold tracking-wide uppercase">VDG / CVE-001</span>
             </div>
 
             {/* Focus path button */}
-            <div className="absolute top-3 right-4">
+            <div className="absolute top-3 right-4 z-10">
                 <Button
                     variant="secondary"
                     onClick={() =>
@@ -37,15 +37,15 @@ export function MissionOverviewAttackGraph({
                             payload: "attack-graph",
                         })
                     }
-                    className="bg-card text-muted-foreground hover:bg-muted border-border h-auto cursor-pointer rounded-sm border-[1px] px-2.5 py-0.5 text-sm tracking-widest"
+                    className="bg-card text-muted-foreground hover:bg-muted border-border h-auto cursor-pointer rounded-sm border-[1px] px-2.5 py-0.5 text-[10px] font-semibold tracking-widest uppercase"
                 >
                     FOCUS HIGHEST-SCORE PATH
                 </Button>
             </div>
 
-            {/* Node chain — centered */}
-            <div className="absolute inset-0 flex items-center justify-center">
-                <div className="flex flex-col items-center gap-0">
+            {/* Node chain — centered and scrollable */}
+            <div className="absolute inset-0 flex flex-col overflow-y-auto py-12 custom-scrollbar">
+                <div className="m-auto flex flex-col items-center gap-0">
                     {nodes.map((node, i) => {
                         const s = nodeStyle(node.status);
                         const badge = getVdgNodeStatusColors(node.status);
