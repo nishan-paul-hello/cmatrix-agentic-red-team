@@ -23,10 +23,7 @@ export default function ModeCards({
                     <label
                         key={opt.value}
                         htmlFor={`mode-${opt.value}`}
-                        className={`flex h-auto flex-1 cursor-pointer flex-col items-stretch justify-start rounded-sm border border-solid text-left whitespace-normal transition-colors duration-100 ${selected ? "border-primary bg-muted" : "border-border bg-background hover:border-muted-foreground hover:bg-card"}`}
-                        style={{
-                            padding: "22px 20px 18px",
-                        }}
+                        className={`flex h-auto flex-1 cursor-pointer flex-col items-stretch justify-start rounded-sm border border-solid px-5 pt-[22px] pb-[18px] text-left whitespace-normal transition-colors duration-100 ${selected ? "border-primary bg-muted" : "border-border bg-background hover:border-muted-foreground hover:bg-card"}`}
                     >
                         <RadioGroupItem
                             value={opt.value}
@@ -37,44 +34,24 @@ export default function ModeCards({
                         <div className="mb-1 flex items-start justify-between">
                             <div className="flex items-center gap-2.5">
                                 <span
-                                    className="text-xs leading-none"
-                                    style={{
-                                        color: selected
-                                            ? "var(--primary)"
-                                            : "var(--muted-foreground)",
-                                    }}
+                                    className={`text-xs leading-none ${selected ? "text-primary" : "text-muted-foreground"}`}
                                 >
                                     {opt.icon}
                                 </span>
                                 <span
-                                    className="text-base font-bold tracking-widest"
-                                    style={{
-                                        color: selected
-                                            ? "var(--foreground)"
-                                            : "var(--muted-foreground)",
-                                    }}
+                                    className={`text-base font-bold tracking-widest ${selected ? "text-foreground" : "text-muted-foreground"}`}
                                 >
                                     {opt.value}
                                 </span>
                             </div>
                             {selected && (
-                                <div
-                                    className="bg-primary mt-1 h-2 w-2 shrink-0"
-                                    style={{
-                                        borderRadius: "50%",
-                                    }}
-                                />
+                                <div className="bg-primary mt-1 h-2 w-2 shrink-0 rounded-full" />
                             )}
                         </div>
 
                         {/* Hint + badges row */}
                         <div className="mb-5 flex items-center gap-2">
-                            <span
-                                className="text-base font-semibold tracking-widest"
-                                style={{
-                                    color: selected ? "var(--border)" : "var(--border)",
-                                }}
-                            >
+                            <span className="text-border text-base font-semibold tracking-widest">
                                 {opt.hint}
                             </span>
                             <span
@@ -93,12 +70,7 @@ export default function ModeCards({
                         </div>
 
                         {/* Divider */}
-                        <div
-                            className="mb-4 h-px"
-                            style={{
-                                background: selected ? "var(--border)" : "var(--border)",
-                            }}
-                        />
+                        <div className="bg-border mb-4 h-px" />
 
                         {/* Description */}
                         <div className="text-muted-foreground mb-5 grow text-xs leading-relaxed tracking-tighter">
@@ -106,22 +78,14 @@ export default function ModeCards({
                         </div>
 
                         {/* Divider */}
-                        <div
-                            className="mb-3.5 h-px"
-                            style={{
-                                background: selected ? "var(--border)" : "var(--border)",
-                            }}
-                        />
+                        <div className="bg-border mb-3.5 h-px" />
 
                         {/* Implications list */}
                         <div className="flex flex-col gap-2">
                             {opt.implications.map((imp: { label: string; detail: string }) => (
                                 <div key={imp.label} className="flex items-start gap-2">
                                     <span
-                                        className="min-w-[96px] shrink-0 text-sm font-semibold tracking-widest"
-                                        style={{
-                                            color: selected ? "var(--primary)" : "var(--border)",
-                                        }}
+                                        className={`min-w-[96px] shrink-0 text-sm font-semibold tracking-widest ${selected ? "text-primary" : "text-border"}`}
                                     >
                                         {imp.label}
                                     </span>

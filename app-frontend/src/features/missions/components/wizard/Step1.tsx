@@ -6,8 +6,8 @@ import Divider from "@/features/missions/components/wizard/Divider";
 import FieldBlock from "@/features/missions/components/wizard/FieldBlock";
 import RadioGroup from "@/features/missions/components/wizard/RadioGroup";
 import StepHeading from "@/features/missions/components/wizard/StepHeading";
-import TextInput from "@/features/missions/components/wizard/TextInput";
 import { useWizardContext } from "@/features/missions/components/wizard/WizardContext";
+import WizardTextInput from "@/features/missions/components/wizard/WizardTextInput";
 import { type TargetType } from "@/features/missions/data/fixtures/wizardMockData";
 
 export function Step1() {
@@ -26,7 +26,7 @@ export function Step1() {
                 mb
                 name="target"
             >
-                <TextInput />
+                <WizardTextInput />
             </FieldBlock>
             <Divider />
             <FieldBlock label="TARGET TYPE" name="targetType">
@@ -53,27 +53,17 @@ export function Step1() {
                     <div className="text-muted-foreground mb-3 text-sm tracking-widest">
                         BENCHMARK SUITE
                     </div>
-                    <div
-                        className="mb-3.5"
-                        style={{
-                            display: "flex",
-                            gap: 6,
-                        }}
-                    >
+                    <div className="mb-3.5 flex gap-1.5">
                         {["CVE-BENCH", "PREDIQL", "MHBENCH"].map((s) => (
                             <Button
                                 key={s}
                                 variant="outline"
                                 onClick={() => setBenchSuite(s)}
-                                className="h-auto rounded-sm px-3 py-1 text-base tracking-wide"
-                                style={{
-                                    background: benchSuite === s ? "var(--border)" : "transparent",
-                                    border: `1px solid ${benchSuite === s ? "var(--primary)" : "var(--border)"}`,
-                                    color:
-                                        benchSuite === s
-                                            ? "var(--destructive)"
-                                            : "var(--muted-foreground)",
-                                }}
+                                className={`h-auto rounded-sm px-3 py-1 text-base tracking-wide ${
+                                    benchSuite === s
+                                        ? "border-primary bg-border text-destructive"
+                                        : "border-border text-muted-foreground bg-transparent"
+                                }`}
                             >
                                 {s}
                             </Button>

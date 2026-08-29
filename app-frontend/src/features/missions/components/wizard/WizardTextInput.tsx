@@ -1,6 +1,6 @@
 import { Input } from "@/components/ui/input";
 
-export default function TextInput(props: Record<string, unknown>) {
+export default function WizardTextInput(props: Record<string, unknown>) {
     return (
         <Input
             spellCheck={false}

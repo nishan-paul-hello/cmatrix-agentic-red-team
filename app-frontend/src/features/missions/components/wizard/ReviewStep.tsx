@@ -38,7 +38,7 @@ export default function ReviewStep({
         {
             label: "TARGET",
             value: target || "—",
-            valueColor: "var(--primary)",
+            valueColor: "text-primary",
             mono: true,
         },
         {
@@ -52,7 +52,7 @@ export default function ReviewStep({
         {
             label: "MODE",
             value: mode,
-            valueColor: mode === "ZERO-DAY" ? "var(--destructive)" : "var(--warning)",
+            valueColor: mode === "ZERO-DAY" ? "text-destructive" : "text-warning",
         },
         {
             label: "MAX RUNTIME",
@@ -61,7 +61,7 @@ export default function ReviewStep({
         {
             label: "COST CEILING",
             value: `$${parseFloat(costCeiling).toFixed(2)}`,
-            valueColor: costNum > 50 ? "var(--warning)" : "var(--foreground)",
+            valueColor: costNum > 50 ? "text-warning" : "text-foreground",
             warn: costNum > 50,
         },
         {
@@ -101,13 +101,7 @@ export default function ReviewStep({
                             {row.label}
                         </div>
                         <div
-                            className="flex-1 px-4 py-2.5 text-xs leading-snug tracking-tight"
-                            style={{
-                                color: row.valueColor ?? "var(--muted-foreground)",
-                                display: "flex",
-                                alignItems: "center",
-                                gap: 8,
-                            }}
+                            className={`flex flex-1 items-center gap-2 px-4 py-2.5 text-xs leading-snug tracking-tight ${row.valueColor ?? "text-muted-foreground"}`}
                         >
                             <span className="font-inherit">{row.value}</span>
                             {row.warn && (
@@ -169,18 +163,12 @@ export default function ReviewStep({
                         className="bg-background border-border flex items-center gap-3 border-b px-4 py-2"
                     >
                         <span
-                            className="shrink-0 text-xs"
-                            style={{
-                                color: chk.ok ? "var(--success)" : "var(--warning)",
-                            }}
+                            className={`shrink-0 text-xs ${chk.ok ? "text-success" : "text-warning"}`}
                         >
                             {chk.ok ? "✓" : "⚠"}
                         </span>
                         <span
-                            className="min-w-[200px] text-xs tracking-tight"
-                            style={{
-                                color: chk.ok ? "var(--muted-foreground)" : "var(--warning)",
-                            }}
+                            className={`min-w-[200px] text-xs tracking-tight ${chk.ok ? "text-muted-foreground" : "text-warning"}`}
                         >
                             {chk.label}
                         </span>

@@ -20,10 +20,7 @@ export function WizardStepIndicator({
                         <div key={s.id} className="flex items-center">
                             {i > 0 && (
                                 <div
-                                    className="h-px w-5 shrink-0 sm:w-10"
-                                    style={{
-                                        background: done ? "var(--primary)" : "var(--border)",
-                                    }}
+                                    className={`h-px w-5 shrink-0 sm:w-10 ${done ? "bg-primary" : "bg-border"}`}
                                 />
                             )}
                             {done ? (
@@ -33,15 +30,7 @@ export function WizardStepIndicator({
                                     title={`Go back to Step ${s.index}`}
                                     className="h-auto flex-col items-center gap-1.5 p-0 hover:bg-transparent"
                                 >
-                                    <div
-                                        className="border-border bg-muted text-muted-foreground h-6 w-6 shrink-0 border-[1px] border-solid text-xs font-bold tracking-tight"
-                                        style={{
-                                            borderRadius: "50%",
-                                            display: "flex",
-                                            alignItems: "center",
-                                            justifyContent: "center",
-                                        }}
-                                    >
+                                    <div className="border-border bg-muted text-muted-foreground flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-[1px] border-solid text-xs font-bold tracking-tight">
                                         ✓
                                     </div>
                                     <span className="text-muted-foreground hidden text-xs tracking-widest whitespace-nowrap sm:block">
@@ -51,30 +40,12 @@ export function WizardStepIndicator({
                             ) : (
                                 <div className="flex flex-col items-center gap-1.5">
                                     <div
-                                        className="h-6 w-6 shrink-0 text-xs font-bold tracking-tight"
-                                        style={{
-                                            borderRadius: "50%",
-                                            display: "flex",
-                                            alignItems: "center",
-                                            justifyContent: "center",
-                                            border: active
-                                                ? "1px solid var(--primary)"
-                                                : "1px solid var(--border)",
-                                            background: active ? "var(--border)" : "var(--border)",
-                                            color: active
-                                                ? "var(--destructive)"
-                                                : "var(--muted-foreground)",
-                                        }}
+                                        className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-[1px] border-solid text-xs font-bold tracking-tight ${active ? "border-primary bg-border text-destructive" : "border-border bg-border text-muted-foreground"}`}
                                     >
                                         {s.index}
                                     </div>
                                     <span
-                                        className="hidden text-xs tracking-widest whitespace-nowrap sm:block"
-                                        style={{
-                                            color: active
-                                                ? "var(--muted-foreground)"
-                                                : "var(--border)",
-                                        }}
+                                        className={`hidden text-xs tracking-widest whitespace-nowrap sm:block ${active ? "text-muted-foreground" : "text-border"}`}
                                     >
                                         {s.label}
                                     </span>
