@@ -45,7 +45,7 @@ export default function Login({ onLogin }: LoginProps) {
     }
 
     return (
-        <div className="bg-background flex min-h-screen items-center justify-center">
+        <div className="bg-background flex min-h-dvh flex-col items-center justify-center">
             {/* Decorative grid background */}
             <div
                 className="pointer-events-none absolute inset-0 opacity-20"
