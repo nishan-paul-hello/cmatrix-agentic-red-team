@@ -79,8 +79,12 @@ const AttackGraphCanvasViewInner = React.memo(function ({
     dims: { w: number; h: number };
 }) {
     const { w, h } = dims;
-    const canvasW = Math.max(w, 1400);
-    const canvasH = Math.max(h, 800);
+    const graphW = Math.max(w, 1000);
+    const graphH = Math.max(h, 560);
+    const canvasW = graphW + 1000;
+    const canvasH = graphH + 1000;
+    const offsetX = 500;
+    const offsetY = 500;
 
     const nodeMap: Record<string, VDGNode | undefined> = Object.fromEntries(
         nodes.map((n) => [n.id, n]),
@@ -89,8 +93,26 @@ const AttackGraphCanvasViewInner = React.memo(function ({
     const isDragging = React.useRef(false);
     const startPos = React.useRef({ x: 0, y: 0 });
     const scrollPos = React.useRef({ left: 0, top: 0 });
+    const hasManuallyScrolled = React.useRef(false);
+
+    React.useEffect(() => {
+        const container = containerRef.current;
+        // w > 100 ensures we don't center during a tiny transient mounting state
+        if (container && !hasManuallyScrolled.current && canvasW > 0 && w > 100) {
+            const rootCx = 500; // The logical center of the root node (RECON-001)
+            const centerPx = lx(rootCx, graphW);
+            const minCy = nodes.length > 0 ? Math.min(...nodes.map((n) => n.cy)) : 50;
+            const topPx = ly(minCy, graphH);
+            
+            // Exactly center the root node horizontally
+            container.scrollLeft = offsetX + centerPx - w / 2;
+            // Exactly place the topmost node 40px from the top
+            container.scrollTop = offsetY + topPx - 40;
+        }
+    }, [canvasW, canvasH, w, h, offsetX, offsetY, graphW, graphH, nodes, containerRef]);
 
     const handleMouseDown = (e: React.MouseEvent) => {
+        hasManuallyScrolled.current = true;
         isDragging.current = true;
         startPos.current = { x: e.clientX, y: e.clientY };
         const container = containerRef.current;
@@ -161,11 +183,13 @@ const AttackGraphCanvasViewInner = React.memo(function ({
                     <div
                         ref={containerRef}
                         role="presentation"
-                        className="relative h-full w-full cursor-grab [scrollbar-width:none] overflow-auto [-ms-overflow-style:none] active:cursor-grabbing [&::-webkit-scrollbar]:hidden"
+                        className="relative h-full w-full overflow-auto cursor-grab active:cursor-grabbing [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
                         onMouseDown={handleMouseDown}
                         onMouseMove={handleMouseMove}
                         onMouseUp={handleMouseUp}
                         onMouseLeave={handleMouseUp}
+                        onWheel={() => { hasManuallyScrolled.current = true; }}
+                        onTouchMove={() => { hasManuallyScrolled.current = true; }}
                     >
                         <div style={{ width: canvasW, height: canvasH, position: "relative" }}>
                             {/* Grid */}
@@ -226,10 +250,10 @@ const AttackGraphCanvasViewInner = React.memo(function ({
                                             edge={edge}
                                             dst={dst}
                                             vis={vis}
-                                            x1={lx(src.cx, canvasW)}
-                                            y1={ly(src.cy, canvasH) + NODE_H}
-                                            x2={lx(dst.cx, canvasW)}
-                                            y2={ly(dst.cy, canvasH) - 4}
+                                            x1={lx(src.cx, graphW) + offsetX}
+                                            y1={ly(src.cy, graphH) + offsetY + NODE_H}
+                                            x2={lx(dst.cx, graphW) + offsetX}
+                                            y2={ly(dst.cy, graphH) + offsetY - 4}
                                         />
                                     );
                                 })}
@@ -247,8 +271,8 @@ const AttackGraphCanvasViewInner = React.memo(function ({
                                         style={style}
                                         isVis={isVis}
                                         isHov={isHov}
-                                        x={lx(node.cx, canvasW) - NODE_W / 2}
-                                        y={ly(node.cy, canvasH)}
+                                        x={lx(node.cx, graphW) + offsetX - NODE_W / 2}
+                                        y={ly(node.cy, graphH) + offsetY}
                                         width={NODE_W}
                                         onMouseEnter={setHovered}
                                         onMouseLeave={setHovered}
