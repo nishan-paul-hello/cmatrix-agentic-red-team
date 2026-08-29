@@ -1,7 +1,7 @@
+import { ArrowLeft } from "lucide-react";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import AttackPath from "@/features/findings/components/AttackPath";
 import EvidenceViewer from "@/features/findings/components/EvidenceViewer";
@@ -12,7 +12,6 @@ import { type Finding } from "@/types/domain-types";
 
 export default function FindingDetail({ f, onBack }: { f: Finding; onBack: () => void }) {
     const [tab, setTab] = useState<Tab>("OVERVIEW");
-    const [evOpen, setEvOpen] = useState(false);
     const sc = SEV_C[f.severity];
     const stc = STATUS_C[f.status] ?? "text-muted-foreground";
     return (
@@ -25,9 +24,9 @@ export default function FindingDetail({ f, onBack }: { f: Finding; onBack: () =>
                 <Button
                     variant="ghost"
                     onClick={onBack}
-                    className="text-muted-foreground hover:text-muted-foreground mb-2.5 h-auto p-0 text-base tracking-widest hover:bg-transparent"
+                    className="text-muted-foreground hover:text-foreground mb-2 flex h-auto items-center gap-2 p-0 text-xs font-semibold tracking-widest transition-colors hover:bg-transparent"
                 >
-                    {"\u2190"} FINDINGS
+                    <ArrowLeft className="h-4 w-4" /> FINDINGS
                 </Button>
                 <div className="mb-3 flex items-center gap-3">
                     <h1 className="text-foreground text-xs font-bold tracking-wide">{f.id}</h1>
@@ -50,7 +49,10 @@ export default function FindingDetail({ f, onBack }: { f: Finding; onBack: () =>
                         {f.status}
                     </span>
                 </div>
-                <TabsList variant="line" className="flex justify-start overflow-x-auto p-0">
+                <TabsList
+                    variant="line"
+                    className="flex justify-start overflow-x-auto overflow-y-hidden p-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+                >
                     {(
                         ["OVERVIEW", "EVIDENCE", "ATTACK PATH", "VALIDATION", "TRAJECTORY"] as Tab[]
                     ).map((t) => (
@@ -125,25 +127,6 @@ export default function FindingDetail({ f, onBack }: { f: Finding; onBack: () =>
                                 </div>
                             ))}
                         </div>
-                        <div className="text-muted-foreground mb-3.5 text-base tracking-widest">
-                            ATTACK PATH
-                        </div>
-                        <AttackPath nodes={f.path} />
-                        <div className="mt-6 flex gap-3">
-                            <Button
-                                onClick={() => setEvOpen(true)}
-                                className="bg-primary text-foreground hover:bg-destructive h-auto rounded-sm px-4 py-1.5 text-base tracking-widest"
-                            >
-                                VIEW EVIDENCE
-                            </Button>
-                            <Button
-                                variant="outline"
-                                onClick={() => setTab("ATTACK PATH")}
-                                className="h-auto rounded-sm px-4 py-1.5 text-base tracking-widest"
-                            >
-                                VIEW PATH
-                            </Button>
-                        </div>
                     </TabsContent>
                     <TabsContent value="EVIDENCE" className="m-0 h-full">
                         <EvidenceViewer inline />
@@ -159,18 +142,6 @@ export default function FindingDetail({ f, onBack }: { f: Finding; onBack: () =>
                     </TabsContent>
                 </div>
             </div>
-            <Dialog open={evOpen} onOpenChange={setEvOpen}>
-                <DialogContent className="border-border bg-background w-panel-3xl sm:max-w-panel-3xl flex max-h-[80vh] max-w-full flex-col overflow-hidden p-0">
-                    <DialogHeader className="border-border border-b px-5 py-4">
-                        <DialogTitle className="text-foreground text-xs font-bold tracking-normal uppercase">
-                            EVIDENCE VIEWER
-                        </DialogTitle>
-                    </DialogHeader>
-                    <div className="overflow-auto p-5">
-                        <EvidenceViewer />
-                    </div>
-                </DialogContent>
-            </Dialog>
         </Tabs>
     );
 }
