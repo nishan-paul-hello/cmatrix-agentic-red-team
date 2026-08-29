@@ -23,12 +23,12 @@ export function Tier4MHBenchOverview({
             <PassRateBar
                 label="HOST COMPROMISE RATE"
                 value={d.hostCompromiseSuccess / d.environments}
-                color="var(--primary)"
+                color="text-primary"
             />
             <PassRateBar
                 label="CREDENTIAL THEFT RATE"
                 value={d.credentialTheftSuccess / d.environments}
-                color="var(--warning)"
+                color="text-warning"
             />
             <MetaRow bench={bench} />
         </>

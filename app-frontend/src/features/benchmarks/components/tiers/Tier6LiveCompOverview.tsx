@@ -18,12 +18,12 @@ export function Tier6LiveCompOverview({
             <PassRateBar
                 label="PentestGPT machines solved (of 13)"
                 value={d.pentestGptMachinesSolved / 13}
-                color="var(--primary)"
+                color="text-primary"
             />
             <PassRateBar
                 label="HTB Season 8 machines solved (of 5)"
                 value={d.htbSeason8Solved / 5}
-                color="var(--warning)"
+                color="text-warning"
             />
             <MetaRow bench={bench} />
         </>

@@ -18,12 +18,12 @@ export function Tier5BountyBenchOverview({
             <PassRateBar
                 label="DETECTION RATE"
                 value={d.detect.pass / d.detect.total}
-                color="var(--warning)"
+                color="text-warning"
             />
             <PassRateBar
                 label="EXPLOITATION RATE"
                 value={d.exploit.pass / d.exploit.total}
-                color="var(--primary)"
+                color="text-primary"
             />
             <div className="text-muted-foreground mt-2 text-sm tracking-wide">
                 PATCH column excluded — RedGrid scoping rule (§2.1): attack only, not defense.

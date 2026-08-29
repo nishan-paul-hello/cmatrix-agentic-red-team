@@ -37,7 +37,7 @@ export function Tier3PrediQLOverview({
                             <span
                                 className="text-base"
                                 style={{
-                                    color: isUs ? "var(--primary)" : "var(--muted-foreground)",
+                                    color: isUs ? "text-primary" : "text-muted-foreground",
                                     fontWeight: isUs ? "bold" : undefined,
                                 }}
                             >
@@ -53,7 +53,7 @@ export function Tier3PrediQLOverview({
                                 className="h-full rounded-sm"
                                 style={{
                                     width: `${row.schemaCoveragePct * 100}%`,
-                                    background: isUs ? "var(--primary)" : "var(--border)",
+                                    background: isUs ? "text-primary" : "text-border",
                                 }}
                             />
                         </div>

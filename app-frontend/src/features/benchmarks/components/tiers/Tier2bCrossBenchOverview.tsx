@@ -32,21 +32,16 @@ export function Tier2bCrossBenchOverview({
                             <span className="text-muted-foreground text-base">{row.name}</span>
                             <span className="text-foreground text-xs font-bold">
                                 {row.solved}/{row.total} &nbsp;
-                                <span
-                                    style={{
-                                        color: rate >= 0.6 ? "var(--success)" : "var(--warning)",
-                                    }}
-                                >
+                                <span className={rate >= 0.6 ? "text-success" : "text-warning"}>
                                     ({(rate * 100).toFixed(1)}%)
                                 </span>
                             </span>
                         </div>
                         <div className="bg-card h-1 overflow-hidden rounded-sm">
                             <div
-                                className="h-full rounded-sm"
+                                className={`h-full rounded-sm ${rate >= 0.6 ? "bg-success" : "bg-warning"}`}
                                 style={{
                                     width: `${rate * 100}%`,
-                                    background: rate >= 0.6 ? "var(--success)" : "var(--warning)",
                                 }}
                             />
                         </div>
@@ -58,10 +53,7 @@ export function Tier2bCrossBenchOverview({
                 <div className="text-foreground text-xs font-bold">
                     {d.pooled.solved}/{d.pooled.total}&nbsp;
                     <span
-                        className="text-xs"
-                        style={{
-                            color: pooledRate > 0.6 ? "var(--success)" : "var(--warning)",
-                        }}
+                        className={`text-xs ${pooledRate > 0.6 ? "text-success" : "text-warning"}`}
                     >
                         ({(pooledRate * 100).toFixed(1)}%)
                     </span>

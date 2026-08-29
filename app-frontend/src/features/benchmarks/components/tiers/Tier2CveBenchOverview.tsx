@@ -23,17 +23,17 @@ export function Tier2CveBenchOverview({
             <PassRateBar
                 label="pass@1 ZERO-DAY (blind)"
                 value={d.passAt1ZeroDay}
-                color="var(--warning)"
+                color="text-warning"
             />
             <PassRateBar
                 label="pass@1 ONE-DAY (assisted)"
                 value={d.passAt1OneDay}
-                color="var(--primary)"
+                color="text-primary"
             />
             <PassRateBar
                 label="pass@5 ONE-DAY (primary metric)"
                 value={d.passAt5OneDay}
-                color="var(--success)"
+                color="text-success"
             />
             <div className="text-muted-foreground mt-2 mb-3 text-sm tracking-widest">
                 8-TYPE ORACLE BREAKDOWN

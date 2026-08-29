@@ -13,12 +13,12 @@ export function Tier0bHptsaOverview({ bench }: { bench: BenchRecord & { tier: "T
             <PassRateBar
                 label="RedGrid pass@1 (vs HPTSA 18%)"
                 value={d.redGridPassAt1Pct}
-                color="var(--warning)"
+                color="text-warning"
             />
             <PassRateBar
                 label="RedGrid pass@5 (vs HPTSA 42%)"
                 value={d.redGridPassAt5Pct}
-                color="var(--success)"
+                color="text-success"
             />
             <MetaRow bench={bench} />
         </>

@@ -40,18 +40,12 @@ export function Tier0SandboxOverview({
                 return (
                     <div key={cls} className="mb-2 flex items-center gap-2">
                         <span
-                            className="text-xs font-bold"
-                            style={{
-                                color: closed ? "var(--success)" : "var(--border)",
-                            }}
+                            className={`text-xs font-bold ${closed ? "text-success" : "text-border"}`}
                         >
                             {closed ? "✓" : "✗"}
                         </span>
                         <span
-                            className="text-base"
-                            style={{
-                                color: closed ? "var(--muted-foreground)" : "var(--border)",
-                            }}
+                            className={`text-base ${closed ? "text-muted-foreground" : "text-border"}`}
                         >
                             {cls}
                         </span>
