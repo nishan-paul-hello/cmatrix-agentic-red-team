@@ -1,6 +1,14 @@
 import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
 import { EnvironmentRepository } from "@/features/environment/data/EnvironmentRepository";
 import { type CredentialEntry } from "@/types/domain-types";
 
@@ -39,42 +47,34 @@ export default function CredentialsPanel() {
                     4 CRACKED · 2 UNCRACKED
                 </span>
             </div>
-            <table className="w-full border-collapse text-xs">
-                <thead>
-                    <tr className="bg-card">
+            <Table className="w-full border-collapse text-xs">
+                <TableHeader>
+                    <TableRow className="bg-card">
                         {["USERNAME", "PASSWORD / HASH", "SOURCE", "SCOPE", "STATUS", ""].map(
                             (h) => (
-                                <th
+                                <TableHead
                                     key={h}
                                     className="text-muted-foreground border-border border-b px-4 py-1.5 text-left text-sm font-semibold tracking-widest whitespace-nowrap"
                                 >
                                     {h}
-                                </th>
+                                </TableHead>
                             ),
                         )}
-                    </tr>
-                </thead>
-                <tbody>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
                     {CREDS.map((row) => {
                         const isRev = revealed.has(row.username);
                         const cracked = row.status === "CRACKED";
                         return (
-                            <tr
+                            <TableRow
                                 key={row.username}
-                                style={{
-                                    borderBottom: "1px solid var(--border)",
-                                }}
-                                onMouseEnter={(e) =>
-                                    (e.currentTarget.style.background = "var(--border)")
-                                }
-                                onMouseLeave={(e) =>
-                                    (e.currentTarget.style.background = "transparent")
-                                }
+                                className="border-border hover:bg-border border-b bg-transparent transition-colors"
                             >
-                                <td className="text-muted-foreground px-4 py-2 font-semibold tracking-tight">
+                                <TableCell className="text-muted-foreground px-4 py-2 font-semibold tracking-tight">
                                     {row.username}
-                                </td>
-                                <td className="px-4 py-2">
+                                </TableCell>
+                                <TableCell className="px-4 py-2">
                                     {isRev && cracked ? (
                                         <span className="text-primary tracking-tight">
                                             {row.plain}
@@ -89,41 +89,35 @@ export default function CredentialsPanel() {
                                             {row.hash.slice(0, 16)}…
                                         </span>
                                     )}
-                                </td>
-                                <td className="text-muted-foreground px-4 py-2 text-base">
+                                </TableCell>
+                                <TableCell className="text-muted-foreground px-4 py-2 text-base">
                                     {row.source}
-                                </td>
-                                <td className="px-4 py-2">
+                                </TableCell>
+                                <TableCell className="px-4 py-2">
                                     <span
-                                        className="text-base tracking-wide"
-                                        style={{
-                                            color: (() => {
-                                                if (row.scope === "ADMIN") {
-                                                    return "var(--primary)";
-                                                }
-                                                if (row.scope === "SERVICE") {
-                                                    return "var(--warning)";
-                                                }
-                                                return "var(--muted-foreground)";
-                                            })(),
-                                        }}
+                                        className={`text-base tracking-wide ${(() => {
+                                            if (row.scope === "ADMIN") {
+                                                return "text-primary";
+                                            }
+                                            if (row.scope === "SERVICE") {
+                                                return "text-warning";
+                                            }
+                                            return "text-muted-foreground";
+                                        })()}`}
                                     >
                                         {row.scope}
                                     </span>
-                                </td>
-                                <td className="px-4 py-2">
+                                </TableCell>
+                                <TableCell className="px-4 py-2">
                                     <span
-                                        className="text-base font-semibold tracking-wide"
-                                        style={{
-                                            color: cracked
-                                                ? "var(--success)"
-                                                : "var(--muted-foreground)",
-                                        }}
+                                        className={`text-base font-semibold tracking-wide ${
+                                            cracked ? "text-success" : "text-muted-foreground"
+                                        }`}
                                     >
                                         {row.status}
                                     </span>
-                                </td>
-                                <td className="px-4 py-2">
+                                </TableCell>
+                                <TableCell className="px-4 py-2">
                                     {cracked && (
                                         <Button
                                             variant="outline"
@@ -133,12 +127,12 @@ export default function CredentialsPanel() {
                                             {isRev ? "HIDE" : "REVEAL"}
                                         </Button>
                                     )}
-                                </td>
-                            </tr>
+                                </TableCell>
+                            </TableRow>
                         );
                     })}
-                </tbody>
-            </table>
+                </TableBody>
+            </Table>
         </>
     );
 }

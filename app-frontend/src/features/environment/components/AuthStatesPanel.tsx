@@ -1,5 +1,13 @@
 import { useEffect, useState } from "react";
 
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
 import { EnvironmentRepository } from "@/features/environment/data/EnvironmentRepository";
 import { type AuthState } from "@/types/domain-types";
 
@@ -23,9 +31,9 @@ export default function AuthStatesPanel() {
                     Active authentication sessions observed by Specialists
                 </span>
             </div>
-            <table className="w-full border-collapse text-xs">
-                <thead>
-                    <tr className="bg-card sticky top-0">
+            <Table className="w-full border-collapse text-xs">
+                <TableHeader>
+                    <TableRow className="bg-card sticky top-0">
                         {[
                             "ID",
                             "SESSION",
@@ -37,82 +45,62 @@ export default function AuthStatesPanel() {
                             "STATUS",
                             "CSRF TOKEN",
                         ].map((h) => (
-                            <th
+                            <TableHead
                                 key={h}
                                 className="text-muted-foreground border-border border-b px-3 py-1.5 text-left text-sm font-semibold tracking-widest whitespace-nowrap"
                             >
                                 {h}
-                            </th>
+                            </TableHead>
                         ))}
-                    </tr>
-                </thead>
-                <tbody>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
                     {AUTH_STATES.map((a: AuthState) => (
-                        <tr
+                        <TableRow
                             key={a.id}
-                            style={{
-                                borderBottom: "1px solid var(--border)",
-                            }}
-                            onMouseEnter={(e) =>
-                                (e.currentTarget.style.background = "var(--border)")
-                            }
-                            onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+                            className="border-border hover:bg-border border-b bg-transparent transition-colors"
                         >
-                            <td className="text-primary px-3 py-1.5 text-base font-bold">{a.id}</td>
-                            <td className="text-muted-foreground px-3 py-1.5 text-base">
+                            <TableCell className="text-primary px-3 py-1.5 text-base font-bold">
+                                {a.id}
+                            </TableCell>
+                            <TableCell className="text-muted-foreground px-3 py-1.5 text-base">
                                 {a.session}
-                            </td>
-                            <td className="text-muted-foreground px-3 py-1.5">{a.user}</td>
-                            <td className="px-3 py-1.5">
+                            </TableCell>
+                            <TableCell className="text-muted-foreground px-3 py-1.5">
+                                {a.user}
+                            </TableCell>
+                            <TableCell className="px-3 py-1.5">
                                 <span
-                                    className="text-sm font-semibold tracking-normal"
-                                    style={{
-                                        color:
-                                            a.role === "ADMIN"
-                                                ? "var(--destructive)"
-                                                : "var(--muted-foreground)",
-                                    }}
+                                    className={`text-sm font-semibold tracking-normal ${a.role === "ADMIN" ? "text-destructive" : "text-muted-foreground"}`}
                                 >
                                     {a.role}
                                 </span>
-                            </td>
-                            <td className="text-muted-foreground px-3 py-1.5 text-base">
+                            </TableCell>
+                            <TableCell className="text-muted-foreground px-3 py-1.5 text-base">
                                 {a.method}
-                            </td>
-                            <td className="text-muted-foreground px-3 py-1.5 text-base">
+                            </TableCell>
+                            <TableCell className="text-muted-foreground px-3 py-1.5 text-base">
                                 {a.issued}
-                            </td>
-                            <td
-                                className="px-3 py-1.5 text-base"
-                                style={{
-                                    color:
-                                        a.status === "EXPIRED"
-                                            ? "var(--border)"
-                                            : "var(--muted-foreground)",
-                                }}
+                            </TableCell>
+                            <TableCell
+                                className={`px-3 py-1.5 text-base ${a.status === "EXPIRED" ? "text-border" : "text-muted-foreground"}`}
                             >
                                 {a.expiry}
-                            </td>
-                            <td className="px-3 py-1.5">
+                            </TableCell>
+                            <TableCell className="px-3 py-1.5">
                                 <span
-                                    className="text-sm font-semibold tracking-wide"
-                                    style={{
-                                        color:
-                                            a.status === "ACTIVE"
-                                                ? "var(--success)"
-                                                : "var(--muted-foreground)",
-                                    }}
+                                    className={`text-sm font-semibold tracking-wide ${a.status === "ACTIVE" ? "text-success" : "text-muted-foreground"}`}
                                 >
                                     {a.status}
                                 </span>
-                            </td>
-                            <td className="text-muted-foreground px-3 py-1.5 text-base tracking-tight">
+                            </TableCell>
+                            <TableCell className="text-muted-foreground px-3 py-1.5 text-base tracking-tight">
                                 {a.csrf}
-                            </td>
-                        </tr>
+                            </TableCell>
+                        </TableRow>
                     ))}
-                </tbody>
-            </table>
+                </TableBody>
+            </Table>
         </div>
     );
 }

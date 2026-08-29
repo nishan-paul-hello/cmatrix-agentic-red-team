@@ -1,5 +1,13 @@
 import { useEffect, useState } from "react";
 
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
 import { EnvironmentRepository } from "@/features/environment/data/EnvironmentRepository";
 import { STATUS_COLOR } from "@/features/environment/data/mockData";
 import { type Service } from "@/types/domain-types";
@@ -24,45 +32,41 @@ export default function ServicesPanel() {
                 </span>
                 <span className="text-success text-sm tracking-widest">E_ord ≥ 4 — CONFIRMED</span>
             </div>
-            <table className="w-full border-collapse text-xs">
-                <thead>
-                    <tr className="bg-card">
+            <Table className="w-full border-collapse text-xs">
+                <TableHeader>
+                    <TableRow className="bg-card">
                         {["HOST", "PORT", "SERVICE", "VERSION", "BANNER", "STATUS"].map((h) => (
-                            <th
+                            <TableHead
                                 key={h}
                                 className="text-muted-foreground border-border border-b px-4 py-1.5 text-left text-sm font-semibold tracking-widest whitespace-nowrap"
                             >
                                 {h}
-                            </th>
+                            </TableHead>
                         ))}
-                    </tr>
-                </thead>
-                <tbody>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
                     {SERVICES.map((row) => (
-                        <tr
+                        <TableRow
                             key={`${row.host}-${row.port}`}
-                            className="border-border cursor-pointer border-b"
-                            onMouseEnter={(e) =>
-                                (e.currentTarget.style.background = "var(--border)")
-                            }
-                            onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+                            className="border-border hover:bg-border cursor-pointer border-b bg-transparent transition-colors"
                         >
-                            <td className="text-muted-foreground px-4 py-1.5 whitespace-nowrap">
+                            <TableCell className="text-muted-foreground px-4 py-1.5 whitespace-nowrap">
                                 {row.host}
-                            </td>
-                            <td className="text-muted-foreground px-4 py-1.5 text-right font-bold">
+                            </TableCell>
+                            <TableCell className="text-muted-foreground px-4 py-1.5 text-right font-bold">
                                 {row.port}
-                            </td>
-                            <td className="text-muted-foreground px-4 py-1.5 tracking-tight">
+                            </TableCell>
+                            <TableCell className="text-muted-foreground px-4 py-1.5 tracking-tight">
                                 {row.service}
-                            </td>
-                            <td className="text-muted-foreground px-4 py-1.5 text-base">
+                            </TableCell>
+                            <TableCell className="text-muted-foreground px-4 py-1.5 text-base">
                                 {row.version}
-                            </td>
-                            <td className="text-muted-foreground px-4 py-1.5 text-base">
+                            </TableCell>
+                            <TableCell className="text-muted-foreground px-4 py-1.5 text-base">
                                 {row.banner}
-                            </td>
-                            <td className="px-4 py-1.5 whitespace-nowrap">
+                            </TableCell>
+                            <TableCell className="px-4 py-1.5 whitespace-nowrap">
                                 <span
                                     className="text-base font-semibold tracking-wide"
                                     style={{
@@ -71,11 +75,11 @@ export default function ServicesPanel() {
                                 >
                                     {row.status}
                                 </span>
-                            </td>
-                        </tr>
+                            </TableCell>
+                        </TableRow>
                     ))}
-                </tbody>
-            </table>
+                </TableBody>
+            </Table>
         </>
     );
 }

@@ -1,5 +1,13 @@
 import { useEffect, useState } from "react";
 
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
 import { EnvironmentRepository } from "@/features/environment/data/EnvironmentRepository";
 import { type CveCandidate } from "@/types/domain-types";
 
@@ -25,9 +33,9 @@ export default function CVECandidatesPanel() {
                     {CVE_CANDIDATES.filter((c) => c.poc).length} WITH PoC
                 </span>
             </div>
-            <table className="w-full border-collapse text-xs">
-                <thead>
-                    <tr className="bg-card sticky top-0">
+            <Table className="w-full border-collapse text-xs">
+                <TableHeader>
+                    <TableRow className="bg-card sticky top-0">
                         {[
                             "CVE ID",
                             "TECHNOLOGY",
@@ -37,80 +45,66 @@ export default function CVECandidatesPanel() {
                             "LINKED VDG NODE",
                             "E_ORD",
                         ].map((h) => (
-                            <th
+                            <TableHead
                                 key={h}
                                 className="text-muted-foreground border-border border-b px-3 py-1.5 text-left text-sm font-semibold tracking-widest whitespace-nowrap"
                             >
                                 {h}
-                            </th>
+                            </TableHead>
                         ))}
-                    </tr>
-                </thead>
-                <tbody>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
                     {[...CVE_CANDIDATES]
                         .sort((a, b) => b.epss - a.epss)
                         .map((c) => (
-                            <tr
+                            <TableRow
                                 key={c.id}
-                                style={{
-                                    borderBottom: "1px solid var(--border)",
-                                }}
-                                onMouseEnter={(e) =>
-                                    (e.currentTarget.style.background = "var(--border)")
-                                }
-                                onMouseLeave={(e) =>
-                                    (e.currentTarget.style.background = "transparent")
-                                }
+                                className="border-border hover:bg-border border-b bg-transparent transition-colors"
                             >
-                                <td className="text-primary px-3 py-1.5 text-base font-bold tracking-tight">
+                                <TableCell className="text-primary px-3 py-1.5 text-base font-bold tracking-tight">
                                     {c.id}
-                                </td>
-                                <td className="text-muted-foreground px-3 py-1.5">{c.tech}</td>
-                                <td className="text-muted-foreground px-3 py-1.5 text-base">
+                                </TableCell>
+                                <TableCell className="text-muted-foreground px-3 py-1.5">
+                                    {c.tech}
+                                </TableCell>
+                                <TableCell className="text-muted-foreground px-3 py-1.5 text-base">
                                     {c.class}
-                                </td>
-                                <td className="px-3 py-1.5">
+                                </TableCell>
+                                <TableCell className="px-3 py-1.5">
                                     <span
-                                        className="text-xs font-bold"
-                                        style={{
-                                            color: (() => {
-                                                if (c.epss > 0.5) {
-                                                    return "var(--destructive)";
-                                                }
-                                                if (c.epss > 0.3) {
-                                                    return "var(--warning)";
-                                                }
-                                                return "var(--muted-foreground)";
-                                            })(),
-                                        }}
+                                        className={`text-xs font-bold ${(() => {
+                                            if (c.epss > 0.5) {
+                                                return "text-destructive";
+                                            }
+                                            if (c.epss > 0.3) {
+                                                return "text-warning";
+                                            }
+                                            return "text-muted-foreground";
+                                        })()}`}
                                     >
                                         {c.epss.toFixed(2)}
                                     </span>
-                                </td>
-                                <td className="px-3 py-1.5">
+                                </TableCell>
+                                <TableCell className="px-3 py-1.5">
                                     <span
-                                        className="text-sm tracking-wide"
-                                        style={{
-                                            color: c.poc ? "var(--success)" : "var(--border)",
-                                        }}
+                                        className={`text-sm tracking-wide ${c.poc ? "text-success" : "text-border"}`}
                                     >
                                         {c.poc ? "YES" : "NO"}
                                     </span>
-                                </td>
-                                <td
-                                    className="px-3 py-1.5 text-base"
-                                    style={{
-                                        color: c.node !== "—" ? "var(--primary)" : "var(--border)",
-                                        fontWeight: c.node !== "—" ? 700 : 400,
-                                    }}
+                                </TableCell>
+                                <TableCell
+                                    className={`px-3 py-1.5 text-base ${c.node !== "\u2014" ? "text-primary font-bold" : "text-border font-normal"}`}
                                 >
                                     {c.node}
-                                </td>
-                                <td className="text-muted-foreground px-3 py-1.5">{c.eord}/5</td>
-                            </tr>
+                                </TableCell>
+                                <TableCell className="text-muted-foreground px-3 py-1.5">
+                                    {c.eord}/5
+                                </TableCell>
+                            </TableRow>
                         ))}
-                </tbody>
-            </table>
+                </TableBody>
+            </Table>
         </div>
     );
 }

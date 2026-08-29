@@ -1,5 +1,13 @@
 import { useEffect, useState } from "react";
 
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
 import { EnvironmentRepository } from "@/features/environment/data/EnvironmentRepository";
 import { METHOD_COLOR, type Endpoint } from "@/features/environment/data/mockData";
 
@@ -23,59 +31,64 @@ export default function EndpointsPanel() {
                 </span>
                 <span className="text-success text-sm tracking-widest">E_ord ≥ 3 — CLEAR</span>
             </div>
-            <table className="w-full border-collapse text-xs">
-                <thead>
-                    <tr className="bg-card">
+            <Table className="w-full border-collapse text-xs">
+                <TableHeader>
+                    <TableRow className="bg-card">
                         {["ENDPOINT", "METHOD", "AUTH", "PARAMETERS", "SOURCE", "LAST SEEN"].map(
                             (h) => (
-                                <th
+                                <TableHead
                                     key={h}
                                     className="text-muted-foreground border-border border-b px-4 py-1.5 text-left text-sm font-semibold tracking-widest whitespace-nowrap"
                                 >
                                     {h}
-                                </th>
+                                </TableHead>
                             ),
                         )}
-                    </tr>
-                </thead>
-                <tbody>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
                     {ENDPOINTS.map((row) => (
-                        <tr
+                        <TableRow
                             key={`${row.method}-${row.endpoint}`}
                             className="border-border hover:bg-border cursor-pointer border-b transition-colors duration-75"
                         >
-                            <td className="font-inherit text-muted-foreground px-4 py-1.5 whitespace-nowrap">
+                            <TableCell className="font-inherit text-muted-foreground px-4 py-1.5 whitespace-nowrap">
                                 {row.endpoint}
-                            </td>
-                            <td className="px-4 py-1.5 whitespace-nowrap">
+                            </TableCell>
+                            <TableCell className="px-4 py-1.5 whitespace-nowrap">
                                 <span
-                                    className="rounded-sm px-1 py-px text-base font-semibold tracking-normal"
-                                    style={{
-                                        color:
-                                            METHOD_COLOR[row.method] ?? "var(--muted-foreground)",
-                                        background: `${METHOD_COLOR[row.method]}15`,
-                                        border: `1px solid ${METHOD_COLOR[row.method]}33`,
-                                    }}
+                                    className={`rounded-sm px-1 py-px text-base font-semibold tracking-normal ${METHOD_COLOR[row.method] ? "" : "text-muted-foreground"}`}
+                                    style={
+                                        METHOD_COLOR[row.method]
+                                            ? {
+                                                  color: METHOD_COLOR[row.method],
+                                                  backgroundColor: `${METHOD_COLOR[row.method]}15`,
+                                                  borderColor: `${METHOD_COLOR[row.method]}33`,
+                                                  borderWidth: 1,
+                                                  borderStyle: "solid",
+                                              }
+                                            : undefined
+                                    }
                                 >
                                     {row.method}
                                 </span>
-                            </td>
-                            <td className="text-muted-foreground px-4 py-1.5 text-base whitespace-nowrap">
+                            </TableCell>
+                            <TableCell className="text-muted-foreground px-4 py-1.5 text-base whitespace-nowrap">
                                 {row.auth}
-                            </td>
-                            <td className="text-muted-foreground px-4 py-1.5 text-base">
+                            </TableCell>
+                            <TableCell className="text-muted-foreground px-4 py-1.5 text-base">
                                 {row.params}
-                            </td>
-                            <td className="text-muted-foreground px-4 py-1.5 text-base tracking-normal">
+                            </TableCell>
+                            <TableCell className="text-muted-foreground px-4 py-1.5 text-base tracking-normal">
                                 {row.source}
-                            </td>
-                            <td className="text-muted-foreground px-4 py-1.5 text-base whitespace-nowrap">
+                            </TableCell>
+                            <TableCell className="text-muted-foreground px-4 py-1.5 text-base whitespace-nowrap">
                                 {row.seen}
-                            </td>
-                        </tr>
+                            </TableCell>
+                        </TableRow>
                     ))}
-                </tbody>
-            </table>
+                </TableBody>
+            </Table>
         </>
     );
 }

@@ -1,5 +1,13 @@
 import { useEffect, useState } from "react";
 
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
 import { EnvironmentRepository } from "@/features/environment/data/EnvironmentRepository";
 import { type EvidenceArtifact } from "@/types/domain-types";
 
@@ -27,74 +35,58 @@ export default function EvidencePanel() {
                         {EVIDENCE_ARTIFACTS.length} ARTIFACTS
                     </span>
                 </div>
-                <table className="w-full border-collapse text-xs">
-                    <thead>
-                        <tr className="bg-card sticky top-0">
+                <Table className="w-full border-collapse text-xs">
+                    <TableHeader>
+                        <TableRow className="bg-card sticky top-0">
                             {["ARTIFACT ID", "TYPE", "FINDING", "TIMESTAMP", "SIZE", "NOTE"].map(
                                 (h) => (
-                                    <th
+                                    <TableHead
                                         key={h}
                                         className="text-muted-foreground border-border border-b px-3 py-1.5 text-left text-sm font-semibold tracking-widest whitespace-nowrap"
                                     >
                                         {h}
-                                    </th>
+                                    </TableHead>
                                 ),
                             )}
-                        </tr>
-                    </thead>
-                    <tbody>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
                         {EVIDENCE_ARTIFACTS.map((a, i) => (
-                            <tr
+                            <TableRow
                                 key={a.id}
                                 onClick={() => setSel(a.id === sel ? null : a.id)}
-                                className="cursor-pointer"
-                                style={{
-                                    borderBottom: "1px solid var(--border)",
-                                    background: (() => {
-                                        if (sel === a.id) {
-                                            return "var(--border)";
-                                        }
-                                        if (i % 2) {
-                                            return "var(--background)";
-                                        }
-                                        return "transparent";
-                                    })(),
-                                }}
-                                onMouseEnter={(e) =>
-                                    (e.currentTarget.style.background = "var(--border)")
-                                }
-                                onMouseLeave={(e) =>
-                                    (e.currentTarget.style.background = (() => {
-                                        if (sel === a.id) {
-                                            return "var(--border)";
-                                        }
-                                        if (i % 2) {
-                                            return "var(--background)";
-                                        }
-                                        return "transparent";
-                                    })())
-                                }
+                                className={`border-border hover:bg-border cursor-pointer border-b transition-colors ${(() => {
+                                    if (sel === a.id) {
+                                        return "bg-border";
+                                    }
+                                    if (i % 2) {
+                                        return "bg-background";
+                                    }
+                                    return "bg-transparent";
+                                })()}`}
                             >
-                                <td className="text-primary px-3 py-1.5 text-base font-bold">
+                                <TableCell className="text-primary px-3 py-1.5 text-base font-bold">
                                     {a.id}
-                                </td>
-                                <td className="text-muted-foreground px-3 py-1.5 text-base">
+                                </TableCell>
+                                <TableCell className="text-muted-foreground px-3 py-1.5 text-base">
                                     {a.type}
-                                </td>
-                                <td className="text-primary px-3 py-1.5 text-base font-bold">
+                                </TableCell>
+                                <TableCell className="text-primary px-3 py-1.5 text-base font-bold">
                                     {a.finding}
-                                </td>
-                                <td className="text-muted-foreground px-3 py-1.5 text-base">
+                                </TableCell>
+                                <TableCell className="text-muted-foreground px-3 py-1.5 text-base">
                                     {a.ts}
-                                </td>
-                                <td className="text-muted-foreground px-3 py-1.5 text-right text-base">
+                                </TableCell>
+                                <TableCell className="text-muted-foreground px-3 py-1.5 text-right text-base">
                                     {a.size}
-                                </td>
-                                <td className="text-muted-foreground px-3 py-1.5">{a.note}</td>
-                            </tr>
+                                </TableCell>
+                                <TableCell className="text-muted-foreground px-3 py-1.5">
+                                    {a.note}
+                                </TableCell>
+                            </TableRow>
                         ))}
-                    </tbody>
-                </table>
+                    </TableBody>
+                </Table>
             </div>
             {sel && (
                 <div className="w-panel-sm bg-background border-border shrink-0 overflow-y-auto border-l px-3.5 py-4">

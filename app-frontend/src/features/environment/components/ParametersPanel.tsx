@@ -1,5 +1,13 @@
 import { useEffect, useState } from "react";
 
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
 import { EnvironmentRepository } from "@/features/environment/data/EnvironmentRepository";
 import { type Parameter } from "@/types/domain-types";
 
@@ -25,9 +33,9 @@ export default function ParametersPanel() {
                     {PARAMS.filter((p) => p.injectable).length} INJECTION ELIGIBLE
                 </span>
             </div>
-            <table className="w-full border-collapse text-xs">
-                <thead>
-                    <tr className="bg-card sticky top-0">
+            <Table className="w-full border-collapse text-xs">
+                <TableHeader>
+                    <TableRow className="bg-card sticky top-0">
                         {[
                             "ID",
                             "ENDPOINT",
@@ -37,63 +45,50 @@ export default function ParametersPanel() {
                             "INJECTABLE",
                             "LAST VALUE",
                         ].map((h) => (
-                            <th
+                            <TableHead
                                 key={h}
                                 className="text-muted-foreground border-border border-b px-3 py-1.5 text-left text-sm font-semibold tracking-widest whitespace-nowrap"
                             >
                                 {h}
-                            </th>
+                            </TableHead>
                         ))}
-                    </tr>
-                </thead>
-                <tbody>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
                     {PARAMS.map((p, i) => (
-                        <tr
+                        <TableRow
                             key={p.id}
-                            style={{
-                                borderBottom: "1px solid var(--border)",
-                                background: i % 2 ? "var(--background)" : "transparent",
-                            }}
-                            onMouseEnter={(e) =>
-                                (e.currentTarget.style.background = "var(--border)")
-                            }
-                            onMouseLeave={(e) =>
-                                (e.currentTarget.style.background =
-                                    i % 2 ? "var(--background)" : "transparent")
-                            }
+                            className={`border-border hover:bg-border border-b transition-colors ${i % 2 ? "bg-background" : "bg-transparent"}`}
                         >
-                            <td className="text-primary px-3 py-1.5 text-base font-bold">{p.id}</td>
-                            <td className="text-muted-foreground px-3 py-1.5 text-base">
+                            <TableCell className="text-primary px-3 py-1.5 text-base font-bold">
+                                {p.id}
+                            </TableCell>
+                            <TableCell className="text-muted-foreground px-3 py-1.5 text-base">
                                 {p.endpoint}
-                            </td>
-                            <td className="text-muted-foreground px-3 py-1.5 font-semibold">
+                            </TableCell>
+                            <TableCell className="text-muted-foreground px-3 py-1.5 font-semibold">
                                 {p.param}
-                            </td>
-                            <td className="text-muted-foreground px-3 py-1.5 text-base">
+                            </TableCell>
+                            <TableCell className="text-muted-foreground px-3 py-1.5 text-base">
                                 {p.type}
-                            </td>
-                            <td className="text-muted-foreground px-3 py-1.5 text-base">
+                            </TableCell>
+                            <TableCell className="text-muted-foreground px-3 py-1.5 text-base">
                                 {p.source}
-                            </td>
-                            <td className="px-3 py-1.5">
+                            </TableCell>
+                            <TableCell className="px-3 py-1.5">
                                 <span
-                                    className="text-sm font-semibold tracking-wide"
-                                    style={{
-                                        color: p.injectable
-                                            ? "var(--destructive)"
-                                            : "var(--border)",
-                                    }}
+                                    className={`text-sm font-semibold tracking-wide ${p.injectable ? "text-destructive" : "text-border"}`}
                                 >
-                                    {p.injectable ? "YES" : "—"}
+                                    {p.injectable ? "YES" : "\u2014"}
                                 </span>
-                            </td>
-                            <td className="text-muted-foreground px-3 py-1.5 text-base">
+                            </TableCell>
+                            <TableCell className="text-muted-foreground px-3 py-1.5 text-base">
                                 {p.lastVal}
-                            </td>
-                        </tr>
+                            </TableCell>
+                        </TableRow>
                     ))}
-                </tbody>
-            </table>
+                </TableBody>
+            </Table>
         </div>
     );
 }

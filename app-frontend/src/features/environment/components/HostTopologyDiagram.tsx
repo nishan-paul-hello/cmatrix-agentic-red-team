@@ -37,24 +37,7 @@ export function HostTopologyDiagram({
                             <Button
                                 variant="outline"
                                 onClick={() => setSelected(isSel ? null : host.id)}
-                                className="flex h-auto w-full max-w-[480px] cursor-pointer items-start justify-start gap-4 rounded-sm border border-solid px-4 py-3.5 text-left font-normal whitespace-normal transition-colors sm:w-[480px]"
-                                style={{
-                                    background: isSel ? "var(--border)" : "var(--background)",
-                                    borderColor: isSel ? "var(--primary)" : "var(--border)",
-                                }}
-                                onMouseEnter={(e) => {
-                                    if (!isSel) {
-                                        e.currentTarget.style.borderColor =
-                                            "var(--muted-foreground)";
-                                        e.currentTarget.style.background = "var(--border)";
-                                    }
-                                }}
-                                onMouseLeave={(e) => {
-                                    if (!isSel) {
-                                        e.currentTarget.style.borderColor = "var(--border)";
-                                        e.currentTarget.style.background = "var(--background)";
-                                    }
-                                }}
+                                className={`max-w-panel-md-wide sm:w-panel-md-wide flex h-auto w-full cursor-pointer items-start justify-start gap-4 rounded-sm border border-solid px-4 py-3.5 text-left font-normal whitespace-normal transition-colors ${isSel ? "bg-border border-primary" : "bg-background border-border"} hover:bg-border hover:border-muted-foreground`}
                             >
                                 {/* Left: id + status dot */}
                                 <div
@@ -64,19 +47,10 @@ export function HostTopologyDiagram({
                                     }}
                                 >
                                     <div
-                                        className="h-2.5 w-2.5 rounded-sm"
-                                        style={{
-                                            border: `1px solid ${isSel ? "var(--primary)" : "var(--border)"}`,
-                                            background: isSel ? "var(--primary)" : "var(--border)",
-                                        }}
+                                        className={`h-2.5 w-2.5 rounded-sm border ${isSel ? "border-primary bg-primary" : "border-border bg-border"}`}
                                     />
                                     <span
-                                        className="text-sm font-bold tracking-normal"
-                                        style={{
-                                            color: isSel
-                                                ? "var(--primary)"
-                                                : "var(--muted-foreground)",
-                                        }}
+                                        className={`text-sm font-bold tracking-normal ${isSel ? "text-primary" : "text-muted-foreground"}`}
                                     >
                                         {host.id}
                                     </span>
@@ -86,24 +60,12 @@ export function HostTopologyDiagram({
                                 <div className="flex-1">
                                     <div className="mb-1 flex items-center gap-2">
                                         <span
-                                            className="text-xs font-bold tracking-tight"
-                                            style={{
-                                                color: isSel
-                                                    ? "var(--foreground)"
-                                                    : "var(--muted-foreground)",
-                                            }}
+                                            className={`text-xs font-bold tracking-tight ${isSel ? "text-foreground" : "text-muted-foreground"}`}
                                         >
                                             {host.ip}
                                         </span>
                                         <span className="text-muted-foreground text-base">·</span>
-                                        <span
-                                            className="text-xs tracking-tighter"
-                                            style={{
-                                                color: isSel
-                                                    ? "var(--muted-foreground)"
-                                                    : "var(--muted-foreground)",
-                                            }}
-                                        >
+                                        <span className="text-muted-foreground text-xs tracking-tighter">
                                             {host.hostname}
                                         </span>
                                     </div>
@@ -156,24 +118,12 @@ export function HostTopologyDiagram({
                             {host.edges.map((edge) => (
                                 <div key={edge.to} className="ml-7 flex items-stretch">
                                     {/* Vertical line */}
-                                    <div
-                                        className="bg-muted w-px shrink-0"
-                                        style={{
-                                            margin: "0 0 0 4px",
-                                        }}
-                                    />
+                                    <div className="bg-muted ml-1 w-px shrink-0" />
                                     {/* Edge label */}
-                                    <div
-                                        className="flex flex-col justify-center"
-                                        style={{
-                                            paddingLeft: 16,
-                                            paddingTop: 6,
-                                            paddingBottom: 6,
-                                        }}
-                                    >
+                                    <div className="flex flex-col justify-center pt-1.5 pb-1.5 pl-4">
                                         <div className="flex items-center gap-2">
                                             <span className="text-primary text-sm tracking-normal">
-                                                →
+                                                {"\u2192"}
                                             </span>
                                             <span className="text-muted-foreground text-base font-semibold tracking-normal">
                                                 {edge.label.toUpperCase()}
@@ -199,7 +149,7 @@ export function HostTopologyDiagram({
             </div>
 
             {/* Caption */}
-            <div className="border-border bg-background mt-8 flex max-w-[480px] items-start gap-2 rounded-sm border-[1px] border-solid px-3.5 py-2.5">
+            <div className="border-border bg-background max-w-panel-md-wide mt-8 flex items-start gap-2 rounded-sm border-[1px] border-solid px-3.5 py-2.5">
                 <span className="text-primary shrink-0 text-xs">ⓘ</span>
                 <span className="text-muted-foreground text-base leading-relaxed tracking-tight">
                     Topology represents{" "}

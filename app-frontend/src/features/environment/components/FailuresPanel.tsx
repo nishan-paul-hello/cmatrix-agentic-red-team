@@ -1,5 +1,13 @@
 import { useEffect, useState } from "react";
 
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
 import { EnvironmentRepository } from "@/features/environment/data/EnvironmentRepository";
 import { type EnvFailureLogEntry } from "@/types/domain-types";
 
@@ -27,9 +35,9 @@ export default function FailuresPanel() {
                         {FAILURE_LOG.filter((f) => !f.resolved).length} UNRESOLVED
                     </span>
                 </div>
-                <table className="w-full border-collapse text-xs">
-                    <thead>
-                        <tr className="bg-card sticky top-0">
+                <Table className="w-full border-collapse text-xs">
+                    <TableHeader>
+                        <TableRow className="bg-card sticky top-0">
                             {[
                                 "ID",
                                 "TIMESTAMP",
@@ -40,81 +48,62 @@ export default function FailuresPanel() {
                                 "E_ORD",
                                 "RESOLVED",
                             ].map((h) => (
-                                <th
+                                <TableHead
                                     key={h}
                                     className="text-muted-foreground border-border border-b px-3 py-1.5 text-left text-sm font-semibold tracking-widest whitespace-nowrap"
                                 >
                                     {h}
-                                </th>
+                                </TableHead>
                             ))}
-                        </tr>
-                    </thead>
-                    <tbody>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
                         {FAILURE_LOG.map((f, i) => (
-                            <tr
+                            <TableRow
                                 key={f.id}
                                 onClick={() => setSelId(f.id === selId ? null : f.id)}
-                                className="cursor-pointer"
-                                style={{
-                                    borderBottom: "1px solid var(--border)",
-                                    background: (() => {
-                                        if (selId === f.id) {
-                                            return "var(--border)";
-                                        }
-                                        if (i % 2) {
-                                            return "var(--background)";
-                                        }
-                                        return "transparent";
-                                    })(),
-                                }}
-                                onMouseEnter={(e) =>
-                                    (e.currentTarget.style.background = "var(--border)")
-                                }
-                                onMouseLeave={(e) =>
-                                    (e.currentTarget.style.background = (() => {
-                                        if (selId === f.id) {
-                                            return "var(--border)";
-                                        }
-                                        if (i % 2) {
-                                            return "var(--background)";
-                                        }
-                                        return "transparent";
-                                    })())
-                                }
+                                className={`border-border cursor-pointer border-b transition-colors ${(() => {
+                                    if (selId === f.id) {
+                                        return "bg-border";
+                                    }
+                                    if (i % 2) {
+                                        return "bg-background";
+                                    }
+                                    return "bg-transparent";
+                                })()} hover:bg-border`}
                             >
-                                <td className="text-primary px-3 py-1.5 text-base font-bold">
+                                <TableCell className="text-primary px-3 py-1.5 text-base font-bold">
                                     {f.id}
-                                </td>
-                                <td className="text-muted-foreground px-3 py-1.5 text-base">
+                                </TableCell>
+                                <TableCell className="text-muted-foreground px-3 py-1.5 text-base">
                                     {f.ts}
-                                </td>
-                                <td className="text-muted-foreground px-3 py-1.5 text-base font-semibold">
+                                </TableCell>
+                                <TableCell className="text-muted-foreground px-3 py-1.5 text-base font-semibold">
                                     {f.spec}
-                                </td>
-                                <td className="text-muted-foreground px-3 py-1.5 text-base">
+                                </TableCell>
+                                <TableCell className="text-muted-foreground px-3 py-1.5 text-base">
                                     {f.action}
-                                </td>
-                                <td className="text-muted-foreground px-3 py-1.5 text-base">
+                                </TableCell>
+                                <TableCell className="text-muted-foreground px-3 py-1.5 text-base">
                                     {f.target}
-                                </td>
-                                <td className="text-muted-foreground px-3 py-1.5 text-base">
+                                </TableCell>
+                                <TableCell className="text-muted-foreground px-3 py-1.5 text-base">
                                     {f.error}
-                                </td>
-                                <td className="text-muted-foreground px-3 py-1.5">{f.eord}/5</td>
-                                <td className="px-3 py-1.5">
+                                </TableCell>
+                                <TableCell className="text-muted-foreground px-3 py-1.5">
+                                    {f.eord}/5
+                                </TableCell>
+                                <TableCell className="px-3 py-1.5">
                                     <span
-                                        className="text-sm font-semibold tracking-wide"
-                                        style={{
-                                            color: f.resolved ? "var(--success)" : "var(--warning)",
-                                        }}
+                                        className={`text-sm font-semibold tracking-wide ${f.resolved ? "text-success" : "text-warning"}`}
                                     >
                                         {f.resolved ? "YES" : "NO"}
                                     </span>
-                                </td>
-                            </tr>
+                                </TableCell>
+                            </TableRow>
                         ))}
-                    </tbody>
-                </table>
+                    </TableBody>
+                </Table>
             </div>
             {selId && (
                 <div className="w-panel-sm bg-background border-border shrink-0 overflow-y-auto border-l px-3.5 py-4">
@@ -163,18 +152,15 @@ export default function FailuresPanel() {
                                             {r.k}
                                         </div>
                                         <div
-                                            className="text-xs"
-                                            style={{
-                                                color: (() => {
-                                                    if (r.k === "RESOLVED" && f.resolved) {
-                                                        return "var(--success)";
-                                                    }
-                                                    if (r.k === "RESOLVED") {
-                                                        return "var(--warning)";
-                                                    }
-                                                    return "var(--muted-foreground)";
-                                                })(),
-                                            }}
+                                            className={`text-xs ${(() => {
+                                                if (r.k === "RESOLVED" && f.resolved) {
+                                                    return "text-success";
+                                                }
+                                                if (r.k === "RESOLVED") {
+                                                    return "text-warning";
+                                                }
+                                                return "text-muted-foreground";
+                                            })()}`}
                                         >
                                             {r.v}
                                         </div>

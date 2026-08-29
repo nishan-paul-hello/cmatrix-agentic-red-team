@@ -1,5 +1,13 @@
 import { useEffect, useState } from "react";
 
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
 import { EnvironmentRepository } from "@/features/environment/data/EnvironmentRepository";
 import { type ElFinding } from "@/types/domain-types";
 
@@ -25,9 +33,9 @@ export default function ELFindingsPanel() {
                     confirmed findings linked to EL evidence artifacts
                 </span>
             </div>
-            <table className="w-full border-collapse text-xs">
-                <thead>
-                    <tr className="bg-card sticky top-0">
+            <Table className="w-full border-collapse text-xs">
+                <TableHeader>
+                    <TableRow className="bg-card sticky top-0">
                         {[
                             "FINDING",
                             "TYPE",
@@ -36,41 +44,37 @@ export default function ELFindingsPanel() {
                             "LINKED VDG NODE",
                             "EVIDENCE ARTIFACTS",
                         ].map((h) => (
-                            <th
+                            <TableHead
                                 key={h}
                                 className="text-muted-foreground border-border border-b px-3 py-1.5 text-left text-sm font-semibold tracking-widest whitespace-nowrap"
                             >
                                 {h}
-                            </th>
+                            </TableHead>
                         ))}
-                    </tr>
-                </thead>
-                <tbody>
-                    {EL_FINDINGS.map((f, i) => (
-                        <tr
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                    {EL_FINDINGS.map((f) => (
+                        <TableRow
                             key={f.id}
-                            style={{
-                                borderBottom: "1px solid var(--border)",
-                                background: i % 2 ? "var(--background)" : "transparent",
-                            }}
-                            onMouseEnter={(e) =>
-                                (e.currentTarget.style.background = "var(--border)")
-                            }
-                            onMouseLeave={(e) =>
-                                (e.currentTarget.style.background =
-                                    i % 2 ? "var(--background)" : "transparent")
-                            }
+                            className="border-border hover:bg-border border-b bg-transparent transition-colors"
                         >
-                            <td className="text-primary px-3 py-1.5 text-base font-bold">{f.id}</td>
-                            <td className="text-muted-foreground px-3 py-1.5">{f.type}</td>
-                            <td className="text-muted-foreground px-3 py-1.5 text-base">
+                            <TableCell className="text-primary px-3 py-1.5 text-base font-bold">
+                                {f.id}
+                            </TableCell>
+                            <TableCell className="text-muted-foreground px-3 py-1.5">
+                                {f.type}
+                            </TableCell>
+                            <TableCell className="text-muted-foreground px-3 py-1.5 text-base">
                                 {f.target}
-                            </td>
-                            <td className="text-muted-foreground px-3 py-1.5">{f.eord}/5</td>
-                            <td className="text-primary px-3 py-1.5 text-base font-bold">
+                            </TableCell>
+                            <TableCell className="text-muted-foreground px-3 py-1.5">
+                                {f.eord}/5
+                            </TableCell>
+                            <TableCell className="text-primary px-3 py-1.5 text-base font-bold">
                                 {f.vdgNode}
-                            </td>
-                            <td className="px-3 py-1.5">
+                            </TableCell>
+                            <TableCell className="px-3 py-1.5">
                                 <div className="flex flex-wrap gap-1">
                                     {f.evidence.map((e: string) => (
                                         <span
@@ -81,11 +85,11 @@ export default function ELFindingsPanel() {
                                         </span>
                                     ))}
                                 </div>
-                            </td>
-                        </tr>
+                            </TableCell>
+                        </TableRow>
                     ))}
-                </tbody>
-            </table>
+                </TableBody>
+            </Table>
         </div>
     );
 }
