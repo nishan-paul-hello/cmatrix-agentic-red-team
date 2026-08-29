@@ -80,13 +80,7 @@ export default function HumanEscalation() {
                         HUMAN ESCALATION
                     </h1>
                     <div className="flex items-center gap-2">
-                        <div
-                            className="bg-destructive h-1.5 w-1.5"
-                            style={{
-                                borderRadius: "50%",
-                                animation: "pulse 1.2s ease infinite",
-                            }}
-                        />
+                        <div className="bg-destructive pulse-dot h-1.5 w-1.5 rounded-full" />
                         <span className="text-destructive text-base font-bold tracking-widest">
                             AWAITING RESPONSE
                         </span>

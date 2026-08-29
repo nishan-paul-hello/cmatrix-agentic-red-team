@@ -167,7 +167,7 @@ export default function VDGNodeDrawerView({
         >
             <SheetContent
                 side="right"
-                className="border-border flex w-full flex-col gap-0 border-l p-0 sm:max-w-[var(--width-drawer-md)]"
+                className="border-border sm:max-w-drawer-md flex w-full flex-col gap-0 border-l p-0"
             >
                 <NodeDrawerContext.Provider
                     value={{ node, detail, onClose, statusColor, statusBg, statusBorder }}

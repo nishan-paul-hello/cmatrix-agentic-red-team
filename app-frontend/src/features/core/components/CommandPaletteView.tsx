@@ -53,8 +53,7 @@ export default function CommandPaletteView(props: CommandPaletteContextType) {
                 <DialogContent
                     showCloseButton={false}
                     aria-label="Command palette"
-                    className="border-border bg-background sm:w-panel-xl sm:max-w-panel-xl top-6 w-[calc(100%-2rem)] max-w-[calc(100%-2rem)] translate-y-0 gap-0 overflow-hidden rounded-[3px] border p-0 sm:top-[120px]"
-                    style={{ boxShadow: "0 24px 48px var(--border)" }}
+                    className="border-border bg-background sm:w-panel-xl sm:max-w-panel-xl shadow-panel top-6 w-[calc(100%-2rem)] max-w-[calc(100%-2rem)] translate-y-0 gap-0 overflow-hidden rounded-xs border p-0 sm:top-[120px]"
                 >
                     <CommandPaletteView.SearchInput />
                     <CommandPaletteView.ResultList />
@@ -104,7 +103,7 @@ CommandPaletteView.ResultList = function ResultList() {
     const { listRef, filtered, cats, cursor, setCursor, onNavigate, onClose } =
         useCommandPaletteContext();
     return (
-        <div ref={listRef} className="max-h-[420px] overflow-y-auto">
+        <div ref={listRef} className="max-h-[min(420px,60vh)] overflow-y-auto">
             {filtered.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-10">
                     <div className="text-muted-foreground mb-2 text-xs" aria-hidden="true">

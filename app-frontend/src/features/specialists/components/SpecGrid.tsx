@@ -59,7 +59,7 @@ function SpecCard({
             className={`bg-background relative flex h-auto w-full cursor-pointer flex-col items-start rounded-sm border border-solid px-3.5 pt-3.5 pb-3 text-left font-normal transition-colors duration-100 ${running ? "border-primary hover:border-destructive" : "border-border hover:border-border"}`}
         >
             {running && (
-                <div className="border-border pointer-events-none absolute -inset-[3px] animate-[ring_2s_ease_infinite] rounded-[3px] border-[1px] border-solid" />
+                <div className="border-border pointer-events-none absolute -inset-[3px] animate-[ring_2s_ease_infinite] rounded-xs border-[1px] border-solid" />
             )}
             {/* Layer badge — top-left micro-label */}
             {layerAccent && (
@@ -76,7 +76,7 @@ function SpecCard({
             )}
             <div className="mb-2 flex items-center justify-between">
                 <div
-                    className={`h-2 w-2 shrink-0 rounded-full ${running ? "animate-[pulse_1.4s_ease_infinite]" : ""}`}
+                    className={`h-2 w-2 shrink-0 rounded-full ${running ? "pulse-dot" : ""}`}
                     style={{
                         background:
                             s.status !== SPEC_STATUS.IDLE && s.status !== SPEC_STATUS.QUEUED

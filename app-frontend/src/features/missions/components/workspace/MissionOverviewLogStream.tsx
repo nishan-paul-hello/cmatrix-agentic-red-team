@@ -6,13 +6,7 @@ export function MissionOverviewLogStream({ log }: { log: LogEntry[] }) {
     return (
         <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
             <div className="bg-background border-border flex flex-shrink-0 items-center gap-2 border-b px-4 py-2">
-                <div
-                    className="bg-destructive h-1.5 w-1.5"
-                    style={{
-                        borderRadius: "50%",
-                        animation: "pulse 1.4s ease infinite",
-                    }}
-                />
+                <div className="bg-destructive pulse-dot h-1.5 w-1.5 rounded-full" />
                 <span className="text-muted-foreground text-base font-semibold tracking-widest">
                     EXECUTION LOG
                 </span>

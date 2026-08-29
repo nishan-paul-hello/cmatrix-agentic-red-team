@@ -24,7 +24,7 @@ export function WizardMissionSummary({
     roe: string;
 }) {
     return (
-        <div className="bg-background border-border flex w-full flex-shrink-0 flex-col overflow-y-auto border-t lg:w-[var(--width-drawer-sm)] lg:border-t-0 lg:border-l">
+        <div className="bg-background border-border lg:w-drawer-sm flex w-full flex-shrink-0 flex-col overflow-y-auto border-t lg:border-t-0 lg:border-l">
             <div className="border-border border-b px-5 pt-5 pb-4">
                 <div className="text-muted-foreground mb-2.5 text-base tracking-widest">
                     MISSION SUMMARY

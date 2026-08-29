@@ -42,7 +42,7 @@ export default function StateMachineModal({
                 }
             }}
         >
-            <DialogContent className="w-panel-2xl max-w-full p-6 sm:max-w-[var(--width-panel-2xl)]">
+            <DialogContent className="w-panel-2xl sm:max-w-panel-2xl max-w-full p-6">
                 <DialogHeader className="mb-5 text-left">
                     <DialogTitle className="text-foreground text-sm font-bold tracking-wide uppercase">
                         VALIDATION STATE MACHINE

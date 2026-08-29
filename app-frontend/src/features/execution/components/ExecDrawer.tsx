@@ -36,7 +36,7 @@ export function ExecDrawer({
         >
             <SheetContent
                 side="right"
-                className="bg-background border-border flex w-full flex-col overflow-hidden border-l p-0 md:max-w-[var(--width-drawer-lg)]"
+                className="bg-background border-border lg:max-w-drawer-lg flex w-full flex-col overflow-hidden border-l p-0"
             >
                 <div className="border-border flex items-center justify-between border-b px-4 pt-4 pb-3">
                     <div>
@@ -55,6 +55,7 @@ export function ExecDrawer({
                         size="icon-sm"
                         onClick={onClose}
                         className="text-muted-foreground"
+                        aria-label="Close"
                     >
                         ✕
                     </Button>

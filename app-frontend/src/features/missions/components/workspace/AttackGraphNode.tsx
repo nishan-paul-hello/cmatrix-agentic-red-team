@@ -52,7 +52,7 @@ export const AttackGraphNode = React.memo(function AttackGraphNodeBase({
         >
             {node.status === "ELIGIBLE" && isVis && (
                 <div
-                    className="border-border absolute rounded-[3px] border-[1px] border-solid"
+                    className="border-border absolute rounded-xs border-[1px] border-solid"
                     style={{
                         inset: -4,
                         pointerEvents: "none",

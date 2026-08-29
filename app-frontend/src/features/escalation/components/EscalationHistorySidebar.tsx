@@ -2,7 +2,7 @@ import { type EscalationHistoryEntry } from "@/features/escalation/domain/Escala
 
 export function EscalationHistorySidebar({ history }: { history: EscalationHistoryEntry[] }) {
     return (
-        <div className="border-border flex w-full flex-shrink-0 flex-col overflow-y-auto border-t px-3.5 py-4 lg:w-[var(--width-panel-sm)] lg:border-t-0 lg:border-l">
+        <div className="border-border lg:w-panel-sm flex w-full flex-shrink-0 flex-col overflow-y-auto border-t px-3.5 py-4 lg:border-t-0 lg:border-l">
             <div className="text-muted-foreground mb-3.5 text-sm tracking-widest">
                 ESCALATION HISTORY
             </div>

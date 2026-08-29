@@ -1,5 +1,6 @@
 import React from "react";
 
+import { TableCell, TableRow } from "@/components/ui/table";
 import { type AuditEntry, type AuditEventType, type AuditResultValue } from "@/types/domain-types";
 
 export interface ColorPair {
@@ -39,32 +40,36 @@ export const AuditLogRow = React.memo(function AuditLogRowInner({
     const tc = TYPE_C[e.type];
     const rc = RESULT_C[e.result];
     return (
-        <tr
+        <TableRow
             onClick={() => onClick(e)}
             className={[
                 "border-border cursor-pointer border-b transition-colors duration-75",
                 isSelected ? "bg-background" : "hover:bg-background",
             ].join(" ")}
         >
-            <td className="text-muted-foreground px-3 py-1.5 text-sm">{e.id}</td>
-            <td className="text-muted-foreground px-3 py-1.5 text-sm whitespace-nowrap">{e.ts}</td>
-            <td className="px-3 py-1.5">
+            <TableCell className="text-muted-foreground px-3 py-1.5 text-sm">{e.id}</TableCell>
+            <TableCell className="text-muted-foreground px-3 py-1.5 text-sm whitespace-nowrap">
+                {e.ts}
+            </TableCell>
+            <TableCell className="px-3 py-1.5">
                 <span
                     className={`rounded-sm border border-solid px-1 py-px text-sm font-semibold tracking-normal ${tc.c} ${tc.bg} ${tc.border}`}
                 >
                     {e.type}
                 </span>
-            </td>
-            <td className="text-muted-foreground px-3 py-1.5 text-base tracking-tighter">
+            </TableCell>
+            <TableCell className="text-muted-foreground px-3 py-1.5 text-base tracking-tighter">
                 {e.actor}
-            </td>
-            <td className="text-muted-foreground px-3 py-1.5 text-base font-semibold tracking-tighter">
+            </TableCell>
+            <TableCell className="text-muted-foreground px-3 py-1.5 text-base font-semibold tracking-tighter">
                 {e.action}
-            </td>
-            <td className="text-muted-foreground px-3 py-1.5 text-base">{e.resource}</td>
-            <td className="px-3 py-1.5">
+            </TableCell>
+            <TableCell className="text-muted-foreground px-3 py-1.5 text-base">
+                {e.resource}
+            </TableCell>
+            <TableCell className="px-3 py-1.5">
                 <span className={`text-sm font-semibold tracking-normal ${rc}`}>{e.result}</span>
-            </td>
-        </tr>
+            </TableCell>
+        </TableRow>
     );
 });

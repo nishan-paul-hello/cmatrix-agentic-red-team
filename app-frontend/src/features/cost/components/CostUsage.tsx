@@ -30,7 +30,7 @@ export default function CostUsage() {
         <div className="flex-1 overflow-y-auto px-6 py-5">
             {/* KPI row */}
             <KPIStrip
-                className="mb-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
+                className="mb-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
                 items={[
                     {
                         k: "TOTAL COST",
@@ -54,9 +54,9 @@ export default function CostUsage() {
                         {((TOTAL / CEILING) * 100).toFixed(1)}%
                     </span>
                 </div>
-                <div className="bg-card h-1.5 overflow-hidden rounded-[3px]">
+                <div className="bg-card h-1.5 overflow-hidden rounded-xs">
                     <div
-                        className="bg-success h-full rounded-[3px]"
+                        className="bg-success h-full rounded-xs"
                         style={{
                             width: `${(TOTAL / CEILING) * 100}%`,
                         }}

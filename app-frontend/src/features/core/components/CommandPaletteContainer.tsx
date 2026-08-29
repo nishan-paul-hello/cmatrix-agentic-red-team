@@ -55,9 +55,6 @@ export default function CommandPaletteContainer({ onClose, onNavigate }: Command
                         onClose();
                     }
                     break;
-                case "Escape":
-                    onClose();
-                    break;
                 default:
                     break;
             }

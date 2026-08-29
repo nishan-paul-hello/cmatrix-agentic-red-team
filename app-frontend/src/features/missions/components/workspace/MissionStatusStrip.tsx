@@ -28,7 +28,7 @@ export default function MissionStatusStrip({
                 <Meta label="SURFACE" value="WEB APPLICATION" />
                 <Sep />
                 <div className="ml-auto flex items-center gap-1.5">
-                    <div className="bg-success h-1.5 w-1.5 animate-[pulse_1.4s_ease_infinite] rounded-full" />
+                    <div className="bg-success h-1.5 w-1.5 pulse-dot rounded-full" />
                     <span className="text-success text-base font-semibold tracking-widest">
                         {MISSION_STATUS.RUNNING}
                     </span>
@@ -37,7 +37,7 @@ export default function MissionStatusStrip({
             {/* Metrics row */}
             <div className="flex w-full items-center gap-0 overflow-x-auto">
                 <KPIStrip
-                    className="flex min-w-max flex-1 rounded-none border-0 border-t md:grid-cols-5"
+                    className="flex min-w-max flex-1 rounded-none border-0 border-t"
                     items={[
                         { k: "VDG NODES", v: "12" },
                         { k: "EL FACTS", v: "87" },

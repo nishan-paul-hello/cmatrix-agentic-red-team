@@ -52,7 +52,7 @@ export function UCBModal({
                 }
             }}
         >
-            <DialogContent className="w-panel-lg max-w-full gap-0 p-0 sm:max-w-[var(--width-panel-lg)]">
+            <DialogContent className="w-panel-lg sm:max-w-panel-lg max-w-full gap-0 p-0">
                 <DialogHeader className="border-border space-y-0 border-b px-5 pt-4 pb-3 text-left">
                     <DialogTitle className="text-foreground mb-0.5 text-sm font-bold tracking-normal">
                         UCB BREAKDOWN

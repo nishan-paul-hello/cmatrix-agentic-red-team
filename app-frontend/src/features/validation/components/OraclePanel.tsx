@@ -37,7 +37,7 @@ export default function OraclePanel({ onClose }: { onClose: () => void }) {
         },
     ];
     return (
-        <div className="w-panel-md bg-background border-border flex flex-shrink-0 flex-col overflow-y-auto border-l">
+        <div className="bg-background border-border lg:w-panel-md flex w-full flex-shrink-0 flex-col overflow-y-auto border-t lg:border-t-0 lg:border-l">
             <div className="border-border flex items-center justify-between border-b px-4 pt-4 pb-3">
                 <span className="text-muted-foreground text-xs font-semibold tracking-widest">
                     ORACLE PANEL
@@ -47,6 +47,7 @@ export default function OraclePanel({ onClose }: { onClose: () => void }) {
                     size="icon-sm"
                     onClick={onClose}
                     className="text-muted-foreground"
+                    aria-label="Close"
                 >
                     ✕
                 </Button>

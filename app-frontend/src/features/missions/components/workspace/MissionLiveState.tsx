@@ -9,7 +9,7 @@ const MissionLiveState = React.memo(function ({ time }: { time: string }) {
     const { specialists } = useWorkspaceData();
 
     return (
-        <div className="bg-background border-border flex w-full flex-shrink-0 flex-col overflow-hidden border-t lg:w-[256px] lg:border-t-0 lg:border-l">
+        <div className="bg-background border-border lg:w-panel-sm-alt flex w-full flex-shrink-0 flex-col overflow-hidden border-t lg:border-t-0 lg:border-l">
             {/* Live state stats */}
             <div className="border-border border-b border-solid">
                 <div className="text-muted-foreground px-4 pt-4 pb-2 text-sm tracking-widest">

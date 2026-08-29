@@ -97,7 +97,7 @@ export function MissionOverviewAttackGraph({
                                     {/* Active pulse ring for ELIGIBLE */}
                                     {node.status === "ELIGIBLE" && (
                                         <div
-                                            className="border-border absolute rounded-[3px] border-[1px] border-solid"
+                                            className="border-border absolute rounded-xs border-[1px] border-solid"
                                             style={{
                                                 inset: -3,
                                                 pointerEvents: "none",

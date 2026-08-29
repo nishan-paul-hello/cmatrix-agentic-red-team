@@ -33,10 +33,7 @@ export default function FieldBlock({
 
                     return (
                         <FormItem className={mb ? "mb-7 space-y-0" : "space-y-0"}>
-                            <FormLabel
-                                className="text-muted-foreground mb-2 text-base font-normal tracking-widest"
-                                style={{ display: "block" }}
-                            >
+                            <FormLabel className="text-muted-foreground mb-2 text-base font-normal tracking-widest">
                                 {label}
                             </FormLabel>
                             <FormControl>
@@ -56,12 +53,7 @@ export default function FieldBlock({
 
     return (
         <div className={mb ? "mb-7" : ""}>
-            <label
-                className="text-muted-foreground mb-2 text-base tracking-widest"
-                style={{
-                    display: "block",
-                }}
-            >
+            <label className="text-muted-foreground mb-2 block text-base tracking-widest">
                 {label}
             </label>
             {children}

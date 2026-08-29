@@ -30,7 +30,7 @@ export function FindingDetailDrawer({
         >
             <SheetContent
                 side="right"
-                className="w-full overflow-y-auto px-7 py-6 sm:max-w-[var(--width-panel-lg)]"
+                className="sm:max-w-panel-lg w-full overflow-y-auto px-7 py-6"
             >
                 <SheetHeader className="mb-4 text-left">
                     <SheetTitle className="text-foreground text-sm font-bold tracking-normal">

@@ -34,7 +34,7 @@ export default function TechnicalActions() {
         [TASK_STATUS.RUNNING]: "text-primary",
     };
     return (
-        <div className="flex min-h-0 flex-1 overflow-hidden">
+        <div className="flex min-h-0 flex-1 flex-col overflow-hidden lg:flex-row">
             <div className="flex-1 overflow-y-auto">
                 <Table className="w-full border-collapse text-xs">
                     <TableHeader>
@@ -80,7 +80,7 @@ export default function TechnicalActions() {
                                 <TableCell className="text-muted-foreground px-3 py-1.5 text-base">
                                     {a.tool}
                                 </TableCell>
-                                <TableCell className="text-muted-foreground max-w-[var(--width-panel-sm)] overflow-hidden px-3 py-1.5 text-base text-ellipsis whitespace-nowrap">
+                                <TableCell className="text-muted-foreground max-w-panel-sm overflow-hidden px-3 py-1.5 text-base text-ellipsis whitespace-nowrap">
                                     {a.result}
                                 </TableCell>
                                 <TableCell
@@ -100,7 +100,7 @@ export default function TechnicalActions() {
                     </TableBody>
                 </Table>
             </div>
-            <div className="bg-background border-border flex w-[var(--width-drawer-md)] flex-shrink-0 flex-col overflow-y-auto border-l">
+            <div className="bg-background border-border lg:w-drawer-md flex w-full flex-shrink-0 flex-col overflow-y-auto border-t lg:border-t-0 lg:border-l">
                 <div className="border-border flex items-start justify-between border-b px-4 pt-4 pb-3">
                     <div>
                         <div className="text-foreground text-xs font-bold tracking-normal">
@@ -115,6 +115,7 @@ export default function TechnicalActions() {
                         size="icon-xs"
                         onClick={() => setSelId(null)}
                         className="text-muted-foreground hover:text-muted-foreground h-auto p-0.5 text-sm hover:bg-transparent"
+                        aria-label="Close"
                     >
                         ✕
                     </Button>

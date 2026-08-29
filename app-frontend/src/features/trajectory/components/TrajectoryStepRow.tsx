@@ -76,7 +76,7 @@ export const TrajectoryStepRow = React.memo(function TrajectoryStepRowInner({
             {/* Spine */}
             <div className="mt-0.5 flex w-8 flex-shrink-0 flex-col items-center">
                 <div
-                    className={`z-header h-2.5 w-2.5 shrink-0 rounded-full border border-solid ${tc.border} ${(() => {
+                    className={`h-2.5 w-2.5 shrink-0 rounded-full border border-solid ${tc.border} ${(() => {
                         if (isSel) {
                             return tc.bgSolid;
                         }

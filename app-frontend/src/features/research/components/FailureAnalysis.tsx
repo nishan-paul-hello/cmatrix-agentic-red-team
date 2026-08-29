@@ -91,6 +91,7 @@ export default function FailureAnalysis() {
                                             setSel(null);
                                         }}
                                         className="text-muted-foreground hover:text-muted-foreground h-auto p-0.5 text-sm leading-none hover:bg-transparent"
+                                        aria-label="Close"
                                     >
                                         ✕
                                     </Button>

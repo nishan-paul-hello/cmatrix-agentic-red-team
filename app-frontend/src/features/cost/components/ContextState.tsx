@@ -35,7 +35,7 @@ export default function ContextState() {
             <div className="flex-1 overflow-y-auto px-6 py-5">
                 {/* KPIs */}
                 <KPIStrip
-                    className="mb-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
+                    className="mb-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
                     items={[
                         { k: "TOTAL CONTEXT", v: "346K", sub: "across specialists" },
                         { k: "COMPACTION EVENTS", v: "3", sub: "context saves" },

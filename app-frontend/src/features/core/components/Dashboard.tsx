@@ -89,7 +89,7 @@ export default function Dashboard({ onNewMission, onOpenMission }: DashboardProp
 
             {/* KPI strip */}
             <KPIStrip
-                className="grid-cols-2 sm:grid-cols-3 lg:grid-cols-6"
+                className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6"
                 items={KPI_ITEMS.map((kpi) => ({
                     k: kpi.label,
                     v: kpi.value,
@@ -201,11 +201,11 @@ export default function Dashboard({ onNewMission, onOpenMission }: DashboardProp
                 </div>
 
                 {/* Live activity feed */}
-                <div className="flex w-full flex-shrink-0 flex-col overflow-hidden lg:w-[var(--width-drawer-lg)]">
+                <div className="lg:w-drawer-lg flex w-full flex-shrink-0 flex-col overflow-hidden">
                     <div className="border-border flex flex-shrink-0 items-center gap-2 border-b px-4 py-3">
                         <div
-                            className="bg-destructive h-1.5 w-1.5 shrink-0 rounded-full"
-                            style={{ animation: "pulse 1.4s ease-in-out infinite" }}
+                            className="bg-destructive pulse-dot h-1.5 w-1.5 shrink-0 rounded-full"
+
                             aria-hidden="true"
                         />
                         <span className="text-muted-foreground text-xs font-semibold tracking-widest">

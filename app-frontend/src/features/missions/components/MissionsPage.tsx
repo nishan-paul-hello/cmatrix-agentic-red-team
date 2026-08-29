@@ -9,6 +9,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useMissionsData } from "@/features/missions/hooks/useMissionsData";
 import { type MissionFilter } from "@/features/missions/utils";
 import { MISSION_STATUS } from "@/types/domain-types";
@@ -94,10 +95,7 @@ export default function MissionsPage({ onNewMission, onOpenMission }: MissionsPa
 
             {/* Missions table */}
             <div className="flex-1 overflow-auto">
-                <Table
-                    className="w-full border-collapse text-xs"
-                    containerClassName="overflow-visible"
-                >
+                <Table className="w-full border-collapse text-xs">
                     <TableHeader>
                         <TableRow className="bg-card z-header sticky top-0">
                             {TABLE_HEADERS.map((h) => (
@@ -132,7 +130,14 @@ export default function MissionsPage({ onNewMission, onOpenMission }: MissionsPa
                                         {m.id}
                                     </TableCell>
                                     <TableCell className="cell-truncate text-muted-foreground max-w-[var(--width-cell-max)] px-4 py-2 whitespace-nowrap">
-                                        {m.target}
+                                        <Tooltip>
+                                            <TooltipTrigger render={<span className="truncate" />}>
+                                                {m.target}
+                                            </TooltipTrigger>
+                                            <TooltipContent side="bottom" align="start">
+                                                {m.target}
+                                            </TooltipContent>
+                                        </Tooltip>
                                     </TableCell>
                                     <TableCell className="text-muted-foreground px-4 py-2 text-xs whitespace-nowrap">
                                         {m.surface}

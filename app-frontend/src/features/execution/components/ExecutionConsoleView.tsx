@@ -23,7 +23,7 @@ export default function ExecutionConsoleView({
     handleRowClick: (e: ExecEntry) => void;
 }) {
     return (
-        <div className="flex h-full min-h-0 flex-col md:flex-row">
+        <div className="flex h-full min-h-0 flex-col lg:flex-row">
             <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
                 {/* Header */}
                 <div className="border-border flex-shrink-0 border-b px-6 pt-5 pb-4">
@@ -53,13 +53,7 @@ export default function ExecutionConsoleView({
                         </div>
                     </div>
                     <div className="ml-auto flex flex-shrink-0 items-center gap-2">
-                        <div
-                            className="bg-destructive h-1.5 w-1.5"
-                            style={{
-                                borderRadius: "50%",
-                                animation: "pulse 1.4s ease infinite",
-                            }}
-                        />
+                        <div className="bg-destructive pulse-dot h-1.5 w-1.5 rounded-full" />
                         <span className="text-primary text-base tracking-widest">1 RUNNING</span>
                     </div>
                 </div>
@@ -113,7 +107,6 @@ export default function ExecutionConsoleView({
                         />
                     )}
                 </div>
-                <style>{`@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}`}</style>
             </div>
 
             {/* Drawer */}

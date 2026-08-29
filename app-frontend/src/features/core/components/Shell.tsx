@@ -90,8 +90,8 @@ export default function Shell({
                 </div>
                 <div className="flex items-center gap-2">
                     <div
-                        className="bg-success h-1.5 w-1.5 shrink-0 rounded-full"
-                        style={{ animation: "pulse 1.4s ease-in-out infinite" }}
+                        className="bg-success pulse-dot h-1.5 w-1.5 shrink-0 rounded-full"
+
                         aria-hidden="true"
                     />
                 </div>
@@ -101,7 +101,7 @@ export default function Shell({
             <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
                 <SheetContent
                     side="left"
-                    className="bg-background flex w-[var(--width-panel-sm)] max-w-[80vw] flex-col border-r p-0"
+                    className="bg-background w-panel-sm flex max-w-[80vw] flex-col border-r p-0"
                 >
                     <SidebarContent
                         activeNav={activeNav}
@@ -113,7 +113,7 @@ export default function Shell({
 
             {/* ── Desktop Sidebar ────────────────────────────────────────────── */}
             <aside
-                className="border-border bg-background relative hidden w-[var(--width-panel-sm)] flex-shrink-0 flex-col overflow-y-auto border-r lg:flex"
+                className="border-border bg-background w-panel-sm relative hidden flex-shrink-0 flex-col overflow-y-auto border-r lg:flex"
                 aria-label="Main navigation"
             >
                 <SidebarContent
@@ -140,8 +140,8 @@ export default function Shell({
                         {/* System status indicator (hidden on mobile, shown in mobile header instead) */}
                         <div className="hidden shrink-0 items-center gap-1.5 lg:flex">
                             <div
-                                className="bg-success h-1.5 w-1.5 shrink-0 rounded-full"
-                                style={{ animation: "pulse 1.4s ease-in-out infinite" }}
+                                className="bg-success pulse-dot h-1.5 w-1.5 shrink-0 rounded-full"
+
                                 aria-hidden="true"
                             />
                             <span className="text-success text-sm tracking-widest whitespace-nowrap lg:text-base">
