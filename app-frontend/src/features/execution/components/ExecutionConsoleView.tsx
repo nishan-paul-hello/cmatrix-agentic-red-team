@@ -45,20 +45,20 @@ export default function ExecutionConsoleView({
                 </div>
 
                 {/* Architecture note */}
-                <div className="bg-background border-border flex flex-shrink-0 items-start gap-3 border-b px-6 py-2">
-                    <div className="bg-primary mt-0.5 h-7 w-0.5 shrink-0" />
-                    <div>
-                        <div className="text-muted-foreground mb-0.5 text-sm tracking-widest">
+                <div className="bg-background border-border flex flex-shrink-0 items-stretch gap-4 border-b px-6 py-3">
+                    <div className="bg-primary w-0.5 shrink-0 rounded-full" />
+                    <div className="flex flex-col justify-center py-0.5">
+                        <div className="text-foreground/80 mb-1.5 text-xs font-bold tracking-widest">
                             REASONING / EXECUTION SEPARATION
                         </div>
-                        <div className="text-muted-foreground text-base leading-normal tracking-tight">
-                            Specialists reason and plan · Execution agent runs tools
-                            deterministically · No LLM reasoning occurs during tool execution
+                        <div className="text-muted-foreground text-sm leading-relaxed tracking-wide">
+                            Specialists reason and plan &nbsp;·&nbsp; Execution agent runs tools
+                            deterministically &nbsp;·&nbsp; No LLM reasoning occurs during tool execution
                         </div>
                     </div>
                     <div className="ml-auto flex flex-shrink-0 items-center gap-2">
                         <div className="bg-destructive pulse-dot h-1.5 w-1.5 rounded-full" />
-                        <span className="text-primary text-base tracking-widest">1 RUNNING</span>
+                        <span className="text-primary text-sm font-bold tracking-widest">1 RUNNING</span>
                     </div>
                 </div>
 
