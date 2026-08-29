@@ -112,7 +112,7 @@ export function VDGNodeDrawerPrerequisites() {
                                 className="text-xs tracking-tight"
                                 style={{
                                     color: p.done
-                                        ? "var(--muted-foreground)"
+                                        ? "var(--foreground)"
                                         : "var(--muted-foreground)",
                                 }}
                             >

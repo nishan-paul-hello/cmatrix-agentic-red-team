@@ -36,7 +36,7 @@ const TeamManagerDashboardView = React.memo(function ({
                 <div className="text-muted-foreground mb-0.5 text-base tracking-widest">
                     MISSION / CVE-001
                 </div>
-                <div className="flex items-baseline justify-between">
+                <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2">
                     <h1 className="text-foreground text-xs font-bold tracking-wide">
                         TEAM MANAGER
                     </h1>
