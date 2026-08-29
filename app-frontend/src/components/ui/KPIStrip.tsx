@@ -79,13 +79,13 @@ export function KPIStrip({ items, className, variant = "default", ...props }: KP
                         {m.k}
                     </div>
                     <div
-                        className="text-xs font-bold text-[var(--kpi-color,var(--foreground))]"
+                        className="cell-truncate text-xs font-bold text-[var(--kpi-color,var(--foreground))]"
                         style={m.c ? ({ "--kpi-color": m.c } as React.CSSProperties) : undefined}
                     >
                         {m.v}
                     </div>
                     {m.sub && (
-                        <div className="text-muted-foreground mt-0.5 text-sm tracking-normal">
+                        <div className="text-muted-foreground cell-truncate mt-0.5 text-sm tracking-normal">
                             {m.sub}
                         </div>
                     )}

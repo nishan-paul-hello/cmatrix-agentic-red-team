@@ -4,6 +4,17 @@ import { getStatusColor } from "@/components/ui/StatusBadge";
 import { formatCommand } from "@/features/execution/domain/TaskCommand";
 import { type ExecEntry } from "@/types/domain-types";
 
+export const EXECUTION_COLUMNS = [
+    { h: "#", w: "w-[48px]" },
+    { h: "TIMESTAMP", w: "w-[80px]" },
+    { h: "SPECIALIST", w: "w-[108px]" },
+    { h: "TASK", w: "w-[160px]" },
+    { h: "TOOL", w: "w-[72px]" },
+    { h: "DURATION", w: "w-[64px]" },
+    { h: "STATUS", w: "w-[72px]" },
+    { h: "OUTPUT", w: "flex-1" },
+] as const;
+
 export const ExecutionEntryRow = React.memo(function ExecutionEntryRowInner({
     e,
     onClick,
@@ -20,25 +31,37 @@ export const ExecutionEntryRow = React.memo(function ExecutionEntryRowInner({
                 onClick();
             }}
         >
-            <div className="text-muted-foreground w-[48px] shrink-0 px-3 py-1.5 text-base">
+            <div
+                className={`text-muted-foreground shrink-0 px-3 py-1.5 text-base ${EXECUTION_COLUMNS[0].w}`}
+            >
                 {e.id}
             </div>
-            <div className="text-muted-foreground w-[80px] shrink-0 px-3 py-1.5 text-base tracking-tighter">
+            <div
+                className={`text-muted-foreground shrink-0 px-3 py-1.5 text-base tracking-tighter ${EXECUTION_COLUMNS[1].w}`}
+            >
                 {e.ts}
             </div>
-            <div className="text-primary w-[108px] shrink-0 px-3 py-1.5 text-base font-semibold tracking-tight">
+            <div
+                className={`text-primary shrink-0 px-3 py-1.5 text-base font-semibold tracking-tight ${EXECUTION_COLUMNS[2].w}`}
+            >
                 {e.specialist}
             </div>
-            <div className="text-muted-foreground w-[160px] shrink-0 overflow-hidden px-3 py-1.5 text-base tracking-tighter text-ellipsis whitespace-nowrap">
+            <div
+                className={`text-muted-foreground shrink-0 overflow-hidden px-3 py-1.5 text-base tracking-tighter text-ellipsis whitespace-nowrap ${EXECUTION_COLUMNS[3].w}`}
+            >
                 {formatCommand(e.command)}
             </div>
-            <div className="text-muted-foreground w-[72px] shrink-0 px-3 py-1.5 text-base">
+            <div
+                className={`text-muted-foreground shrink-0 px-3 py-1.5 text-base ${EXECUTION_COLUMNS[4].w}`}
+            >
                 {e.command.tool.id}
             </div>
-            <div className="text-muted-foreground w-[64px] shrink-0 px-3 py-1.5 text-right text-base">
+            <div
+                className={`text-muted-foreground shrink-0 px-3 py-1.5 text-right text-base ${EXECUTION_COLUMNS[5].w}`}
+            >
                 {e.duration}
             </div>
-            <div className="w-[72px] shrink-0 px-3 py-1.5">
+            <div className={`shrink-0 px-3 py-1.5 ${EXECUTION_COLUMNS[6].w}`}>
                 <span
                     className="text-sm font-semibold tracking-normal"
                     style={{
@@ -48,7 +71,9 @@ export const ExecutionEntryRow = React.memo(function ExecutionEntryRowInner({
                     {e.status}
                 </span>
             </div>
-            <div className="text-muted-foreground flex-1 overflow-hidden px-3 py-1.5 text-base leading-tight tracking-tighter text-ellipsis whitespace-nowrap">
+            <div
+                className={`text-muted-foreground flex-1 overflow-hidden px-3 py-1.5 text-base leading-tight tracking-tighter text-ellipsis whitespace-nowrap ${EXECUTION_COLUMNS[7].w}`}
+            >
                 {e.output || <span className="text-muted-foreground">IN PROGRESS…</span>}
             </div>
         </button>

@@ -2,7 +2,10 @@ import React from "react";
 import { type Virtualizer } from "@tanstack/react-virtual";
 
 import { ExecDrawer } from "@/features/execution/components/ExecDrawer";
-import { ExecutionEntryRow } from "@/features/execution/components/ExecutionEntryRow";
+import {
+    EXECUTION_COLUMNS,
+    ExecutionEntryRow,
+} from "@/features/execution/components/ExecutionEntryRow";
 import { type ExecEntry } from "@/types/domain-types";
 
 export default function ExecutionConsoleView({
@@ -65,16 +68,7 @@ export default function ExecutionConsoleView({
                 >
                     {/* Header row */}
                     <div className="bg-background border-border sticky top-0 flex min-w-fit gap-0 border-b">
-                        {[
-                            { h: "#", w: "w-[48px]" },
-                            { h: "TIMESTAMP", w: "w-[80px]" },
-                            { h: "SPECIALIST", w: "w-[108px]" },
-                            { h: "TASK", w: "w-[160px]" },
-                            { h: "TOOL", w: "w-[72px]" },
-                            { h: "DURATION", w: "w-[64px]" },
-                            { h: "STATUS", w: "w-[72px]" },
-                            { h: "OUTPUT", w: "flex-1" },
-                        ].map(({ h, w }) => (
+                        {EXECUTION_COLUMNS.map(({ h, w }) => (
                             <div
                                 key={h}
                                 className={`text-muted-foreground shrink-0 px-3 py-1 text-xs font-semibold tracking-widest ${w}`}

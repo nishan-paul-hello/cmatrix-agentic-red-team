@@ -1,22 +1,6 @@
-import { useEffect } from "react";
-
 import { Button } from "@/components/ui/button";
 
 export default function OraclePanel({ onClose }: { onClose: () => void }) {
-    // F10: ESC key closes panel
-    useEffect(() => {
-        function onKey(e: KeyboardEvent) {
-            if (e.key === "Escape") {
-                // Do not close if a dialog or other modal is open
-                if (document.querySelector('[role="dialog"]')) {
-                    return;
-                }
-                onClose();
-            }
-        }
-        window.addEventListener("keydown", onKey);
-        return () => window.removeEventListener("keydown", onKey);
-    }, [onClose]);
     const oracles = [
         {
             oracle: "CVE-BENCH",
