@@ -68,71 +68,77 @@ export default function SkillLibrary() {
                         {sel.cat}
                     </span>
                 </div>
-                <Sub label="DESCRIPTION">
-                    <p className="text-muted-foreground m-0 text-xs leading-loose">{sel.desc}</p>
-                </Sub>
-                <Sub label="PARAMETERS">
-                    <div className="border-border overflow-hidden rounded-sm border-[1px] border-solid">
-                        {sel.params.map((p) => (
-                            <div
-                                key={p.k}
-                                className="border-border flex items-start gap-4 border-b px-3 py-2"
-                            >
-                                <span className="font-inherit text-muted-foreground min-w-[80px] shrink-0 text-xs font-bold">
-                                    {p.k}
-                                </span>
-                                <span className="text-muted-foreground min-w-7 shrink-0 text-sm">
-                                    {p.t}
-                                </span>
-                                <span className="text-muted-foreground text-base">{p.desc}</span>
-                            </div>
-                        ))}
-                    </div>
-                </Sub>
-                <Sub label="USAGE STATS">
-                    <div className="border-border grid grid-cols-1 gap-0 overflow-hidden rounded-sm border-[1px] border-solid sm:grid-cols-2 lg:grid-cols-4">
-                        {[
-                            {
-                                k: "CALLS",
-                                v: String(sel.calls),
-                            },
-                            {
-                                k: "SUCCESS",
-                                v: String(sel.success),
-                            },
-                            {
-                                k: "LAST CALL",
-                                v: sel.lastCall,
-                            },
-                            {
-                                k: "E_ORD DELTA",
-                                v: (sel as unknown as Record<string, string>).eordDelta,
-                            },
-                        ].map((m) => (
-                            <div
-                                key={m.k}
-                                className="bg-background border-border border-r px-3 py-2.5"
-                            >
-                                <div className="text-muted-foreground mb-1 text-xs tracking-widest">
-                                    {m.k}
-                                </div>
+                <div className="space-y-5">
+                    <Sub label="DESCRIPTION">
+                        <p className="text-muted-foreground m-0 text-xs leading-loose">
+                            {sel.desc}
+                        </p>
+                    </Sub>
+                    <Sub label="PARAMETERS">
+                        <div className="border-border overflow-hidden rounded-sm border-[1px] border-solid">
+                            {sel.params.map((p) => (
                                 <div
-                                    className={`text-sm font-bold ${(() => {
-                                        if (m.k === "SUCCESS") {
-                                            return "text-success";
-                                        }
-                                        if (m.k === "E_ORD DELTA") {
-                                            return "text-primary";
-                                        }
-                                        return "text-foreground";
-                                    })()}`}
+                                    key={p.k}
+                                    className="border-border flex items-start gap-4 border-b px-3 py-2"
                                 >
-                                    {m.v}
+                                    <span className="font-inherit text-muted-foreground min-w-[80px] shrink-0 text-xs font-bold">
+                                        {p.k}
+                                    </span>
+                                    <span className="text-muted-foreground min-w-7 shrink-0 text-sm">
+                                        {p.t}
+                                    </span>
+                                    <span className="text-muted-foreground text-base">
+                                        {p.desc}
+                                    </span>
                                 </div>
-                            </div>
-                        ))}
-                    </div>
-                </Sub>
+                            ))}
+                        </div>
+                    </Sub>
+                    <Sub label="USAGE STATS">
+                        <div className="border-border grid grid-cols-1 gap-0 overflow-hidden rounded-sm border-[1px] border-solid sm:grid-cols-2 lg:grid-cols-4">
+                            {[
+                                {
+                                    k: "CALLS",
+                                    v: String(sel.calls),
+                                },
+                                {
+                                    k: "SUCCESS",
+                                    v: String(sel.success),
+                                },
+                                {
+                                    k: "LAST CALL",
+                                    v: sel.lastCall,
+                                },
+                                {
+                                    k: "E_ORD DELTA",
+                                    v: (sel as unknown as Record<string, string>).eordDelta,
+                                },
+                            ].map((m) => (
+                                <div
+                                    key={m.k}
+                                    className="bg-background border-border border-r px-3 py-2.5"
+                                >
+                                    <div className="text-muted-foreground mb-1 text-xs tracking-widest">
+                                        {m.k}
+                                    </div>
+                                    <div
+                                        className={`text-sm font-bold ${(() => {
+                                            if (m.k === "SUCCESS") {
+                                                return "text-success";
+                                            }
+                                            if (m.k === "E_ORD DELTA") {
+                                                return "text-primary";
+                                            }
+                                            return "text-foreground";
+                                        })()}`}
+                                    >
+                                        {m.v}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </Sub>
+                </div>
             </div>
         </div>
     );

@@ -41,10 +41,10 @@ export default function SettingsPageView({ data }: { data: SettingsData }) {
     const { tab, setTab, form } = data;
     return (
         <Form {...form}>
-            <div className="flex h-full min-h-0 flex-col md:flex-row">
+            <div className="flex h-full min-h-0 flex-col lg:flex-row">
                 {/* Left nav */}
-                <div className="border-border bg-background flex w-full flex-shrink-0 flex-row overflow-x-auto border-b py-2 md:w-40 md:flex-col md:overflow-y-auto md:border-r md:border-b-0 md:py-4">
-                    <div className="text-muted-foreground mb-3 hidden pl-4 text-base tracking-widest md:block">
+                <div className="border-border bg-background flex w-full flex-shrink-0 flex-row overflow-x-auto border-b py-2 lg:w-40 lg:flex-col lg:overflow-y-auto lg:border-r lg:border-b-0 lg:py-4">
+                    <div className="text-muted-foreground mb-3 hidden pl-4 text-base tracking-widest lg:block">
                         SYSTEM / SETTINGS
                     </div>
                     {TABS.map((t) => (
@@ -54,7 +54,7 @@ export default function SettingsPageView({ data }: { data: SettingsData }) {
                             size="sm"
                             onClick={() => setTab(t)}
                             className={[
-                                "w-max shrink-0 justify-start rounded-none border-b-2 px-4 py-2 text-xs tracking-tight md:w-full md:border-b-0 md:border-l-2",
+                                "w-max shrink-0 justify-start rounded-none border-b-2 px-4 py-2 text-xs tracking-tight lg:w-full lg:border-b-0 lg:border-l-2",
                                 t === tab
                                     ? "bg-border text-foreground border-primary"
                                     : "text-muted-foreground hover:text-foreground border-transparent",

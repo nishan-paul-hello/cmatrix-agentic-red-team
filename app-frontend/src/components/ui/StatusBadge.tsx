@@ -1,4 +1,3 @@
-import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { type MissionStatus, type TaskStatus } from "@/types/domain-types";
 
@@ -34,9 +33,16 @@ export default function StatusBadge({ status, className }: StatusBadgeProps) {
     const variantClasses = STATUS_VARIANTS[formattedStatus] || STATUS_VARIANTS.DEFAULT;
 
     return (
-        <Badge variant="outline" className={cn("uppercase", variantClasses, className)}>
+        <div
+            className={cn(
+                "focus:ring-ring inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:ring-2 focus:ring-offset-2 focus:outline-none",
+                "uppercase",
+                variantClasses,
+                className,
+            )}
+        >
             {status}
-        </Badge>
+        </div>
     );
 }
 

@@ -16,18 +16,15 @@ export default function RadioGroup<T extends string>({
         <ShadcnRadioGroup
             value={value}
             onValueChange={onChange}
-            className="border-border flex flex-col gap-0 overflow-hidden rounded-sm border-[1px] border-solid"
+            className="border-border divide-border flex flex-col gap-0 divide-y overflow-hidden rounded-sm border-[1px] border-solid"
         >
-            {options.map((opt, i) => {
+            {options.map((opt) => {
                 const selected = value === opt.value;
                 return (
                     <label
                         key={opt.value}
                         htmlFor={`radio-${opt.value}`}
                         className={`flex h-auto w-full cursor-pointer items-start gap-4 rounded-none border-l-[3px] px-4 py-3 text-left whitespace-normal transition-colors ${selected ? "bg-muted border-l-primary" : "bg-background hover:bg-card border-l-transparent"}`}
-                        style={{
-                            borderTop: i > 0 ? "1px solid var(--border)" : "none",
-                        }}
                     >
                         <RadioGroupItem
                             value={opt.value}

@@ -28,13 +28,7 @@ export default function NotFound() {
                 </div>
 
                 {/* Divider */}
-                <div
-                    className="h-px w-[200px]"
-                    style={{
-                        background:
-                            "linear-gradient(90deg, var(--primary) 0%, var(--border) 60%, transparent 100%)",
-                    }}
-                />
+                <div className="h-px w-[200px] bg-[linear-gradient(90deg,var(--primary)_0%,var(--border)_60%,transparent_100%)]" />
 
                 <div className="flex flex-col gap-1">
                     <p className="text-muted-foreground text-sm font-semibold tracking-widest">

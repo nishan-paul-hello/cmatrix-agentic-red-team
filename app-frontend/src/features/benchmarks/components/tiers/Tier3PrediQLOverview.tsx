@@ -1,5 +1,6 @@
 import { KvGrid, MetaRow } from "@/features/benchmarks/components/BenchmarkSharedUI";
 import { type BenchRecord } from "@/features/benchmarks/data/fixtures/benchmarksMockData";
+import { cn } from "@/lib/utils";
 
 export function Tier3PrediQLOverview({
     bench,
@@ -35,11 +36,10 @@ export function Tier3PrediQLOverview({
                     <div key={row.name} className="mb-3">
                         <div className="mb-1 flex justify-between">
                             <span
-                                className="text-base"
-                                style={{
-                                    color: isUs ? "text-primary" : "text-muted-foreground",
-                                    fontWeight: isUs ? "bold" : undefined,
-                                }}
+                                className={cn(
+                                    "text-base",
+                                    isUs ? "text-primary font-bold" : "text-muted-foreground",
+                                )}
                             >
                                 {row.name}
                             </span>
@@ -50,10 +50,12 @@ export function Tier3PrediQLOverview({
                         </div>
                         <div className="bg-card h-0.5 overflow-hidden rounded-sm">
                             <div
-                                className="h-full rounded-sm"
+                                className={cn(
+                                    "h-full rounded-sm",
+                                    isUs ? "bg-primary" : "bg-border",
+                                )}
                                 style={{
                                     width: `${row.schemaCoveragePct * 100}%`,
-                                    background: isUs ? "text-primary" : "text-border",
                                 }}
                             />
                         </div>

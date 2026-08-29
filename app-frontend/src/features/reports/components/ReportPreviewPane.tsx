@@ -118,7 +118,7 @@ export function ReportPreviewPane({
                                             </p>
                                         )}
                                         {s.items && (
-                                            <div className="border-border overflow-hidden rounded-sm border-[1px] border-solid">
+                                            <div className="border-border overflow-x-auto rounded-sm border-[1px] border-solid">
                                                 {s.items.map((item) => (
                                                     <div
                                                         key={item.id}

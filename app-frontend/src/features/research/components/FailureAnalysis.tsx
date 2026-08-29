@@ -133,12 +133,7 @@ export default function FailureAnalysis() {
                             <div className="text-muted-foreground flex-1 px-3 py-1.5 text-sm">
                                 {f.ts}
                             </div>
-                            <div
-                                className="text-muted-foreground px-3 py-1.5 text-base font-semibold tracking-tight"
-                                style={{
-                                    flex: 2,
-                                }}
-                            >
+                            <div className="text-muted-foreground flex-[2] px-3 py-1.5 text-base font-semibold tracking-tight">
                                 {f.type}
                             </div>
                             <div className="text-primary flex-1 px-3 py-1.5 text-base">{f.run}</div>

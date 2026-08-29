@@ -45,12 +45,7 @@ export function MissionOverviewAttackGraph({
 
             {/* Node chain — centered */}
             <div className="absolute inset-0 flex items-center justify-center">
-                <div
-                    className="flex flex-col items-center"
-                    style={{
-                        gap: 0,
-                    }}
-                >
+                <div className="flex flex-col items-center gap-0">
                     {nodes.map((node, i) => {
                         const s = nodeStyle(node.status);
                         const badge = getVdgNodeStatusColors(node.status);

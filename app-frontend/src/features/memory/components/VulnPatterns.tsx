@@ -87,50 +87,52 @@ export default function VulnPatterns() {
                         </div>
                     ))}
                 </div>
-                <Sub label="TECHNIQUE SEQUENCE">
-                    {sel.techniques.map((t: string, i: number) => (
-                        <div key={t} className="mb-2 flex items-center gap-3">
-                            <div className="border-border flex h-4 w-4 shrink-0 items-center justify-center rounded-full border-[1px] border-solid">
-                                <span className="text-muted-foreground text-xs">{i + 1}</span>
-                            </div>
-                            <span className="text-muted-foreground text-xs">{t}</span>
-                        </div>
-                    ))}
-                </Sub>
-                <Sub label="DETECTION INDICATORS">
-                    {sel.indicators.map((ind: string) => (
-                        <div key={ind} className="mb-2 flex items-center gap-2">
-                            <div className="bg-primary h-1 w-1 shrink-0 rounded-full" />
-                            <span className="text-muted-foreground text-xs">{ind}</span>
-                        </div>
-                    ))}
-                </Sub>
-                <Sub label="PATTERN EVOLUTION" last>
-                    {sel.evolution.map(
-                        (
-                            ev: { ts: string; note?: string },
-                            i: number,
-                            a: { ts: string; note?: string }[],
-                        ) => (
-                            <div key={ev.ts} className="flex items-start gap-3">
-                                <div className="flex shrink-0 flex-col items-center">
-                                    <div
-                                        className={`border-primary mt-0.5 h-1.5 w-1.5 rounded-full border-[1px] border-solid ${i === a.length - 1 ? "bg-primary" : "bg-transparent"}`}
-                                    />
-                                    {i < a.length - 1 && <div className="bg-muted h-5 w-px" />}
+                <div className="space-y-5">
+                    <Sub label="TECHNIQUE SEQUENCE">
+                        {sel.techniques.map((t: string, i: number) => (
+                            <div key={t} className="mb-2 flex items-center gap-3">
+                                <div className="border-border flex h-4 w-4 shrink-0 items-center justify-center rounded-full border-[1px] border-solid">
+                                    <span className="text-muted-foreground text-xs">{i + 1}</span>
                                 </div>
-                                <div>
-                                    <span className="text-muted-foreground mr-2 text-sm">
-                                        {ev.ts}
-                                    </span>
-                                    <span className="text-muted-foreground text-base leading-normal">
-                                        {ev.note}
-                                    </span>
-                                </div>
+                                <span className="text-muted-foreground text-xs">{t}</span>
                             </div>
-                        ),
-                    )}
-                </Sub>
+                        ))}
+                    </Sub>
+                    <Sub label="DETECTION INDICATORS">
+                        {sel.indicators.map((ind: string) => (
+                            <div key={ind} className="mb-2 flex items-center gap-2">
+                                <div className="bg-primary h-1 w-1 shrink-0 rounded-full" />
+                                <span className="text-muted-foreground text-xs">{ind}</span>
+                            </div>
+                        ))}
+                    </Sub>
+                    <Sub label="PATTERN EVOLUTION">
+                        {sel.evolution.map(
+                            (
+                                ev: { ts: string; note?: string },
+                                i: number,
+                                a: { ts: string; note?: string }[],
+                            ) => (
+                                <div key={ev.ts} className="flex items-start gap-3">
+                                    <div className="flex shrink-0 flex-col items-center">
+                                        <div
+                                            className={`border-primary mt-0.5 h-1.5 w-1.5 rounded-full border-[1px] border-solid ${i === a.length - 1 ? "bg-primary" : "bg-transparent"}`}
+                                        />
+                                        {i < a.length - 1 && <div className="bg-muted h-5 w-px" />}
+                                    </div>
+                                    <div>
+                                        <span className="text-muted-foreground mr-2 text-sm">
+                                            {ev.ts}
+                                        </span>
+                                        <span className="text-muted-foreground text-base leading-normal">
+                                            {ev.note}
+                                        </span>
+                                    </div>
+                                </div>
+                            ),
+                        )}
+                    </Sub>
+                </div>
             </div>
         </div>
     );
