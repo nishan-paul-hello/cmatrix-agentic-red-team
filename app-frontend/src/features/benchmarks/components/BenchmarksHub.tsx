@@ -1,3 +1,5 @@
+"use client";
+
 import BenchmarkDetail from "@/features/benchmarks/components/BenchmarkDetail";
 import BenchmarkList from "@/features/benchmarks/components/BenchmarkList";
 import { useBenchmarksData } from "@/features/benchmarks/hooks/useBenchmarksData";

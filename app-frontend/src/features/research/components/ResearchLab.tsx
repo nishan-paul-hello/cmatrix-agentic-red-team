@@ -1,3 +1,5 @@
+"use client";
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import AblationLab from "@/features/research/components/AblationLab";
 import FailureAnalysis from "@/features/research/components/FailureAnalysis";

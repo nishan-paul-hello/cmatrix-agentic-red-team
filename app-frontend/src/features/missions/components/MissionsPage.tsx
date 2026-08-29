@@ -1,3 +1,8 @@
+"use client";
+
+// ─── Props ────────────────────────────────────────────────────────────────────
+import { useRouter } from "next/navigation";
+
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import StatusBadge from "@/components/ui/StatusBadge";
@@ -12,6 +17,7 @@ import {
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useMissionsData } from "@/features/missions/hooks/useMissionsData";
 import { type MissionFilter } from "@/features/missions/utils";
+import { useMission } from "@/lib/mission-context";
 import { MISSION_STATUS } from "@/types/domain-types";
 
 // ─── Types & constants ────────────────────────────────────────────────────────
@@ -37,16 +43,31 @@ const TABLE_HEADERS = [
     "STARTED",
 ] as const;
 
-// ─── Props ────────────────────────────────────────────────────────────────────
-
 interface MissionsPageProps {
     onNewMission?: () => void;
     onOpenMission?: (id: string) => void;
 }
 
-// ─── Component ────────────────────────────────────────────────────────────────
-
 export default function MissionsPage({ onNewMission, onOpenMission }: MissionsPageProps) {
+    const router = useRouter();
+    const { setActiveMissionId } = useMission();
+
+    const handleNewMission = () => {
+        if (onNewMission) {
+            onNewMission();
+        } else {
+            router.push("/missions/new");
+        }
+    };
+
+    const handleOpenMission = (id: string) => {
+        if (onOpenMission) {
+            onOpenMission(id);
+        } else {
+            setActiveMissionId(id);
+            router.push(`/missions/${id}`);
+        }
+    };
     const { filter, setFilter, isLoading, filtered } = useMissionsData();
 
     return (
@@ -58,7 +79,7 @@ export default function MissionsPage({ onNewMission, onOpenMission }: MissionsPa
                     <h1 className="text-foreground text-xs font-bold tracking-wide">MISSIONS</h1>
                     <Button
                         variant="outline"
-                        onClick={onNewMission}
+                        onClick={handleNewMission}
                         className="text-primary hover:border-primary hover:bg-muted h-auto rounded-sm px-3 py-1 text-base font-semibold tracking-widest transition-colors duration-100"
                     >
                         NEW MISSION →
@@ -123,7 +144,7 @@ export default function MissionsPage({ onNewMission, onOpenMission }: MissionsPa
                             return filtered.map((m) => (
                                 <TableRow
                                     key={m.id}
-                                    onClick={() => onOpenMission?.(m.id)}
+                                    onClick={() => handleOpenMission(m.id)}
                                     className="border-border hover:bg-muted cursor-pointer border-b transition-colors duration-75"
                                 >
                                     <TableCell className="text-primary px-4 py-2 font-semibold tracking-tight whitespace-nowrap">

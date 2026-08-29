@@ -1,4 +1,9 @@
+"use client";
+
 import { useEffect, useRef, useState } from "react";
+// ─── Component ────────────────────────────────────────────────────────────────
+
+import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/EmptyState";
@@ -20,10 +25,9 @@ import {
     type ActivityEntry,
 } from "@/features/core/components/DashboardConstants";
 import { MissionOrchestratorModel } from "@/features/missions/domain/Orchestrator";
+import { useMission } from "@/lib/mission-context";
 import { useServices } from "@/lib/services-context";
 import { type Mission } from "@/types/domain-types";
-
-// ─── Component ────────────────────────────────────────────────────────────────
 
 interface DashboardProps {
     onNewMission?: () => void;
@@ -31,6 +35,25 @@ interface DashboardProps {
 }
 
 export default function Dashboard({ onNewMission, onOpenMission }: DashboardProps) {
+    const router = useRouter();
+    const { setActiveMissionId } = useMission();
+
+    const handleNewMission = () => {
+        if (onNewMission) {
+            onNewMission();
+        } else {
+            router.push("/missions/new");
+        }
+    };
+
+    const handleOpenMission = (id: string) => {
+        if (onOpenMission) {
+            onOpenMission(id);
+        } else {
+            setActiveMissionId(id);
+            router.push(`/missions/${id}`);
+        }
+    };
     const [activity, setActivity] = useState<ActivityEntry[]>(INITIAL_ACTIVITY);
     const [missions, setMissions] = useState<Mission[]>([]);
     const [orchestrators, setOrchestrators] = useState<Record<string, MissionOrchestratorModel>>(
@@ -110,7 +133,7 @@ export default function Dashboard({ onNewMission, onOpenMission }: DashboardProp
                         <Button
                             variant="outline"
                             size="sm"
-                            onClick={onNewMission}
+                            onClick={handleNewMission}
                             className="border-border text-primary hover:border-primary hover:bg-muted h-auto rounded-sm px-2 py-0.5 text-base tracking-widest transition-colors duration-100"
                         >
                             + NEW MISSION
@@ -154,7 +177,7 @@ export default function Dashboard({ onNewMission, onOpenMission }: DashboardProp
                                     return missions.map((m) => (
                                         <TableRow
                                             key={m.id}
-                                            onClick={() => onOpenMission?.(m.id)}
+                                            onClick={() => handleOpenMission(m.id)}
                                             className="border-border hover:bg-muted cursor-pointer border-b transition-colors duration-75"
                                         >
                                             <TableCell className="text-primary px-4 py-2 font-semibold tracking-tight whitespace-nowrap">

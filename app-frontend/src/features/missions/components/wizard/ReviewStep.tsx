@@ -97,7 +97,7 @@ export default function ReviewStep({
             <div className="border-border mb-5 overflow-hidden rounded-sm border-[1px] border-solid">
                 {rows.map((row) => (
                     <div key={row.label} className="border-border flex border-b">
-                        <div className="text-muted-foreground border-border w-[148px] shrink-0 border-r px-4 py-2.5 text-base font-semibold tracking-widest">
+                        <div className="text-muted-foreground border-border w-panel-2xs shrink-0 border-r px-4 py-2.5 text-base font-semibold tracking-widest">
                             {row.label}
                         </div>
                         <div

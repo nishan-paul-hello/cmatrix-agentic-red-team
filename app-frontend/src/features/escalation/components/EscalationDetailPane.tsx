@@ -93,7 +93,7 @@ export function EscalationDetailPane({
             <div className="border-border mb-6 overflow-hidden rounded-sm border-[1px] border-solid">
                 {contextBlocks.map((b) => (
                     <div key={b.k} className="border-border flex border-b">
-                        <div className="text-muted-foreground border-border w-[120px] shrink-0 border-r px-3.5 py-2 text-sm font-semibold tracking-widest">
+                        <div className="text-muted-foreground border-border w-panel-2xs shrink-0 border-r px-3.5 py-2 text-sm font-semibold tracking-widest">
                             {b.k}
                         </div>
                         <div className="text-muted-foreground flex-1 px-3.5 py-2 text-xs">

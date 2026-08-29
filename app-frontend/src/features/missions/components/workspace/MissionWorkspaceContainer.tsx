@@ -1,3 +1,5 @@
+"use client";
+
 import { useCallback, useEffect, useReducer, useRef, useState } from "react";
 
 import MissionWorkspaceView from "@/features/missions/components/workspace/MissionWorkspaceView";
@@ -12,6 +14,7 @@ import {
 } from "@/features/missions/domain/Orchestrator";
 import { useElapsed } from "@/features/missions/hooks/useElapsed";
 import { useTelemetry } from "@/hooks/useTelemetry";
+import { useMission } from "@/lib/mission-context";
 import { useServices } from "@/lib/services-context";
 import { MISSION_STATUS } from "@/types/domain-types";
 import { canTransitionMission } from "@/utils/FSM";
@@ -62,6 +65,13 @@ export default function MissionWorkspaceContainer({
     const [orchestrator, setOrchestrator] = useState<MissionOrchestratorModel | null>(null);
 
     const { missionRepository, specialistRepository } = useServices();
+    const { setActiveMissionId } = useMission();
+
+    useEffect(() => {
+        if (missionId) {
+            setActiveMissionId(missionId);
+        }
+    }, [missionId, setActiveMissionId]);
 
     useEffect(() => {
         void Promise.all([missionRepository.fetch(missionId), specialistRepository.fetchAll()])

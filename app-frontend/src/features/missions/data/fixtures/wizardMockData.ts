@@ -29,7 +29,7 @@ export type TargetType = "URL" | "HOST" | "BENCHMARK ENVIRONMENT";
 export type SurfaceType = "WEB APPLICATION" | "GRAPHQL" | "MULTI-HOST";
 export type ModeType = "ONE-DAY" | "ZERO-DAY";
 export interface WizardProps {
-    onCancel: () => void;
+    onCancel?: () => void;
     onStart?: () => void;
     initialStep?: number;
 }

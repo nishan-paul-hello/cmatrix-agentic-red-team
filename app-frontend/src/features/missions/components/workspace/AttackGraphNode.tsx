@@ -84,10 +84,9 @@ export function AttackGraphNode<T extends BaseVDGNode>({
                 </div>
 
                 <div
-                    className="text-sm tracking-widest"
+                    className={`text-sm tracking-widest ${node.ucb !== undefined ? "mb-2" : "mb-0"}`}
                     style={{
                         color: style.typeColor,
-                        marginBottom: node.ucb !== undefined ? 8 : 0,
                     }}
                 >
                     {node.type}
@@ -95,10 +94,9 @@ export function AttackGraphNode<T extends BaseVDGNode>({
 
                 {node.ucb !== undefined && (
                     <div
-                        className="flex items-center gap-4"
+                        className="flex items-center gap-4 pt-[7px]"
                         style={{
                             borderTop: `1px solid ${style.border}`,
-                            paddingTop: 7,
                         }}
                     >
                         <KPIStrip
