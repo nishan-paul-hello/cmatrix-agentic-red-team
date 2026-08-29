@@ -23,7 +23,7 @@ export default function ModeCards({
                     <label
                         key={opt.value}
                         htmlFor={`mode-${opt.value}`}
-                        className={`flex h-auto flex-1 cursor-pointer flex-col items-stretch justify-start rounded-sm border border-solid px-5 pt-[22px] pb-[18px] text-left whitespace-normal transition-colors duration-100 ${selected ? "border-primary bg-muted" : "border-border bg-background hover:border-muted-foreground hover:bg-card"}`}
+                        className={`flex h-auto flex-1 cursor-pointer flex-col items-stretch justify-start rounded-sm border border-solid px-5 pt-[22px] pb-[18px] text-left whitespace-normal transition-colors duration-100 ${selected ? "border-primary bg-transparent" : "border-border bg-background hover:border-muted-foreground hover:bg-card"}`}
                     >
                         <RadioGroupItem
                             value={opt.value}
@@ -39,7 +39,7 @@ export default function ModeCards({
                                     {opt.icon}
                                 </span>
                                 <span
-                                    className={`text-base font-bold tracking-widest ${selected ? "text-foreground" : "text-muted-foreground"}`}
+                                    className={`text-xs font-bold tracking-widest ${selected ? "text-primary" : "text-muted-foreground"}`}
                                 >
                                     {opt.value}
                                 </span>
@@ -50,12 +50,12 @@ export default function ModeCards({
                         </div>
 
                         {/* Hint + badges row */}
-                        <div className="mb-5 flex items-center gap-2">
-                            <span className="text-border text-base font-semibold tracking-widest">
+                        <div className="mb-4 flex items-center gap-2">
+                            <span className={`text-[10px] font-semibold uppercase tracking-widest ${selected ? "text-primary" : "text-muted-foreground"}`}>
                                 {opt.hint}
                             </span>
                             <span
-                                className="rounded-sm px-1.5 py-px text-sm font-semibold tracking-widest"
+                                className="rounded-sm px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-widest"
                                 style={{
                                     color: opt.badgeColor,
                                     background: `${opt.badgeColor}18`,
@@ -64,32 +64,26 @@ export default function ModeCards({
                             >
                                 {opt.badge}
                             </span>
-                            <span className="border-border bg-muted text-muted-foreground rounded-sm border-[1px] border-solid px-1.5 py-px text-sm tracking-widest">
+                            <span className="border-border bg-transparent text-muted-foreground rounded-sm border-[1px] border-solid px-1.5 py-0.5 text-[10px] uppercase tracking-widest">
                                 {opt.difficulty}
                             </span>
                         </div>
 
-                        {/* Divider */}
-                        <div className="bg-border mb-4 h-px" />
-
                         {/* Description */}
-                        <div className="text-muted-foreground mb-5 grow text-xs leading-relaxed tracking-tighter">
+                        <div className="text-muted-foreground mb-4 grow text-xs leading-relaxed tracking-normal">
                             {opt.description}
                         </div>
-
-                        {/* Divider */}
-                        <div className="bg-border mb-3.5 h-px" />
 
                         {/* Implications list */}
                         <div className="flex flex-col gap-2">
                             {opt.implications.map((imp: { label: string; detail: string }) => (
                                 <div key={imp.label} className="flex items-start gap-2">
                                     <span
-                                        className={`min-w-[96px] shrink-0 text-sm font-semibold tracking-widest ${selected ? "text-primary" : "text-border"}`}
+                                        className={`min-w-[96px] shrink-0 text-[10px] font-semibold uppercase tracking-widest ${selected ? "text-primary" : "text-muted-foreground"}`}
                                     >
                                         {imp.label}
                                     </span>
-                                    <span className="text-muted-foreground text-sm leading-snug tracking-tight">
+                                    <span className="text-muted-foreground text-xs leading-relaxed tracking-normal">
                                         {imp.detail}
                                     </span>
                                 </div>
