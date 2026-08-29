@@ -4,25 +4,25 @@ import { Button } from "@/components/ui/button";
 import { SPEC_STATUS, type Specialist, type SpecStatus } from "@/types/domain-types";
 
 export const DOT: Record<SpecStatus, string> = {
-    [SPEC_STATUS.RUNNING]: "var(--primary)",
-    [SPEC_STATUS.IDLE]: "var(--border)",
-    [SPEC_STATUS.QUEUED]: "var(--muted-foreground)",
-    [SPEC_STATUS.WAITING]: "var(--warning)",
-    [SPEC_STATUS.VALIDATING]: "var(--destructive)",
-    [SPEC_STATUS.COMPLETED]: "var(--success)",
-    [SPEC_STATUS.FAILED]: "var(--destructive)",
-    [SPEC_STATUS.BLOCKED]: "var(--border)",
+    [SPEC_STATUS.RUNNING]: "text-primary",
+    [SPEC_STATUS.IDLE]: "text-border",
+    [SPEC_STATUS.QUEUED]: "text-muted-foreground",
+    [SPEC_STATUS.WAITING]: "text-warning",
+    [SPEC_STATUS.VALIDATING]: "text-destructive",
+    [SPEC_STATUS.COMPLETED]: "text-success",
+    [SPEC_STATUS.FAILED]: "text-destructive",
+    [SPEC_STATUS.BLOCKED]: "text-border",
 };
 
 export const BADGE_BG: Record<SpecStatus, string> = {
-    [SPEC_STATUS.RUNNING]: "var(--border)",
+    [SPEC_STATUS.RUNNING]: "text-border",
     [SPEC_STATUS.IDLE]: "transparent",
     [SPEC_STATUS.QUEUED]: "transparent",
-    [SPEC_STATUS.WAITING]: "var(--border)",
-    [SPEC_STATUS.VALIDATING]: "var(--border)",
-    [SPEC_STATUS.COMPLETED]: "var(--border)",
-    [SPEC_STATUS.FAILED]: "var(--border)",
-    [SPEC_STATUS.BLOCKED]: "var(--border)",
+    [SPEC_STATUS.WAITING]: "text-border",
+    [SPEC_STATUS.VALIDATING]: "text-border",
+    [SPEC_STATUS.COMPLETED]: "text-border",
+    [SPEC_STATUS.FAILED]: "text-border",
+    [SPEC_STATUS.BLOCKED]: "text-border",
 };
 
 export function Kv({ k, v, red }: { k: string; v: string; red?: boolean }) {
@@ -30,11 +30,7 @@ export function Kv({ k, v, red }: { k: string; v: string; red?: boolean }) {
         <div>
             <div className="text-muted-foreground text-xs tracking-widest">{k}</div>
             <div
-                className="overflow-hidden text-base tracking-tight whitespace-nowrap"
-                style={{
-                    color: red ? "var(--primary)" : "var(--muted-foreground)",
-                    textOverflow: "ellipsis",
-                }}
+                className={`overflow-hidden text-base tracking-tight text-ellipsis whitespace-nowrap ${red ? "text-primary" : "text-muted-foreground"}`}
             >
                 {v}
             </div>
@@ -49,7 +45,7 @@ function SpecCard({
 }: {
     s: Specialist;
     onSelect: (s: Specialist) => void;
-    layerAccent?: string;
+    layerAccent?: "primary" | "warning";
 }) {
     const dot = DOT[s.status];
     const bg = BADGE_BG[s.status];
@@ -60,20 +56,15 @@ function SpecCard({
             key={s.id}
             variant="outline"
             onClick={() => onSelect(s)}
-            className={`bg-background relative flex h-auto w-full cursor-pointer flex-col items-start rounded-sm border border-solid text-left font-normal transition-colors duration-100 ${running ? "border-primary hover:border-destructive" : "border-border hover:border-border"}`}
-            style={{ padding: "14px 14px 12px" }}
+            className={`bg-background relative flex h-auto w-full cursor-pointer flex-col items-start rounded-sm border border-solid px-3.5 pt-3.5 pb-3 text-left font-normal transition-colors duration-100 ${running ? "border-primary hover:border-destructive" : "border-border hover:border-border"}`}
         >
             {running && (
-                <div
-                    className="border-border absolute rounded-[3px] border-[1px] border-solid"
-                    style={{ inset: -3, pointerEvents: "none", animation: "ring 2s ease infinite" }}
-                />
+                <div className="border-border pointer-events-none absolute -inset-[3px] animate-[ring_2s_ease_infinite] rounded-[3px] border-[1px] border-solid" />
             )}
             {/* Layer badge — top-left micro-label */}
             {layerAccent && (
                 <div
-                    className="mb-1.5 text-xs font-semibold tracking-widest"
-                    style={{ color: layerAccent }}
+                    className={`mb-1.5 text-xs font-semibold tracking-widest ${layerAccent === "primary" ? "text-primary" : "text-warning"}`}
                 >
                     {s.layer === 3 ? "L3 SPECIALIST" : "L4 VALIDATION"}
                     {s.phase != null && s.phaseTotal != null && (
@@ -85,15 +76,13 @@ function SpecCard({
             )}
             <div className="mb-2 flex items-center justify-between">
                 <div
-                    className="h-2 w-2 shrink-0"
+                    className={`h-2 w-2 shrink-0 rounded-full ${running ? "animate-[pulse_1.4s_ease_infinite]" : ""}`}
                     style={{
-                        borderRadius: "50%",
                         background:
                             s.status !== SPEC_STATUS.IDLE && s.status !== SPEC_STATUS.QUEUED
                                 ? dot
                                 : "transparent",
                         border: `1px solid ${dot}`,
-                        animation: running ? "pulse 1.4s ease infinite" : "none",
                     }}
                 />
                 <span
@@ -129,28 +118,27 @@ function LayerSection({
 }: {
     title: string;
     label: string;
-    accent: string;
+    accent: "primary" | "warning";
     specs: Specialist[];
     onSelect: (s: Specialist) => void;
 }) {
     if (specs.length === 0) {
         return null;
     }
+
+    const textColor = accent === "primary" ? "text-primary" : "text-warning";
+    const dividerBg = accent === "primary" ? "bg-primary/20" : "bg-warning/20";
+    const badgeBorder = accent === "primary" ? "border-primary/25" : "border-warning/25";
+    const badgeBg = accent === "primary" ? "bg-primary/10" : "bg-warning/10";
+
     return (
         <div className="mb-6">
             <div className="mb-2.5 flex items-center gap-3">
-                <div className="text-sm font-semibold tracking-widest" style={{ color: accent }}>
-                    {title}
-                </div>
-                <div className="h-px flex-1" style={{ background: `${accent}22` }} />
+                <div className={`text-sm font-semibold tracking-widest ${textColor}`}>{title}</div>
+                <div className={`h-px flex-1 ${dividerBg}`} />
                 <div className="text-muted-foreground text-xs tracking-widest">{label}</div>
                 <div
-                    className="rounded-sm px-1 py-px text-xs font-bold"
-                    style={{
-                        color: accent,
-                        border: `1px solid ${accent}44`,
-                        background: `${accent}11`,
-                    }}
+                    className={`rounded-sm border border-solid px-1 py-px text-xs font-bold ${textColor} ${badgeBorder} ${badgeBg}`}
                 >
                     {specs.length}
                 </div>
@@ -209,7 +197,7 @@ export function SpecGrid({
                         <LayerSection
                             title="LAYER 3 — SPECIALIST AGENTS"
                             label="Perform targeted attack; produce structured evidence"
-                            accent="var(--primary)"
+                            accent="primary"
                             specs={[...layer3, ...layerless]}
                             onSelect={onSelect}
                         />
@@ -217,7 +205,7 @@ export function SpecGrid({
                         <LayerSection
                             title="LAYER 4 — VALIDATION / EXECUTION"
                             label="Oracle assertion, multi-host pivot, rate-limited execution"
-                            accent="var(--warning)"
+                            accent="warning"
                             specs={layer4}
                             onSelect={onSelect}
                         />

@@ -11,10 +11,10 @@ import {
 import { SPEC_STATUS } from "@/types/domain-types";
 
 const SPEC_C: Record<string, string> = {
-    [SPEC_STATUS.COMPLETED]: "var(--success)",
-    [SPEC_STATUS.RUNNING]: "var(--destructive)",
-    [SPEC_STATUS.WAITING]: "var(--warning)",
-    [SPEC_STATUS.IDLE]: "var(--border)",
+    [SPEC_STATUS.COMPLETED]: "text-success",
+    [SPEC_STATUS.RUNNING]: "text-destructive",
+    [SPEC_STATUS.WAITING]: "text-warning",
+    [SPEC_STATUS.IDLE]: "text-border",
 };
 const TeamManagerDashboardView = React.memo(function ({
     ucbEntry,
@@ -57,12 +57,12 @@ const TeamManagerDashboardView = React.memo(function ({
                 </div>
             </div>
 
-            <div className="flex min-h-0 flex-1 overflow-hidden">
+            <div className="flex min-h-0 flex-1 flex-col overflow-hidden lg:flex-row">
                 {/* LEFT: VDG scoring table */}
                 <VDGScoringTable vdg={vdg} setUcbEntry={setUcbEntry} />
 
                 {/* RIGHT: specialists + schedule */}
-                <div className="w-panel-sm flex flex-shrink-0 flex-col overflow-y-auto">
+                <div className="border-border lg:w-panel-sm flex w-full flex-shrink-0 flex-col overflow-y-auto border-t lg:border-t-0 lg:border-l">
                     {/* Specialists */}
                     <div className="bg-background text-muted-foreground border-border border-b text-sm tracking-widest">
                         SPECIALIST STATUS
@@ -71,21 +71,15 @@ const TeamManagerDashboardView = React.memo(function ({
                         <div key={s.id} className="border-border border-b px-4 py-2.5">
                             <div className="mb-1 flex items-center gap-2">
                                 <div
-                                    className="h-1.5 w-1.5 shrink-0"
-                                    style={{
-                                        borderRadius: "50%",
-                                        background: SPEC_C[s.status] ?? "var(--border)",
-                                    }}
+                                    className={`h-1.5 w-1.5 shrink-0 rounded-full ${(SPEC_C[s.status] ?? "text-border").replace("text-", "bg-")}`}
                                 />
                                 <span className="text-muted-foreground flex-1 text-xs font-bold tracking-tight">
                                     {s.role}
                                 </span>
                                 <span
-                                    className="text-sm font-semibold tracking-normal"
-                                    style={{
-                                        color: SPEC_C[s.status] ?? "var(--border)",
-                                    }}
+                                    className={`text-sm font-semibold tracking-normal ${SPEC_C[s.status] ?? "text-border"}`}
                                 >
+                                    {" "}
                                     {s.status}
                                 </span>
                             </div>
@@ -107,10 +101,7 @@ const TeamManagerDashboardView = React.memo(function ({
                         <div key={s.node} className="border-border border-b px-4 py-2.5">
                             <div className="mb-1 flex items-center gap-2">
                                 <span
-                                    className="min-w-12 text-sm font-bold tracking-widest"
-                                    style={{
-                                        color: i === 0 ? "var(--warning)" : "var(--border)",
-                                    }}
+                                    className={`min-w-12 text-sm font-bold tracking-widest ${i === 0 ? "text-warning" : "text-border"}`}
                                 >
                                     {s.step}
                                 </span>

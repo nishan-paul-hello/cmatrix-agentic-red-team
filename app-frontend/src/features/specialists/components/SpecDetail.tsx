@@ -81,7 +81,7 @@ export function SpecDetail({ spec, onBack }: { spec: Specialist; onBack: () => v
                             },
                         ].map((r) => (
                             <div key={r.k} className="border-border flex border-b">
-                                <div className="text-muted-foreground border-border w-[140px] shrink-0 border-r px-3.5 py-2 text-sm font-semibold tracking-widest">
+                                <div className="text-muted-foreground border-border w-panel-2xs shrink-0 border-r px-3.5 py-2 text-sm font-semibold tracking-widest">
                                     {r.k}
                                 </div>
                                 <div className="text-muted-foreground flex-1 px-3.5 py-2 text-xs tracking-tighter">
@@ -95,67 +95,47 @@ export function SpecDetail({ spec, onBack }: { spec: Specialist; onBack: () => v
                     <div className="text-muted-foreground mb-3.5 text-base tracking-widest">
                         INVOCATION TIMELINE
                     </div>
-                    <div
-                        className="flex flex-col"
-                        style={{
-                            gap: 0,
-                        }}
-                    >
-                        {timeline.map((t, i) => (
-                            <div key={t.event} className="flex items-start gap-4">
-                                <div className="flex flex-shrink-0 flex-col items-center">
-                                    <div
-                                        className="mt-0.5 h-2 w-2 rounded-none"
-                                        style={{
-                                            border: `1px solid ${i === timeline.length - 1 ? "var(--primary)" : "var(--border)"}`,
-                                            background: (() => {
-                                                if (i === timeline.length - 1) {
-                                                    return "var(--primary)";
-                                                }
-                                                if (i < timeline.length - 1) {
-                                                    return "var(--border)";
-                                                }
-                                                return "transparent";
-                                            })(),
-                                        }}
-                                    />
-                                    {i < timeline.length - 1 && (
-                                        <div className="bg-muted h-7 w-px" />
-                                    )}
-                                </div>
-                                <div
-                                    className="mb-1"
-                                    style={{
-                                        paddingBottom: i < timeline.length - 1 ? 0 : 0,
-                                    }}
-                                >
-                                    <div className="mb-0.5 flex items-center gap-3">
-                                        <span className="text-muted-foreground text-sm tracking-tight">
-                                            {t.ts}
-                                        </span>
-                                        <span
-                                            className="text-base font-semibold tracking-wide"
-                                            style={{
-                                                color:
-                                                    i === timeline.length - 1
-                                                        ? "var(--primary)"
-                                                        : "var(--muted-foreground)",
-                                            }}
-                                        >
-                                            {t.event}
-                                        </span>
+                    <div className="flex flex-col gap-0">
+                        {timeline.map((t, i) => {
+                            let dotBorder = "border-transparent bg-transparent";
+                            if (i === timeline.length - 1) {
+                                dotBorder = "border-primary bg-primary";
+                            } else if (i < timeline.length - 1) {
+                                dotBorder = "border-border bg-border";
+                            }
+                            return (
+                                <div key={t.event} className="flex items-start gap-4">
+                                    <div className="flex flex-shrink-0 flex-col items-center">
+                                        <div
+                                            className={`mt-0.5 h-2 w-2 rounded-none border border-solid ${dotBorder}`}
+                                        />
+                                        {i < timeline.length - 1 && (
+                                            <div className="bg-muted h-7 w-px" />
+                                        )}
                                     </div>
-                                    <div className="text-muted-foreground text-base tracking-tighter">
-                                        {t.detail}
+                                    <div className="mb-1">
+                                        <div className="mb-0.5 flex items-center gap-3">
+                                            <span className="text-muted-foreground text-sm tracking-tight">
+                                                {t.ts}
+                                            </span>
+                                            <span
+                                                className={`text-base font-semibold tracking-wide ${i === timeline.length - 1 ? "text-primary" : "text-muted-foreground"}`}
+                                            >
+                                                {t.event}
+                                            </span>
+                                        </div>
+                                        <div className="text-muted-foreground text-base tracking-tighter">
+                                            {t.detail}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 </div>
 
                 {/* Right sidebar */}
-                <div className="bg-background border-border w-[240px] flex-shrink-0 overflow-y-auto border-l">
+                <div className="bg-background border-border lg:w-panel-sm w-full flex-shrink-0 overflow-y-auto border-t lg:border-t-0 lg:border-l">
                     <Sidebar label="AGENT ID">
                         <span className="text-muted-foreground text-xs">{spec.id}</span>
                     </Sidebar>
