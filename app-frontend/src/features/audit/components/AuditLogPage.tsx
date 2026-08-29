@@ -4,6 +4,14 @@ import { useVirtualizer } from "@tanstack/react-virtual";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
+import {
     drawerFields,
     RESULT_FILTERS,
     TABLE_HEADERS,
@@ -81,16 +89,7 @@ export default React.memo(function AuditLogPage() {
                                 variant="outline"
                                 onClick={() => setTypeFilter(t)}
                                 aria-pressed={active}
-                                className="h-auto rounded-sm px-2 py-0.5 text-xs tracking-wide"
-                                style={{
-                                    background: active
-                                        ? (cc?.bg ?? "var(--border)")
-                                        : "transparent",
-                                    border: `1px solid ${active ? (cc?.c ?? "var(--foreground)") : "var(--border)"}`,
-                                    color: active
-                                        ? (cc?.c ?? "var(--foreground)")
-                                        : "var(--muted-foreground)",
-                                }}
+                                className={`h-auto rounded-sm border border-solid px-2 py-0.5 text-xs tracking-wide transition-colors ${active ? `${cc?.bg ?? "bg-border"} ${cc?.c ?? "text-foreground"} ${cc?.border ?? "border-foreground/30"}` : "border-border text-muted-foreground bg-transparent"}`}
                             >
                                 {t}
                             </Button>
@@ -111,11 +110,7 @@ export default React.memo(function AuditLogPage() {
                                 variant="outline"
                                 onClick={() => setResultFilter(r)}
                                 aria-pressed={active}
-                                className="h-auto rounded-sm bg-transparent px-2 py-0.5 text-xs tracking-wide hover:bg-transparent"
-                                style={{
-                                    border: `1px solid ${active ? color : "var(--border)"}`,
-                                    color: active ? color : "var(--muted-foreground)",
-                                }}
+                                className={`h-auto rounded-sm border border-solid bg-transparent px-2 py-0.5 text-xs tracking-wide hover:bg-transparent ${active ? `border-current ${color}` : "border-border text-muted-foreground"}`}
                             >
                                 {r}
                             </Button>
@@ -129,24 +124,24 @@ export default React.memo(function AuditLogPage() {
                 {/* Table */}
                 <div ref={parentRef} className="flex flex-1 flex-col overflow-y-auto">
                     <div className="w-full overflow-x-auto">
-                        <table className="w-full border-collapse">
-                            <thead>
-                                <tr className="bg-card sticky top-0 z-10">
+                        <Table className="w-full border-collapse">
+                            <TableHeader>
+                                <TableRow className="bg-card z-header sticky top-0">
                                     {TABLE_HEADERS.map((h) => (
-                                        <th
+                                        <TableHead
                                             key={h}
                                             className="border-border text-muted-foreground border-b px-3 py-1 text-left text-xs font-semibold tracking-widest whitespace-nowrap"
                                         >
                                             {h}
-                                        </th>
+                                        </TableHead>
                                     ))}
-                                </tr>
-                            </thead>
-                            <tbody>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
                                 {paddingTop > 0 && (
-                                    <tr>
-                                        <td style={{ height: `${paddingTop}px` }} />
-                                    </tr>
+                                    <TableRow>
+                                        <TableCell style={{ height: `${paddingTop}px` }} />
+                                    </TableRow>
                                 )}
                                 {virtualItems.map((virtualRow) => {
                                     const e = visible[virtualRow.index];
@@ -160,12 +155,12 @@ export default React.memo(function AuditLogPage() {
                                     );
                                 })}
                                 {paddingBottom > 0 && (
-                                    <tr>
-                                        <td style={{ height: `${paddingBottom}px` }} />
-                                    </tr>
+                                    <TableRow>
+                                        <TableCell style={{ height: `${paddingBottom}px` }} />
+                                    </TableRow>
                                 )}
-                            </tbody>
-                        </table>
+                            </TableBody>
+                        </Table>
                     </div>
                 </div>
 
@@ -190,15 +185,14 @@ export default React.memo(function AuditLogPage() {
                             </Button>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-4 px-4 py-4">
+                        <div className="grid grid-cols-1 gap-4 px-4 py-4 sm:grid-cols-2">
                             {drawerFields(sel).map((row) => (
                                 <div key={row.k}>
                                     <div className="text-muted-foreground mb-0.5 text-xs tracking-widest">
                                         {row.k}
                                     </div>
                                     <div
-                                        className="text-xs leading-normal"
-                                        style={{ color: row.c ?? "var(--muted-foreground)" }}
+                                        className={`text-xs leading-normal ${row.c ?? "text-muted-foreground"}`}
                                     >
                                         {row.v}
                                     </div>

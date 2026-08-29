@@ -5,21 +5,26 @@ import { type AuditEntry, type AuditEventType, type AuditResultValue } from "@/t
 export interface ColorPair {
     c: string;
     bg: string;
+    border: string;
 }
 
 export const TYPE_C: Record<AuditEventType, ColorPair> = {
-    AUTH: { c: "var(--muted-foreground)", bg: "var(--border)" },
-    MISSION: { c: "var(--primary)", bg: "var(--border)" },
-    EXECUTION: { c: "var(--muted-foreground)", bg: "var(--background)" },
-    ESCALATION: { c: "var(--warning)", bg: "var(--border)" },
-    SYSTEM: { c: "var(--success)", bg: "var(--border)" },
-    CONFIG: { c: "var(--muted-foreground)", bg: "var(--border)" },
+    AUTH: { c: "text-muted-foreground", bg: "bg-border", border: "border-muted-foreground/30" },
+    MISSION: { c: "text-primary", bg: "bg-border", border: "border-primary/30" },
+    EXECUTION: {
+        c: "text-muted-foreground",
+        bg: "bg-background",
+        border: "border-muted-foreground/30",
+    },
+    ESCALATION: { c: "text-warning", bg: "bg-border", border: "border-warning/30" },
+    SYSTEM: { c: "text-success", bg: "bg-border", border: "border-success/30" },
+    CONFIG: { c: "text-muted-foreground", bg: "bg-border", border: "border-muted-foreground/30" },
 };
 
 export const RESULT_C: Record<AuditResultValue, string> = {
-    SUCCESS: "var(--success)",
-    FAILURE: "var(--destructive)",
-    WARNING: "var(--warning)",
+    SUCCESS: "text-success",
+    FAILURE: "text-destructive",
+    WARNING: "text-warning",
 };
 
 export const AuditLogRow = React.memo(function AuditLogRowInner({
@@ -45,12 +50,7 @@ export const AuditLogRow = React.memo(function AuditLogRowInner({
             <td className="text-muted-foreground px-3 py-1.5 text-sm whitespace-nowrap">{e.ts}</td>
             <td className="px-3 py-1.5">
                 <span
-                    className="rounded-sm px-1 py-px text-sm font-semibold tracking-normal"
-                    style={{
-                        color: tc.c,
-                        background: tc.bg,
-                        border: `1px solid ${tc.c}33`,
-                    }}
+                    className={`rounded-sm border border-solid px-1 py-px text-sm font-semibold tracking-normal ${tc.c} ${tc.bg} ${tc.border}`}
                 >
                     {e.type}
                 </span>
@@ -63,9 +63,7 @@ export const AuditLogRow = React.memo(function AuditLogRowInner({
             </td>
             <td className="text-muted-foreground px-3 py-1.5 text-base">{e.resource}</td>
             <td className="px-3 py-1.5">
-                <span className="text-sm font-semibold tracking-normal" style={{ color: rc }}>
-                    {e.result}
-                </span>
+                <span className={`text-sm font-semibold tracking-normal ${rc}`}>{e.result}</span>
             </td>
         </tr>
     );
