@@ -18,7 +18,7 @@ export function AttackGraphLegend({
     >;
 }) {
     return (
-        <div className="border-border bg-background absolute right-4 bottom-4 flex flex-col gap-1.5 rounded-sm border-[1px] border-solid px-3 py-2.5">
+        <div className="border-border bg-background absolute top-4 left-4 z-10 flex flex-col gap-1.5 rounded-sm border-[1px] border-solid px-3 py-2.5">
             <div className="text-muted-foreground mb-1 text-xs tracking-widest">LEGEND</div>
             {nodeStatuses.map((st) => {
                 const s = nodeStyles[st];

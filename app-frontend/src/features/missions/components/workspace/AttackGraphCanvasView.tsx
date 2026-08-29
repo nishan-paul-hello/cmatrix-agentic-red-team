@@ -20,8 +20,8 @@ import {
 
 const LOGIC_W = 1000,
     LOGIC_H = 560,
-    NODE_W = 158,
-    NODE_H = 84;
+    NODE_W = 180,
+    NODE_H = 92;
 
 function lx(x: number, cw: number) {
     return (x / LOGIC_W) * cw;
@@ -79,9 +79,43 @@ const AttackGraphCanvasViewInner = React.memo(function ({
     dims: { w: number; h: number };
 }) {
     const { w, h } = dims;
+    const canvasW = Math.max(w, 1400);
+    const canvasH = Math.max(h, 800);
+
     const nodeMap: Record<string, VDGNode | undefined> = Object.fromEntries(
         nodes.map((n) => [n.id, n]),
     );
+
+    const isDragging = React.useRef(false);
+    const startPos = React.useRef({ x: 0, y: 0 });
+    const scrollPos = React.useRef({ left: 0, top: 0 });
+
+    const handleMouseDown = (e: React.MouseEvent) => {
+        isDragging.current = true;
+        startPos.current = { x: e.clientX, y: e.clientY };
+        const container = containerRef.current;
+        if (container) {
+            scrollPos.current = {
+                left: container.scrollLeft,
+                top: container.scrollTop,
+            };
+        }
+    };
+
+    const handleMouseMove = (e: React.MouseEvent) => {
+        if (!isDragging.current) {return;}
+        const dx = e.clientX - startPos.current.x;
+        const dy = e.clientY - startPos.current.y;
+        const container = containerRef.current;
+        if (container) {
+            container.scrollLeft = scrollPos.current.left - dx;
+            container.scrollTop = scrollPos.current.top - dy;
+        }
+    };
+
+    const handleMouseUp = () => {
+        isDragging.current = false;
+    };
 
     function visible(n: VDGNode) {
         return (
@@ -118,13 +152,25 @@ const AttackGraphCanvasViewInner = React.memo(function ({
 
             {/* Canvas row */}
             <div className="flex min-h-0 flex-1 overflow-hidden">
-                {/* Canvas */}
-                <div ref={containerRef} className="bg-background relative flex-1 overflow-hidden">
-                    {/* Grid */}
-                    <div className="grid-bg pointer-events-none absolute inset-0 opacity-50" />
+                {/* Canvas Wrapper */}
+                <div className="relative flex-1 overflow-hidden bg-background">
+                    {/* Canvas Viewport */}
+                    {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
+                    <div
+                        ref={containerRef}
+                        role="presentation"
+                        className="relative h-full w-full overflow-auto cursor-grab active:cursor-grabbing [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+                        onMouseDown={handleMouseDown}
+                        onMouseMove={handleMouseMove}
+                        onMouseUp={handleMouseUp}
+                        onMouseLeave={handleMouseUp}
+                    >
+                    <div style={{ width: canvasW, height: canvasH, position: "relative" }}>
+                        {/* Grid */}
+                        <div className="grid-bg pointer-events-none absolute inset-0 opacity-50" />
 
-                    {/* SVG edges */}
-                    <svg className="pointer-events-none absolute inset-0" width={w} height={h}>
+                        {/* SVG edges */}
+                        <svg className="pointer-events-none absolute inset-0" width={canvasW} height={canvasH}>
                         <defs>
                             <marker
                                 id="arr-red"
@@ -170,10 +216,10 @@ const AttackGraphCanvasViewInner = React.memo(function ({
                                     edge={edge}
                                     dst={dst}
                                     vis={vis}
-                                    x1={lx(src.cx, w)}
-                                    y1={ly(src.cy, h) + NODE_H}
-                                    x2={lx(dst.cx, w)}
-                                    y2={ly(dst.cy, h) - 4}
+                                    x1={lx(src.cx, canvasW)}
+                                    y1={ly(src.cy, canvasH) + NODE_H}
+                                    x2={lx(dst.cx, canvasW)}
+                                    y2={ly(dst.cy, canvasH) - 4}
                                 />
                             );
                         })}
@@ -191,8 +237,8 @@ const AttackGraphCanvasViewInner = React.memo(function ({
                                 style={style}
                                 isVis={isVis}
                                 isHov={isHov}
-                                x={lx(node.cx, w) - NODE_W / 2}
-                                y={ly(node.cy, h)}
+                                x={lx(node.cx, canvasW) - NODE_W / 2}
+                                y={ly(node.cy, canvasH)}
                                 width={NODE_W}
                                 onMouseEnter={setHovered}
                                 onMouseLeave={setHovered}
@@ -201,19 +247,26 @@ const AttackGraphCanvasViewInner = React.memo(function ({
                         );
                     })}
 
-                    {/* Legend */}
-                    <AttackGraphLegend
-                        nodeStatuses={[
-                            "ELIGIBLE",
-                            "IN_PROGRESS",
-                            "EXPLOITED",
-                            "BLOCKED",
-                            "INFEASIBLE",
-                            "DEPRIORITIZED",
-                        ]}
-                        nodeStyles={NODE_STYLE}
-                    />
+                    </div>
+                </div> {/* Closes viewport */}
+                
+                {/* Legend (Positioned relative to wrapper) */}
+                <div className="pointer-events-none absolute inset-0">
+                    <div className="pointer-events-auto">
+                        <AttackGraphLegend
+                            nodeStatuses={[
+                                "ELIGIBLE",
+                                "IN_PROGRESS",
+                                "EXPLOITED",
+                                "BLOCKED",
+                                "INFEASIBLE",
+                                "DEPRIORITIZED",
+                            ]}
+                            nodeStyles={NODE_STYLE}
+                        />
+                    </div>
                 </div>
+            </div>
 
                 {/* Node detail drawer */}
                 {drawerNode && (

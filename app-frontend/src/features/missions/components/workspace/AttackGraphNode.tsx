@@ -141,7 +141,7 @@ export function AttackGraphNode<T extends BaseVDGNode>({
             )}
             <div className="mb-1 flex w-full items-center justify-between px-2 pt-2">
                 <span
-                    className="truncate text-xs font-bold tracking-wide"
+                    className="text-xs font-bold tracking-wide"
                     style={{
                         color: style.labelColor,
                     }}
@@ -166,7 +166,7 @@ export function AttackGraphNode<T extends BaseVDGNode>({
                 </span>
             </div>
             <div
-                className="leading-tight-2 mb-1.5 w-full truncate px-2 text-left text-[10px] uppercase tracking-widest"
+                className="leading-tight-2 mb-1.5 w-full px-2 text-left text-[10px] uppercase tracking-widest"
                 style={{
                     color: style.typeColor,
                 }}
