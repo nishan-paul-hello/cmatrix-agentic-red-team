@@ -1,6 +1,14 @@
 import React from "react";
 
 import { Button } from "@/components/ui/button";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
 import { SEV_C, STATUS_C } from "@/features/findings/data/fixtures/findingsMockData";
 import { type Finding, type Severity } from "@/types/domain-types";
 
@@ -48,9 +56,9 @@ export default function FindingsList({
             {/* Table */}
             <div className="flex-1 overflow-auto">
                 <div className="w-full overflow-x-auto">
-                    <table className="w-full border-collapse text-xs">
-                        <thead>
-                            <tr className="bg-card sticky top-0">
+                    <Table className="w-full border-collapse text-xs">
+                        <TableHeader>
+                            <TableRow className="bg-card sticky top-0">
                                 {[
                                     "ID",
                                     "TYPE",
@@ -61,41 +69,35 @@ export default function FindingsList({
                                     "FIRST SEEN",
                                     "VALIDATED",
                                 ].map((h) => (
-                                    <th
+                                    <TableHead
                                         key={h}
                                         className="text-muted-foreground border-border border-b px-3.5 py-1.5 text-left text-sm font-semibold tracking-widest whitespace-nowrap"
                                     >
                                         {h}
-                                    </th>
+                                    </TableHead>
                                 ))}
-                            </tr>
-                        </thead>
-                        <tbody>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
                             {findings.map((f) => {
                                 const sc = SEV_C[f.severity],
-                                    stc = STATUS_C[f.status] ?? "var(--muted-foreground)";
+                                    stc = STATUS_C[f.status] ?? "text-muted-foreground";
                                 return (
-                                    <tr
+                                    <TableRow
                                         key={f.id}
-                                        className="border-border cursor-pointer border-b"
+                                        className="border-border hover:bg-border cursor-pointer border-b transition-colors"
                                         onClick={() => onSelect(f)}
-                                        onMouseEnter={(e) =>
-                                            (e.currentTarget.style.background = "var(--border)")
-                                        }
-                                        onMouseLeave={(e) =>
-                                            (e.currentTarget.style.background = "transparent")
-                                        }
                                     >
-                                        <td className="text-primary px-3.5 py-2 font-bold tracking-tight">
+                                        <TableCell className="text-primary px-3.5 py-2 font-bold tracking-tight">
                                             {f.id}
-                                        </td>
-                                        <td className="text-muted-foreground px-3.5 py-2">
+                                        </TableCell>
+                                        <TableCell className="text-muted-foreground px-3.5 py-2">
                                             {f.type}
-                                        </td>
-                                        <td className="text-muted-foreground px-3.5 py-2 text-base">
+                                        </TableCell>
+                                        <TableCell className="text-muted-foreground px-3.5 py-2 text-base">
                                             {f.target}
-                                        </td>
-                                        <td className="px-3.5 py-2">
+                                        </TableCell>
+                                        <TableCell className="px-3.5 py-2">
                                             <span
                                                 className="rounded-sm px-1 py-px text-base font-semibold tracking-normal"
                                                 style={{
@@ -106,11 +108,11 @@ export default function FindingsList({
                                             >
                                                 {f.severity}
                                             </span>
-                                        </td>
-                                        <td className="text-muted-foreground px-3.5 py-2 text-center">
+                                        </TableCell>
+                                        <TableCell className="text-muted-foreground px-3.5 py-2 text-center">
                                             {f.eord}/5
-                                        </td>
-                                        <td className="px-3.5 py-2">
+                                        </TableCell>
+                                        <TableCell className="px-3.5 py-2">
                                             <span
                                                 className="text-base font-semibold tracking-normal"
                                                 style={{
@@ -119,18 +121,18 @@ export default function FindingsList({
                                             >
                                                 {f.status}
                                             </span>
-                                        </td>
-                                        <td className="text-muted-foreground px-3.5 py-2 text-base">
+                                        </TableCell>
+                                        <TableCell className="text-muted-foreground px-3.5 py-2 text-base">
                                             {f.first}
-                                        </td>
-                                        <td className="text-muted-foreground px-3.5 py-2 text-base">
+                                        </TableCell>
+                                        <TableCell className="text-muted-foreground px-3.5 py-2 text-base">
                                             {f.validated}
-                                        </td>
-                                    </tr>
+                                        </TableCell>
+                                    </TableRow>
                                 );
                             })}
-                        </tbody>
-                    </table>
+                        </TableBody>
+                    </Table>
                 </div>
             </div>
 

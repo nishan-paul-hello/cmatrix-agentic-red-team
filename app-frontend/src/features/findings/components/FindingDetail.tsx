@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import AttackPath from "@/features/findings/components/AttackPath";
 import EvidenceViewer from "@/features/findings/components/EvidenceViewer";
 import TrajectoryTab from "@/features/findings/components/TrajectoryTab";
@@ -12,7 +13,7 @@ export default function FindingDetail({ f, onBack }: { f: Finding; onBack: () =>
     const [tab, setTab] = useState<Tab>("OVERVIEW");
     const [evOpen, setEvOpen] = useState(false);
     const sc = SEV_C[f.severity];
-    const stc = STATUS_C[f.status] ?? "var(--muted-foreground)";
+    const stc = STATUS_C[f.status] ?? "text-muted-foreground";
     return (
         <div className="flex h-full min-h-0 flex-col">
             <div className="border-border flex-shrink-0 border-b px-6 pt-5 pb-0">
@@ -21,7 +22,7 @@ export default function FindingDetail({ f, onBack }: { f: Finding; onBack: () =>
                     onClick={onBack}
                     className="text-muted-foreground hover:text-muted-foreground mb-2.5 h-auto p-0 text-base tracking-widest hover:bg-transparent"
                 >
-                    ← FINDINGS
+                    {"\u2190"} FINDINGS
                 </Button>
                 <div className="mb-3 flex items-center gap-3">
                     <h1 className="text-foreground text-xs font-bold tracking-wide">{f.id}</h1>
@@ -52,15 +53,7 @@ export default function FindingDetail({ f, onBack }: { f: Finding; onBack: () =>
                             key={t}
                             variant="ghost"
                             onClick={() => setTab(t)}
-                            className="h-auto rounded-none px-3.5 py-1 text-base tracking-widest whitespace-nowrap hover:bg-transparent"
-                            style={{
-                                borderBottom:
-                                    t === tab
-                                        ? "2px solid var(--primary)"
-                                        : "2px solid transparent",
-                                color: t === tab ? "var(--foreground)" : "var(--muted-foreground)",
-                                marginBottom: -1,
-                            }}
+                            className={`-mb-px h-auto rounded-none border-b-2 px-3.5 py-1 text-base tracking-widest whitespace-nowrap hover:bg-transparent ${t === tab ? "border-primary text-foreground" : "text-muted-foreground border-transparent"}`}
                         >
                             {t}
                         </Button>
@@ -107,7 +100,7 @@ export default function FindingDetail({ f, onBack }: { f: Finding; onBack: () =>
                                     },
                                 ].map((r) => (
                                     <div key={r.k} className="border-border flex border-b">
-                                        <div className="text-muted-foreground border-border w-[140px] shrink-0 border-r px-3.5 py-2 text-sm font-semibold tracking-widest">
+                                        <div className="text-muted-foreground border-border w-panel-2xs shrink-0 border-r px-3.5 py-2 text-sm font-semibold tracking-widest">
                                             {r.k}
                                         </div>
                                         <div
@@ -120,7 +113,7 @@ export default function FindingDetail({ f, onBack }: { f: Finding; onBack: () =>
                                                     if (r.k === "SEVERITY") {
                                                         return sc.color;
                                                     }
-                                                    return "var(--muted-foreground)";
+                                                    return "text-muted-foreground";
                                                 })(),
                                             }}
                                         >
@@ -156,51 +149,18 @@ export default function FindingDetail({ f, onBack }: { f: Finding; onBack: () =>
                     {tab === "TRAJECTORY" && <TrajectoryTab f={f} />}
                 </div>
             </div>
-            {evOpen && (
-                <div
-                    className="bg-muted fixed inset-0 flex items-center justify-center"
-                    style={{
-                        zIndex: 60,
-                    }}
-                    onClick={() => setEvOpen(false)}
-                    onKeyDown={(e) => {
-                        if (e.key === "Escape") {
-                            setEvOpen(false);
-                        }
-                    }}
-                    role="presentation"
-                >
-                    <div
-                        role="button"
-                        tabIndex={0}
-                        onKeyDown={(e) => {
-                            if (e.key === "Enter" || e.key === " ") {
-                                e.stopPropagation();
-                            }
-                        }}
-                        className="border-border bg-background w-full max-w-[700px] overflow-auto rounded-sm border-[1px] border-solid sm:w-[700px]"
-                        style={{
-                            maxHeight: "80vh",
-                        }}
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        <div className="border-border flex justify-between border-b px-5 pt-4 pb-3">
-                            <span className="text-foreground text-xs font-bold tracking-normal">
-                                EVIDENCE VIEWER
-                            </span>
-                            <Button
-                                variant="ghost"
-                                size="icon-xs"
-                                onClick={() => setEvOpen(false)}
-                                className="text-muted-foreground hover:text-muted-foreground h-auto p-0.5 text-sm hover:bg-transparent"
-                            >
-                                ✕
-                            </Button>
-                        </div>
+            <Dialog open={evOpen} onOpenChange={setEvOpen}>
+                <DialogContent className="border-border bg-background flex max-h-[80vh] max-w-[700px] flex-col overflow-hidden p-0">
+                    <DialogHeader className="border-border border-b px-5 py-4">
+                        <DialogTitle className="text-foreground text-xs font-bold tracking-normal uppercase">
+                            EVIDENCE VIEWER
+                        </DialogTitle>
+                    </DialogHeader>
+                    <div className="overflow-auto p-5">
                         <EvidenceViewer />
                     </div>
-                </div>
-            )}
+                </DialogContent>
+            </Dialog>
         </div>
     );
 }

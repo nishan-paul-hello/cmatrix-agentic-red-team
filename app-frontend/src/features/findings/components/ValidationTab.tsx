@@ -29,84 +29,54 @@ export default function ValidationTab({ f }: { f: Finding }) {
         },
     ].filter((s) => s.ts !== "—" || s.eord < 5);
     return (
-        <div
-            style={{
-                paddingBottom: 24,
-            }}
-        >
+        <div className="pb-6">
             <div className="text-muted-foreground mb-4 text-sm tracking-widest">
                 VALIDATION LIFECYCLE
             </div>
             {steps.map((s, i) => (
-                <div
-                    key={`step-${s.label}`}
-                    className="flex gap-4"
-                    style={{
-                        marginBottom: i < steps.length - 1 ? 0 : 0,
-                    }}
-                >
+                <div key={`step-${s.label}`} className="flex gap-4">
                     <div className="flex w-6 shrink-0 flex-col items-center">
                         <div
-                            className="h-2 w-2 shrink-0 border-[1px] border-solid border-[transparent]"
-                            style={{
-                                borderRadius: "50%",
-                                background: (() => {
-                                    if (s.eord === 5) {
-                                        return "var(--success)";
-                                    }
-                                    if (s.eord >= 4) {
-                                        return "var(--destructive)";
-                                    }
-                                    if (s.eord >= 3) {
-                                        return "var(--warning)";
-                                    }
-                                    return "var(--border)";
-                                })(),
-                            }}
+                            className={`h-2 w-2 shrink-0 rounded-full border-[1px] border-solid border-[transparent] ${(() => {
+                                if (s.eord === 5) {
+                                    return "bg-success";
+                                }
+                                if (s.eord >= 4) {
+                                    return "bg-destructive";
+                                }
+                                if (s.eord >= 3) {
+                                    return "bg-warning";
+                                }
+                                return "bg-border";
+                            })()}`}
                         />
                         {i < steps.length - 1 && (
-                            <div
-                                className="bg-muted min-h-6 w-px flex-1"
-                                style={{
-                                    margin: "4px 0",
-                                }}
-                            />
+                            <div className="bg-muted my-1 min-h-6 w-px flex-1" />
                         )}
                     </div>
-                    <div
-                        style={{
-                            paddingBottom: 16,
-                        }}
-                    >
+                    <div className="pb-4">
                         <div className="mb-1 flex items-center gap-3">
                             <span
-                                className="text-sm font-bold tracking-normal"
-                                style={{
-                                    color:
-                                        s.eord === 5 ? "var(--success)" : "var(--muted-foreground)",
-                                }}
+                                className={`text-sm font-bold tracking-normal ${s.eord === 5 ? "text-success" : "text-muted-foreground"}`}
                             >
                                 {s.label}
                             </span>
                             <span className="text-muted-foreground text-xs">{s.ts}</span>
                             <span
-                                className="text-sm font-semibold tracking-normal"
-                                style={{
-                                    color: (() => {
-                                        if (s.eord === 5) {
-                                            return "var(--success)";
-                                        }
-                                        if (s.eord >= 4) {
-                                            return "var(--destructive)";
-                                        }
-                                        if (s.eord >= 3) {
-                                            return "var(--warning)";
-                                        }
-                                        return "var(--muted-foreground)";
-                                    })(),
-                                }}
+                                className={`text-sm font-semibold tracking-normal ${(() => {
+                                    if (s.eord === 5) {
+                                        return "text-success";
+                                    }
+                                    if (s.eord >= 4) {
+                                        return "text-destructive";
+                                    }
+                                    if (s.eord >= 3) {
+                                        return "text-warning";
+                                    }
+                                    return "text-muted-foreground";
+                                })()}`}
                             >
-                                E_ord {s.eord} — {eord_labels[s.eord]}
+                                E_ord {s.eord} - {eord_labels[s.eord]}
                             </span>
                         </div>
                         <div className="text-muted-foreground text-base leading-relaxed">
@@ -143,17 +113,14 @@ export default function ValidationTab({ f }: { f: Finding }) {
                                 {r.k}
                             </div>
                             <div
-                                className="text-xs font-bold"
-                                style={{
-                                    color: (() => {
-                                        if (r.k === "RESULT") {
-                                            return f.status === "ORACLE_CONFIRMED"
-                                                ? "var(--success)"
-                                                : "var(--warning)";
-                                        }
-                                        return "var(--muted-foreground)";
-                                    })(),
-                                }}
+                                className={`text-xs font-bold ${(() => {
+                                    if (r.k === "RESULT") {
+                                        return f.status === "ORACLE_CONFIRMED"
+                                            ? "text-success"
+                                            : "text-warning";
+                                    }
+                                    return "text-muted-foreground";
+                                })()}`}
                             >
                                 {r.v}
                             </div>

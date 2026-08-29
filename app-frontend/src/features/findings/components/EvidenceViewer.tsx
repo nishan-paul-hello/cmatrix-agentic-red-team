@@ -16,12 +16,7 @@ export default function EvidenceViewer({ inline }: { inline?: boolean }) {
                         key={t}
                         variant="ghost"
                         onClick={() => setTab(t)}
-                        className="h-auto rounded-none px-4 py-1 text-base tracking-widest hover:bg-transparent"
-                        style={{
-                            borderBottom:
-                                t === tab ? "2px solid var(--primary)" : "2px solid transparent",
-                            color: t === tab ? "var(--foreground)" : "var(--muted-foreground)",
-                        }}
+                        className={`-mb-px h-auto rounded-none border-b-2 px-4 py-1 text-base tracking-widest hover:bg-transparent ${t === tab ? "border-primary text-foreground" : "text-muted-foreground border-transparent"}`}
                     >
                         {t}
                     </Button>
@@ -45,38 +40,16 @@ export default function EvidenceViewer({ inline }: { inline?: boolean }) {
                             <div className="text-muted-foreground mb-2">HTTP/1.1 200 OK</div>
                             <div>Content-Type: application/json</div>
                             <div>X-Response-Time: 4182ms</div>
-                            <div
-                                className="bg-card h-px"
-                                style={{
-                                    margin: "8px 0",
-                                }}
-                            />
+                            <div className="bg-card my-2 h-px" />
                             {"{"}
                             <br />
                             {'  "users": ['}
                             <br />
-                            <div
-                                className="border-border bg-muted relative rounded-sm border-[1px] border-solid px-2 py-1"
-                                style={{
-                                    margin: "4px 0",
-                                }}
-                            >
-                                <div
-                                    className="bg-muted text-primary absolute right-1.5 text-xs tracking-normal"
-                                    style={{
-                                        top: -8,
-                                        padding: "0 4px",
-                                    }}
-                                >
-                                    REDACTED — SENSITIVE DATA
+                            <div className="border-border bg-muted relative my-1 rounded-sm border-[1px] border-solid px-2 py-1">
+                                <div className="bg-muted text-primary absolute -top-2 right-1.5 px-1 text-xs tracking-normal">
+                                    REDACTED {"\u2014"} SENSITIVE DATA
                                 </div>
-                                <span
-                                    className="text-primary tracking-tighter"
-                                    style={{
-                                        filter: "blur(3px)",
-                                        userSelect: "none",
-                                    }}
-                                >
+                                <span className="text-primary tracking-tighter blur-[3px] select-none">
                                     {
                                         '    {"id":1,"username":"admin","password_hash":"5f4dcc3b5aa765d61d83","role":"ADMIN","email":"admin@targetcorp.com"}'
                                     }
@@ -89,12 +62,7 @@ export default function EvidenceViewer({ inline }: { inline?: boolean }) {
                     </div>
                 )}
                 {tab === "REQUEST" && (
-                    <pre
-                        className="font-inherit text-muted-foreground text-base leading-loose"
-                        style={{
-                            margin: 0,
-                        }}
-                    >
+                    <pre className="font-inherit text-muted-foreground m-0 text-base leading-loose">
                         {`GET /api/users?id=1 HTTP/1.1
 Host: app.targetcorp.com
 Cookie: session=eyJhbGciOiJIUzI1NiJ9...
@@ -187,13 +155,7 @@ id=1' AND SLEEP(4)-- -`}
                                     {r.k}
                                 </div>
                                 <div
-                                    className="text-xs"
-                                    style={{
-                                        color:
-                                            r.k === "RESULT"
-                                                ? "var(--success)"
-                                                : "var(--muted-foreground)",
-                                    }}
+                                    className={`text-xs ${r.k === "RESULT" ? "text-success" : "text-muted-foreground"}`}
                                 >
                                     {r.v}
                                 </div>
