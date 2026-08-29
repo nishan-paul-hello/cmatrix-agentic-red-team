@@ -1,5 +1,13 @@
 import React from "react";
 
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
 import { type ExecEntry } from "@/types/domain-types";
 
 export function ExecDrawerParsedTab({
@@ -10,43 +18,41 @@ export function ExecDrawerParsedTab({
     parsedRows: Record<string, string | number | boolean>[];
 }) {
     return (
-        <table className="w-full border-collapse">
-            <thead>
-                <tr className="bg-card">
+        <Table className="w-full border-collapse">
+            <TableHeader>
+                <TableRow className="bg-card">
                     {(entry.command.tool.outputShape
                         ? Object.keys(entry.command.tool.outputShape)
                         : ["PORT", "STATE", "SERVICE", "VERSION"]
                     ).map((h) => (
-                        <th
+                        <TableHead
                             key={h}
                             className="text-muted-foreground border-border border-b px-2 py-1 text-left text-xs tracking-widest uppercase"
                         >
                             {h}
-                        </th>
+                        </TableHead>
                     ))}
-                </tr>
-            </thead>
-            <tbody>
+                </TableRow>
+            </TableHeader>
+            <TableBody>
                 {parsedRows.map((r, i) => {
                     const keys = entry.command.tool.outputShape
                         ? Object.keys(entry.command.tool.outputShape)
                         : ["port", "state", "service", "version"];
                     return (
-                        <tr
-                            key={r.id ? String(r.id) : i}
-                            style={{
-                                borderBottom: "1px solid var(--border)",
-                            }}
-                        >
+                        <TableRow key={r.id ? String(r.id) : i} className="border-border border-b">
                             {keys.map((k) => (
-                                <td key={k} className="text-muted-foreground px-2 py-1 text-base">
+                                <TableCell
+                                    key={k}
+                                    className="text-muted-foreground px-2 py-1 text-base"
+                                >
                                     {String(r[k] ?? "")}
-                                </td>
+                                </TableCell>
                             ))}
-                        </tr>
+                        </TableRow>
                     );
                 })}
-            </tbody>
-        </table>
+            </TableBody>
+        </Table>
     );
 }

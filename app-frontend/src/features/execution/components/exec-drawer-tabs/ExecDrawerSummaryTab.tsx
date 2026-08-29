@@ -26,8 +26,8 @@ export function ExecDrawerSummaryTab({
                 <div key={r.k}>
                     <div className="text-muted-foreground mb-px text-xs tracking-widest">{r.k}</div>
                     <div
-                        className="text-xs tracking-tight"
-                        style={{ color: r.color ?? "var(--muted-foreground)" }}
+                        className={`text-xs tracking-tight ${r.color ? "" : "text-muted-foreground"}`}
+                        style={r.color ? { color: r.color } : undefined}
                     >
                         {r.v}
                     </div>
