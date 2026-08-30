@@ -34,6 +34,13 @@ interface DashboardProps {
     onOpenMission?: (id: string) => void;
 }
 
+const headerAlignMap: Record<string, string> = {
+    NODES: "text-right",
+    FINDINGS: "text-right",
+    COST: "text-right",
+    WORKERS: "text-center",
+};
+
 export default function Dashboard({ onNewMission, onOpenMission }: DashboardProps) {
     const router = useRouter();
     const { setActiveMissionId } = useMission();
@@ -141,13 +148,15 @@ export default function Dashboard({ onNewMission, onOpenMission }: DashboardProp
                     </div>
 
                     <div className="flex-1 overflow-auto">
-                        <Table className="text-2xs w-full border-collapse">
+                        <Table className="text-xs w-full border-collapse">
                             <TableHeader>
                                 <TableRow className="bg-card">
                                     {TABLE_HEADERS.map((h) => (
                                         <TableHead
                                             key={h}
-                                            className="border-border text-muted-foreground text-2xs border-b px-4 py-1 text-left font-semibold tracking-widest whitespace-nowrap"
+                                            className={`border-border text-muted-foreground text-xs border-b px-4 py-2 font-semibold tracking-widest whitespace-nowrap ${
+                                                headerAlignMap[h] || "text-left"
+                                            }`}
                                         >
                                             {h}
                                         </TableHead>
@@ -180,33 +189,33 @@ export default function Dashboard({ onNewMission, onOpenMission }: DashboardProp
                                             onClick={() => handleOpenMission(m.id)}
                                             className="border-border hover:bg-muted cursor-pointer border-b transition-colors duration-75"
                                         >
-                                            <TableCell className="text-primary px-4 py-1.5 font-semibold tracking-tight whitespace-nowrap">
+                                            <TableCell className="text-primary px-4 py-2 font-semibold tracking-tight whitespace-nowrap">
                                                 {m.id}
                                             </TableCell>
-                                            <TableCell className="cell-truncate text-muted-foreground max-w-cell-max px-4 py-1.5 whitespace-nowrap">
+                                            <TableCell className="cell-truncate text-muted-foreground max-w-cell-max px-4 py-2 whitespace-nowrap">
                                                 {m.target}
                                             </TableCell>
-                                            <TableCell className="text-muted-foreground text-2xs px-4 py-1.5 whitespace-nowrap">
+                                            <TableCell className="text-muted-foreground px-4 py-2 whitespace-nowrap">
                                                 {m.surface}
                                             </TableCell>
-                                            <TableCell className="text-muted-foreground text-2xs px-4 py-1.5 whitespace-nowrap">
+                                            <TableCell className="text-muted-foreground px-4 py-2 whitespace-nowrap">
                                                 {m.mode}
                                             </TableCell>
-                                            <TableCell className="px-4 py-1.5 whitespace-nowrap">
+                                            <TableCell className="px-4 py-2 whitespace-nowrap">
                                                 <StatusBadge status={m.status} />
                                             </TableCell>
-                                            <TableCell className="text-muted-foreground px-4 py-1.5 text-right">
+                                            <TableCell className="text-muted-foreground px-4 py-2 text-right">
                                                 {m.nodes}
                                             </TableCell>
                                             <TableCell
-                                                className={`px-4 py-1.5 text-right ${m.findings > 0 ? "text-destructive font-semibold" : "text-muted-foreground font-normal"}`}
+                                                className={`px-4 py-2 text-right ${m.findings > 0 ? "text-destructive font-semibold" : "text-muted-foreground font-normal"}`}
                                             >
                                                 {m.findings}
                                             </TableCell>
-                                            <TableCell className="text-muted-foreground px-4 py-1.5 text-right">
+                                            <TableCell className="text-muted-foreground px-4 py-2 text-right">
                                                 {m.cost}
                                             </TableCell>
-                                            <TableCell className="text-muted-foreground px-4 py-1.5 text-center">
+                                            <TableCell className="text-muted-foreground px-4 py-2 text-center">
                                                 {orchestrators[m.id].hasActiveWorkers() ? (
                                                     <span className="text-success text-xs font-semibold tracking-normal">
                                                         ACTIVE
