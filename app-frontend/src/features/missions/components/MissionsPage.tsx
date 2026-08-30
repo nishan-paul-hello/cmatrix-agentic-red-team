@@ -122,7 +122,11 @@ export default function MissionsPage({ onNewMission, onOpenMission }: MissionsPa
                             {TABLE_HEADERS.map((h) => (
                                 <TableHead
                                     key={h}
-                                    className="border-border text-muted-foreground border-b px-4 py-1.5 text-left text-sm font-semibold tracking-widest whitespace-nowrap"
+                                    className={`border-border text-muted-foreground border-b px-4 py-1.5 text-sm font-semibold tracking-widest whitespace-nowrap ${
+                                        ["NODES", "FINDINGS", "COST"].includes(h)
+                                            ? "text-right"
+                                            : "text-left"
+                                    }`}
                                 >
                                     {h}
                                 </TableHead>
