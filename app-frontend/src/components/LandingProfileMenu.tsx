@@ -1,9 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { LayoutDashboard, Power } from "lucide-react";
+import { Power } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
@@ -47,14 +46,6 @@ export function LandingProfileMenu() {
                     </div>
                     <div className="bg-border h-px w-full" />
                     <div className="flex flex-col p-1">
-                        <Link 
-                            href="/dashboard" 
-                            onClick={() => setIsOpen(false)}
-                            className="hover:bg-muted text-foreground flex h-auto w-full items-center justify-start gap-2 rounded-sm px-2 py-1.5 text-sm font-normal transition-colors"
-                        >
-                            <LayoutDashboard className="size-4" />
-                            Dashboard
-                        </Link>
                         <Button
                             variant="ghost"
                             className="text-destructive hover:bg-destructive/10 hover:text-destructive h-auto w-full justify-start gap-2 rounded-sm px-2 py-1.5 text-sm font-normal"

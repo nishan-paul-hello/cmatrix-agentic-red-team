@@ -60,12 +60,6 @@ export default async function LandingPage() {
                             {isAuthenticated ? "Go to Dashboard" : "Get Started"}
                             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                         </Link>
-                        <Link
-                            href="/login"
-                            className="focus-visible:ring-ring border-border bg-card/50 text-foreground hover:bg-accent hover:text-accent-foreground inline-flex h-12 w-full items-center justify-center rounded-md border px-8 text-base font-medium backdrop-blur-sm transition-colors focus-visible:ring-2 focus-visible:outline-none sm:w-auto"
-                        >
-                            View Demo
-                        </Link>
                     </div>
                 </div>
 
