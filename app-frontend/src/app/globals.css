@@ -258,19 +258,4 @@ input:-webkit-autofill:focus {
     html {
         @apply font-sans;
     }
-    
-    /* Apply pointer cursor to all standard and ARIA interactive elements */
-    button, 
-    a, 
-    [role="button"], 
-    [role="tab"], 
-    [role="link"], 
-    [role="checkbox"], 
-    [role="switch"], 
-    [role="menuitem"], 
-    [type="button"], 
-    [type="submit"], 
-    [type="reset"] {
-        @apply cursor-pointer;
-    }
 }
