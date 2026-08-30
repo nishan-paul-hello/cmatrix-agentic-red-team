@@ -102,28 +102,33 @@ export function SidebarContent({
                         aria-label="Expand Sidebar"
                     >
                         <div className="flex items-center transition-opacity duration-200 group-hover:opacity-0">
-                            <Image
-                                src="/logo-brand.svg"
-                                alt="Logo"
-                                width={20}
-                                height={20}
-                                className="h-5 w-5"
-                            />
+                            <div className="relative h-5 w-5 shrink-0">
+                                <Image
+                                    src="/logo-brand.svg"
+                                    alt="Logo"
+                                    fill
+                                    className="object-contain"
+                                />
+                            </div>
                         </div>
                         <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-200 group-hover:opacity-100">
                             <ChevronRight className="text-muted-foreground size-5" />
                         </div>
                     </button>
                 ) : (
-                    <Link href="/" className="group flex items-center gap-2.5 outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm">
-                        <Image
-                            src="/logo-brand.svg"
-                            alt="Logo"
-                            width={20}
-                            height={20}
-                            className="h-5 w-5"
-                        />
-                        <span className="text-foreground transition-colors group-hover:text-red-500 text-base font-bold tracking-wide">
+                    <Link
+                        href="/"
+                        className="group focus-visible:ring-ring flex items-center gap-2.5 rounded-sm outline-none focus-visible:ring-2"
+                    >
+                        <div className="relative h-5 w-5 shrink-0">
+                            <Image
+                                src="/logo-brand.svg"
+                                alt="Logo"
+                                fill
+                                className="object-contain"
+                            />
+                        </div>
+                        <span className="text-foreground text-base font-bold tracking-wide transition-colors group-hover:text-red-500">
                             RedGrid
                         </span>
                     </Link>

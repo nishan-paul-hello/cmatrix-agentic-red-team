@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { cn } from "@/lib/utils";
 
 /**
  * GeometricMark — the brand mark used in the sidebar logo and the login page
@@ -6,20 +7,21 @@ import Image from "next/image";
  * truth for the mark geometry and colours.
  */
 interface GeometricMarkProps {
-    /** Rendered width and height in pixels. Defaults to 28. */
-    size?: number;
+    /** Tailwind class name to apply size, e.g. "h-7 w-7". Defaults to "h-7 w-7" (28px). */
+    className?: string;
 }
 
-export default function GeometricMark({ size = 28 }: GeometricMarkProps) {
+export default function GeometricMark({ className = "h-7 w-7" }: GeometricMarkProps) {
     return (
-        <Image
-            src="/logo-brand.svg"
-            width={size}
-            height={size}
-            alt=""
-            className="block"
-            aria-hidden="true"
-            draggable={false}
-        />
+        <div className={cn("relative shrink-0", className)}>
+            <Image
+                src="/logo-brand.svg"
+                alt=""
+                fill
+                className="object-contain"
+                aria-hidden="true"
+                draggable={false}
+            />
+        </div>
     );
 }

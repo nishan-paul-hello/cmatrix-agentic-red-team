@@ -155,14 +155,14 @@ export default function Login({ onLogin }: LoginProps) {
                             rel="noopener noreferrer"
                             className="text-success inline-flex items-center gap-1 font-semibold transition-opacity hover:opacity-80"
                         >
-                            <Image
-                                src="/logo-company.svg"
-                                alt="KAI Logo"
-                                width={12}
-                                height={12}
-                                className="inline-block"
-                                style={{ width: "12px", height: "12px" }}
-                            />
+                            <div className="relative inline-block h-3 w-3">
+                                <Image
+                                    src="/logo-company.svg"
+                                    alt="KAI Logo"
+                                    fill
+                                    className="object-contain"
+                                />
+                            </div>
                             <span>KAI</span>
                         </a>{" "}
                         © 2026
