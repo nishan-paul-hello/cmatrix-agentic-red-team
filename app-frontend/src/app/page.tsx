@@ -53,10 +53,10 @@ export default async function LandingPage() {
                                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                             </Link>
                         ) : (
-                            <LoginButton 
-                                text="Get Started" 
+                            <LoginButton
+                                text="Get Started"
                                 showArrow
-                                className="group h-12 w-full gap-2 px-8 text-base sm:w-auto" 
+                                className="group h-12 w-full gap-2 px-8 text-base sm:w-auto"
                             />
                         )}
                     </div>
