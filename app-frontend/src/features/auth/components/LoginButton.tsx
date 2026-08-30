@@ -7,7 +7,8 @@ import {
     DialogContent, 
     DialogHeader, 
     DialogTitle, 
-    DialogTrigger 
+    DialogTrigger,
+    DialogDescription
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth-context";
@@ -46,13 +47,16 @@ export function LoginButton({ text, className, showArrow }: LoginButtonProps) {
                     <DialogTitle className="text-xl font-semibold tracking-tight text-center">
                         Sign in to RedGrid
                     </DialogTitle>
+                    <DialogDescription className="text-center mt-2 text-sm text-muted-foreground">
+                        Elevate your security research with autonomous VAPT and advanced benchmarking.
+                    </DialogDescription>
                 </DialogHeader>
 
                 <div className="flex flex-col gap-4 py-4 px-4">
                     <Button 
                         onClick={handleGoogleLogin} 
                         disabled={loading}
-                        className="w-full h-12 text-sm font-medium tracking-wide bg-white text-black hover:bg-gray-100 border border-transparent shadow-sm"
+                        className="w-full h-12 rounded-full text-sm font-medium tracking-wide bg-white text-black hover:bg-gray-100 border border-transparent shadow-sm"
                     >
                         {loading ? (
                             "Authenticating..."
@@ -70,12 +74,7 @@ export function LoginButton({ text, className, showArrow }: LoginButtonProps) {
                     </Button>
                 </div>
 
-                <div className="flex items-center justify-center gap-2 pb-6">
-                    <div className="bg-success h-1.5 w-1.5 shrink-0 rounded-full" aria-hidden="true" />
-                    <span className="text-muted-foreground text-xs tracking-widest uppercase">
-                        SECURE RESEARCH ENVIRONMENT
-                    </span>
-                </div>
+
             </DialogContent>
         </Dialog>
     );
