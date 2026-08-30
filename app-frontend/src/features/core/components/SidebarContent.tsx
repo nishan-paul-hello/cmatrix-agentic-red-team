@@ -75,8 +75,6 @@ export function SidebarContent({
 }) {
     return (
         <>
-            {/* Red accent stripe */}
-            <div className="bg-primary absolute top-0 bottom-0 left-0 w-0.5" aria-hidden="true" />
 
             {/* Logo */}
             <div
