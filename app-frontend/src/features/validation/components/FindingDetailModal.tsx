@@ -59,10 +59,10 @@ export function FindingDetailModal({
                         },
                     ].map((r) => (
                         <div key={r.k}>
-                            <div className="text-muted-foreground mb-px text-sm tracking-widest">
+                            <div className="text-muted-foreground mb-1 text-xs tracking-widest">
                                 {r.k}
                             </div>
-                            <div className="text-muted-foreground text-xs">{r.v}</div>
+                            <div className="text-foreground text-sm font-medium">{r.v}</div>
                         </div>
                     ))}
 
