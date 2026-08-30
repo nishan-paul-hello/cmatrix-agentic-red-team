@@ -135,6 +135,12 @@ export default tseslint.config(
             "import/no-self-import": "error",
             "import/no-cycle": "error",
             "import/no-useless-path-segments": "error",
+            "no-restricted-imports": [
+                "error",
+                {
+                    patterns: ["./*", "../*"],
+                },
+            ],
             "import/first": "error",
             "import/newline-after-import": "error",
             "import/no-default-export": "off",
