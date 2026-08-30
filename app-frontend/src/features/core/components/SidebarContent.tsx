@@ -13,7 +13,7 @@ import {
     LayoutDashboard,
     LineChart,
     List,
-    LogOut,
+    Power,
     Search,
     Settings,
     Target,
@@ -219,15 +219,26 @@ export function SidebarContent({
             <div className="border-border bg-background flex flex-col border-t">
                 <div className="relative p-2">
                     {showLogoutMenu && (
-                        <div className="border-border bg-popover absolute right-2 bottom-full left-2 mb-1 rounded-md border shadow-md">
-                            <Button
-                                variant="ghost"
-                                className="text-destructive hover:bg-destructive/10 hover:text-destructive w-full justify-start gap-2 rounded-sm px-3 py-2 text-sm"
-                                onClick={() => setShowLogoutMenu(false)}
-                            >
-                                <LogOut className="size-4" />
-                                Log out
-                            </Button>
+                        <div className="border-border bg-popover absolute bottom-full left-2 z-50 mb-1 flex min-w-52 w-max flex-col rounded-md border shadow-md">
+                            <div className="flex flex-col px-3 py-3">
+                                <span className="text-foreground text-sm font-medium leading-none">
+                                    Nishan Paul
+                                </span>
+                                <span className="text-muted-foreground mt-1.5 text-xs">
+                                    nishan.paul@example.com
+                                </span>
+                            </div>
+                            <div className="bg-border h-px w-full" />
+                            <div className="p-1">
+                                <Button
+                                    variant="ghost"
+                                    className="text-destructive hover:bg-destructive/10 hover:text-destructive h-auto w-full justify-start gap-2 rounded-sm px-2 py-1.5 text-sm"
+                                    onClick={() => setShowLogoutMenu(false)}
+                                >
+                                    <Power className="size-4" />
+                                    Log out
+                                </Button>
+                            </div>
                         </div>
                     )}
                     <Button
@@ -246,7 +257,6 @@ export function SidebarContent({
                                 <span className="w-full truncate text-sm leading-none font-medium">
                                     Nishan Paul
                                 </span>
-                                <span className="text-muted-foreground mt-1 text-xs">Free</span>
                             </div>
                         )}
                     </Button>

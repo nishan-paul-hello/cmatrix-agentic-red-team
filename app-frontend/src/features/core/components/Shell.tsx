@@ -119,7 +119,7 @@ export default function Shell({
             {/* ── Desktop Sidebar ────────────────────────────────────────────── */}
             <aside
                 className={cn(
-                    "border-border bg-background relative hidden flex-shrink-0 flex-col overflow-y-auto border-r transition-all duration-300 lg:flex",
+                    "border-border bg-background relative hidden flex-shrink-0 flex-col border-r transition-all duration-300 lg:flex",
                     isSidebarCollapsed ? "w-[64px]" : "w-[200px]",
                 )}
                 aria-label="Main navigation"
