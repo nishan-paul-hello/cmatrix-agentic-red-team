@@ -107,7 +107,7 @@ export default function CostBrowser() {
                         </Select>
                     </div>
                 </div>
-                <TabsList variant="line" className="flex justify-start overflow-x-auto p-0">
+                <TabsList variant="line" className="flex justify-start overflow-x-auto overflow-y-hidden p-0">
                     {aggTabs.map((t) => (
                         <TabsTrigger
                             key={t}

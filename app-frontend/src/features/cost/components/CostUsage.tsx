@@ -97,7 +97,7 @@ export default function CostUsage() {
                             ].map((h) => (
                                 <TableHead
                                     key={h}
-                                    className={`px-3 py-1 text-xs tracking-widest ${h === "SPECIALIST" || h === "MODEL" ? "w-[20%]" : "w-[10%]"} ${h === "COST" || h === "SHARE" || h === "CALLS" ? "text-right" : "text-left"}`}
+                                    className={`px-3 py-1 text-xs tracking-widest ${h === "SPECIALIST" || h === "MODEL" ? "w-[20%]" : "w-[10%]"} ${h !== "SPECIALIST" && h !== "MODEL" ? "text-right" : "text-left"}`}
                                 >
                                     {h}
                                 </TableHead>
@@ -142,7 +142,7 @@ export default function CostUsage() {
                                                     }}
                                                 />
                                             </div>
-                                            <span className="text-muted-foreground text-sm">
+                                            <span className="text-muted-foreground w-10 text-right text-sm">
                                                 {s.pct}%
                                             </span>
                                         </div>
