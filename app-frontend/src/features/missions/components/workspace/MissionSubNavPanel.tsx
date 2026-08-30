@@ -24,7 +24,7 @@ export default function MissionSubNavPanel({
 
     return (
         <div className="bg-background border-border lg:w-panel-xs flex w-full flex-shrink-0 flex-col border-b lg:overflow-y-auto lg:border-r lg:border-b-0">
-            <div className="flex flex-row overflow-x-auto py-2 lg:flex-1 lg:flex-col">
+            <div className="flex flex-row overflow-x-auto lg:flex-1 lg:flex-col">
                 {subNavItems.map((item) => {
                     const active = subNav === item.id;
                     return (
