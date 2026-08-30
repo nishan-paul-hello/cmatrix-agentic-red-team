@@ -108,7 +108,7 @@ export function SidebarContent({
                 ) : (
                     <div className="flex items-center gap-2.5">
                         <GeometricMark size={20} />
-                        <span className="text-foreground text-xs font-bold tracking-widest">
+                        <span className="text-foreground text-base font-bold tracking-wide">
                             RedGrid
                         </span>
                     </div>
@@ -124,21 +124,21 @@ export function SidebarContent({
                     <Button
                         variant="ghost"
                         size="icon"
-                        className="text-muted-foreground hover:text-foreground h-8 w-8"
+                        className="text-muted-foreground/70 hover:bg-muted/50 hover:text-foreground h-6 w-6"
                         title="Command Palette (⌘K)"
                         onClick={onOpenCommandPalette}
                     >
-                        <Search className={cn(isCollapsed ? "size-5" : "size-4")} />
+                        <Search className={cn(isCollapsed ? "size-4" : "size-3.5")} />
                     </Button>
                     {!isCollapsed && toggleCollapse && (
                         <Button
                             variant="ghost"
                             size="icon"
                             onClick={toggleCollapse}
-                            className="text-muted-foreground hover:text-foreground h-8 w-8"
+                            className="text-muted-foreground/70 hover:bg-muted/50 hover:text-foreground h-6 w-6"
                             title="Collapse Sidebar"
                         >
-                            <ChevronLeft className="size-4" />
+                            <ChevronLeft className="size-3.5" />
                         </Button>
                     )}
                 </div>
