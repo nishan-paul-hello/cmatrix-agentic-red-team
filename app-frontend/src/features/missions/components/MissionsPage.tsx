@@ -1,6 +1,7 @@
 "use client";
 
 // ─── Props ────────────────────────────────────────────────────────────────────
+import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
@@ -80,9 +81,10 @@ export default function MissionsPage({ onNewMission, onOpenMission }: MissionsPa
                     <Button
                         variant="outline"
                         onClick={handleNewMission}
-                        className="text-primary hover:border-primary hover:bg-muted h-auto rounded-sm px-3 py-1 text-base font-semibold tracking-widest transition-colors duration-100"
+                        className="text-primary hover:border-primary hover:bg-muted flex h-auto items-center gap-2 rounded-sm px-3 py-1 text-base font-semibold tracking-widest transition-colors duration-100"
                     >
-                        NEW MISSION →
+                        <Plus className="h-4 w-4" />
+                        NEW MISSION
                     </Button>
                 </div>
             </div>
