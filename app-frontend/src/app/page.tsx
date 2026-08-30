@@ -11,7 +11,7 @@ export default async function LandingPage() {
     const cookieStore = await cookies();
     const isAuthenticated = cookieStore.get("auth")?.value === "1";
     return (
-        <div className="bg-background text-foreground selection:bg-primary/30 flex min-h-screen flex-col">
+        <div className="bg-background text-foreground flex min-h-screen flex-col">
             {/* Header / Navbar */}
             <header className="border-border bg-background/80 sticky top-0 z-50 flex h-16 items-center justify-between border-b px-6 backdrop-blur-sm lg:px-12">
                 <div className="flex items-center gap-2 text-xl font-bold tracking-tight">
