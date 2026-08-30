@@ -41,7 +41,7 @@ export default function MemoryPage({
                     {missionId ? `MISSION / ${missionId}` : "KNOWLEDGE"}
                 </div>
                 <h1 className="text-foreground mb-3 text-xs font-bold tracking-wide">MEMORY</h1>
-                <TabsList variant="line" className="flex justify-start overflow-x-auto p-0">
+                <TabsList variant="line" className="flex justify-start overflow-x-auto p-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                     {tabs.map((t) => (
                         <TabsTrigger
                             key={t}
@@ -65,7 +65,7 @@ export default function MemoryPage({
                 </TabsList>
             </div>
             {/* G2: Tier legend row */}
-            <div className="border-border shrink-0 border-b px-6 py-1.5">
+            <div className="border-border shrink-0 border-b px-6 py-1.5 flex flex-row flex-wrap items-center gap-6">
                 {[
                     {
                         n: 1,

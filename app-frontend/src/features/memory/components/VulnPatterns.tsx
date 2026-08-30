@@ -23,7 +23,7 @@ export default function VulnPatterns() {
     return (
         <div className="flex min-h-0 flex-1 flex-col overflow-hidden lg:flex-row">
             <div className="lg:w-panel-md border-border w-full flex-shrink-0 overflow-y-auto border-b lg:border-r lg:border-b-0">
-                <div className="text-muted-foreground border-border border-b text-sm tracking-widest">
+                <div className="text-muted-foreground border-border border-b px-4 py-2 text-sm tracking-widest">
                     {PATTERNS.length} PATTERNS
                 </div>
                 {PATTERNS.map((p) => (
