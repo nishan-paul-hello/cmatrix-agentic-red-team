@@ -30,9 +30,16 @@ export default async function LandingPage() {
             {/* Main Content */}
             <main className="relative flex flex-1 flex-col items-center justify-center overflow-hidden p-6 text-center lg:p-12">
                 <div className="z-10 max-w-3xl space-y-8">
-                    <div className="border-border bg-card/50 text-muted-foreground inline-flex items-center rounded-full border px-3 py-1 text-sm font-medium backdrop-blur-sm">
-                        <span className="bg-primary mr-2 flex h-2 w-2 animate-pulse rounded-full" />
-                        LLM-orchestrated multi-agent framework for autonomous VAPT
+                    <div className="group relative inline-flex items-center justify-center bg-background px-6 py-2.5">
+                        <div className="absolute inset-0 border border-foreground/10" />
+                        <div className="absolute left-[-1px] top-[-1px] h-2.5 w-2.5 border-l-2 border-t-2 border-foreground/80 transition-colors group-hover:border-foreground" />
+                        <div className="absolute bottom-[-1px] right-[-1px] h-2.5 w-2.5 border-b-2 border-r-2 border-foreground/80 transition-colors group-hover:border-foreground" />
+                        
+                        <div className="relative flex items-center gap-2 font-mono text-sm font-medium tracking-tight text-foreground">
+                            <span className="mr-1 font-bold text-foreground/50 transition-colors group-hover:text-foreground/80">&#47;&#47;</span>
+                            <span>LLM-orchestrated multi-agent framework for autonomous VAPT</span>
+                            <span className="ml-1 inline-block h-4 w-1.5 bg-foreground/80 animate-pulse transition-colors group-hover:bg-foreground" />
+                        </div>
                     </div>
 
                     <h1 className="text-5xl font-extrabold tracking-tight sm:text-6xl lg:text-7xl">
