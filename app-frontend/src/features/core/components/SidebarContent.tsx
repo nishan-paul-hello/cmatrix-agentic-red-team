@@ -1,5 +1,4 @@
 import { useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -25,6 +24,7 @@ import {
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import GeometricMark from "@/components/ui/GeometricMark";
 import { type NavItem } from "@/features/core/components/Shell";
 import { cn } from "@/lib/utils";
 
@@ -102,14 +102,7 @@ export function SidebarContent({
                         aria-label="Expand Sidebar"
                     >
                         <div className="flex items-center transition-opacity duration-200 group-hover:opacity-0">
-                            <div className="relative h-5 w-5 shrink-0">
-                                <Image
-                                    src="/logo-brand.svg"
-                                    alt="Logo"
-                                    fill
-                                    className="object-contain"
-                                />
-                            </div>
+                            <GeometricMark className="h-5 w-5" />
                         </div>
                         <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-200 group-hover:opacity-100">
                             <ChevronRight className="text-muted-foreground size-5" />
@@ -120,14 +113,7 @@ export function SidebarContent({
                         href="/"
                         className="group focus-visible:ring-ring flex items-center gap-2.5 rounded-sm outline-none focus-visible:ring-2"
                     >
-                        <div className="relative h-5 w-5 shrink-0">
-                            <Image
-                                src="/logo-brand.svg"
-                                alt="Logo"
-                                fill
-                                className="object-contain"
-                            />
-                        </div>
+                        <GeometricMark className="h-5 w-5" />
                         <span className="text-foreground text-base font-bold tracking-wide transition-colors group-hover:text-red-500">
                             RedGrid
                         </span>

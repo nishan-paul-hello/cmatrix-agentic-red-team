@@ -55,7 +55,7 @@ export default function Login({ onLogin }: LoginProps) {
             <div className="relative flex w-full max-w-[360px] flex-col items-center sm:w-[360px]">
                 {/* Brand header */}
                 <div className="mb-8 flex items-center gap-3">
-                    <GeometricMark size={28} />
+                    <GeometricMark className="h-7 w-7" />
                     <div className="flex flex-col">
                         <span className="text-foreground text-sm font-bold tracking-widest">
                             RedGrid

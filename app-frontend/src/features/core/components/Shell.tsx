@@ -87,7 +87,7 @@ export default function Shell({
                     >
                         <Menu className="size-5" />
                     </Button>
-                    <GeometricMark size={20} />
+                    <GeometricMark className="h-5 w-5" />
                     <span className="text-foreground text-xs font-bold tracking-widest">
                         RedGrid
                     </span>

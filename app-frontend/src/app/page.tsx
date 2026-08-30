@@ -1,10 +1,10 @@
 import { cookies } from "next/headers";
 import Image from "next/image";
-import GeometricMark from "@/components/ui/GeometricMark";
 import Link from "next/link";
 import { Activity, ArrowRight, Shield, Zap } from "lucide-react";
 
 import { LandingProfileMenu } from "@/components/LandingProfileMenu";
+import GeometricMark from "@/components/ui/GeometricMark";
 
 export default async function LandingPage() {
     const cookieStore = await cookies();
