@@ -29,11 +29,8 @@ export default async function LandingPage() {
                 </nav>
             </header>
 
-            {/* Main Content */}
+                {/* Main Content */}
             <main className="relative flex flex-1 flex-col items-center justify-center overflow-hidden p-6 text-center lg:p-12">
-                {/* Background glow effects */}
-                <div className="bg-primary/10 pointer-events-none absolute top-1/2 left-1/2 -z-10 h-[800px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[100px]" />
-                <div className="bg-primary/5 pointer-events-none absolute top-0 right-0 -z-10 h-[500px] w-[500px] rounded-full blur-[80px]" />
 
                 <div className="z-10 max-w-3xl space-y-8">
                     <div className="border-border bg-card/50 text-muted-foreground inline-flex items-center rounded-full border px-3 py-1 text-sm font-medium backdrop-blur-sm">
@@ -43,7 +40,7 @@ export default async function LandingPage() {
 
                     <h1 className="text-5xl font-extrabold tracking-tight sm:text-6xl lg:text-7xl">
                         Agentic{" "}
-                        <span className="text-primary drop-shadow-[0_0_15px_rgba(227,27,35,0.3)]">
+                        <span className="text-primary">
                             Red Team
                         </span>
                     </h1>
@@ -55,7 +52,7 @@ export default async function LandingPage() {
                     <div className="flex flex-col items-center justify-center gap-4 pt-4 sm:flex-row">
                         <Link
                             href={isAuthenticated ? "/dashboard" : "/login"}
-                            className="focus-visible:ring-ring bg-primary text-primary-foreground hover:bg-primary/90 group inline-flex h-12 w-full items-center justify-center gap-2 rounded-md px-8 text-base font-medium shadow-[0_0_20px_rgba(227,27,35,0.2)] transition-colors hover:shadow-[0_0_30px_rgba(227,27,35,0.4)] focus-visible:ring-2 focus-visible:outline-none sm:w-auto"
+                            className="focus-visible:ring-ring bg-primary text-primary-foreground hover:bg-primary/90 group inline-flex h-12 w-full items-center justify-center gap-2 rounded-md px-8 text-base font-medium transition-colors focus-visible:ring-2 focus-visible:outline-none sm:w-auto"
                         >
                             {isAuthenticated ? "Go to Dashboard" : "Get Started"}
                             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
