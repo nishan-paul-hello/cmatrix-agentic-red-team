@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -268,7 +268,7 @@ export function SidebarContent({
                             isCollapsed ? "justify-center" : "justify-start gap-3",
                         )}
                     >
-                        <div className="bg-white text-black flex size-8 shrink-0 items-center justify-center rounded-full text-xs font-bold">
+                        <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-white text-xs font-bold text-black">
                             NP
                         </div>
                         {!isCollapsed && (

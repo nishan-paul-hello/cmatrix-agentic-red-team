@@ -1,8 +1,9 @@
 import { cookies } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
-import { Activity, ArrowRight, Shield, Zap } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
+import ArchitectureAnimation from "@/components/ArchitectureAnimation";
 import { LandingProfileMenu } from "@/components/LandingProfileMenu";
 import GeometricMark from "@/components/ui/GeometricMark";
 import { LoginButton } from "@/features/auth/components/LoginButton";
@@ -30,12 +31,12 @@ export default async function LandingPage() {
             {/* Main Content */}
             <main className="relative flex flex-1 flex-col items-center justify-center overflow-hidden p-6 text-center lg:p-12">
                 <div className="z-10 max-w-3xl space-y-8">
-                    <div className="group relative inline-flex items-center justify-center bg-background px-6 py-2.5">
-                        <div className="absolute inset-0 border border-foreground/10" />
-                        <div className="absolute left-[-1px] top-[-1px] h-2.5 w-2.5 border-l-2 border-t-2 border-foreground/80 transition-colors group-hover:border-foreground" />
-                        <div className="absolute bottom-[-1px] right-[-1px] h-2.5 w-2.5 border-b-2 border-r-2 border-foreground/80 transition-colors group-hover:border-foreground" />
-                        
-                        <div className="relative flex items-center gap-2 font-mono text-sm font-medium tracking-tight text-foreground">
+                    <div className="group bg-background relative inline-flex items-center justify-center px-6 py-2.5">
+                        <div className="border-foreground/10 absolute inset-0 border" />
+                        <div className="border-foreground/80 group-hover:border-foreground absolute top-[-1px] left-[-1px] h-2.5 w-2.5 border-t-2 border-l-2 transition-colors" />
+                        <div className="border-foreground/80 group-hover:border-foreground absolute right-[-1px] bottom-[-1px] h-2.5 w-2.5 border-r-2 border-b-2 transition-colors" />
+
+                        <div className="text-foreground relative flex items-center gap-2 font-mono text-sm font-medium tracking-tight">
                             <span>LLM-orchestrated multi-agent framework for autonomous VAPT</span>
                         </div>
                     </div>
@@ -67,45 +68,8 @@ export default async function LandingPage() {
                     </div>
                 </div>
 
-                {/* Features Grid */}
-                <div className="z-10 mt-24 grid w-full max-w-5xl grid-cols-1 gap-6 text-left md:grid-cols-3">
-                    <div className="border-border bg-card/30 hover:bg-card/80 group rounded-xl border p-6 backdrop-blur-sm transition-colors">
-                        <div className="bg-primary/10 text-primary group-hover:bg-primary/20 mb-4 inline-flex h-10 w-10 items-center justify-center rounded-lg transition-colors">
-                            <Activity className="h-5 w-5" />
-                        </div>
-                        <h3 className="text-foreground mb-2 text-lg font-semibold">
-                            Real-time Monitoring
-                        </h3>
-                        <p className="text-muted-foreground text-sm leading-relaxed">
-                            Live dashboard tracking agent operations and security posture across
-                            your entire infrastructure.
-                        </p>
-                    </div>
-                    <div className="border-border bg-card/30 hover:bg-card/80 group rounded-xl border p-6 backdrop-blur-sm transition-colors">
-                        <div className="bg-primary/10 text-primary group-hover:bg-primary/20 mb-4 inline-flex h-10 w-10 items-center justify-center rounded-lg transition-colors">
-                            <Zap className="h-5 w-5" />
-                        </div>
-                        <h3 className="text-foreground mb-2 text-lg font-semibold">
-                            Autonomous Execution
-                        </h3>
-                        <p className="text-muted-foreground text-sm leading-relaxed">
-                            Deploy self-directed agents that adapt to your environment and chain
-                            vulnerabilities intelligently.
-                        </p>
-                    </div>
-                    <div className="border-border bg-card/30 hover:bg-card/80 group rounded-xl border p-6 backdrop-blur-sm transition-colors">
-                        <div className="bg-primary/10 text-primary group-hover:bg-primary/20 mb-4 inline-flex h-10 w-10 items-center justify-center rounded-lg transition-colors">
-                            <Shield className="h-5 w-5" />
-                        </div>
-                        <h3 className="text-foreground mb-2 text-lg font-semibold">
-                            Comprehensive Coverage
-                        </h3>
-                        <p className="text-muted-foreground text-sm leading-relaxed">
-                            Continuous scanning mapped against MITRE ATT&CK framework for full
-                            spectrum visibility.
-                        </p>
-                    </div>
-                </div>
+                {/* Workflow Animation */}
+                <ArchitectureAnimation />
             </main>
 
             {/* Footer */}
@@ -113,7 +77,7 @@ export default async function LandingPage() {
                 <div className="flex flex-col items-center justify-center gap-3">
                     <div className="flex items-center gap-1.5">
                         <span className="leading-none">Built by</span>
-                        <a 
+                        <a
                             href="https://kaiofficial.xyz"
                             target="_blank"
                             rel="noopener noreferrer"

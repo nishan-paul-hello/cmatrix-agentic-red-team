@@ -28,7 +28,7 @@ export function LandingProfileMenu() {
                 onClick={() => setIsOpen(!isOpen)}
                 className="hover:bg-accent hover:text-accent-foreground border-border bg-card/50 flex cursor-pointer items-center gap-2 rounded-full border p-1 pr-3 text-sm transition-colors"
             >
-                <div className="bg-white text-black flex size-7 shrink-0 items-center justify-center rounded-full text-xs font-bold">
+                <div className="flex size-7 shrink-0 items-center justify-center rounded-full bg-white text-xs font-bold text-black">
                     NP
                 </div>
                 <span className="text-sm font-medium">Nishan Paul</span>
