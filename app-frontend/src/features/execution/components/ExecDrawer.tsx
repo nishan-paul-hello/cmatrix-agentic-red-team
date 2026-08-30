@@ -3,13 +3,12 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { getStatusColor } from "@/components/ui/StatusBadge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ExecDrawerElChangesTab } from "@/features/execution/components/exec-drawer-tabs/ExecDrawerElChangesTab";
+import { ExecDrawerParsedTab } from "@/features/execution/components/exec-drawer-tabs/ExecDrawerParsedTab";
+import { ExecDrawerRawTab } from "@/features/execution/components/exec-drawer-tabs/ExecDrawerRawTab";
+import { ExecDrawerSummaryTab } from "@/features/execution/components/exec-drawer-tabs/ExecDrawerSummaryTab";
+import { ExecDrawerTrajectoryTab } from "@/features/execution/components/exec-drawer-tabs/ExecDrawerTrajectoryTab";
 import { type ExecEntry } from "@/types/domain-types";
-
-import { ExecDrawerElChangesTab } from '@/features/execution/components/exec-drawer-tabs/ExecDrawerElChangesTab';
-import { ExecDrawerParsedTab } from '@/features/execution/components/exec-drawer-tabs/ExecDrawerParsedTab';
-import { ExecDrawerRawTab } from '@/features/execution/components/exec-drawer-tabs/ExecDrawerRawTab';
-import { ExecDrawerSummaryTab } from '@/features/execution/components/exec-drawer-tabs/ExecDrawerSummaryTab';
-import { ExecDrawerTrajectoryTab } from '@/features/execution/components/exec-drawer-tabs/ExecDrawerTrajectoryTab';
 
 export function ExecDrawer({
     entry,

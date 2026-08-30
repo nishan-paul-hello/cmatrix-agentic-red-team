@@ -1,12 +1,11 @@
 import Btn from "@/features/validation/components/Btn";
+import { FindingDetailModal } from "@/features/validation/components/FindingDetailModal";
 import OraclePanel from "@/features/validation/components/OraclePanel";
 import StateMachineModal from "@/features/validation/components/StateMachineModal";
+import { ValidationTable } from "@/features/validation/components/ValidationTable";
 import { useValidationData } from "@/features/validation/hooks/useValidationData";
 import { useTelemetry } from "@/hooks/useTelemetry";
 import { cn } from "@/lib/utils";
-
-import { FindingDetailModal } from '@/features/validation/components/FindingDetailModal';
-import { ValidationTable } from '@/features/validation/components/ValidationTable';
 
 export default function ValidationCenter() {
     const { logEvent } = useTelemetry();

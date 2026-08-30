@@ -9,10 +9,13 @@ import { Button } from "@/components/ui/button";
 
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-import { CAT_STYLE, HELP_KEYS, type PaletteItem } from '@/features/core/components/CommandPaletteConstants';
+import {
+    CAT_STYLE,
+    HELP_KEYS,
+    type PaletteItem,
+} from "@/features/core/components/CommandPaletteConstants";
 
 export interface CommandPaletteContextType {
     query: string;

@@ -3,10 +3,9 @@
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { ReportListSidebar } from "@/features/reports/components/ReportListSidebar";
+import { ReportPreviewPane } from "@/features/reports/components/ReportPreviewPane";
 import { useReportsData } from "@/features/reports/hooks/useReportsData";
-
-import { ReportListSidebar } from '@/features/reports/components/ReportListSidebar';
-import { ReportPreviewPane } from '@/features/reports/components/ReportPreviewPane';
 
 export default function ReportsPage() {
     const [page, setPage] = useState(1);

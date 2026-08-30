@@ -1,6 +1,8 @@
 import { useState } from "react";
 
 import { emitAuditEvent } from "@/features/audit/emitAuditEvent";
+import { EscalationDetailPane } from "@/features/escalation/components/EscalationDetailPane";
+import { EscalationHistorySidebar } from "@/features/escalation/components/EscalationHistorySidebar";
 import {
     ESCALATION_CATEGORIES,
     globalEscalationManager,
@@ -12,9 +14,6 @@ import { useTelemetry } from "@/hooks/useTelemetry";
 import { useAuth } from "@/lib/auth-context";
 import { useServices } from "@/lib/services-context";
 import { type RiskAssessment } from "@/types/domain-types";
-
-import { EscalationDetailPane } from '@/features/escalation/components/EscalationDetailPane';
-import { EscalationHistorySidebar } from '@/features/escalation/components/EscalationHistorySidebar';
 
 export default function HumanEscalation() {
     const [activeReason, setActiveReason] = useState<EscalationReason>("HIGH_RISK_ACTION");

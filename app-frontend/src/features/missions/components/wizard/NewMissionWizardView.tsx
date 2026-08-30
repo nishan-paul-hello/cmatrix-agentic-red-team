@@ -10,10 +10,9 @@ import {
     WizardContext,
     type WizardContextType,
 } from "@/features/missions/components/wizard/WizardContext";
+import { WizardMissionSummary } from "@/features/missions/components/wizard/WizardMissionSummary";
+import { WizardStepIndicator } from "@/features/missions/components/wizard/WizardStepIndicator";
 import { AUDIT_RESULT, type AuditEntry } from "@/types/domain-types";
-
-import { WizardMissionSummary } from '@/features/missions/components/wizard/WizardMissionSummary';
-import { WizardStepIndicator } from '@/features/missions/components/wizard/WizardStepIndicator';
 
 export default function NewMissionWizardView(props: WizardContextType) {
     const { eventBus, logEvent } = props;

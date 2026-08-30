@@ -148,13 +148,13 @@ export default function Dashboard({ onNewMission, onOpenMission }: DashboardProp
                     </div>
 
                     <div className="flex-1 overflow-auto">
-                        <Table className="text-xs w-full border-collapse">
+                        <Table className="w-full border-collapse text-xs">
                             <TableHeader>
                                 <TableRow className="bg-card">
                                     {TABLE_HEADERS.map((h) => (
                                         <TableHead
                                             key={h}
-                                            className={`border-border text-muted-foreground text-xs border-b px-4 py-2 font-semibold tracking-widest whitespace-nowrap ${
+                                            className={`border-border text-muted-foreground border-b px-4 py-2 text-xs font-semibold tracking-widest whitespace-nowrap ${
                                                 headerAlignMap[h] || "text-left"
                                             }`}
                                         >

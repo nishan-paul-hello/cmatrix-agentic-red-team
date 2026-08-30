@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { BenchmarkTable } from "@/features/benchmarks/components/BenchmarkTable";
 import { BenchmarksRepository } from "@/features/benchmarks/data/BenchmarksRepository";
 import {
     ALL_BENCH_RUNS,
@@ -9,8 +10,6 @@ import {
     type BenchTier,
 } from "@/features/benchmarks/data/fixtures/benchmarksMockData";
 import { BENCHMARK_STATUS } from "@/types/domain-types";
-
-import { BenchmarkTable } from '@/features/benchmarks/components/BenchmarkTable';
 
 const ALL_TIERS: BenchTier[] = [
     "TIER0_SANDBOX",

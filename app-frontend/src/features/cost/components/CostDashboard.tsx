@@ -61,7 +61,10 @@ export default function CostDashboard({
                     <h1 className="text-foreground mb-3 text-xs font-bold tracking-wide">
                         COST &amp; USAGE
                     </h1>
-                    <TabsList variant="line" className="flex justify-start overflow-x-auto overflow-y-hidden p-0">
+                    <TabsList
+                        variant="line"
+                        className="flex justify-start overflow-x-auto overflow-y-hidden p-0"
+                    >
                         {(["COST & USAGE", "MODEL BREAKDOWN", "CONTEXT STATE"] as CostTab[]).map(
                             (t) => (
                                 <TabsTrigger

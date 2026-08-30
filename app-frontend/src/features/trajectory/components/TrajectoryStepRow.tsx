@@ -95,7 +95,7 @@ export const TrajectoryStepRow = React.memo(function TrajectoryStepRowInner({
                 className={`group block w-full flex-1 cursor-pointer text-left focus:outline-none ${!isLast ? "pb-3" : "pb-0"} mb-0`}
             >
                 <div
-                    className={`hover:bg-background overflow-hidden rounded-sm border-[1px] border-solid transition-colors group-focus:ring-1 group-focus:ring-primary ${isSel ? "bg-background border-primary" : "bg-transparent border-border"}`}
+                    className={`hover:bg-background group-focus:ring-primary overflow-hidden rounded-sm border-[1px] border-solid transition-colors group-focus:ring-1 ${isSel ? "bg-background border-primary" : "border-border bg-transparent"}`}
                 >
                     <div className="border-border flex items-center gap-3 border-b px-4 py-2">
                         <span className="text-muted-foreground min-w-5 text-sm tracking-wide">

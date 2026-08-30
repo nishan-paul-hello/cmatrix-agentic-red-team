@@ -1,10 +1,9 @@
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { AblationLabDetailPanel } from "@/features/research/components/AblationLabDetailPanel";
+import { AblationLabTable } from "@/features/research/components/AblationLabTable";
 import { ABLATIONS, type AblationSpec } from "@/features/research/data/fixtures/researchMockData";
-
-import { AblationLabDetailPanel } from '@/features/research/components/AblationLabDetailPanel';
-import { AblationLabTable } from '@/features/research/components/AblationLabTable';
 
 export default function AblationLab() {
     const [sel, setSel] = useState<AblationSpec>(ABLATIONS[0]);

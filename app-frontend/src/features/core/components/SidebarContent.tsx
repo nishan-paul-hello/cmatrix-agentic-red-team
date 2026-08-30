@@ -75,7 +75,6 @@ export function SidebarContent({
 }) {
     return (
         <>
-
             {/* Logo */}
             <div
                 className={cn(

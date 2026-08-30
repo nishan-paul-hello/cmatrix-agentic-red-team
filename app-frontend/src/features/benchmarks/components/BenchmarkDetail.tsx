@@ -2,15 +2,14 @@ import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { BenchmarkCategoriesTab } from "@/features/benchmarks/components/BenchmarkCategoriesTab";
+import { BenchmarkOverviewTab } from "@/features/benchmarks/components/BenchmarkOverviewTab";
+import { BenchmarkTasksTab } from "@/features/benchmarks/components/BenchmarkTasksTab";
 import {
     TIER_META,
     type BenchRecord,
 } from "@/features/benchmarks/data/fixtures/benchmarksMockData";
 import { useBenchmarkDetailData } from "@/features/benchmarks/hooks/useBenchmarkDetailData";
-
-import { BenchmarkCategoriesTab } from '@/features/benchmarks/components/BenchmarkCategoriesTab';
-import { BenchmarkOverviewTab } from '@/features/benchmarks/components/BenchmarkOverviewTab';
-import { BenchmarkTasksTab } from '@/features/benchmarks/components/BenchmarkTasksTab';
 
 export default function BenchmarkDetail({
     bench,
