@@ -255,7 +255,7 @@ export function SidebarContent({
                             isCollapsed ? "justify-center" : "justify-start gap-3",
                         )}
                     >
-                        <div className="bg-primary text-primary-foreground flex size-8 shrink-0 items-center justify-center rounded-full text-xs font-bold">
+                        <div className="bg-white text-black flex size-8 shrink-0 items-center justify-center rounded-full text-xs font-bold">
                             NP
                         </div>
                         {!isCollapsed && (
