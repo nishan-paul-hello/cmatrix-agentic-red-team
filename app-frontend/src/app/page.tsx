@@ -111,7 +111,8 @@ export default async function LandingPage() {
                             alt="Company Logo"
                             width={120}
                             height={24}
-                            className="h-6 w-auto opacity-60 grayscale filter transition-opacity hover:opacity-100 hover:grayscale-0"
+                            className="opacity-60 grayscale filter transition-opacity hover:opacity-100 hover:grayscale-0"
+                            style={{ width: "120px", height: "24px" }}
                         />
                     </div>
                     <p>&copy; {new Date().getFullYear()} RedGrid. All rights reserved.</p>

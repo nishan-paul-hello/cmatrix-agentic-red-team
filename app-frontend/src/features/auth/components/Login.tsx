@@ -161,6 +161,7 @@ export default function Login({ onLogin }: LoginProps) {
                                 width={12}
                                 height={12}
                                 className="inline-block"
+                                style={{ width: "12px", height: "12px" }}
                             />
                             <span>KAI</span>
                         </a>{" "}
