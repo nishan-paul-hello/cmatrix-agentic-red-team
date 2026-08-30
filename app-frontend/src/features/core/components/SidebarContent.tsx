@@ -85,8 +85,8 @@ export function SidebarContent({
             {/* Logo and Top Actions */}
             <div
                 className={cn(
-                    "border-border flex border-b py-4 lg:py-3",
-                    isCollapsed ? "flex-col items-center gap-3 px-2" : "items-center justify-between px-4",
+                    "border-border flex h-14 shrink-0 items-center border-b",
+                    isCollapsed ? "justify-center px-2" : "justify-between px-4",
                 )}
             >
                 {/* Logo Area (Interactive when collapsed) */}
@@ -115,33 +115,30 @@ export function SidebarContent({
                 )}
 
                 {/* Desktop top actions (Search & Collapse) */}
-                <div
-                    className={cn(
-                        "hidden items-center gap-1 lg:flex",
-                        isCollapsed ? "w-full flex-col" : "",
-                    )}
-                >
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        className="text-muted-foreground/70 hover:bg-muted/50 hover:text-foreground h-6 w-6"
-                        title="Command Palette (⌘K)"
-                        onClick={onOpenCommandPalette}
-                    >
-                        <Search className={cn(isCollapsed ? "size-4" : "size-3.5")} />
-                    </Button>
-                    {!isCollapsed && toggleCollapse && (
+                {!isCollapsed && (
+                    <div className="hidden items-center gap-1 lg:flex">
                         <Button
                             variant="ghost"
                             size="icon"
-                            onClick={toggleCollapse}
                             className="text-muted-foreground/70 hover:bg-muted/50 hover:text-foreground h-6 w-6"
-                            title="Collapse Sidebar"
+                            title="Command Palette (⌘K)"
+                            onClick={onOpenCommandPalette}
                         >
-                            <ChevronLeft className="size-3.5" />
+                            <Search className="size-3.5" />
                         </Button>
-                    )}
-                </div>
+                        {toggleCollapse && (
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={toggleCollapse}
+                                className="text-muted-foreground/70 hover:bg-muted/50 hover:text-foreground h-6 w-6"
+                                title="Collapse Sidebar"
+                            >
+                                <ChevronLeft className="size-3.5" />
+                            </Button>
+                        )}
+                    </div>
+                )}
 
                 {/* Mobile close button inside drawer */}
                 <Button
