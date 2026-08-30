@@ -1,4 +1,6 @@
 import { useState } from "react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 import {
     Activity,
     AlertTriangle,
@@ -22,7 +24,6 @@ import {
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import GeometricMark from "@/components/ui/GeometricMark";
 import { type NavItem } from "@/features/core/components/Shell";
 import { cn } from "@/lib/utils";
 
@@ -79,6 +80,7 @@ export function SidebarContent({
     onOpenCommandPalette?: () => void;
 }) {
     const [showLogoutMenu, setShowLogoutMenu] = useState(false);
+    const router = useRouter();
 
     return (
         <>
@@ -93,13 +95,13 @@ export function SidebarContent({
                 {isCollapsed ? (
                     <button
                         type="button"
-                        className="group relative flex h-8 w-8 cursor-pointer items-center justify-center rounded-md hover:bg-muted focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                        className="group hover:bg-muted focus-visible:ring-ring relative flex h-8 w-8 cursor-pointer items-center justify-center rounded-md focus-visible:ring-1 focus-visible:outline-none"
                         onClick={toggleCollapse}
                         title="Expand Sidebar"
                         aria-label="Expand Sidebar"
                     >
                         <div className="flex items-center transition-opacity duration-200 group-hover:opacity-0">
-                            <GeometricMark size={20} />
+                            <Image src="/logo-brand.svg" alt="Logo" width={20} height={20} className="h-5 w-5" />
                         </div>
                         <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-200 group-hover:opacity-100">
                             <ChevronRight className="text-muted-foreground size-5" />
@@ -107,7 +109,7 @@ export function SidebarContent({
                     </button>
                 ) : (
                     <div className="flex items-center gap-2.5">
-                        <GeometricMark size={20} />
+                        <Image src="/logo-brand.svg" alt="Logo" width={20} height={20} className="h-5 w-5" />
                         <span className="text-foreground text-base font-bold tracking-wide">
                             RedGrid
                         </span>
@@ -151,8 +153,6 @@ export function SidebarContent({
                     <X className="size-4" />
                 </Button>
             </div>
-
-
 
             {/* Nav groups */}
             <nav
@@ -216,9 +216,9 @@ export function SidebarContent({
             <div className="border-border bg-background flex flex-col border-t">
                 <div className="relative p-2">
                     {showLogoutMenu && (
-                        <div className="border-border bg-popover absolute bottom-full left-2 z-50 mb-1 flex min-w-52 w-max flex-col rounded-md border shadow-md">
+                        <div className="border-border bg-popover absolute bottom-full left-2 z-50 mb-1 flex w-max min-w-52 flex-col rounded-md border shadow-md">
                             <div className="flex flex-col px-3 py-3">
-                                <span className="text-foreground text-sm font-medium leading-none">
+                                <span className="text-foreground text-sm leading-none font-medium">
                                     Nishan Paul
                                 </span>
                                 <span className="text-muted-foreground mt-1.5 text-xs">
@@ -230,7 +230,12 @@ export function SidebarContent({
                                 <Button
                                     variant="ghost"
                                     className="text-destructive hover:bg-destructive/10 hover:text-destructive h-auto w-full justify-start gap-2 rounded-sm px-2 py-1.5 text-sm"
-                                    onClick={() => setShowLogoutMenu(false)}
+                                    onClick={() => {
+                                        setShowLogoutMenu(false);
+                                        document.cookie = "auth=; max-age=0; path=/";
+                                        router.push("/");
+                                        router.refresh();
+                                    }}
                                 >
                                     <Power className="size-4" />
                                     Log out

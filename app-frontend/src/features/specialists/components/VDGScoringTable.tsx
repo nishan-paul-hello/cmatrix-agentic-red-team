@@ -103,9 +103,7 @@ export const VDGScoringTable = React.memo(function ({
                                         <TableCell className="text-muted-foreground px-3 py-1.5 text-base">
                                             {v.visits}
                                         </TableCell>
-                                        <TableCell
-                                            className={`px-3 py-1.5 text-base ${eordColor}`}
-                                        >
+                                        <TableCell className={`px-3 py-1.5 text-base ${eordColor}`}>
                                             {v.eord}/5
                                         </TableCell>
                                         <TableCell className="text-muted-foreground px-3 py-1.5 text-base">

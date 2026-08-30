@@ -33,7 +33,7 @@ const TeamManagerDashboardView = React.memo(function ({
         <div className="flex h-full min-h-0 flex-col">
             {/* Header */}
             <div className="border-border flex-shrink-0 border-b px-6 pt-5 pb-4">
-                <div className="flex justify-between items-start">
+                <div className="flex items-start justify-between">
                     <div className="flex flex-col">
                         <div className="text-muted-foreground mb-0.5 text-base tracking-widest">
                             MISSION / CVE-001
