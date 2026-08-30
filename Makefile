@@ -1,5 +1,8 @@
 .PHONY: help install dev build docker-build up down clean paper ppt clean-paper format format-check lint lint-fix audit typecheck test
 
+include .env
+export
+
 ROOT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 LATEXMK := latexmk -f -cd -pdf -pdflatex="pdflatex -interaction=nonstopmode -halt-on-error %O %S"
 
@@ -30,11 +33,11 @@ install:
 
 dev:
 	@echo "🚀 Starting dev server..."
-	cd app-frontend && npm run dev
+	cd app-frontend && PORT=$(FRONTEND_PORT) npm run dev
 
 build:
 	@echo "🏗️  Building production assets..."
-	cd app-frontend && npm run build
+	cd app-frontend && PORT=$(FRONTEND_PORT) npm run build
 
 format:
 	@echo "✨ Formatting frontend code with Prettier..."

@@ -40,9 +40,10 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 USER nextjs
 
-EXPOSE 3000
+ARG FRONTEND_PORT
+EXPOSE ${FRONTEND_PORT}
 
-ENV PORT=3000
+ENV PORT=${FRONTEND_PORT}
 
 # server.js is created by next build from the standalone output
 # https://nextjs.org/docs/pages/api-reference/next-config-js/output
