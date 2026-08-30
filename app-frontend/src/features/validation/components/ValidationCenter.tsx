@@ -62,14 +62,8 @@ export default function ValidationCenter() {
                                 setModal(true);
                             }}
                             label="STATE MACHINE"
-                            className="cursor-pointer"
                         />
-                        <Btn
-                            onClick={() => setOracleOpen((v) => !v)}
-                            label="ORACLE PANEL"
-                            red
-                            className="cursor-pointer"
-                        />
+                        <Btn onClick={() => setOracleOpen((v) => !v)} label="ORACLE PANEL" red />
                     </div>
                 </div>
             </div>

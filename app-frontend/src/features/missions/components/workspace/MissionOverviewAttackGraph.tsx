@@ -85,7 +85,6 @@ export function MissionOverviewAttackGraph({
                                             payload: "attack-graph",
                                         })
                                     }
-                                    className="cursor-pointer"
                                 />
                             </div>
                         );

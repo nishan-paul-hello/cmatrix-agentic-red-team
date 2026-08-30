@@ -34,7 +34,7 @@ export default function AblationLab() {
                                 key={abl.id}
                                 variant="outline"
                                 onClick={() => setSel(abl)}
-                                className={`h-auto rounded-sm border border-solid px-2.5 py-1 text-sm tracking-wide ${btnClass} cursor-pointer`}
+                                className={`h-auto rounded-sm border border-solid px-2.5 py-1 text-sm tracking-wide ${btnClass}`}
                             >
                                 <span className="mr-1 font-bold">{abl.id}</span>
                                 {/* CORE vs SECONDARY badge */}

@@ -81,7 +81,7 @@ export default function Shell({
                     <Button
                         variant="ghost"
                         size="icon"
-                        className="text-muted-foreground hover:text-foreground -ml-2 h-8 w-8 cursor-pointer"
+                        className="text-muted-foreground hover:text-foreground -ml-2 h-8 w-8"
                         onClick={() => setMobileMenuOpen(true)}
                         aria-label="Open menu"
                     >

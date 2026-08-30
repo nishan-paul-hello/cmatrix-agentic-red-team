@@ -141,7 +141,7 @@ export default function Dashboard({ onNewMission, onOpenMission }: DashboardProp
                             variant="outline"
                             size="sm"
                             onClick={handleNewMission}
-                            className="border-border text-primary hover:border-primary hover:bg-muted h-auto cursor-pointer rounded-sm px-2 py-0.5 text-[10px] font-semibold tracking-widest transition-colors duration-100"
+                            className="border-border text-primary hover:border-primary hover:bg-muted h-auto rounded-sm px-2 py-0.5 text-[10px] font-semibold tracking-widest transition-colors duration-100"
                         >
                             + NEW MISSION
                         </Button>

@@ -106,7 +106,7 @@ export function GeneralSettings() {
                     onClick={() => {
                         form.setValue("general.devRef", !form.watch("general.devRef"));
                     }}
-                    className="text-muted-foreground cursor-pointer text-xs tracking-widest"
+                    className="text-muted-foreground text-xs tracking-widest"
                 >
                     {form.watch("general.devRef") ? "▾" : "▸"} DEV REFERENCE
                 </Button>

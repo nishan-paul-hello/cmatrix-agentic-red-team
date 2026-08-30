@@ -284,7 +284,6 @@ const AttackGraphCanvasViewInner = React.memo(function ({
                                         onMouseEnter={setHovered}
                                         onMouseLeave={setHovered}
                                         onClick={setDrawerNode}
-                                        className="cursor-pointer"
                                     />
                                 );
                             })}

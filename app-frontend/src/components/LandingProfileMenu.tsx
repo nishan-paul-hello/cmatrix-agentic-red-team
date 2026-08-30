@@ -26,7 +26,7 @@ export function LandingProfileMenu() {
         <div className="relative" ref={menuRef}>
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="hover:bg-accent hover:text-accent-foreground border-border bg-card/50 flex cursor-pointer items-center gap-2 rounded-full border p-1 pr-3 text-sm transition-colors"
+                className="hover:bg-accent hover:text-accent-foreground border-border bg-card/50 flex items-center gap-2 rounded-full border p-1 pr-3 transition-colors text-sm cursor-pointer"
             >
                 <div className="bg-primary text-primary-foreground flex size-7 shrink-0 items-center justify-center rounded-full text-xs font-bold">
                     NP
@@ -48,7 +48,7 @@ export function LandingProfileMenu() {
                     <div className="flex flex-col p-1">
                         <Button
                             variant="ghost"
-                            className="text-destructive hover:bg-destructive/10 hover:text-destructive h-auto w-full cursor-pointer justify-start gap-2 rounded-sm px-2 py-1.5 text-sm font-normal"
+                            className="text-destructive hover:bg-destructive/10 hover:text-destructive h-auto w-full justify-start gap-2 rounded-sm px-2 py-1.5 text-sm font-normal"
                             onClick={() => {
                                 setIsOpen(false);
                                 document.cookie = "auth=; max-age=0; path=/";

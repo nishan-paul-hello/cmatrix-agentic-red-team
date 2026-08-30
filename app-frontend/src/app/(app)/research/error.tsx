@@ -24,7 +24,7 @@ export default function ErrorBoundary({
             <Button
                 variant="destructive"
                 onClick={() => reset()}
-                className="cursor-pointer rounded font-mono text-sm transition-colors"
+                className="rounded font-mono text-sm transition-colors"
             >
                 Retry
             </Button>

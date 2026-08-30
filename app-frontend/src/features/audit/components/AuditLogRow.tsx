@@ -42,10 +42,10 @@ export const AuditLogRow = React.memo(function AuditLogRowInner({
     return (
         <TableRow
             onClick={() => onClick(e)}
-            className={`cursor-pointer ${[
+            className={[
                 "border-border cursor-pointer border-b transition-colors duration-75",
                 isSelected ? "bg-background" : "hover:bg-background",
-            ].join(" ")}`}
+            ].join(" ")}
         >
             <TableCell className="text-muted-foreground px-3 py-1.5 text-sm">{e.id}</TableCell>
             <TableCell className="text-muted-foreground px-3 py-1.5 text-sm whitespace-nowrap">

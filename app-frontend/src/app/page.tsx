@@ -1,8 +1,7 @@
 import { cookies } from "next/headers";
-import Image from "next/image";
 import Link from "next/link";
+import Image from "next/image";
 import { Activity, ArrowRight, Shield, Zap } from "lucide-react";
-
 import { LandingProfileMenu } from "@/components/LandingProfileMenu";
 
 export default async function LandingPage() {
@@ -13,13 +12,7 @@ export default async function LandingPage() {
             {/* Header / Navbar */}
             <header className="border-border bg-background/80 sticky top-0 z-50 flex h-16 items-center justify-between border-b px-6 backdrop-blur-sm lg:px-12">
                 <div className="flex items-center gap-2 text-xl font-bold tracking-tight">
-                    <Image
-                        src="/logo-brand.svg"
-                        alt="RedGrid Logo"
-                        width={24}
-                        height={24}
-                        className="h-6 w-6"
-                    />
+                    <Image src="/logo-brand.svg" alt="RedGrid Logo" width={24} height={24} className="h-6 w-6" />
                     <span>RedGrid</span>
                 </div>
                 <nav>
@@ -36,8 +29,9 @@ export default async function LandingPage() {
                 </nav>
             </header>
 
-            {/* Main Content */}
+                {/* Main Content */}
             <main className="relative flex flex-1 flex-col items-center justify-center overflow-hidden p-6 text-center lg:p-12">
+
                 <div className="z-10 max-w-3xl space-y-8">
                     <div className="border-border bg-card/50 text-muted-foreground inline-flex items-center rounded-full border px-3 py-1 text-sm font-medium backdrop-blur-sm">
                         <span className="bg-primary mr-2 flex h-2 w-2 animate-pulse rounded-full" />
@@ -45,7 +39,10 @@ export default async function LandingPage() {
                     </div>
 
                     <h1 className="text-5xl font-extrabold tracking-tight sm:text-6xl lg:text-7xl">
-                        Agentic <span className="text-primary">Red Team</span>
+                        Agentic{" "}
+                        <span className="text-primary">
+                            Red Team
+                        </span>
                     </h1>
 
                     <p className="text-muted-foreground mx-auto max-w-2xl text-lg leading-relaxed">

@@ -31,7 +31,7 @@ export default function ReportsPage() {
                                 onClick={() => setFilter(t)}
                                 aria-pressed={filter === t}
                                 aria-label={t === "ALL" ? "Show all reports" : `Filter by ${t}`}
-                                className={`h-auto rounded-sm border border-solid px-2.5 py-0.5 text-sm tracking-wide ${filter === t ? "bg-border border-primary text-primary" : "border-border text-muted-foreground bg-transparent"} cursor-pointer`}
+                                className={`h-auto rounded-sm border border-solid px-2.5 py-0.5 text-sm tracking-wide ${filter === t ? "bg-border border-primary text-primary" : "border-border text-muted-foreground bg-transparent"}`}
                             >
                                 {t}
                             </Button>

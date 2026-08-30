@@ -133,7 +133,7 @@ export function EscalationDetailPane({
                 <Button
                     onClick={() => response.trim() && handleSubmit("RESPONSE")}
                     disabled={!response.trim() || !canApprove("RESPONSE")}
-                    className={`text-foreground h-auto rounded-sm border-none px-5 py-2 text-base tracking-widest transition-colors duration-150 ${response.trim() ? "bg-primary hover:bg-destructive cursor-pointer" : "bg-border hover:bg-border cursor-not-allowed"} cursor-pointer`}
+                    className={`text-foreground h-auto rounded-sm border-none px-5 py-2 text-base tracking-widest transition-colors duration-150 ${response.trim() ? "bg-primary hover:bg-destructive cursor-pointer" : "bg-border hover:bg-border cursor-not-allowed"}`}
                 >
                     SEND RESPONSE
                 </Button>

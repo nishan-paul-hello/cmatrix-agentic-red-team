@@ -80,7 +80,7 @@ export default function TrajectoryPage() {
                                 return `${TYPE_C[t].bg} ${TYPE_C[t].borderAlpha} ${TYPE_C[t].text}`;
                             }
                             return "border-border text-muted-foreground bg-transparent";
-                        })()} cursor-pointer`}
+                        })()}`}
                     >
                         {t}
                     </Button>
@@ -105,7 +105,6 @@ export default function TrajectoryPage() {
                                 isSel={sel?.step === step.step}
                                 isLast={virtualRow.index === visible.length - 1}
                                 onClick={handleRowClick}
-                                className="cursor-pointer"
                             />
                         );
                     })}

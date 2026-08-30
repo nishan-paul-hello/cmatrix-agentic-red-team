@@ -92,7 +92,7 @@ export function FindingDetailModal({
                                     });
                                 }
                             }}
-                            className="text-success hover:border-success hover:bg-muted cursor-pointer text-xs tracking-widest"
+                            className="text-success hover:border-success hover:bg-muted text-xs tracking-widest"
                         >
                             VERIFY
                         </Button>
@@ -111,7 +111,7 @@ export function FindingDetailModal({
                                     });
                                 }
                             }}
-                            className="text-destructive hover:border-destructive hover:bg-muted cursor-pointer text-xs tracking-widest"
+                            className="text-destructive hover:border-destructive hover:bg-muted text-xs tracking-widest"
                         >
                             REJECT
                         </Button>

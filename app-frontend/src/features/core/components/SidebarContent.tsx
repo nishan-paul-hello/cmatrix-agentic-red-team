@@ -134,7 +134,7 @@ export function SidebarContent({
                         <Button
                             variant="ghost"
                             size="icon"
-                            className="text-muted-foreground/70 hover:bg-muted/50 hover:text-foreground h-6 w-6 cursor-pointer"
+                            className="text-muted-foreground/70 hover:bg-muted/50 hover:text-foreground h-6 w-6"
                             title="Command Palette (⌘K)"
                             onClick={onOpenCommandPalette}
                         >
@@ -145,7 +145,7 @@ export function SidebarContent({
                                 variant="ghost"
                                 size="icon"
                                 onClick={toggleCollapse}
-                                className="text-muted-foreground/70 hover:bg-muted/50 hover:text-foreground h-6 w-6 cursor-pointer"
+                                className="text-muted-foreground/70 hover:bg-muted/50 hover:text-foreground h-6 w-6"
                                 title="Collapse Sidebar"
                             >
                                 <ChevronLeft className="size-3.5" />
@@ -158,7 +158,7 @@ export function SidebarContent({
                 <Button
                     variant="ghost"
                     size="icon"
-                    className="text-muted-foreground hover:text-foreground h-8 w-8 cursor-pointer lg:hidden"
+                    className="text-muted-foreground hover:text-foreground h-8 w-8 lg:hidden"
                     onClick={() => setMobileMenuOpen(false)}
                     aria-label="Close menu"
                 >
@@ -196,7 +196,7 @@ export function SidebarContent({
                                     }}
                                     title={isCollapsed ? item.label : undefined}
                                     aria-current={active ? "page" : undefined}
-                                    className={`cursor-pointer ${cn(
+                                    className={cn(
                                         "flex w-full items-center gap-2.5 rounded-none py-1.5 text-xs tracking-tighter uppercase",
                                         "border-l-2 transition-colors duration-100",
                                         isCollapsed
@@ -205,7 +205,7 @@ export function SidebarContent({
                                         active
                                             ? "border-primary bg-muted text-foreground"
                                             : "text-muted-foreground hover:text-muted-foreground border-transparent hover:bg-transparent",
-                                    )}`}
+                                    )}
                                 >
                                     <Icon
                                         className={cn(
@@ -241,7 +241,7 @@ export function SidebarContent({
                             <div className="p-1">
                                 <Button
                                     variant="ghost"
-                                    className="text-destructive hover:bg-destructive/10 hover:text-destructive h-auto w-full cursor-pointer justify-start gap-2 rounded-sm px-2 py-1.5 text-sm"
+                                    className="text-destructive hover:bg-destructive/10 hover:text-destructive h-auto w-full justify-start gap-2 rounded-sm px-2 py-1.5 text-sm"
                                     onClick={() => {
                                         setShowLogoutMenu(false);
                                         document.cookie = "auth=; max-age=0; path=/";
@@ -258,10 +258,10 @@ export function SidebarContent({
                     <Button
                         variant="ghost"
                         onClick={() => setShowLogoutMenu(!showLogoutMenu)}
-                        className={`cursor-pointer ${cn(
+                        className={cn(
                             "hover:bg-muted flex h-auto w-full items-center px-2 py-2",
                             isCollapsed ? "justify-center" : "justify-start gap-3",
-                        )}`}
+                        )}
                     >
                         <div className="bg-primary text-primary-foreground flex size-8 shrink-0 items-center justify-center rounded-full text-xs font-bold">
                             NP

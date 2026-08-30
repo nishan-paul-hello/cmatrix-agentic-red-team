@@ -11,7 +11,7 @@ export function SaveBar() {
                     setSaved(true);
                     setTimeout(() => setSaved(false), 2000);
                 }}
-                className="cursor-pointer text-xs tracking-widest uppercase"
+                className="text-xs tracking-widest uppercase"
             >
                 {saved ? "SAVED ✓" : "SAVE CHANGES"}
             </Button>
