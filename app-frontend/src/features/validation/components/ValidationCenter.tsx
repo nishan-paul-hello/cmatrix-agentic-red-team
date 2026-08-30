@@ -5,7 +5,7 @@ import { useValidationData } from "@/features/validation/hooks/useValidationData
 import { useTelemetry } from "@/hooks/useTelemetry";
 import { cn } from "@/lib/utils";
 
-import { FindingDetailDrawer } from "./FindingDetailDrawer";
+import { FindingDetailModal } from "./FindingDetailModal";
 import { ValidationTable } from "./ValidationTable";
 
 export default function ValidationCenter() {
@@ -101,9 +101,9 @@ export default function ValidationCenter() {
                 <StateMachineModal onClose={() => setModal(false)} finding={stateMachineFinding} />
             )}
 
-            {/* Finding detail drawer */}
+            {/* Finding detail modal */}
             {selected && (
-                <FindingDetailDrawer
+                <FindingDetailModal
                     selected={selected}
                     setSelected={setSelected}
                     guardrails={guardrails}

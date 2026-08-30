@@ -1,3 +1,4 @@
+import { ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
     Table,
@@ -23,7 +24,7 @@ export function ValidationTable({
             <Table className="text-xs">
                 <TableHeader>
                     <TableRow className="bg-card hover:bg-card sticky top-0">
-                        {["FINDING", "TYPE", "EVIDENCE", "RETRY", "STATUS", "ORACLE", ""].map(
+                        {["FINDING", "TYPE", "EVIDENCE", "RETRY", "STATUS", "ORACLE", "DETAILS"].map(
                             (h) => (
                                 <TableHead
                                     key={h}
@@ -66,7 +67,7 @@ export function ValidationTable({
                                     {f.evidence}
                                 </TableCell>
                                 <TableCell
-                                    className={`px-4 py-2 text-right ${f.retry > 0 ? "text-warning" : "text-muted-foreground"}`}
+                                    className={`px-4 py-2 ${f.retry > 0 ? "text-warning" : "text-muted-foreground"}`}
                                 >
                                     {f.retry}
                                 </TableCell>
@@ -87,15 +88,15 @@ export function ValidationTable({
                                 </TableCell>
                                 <TableCell className="px-4 py-2">
                                     <Button
-                                        variant="outline"
+                                        variant="ghost"
                                         size="sm"
                                         onClick={(e) => {
                                             e.stopPropagation();
                                             setSelected(f);
                                         }}
-                                        className="text-muted-foreground hover:border-primary text-xs tracking-normal"
+                                        className="text-muted-foreground hover:bg-muted hover:text-foreground flex h-7 w-7 items-center justify-center p-0 text-xs"
                                     >
-                                        DETAIL
+                                        <ChevronRight className="h-4 w-4" />
                                     </Button>
                                 </TableCell>
                             </TableRow>

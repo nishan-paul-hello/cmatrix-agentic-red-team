@@ -1,10 +1,10 @@
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { type VFinding } from "@/features/validation/data/fixtures/validationMockData";
 import { type TelemetryEventName } from "@/hooks/useTelemetry";
 import { type GuardrailResult } from "@/types/domain-types";
 
-export function FindingDetailDrawer({
+export function FindingDetailModal({
     selected,
     setSelected,
     guardrails,
@@ -20,7 +20,7 @@ export function FindingDetailDrawer({
     logEvent: (event: TelemetryEventName, meta?: Record<string, unknown>) => void;
 }) {
     return (
-        <Sheet
+        <Dialog
             open
             onOpenChange={(open) => {
                 if (!open) {
@@ -28,18 +28,17 @@ export function FindingDetailDrawer({
                 }
             }}
         >
-            <SheetContent
-                side="right"
-                className="sm:max-w-panel-lg w-full overflow-y-auto px-7 py-6"
+            <DialogContent
+                className="sm:max-w-panel-lg w-full max-h-[85vh] overflow-y-auto px-7 py-6"
             >
-                <SheetHeader className="mb-4 text-left">
-                    <SheetTitle className="text-foreground text-sm font-bold tracking-normal">
+                <DialogHeader className="mb-4 text-left">
+                    <DialogTitle className="text-foreground text-sm font-bold tracking-normal">
                         {selected.id}
-                    </SheetTitle>
+                    </DialogTitle>
                     <div className="text-muted-foreground mt-0 text-base tracking-widest">
                         {selected.type}
                     </div>
-                </SheetHeader>
+                </DialogHeader>
                 <div className="flex flex-col gap-3">
                     {[
                         {
@@ -120,7 +119,7 @@ export function FindingDetailDrawer({
                         </Button>
                     </div>
                 </div>
-            </SheetContent>
-        </Sheet>
+            </DialogContent>
+        </Dialog>
     );
 }
