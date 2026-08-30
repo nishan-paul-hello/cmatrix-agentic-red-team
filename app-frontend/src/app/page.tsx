@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import Link from "next/link";
 import Image from "next/image";
 import { Activity, ArrowRight, Shield, Zap } from "lucide-react";
+import { LandingProfileMenu } from "@/components/LandingProfileMenu";
 
 export default async function LandingPage() {
     const cookieStore = await cookies();
@@ -16,15 +17,7 @@ export default async function LandingPage() {
                 </div>
                 <nav>
                     {isAuthenticated ? (
-                        <Link
-                            href="/dashboard"
-                            className="hover:bg-accent hover:text-accent-foreground border-border bg-card/50 flex items-center gap-2 rounded-full border p-1 pr-3 transition-colors"
-                        >
-                            <div className="bg-primary text-primary-foreground flex size-7 shrink-0 items-center justify-center rounded-full text-xs font-bold">
-                                NP
-                            </div>
-                            <span className="text-sm font-medium">Nishan Paul</span>
-                        </Link>
+                        <LandingProfileMenu />
                     ) : (
                         <Link
                             href="/login"

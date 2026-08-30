@@ -101,7 +101,13 @@ export function SidebarContent({
                         aria-label="Expand Sidebar"
                     >
                         <div className="flex items-center transition-opacity duration-200 group-hover:opacity-0">
-                            <Image src="/logo-brand.svg" alt="Logo" width={20} height={20} className="h-5 w-5" />
+                            <Image
+                                src="/logo-brand.svg"
+                                alt="Logo"
+                                width={20}
+                                height={20}
+                                className="h-5 w-5"
+                            />
                         </div>
                         <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-200 group-hover:opacity-100">
                             <ChevronRight className="text-muted-foreground size-5" />
@@ -109,7 +115,13 @@ export function SidebarContent({
                     </button>
                 ) : (
                     <div className="flex items-center gap-2.5">
-                        <Image src="/logo-brand.svg" alt="Logo" width={20} height={20} className="h-5 w-5" />
+                        <Image
+                            src="/logo-brand.svg"
+                            alt="Logo"
+                            width={20}
+                            height={20}
+                            className="h-5 w-5"
+                        />
                         <span className="text-foreground text-base font-bold tracking-wide">
                             RedGrid
                         </span>
