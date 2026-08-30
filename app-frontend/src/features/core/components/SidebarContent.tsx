@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
     Activity,
@@ -114,7 +115,7 @@ export function SidebarContent({
                         </div>
                     </button>
                 ) : (
-                    <div className="flex items-center gap-2.5">
+                    <Link href="/" className="group flex items-center gap-2.5 outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm">
                         <Image
                             src="/logo-brand.svg"
                             alt="Logo"
@@ -122,10 +123,10 @@ export function SidebarContent({
                             height={20}
                             className="h-5 w-5"
                         />
-                        <span className="text-foreground text-base font-bold tracking-wide">
+                        <span className="text-foreground transition-colors group-hover:text-red-500 text-base font-bold tracking-wide">
                             RedGrid
                         </span>
-                    </div>
+                    </Link>
                 )}
 
                 {/* Desktop top actions (Search & Collapse) */}
