@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import { EnvironmentRepository } from "@/features/environment/data/EnvironmentRepository";
 import { type HostNode } from "@/types/domain-types";
 
-import { HostDetailPanel } from "./HostDetailPanel";
-import { HostTopologyDiagram } from "./HostTopologyDiagram";
+import { HostDetailPanel } from '@/features/environment/components/HostDetailPanel';
+import { HostTopologyDiagram } from '@/features/environment/components/HostTopologyDiagram';
 
 export default function HostTopology() {
     const [HOSTS, setData] = useState<HostNode[]>([]);

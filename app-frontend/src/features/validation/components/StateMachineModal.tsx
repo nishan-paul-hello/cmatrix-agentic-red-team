@@ -1,7 +1,7 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { type VFinding } from "@/features/validation/data/fixtures/validationMockData";
 
-import { STATE_MACHINE_EDGES, STATE_MACHINE_NODES } from "./StateMachineConstants";
+import { STATE_MACHINE_EDGES, STATE_MACHINE_NODES } from '@/features/validation/components/StateMachineConstants';
 
 export default function StateMachineModal({
     onClose,

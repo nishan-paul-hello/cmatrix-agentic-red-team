@@ -8,9 +8,9 @@ import {
 } from "@/features/benchmarks/data/fixtures/benchmarksMockData";
 import { useBenchmarkDetailData } from "@/features/benchmarks/hooks/useBenchmarkDetailData";
 
-import { BenchmarkCategoriesTab } from "./BenchmarkCategoriesTab";
-import { BenchmarkOverviewTab } from "./BenchmarkOverviewTab";
-import { BenchmarkTasksTab } from "./BenchmarkTasksTab";
+import { BenchmarkCategoriesTab } from '@/features/benchmarks/components/BenchmarkCategoriesTab';
+import { BenchmarkOverviewTab } from '@/features/benchmarks/components/BenchmarkOverviewTab';
+import { BenchmarkTasksTab } from '@/features/benchmarks/components/BenchmarkTasksTab';
 
 export default function BenchmarkDetail({
     bench,

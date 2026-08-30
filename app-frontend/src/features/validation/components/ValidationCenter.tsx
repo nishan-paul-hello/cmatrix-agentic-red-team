@@ -5,8 +5,8 @@ import { useValidationData } from "@/features/validation/hooks/useValidationData
 import { useTelemetry } from "@/hooks/useTelemetry";
 import { cn } from "@/lib/utils";
 
-import { FindingDetailModal } from "./FindingDetailModal";
-import { ValidationTable } from "./ValidationTable";
+import { FindingDetailModal } from '@/features/validation/components/FindingDetailModal';
+import { ValidationTable } from '@/features/validation/components/ValidationTable';
 
 export default function ValidationCenter() {
     const { logEvent } = useTelemetry();

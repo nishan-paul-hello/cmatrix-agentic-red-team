@@ -13,8 +13,8 @@ import { useAuth } from "@/lib/auth-context";
 import { useServices } from "@/lib/services-context";
 import { type RiskAssessment } from "@/types/domain-types";
 
-import { EscalationDetailPane } from "./EscalationDetailPane";
-import { EscalationHistorySidebar } from "./EscalationHistorySidebar";
+import { EscalationDetailPane } from '@/features/escalation/components/EscalationDetailPane';
+import { EscalationHistorySidebar } from '@/features/escalation/components/EscalationHistorySidebar';
 
 export default function HumanEscalation() {
     const [activeReason, setActiveReason] = useState<EscalationReason>("HIGH_RISK_ACTION");

@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-import { CAT_STYLE, HELP_KEYS, type PaletteItem } from "./CommandPaletteConstants";
+import { CAT_STYLE, HELP_KEYS, type PaletteItem } from '@/features/core/components/CommandPaletteConstants';
 
 export interface CommandPaletteContextType {
     query: string;

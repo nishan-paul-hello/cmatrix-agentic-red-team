@@ -10,7 +10,7 @@ import {
 } from "@/features/benchmarks/data/fixtures/benchmarksMockData";
 import { BENCHMARK_STATUS } from "@/types/domain-types";
 
-import { BenchmarkTable } from "./BenchmarkTable";
+import { BenchmarkTable } from '@/features/benchmarks/components/BenchmarkTable';
 
 const ALL_TIERS: BenchTier[] = [
     "TIER0_SANDBOX",
