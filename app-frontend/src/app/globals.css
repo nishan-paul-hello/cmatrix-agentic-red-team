@@ -210,8 +210,8 @@ input:-webkit-autofill:focus {
     --card-foreground: #f2f2f2;
     --popover: #0d0d0d;
     --popover-foreground: #f2f2f2;
-    --primary: #fafafa;
-    --primary-foreground: #09090b;
+    --primary: #e31b23;
+    --primary-foreground: #f2f2f2;
     --secondary: #1a1a1a;
     --secondary-foreground: #f2f2f2;
     --muted: #111111;
@@ -221,11 +221,11 @@ input:-webkit-autofill:focus {
     --muted-dimmest: #333333;
     --accent: #1e1e1e;
     --accent-foreground: #f2f2f2;
-    --destructive: #ef4444;
-    --destructive-foreground: #fafafa;
+    --destructive: #ff2a32;
+    --destructive-foreground: #f2f2f2;
     --border: #1e1e1e;
     --input: #1e1e1e;
-    --ring: #d4d4d8;
+    --ring: #e31b23;
     --success: #3fb950;
     --success-foreground: #f2f2f2;
     --warning: #d29922;
@@ -240,12 +240,12 @@ input:-webkit-autofill:focus {
     --radius: 0.625rem;
     --sidebar: #080808;
     --sidebar-foreground: #f2f2f2;
-    --sidebar-primary: #fafafa;
-    --sidebar-primary-foreground: #09090b;
+    --sidebar-primary: #e31b23;
+    --sidebar-primary-foreground: #f2f2f2;
     --sidebar-accent: #1e1e1e;
     --sidebar-accent-foreground: #f2f2f2;
     --sidebar-border: #1e1e1e;
-    --sidebar-ring: #d4d4d8;
+    --sidebar-ring: #e31b23;
 }
 
 @layer base {

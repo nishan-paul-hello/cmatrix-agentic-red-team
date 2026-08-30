@@ -31,12 +31,12 @@ export default async function LandingPage() {
             <main className="relative flex flex-1 flex-col items-center justify-center overflow-hidden p-6 text-center lg:p-12">
                 <div className="z-10 max-w-3xl space-y-8">
                     <div className="border-border bg-card/50 text-muted-foreground inline-flex items-center rounded-full border px-3 py-1 text-sm font-medium backdrop-blur-sm">
-                        <span className="bg-[#e31b23] mr-2 flex h-2 w-2 animate-pulse rounded-full" />
+                        <span className="bg-primary mr-2 flex h-2 w-2 animate-pulse rounded-full" />
                         LLM-orchestrated multi-agent framework for autonomous VAPT
                     </div>
 
                     <h1 className="text-5xl font-extrabold tracking-tight sm:text-6xl lg:text-7xl">
-                        Agentic <span className="text-[#e31b23]">Red Team</span>
+                        Agentic <span className="text-primary">Red Team</span>
                     </h1>
 
                     <p className="text-muted-foreground mx-auto max-w-2xl text-lg leading-relaxed">
