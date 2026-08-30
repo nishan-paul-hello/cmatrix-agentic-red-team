@@ -106,18 +106,24 @@ export default async function LandingPage() {
             {/* Footer */}
             <footer className="border-border text-muted-foreground bg-background border-t py-8 text-center text-sm">
                 <div className="flex flex-col items-center justify-center gap-3">
-                    <div className="flex items-center gap-2">
-                        <span>Built by</span>
-                        <div className="relative h-6 w-[7.5rem]">
+                    <a 
+                        href="https://kaiofficial.xyz"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-1.5 transition-opacity hover:opacity-80"
+                    >
+                        <span className="leading-none">Built by</span>
+                        <div className="relative h-6 w-6 translate-y-0.5">
                             <Image
                                 src="/logo-company.svg"
-                                alt="Company Logo"
+                                alt="KAI Logo"
                                 fill
-                                className="object-contain opacity-60 grayscale filter transition-opacity hover:opacity-100 hover:grayscale-0"
+                                className="object-contain"
                             />
                         </div>
-                    </div>
-                    <p>&copy; {new Date().getFullYear()} RedGrid. All rights reserved.</p>
+                        <span className="leading-none font-medium text-[#00F07C]">KAI</span>
+                    </a>
+                    <p>&copy; {new Date().getFullYear()} RedGrid, all rights reserved.</p>
                 </div>
             </footer>
         </div>
