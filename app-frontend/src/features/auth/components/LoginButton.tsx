@@ -42,17 +42,17 @@ export function LoginButton({ text, className, showArrow }: LoginButtonProps) {
                 {text}
                 {showArrow && <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />}
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[400px]">
-                <DialogHeader className="flex flex-col items-center justify-center pt-8 pb-4">
-                    <DialogTitle className="text-xl font-semibold tracking-tight text-center">
+            <DialogContent className="sm:max-w-[500px] bg-background border-none shadow-[0_0_60px_-15px_rgba(255,255,255,0.05)]">
+                <DialogHeader className="flex flex-col items-center justify-center pt-8 pb-1">
+                    <DialogTitle className="text-3xl font-bold tracking-tight text-center text-foreground">
                         Sign in to RedGrid
                     </DialogTitle>
-                    <DialogDescription className="text-center mt-2 text-sm text-muted-foreground">
-                        Elevate your security research with autonomous VAPT and advanced benchmarking.
+                    <DialogDescription className="text-center mt-3 text-[15px] leading-relaxed text-muted-foreground/80 font-sans font-light tracking-wide mx-auto">
+                        Your private evaluation platform for autonomous<br />VAPT on hosted benchmarks.
                     </DialogDescription>
                 </DialogHeader>
 
-                <div className="flex flex-col gap-4 py-4 px-4">
+                <div className="flex flex-col gap-6 pt-6 pb-8 px-8">
                     <Button 
                         onClick={handleGoogleLogin} 
                         disabled={loading}
