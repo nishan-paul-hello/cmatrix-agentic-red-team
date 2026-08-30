@@ -1,10 +1,16 @@
 import { PanelErrorBoundary } from "@/components/PanelErrorBoundary";
 import MissionWorkspace from "@/features/missions/components/workspace/MissionWorkspace";
 
-export default function MissionWorkspaceRoute({ params }: { params: { missionId: string } }) {
+export default async function MissionWorkspaceRoute({
+    params,
+}: {
+    params: Promise<{ missionId: string }>;
+}) {
+    const { missionId } = await params;
+
     return (
         <PanelErrorBoundary>
-            <MissionWorkspace missionId={params.missionId} />
+            <MissionWorkspace missionId={missionId} />
         </PanelErrorBoundary>
     );
 }
