@@ -33,7 +33,7 @@ export default function MissionSubNavPanel({
                             variant="ghost"
                             onClick={() => dispatch({ type: "SET_SUB_NAV", payload: item.id })}
                             aria-current={active ? "page" : undefined}
-                            className={`border-border h-auto w-max shrink-0 justify-start rounded-none border-l px-4 py-2 text-left text-xs tracking-tight uppercase lg:w-full ${active ? "text-primary" : "text-muted-foreground hover:text-muted-foreground"}`}
+                            className={`border-border h-auto w-max shrink-0 justify-start rounded-none border-l px-4 py-2 text-left text-xs tracking-tight uppercase lg:w-full ${active ? "text-primary" : "text-muted-foreground hover:text-muted-foreground"} cursor-pointer`}
                         >
                             {(() => {
                                 if (item.id === "findings") {
@@ -67,7 +67,7 @@ export default function MissionSubNavPanel({
             <div className="border-border flex flex-row gap-2 border-t p-3 lg:flex-col">
                 <Button
                     variant="outline"
-                    className={`bg-card hover:bg-card hover:border-warning h-auto w-full rounded-sm py-[7px] text-base font-semibold tracking-widest ${paused ? "border-warning text-warning" : "border-border text-muted-foreground"}`}
+                    className={`bg-card hover:bg-card hover:border-warning h-auto w-full rounded-sm py-[7px] text-base font-semibold tracking-widest ${paused ? "border-warning text-warning" : "border-border text-muted-foreground"} cursor-pointer`}
                     onClick={() => {
                         const newPausedState = !paused;
                         dispatch({ type: "SET_PAUSED", payload: newPausedState });
@@ -92,7 +92,7 @@ export default function MissionSubNavPanel({
                         terminated
                             ? "bg-border border-border text-muted-foreground cursor-not-allowed"
                             : "border-primary text-primary hover:bg-border hover:border-primary cursor-pointer bg-transparent"
-                    }`}
+                    } cursor-pointer`}
                     onClick={() => {
                         dispatch({ type: "SET_PAUSED", payload: true });
                         dispatch({ type: "SET_TERMINATED", payload: true });

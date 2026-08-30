@@ -37,7 +37,7 @@ export function AttackGraphToolbar({
                 </div>
                 <Button
                     variant="outline"
-                    className="border-border bg-muted text-muted-foreground hover:border-primary hover:bg-muted hover:text-muted-foreground h-auto rounded-sm px-3 py-1 text-base tracking-widest transition-colors duration-100"
+                    className="border-border bg-muted text-muted-foreground hover:border-primary hover:bg-muted hover:text-muted-foreground h-auto cursor-pointer rounded-sm px-3 py-1 text-base tracking-widest transition-colors duration-100"
                     onClick={onFocusHighestScore}
                 >
                     ◈ FOCUS HIGHEST-SCORE PATH
@@ -52,6 +52,7 @@ export function AttackGraphToolbar({
                             active={statusFilter === f}
                             onClick={() => setStatusFilter(f)}
                             red={f !== "ALL"}
+                            className="cursor-pointer"
                         />
                     ))}
                 </div>
@@ -64,6 +65,7 @@ export function AttackGraphToolbar({
                             active={vulnFilter === f}
                             onClick={() => setVulnFilter(f)}
                             dim
+                            className="cursor-pointer"
                         />
                     ))}
                 </div>

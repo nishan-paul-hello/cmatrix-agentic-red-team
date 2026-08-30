@@ -28,7 +28,7 @@ export function WizardStepIndicator({
                                     variant="ghost"
                                     onClick={() => setStep(s.index)}
                                     title={`Go back to Step ${s.index}`}
-                                    className="h-auto flex-col items-center gap-1.5 p-0 hover:bg-transparent"
+                                    className="h-auto cursor-pointer flex-col items-center gap-1.5 p-0 hover:bg-transparent"
                                 >
                                     <div className="border-border bg-muted text-muted-foreground flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-[1px] border-solid text-xs font-bold tracking-tight">
                                         ✓

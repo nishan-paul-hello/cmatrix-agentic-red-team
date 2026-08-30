@@ -63,7 +63,7 @@ export function Step1() {
                                     benchSuite === s
                                         ? "border-primary bg-border text-destructive"
                                         : "border-border text-muted-foreground bg-transparent"
-                                }`}
+                                } cursor-pointer`}
                             >
                                 {s}
                             </Button>

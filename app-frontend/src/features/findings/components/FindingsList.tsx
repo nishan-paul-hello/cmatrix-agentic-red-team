@@ -140,7 +140,7 @@ export default function FindingsList({
                 <div className="flex gap-2">
                     <Button
                         variant="secondary"
-                        className="bg-card text-foreground hover:bg-card/80 h-auto rounded-sm px-3 py-1.5 text-base font-semibold tracking-widest"
+                        className="bg-card text-foreground hover:bg-card/80 h-auto cursor-pointer rounded-sm px-3 py-1.5 text-base font-semibold tracking-widest"
                         onClick={() => setPage((p) => Math.max(1, p - 1))}
                         disabled={page === 1}
                     >
@@ -148,7 +148,7 @@ export default function FindingsList({
                     </Button>
                     <Button
                         variant="secondary"
-                        className="bg-card text-foreground hover:bg-card/80 h-auto rounded-sm px-3 py-1.5 text-base font-semibold tracking-widest"
+                        className="bg-card text-foreground hover:bg-card/80 h-auto cursor-pointer rounded-sm px-3 py-1.5 text-base font-semibold tracking-widest"
                         onClick={() => setPage((p) => p + 1)}
                         disabled={findings.length < 50}
                     >

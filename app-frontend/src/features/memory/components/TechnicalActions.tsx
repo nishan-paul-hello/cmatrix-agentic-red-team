@@ -115,7 +115,7 @@ export default function TechnicalActions() {
                         variant="ghost"
                         size="icon-xs"
                         onClick={() => setSelId(null)}
-                        className="text-muted-foreground hover:text-muted-foreground h-auto p-0.5 text-sm hover:bg-transparent"
+                        className="text-muted-foreground hover:text-muted-foreground h-auto cursor-pointer p-0.5 text-sm hover:bg-transparent"
                         aria-label="Close"
                     >
                         ✕

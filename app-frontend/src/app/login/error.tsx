@@ -22,7 +22,7 @@ export default function ErrorBoundary({
             <Button
                 onClick={reset}
                 variant="outline"
-                className="text-primary border-primary hover:bg-muted text-xs tracking-widest uppercase"
+                className="text-primary border-primary hover:bg-muted cursor-pointer text-xs tracking-widest uppercase"
             >
                 REBOOT SUBSYSTEM
             </Button>

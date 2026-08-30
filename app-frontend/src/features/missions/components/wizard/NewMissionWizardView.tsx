@@ -91,7 +91,7 @@ export default function NewMissionWizardView(props: WizardContextType) {
                         <Button
                             variant="outline"
                             onClick={onCancel}
-                            className="text-muted-foreground hover:text-foreground h-auto rounded-sm px-4 py-1.5 text-xs tracking-widest"
+                            className="text-muted-foreground hover:text-foreground h-auto cursor-pointer rounded-sm px-4 py-1.5 text-xs tracking-widest"
                         >
                             CANCEL
                         </Button>
@@ -100,7 +100,7 @@ export default function NewMissionWizardView(props: WizardContextType) {
                                 <Button
                                     variant="outline"
                                     onClick={() => setStep(step - 1)}
-                                    className="text-muted-foreground hover:text-foreground h-auto rounded-sm px-4 py-1.5 text-xs tracking-widest"
+                                    className="text-muted-foreground hover:text-foreground h-auto cursor-pointer rounded-sm px-4 py-1.5 text-xs tracking-widest"
                                 >
                                     ← BACK
                                 </Button>
@@ -135,7 +135,7 @@ export default function NewMissionWizardView(props: WizardContextType) {
                                         onStart?.();
                                     }
                                 }}
-                                className={`text-foreground hover:bg-destructive h-auto rounded-sm py-2 text-xs font-semibold tracking-widest ${step === 5 ? "px-8" : "px-6"}`}
+                                className={`text-foreground hover:bg-destructive h-auto rounded-sm py-2 text-xs font-semibold tracking-widest ${step === 5 ? "px-8" : "px-6"} cursor-pointer`}
                             >
                                 {step === 5 ? "START MISSION →" : "NEXT →"}
                             </Button>

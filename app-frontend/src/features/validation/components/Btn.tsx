@@ -20,12 +20,12 @@ export default function Btn({
                 e.stopPropagation();
                 onClick();
             }}
-            className={cn(
+            className={`cursor-pointer ${cn(
                 "text-xs tracking-widest uppercase",
                 red
                     ? "text-primary border-border hover:border-primary"
                     : "text-muted-foreground border-border hover:border-border",
-            )}
+            )}`}
         >
             {label}
         </Button>

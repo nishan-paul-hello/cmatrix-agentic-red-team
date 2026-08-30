@@ -98,6 +98,7 @@ export default function ExecutionConsoleView({
                                     key={e.id}
                                     e={e}
                                     onClick={() => handleRowClick(e)}
+                                    className="cursor-pointer"
                                 />
                             );
                         })}

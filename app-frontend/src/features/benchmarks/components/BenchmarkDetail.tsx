@@ -35,7 +35,7 @@ export default function BenchmarkDetail({
                 <Button
                     variant="ghost"
                     onClick={onBack}
-                    className="text-muted-foreground hover:text-muted-foreground mb-2.5 h-auto p-0 text-base tracking-widest hover:bg-transparent"
+                    className="text-muted-foreground hover:text-muted-foreground mb-2.5 h-auto cursor-pointer p-0 text-base tracking-widest hover:bg-transparent"
                 >
                     ← BENCHMARKS
                 </Button>

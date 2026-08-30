@@ -20,7 +20,7 @@ export default function SurfaceCards({
                         key={opt.value}
                         variant="outline"
                         onClick={() => onChange?.(opt.value)}
-                        className={`h-auto min-h-[160px] flex-1 flex-col items-start justify-start rounded-sm border border-solid px-5 pt-5 pb-4 text-left whitespace-normal transition-colors duration-100 ${selected ? "border-primary bg-transparent" : "border-border bg-background hover:border-muted-foreground hover:bg-card"}`}
+                        className={`h-auto min-h-[160px] flex-1 flex-col items-start justify-start rounded-sm border border-solid px-5 pt-5 pb-4 text-left whitespace-normal transition-colors duration-100 ${selected ? "border-primary bg-transparent" : "border-border bg-background hover:border-muted-foreground hover:bg-card"} cursor-pointer`}
                     >
                         {/* Selected indicator */}
                         {selected && (

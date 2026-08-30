@@ -101,7 +101,7 @@ export function ValidationTable({
                                             e.stopPropagation();
                                             setSelected(f);
                                         }}
-                                        className="text-muted-foreground hover:bg-muted hover:text-foreground flex h-7 w-7 items-center justify-center p-0 text-xs"
+                                        className="text-muted-foreground hover:bg-muted hover:text-foreground flex h-7 w-7 cursor-pointer items-center justify-center p-0 text-xs"
                                     >
                                         <ChevronRight className="h-4 w-4" />
                                     </Button>

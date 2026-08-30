@@ -24,7 +24,7 @@ export default function FindingDetail({ f, onBack }: { f: Finding; onBack: () =>
                 <Button
                     variant="ghost"
                     onClick={onBack}
-                    className="text-muted-foreground hover:text-foreground mb-2 flex h-auto items-center gap-2 p-0 text-xs font-semibold tracking-widest transition-colors hover:bg-transparent"
+                    className="text-muted-foreground hover:text-foreground mb-2 flex h-auto cursor-pointer items-center gap-2 p-0 text-xs font-semibold tracking-widest transition-colors hover:bg-transparent"
                 >
                     <ArrowLeft className="h-4 w-4" /> FINDINGS
                 </Button>

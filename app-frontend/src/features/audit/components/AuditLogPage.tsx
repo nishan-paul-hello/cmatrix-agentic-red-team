@@ -91,7 +91,7 @@ export default React.memo(function AuditLogPage() {
                                 variant="outline"
                                 onClick={() => setTypeFilter(t)}
                                 aria-pressed={active}
-                                className={`h-auto rounded-sm border border-solid px-2 py-0.5 text-xs tracking-wide transition-colors ${active ? `${cc?.bg ?? "bg-border"} ${cc?.c ?? "text-foreground"} ${cc?.border ?? "border-foreground/30"}` : "border-border text-muted-foreground bg-transparent"}`}
+                                className={`h-auto rounded-sm border border-solid px-2 py-0.5 text-xs tracking-wide transition-colors ${active ? `${cc?.bg ?? "bg-border"} ${cc?.c ?? "text-foreground"} ${cc?.border ?? "border-foreground/30"}` : "border-border text-muted-foreground bg-transparent"} cursor-pointer`}
                             >
                                 {t}
                             </Button>
@@ -112,7 +112,7 @@ export default React.memo(function AuditLogPage() {
                                 variant="outline"
                                 onClick={() => setResultFilter(r)}
                                 aria-pressed={active}
-                                className={`h-auto rounded-sm border border-solid bg-transparent px-2 py-0.5 text-xs tracking-wide hover:bg-transparent ${active ? `border-current ${color}` : "border-border text-muted-foreground"}`}
+                                className={`h-auto rounded-sm border border-solid bg-transparent px-2 py-0.5 text-xs tracking-wide hover:bg-transparent ${active ? `border-current ${color}` : "border-border text-muted-foreground"} cursor-pointer`}
                             >
                                 {r}
                             </Button>
@@ -152,6 +152,7 @@ export default React.memo(function AuditLogPage() {
                                         e={e}
                                         isSelected={sel?.id === e.id}
                                         onClick={toggleSel}
+                                        className="cursor-pointer"
                                     />
                                 );
                             })}
@@ -179,7 +180,7 @@ export default React.memo(function AuditLogPage() {
                                 size="icon-xs"
                                 onClick={() => setSel(null)}
                                 aria-label="Close detail drawer"
-                                className="text-muted-foreground hover:text-muted-foreground h-auto p-0.5 text-sm hover:bg-transparent"
+                                className="text-muted-foreground hover:text-muted-foreground h-auto cursor-pointer p-0.5 text-sm hover:bg-transparent"
                             >
                                 ✕
                             </Button>

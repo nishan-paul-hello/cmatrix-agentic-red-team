@@ -30,7 +30,7 @@ export function FilterChip({
                     return "text-border border-border hover:text-muted-foreground bg-transparent";
                 }
                 return "text-muted-foreground border-border hover:text-muted-foreground bg-transparent";
-            })()}`}
+            })()} cursor-pointer`}
         >
             {label}
         </Button>

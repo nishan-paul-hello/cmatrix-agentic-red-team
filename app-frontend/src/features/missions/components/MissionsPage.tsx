@@ -81,7 +81,7 @@ export default function MissionsPage({ onNewMission, onOpenMission }: MissionsPa
                     <Button
                         variant="outline"
                         onClick={handleNewMission}
-                        className="text-primary hover:border-primary hover:bg-muted flex h-auto items-center gap-2 rounded-sm px-3 py-1 text-base font-semibold tracking-widest transition-colors duration-100"
+                        className="text-primary hover:border-primary hover:bg-muted flex h-auto cursor-pointer items-center gap-2 rounded-sm px-3 py-1 text-base font-semibold tracking-widest transition-colors duration-100"
                     >
                         <Plus className="h-4 w-4" />
                         NEW MISSION
@@ -101,12 +101,12 @@ export default function MissionsPage({ onNewMission, onOpenMission }: MissionsPa
                         variant="outline"
                         onClick={() => setFilter(f)}
                         aria-pressed={filter === f}
-                        className={[
+                        className={`cursor-pointer ${[
                             "filter-btn h-auto transition-colors duration-100",
                             filter === f
                                 ? "border-primary bg-muted text-destructive"
                                 : "text-muted-foreground hover:text-muted-foreground bg-transparent",
-                        ].join(" ")}
+                        ].join(" ")}`}
                     >
                         {f}
                     </Button>

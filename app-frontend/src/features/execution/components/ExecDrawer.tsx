@@ -41,7 +41,7 @@ export function ExecDrawer({
                     variant="ghost"
                     size="icon-sm"
                     onClick={onClose}
-                    className="text-muted-foreground"
+                    className="text-muted-foreground cursor-pointer"
                     aria-label="Close"
                 >
                     ✕

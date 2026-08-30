@@ -34,7 +34,7 @@ export default function OraclePanel({ onClose }: { onClose: () => void }) {
                     variant="ghost"
                     size="icon-sm"
                     onClick={onClose}
-                    className="text-muted-foreground"
+                    className="text-muted-foreground cursor-pointer"
                     aria-label="Close"
                 >
                     ✕

@@ -32,7 +32,7 @@ export function VDGNodeDrawerHeader() {
                 variant="ghost"
                 size="icon-xs"
                 onClick={onClose}
-                className="text-muted-foreground hover:text-muted-foreground h-auto p-0.5 text-sm leading-none hover:bg-transparent"
+                className="text-muted-foreground hover:text-muted-foreground h-auto cursor-pointer p-0.5 text-sm leading-none hover:bg-transparent"
                 aria-label="Close"
             >
                 ✕
