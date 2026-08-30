@@ -53,12 +53,15 @@ export default function ExecutionConsoleView({
                         </div>
                         <div className="text-muted-foreground text-sm leading-relaxed tracking-wide">
                             Specialists reason and plan &nbsp;·&nbsp; Execution agent runs tools
-                            deterministically &nbsp;·&nbsp; No LLM reasoning occurs during tool execution
+                            deterministically &nbsp;·&nbsp; No LLM reasoning occurs during tool
+                            execution
                         </div>
                     </div>
                     <div className="ml-auto flex flex-shrink-0 items-center gap-2">
                         <div className="bg-destructive pulse-dot h-1.5 w-1.5 rounded-full" />
-                        <span className="text-primary text-sm font-bold tracking-widest">1 RUNNING</span>
+                        <span className="text-primary text-sm font-bold tracking-widest">
+                            1 RUNNING
+                        </span>
                     </div>
                 </div>
 
@@ -67,7 +70,7 @@ export default function ExecutionConsoleView({
                     className="bg-background flex-1 overflow-x-auto overflow-y-auto"
                     ref={parentRef}
                 >
-                    <div className="min-w-[1480px] w-full flex flex-col">
+                    <div className="flex w-full min-w-[1480px] flex-col">
                         {/* Header row */}
                         <div
                             className="bg-muted/30 border-border sticky top-0 z-10 grid gap-4 border-b py-1 shadow-sm"
@@ -76,7 +79,7 @@ export default function ExecutionConsoleView({
                             {EXECUTION_COLUMNS.map(({ h }) => (
                                 <div
                                     key={h}
-                                    className="text-muted-foreground truncate px-3 py-1 text-xs font-bold uppercase tracking-widest"
+                                    className="text-muted-foreground truncate px-3 py-1 text-xs font-bold tracking-widest uppercase"
                                 >
                                     {h}
                                 </div>
@@ -84,12 +87,18 @@ export default function ExecutionConsoleView({
                         </div>
 
                         {rowVirtualizer.getVirtualItems().length > 0 && (
-                            <div style={{ height: `${rowVirtualizer.getVirtualItems()[0].start}px` }} />
+                            <div
+                                style={{ height: `${rowVirtualizer.getVirtualItems()[0].start}px` }}
+                            />
                         )}
                         {rowVirtualizer.getVirtualItems().map((virtualRow) => {
                             const e = entries[virtualRow.index];
                             return (
-                                <ExecutionEntryRow key={e.id} e={e} onClick={() => handleRowClick(e)} />
+                                <ExecutionEntryRow
+                                    key={e.id}
+                                    e={e}
+                                    onClick={() => handleRowClick(e)}
+                                />
                             );
                         })}
                         {rowVirtualizer.getVirtualItems().length > 0 && (

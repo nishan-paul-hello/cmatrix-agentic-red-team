@@ -103,10 +103,10 @@ const AttackGraphCanvasViewInner = React.memo(function ({
             const maxCx = nodes.length > 0 ? Math.max(...nodes.map((n) => n.cx)) : 500;
             const centerCx = (minCx + maxCx) / 2;
             const centerPx = lx(centerCx, graphW);
-            
+
             const minCy = nodes.length > 0 ? Math.min(...nodes.map((n) => n.cy)) : 50;
             const topPx = ly(minCy, graphH);
-            
+
             // Exactly center the visual mass of the tree horizontally
             container.scrollLeft = offsetX + centerPx - w / 2;
             // Exactly place the topmost node 40px from the top
@@ -186,13 +186,17 @@ const AttackGraphCanvasViewInner = React.memo(function ({
                     <div
                         ref={containerRef}
                         role="presentation"
-                        className="relative h-full w-full overflow-auto cursor-grab active:cursor-grabbing [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+                        className="relative h-full w-full cursor-grab [scrollbar-width:none] overflow-auto [-ms-overflow-style:none] active:cursor-grabbing [&::-webkit-scrollbar]:hidden"
                         onMouseDown={handleMouseDown}
                         onMouseMove={handleMouseMove}
                         onMouseUp={handleMouseUp}
                         onMouseLeave={handleMouseUp}
-                        onWheel={() => { hasManuallyScrolled.current = true; }}
-                        onTouchMove={() => { hasManuallyScrolled.current = true; }}
+                        onWheel={() => {
+                            hasManuallyScrolled.current = true;
+                        }}
+                        onTouchMove={() => {
+                            hasManuallyScrolled.current = true;
+                        }}
                     >
                         <div style={{ width: canvasW, height: canvasH, position: "relative" }}>
                             {/* Grid */}

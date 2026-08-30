@@ -47,23 +47,23 @@ export function getStatusColor(status: string): { color: string } {
         case "COMPLETED":
         case "RUNNING":
         case "VALIDATED":
-            return { color: "var(--success)" };
+            return { color: "text-success" };
         case "VALIDATING":
         case "FAILED":
         case "BLOCKED":
-            return { color: "var(--destructive)" };
+            return { color: "text-destructive" };
         case "TIMEOUT":
         case "PAUSED":
         case "WAITING":
-            return { color: "var(--warning)" };
+            return { color: "text-warning" };
         case "QUEUED":
         case "PENDING":
         case "IDLE":
         case "RULED_OUT":
-            return { color: "var(--muted-foreground)" };
+            return { color: "text-muted-foreground" };
         case "ORACLE_CONFIRMED":
-            return { color: "var(--accent-purple)" };
+            return { color: "text-accent-purple" };
         default:
-            return { color: "var(--muted-foreground)" };
+            return { color: "text-muted-foreground" };
     }
 }

@@ -45,13 +45,13 @@ function EnvironmentalLayerInner() {
                 {/* Tabs */}
                 <TabsList
                     variant="line"
-                    className="flex !h-auto w-full items-end justify-start gap-0 overflow-x-auto overflow-y-hidden p-0 [&::-webkit-scrollbar-thumb]:bg-border [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar]:h-1"
+                    className="[&::-webkit-scrollbar-thumb]:bg-border flex !h-auto w-full items-end justify-start gap-0 overflow-x-auto overflow-y-hidden p-0 [&::-webkit-scrollbar]:h-1 [&::-webkit-scrollbar-track]:bg-transparent"
                 >
                     {TABS.map((t) => (
                         <TabsTrigger
                             key={t}
                             value={t}
-                            className={`relative flex-none h-auto cursor-pointer rounded-none bg-transparent px-6 py-3 text-base font-bold tracking-widest transition-colors duration-150 ${
+                            className={`relative h-auto flex-none cursor-pointer rounded-none bg-transparent px-6 py-3 text-base font-bold tracking-widest transition-colors duration-150 ${
                                 activeTab === t
                                     ? "text-foreground hover:text-foreground hover:bg-transparent"
                                     : "text-muted-foreground hover:text-muted-foreground hover:bg-transparent"

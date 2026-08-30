@@ -31,7 +31,7 @@ export default function VulnPatterns() {
                         type="button"
                         key={p.id}
                         onClick={() => setSelId(p.id)}
-                        className={`focus:ring-primary hover:bg-background block w-full cursor-pointer px-4 py-3 text-left transition-colors focus:ring-1 focus:outline-none border-[1px] ${sel.id === p.id ? "bg-background border-primary" : "bg-transparent border-transparent border-b-border"}`}
+                        className={`focus:ring-primary hover:bg-background block w-full cursor-pointer border-[1px] px-4 py-3 text-left transition-colors focus:ring-1 focus:outline-none ${sel.id === p.id ? "bg-background border-primary" : "border-b-border border-transparent bg-transparent"}`}
                     >
                         <div className="mb-1 flex justify-between">
                             <span className="text-primary text-xs font-bold tracking-tight">

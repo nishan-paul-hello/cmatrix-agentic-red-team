@@ -35,9 +35,7 @@ export const ExecutionEntryRow = React.memo(function ExecutionEntryRowInner({
                 onClick();
             }}
         >
-            <div className="text-muted-foreground truncate px-3 py-1.5 text-base">
-                {e.id}
-            </div>
+            <div className="text-muted-foreground truncate px-3 py-1.5 text-base">{e.id}</div>
             <div className="text-muted-foreground truncate px-3 py-1.5 text-base tracking-tighter">
                 {e.ts}
             </div>
@@ -55,10 +53,7 @@ export const ExecutionEntryRow = React.memo(function ExecutionEntryRowInner({
             </div>
             <div className="truncate px-3 py-1.5">
                 <span
-                    className="text-sm font-semibold tracking-normal"
-                    style={{
-                        color: getStatusColor(e.status).color,
-                    }}
+                    className={`text-sm font-semibold tracking-normal ${getStatusColor(e.status).color}`}
                 >
                     {e.status}
                 </span>

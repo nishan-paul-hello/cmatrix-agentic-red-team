@@ -1,5 +1,5 @@
-import { ArrowLeft } from "lucide-react";
 import { useState } from "react";
+import { ArrowLeft } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -51,7 +51,7 @@ export default function FindingDetail({ f, onBack }: { f: Finding; onBack: () =>
                 </div>
                 <TabsList
                     variant="line"
-                    className="flex justify-start overflow-x-auto overflow-y-hidden p-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+                    className="flex [scrollbar-width:none] justify-start overflow-x-auto overflow-y-hidden p-0 [&::-webkit-scrollbar]:hidden"
                 >
                     {(
                         ["OVERVIEW", "EVIDENCE", "ATTACK PATH", "VALIDATION", "TRAJECTORY"] as Tab[]

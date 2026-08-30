@@ -28,9 +28,7 @@ export function FindingDetailModal({
                 }
             }}
         >
-            <DialogContent
-                className="sm:max-w-panel-lg w-full max-h-[85vh] overflow-y-auto px-7 py-6"
-            >
+            <DialogContent className="sm:max-w-panel-lg max-h-[85vh] w-full overflow-y-auto px-7 py-6">
                 <DialogHeader className="mb-4 text-left">
                     <DialogTitle className="text-foreground text-sm font-bold tracking-normal">
                         {selected.id}

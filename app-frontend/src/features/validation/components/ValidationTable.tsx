@@ -1,4 +1,5 @@
 import { ChevronRight } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import {
     Table,
@@ -24,16 +25,22 @@ export function ValidationTable({
             <Table className="text-xs">
                 <TableHeader>
                     <TableRow className="bg-card hover:bg-card sticky top-0">
-                        {["FINDING", "TYPE", "EVIDENCE", "RETRY", "STATUS", "ORACLE", "DETAILS"].map(
-                            (h) => (
-                                <TableHead
-                                    key={h}
-                                    className="text-muted-foreground border-border border-b px-4 py-1.5 text-left text-sm font-semibold tracking-widest"
-                                >
-                                    {h}
-                                </TableHead>
-                            ),
-                        )}
+                        {[
+                            "FINDING",
+                            "TYPE",
+                            "EVIDENCE",
+                            "RETRY",
+                            "STATUS",
+                            "ORACLE",
+                            "DETAILS",
+                        ].map((h) => (
+                            <TableHead
+                                key={h}
+                                className="text-muted-foreground border-border border-b px-4 py-1.5 text-left text-sm font-semibold tracking-widest"
+                            >
+                                {h}
+                            </TableHead>
+                        ))}
                     </TableRow>
                 </TableHeader>
                 <TableBody>

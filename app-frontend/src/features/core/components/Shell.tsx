@@ -5,8 +5,8 @@ import { Button } from "@/components/ui/button";
 import GeometricMark from "@/components/ui/GeometricMark";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { SidebarContent } from "@/features/core/components/SidebarContent";
-import { MISSION_STATUS } from "@/types/domain-types";
 import { cn } from "@/lib/utils";
+import { MISSION_STATUS } from "@/types/domain-types";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -103,7 +103,7 @@ export default function Shell({
             <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
                 <SheetContent
                     side="left"
-                    className="bg-background w-[200px] flex max-w-[80vw] flex-col border-r p-0"
+                    className="bg-background flex w-[200px] max-w-[80vw] flex-col border-r p-0"
                 >
                     <SidebarContent
                         activeNav={activeNav}
@@ -115,7 +115,10 @@ export default function Shell({
 
             {/* ── Desktop Sidebar ────────────────────────────────────────────── */}
             <aside
-                className={cn("border-border bg-background relative hidden flex-shrink-0 flex-col overflow-y-auto border-r lg:flex transition-all duration-300", isSidebarCollapsed ? "w-[64px]" : "w-[200px]")}
+                className={cn(
+                    "border-border bg-background relative hidden flex-shrink-0 flex-col overflow-y-auto border-r transition-all duration-300 lg:flex",
+                    isSidebarCollapsed ? "w-[64px]" : "w-[200px]",
+                )}
                 aria-label="Main navigation"
             >
                 <SidebarContent

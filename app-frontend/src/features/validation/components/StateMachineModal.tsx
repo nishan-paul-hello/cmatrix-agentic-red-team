@@ -42,7 +42,7 @@ export default function StateMachineModal({
                 }
             }}
         >
-            <DialogContent className="w-[95vw] sm:max-w-4xl max-w-full p-6">
+            <DialogContent className="w-[95vw] max-w-full p-6 sm:max-w-4xl">
                 <DialogHeader className="mb-5 text-left">
                     <DialogTitle className="text-foreground text-sm font-bold tracking-wide uppercase">
                         VALIDATION STATE MACHINE
@@ -93,7 +93,13 @@ export default function StateMachineModal({
                             strokeDasharray="4 3"
                             markerEnd="url(#sm-arrow-red)"
                         />
-                        <text x="100" y="340" fill="var(--muted-foreground)" fontSize="10" letterSpacing="1">
+                        <text
+                            x="100"
+                            y="340"
+                            fill="var(--muted-foreground)"
+                            fontSize="10"
+                            letterSpacing="1"
+                        >
                             RETRY
                         </text>
                         <defs>
@@ -143,7 +149,9 @@ export default function StateMachineModal({
                                         textAnchor="middle"
                                         dominantBaseline="central"
                                         style={{
-                                            textShadow: isActive ? "0 0 10px var(--foreground)" : "none",
+                                            textShadow: isActive
+                                                ? "0 0 10px var(--foreground)"
+                                                : "none",
                                         }}
                                     >
                                         {n.id}

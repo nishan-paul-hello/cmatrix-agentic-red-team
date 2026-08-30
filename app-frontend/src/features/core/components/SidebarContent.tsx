@@ -4,6 +4,8 @@ import {
     BarChart2,
     Beaker,
     Bug,
+    ChevronLeft,
+    ChevronRight,
     Database,
     DollarSign,
     FileText,
@@ -14,8 +16,6 @@ import {
     Target,
     Wrench,
     X,
-    ChevronLeft,
-    ChevronRight,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -79,8 +79,18 @@ export function SidebarContent({
             <div className="bg-primary absolute top-0 bottom-0 left-0 w-0.5" aria-hidden="true" />
 
             {/* Logo */}
-            <div className={cn("border-border flex items-center border-b py-4 lg:py-3", isCollapsed ? "justify-center px-2" : "justify-between gap-2.5 px-4")}>
-                <div className={cn("flex items-center gap-2.5", isCollapsed && "justify-center w-full")}>
+            <div
+                className={cn(
+                    "border-border flex items-center border-b py-4 lg:py-3",
+                    isCollapsed ? "justify-center px-2" : "justify-between gap-2.5 px-4",
+                )}
+            >
+                <div
+                    className={cn(
+                        "flex items-center gap-2.5",
+                        isCollapsed && "w-full justify-center",
+                    )}
+                >
                     <GeometricMark size={20} />
                     {!isCollapsed && (
                         <div className="flex flex-col">
@@ -103,11 +113,14 @@ export function SidebarContent({
             </div>
 
             {/* Nav groups */}
-            <nav className="flex flex-1 flex-col py-2 overflow-y-auto overflow-x-hidden scrollbar-none" aria-label="Sections">
+            <nav
+                className="flex flex-1 scrollbar-none flex-col overflow-x-hidden overflow-y-auto py-2"
+                aria-label="Sections"
+            >
                 {NAV_GROUPS.map((group, gi) => (
                     <div key={group.label}>
                         {gi > 0 && <div className="bg-muted mx-4 my-2 h-px" aria-hidden="true" />}
-                        
+
                         {!isCollapsed ? (
                             <div className="text-muted-foreground px-4 pt-2 pb-1 text-sm font-semibold tracking-widest whitespace-nowrap">
                                 {group.label}
@@ -132,14 +145,24 @@ export function SidebarContent({
                                     className={cn(
                                         "flex w-full items-center gap-2.5 rounded-none py-1.5 text-xs tracking-tighter uppercase",
                                         "border-l-2 transition-colors duration-100",
-                                        isCollapsed ? "justify-center px-0" : "justify-start text-left px-4",
+                                        isCollapsed
+                                            ? "justify-center px-0"
+                                            : "justify-start px-4 text-left",
                                         active
                                             ? "border-primary bg-muted text-foreground"
                                             : "text-muted-foreground hover:text-muted-foreground border-transparent hover:bg-transparent",
                                     )}
                                 >
-                                    <Icon className={cn("shrink-0", isCollapsed ? "size-5" : "size-3.5")} aria-hidden="true" />
-                                    {!isCollapsed && <span className="whitespace-nowrap">{item.label}</span>}
+                                    <Icon
+                                        className={cn(
+                                            "shrink-0",
+                                            isCollapsed ? "size-5" : "size-3.5",
+                                        )}
+                                        aria-hidden="true"
+                                    />
+                                    {!isCollapsed && (
+                                        <span className="whitespace-nowrap">{item.label}</span>
+                                    )}
                                 </Button>
                             );
                         })}
@@ -148,15 +171,25 @@ export function SidebarContent({
             </nav>
 
             {/* Bottom Actions */}
-            <div className="border-border flex flex-col border-t bg-background">
+            <div className="border-border bg-background flex flex-col border-t">
                 {toggleCollapse && (
                     <Button
                         variant="ghost"
                         onClick={toggleCollapse}
-                        className={cn("hidden lg:flex w-full items-center rounded-none px-4 py-3 h-auto gap-2.5 text-muted-foreground hover:text-foreground", isCollapsed ? "justify-center px-0" : "justify-start")}
+                        className={cn(
+                            "text-muted-foreground hover:text-foreground hidden h-auto w-full items-center gap-2.5 rounded-none px-4 py-3 lg:flex",
+                            isCollapsed ? "justify-center px-0" : "justify-start",
+                        )}
                         title={isCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
                     >
-                        {isCollapsed ? <ChevronRight className="size-5" /> : <><ChevronLeft className="size-4" /> <span className="text-xs font-bold tracking-widest">COLLAPSE</span></>}
+                        {isCollapsed ? (
+                            <ChevronRight className="size-5" />
+                        ) : (
+                            <>
+                                <ChevronLeft className="size-4" />{" "}
+                                <span className="text-xs font-bold tracking-widest">COLLAPSE</span>
+                            </>
+                        )}
                     </Button>
                 )}
                 {!isCollapsed && (
@@ -164,7 +197,7 @@ export function SidebarContent({
                         <kbd className="border-border bg-card text-muted-foreground rounded-sm border px-1 py-px text-sm">
                             ⌘K
                         </kbd>
-                        <span className="text-muted-foreground text-xs tracking-normal sm:text-sm whitespace-nowrap">
+                        <span className="text-muted-foreground text-xs tracking-normal whitespace-nowrap sm:text-sm">
                             COMMAND PALETTE
                         </span>
                     </div>
