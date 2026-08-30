@@ -19,7 +19,7 @@ export function KPIStrip({ items, className, variant = "default", ...props }: KP
         return (
             <div className={cn("flex items-center gap-5", className)} {...props}>
                 {items.map((m) => (
-                    <div key={m.k} className="flex flex-col items-end">
+                    <div key={m.k} className="flex flex-col items-start">
                         <div className="text-muted-foreground mb-0.5 text-xs tracking-widest uppercase">
                             {m.k}
                         </div>

@@ -20,7 +20,7 @@ export const VDGScoringTable = React.memo(function ({
 }) {
     return (
         <div className="border-border flex flex-1 flex-col overflow-hidden border-r">
-            <div className="bg-background text-muted-foreground border-border shrink-0 border-b text-sm tracking-widest">
+            <div className="bg-background text-muted-foreground border-border shrink-0 border-b px-4 py-2 text-sm tracking-widest">
                 VDG SCORING — UCB POLICY
             </div>
             <div className="flex-1 overflow-auto">

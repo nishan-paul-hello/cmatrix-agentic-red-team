@@ -64,7 +64,7 @@ const TeamManagerDashboardView = React.memo(function ({
                 {/* RIGHT: specialists + schedule */}
                 <div className="border-border lg:w-panel-sm flex w-full flex-shrink-0 flex-col overflow-y-auto border-t lg:border-t-0 lg:border-l">
                     {/* Specialists */}
-                    <div className="bg-background text-muted-foreground border-border border-b text-sm tracking-widest">
+                    <div className="bg-background text-muted-foreground border-border border-b px-4 py-2 text-sm tracking-widest">
                         SPECIALIST STATUS
                     </div>
                     {specialists.map((s) => (
@@ -94,7 +94,7 @@ const TeamManagerDashboardView = React.memo(function ({
                         </div>
                     ))}
                     {/* Schedule */}
-                    <div className="bg-background text-muted-foreground border-border border-b text-sm tracking-widest">
+                    <div className="bg-background text-muted-foreground border-border border-b px-4 py-2 text-sm tracking-widest">
                         NEXT SCHEDULED
                     </div>
                     {sched.map((s, i) => (
