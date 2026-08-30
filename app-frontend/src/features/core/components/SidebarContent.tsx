@@ -14,8 +14,6 @@ import {
     LineChart,
     List,
     LogOut,
-    PanelLeft,
-    PanelLeftClose,
     Search,
     Settings,
     Target,
@@ -92,33 +90,29 @@ export function SidebarContent({
                 )}
             >
                 {/* Logo Area (Interactive when collapsed) */}
-                <div
-                    className={cn(
-                        "group relative flex items-center",
-                        isCollapsed ? "h-8 w-8 cursor-pointer justify-center" : "gap-2.5",
-                    )}
-                    onClick={isCollapsed ? toggleCollapse : undefined}
-                    title={isCollapsed ? "Expand Sidebar" : undefined}
-                >
-                    <div
-                        className={cn(
-                            "flex items-center transition-opacity duration-200",
-                            isCollapsed && "group-hover:opacity-0",
-                        )}
+                {isCollapsed ? (
+                    <button
+                        type="button"
+                        className="group relative flex h-8 w-8 cursor-pointer items-center justify-center rounded-md hover:bg-muted focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                        onClick={toggleCollapse}
+                        title="Expand Sidebar"
+                        aria-label="Expand Sidebar"
                     >
-                        <GeometricMark size={20} />
-                        {!isCollapsed && (
-                            <span className="text-foreground ml-2.5 text-xs font-bold tracking-widest">
-                                RedGrid
-                            </span>
-                        )}
-                    </div>
-                    {isCollapsed && (
-                        <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-200 group-hover:opacity-100">
-                            <PanelLeft className="text-muted-foreground size-5" />
+                        <div className="flex items-center transition-opacity duration-200 group-hover:opacity-0">
+                            <GeometricMark size={20} />
                         </div>
-                    )}
-                </div>
+                        <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                            <ChevronRight className="text-muted-foreground size-5" />
+                        </div>
+                    </button>
+                ) : (
+                    <div className="flex items-center gap-2.5">
+                        <GeometricMark size={20} />
+                        <span className="text-foreground text-xs font-bold tracking-widest">
+                            RedGrid
+                        </span>
+                    </div>
+                )}
 
                 {/* Desktop top actions (Search & Collapse) */}
                 <div
@@ -144,7 +138,7 @@ export function SidebarContent({
                             className="text-muted-foreground hover:text-foreground h-8 w-8"
                             title="Collapse Sidebar"
                         >
-                            <PanelLeftClose className="size-4" />
+                            <ChevronLeft className="size-4" />
                         </Button>
                     )}
                 </div>
