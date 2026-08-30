@@ -38,12 +38,12 @@ function TopbarStat({
     valueColor?: string;
 }) {
     return (
-        <div className="flex items-center gap-1.5">
-            <span className="text-muted-foreground text-xs tracking-widest sm:text-sm">
+        <div className="flex flex-col justify-center gap-0.5">
+            <span className="text-muted-foreground text-[10px] font-bold tracking-widest">
                 {label}
             </span>
             <span
-                className={`text-sm tracking-tight sm:text-base ${valueColor ?? "text-muted-foreground"}`}
+                className={`text-sm font-medium tracking-tight ${valueColor ?? "text-foreground"}`}
             >
                 {value}
             </span>
@@ -134,7 +134,7 @@ export default function Shell({
             <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
                 {/* Top bar */}
                 <header
-                    className="border-border bg-background flex flex-shrink-0 flex-col justify-between gap-2 overflow-x-auto border-b px-4 py-2 sm:h-12 sm:flex-row sm:items-center sm:gap-4 sm:py-0"
+                    className="border-border bg-background flex flex-shrink-0 flex-col justify-between gap-2 overflow-x-auto border-b px-4 py-2 sm:h-14 sm:flex-row sm:items-center sm:gap-4 sm:py-0"
                     aria-label="Mission context bar"
                 >
                     <div className="flex shrink-0 items-center">
@@ -143,7 +143,7 @@ export default function Shell({
                         </span>
                     </div>
 
-                    <div className="flex scrollbar-none items-center gap-4 overflow-x-auto pb-1 sm:gap-5 sm:pb-0">
+                    <div className="flex scrollbar-none items-center gap-5 overflow-x-auto pb-1 sm:pb-0">
                         {/* System status indicator (hidden on mobile, shown in mobile header instead) */}
                         <div className="hidden shrink-0 items-center gap-1.5 lg:flex">
                             <div
@@ -151,17 +151,27 @@ export default function Shell({
 
                                 aria-hidden="true"
                             />
-                            <span className="text-success text-sm tracking-widest whitespace-nowrap lg:text-base">
+                            <span className="text-success text-sm tracking-widest whitespace-nowrap">
                                 SYSTEM ONLINE
                             </span>
                         </div>
 
-                        <div className="flex shrink-0 items-center gap-3 sm:gap-5">
+                        {/* Divider */}
+                        <div className="bg-border hidden h-8 w-px lg:block" />
+
+                        <div className="flex shrink-0 items-center gap-4 sm:gap-6">
                             <TopbarStat
                                 label="STATUS"
                                 value={MISSION_STATUS.RUNNING}
                                 valueColor="text-success"
                             />
+                            <TopbarStat label="TARGET" value="app.targetcorp.com" />
+                            <TopbarStat label="MODE" value="ONE-DAY" />
+                            <TopbarStat label="SURFACE" value="WEB APP" />
+                            
+                            {/* Inner Divider */}
+                            <div className="bg-border h-6 w-px" />
+                            
                             <TopbarStat label="MODEL" value="SONNET-5" />
                             <TopbarStat label="COST" value="$1.42" />
                             <TopbarStat label="TIME" value="00:19:04" />
