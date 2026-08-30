@@ -58,6 +58,7 @@ interface ShellProps {
     onNavChange: (id: NavItem) => void;
     children: ReactNode;
     missionId?: string;
+    onOpenCommandPalette?: () => void;
 }
 
 // ─── Component ────────────────────────────────────────────────────────────────
@@ -67,6 +68,7 @@ export default function Shell({
     onNavChange,
     children,
     missionId = "CVE-001",
+    onOpenCommandPalette,
 }: ShellProps) {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -109,6 +111,7 @@ export default function Shell({
                         activeNav={activeNav}
                         onNavChange={onNavChange}
                         setMobileMenuOpen={setMobileMenuOpen}
+                        onOpenCommandPalette={onOpenCommandPalette}
                     />
                 </SheetContent>
             </Sheet>
@@ -127,6 +130,7 @@ export default function Shell({
                     setMobileMenuOpen={setMobileMenuOpen}
                     isCollapsed={isSidebarCollapsed}
                     toggleCollapse={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+                    onOpenCommandPalette={onOpenCommandPalette}
                 />
             </aside>
 
@@ -168,10 +172,10 @@ export default function Shell({
                             <TopbarStat label="TARGET" value="app.targetcorp.com" />
                             <TopbarStat label="MODE" value="ONE-DAY" />
                             <TopbarStat label="SURFACE" value="WEB APP" />
-                            
+
                             {/* Inner Divider */}
                             <div className="bg-border h-6 w-px" />
-                            
+
                             <TopbarStat label="MODEL" value="SONNET-5" />
                             <TopbarStat label="COST" value="$1.42" />
                             <TopbarStat label="TIME" value="00:19:04" />
@@ -179,22 +183,7 @@ export default function Shell({
 
                         {/* User actions */}
                         <div className="border-border ml-auto flex shrink-0 items-center gap-2 sm:ml-2 sm:border-l sm:pl-3">
-                            <Button
-                                variant="outline"
-                                size="icon"
-                                aria-label="Settings"
-                                className="bg-muted text-muted-foreground hover:text-muted-foreground h-6 w-6 sm:h-7 sm:w-7"
-                            >
-                                <Settings className="size-3.5" />
-                            </Button>
-                            <Button
-                                variant="outline"
-                                size="icon"
-                                aria-label="User profile"
-                                className="bg-muted text-muted-foreground hover:text-foreground h-6 w-6 rounded-full text-xs font-bold sm:h-7 sm:w-7"
-                            >
-                                R
-                            </Button>
+                            {/* Icons removed as per user request */}
                         </div>
                     </div>
                 </header>

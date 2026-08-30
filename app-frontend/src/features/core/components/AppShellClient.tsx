@@ -68,6 +68,7 @@ export function AppShellClient({ children }: { children: React.ReactNode }) {
                 activeNav={navItemForPath(pathname)}
                 onNavChange={handleNavChange}
                 missionId={activeMissionId}
+                onOpenCommandPalette={() => setPaletteOpen(true)}
             >
                 {children}
             </Shell>

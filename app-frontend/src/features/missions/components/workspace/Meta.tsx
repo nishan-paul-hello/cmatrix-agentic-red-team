@@ -4,9 +4,7 @@ export default function Meta({ label, value }: { label: string; value: string })
             <span className="text-muted-foreground text-[10px] font-bold tracking-widest uppercase">
                 {label}
             </span>
-            <span className="text-foreground text-sm font-medium tracking-tight">
-                {value}
-            </span>
+            <span className="text-foreground text-sm font-medium tracking-tight">{value}</span>
         </div>
     );
 }

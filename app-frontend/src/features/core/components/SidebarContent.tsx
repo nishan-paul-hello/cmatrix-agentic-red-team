@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
     Activity,
     AlertTriangle,
@@ -12,6 +13,10 @@ import {
     LayoutDashboard,
     LineChart,
     List,
+    LogOut,
+    PanelLeft,
+    PanelLeftClose,
+    Search,
     Settings,
     Target,
     Wrench,
@@ -66,37 +71,84 @@ export function SidebarContent({
     setMobileMenuOpen,
     isCollapsed = false,
     toggleCollapse,
+    onOpenCommandPalette,
 }: {
     activeNav: NavItem;
     onNavChange: (id: NavItem) => void;
     setMobileMenuOpen: (open: boolean) => void;
     isCollapsed?: boolean;
     toggleCollapse?: () => void;
+    onOpenCommandPalette?: () => void;
 }) {
+    const [showLogoutMenu, setShowLogoutMenu] = useState(false);
+
     return (
         <>
-            {/* Logo */}
+            {/* Logo and Top Actions */}
             <div
                 className={cn(
-                    "border-border flex items-center border-b py-4 lg:py-3",
-                    isCollapsed ? "justify-center px-2" : "justify-between gap-2.5 px-4",
+                    "border-border flex border-b py-4 lg:py-3",
+                    isCollapsed ? "flex-col items-center gap-3 px-2" : "items-center justify-between px-4",
                 )}
             >
+                {/* Logo Area (Interactive when collapsed) */}
                 <div
                     className={cn(
-                        "flex items-center gap-2.5",
-                        isCollapsed && "w-full justify-center",
+                        "group relative flex items-center",
+                        isCollapsed ? "h-8 w-8 cursor-pointer justify-center" : "gap-2.5",
                     )}
+                    onClick={isCollapsed ? toggleCollapse : undefined}
+                    title={isCollapsed ? "Expand Sidebar" : undefined}
                 >
-                    <GeometricMark size={20} />
-                    {!isCollapsed && (
-                        <div className="flex flex-col">
-                            <span className="text-foreground text-xs font-bold tracking-widest">
+                    <div
+                        className={cn(
+                            "flex items-center transition-opacity duration-200",
+                            isCollapsed && "group-hover:opacity-0",
+                        )}
+                    >
+                        <GeometricMark size={20} />
+                        {!isCollapsed && (
+                            <span className="text-foreground ml-2.5 text-xs font-bold tracking-widest">
                                 RedGrid
                             </span>
+                        )}
+                    </div>
+                    {isCollapsed && (
+                        <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                            <PanelLeft className="text-muted-foreground size-5" />
                         </div>
                     )}
                 </div>
+
+                {/* Desktop top actions (Search & Collapse) */}
+                <div
+                    className={cn(
+                        "hidden items-center gap-1 lg:flex",
+                        isCollapsed ? "w-full flex-col" : "",
+                    )}
+                >
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        className="text-muted-foreground hover:text-foreground h-8 w-8"
+                        title="Command Palette (⌘K)"
+                        onClick={onOpenCommandPalette}
+                    >
+                        <Search className={cn(isCollapsed ? "size-5" : "size-4")} />
+                    </Button>
+                    {!isCollapsed && toggleCollapse && (
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={toggleCollapse}
+                            className="text-muted-foreground hover:text-foreground h-8 w-8"
+                            title="Collapse Sidebar"
+                        >
+                            <PanelLeftClose className="size-4" />
+                        </Button>
+                    )}
+                </div>
+
                 {/* Mobile close button inside drawer */}
                 <Button
                     variant="ghost"
@@ -108,6 +160,8 @@ export function SidebarContent({
                     <X className="size-4" />
                 </Button>
             </div>
+
+
 
             {/* Nav groups */}
             <nav
@@ -169,36 +223,40 @@ export function SidebarContent({
 
             {/* Bottom Actions */}
             <div className="border-border bg-background flex flex-col border-t">
-                {toggleCollapse && (
+                <div className="relative p-2">
+                    {showLogoutMenu && (
+                        <div className="border-border bg-popover absolute right-2 bottom-full left-2 mb-1 rounded-md border shadow-md">
+                            <Button
+                                variant="ghost"
+                                className="text-destructive hover:bg-destructive/10 hover:text-destructive w-full justify-start gap-2 rounded-sm px-3 py-2 text-sm"
+                                onClick={() => setShowLogoutMenu(false)}
+                            >
+                                <LogOut className="size-4" />
+                                Log out
+                            </Button>
+                        </div>
+                    )}
                     <Button
                         variant="ghost"
-                        onClick={toggleCollapse}
+                        onClick={() => setShowLogoutMenu(!showLogoutMenu)}
                         className={cn(
-                            "text-muted-foreground hover:text-foreground hidden h-auto w-full items-center gap-2.5 rounded-none px-4 py-3 lg:flex",
-                            isCollapsed ? "justify-center px-0" : "justify-start",
+                            "hover:bg-muted flex h-auto w-full items-center px-2 py-2",
+                            isCollapsed ? "justify-center" : "justify-start gap-3",
                         )}
-                        title={isCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
                     >
-                        {isCollapsed ? (
-                            <ChevronRight className="size-5" />
-                        ) : (
-                            <>
-                                <ChevronLeft className="size-4" />{" "}
-                                <span className="text-xs font-bold tracking-widest">COLLAPSE</span>
-                            </>
+                        <div className="bg-primary text-primary-foreground flex size-8 shrink-0 items-center justify-center rounded-full text-xs font-bold">
+                            NP
+                        </div>
+                        {!isCollapsed && (
+                            <div className="flex flex-1 flex-col items-start overflow-hidden text-left">
+                                <span className="w-full truncate text-sm leading-none font-medium">
+                                    Nishan Paul
+                                </span>
+                                <span className="text-muted-foreground mt-1 text-xs">Free</span>
+                            </div>
                         )}
                     </Button>
-                )}
-                {!isCollapsed && (
-                    <div className="border-border flex items-center gap-2 border-t px-4 py-3">
-                        <kbd className="border-border bg-card text-muted-foreground rounded-sm border px-1 py-px text-sm">
-                            ⌘K
-                        </kbd>
-                        <span className="text-muted-foreground text-xs tracking-normal whitespace-nowrap sm:text-sm">
-                            COMMAND PALETTE
-                        </span>
-                    </div>
-                )}
+                </div>
             </div>
         </>
     );
