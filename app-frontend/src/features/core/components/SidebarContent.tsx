@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -81,7 +81,20 @@ export function SidebarContent({
     onOpenCommandPalette?: () => void;
 }) {
     const [showLogoutMenu, setShowLogoutMenu] = useState(false);
+    const logoutMenuRef = useRef<HTMLDivElement>(null);
     const router = useRouter();
+
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (logoutMenuRef.current && !logoutMenuRef.current.contains(event.target as Node)) {
+                setShowLogoutMenu(false);
+            }
+        }
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
 
     return (
         <>
@@ -217,7 +230,7 @@ export function SidebarContent({
             </nav>
 
             {/* Bottom Actions */}
-            <div className="border-border bg-background flex flex-col border-t">
+            <div className="border-border bg-background flex flex-col border-t" ref={logoutMenuRef}>
                 <div className="relative p-2">
                     {showLogoutMenu && (
                         <div className="border-border bg-popover absolute bottom-full left-2 z-50 mb-1 flex w-max min-w-52 flex-col rounded-md border shadow-md">
