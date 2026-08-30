@@ -89,26 +89,26 @@ export const VDGScoringTable = React.memo(function ({
                                                 {v.status}
                                             </span>
                                         </TableCell>
-                                        <TableCell className="px-3 py-1.5 text-right">
+                                        <TableCell className="px-3 py-1.5">
                                             <span className={`text-xs font-bold ${ucbColor}`}>
                                                 {v.ucb > 0 ? v.ucb.toFixed(3) : "—"}
                                             </span>
                                         </TableCell>
-                                        <TableCell className="text-muted-foreground px-3 py-1.5 text-right text-base">
+                                        <TableCell className="text-muted-foreground px-3 py-1.5 text-base">
                                             {v.exploit > 0 ? v.exploit.toFixed(3) : "—"}
                                         </TableCell>
-                                        <TableCell className="text-success px-3 py-1.5 text-right text-base">
+                                        <TableCell className="text-success px-3 py-1.5 text-base">
                                             {v.explore > 0 ? v.explore.toFixed(3) : "—"}
                                         </TableCell>
-                                        <TableCell className="text-muted-foreground px-3 py-1.5 text-right text-base">
+                                        <TableCell className="text-muted-foreground px-3 py-1.5 text-base">
                                             {v.visits}
                                         </TableCell>
                                         <TableCell
-                                            className={`px-3 py-1.5 text-right text-base ${eordColor}`}
+                                            className={`px-3 py-1.5 text-base ${eordColor}`}
                                         >
                                             {v.eord}/5
                                         </TableCell>
-                                        <TableCell className="text-muted-foreground px-3 py-1.5 text-right text-base">
+                                        <TableCell className="text-muted-foreground px-3 py-1.5 text-base">
                                             {v.cost}
                                         </TableCell>
                                     </TableRow>
