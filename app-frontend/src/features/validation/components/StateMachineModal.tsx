@@ -42,7 +42,7 @@ export default function StateMachineModal({
                 }
             }}
         >
-            <DialogContent className="w-panel-2xl sm:max-w-panel-2xl max-w-full p-6">
+            <DialogContent className="w-[95vw] sm:max-w-4xl max-w-full p-6">
                 <DialogHeader className="mb-5 text-left">
                     <DialogTitle className="text-foreground text-sm font-bold tracking-wide uppercase">
                         VALIDATION STATE MACHINE
@@ -53,12 +53,12 @@ export default function StateMachineModal({
                             : "DIAGNOSIS → ADAPT → CAP RETRY LOOP"}
                     </div>
                 </DialogHeader>
-                <div className="relative h-[min(530px,70vh)]">
+                <div className="relative h-[min(700px,85vh)]">
                     <svg
                         className="absolute inset-0"
                         width="100%"
                         height="100%"
-                        viewBox="0 0 620 530"
+                        viewBox="20 10 540 520"
                     >
                         {edges.map((e) => (
                             <g key={`${e.x1}-${e.y1}-${e.x2}-${e.y2}`}>
@@ -76,7 +76,7 @@ export default function StateMachineModal({
                                         x={(e.x1 + e.x2) / 2 + 6}
                                         y={(e.y1 + e.y2) / 2}
                                         fill="var(--muted-foreground)"
-                                        fontSize="8"
+                                        fontSize="10"
                                         letterSpacing="1"
                                     >
                                         {e.label}
@@ -93,7 +93,7 @@ export default function StateMachineModal({
                             strokeDasharray="4 3"
                             markerEnd="url(#sm-arrow-red)"
                         />
-                        <text x="100" y="340" fill="var(--border)" fontSize="8" letterSpacing="1">
+                        <text x="100" y="340" fill="var(--muted-foreground)" fontSize="10" letterSpacing="1">
                             RETRY
                         </text>
                         <defs>
@@ -118,36 +118,40 @@ export default function StateMachineModal({
                                 <path d="M0,0 L0,6 L6,3 z" fill="var(--border)" />
                             </marker>
                         </defs>
+                        {nodes.map((n) => {
+                            const isActive = n.id === activeState;
+                            const strokeColor = isActive ? "var(--foreground)" : n.text;
+                            const fillColor = isActive ? "var(--foreground)" : n.text;
+                            const textColor = isActive ? "var(--foreground)" : n.text;
+                            return (
+                                <g key={n.id} transform={`translate(${n.x}, ${n.y})`}>
+                                    <rect
+                                        width={n.w}
+                                        height={n.h}
+                                        rx={4}
+                                        stroke={strokeColor}
+                                        strokeWidth={1}
+                                        fill={`color-mix(in srgb, ${fillColor} ${isActive ? "20%" : "10%"}, transparent)`}
+                                    />
+                                    <text
+                                        x={n.w / 2}
+                                        y={n.h / 2}
+                                        fill={textColor}
+                                        fontSize="14"
+                                        fontWeight="bold"
+                                        letterSpacing="1"
+                                        textAnchor="middle"
+                                        dominantBaseline="central"
+                                        style={{
+                                            textShadow: isActive ? "0 0 10px var(--foreground)" : "none",
+                                        }}
+                                    >
+                                        {n.id}
+                                    </text>
+                                </g>
+                            );
+                        })}
                     </svg>
-                    {nodes.map((n) => {
-                        const isActive = n.id === activeState;
-                        return (
-                            <div
-                                key={n.id}
-                                className="absolute rounded-sm"
-                                style={{
-                                    left: `${(n.x / 620) * 100}%`,
-                                    top: `${(n.y / 530) * 100}%`,
-                                    width: `${(n.w / 620) * 100}%`,
-                                    height: `${(n.h / 530) * 100}%`,
-                                    background: isActive ? "var(--primary)" : n.color,
-                                    border: `1px solid ${isActive ? "var(--destructive)" : (n.border ?? "var(--border)")}`,
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                }}
-                            >
-                                <span
-                                    className="text-base font-bold tracking-wide"
-                                    style={{
-                                        color: isActive ? "var(--foreground)" : n.text,
-                                    }}
-                                >
-                                    {n.id}
-                                </span>
-                            </div>
-                        );
-                    })}
                 </div>
             </DialogContent>
         </Dialog>
