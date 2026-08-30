@@ -36,9 +36,7 @@ export default async function LandingPage() {
                         <div className="absolute bottom-[-1px] right-[-1px] h-2.5 w-2.5 border-b-2 border-r-2 border-foreground/80 transition-colors group-hover:border-foreground" />
                         
                         <div className="relative flex items-center gap-2 font-mono text-sm font-medium tracking-tight text-foreground">
-                            <span className="mr-1 font-bold text-foreground/50 transition-colors group-hover:text-foreground/80">&#47;&#47;</span>
                             <span>LLM-orchestrated multi-agent framework for autonomous VAPT</span>
-                            <span className="ml-1 inline-block h-4 w-1.5 bg-foreground/80 animate-pulse transition-colors group-hover:bg-foreground" />
                         </div>
                     </div>
 
