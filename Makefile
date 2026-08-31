@@ -1,4 +1,4 @@
-.PHONY: help install dev build docker-build up down clean paper ppt clean-paper format format-check lint lint-fix audit typecheck test
+.PHONY: help install dev build docker-build up down clean paper ppt clean-paper format format-check lint lint-fix audit typecheck test paper-inception
 
 -include .env
 export
@@ -24,6 +24,7 @@ help:
 	@echo "  make down                   Stop Docker containers"
 	@echo "  make clean                  Clean all build artifacts and caches"
 	@echo "  make paper                  Build the Research Paper PDF"
+	@echo "  make paper-inception        Build the Inception Report PDF"
 	@echo "  make ppt                    Build the Presentation PPTX"
 	@echo "  make clean-paper            Clean Research Paper artifacts"
 
@@ -77,6 +78,7 @@ PAPER_DIR_02 := docs/paper-structure/paper-02-governed-agentic-red-teaming
 PAPER_DIR_03 := docs/paper-structure/paper-03-checkpoint-resumable-autonomy
 PAPER_DIR_04 := docs/paper-structure/paper-04-hitl-orchestrated-reasoning
 PAPER_DIR_05 := docs/paper-structure/paper-05-agentic-vuln-intelligence
+PAPER_DIR_INCEPTION := docs/paper-structure/inception-report-template
 
 paper: paper-01 paper-02 paper-03 paper-04 paper-05
 	@echo "✅ All papers built successfully!"
@@ -111,6 +113,10 @@ paper-05:
 	mv $(PAPER_DIR_05)/main/main.pdf $(PAPER_DIR_05)/paper.pdf
 	rm -rf $(PAPER_DIR_05)/main/build
 
+paper-inception:
+	@echo "🏗️  Building Inception Report Template..."
+	export BIBINPUTS=.:$$BIBINPUTS; $(LATEXMK) -jobname=main -outdir="." -auxdir="build" $(PAPER_DIR_INCEPTION)/main.tex
+
 # Presentation Build
 PPT_DIR := docs/paper-thesis/presentation
 PPT_NAME ?= presentation-draft.pptx
@@ -129,3 +135,4 @@ clean: clean-paper
 clean-paper:
 	@echo "🧹 Cleaning Research Paper artifacts..."
 	rm -rf docs/paper-structure/paper-*/*.pdf docs/paper-structure/paper-*/content/build docs/paper-structure/paper-*/contents/build docs/paper-structure/paper-*/main/build
+	rm -rf docs/paper-structure/inception-report-template/build docs/paper-structure/inception-report-template/*.pdf
