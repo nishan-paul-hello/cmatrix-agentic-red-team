@@ -1,17 +1,18 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { cn } from "@/lib/utils";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { Crosshair } from "lucide-react";
 
+import { cn } from "@/lib/utils";
+
 interface TerminalCTAProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-    originalText: string;
+    originalText?: string;
     href?: string;
 }
 
 export const TerminalCTA = React.forwardRef<HTMLElement, TerminalCTAProps>(
-    ({ className, originalText, href, onClick, ...props }, ref) => {
+    ({ className, originalText = "DEPLOY HACKING AGENT", href, onClick, ...props }, ref) => {
         const [text, setText] = useState(originalText);
         const [isHovering, setIsHovering] = useState(false);
         const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*";
@@ -30,7 +31,7 @@ export const TerminalCTA = React.forwardRef<HTMLElement, TerminalCTAProps>(
                                 }
                                 return letters[Math.floor(Math.random() * letters.length)];
                             })
-                            .join("")
+                            .join(""),
                     );
                     if (iteration >= originalText.length) {
                         clearInterval(interval);
@@ -42,10 +43,12 @@ export const TerminalCTA = React.forwardRef<HTMLElement, TerminalCTAProps>(
         }, [isHovering, originalText]);
 
         const content = (
-            <div className="relative w-full h-full flex items-center justify-center px-4 py-4">
+            <div className="relative flex h-full w-full items-center justify-center px-4 py-4">
                 <span className="relative z-10 flex items-center text-left">
-                    <Crosshair className="text-primary mr-3 w-5 h-5 transition-transform duration-500 group-hover:rotate-90 group-hover:scale-110" />
-                    <span className="tracking-[0.15em] font-semibold text-primary transition-all">{text}</span>
+                    <Crosshair className="text-primary mr-3 h-5 w-5 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-90" />
+                    <span className="text-primary font-semibold tracking-[0.15em] transition-all">
+                        {text}
+                    </span>
                 </span>
             </div>
         );
@@ -62,15 +65,15 @@ export const TerminalCTA = React.forwardRef<HTMLElement, TerminalCTAProps>(
             },
             className: cn(
                 "cursor-pointer relative group bg-transparent font-mono text-sm inline-flex outline-none",
-                className
-            )
+                className,
+            ),
         };
 
         if (href) {
             return (
-                <Link 
-                    href={href} 
-                    ref={ref as React.Ref<HTMLAnchorElement>} 
+                <Link
+                    href={href}
+                    ref={ref as React.Ref<HTMLAnchorElement>}
                     {...commonProps}
                     onClick={onClick as React.MouseEventHandler<HTMLAnchorElement> | undefined}
                 >
@@ -80,15 +83,15 @@ export const TerminalCTA = React.forwardRef<HTMLElement, TerminalCTAProps>(
         }
 
         return (
-            <button 
-                ref={ref as React.Ref<HTMLButtonElement>} 
-                type="button" 
+            <button
+                ref={ref as React.Ref<HTMLButtonElement>}
+                type="button"
                 {...commonProps}
                 onClick={onClick}
             >
                 {content}
             </button>
         );
-    }
+    },
 );
 TerminalCTA.displayName = "TerminalCTA";

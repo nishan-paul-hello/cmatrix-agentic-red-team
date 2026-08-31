@@ -25,10 +25,10 @@ export default async function LandingPage() {
                         {isAuthenticated ? (
                             <LandingProfileMenu />
                         ) : (
-                            <LoginButton 
-                                text="Log in" 
+                            <LoginButton
+                                text="Log in"
                                 icon={<User className="h-3.5 w-3.5" />}
-                                className="group h-8 px-3 py-1.5 text-sm rounded-full bg-white text-black font-medium transition-all duration-300 hover:bg-white/90 hover:shadow-[0_0_15px_rgba(255,255,255,0.2)] hover:scale-105" 
+                                className="group h-8 rounded-full bg-white px-3 py-1.5 text-sm font-medium text-black transition-all duration-300 hover:scale-105 hover:bg-white/90 hover:shadow-[0_0_15px_rgba(255,255,255,0.2)]"
                             />
                         )}
                     </nav>
@@ -60,14 +60,10 @@ export default async function LandingPage() {
                         {isAuthenticated ? (
                             <TerminalCTA
                                 href="/dashboard"
-                                originalText="Deploy Autonomous Agents"
                                 className="h-14 w-full px-8 text-base sm:w-auto sm:min-w-[200px]"
                             />
                         ) : (
-                            <TerminalLoginCTA
-                                originalText="Deploy Autonomous Agents"
-                                className="h-14 w-full px-8 text-base sm:w-auto sm:min-w-[200px]"
-                            />
+                            <TerminalLoginCTA className="h-14 w-full px-8 text-base sm:w-auto sm:min-w-[200px]" />
                         )}
                     </div>
                 </div>

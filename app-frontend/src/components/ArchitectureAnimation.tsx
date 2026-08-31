@@ -169,7 +169,12 @@ const ACCENT_HEX: Record<Accent, string> = {
 
 type OrchStage = "intake" | "recon" | "compact" | null;
 
-const ORCH_STAGES: { id: Exclude<OrchStage, null>; label: string; sub: string; icon: React.ReactNode }[] = [
+const ORCH_STAGES: {
+    id: Exclude<OrchStage, null>;
+    label: string;
+    sub: string;
+    icon: React.ReactNode;
+}[] = [
     {
         id: "intake",
         label: "Scope Intake",
@@ -726,7 +731,9 @@ function TrajectoryLog({ line }: { line: string }) {
     const style = LOG_TAG_STYLE[tag] ?? "bg-zinc-900 text-zinc-300 border-zinc-700";
     return (
         <span className="inline-flex items-center gap-2">
-            <span className={`rounded border px-1.5 py-[1px] text-[9px] font-bold tracking-wide ${style}`}>
+            <span
+                className={`rounded border px-1.5 py-[1px] text-[9px] font-bold tracking-wide ${style}`}
+            >
                 {tag}
             </span>
             <span>{rest}</span>
@@ -938,7 +945,9 @@ export default function ArchitectureAnimation() {
                                         <div
                                             className={`flex flex-1 items-center gap-2 rounded px-2 transition-colors duration-300 ${on ? "bg-cyan-500/10" : ""}`}
                                         >
-                                            <span className={on ? "text-cyan-400" : "text-zinc-600"}>
+                                            <span
+                                                className={on ? "text-cyan-400" : "text-zinc-600"}
+                                            >
                                                 {stage.icon}
                                             </span>
                                             <div className="flex min-w-0 flex-col leading-none">
@@ -1014,7 +1023,9 @@ export default function ArchitectureAnimation() {
                                         }`}
                                     >
                                         <div className="flex items-center gap-1.5">
-                                            <span className={on ? "text-amber-400" : "text-zinc-600"}>
+                                            <span
+                                                className={on ? "text-amber-400" : "text-zinc-600"}
+                                            >
                                                 {s.icon}
                                             </span>
                                             <span
@@ -1212,17 +1223,17 @@ export default function ArchitectureAnimation() {
                 <span className="mr-1 text-[9px] font-bold tracking-wider text-zinc-500 uppercase">
                     VDG node status
                 </span>
-                {(["locked", "eligible", "selected", "in_progress", "exploited"] as NodeStatus[]).map(
-                    (status) => (
-                        <div
-                            key={status}
-                            className={`flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[9.5px] ${STATUS_BORDER[status]} ${STATUS_BG[status]} ${STATUS_TEXT[status]}`}
-                        >
-                            <StatusIcon status={status} className="h-3 w-3" />
-                            {STATUS_LABEL[status].toLowerCase()}
-                        </div>
-                    ),
-                )}
+                {(
+                    ["locked", "eligible", "selected", "in_progress", "exploited"] as NodeStatus[]
+                ).map((status) => (
+                    <div
+                        key={status}
+                        className={`flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[9.5px] ${STATUS_BORDER[status]} ${STATUS_BG[status]} ${STATUS_TEXT[status]}`}
+                    >
+                        <StatusIcon status={status} className="h-3 w-3" />
+                        {STATUS_LABEL[status].toLowerCase()}
+                    </div>
+                ))}
             </div>
 
             {/* Trajectory log */}
