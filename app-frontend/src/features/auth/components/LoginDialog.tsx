@@ -43,9 +43,7 @@ export function LoginDialog({ children }: LoginDialogProps) {
                         Sign in to RedGrid
                     </DialogTitle>
                     <DialogDescription className="text-muted-foreground/80 mx-auto mt-3 text-center font-sans text-[15px] leading-relaxed font-light tracking-wide">
-                        Your private evaluation platform for autonomous
-                        <br />
-                        VAPT on hosted benchmarks.
+                        Conquer Your Weakness Before It Conquers You.
                     </DialogDescription>
                 </DialogHeader>
 
