@@ -24,20 +24,49 @@ import {
 } from "lucide-react";
 
 /* ------------------------------------------------------------------ */
-/*  Static structure — mirrors the RedGrid architecture spec           */
+/*  Geometry — every box lives in a fixed 1000x740 coordinate space.   */
+/*  All connectors are derived FROM these boxes, so a line's endpoint  */
+/*  is always exactly on a box's border — never floating near it.      */
+/* ------------------------------------------------------------------ */
+
+const VB_W = 1000;
+const VB_H = 740;
+
+type BoxId = "el" | "tm" | "spec" | "vdg" | "val" | "ev" | "exec" | "target";
+
+type Box = { x: number; y: number; w: number; h: number };
+
+const BOX: Record<BoxId, Box> = {
+    el: { x: 24, y: 24, w: 272, h: 130 },
+    tm: { x: 364, y: 24, w: 272, h: 130 },
+    spec: { x: 744, y: 24, w: 232, h: 130 },
+    vdg: { x: 24, y: 190, w: 700, h: 300 },
+    val: { x: 24, y: 530, w: 200, h: 120 },
+    ev: { x: 244, y: 530, w: 200, h: 120 },
+    exec: { x: 484, y: 530, w: 200, h: 120 },
+    target: { x: 744, y: 530, w: 232, h: 120 },
+};
+
+const pct = (box: Box) => ({
+    left: `${(box.x / VB_W) * 100}%`,
+    top: `${(box.y / VB_H) * 100}%`,
+    width: `${(box.w / VB_W) * 100}%`,
+    height: `${(box.h / VB_H) * 100}%`,
+});
+
+/* ------------------------------------------------------------------ */
+/*  VDG — Vulnerability Dependency Graph nodes (fixed positions)       */
 /* ------------------------------------------------------------------ */
 
 type NodeStatus = "hidden" | "locked" | "eligible" | "selected" | "in_progress" | "exploited";
-
 type VdgId = "v1" | "v2" | "v3" | "v4" | "v5";
 
-const VDG: Record<
+const VDG_NODE: Record<
     VdgId,
-    { x: number; y: number; label: string; sub: string; phi: number; delta: number; epss: number }
+    { box: Box; label: string; sub: string; phi: number; delta: number; epss: number }
 > = {
     v1: {
-        x: 150,
-        y: 245,
+        box: { x: 54, y: 230, w: 190, h: 90 },
         label: "AUTH BYPASS",
         sub: "JWT forgery",
         phi: 0.74,
@@ -45,28 +74,32 @@ const VDG: Record<
         epss: 0.41,
     },
     v2: {
-        x: 460,
-        y: 215,
-        label: "SQLI · login",
+        box: { x: 279, y: 230, w: 190, h: 90 },
+        label: "SQLI · LOGIN",
         sub: "blind UNION",
         phi: 0.83,
         delta: 0.22,
         epss: 0.71,
     },
     v3: {
-        x: 790,
-        y: 245,
-        label: "XSS · search",
+        box: { x: 504, y: 230, w: 190, h: 90 },
+        label: "XSS · SEARCH",
         sub: "reflected",
         phi: 0.58,
         delta: 0.28,
         epss: 0.33,
     },
-    v4: { x: 300, y: 365, label: "PRIV ESC", sub: "role param", phi: 0.61, delta: 0.5, epss: 0.22 },
+    v4: {
+        box: { x: 84, y: 378, w: 230, h: 90 },
+        label: "PRIV ESC",
+        sub: "role parameter",
+        phi: 0.61,
+        delta: 0.5,
+        epss: 0.22,
+    },
     v5: {
-        x: 590,
-        y: 435,
-        label: "RCE · upload",
+        box: { x: 384, y: 378, w: 230, h: 90 },
+        label: "RCE · UPLOAD",
         sub: "file-type bypass",
         phi: 0.69,
         delta: 0.62,
@@ -74,34 +107,53 @@ const VDG: Record<
     },
 };
 
+// Prerequisite edges inside the VDG. Elbowed so every line meets a node
+// border square-on — no diagonal lines guessing where a box edge is.
 const PREREQ: { from: VdgId; to: VdgId; d: string }[] = [
-    { from: "v1", to: "v4", d: "M 160,270 Q 220,315 292,342" },
-    { from: "v2", to: "v5", d: "M 480,242 Q 545,330 583,408" },
-    { from: "v4", to: "v5", d: "M 320,390 Q 430,415 560,428" },
+    { from: "v1", to: "v4", d: "M 149,320 L 149,349 L 199,349 L 199,378" },
+    { from: "v2", to: "v5", d: "M 374,320 L 374,349 L 499,349 L 499,378" },
+    { from: "v4", to: "v5", d: "M 314,423 L 384,423" },
 ];
 
-type EdgeId =
-    | "el-manager"
-    | "manager-specialist"
-    | "manager-vdg"
-    | "specialist-target"
-    | "target-pipeline"
-    | "exec-eval"
-    | "eval-validation"
-    | "to-el"
-    | "vdg-manager-loop";
+/* ------------------------------------------------------------------ */
+/*  Structural edges — one connector per pair of components, ever.     */
+/* ------------------------------------------------------------------ */
 
-const EDGES: Record<EdgeId, { d: string; color: string }> = {
-    "el-manager": { d: "M 300,85 L 350,85", color: "#38bdf8" },
-    "manager-specialist": { d: "M 650,85 L 700,85", color: "#f43f5e" },
-    "manager-vdg": { d: "M 500,150 Q 480,182 460,215", color: "#a78bfa" },
-    "specialist-target": { d: "M 840,150 C 840,300 760,340 710,495", color: "#fbbf24" },
-    "target-pipeline": { d: "M 560,548 L 480,540", color: "#fbbf24" },
-    "exec-eval": { d: "M 160,540 L 190,540", color: "#38bdf8" },
-    "eval-validation": { d: "M 310,540 L 340,540", color: "#38bdf8" },
-    "to-el": { d: "M 420,500 C 200,410 70,300 55,150", color: "#34d399" },
-    "vdg-manager-loop": { d: "M 900,205 Q 970,110 650,85", color: "#f43f5e" },
+type StructId =
+    | "el-tm"
+    | "tm-spec"
+    | "el-vdg"
+    | "tm-vdg"
+    | "spec-target"
+    | "target-exec"
+    | "exec-ev"
+    | "ev-val"
+    | "val-vdg";
+
+type Accent = "cyan" | "indigo" | "amber" | "emerald";
+
+const STRUCT: Record<StructId, { d: string; accent: Accent }> = {
+    "el-tm": { d: "M 296,89 L 364,89", accent: "cyan" },
+    "tm-spec": { d: "M 636,89 L 744,89", accent: "indigo" },
+    "el-vdg": { d: "M 160,154 L 160,190", accent: "cyan" },
+    "tm-vdg": { d: "M 500,154 L 500,190", accent: "indigo" },
+    "spec-target": { d: "M 860,154 L 860,530", accent: "amber" },
+    "target-exec": { d: "M 744,590 L 684,590", accent: "amber" },
+    "exec-ev": { d: "M 484,590 L 444,590", accent: "amber" },
+    "ev-val": { d: "M 244,590 L 224,590", accent: "amber" },
+    "val-vdg": { d: "M 124,530 L 124,490", accent: "emerald" },
 };
+
+const ACCENT_HEX: Record<Accent, string> = {
+    cyan: "#22d3ee",
+    indigo: "#818cf8",
+    amber: "#fbbf24",
+    emerald: "#34d399",
+};
+
+/* ------------------------------------------------------------------ */
+/*  Specialists / Memory tiers                                         */
+/* ------------------------------------------------------------------ */
 
 type SpecId = "recon" | "sqli" | "xss" | "lateral";
 const SPECIALISTS: { id: SpecId; label: string; sub: string; icon: React.ReactNode }[] = [
@@ -132,17 +184,19 @@ const SPECIALISTS: { id: SpecId; label: string; sub: string; icon: React.ReactNo
 ];
 
 type MemId = "strategy" | "skill" | "episodic" | "cost" | "stop";
-const MEMORY: { id: MemId; x: number; label: string; icon: React.ReactNode }[] = [
-    { id: "strategy", x: 110, label: "Strategy Mem", icon: <GitBranch className="h-3.5 w-3.5" /> },
-    { id: "skill", x: 320, label: "Skill Library", icon: <Library className="h-3.5 w-3.5" /> },
-    { id: "episodic", x: 530, label: "Episodic Mem", icon: <History className="h-3.5 w-3.5" /> },
-    { id: "cost", x: 740, label: "Trajectory Log", icon: <Coins className="h-3.5 w-3.5" /> },
-    { id: "stop", x: 890, label: "Early-Stop", icon: <PauseCircle className="h-3.5 w-3.5" /> },
+const MEMORY: { id: MemId; label: string; icon: React.ReactNode }[] = [
+    { id: "strategy", label: "Strategy Mem", icon: <GitBranch className="h-3.5 w-3.5" /> },
+    { id: "skill", label: "Skill Library", icon: <Library className="h-3.5 w-3.5" /> },
+    { id: "episodic", label: "Episodic Mem", icon: <History className="h-3.5 w-3.5" /> },
+    { id: "cost", label: "Trajectory Log", icon: <Coins className="h-3.5 w-3.5" /> },
+    { id: "stop", label: "Early-Stop", icon: <PauseCircle className="h-3.5 w-3.5" /> },
 ];
 
 /* ------------------------------------------------------------------ */
 /*  Phase timeline                                                     */
 /* ------------------------------------------------------------------ */
+
+type ActiveEdge = { id: StructId; reverse?: boolean };
 
 type Phase = {
     title: string;
@@ -153,7 +207,8 @@ type Phase = {
     activeSpecialist: SpecId | null;
     target: string[];
     nodeStatus: Record<VdgId, NodeStatus>;
-    edges: EdgeId[];
+    activeBoxes: BoxId[];
+    activeEdges: ActiveEdge[];
     memory: MemId[];
     stats: { t: string; calls: number; cost: string; nodes: number };
     icon: React.ReactNode;
@@ -186,7 +241,8 @@ const PHASES: Phase[] = [
             "WhatWeb + ObserverWard running",
         ],
         nodeStatus: HIDDEN_ALL,
-        edges: ["specialist-target", "to-el"],
+        activeBoxes: ["spec", "target", "el"],
+        activeEdges: [{ id: "spec-target" }],
         memory: [],
         stats: { t: "0:12", calls: 6, cost: "$0.04", nodes: 0 },
         icon: <Search className="h-5 w-5 text-cyan-400" />,
@@ -209,10 +265,11 @@ const PHASES: Phase[] = [
         activeSpecialist: null,
         target: ["idle"],
         nodeStatus: { v1: "eligible", v2: "eligible", v3: "eligible", v4: "locked", v5: "locked" },
-        edges: ["el-manager", "manager-vdg"],
+        activeBoxes: ["el", "tm", "vdg"],
+        activeEdges: [{ id: "el-tm" }, { id: "el-vdg" }, { id: "tm-vdg" }],
         memory: [],
         stats: { t: "0:34", calls: 12, cost: "$0.11", nodes: 3 },
-        icon: <BrainCircuit className="h-5 w-5 text-violet-400" />,
+        icon: <BrainCircuit className="h-5 w-5 text-indigo-400" />,
     },
     {
         title: "3 · Dependency-Constrained UCB",
@@ -224,16 +281,17 @@ const PHASES: Phase[] = [
             "waf: ModSecurity (detected)",
         ],
         ucb: [
-            "UCB(sqli)  = .42 +.58 +.25 −.02 +.11 = 0.91",
-            "UCB(auth)  = .31 +.51 +.22 −.03 +.06 = 0.78",
-            "UCB(xss)   = .20 +.44 +.15 −.05 +.05 = 0.54",
+            "UCB(sqli) = .42+.58+.25−.02+.11 = 0.91",
+            "UCB(auth) = .31+.51+.22−.03+.06 = 0.78",
+            "UCB(xss)  = .20+.44+.15−.05+.05 = 0.54",
             "→ argmax: sqli_login",
         ],
         log: "[ADM] eligible={auth,sqli,xss} → SELECTED sqli_login",
         activeSpecialist: null,
         target: ["idle"],
         nodeStatus: { v1: "eligible", v2: "selected", v3: "eligible", v4: "locked", v5: "locked" },
-        edges: ["manager-vdg"],
+        activeBoxes: ["tm", "vdg"],
+        activeEdges: [{ id: "tm-vdg" }],
         memory: [],
         stats: { t: "0:41", calls: 12, cost: "$0.12", nodes: 3 },
         icon: <Crosshair className="h-5 w-5 text-rose-400" />,
@@ -262,7 +320,8 @@ const PHASES: Phase[] = [
             v4: "locked",
             v5: "locked",
         },
-        edges: ["manager-specialist", "specialist-target"],
+        activeBoxes: ["tm", "spec", "target", "exec"],
+        activeEdges: [{ id: "tm-spec" }, { id: "spec-target" }, { id: "target-exec" }],
         memory: [],
         stats: { t: "1:22", calls: 27, cost: "$0.34", nodes: 3 },
         icon: <Terminal className="h-5 w-5 text-amber-400" />,
@@ -285,7 +344,8 @@ const PHASES: Phase[] = [
         activeSpecialist: "sqli",
         target: ["PoC re-run ×1", "oracle: CONFIRMED", "creds harvested → EL"],
         nodeStatus: { v1: "eligible", v2: "exploited", v3: "eligible", v4: "locked", v5: "locked" },
-        edges: ["target-pipeline", "exec-eval", "eval-validation"],
+        activeBoxes: ["target", "exec", "ev", "val"],
+        activeEdges: [{ id: "target-exec" }, { id: "exec-ev" }, { id: "ev-val" }],
         memory: [],
         stats: { t: "1:58", calls: 31, cost: "$0.41", nodes: 3 },
         icon: <Eye className="h-5 w-5 text-emerald-400" />,
@@ -308,7 +368,8 @@ const PHASES: Phase[] = [
         activeSpecialist: null,
         target: ["idle"],
         nodeStatus: { v1: "eligible", v2: "exploited", v3: "eligible", v4: "locked", v5: "locked" },
-        edges: ["to-el"],
+        activeBoxes: ["val", "vdg"],
+        activeEdges: [{ id: "val-vdg" }],
         memory: ["strategy", "skill", "episodic", "cost"],
         stats: { t: "2:10", calls: 33, cost: "$0.44", nodes: 3 },
         icon: <ShieldCheck className="h-5 w-5 text-emerald-400" />,
@@ -331,40 +392,50 @@ const PHASES: Phase[] = [
         activeSpecialist: null,
         target: ["idle"],
         nodeStatus: { v1: "selected", v2: "exploited", v3: "eligible", v4: "locked", v5: "locked" },
-        edges: ["vdg-manager-loop", "manager-vdg"],
+        activeBoxes: ["tm", "vdg"],
+        activeEdges: [{ id: "tm-vdg", reverse: true }],
         memory: ["stop"],
         stats: { t: "2:15", calls: 33, cost: "$0.44", nodes: 3 },
-        icon: <GitBranch className="h-5 w-5 text-rose-400" />,
+        icon: <GitBranch className="h-5 w-5 text-indigo-400" />,
     },
 ];
 
-const STEP_MS = 5200;
+const STEP_MS = 5600;
 
 /* ------------------------------------------------------------------ */
-/*  Status → visual tokens                                             */
+/*  Status → visual tokens (flat colors only — no gradients/glows)     */
 /* ------------------------------------------------------------------ */
 
-const STATUS_RING: Record<NodeStatus, string> = {
-    hidden: "border-zinc-800/0",
+const STATUS_BORDER: Record<NodeStatus, string> = {
+    hidden: "border-transparent",
     locked: "border-zinc-700",
-    eligible: "border-violet-500/60",
-    selected: "border-rose-500 shadow-[0_0_28px_rgba(244,63,94,0.35)]",
-    in_progress: "border-amber-500/70 shadow-[0_0_22px_rgba(251,191,36,0.25)]",
-    exploited: "border-emerald-500/70 shadow-[0_0_22px_rgba(52,211,153,0.25)]",
+    eligible: "border-violet-400",
+    selected: "border-rose-400",
+    in_progress: "border-amber-400",
+    exploited: "border-emerald-400",
 };
 
 const STATUS_TEXT: Record<NodeStatus, string> = {
     hidden: "text-zinc-700",
-    locked: "text-zinc-500",
+    locked: "text-zinc-400",
     eligible: "text-violet-300",
     selected: "text-rose-300",
     in_progress: "text-amber-300",
     exploited: "text-emerald-300",
 };
 
+const STATUS_BG: Record<NodeStatus, string> = {
+    hidden: "bg-zinc-950",
+    locked: "bg-zinc-950",
+    eligible: "bg-violet-950/40",
+    selected: "bg-rose-950/40",
+    in_progress: "bg-amber-950/30",
+    exploited: "bg-emerald-950/30",
+};
+
 function StatusIcon({ status }: { status: NodeStatus }) {
     if (status === "locked") {
-        return <Lock className="h-3 w-3 text-zinc-600" />;
+        return <Lock className="h-3 w-3 text-zinc-500" />;
     }
     if (status === "exploited") {
         return <Unlock className="h-3 w-3 text-emerald-400" />;
@@ -375,36 +446,109 @@ function StatusIcon({ status }: { status: NodeStatus }) {
     if (status === "selected") {
         return <Crosshair className="h-3 w-3 text-rose-400" />;
     }
-    return <Activity className="h-3 w-3 text-violet-400/70" />;
+    return <Activity className="h-3 w-3 text-violet-400" />;
 }
 
 /* ------------------------------------------------------------------ */
-/*  Flow particles along a bezier/line path                            */
+/*  A connector: a straight or elbowed line whose endpoints are always */
+/*  exact box-border coordinates. Flat stroke, no gradient fill.       */
 /* ------------------------------------------------------------------ */
 
-function FlowEdge({ d, color, active }: { d: string; color: string; active: boolean }) {
+function Connector({
+    d,
+    color,
+    active,
+    reverse,
+}: {
+    d: string;
+    color: string;
+    active: boolean;
+    reverse?: boolean;
+}) {
     return (
         <g>
             <path
                 d={d}
                 fill="none"
-                stroke={active ? color : "#27272a"}
-                strokeWidth={active ? 1.75 : 1.25}
-                strokeOpacity={active ? 0.9 : 0.5}
-                style={{ transition: "stroke 0.4s ease, stroke-width 0.4s ease" }}
+                stroke={active ? color : "#3f3f46"}
+                strokeWidth={active ? 2 : 1.25}
+                strokeOpacity={active ? 1 : 0.45}
+                style={{
+                    transition:
+                        "stroke 0.4s ease, stroke-width 0.4s ease, stroke-opacity 0.4s ease",
+                }}
             />
             {active &&
-                [0, 0.33, 0.66].map((offset) => (
-                    <circle key={offset} r="3.2" fill={color}>
+                [0, 0.4, 0.8].map((offset) => (
+                    <circle key={offset} r="3" fill={color}>
                         <animateMotion
-                            dur="1.1s"
+                            dur="1.3s"
                             begin={`${offset}s`}
                             repeatCount="indefinite"
                             path={d}
+                            keyPoints={reverse ? "1;0" : "0;1"}
+                            keyTimes="0;1"
                         />
                     </circle>
                 ))}
         </g>
+    );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Reusable panel — a box positioned from BOX geometry                */
+/* ------------------------------------------------------------------ */
+
+const ACCENT_CLASS: Record<Accent, { border: string; text: string; icon: string }> = {
+    cyan: { border: "border-cyan-400/80", text: "text-cyan-200", icon: "text-cyan-400" },
+    indigo: { border: "border-indigo-400/80", text: "text-indigo-200", icon: "text-indigo-400" },
+    amber: { border: "border-amber-400/80", text: "text-amber-200", icon: "text-amber-400" },
+    emerald: {
+        border: "border-emerald-400/80",
+        text: "text-emerald-200",
+        icon: "text-emerald-400",
+    },
+};
+
+function Panel({
+    box,
+    active,
+    accent,
+    icon,
+    title,
+    pulse,
+    children,
+}: {
+    box: Box;
+    active: boolean;
+    accent: Accent;
+    icon: React.ReactNode;
+    title: string;
+    pulse?: boolean;
+    children: React.ReactNode;
+}) {
+    const a = ACCENT_CLASS[accent];
+    return (
+        <div className="absolute" style={pct(box)}>
+            <div
+                className={`flex h-full flex-col rounded-md border bg-[#0c0d10] p-3 transition-colors duration-500 ${
+                    active ? a.border : "border-zinc-800"
+                }`}
+            >
+                <div className="mb-1.5 flex items-center justify-between border-b border-zinc-800 pb-1.5">
+                    <div className="flex items-center gap-2">
+                        <span className={active ? a.icon : "text-zinc-600"}>{icon}</span>
+                        <span
+                            className={`text-[10.5px] font-bold tracking-wide ${active ? a.text : "text-zinc-500"}`}
+                        >
+                            {title}
+                        </span>
+                    </div>
+                    {pulse && active && <Activity className={`h-3 w-3 animate-pulse ${a.icon}`} />}
+                </div>
+                <div className="min-h-0 flex-1 overflow-hidden">{children}</div>
+            </div>
+        </div>
     );
 }
 
@@ -428,22 +572,27 @@ export default function ArchitectureAnimation() {
         return () => clearInterval(timer);
     }, [paused]);
 
-    // drives the per-step progress bar independent of the phase interval
     useEffect(() => {
         const raf = setInterval(() => setTick((t) => Math.min(100, t + 100 / (STEP_MS / 60))), 60);
         return () => clearInterval(raf);
     }, [step, paused]);
 
     const current = PHASES[step];
-    const activeEdgeSet = useMemo(() => new Set(current.edges), [current]);
+    const activeEdgeMap = useMemo(() => {
+        const m = new Map<StructId, boolean>();
+        current.activeEdges.forEach((e) => m.set(e.id, !!e.reverse));
+        return m;
+    }, [current]);
+    const activeBoxSet = useMemo(() => new Set(current.activeBoxes), [current]);
 
     const isSpecActive = (id: SpecId) => current.activeSpecialist === id;
     const isMemActive = (id: MemId) => current.memory.includes(id);
+    const isBoxActive = (id: BoxId) => activeBoxSet.has(id);
 
     return (
         <div className="z-10 mt-16 w-full max-w-6xl font-mono">
             {/* Header / Info panel */}
-            <div className="mb-4 flex flex-col items-start justify-between gap-6 rounded-xl border border-zinc-800 bg-zinc-950/60 p-6 backdrop-blur-md md:flex-row">
+            <div className="mb-4 flex flex-col items-start justify-between gap-6 rounded-xl border border-zinc-800 bg-zinc-950 p-6 md:flex-row">
                 <div className="min-w-0 flex-1">
                     <div className="mb-2 flex items-center gap-3">
                         {current.icon}
@@ -479,7 +628,7 @@ export default function ArchitectureAnimation() {
                     </div>
                     <button
                         onClick={() => setPaused((p) => !p)}
-                        className="text-[10px] tracking-wide text-zinc-500 uppercase transition-colors hover:text-zinc-300"
+                        className="text-[10px] tracking-wide text-zinc-400 uppercase transition-colors hover:text-zinc-200"
                     >
                         {paused ? "▶ resume" : "⏸ pause"}
                     </button>
@@ -496,10 +645,10 @@ export default function ArchitectureAnimation() {
                 ].map((s) => (
                     <div
                         key={s.label}
-                        className="rounded-lg border border-zinc-800 bg-zinc-950/50 py-2"
+                        className="rounded-md border border-zinc-800 bg-zinc-950 py-2"
                     >
-                        <div className="text-sm font-bold text-zinc-200">{s.value}</div>
-                        <div className="text-[9px] tracking-wider text-zinc-600 uppercase">
+                        <div className="text-sm font-bold text-zinc-100">{s.value}</div>
+                        <div className="text-[9px] tracking-wider text-zinc-500 uppercase">
                             {s.label}
                         </div>
                     </div>
@@ -507,303 +656,310 @@ export default function ArchitectureAnimation() {
             </div>
 
             {/* Canvas */}
-            <div className="overflow-x-auto rounded-2xl border border-zinc-800 bg-[#08080a] shadow-2xl">
-                <div className="px-4 pt-2 text-[10px] text-zinc-600 sm:hidden">
+            <div className="overflow-x-auto rounded-2xl border border-zinc-800 bg-[#08090b]">
+                <div className="px-4 pt-2 text-[10px] text-zinc-500 sm:hidden">
                     ← scroll to see the full graph →
                 </div>
-                <div className="relative aspect-[1000/700] w-full min-w-[920px]">
-                    {/* grid + vignette */}
+                <div
+                    className="relative w-full min-w-[960px]"
+                    style={{ aspectRatio: `${VB_W} / ${VB_H}` }}
+                >
+                    {/* flat dot grid — no color gradient, just a repeating pattern */}
                     <div
-                        className="absolute inset-0 opacity-[0.15]"
+                        className="absolute inset-0 opacity-[0.35]"
                         style={{
-                            backgroundImage:
-                                "linear-gradient(#27272a 1px, transparent 1px), linear-gradient(90deg, #27272a 1px, transparent 1px)",
-                            backgroundSize: "28px 28px",
+                            backgroundImage: "radial-gradient(#27272a 1px, transparent 1px)",
+                            backgroundSize: "26px 26px",
                         }}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#08080a]" />
 
                     <svg
                         className="pointer-events-none absolute inset-0 h-full w-full"
-                        viewBox="0 0 1000 700"
+                        viewBox={`0 0 ${VB_W} ${VB_H}`}
                         preserveAspectRatio="xMidYMid meet"
                     >
-                        <defs>
-                            <marker
-                                id="arrow-zinc"
-                                markerWidth="8"
-                                markerHeight="8"
-                                refX="6"
-                                refY="3"
-                                orient="auto"
-                            >
-                                <path d="M0,0 L6,3 L0,6 Z" fill="#3f3f46" />
-                            </marker>
-                            <marker
-                                id="arrow-emerald"
-                                markerWidth="8"
-                                markerHeight="8"
-                                refX="6"
-                                refY="3"
-                                orient="auto"
-                            >
-                                <path d="M0,0 L6,3 L0,6 Z" fill="#34d399" />
-                            </marker>
-                        </defs>
+                        {/* structural connectors — exactly one line per component pair */}
+                        {(Object.keys(STRUCT) as StructId[]).map((id) => {
+                            const edge = STRUCT[id];
+                            const active = activeEdgeMap.has(id);
+                            return (
+                                <Connector
+                                    key={id}
+                                    d={edge.d}
+                                    color={ACCENT_HEX[edge.accent]}
+                                    active={active}
+                                    reverse={activeEdgeMap.get(id)}
+                                />
+                            );
+                        })}
 
-                        {/* structural edges */}
-                        {(Object.keys(EDGES) as EdgeId[]).map((id) => (
-                            <FlowEdge
-                                key={id}
-                                d={EDGES[id].d}
-                                color={EDGES[id].color}
-                                active={activeEdgeSet.has(id)}
-                            />
-                        ))}
+                        {/* VDG corner brackets — the diagram's signature mark */}
+                        {(() => {
+                            const b = BOX.vdg;
+                            const arm = 18;
+                            const corners = [
+                                { x: b.x, y: b.y, dx: 1, dy: 1 },
+                                { x: b.x + b.w, y: b.y, dx: -1, dy: 1 },
+                                { x: b.x, y: b.y + b.h, dx: 1, dy: -1 },
+                                { x: b.x + b.w, y: b.y + b.h, dx: -1, dy: -1 },
+                            ];
+                            return corners.map((c) => (
+                                <path
+                                    key={`${c.x}-${c.y}`}
+                                    d={`M ${c.x + c.dx * arm},${c.y} L ${c.x},${c.y} L ${c.x},${c.y + c.dy * arm}`}
+                                    fill="none"
+                                    stroke="#52525b"
+                                    strokeWidth={1.5}
+                                />
+                            ));
+                        })()}
 
-                        {/* prerequisite edges inside the VDG */}
+                        {/* prerequisite edges — only drawn once both endpoints exist */}
                         {PREREQ.map((edge) => {
-                            const sourceDone = current.nodeStatus[edge.from] === "exploited";
+                            const fromStatus = current.nodeStatus[edge.from];
+                            const toStatus = current.nodeStatus[edge.to];
+                            if (fromStatus === "hidden" || toStatus === "hidden") {
+                                return null;
+                            }
+                            const satisfied = fromStatus === "exploited";
                             return (
                                 <path
                                     key={`${edge.from}-${edge.to}`}
                                     d={edge.d}
                                     fill="none"
-                                    stroke={sourceDone ? "#34d399" : "#3f3f46"}
-                                    strokeWidth={sourceDone ? 1.75 : 1.25}
-                                    strokeDasharray={sourceDone ? undefined : "4 4"}
-                                    markerEnd={
-                                        sourceDone ? "url(#arrow-emerald)" : "url(#arrow-zinc)"
-                                    }
+                                    stroke={satisfied ? "#34d399" : "#52525b"}
+                                    strokeWidth={satisfied ? 2 : 1.25}
+                                    strokeDasharray={satisfied ? undefined : "3 4"}
                                     style={{ transition: "stroke 0.5s ease" }}
                                 />
                             );
                         })}
                     </svg>
 
-                    {/* ---- HTML NODES (percentage-positioned to track the 1000x700 viewBox) ---- */}
+                    {/* ---- HTML PANELS (percentage-positioned from BOX geometry) ---- */}
 
-                    {/* Environmental Layer */}
-                    <div className="absolute" style={{ left: "2%", top: "2.8%", width: "28%" }}>
-                        <div className="flex h-[125px] flex-col rounded-lg border border-cyan-500/40 bg-zinc-950/80 p-3 shadow-xl backdrop-blur-xl">
-                            <div className="mb-1.5 flex items-center gap-2 border-b border-zinc-800 pb-1.5">
-                                <Database className="h-3.5 w-3.5 text-cyan-400" />
-                                <span className="text-[10px] font-bold text-cyan-300">
-                                    ENVIRONMENTAL LAYER
-                                </span>
-                            </div>
-                            <div className="overflow-hidden text-[9.5px] leading-snug whitespace-pre-line text-cyan-200/70">
-                                {current.el.join("\n")}
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Team Manager */}
-                    <div className="absolute" style={{ left: "35%", top: "2.8%", width: "30%" }}>
-                        <div className="flex h-[125px] flex-col rounded-lg border border-blue-500/40 bg-zinc-950/80 p-3 shadow-xl backdrop-blur-xl">
-                            <div className="mb-1.5 flex items-center justify-between border-b border-zinc-800 pb-1.5">
-                                <div className="flex items-center gap-2">
-                                    <BrainCircuit className="h-3.5 w-3.5 text-blue-400" />
-                                    <span className="text-[10px] font-bold text-blue-300">
-                                        TEAM MANAGER · ADM
-                                    </span>
-                                </div>
-                                <Activity className="h-3 w-3 animate-pulse text-blue-400" />
-                            </div>
-                            <div className="overflow-hidden text-[9.5px] leading-snug whitespace-pre-line text-blue-200/80">
-                                {current.ucb.join("\n")}
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Specialist pool */}
-                    <div className="absolute" style={{ left: "70%", top: "2.8%", width: "28%" }}>
-                        <div className="flex h-[125px] flex-col justify-between rounded-lg border border-zinc-800 bg-zinc-950/80 p-2.5 shadow-xl backdrop-blur-xl">
-                            {SPECIALISTS.map((s) => (
-                                <div
-                                    key={s.id}
-                                    className={`flex items-center gap-2 rounded px-1.5 py-1 transition-all duration-500 ${
-                                        isSpecActive(s.id)
-                                            ? "bg-amber-500/10 text-amber-200"
-                                            : "text-zinc-500"
-                                    }`}
-                                >
-                                    <span
-                                        className={
-                                            isSpecActive(s.id) ? "text-amber-400" : "text-zinc-600"
-                                        }
-                                    >
-                                        {s.icon}
-                                    </span>
-                                    <div className="flex flex-col leading-none">
-                                        <span className="text-[9.5px] font-bold">{s.label}</span>
-                                        <span className="text-[8px] text-zinc-600">{s.sub}</span>
-                                    </div>
-                                    {isSpecActive(s.id) && (
-                                        <Activity className="ml-auto h-2.5 w-2.5 animate-pulse text-amber-400" />
-                                    )}
-                                </div>
+                    <Panel
+                        box={BOX.el}
+                        active={isBoxActive("el")}
+                        accent="cyan"
+                        icon={<Database className="h-3.5 w-3.5" />}
+                        title="ENVIRONMENTAL LAYER"
+                    >
+                        <div className="space-y-0.5 text-[10px] leading-snug text-zinc-300">
+                            {current.el.map((line, i) => (
+                                // eslint-disable-next-line react/no-array-index-key
+                                <div key={i}>{line}</div>
                             ))}
                         </div>
+                    </Panel>
+
+                    <Panel
+                        box={BOX.tm}
+                        active={isBoxActive("tm")}
+                        accent="indigo"
+                        icon={<BrainCircuit className="h-3.5 w-3.5" />}
+                        title="TEAM MANAGER · ADM"
+                        pulse
+                    >
+                        <div className="space-y-0.5 text-[10px] leading-snug text-zinc-300">
+                            {current.ucb.map((line, i) => (
+                                // eslint-disable-next-line react/no-array-index-key
+                                <div key={i}>{line}</div>
+                            ))}
+                        </div>
+                    </Panel>
+
+                    <Panel
+                        box={BOX.spec}
+                        active={isBoxActive("spec")}
+                        accent="amber"
+                        icon={<Network className="h-3.5 w-3.5" />}
+                        title="SPECIALIST POOL"
+                    >
+                        <div className="flex h-full flex-col justify-between">
+                            {SPECIALISTS.map((s) => {
+                                const on = isSpecActive(s.id);
+                                return (
+                                    <div
+                                        key={s.id}
+                                        className={`flex items-center gap-2 rounded px-1 py-0.5 ${on ? "bg-amber-500/10" : ""}`}
+                                    >
+                                        <span className={on ? "text-amber-400" : "text-zinc-600"}>
+                                            {s.icon}
+                                        </span>
+                                        <div className="flex flex-col leading-none">
+                                            <span
+                                                className={`text-[9.5px] font-bold ${on ? "text-amber-200" : "text-zinc-400"}`}
+                                            >
+                                                {s.label}
+                                            </span>
+                                            <span className="text-[8px] text-zinc-500">
+                                                {s.sub}
+                                            </span>
+                                        </div>
+                                        {on && (
+                                            <Activity className="ml-auto h-2.5 w-2.5 animate-pulse text-amber-400" />
+                                        )}
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </Panel>
+
+                    {/* VDG / Attack Layer container */}
+                    <div className="absolute" style={pct(BOX.vdg)}>
+                        <div
+                            className={`h-full rounded-md border p-3 transition-colors duration-500 ${isBoxActive("vdg") ? "border-violet-400/70" : "border-zinc-800"}`}
+                        >
+                            <div className="mb-2 flex items-center gap-2 border-b border-zinc-800 pb-1.5">
+                                <GitBranch
+                                    className={`h-3.5 w-3.5 ${isBoxActive("vdg") ? "text-violet-400" : "text-zinc-600"}`}
+                                />
+                                <span
+                                    className={`text-[10.5px] font-bold tracking-wide ${isBoxActive("vdg") ? "text-violet-200" : "text-zinc-500"}`}
+                                >
+                                    ATTACK LAYER — VULNERABILITY DEPENDENCY GRAPH
+                                </span>
+                            </div>
+                        </div>
                     </div>
 
-                    {/* VDG graph nodes */}
-                    {(Object.keys(VDG) as VdgId[]).map((id) => {
-                        const n = VDG[id];
+                    {/* VDG nodes */}
+                    {(Object.keys(VDG_NODE) as VdgId[]).map((id) => {
+                        const n = VDG_NODE[id];
                         const status = current.nodeStatus[id];
                         const hidden = status === "hidden";
                         return (
                             <div
                                 key={id}
-                                className={`absolute -translate-x-1/2 -translate-y-1/2 transition-all duration-700 ${
-                                    hidden
-                                        ? "pointer-events-none scale-75 opacity-0"
-                                        : "scale-100 opacity-100"
-                                } ${status === "selected" ? "scale-110" : ""}`}
-                                style={{
-                                    left: `${n.x / 10}%`,
-                                    top: `${(n.y / 700) * 100}%`,
-                                    width: "148px",
-                                }}
+                                className={`absolute transition-all duration-700 ${hidden ? "pointer-events-none scale-90 opacity-0" : "scale-100 opacity-100"} ${
+                                    status === "selected" ? "scale-[1.04]" : ""
+                                }`}
+                                style={pct(n.box)}
                             >
                                 <div
-                                    className={`rounded-lg border-2 bg-zinc-950/90 px-2.5 py-2 backdrop-blur-xl transition-all duration-500 ${STATUS_RING[status]}`}
+                                    className={`flex h-full flex-col justify-between rounded-md border-2 px-2.5 py-2 transition-colors duration-500 ${STATUS_BORDER[status]} ${STATUS_BG[status]}`}
                                 >
-                                    <div className="mb-1 flex items-center justify-between">
+                                    <div className="flex items-center justify-between">
                                         <span
-                                            className={`text-[9.5px] font-bold ${STATUS_TEXT[status]}`}
+                                            className={`text-[10.5px] font-bold ${STATUS_TEXT[status]}`}
                                         >
                                             {n.label}
                                         </span>
                                         <StatusIcon status={status} />
                                     </div>
-                                    <div className="mb-1 text-[8px] text-zinc-600">{n.sub}</div>
-                                    <div className="flex gap-1.5 text-[7.5px] text-zinc-600">
-                                        <span>φ{n.phi}</span>
-                                        <span>δ{n.delta}</span>
-                                        <span>epss{n.epss}</span>
+                                    <div className="text-[9px] text-zinc-400">{n.sub}</div>
+                                    <div className="flex gap-2 text-[8.5px] text-zinc-500">
+                                        <span>φ {n.phi}</span>
+                                        <span>δ {n.delta}</span>
+                                        <span>epss {n.epss}</span>
                                     </div>
                                 </div>
                             </div>
                         );
                     })}
 
-                    {/* Execution / Evaluation / Validation pipeline */}
-                    {[
-                        {
-                            key: "exec",
-                            x: 4,
-                            w: 12,
-                            label: "EXECUTION",
-                            sub: "tool calls only",
-                            icon: <Terminal className="h-3 w-3" />,
-                            active: activeEdgeSet.has("target-pipeline"),
-                        },
-                        {
-                            key: "eval",
-                            x: 19,
-                            w: 12,
-                            label: "EVALUATION",
-                            sub: "4-part critique",
-                            icon: <Eye className="h-3 w-3" />,
-                            active: activeEdgeSet.has("exec-eval"),
-                        },
-                        {
-                            key: "val",
-                            x: 34,
-                            w: 14,
-                            label: "VALIDATION",
-                            sub: "diagnose·adapt·cap",
-                            icon: <ShieldCheck className="h-3 w-3" />,
-                            active: activeEdgeSet.has("eval-validation"),
-                        },
-                    ].map((b) => (
-                        <div
-                            key={b.key}
-                            className="absolute"
-                            style={{ left: `${b.x}%`, top: "70.5%", width: `${b.w}%` }}
-                        >
-                            <div
-                                className={`flex h-[68px] flex-col items-center justify-center rounded-lg border bg-zinc-950/85 px-2 py-2 text-center backdrop-blur-xl transition-all duration-500 ${
-                                    b.active
-                                        ? "border-emerald-500/50 shadow-[0_0_18px_rgba(52,211,153,0.15)]"
-                                        : "border-zinc-800"
-                                }`}
-                            >
-                                <span className={b.active ? "text-emerald-400" : "text-zinc-600"}>
-                                    {b.icon}
-                                </span>
-                                <span
-                                    className={`mt-1 text-[8.5px] font-bold ${b.active ? "text-emerald-300" : "text-zinc-500"}`}
-                                >
-                                    {b.label}
-                                </span>
-                                <span className="text-[7px] text-zinc-600">{b.sub}</span>
+                    <Panel
+                        box={BOX.val}
+                        active={isBoxActive("val")}
+                        accent="emerald"
+                        icon={<ShieldCheck className="h-3.5 w-3.5" />}
+                        title="VALIDATION"
+                    >
+                        <div className="flex h-full flex-col justify-center">
+                            <div className="text-[9px] text-zinc-400">diagnose · adapt · cap</div>
+                        </div>
+                    </Panel>
+
+                    <Panel
+                        box={BOX.ev}
+                        active={isBoxActive("ev")}
+                        accent="emerald"
+                        icon={<Eye className="h-3.5 w-3.5" />}
+                        title="EVALUATION"
+                    >
+                        <div className="flex h-full flex-col justify-center">
+                            <div className="text-[9px] text-zinc-400">4-part critique · E_ord</div>
+                        </div>
+                    </Panel>
+
+                    <Panel
+                        box={BOX.exec}
+                        active={isBoxActive("exec")}
+                        accent="amber"
+                        icon={<Terminal className="h-3.5 w-3.5" />}
+                        title="EXECUTION"
+                    >
+                        <div className="flex h-full flex-col justify-center">
+                            <div className="text-[9px] text-zinc-400">
+                                deterministic tool calls only
                             </div>
                         </div>
-                    ))}
+                    </Panel>
 
                     {/* Target environment */}
-                    <div className="absolute" style={{ left: "56%", top: "70%", width: "30%" }}>
+                    <div className="absolute" style={pct(BOX.target)}>
                         <div
-                            className={`rounded-lg border bg-zinc-950/85 p-3 shadow-xl backdrop-blur-xl transition-all duration-500 ${
-                                step === 4
-                                    ? "border-rose-500/50 shadow-[0_0_30px_rgba(244,63,94,0.15)]"
-                                    : "border-zinc-800"
-                            }`}
+                            className={`flex h-full flex-col rounded-md border p-3 transition-colors duration-500 ${isBoxActive("target") ? "border-rose-400/80" : "border-zinc-800"} bg-[#0c0d10]`}
                         >
                             <div className="mb-1.5 flex items-center justify-between border-b border-zinc-800 pb-1.5">
                                 <div className="flex items-center gap-2">
                                     <Server
-                                        className={`h-3.5 w-3.5 ${step === 4 ? "text-rose-400" : "text-zinc-400"}`}
+                                        className={`h-3.5 w-3.5 ${isBoxActive("target") ? "text-rose-400" : "text-zinc-600"}`}
                                     />
-                                    <span className="text-[10px] font-bold text-zinc-200">
+                                    <span
+                                        className={`text-[10.5px] font-bold tracking-wide ${isBoxActive("target") ? "text-rose-200" : "text-zinc-500"}`}
+                                    >
                                         TARGET ENVIRONMENT
                                     </span>
                                 </div>
-                                {step === 4 ? (
+                                {isBoxActive("target") ? (
                                     <Unlock className="h-3 w-3 text-rose-400" />
                                 ) : (
                                     <Lock className="h-3 w-3 text-zinc-600" />
                                 )}
                             </div>
-                            <div className="text-[9px] leading-snug whitespace-pre-line text-zinc-400">
-                                {current.target.join("\n")}
+                            <div className="space-y-0.5 overflow-hidden text-[9.5px] leading-snug text-zinc-300">
+                                {current.target.map((line, i) => (
+                                    // eslint-disable-next-line react/no-array-index-key
+                                    <div key={i}>{line}</div>
+                                ))}
                             </div>
                         </div>
                     </div>
 
                     {/* Memory strip */}
-                    <div className="absolute inset-x-0" style={{ top: "93%" }}>
-                        <div className="flex justify-between px-[3%]">
-                            {MEMORY.map((m) => (
-                                <div
-                                    key={m.id}
-                                    className={`flex items-center gap-1.5 rounded-full border px-2.5 py-1 transition-all duration-500 ${
-                                        isMemActive(m.id)
-                                            ? "border-emerald-500/50 bg-emerald-500/5 text-emerald-300"
-                                            : "border-zinc-800 text-zinc-600"
-                                    }`}
-                                >
-                                    {m.icon}
-                                    <span className="hidden text-[8px] font-bold whitespace-nowrap md:inline">
-                                        {m.label}
-                                    </span>
-                                </div>
-                            ))}
-                        </div>
+                    <div
+                        className="absolute inset-x-0 flex justify-between px-6"
+                        style={{ top: `${(672 / VB_H) * 100}%` }}
+                    >
+                        {MEMORY.map((m) => (
+                            <div
+                                key={m.id}
+                                className={`flex items-center gap-1.5 rounded-full border px-2.5 py-1 transition-colors duration-500 ${
+                                    isMemActive(m.id)
+                                        ? "border-emerald-400/70 bg-emerald-500/10 text-emerald-200"
+                                        : "border-zinc-800 text-zinc-500"
+                                }`}
+                            >
+                                {m.icon}
+                                <span className="hidden text-[8.5px] font-bold whitespace-nowrap md:inline">
+                                    {m.label}
+                                </span>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>
 
             {/* Legend */}
-            <div className="mt-3 flex flex-wrap gap-x-5 gap-y-1.5 text-[9px] text-zinc-500">
+            <div className="mt-3 flex flex-wrap gap-x-5 gap-y-1.5 text-[9.5px] text-zinc-400">
                 {[
                     { label: "locked", cls: "border-zinc-700" },
-                    { label: "eligible", cls: "border-violet-500/60" },
-                    { label: "selected", cls: "border-rose-500" },
-                    { label: "in progress", cls: "border-amber-500/70" },
-                    { label: "exploited", cls: "border-emerald-500/70" },
+                    { label: "eligible", cls: "border-violet-400" },
+                    { label: "selected", cls: "border-rose-400" },
+                    { label: "in progress", cls: "border-amber-400" },
+                    { label: "exploited", cls: "border-emerald-400" },
                 ].map((l) => (
                     <div key={l.label} className="flex items-center gap-1.5">
                         <span className={`h-2.5 w-2.5 rounded-sm border-2 ${l.cls}`} />
@@ -813,10 +969,10 @@ export default function ArchitectureAnimation() {
             </div>
 
             {/* Trajectory log */}
-            <div className="mt-3 overflow-hidden rounded-lg border border-zinc-800 bg-black/60 px-4 py-2 text-[10px] text-zinc-500">
-                <span className="mr-2 text-zinc-700">$</span>
+            <div className="mt-3 overflow-hidden rounded-md border border-zinc-800 bg-black px-4 py-2 text-[10px] text-zinc-300">
+                <span className="mr-2 text-zinc-600">$</span>
                 {current.log}
-                <span className="ml-1 inline-block h-3 w-1.5 animate-pulse bg-zinc-600 align-middle" />
+                <span className="ml-1 inline-block h-3 w-1.5 animate-pulse bg-zinc-500 align-middle" />
             </div>
         </div>
     );
