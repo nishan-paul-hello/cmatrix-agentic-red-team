@@ -779,7 +779,7 @@ export default function ArchitectureAnimation() {
     const isBoxActive = (id: BoxId) => activeBoxSet.has(id);
 
     return (
-        <div className="z-10 mt-16 w-full max-w-6xl font-mono">
+        <div className="z-10 mt-6 w-full max-w-6xl font-mono">
             {/* Header / Info panel */}
             <div className="mb-4 flex flex-col items-start justify-between gap-6 rounded-xl border border-zinc-800 bg-zinc-950 p-6 md:flex-row">
                 <div className="min-w-0 flex-1">

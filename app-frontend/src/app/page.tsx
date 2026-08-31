@@ -65,6 +65,11 @@ export default async function LandingPage() {
                 </div>
 
                 {/* Workflow Animation */}
+                <div className="mt-24 z-10 w-full max-w-6xl text-left">
+                    <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+                        How RedGrid Works
+                    </h2>
+                </div>
                 <ArchitectureAnimation />
             </main>
 
