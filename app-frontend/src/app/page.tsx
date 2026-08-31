@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, User } from "lucide-react";
 
 import ArchitectureAnimation from "@/components/ArchitectureAnimation";
 import { LandingProfileMenu } from "@/components/LandingProfileMenu";
@@ -24,7 +24,11 @@ export default async function LandingPage() {
                         {isAuthenticated ? (
                             <LandingProfileMenu />
                         ) : (
-                            <LoginButton text="Login to Dashboard" className="h-9 px-4 py-2" />
+                            <LoginButton 
+                                text="Log in" 
+                                icon={<User className="h-3.5 w-3.5" />}
+                                className="group h-8 px-3 py-1.5 text-sm rounded-full bg-white text-black font-medium transition-all duration-300 hover:bg-white/90 hover:shadow-[0_0_15px_rgba(255,255,255,0.2)] hover:scale-105" 
+                            />
                         )}
                     </nav>
                 </div>

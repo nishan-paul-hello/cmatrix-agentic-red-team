@@ -19,9 +19,10 @@ interface LoginButtonProps {
     text: string;
     className?: string;
     showArrow?: boolean;
+    icon?: React.ReactNode;
 }
 
-export function LoginButton({ text, className, showArrow }: LoginButtonProps) {
+export function LoginButton({ text, className, showArrow, icon }: LoginButtonProps) {
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
     const router = useRouter();
@@ -40,6 +41,7 @@ export function LoginButton({ text, className, showArrow }: LoginButtonProps) {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger render={<Button className={className} />}>
+                {icon && <span className="mr-2">{icon}</span>}
                 {text}
                 {showArrow && (
                     <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
