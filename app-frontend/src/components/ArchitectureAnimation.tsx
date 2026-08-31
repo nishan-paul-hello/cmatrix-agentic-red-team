@@ -3,15 +3,21 @@
 import React, { useEffect, useMemo, useState } from "react";
 import {
     Activity,
+    Boxes,
+    Braces,
     BrainCircuit,
     Bug,
+    ClipboardList,
     Code2,
     Coins,
+    Compass,
     Crosshair,
     Database,
     Eye,
     GitBranch,
     History,
+    KeyRound,
+    Layers,
     Library,
     Lock,
     Network,
@@ -21,30 +27,32 @@ import {
     ShieldCheck,
     Terminal,
     Unlock,
+    Wand2,
 } from "lucide-react";
 
 /* ------------------------------------------------------------------ */
-/*  Geometry — every box lives in a fixed 1000x740 coordinate space.   */
+/*  Geometry — every box lives in a fixed 1000x860 coordinate space.   */
 /*  All connectors are derived FROM these boxes, so a line's endpoint  */
 /*  is always exactly on a box's border — never floating near it.      */
 /* ------------------------------------------------------------------ */
 
 const VB_W = 1000;
-const VB_H = 740;
+const VB_H = 860;
 
-type BoxId = "el" | "tm" | "spec" | "vdg" | "val" | "ev" | "exec" | "target";
+type BoxId = "orch" | "el" | "tm" | "spec" | "vdg" | "val" | "ev" | "exec" | "target";
 
 type Box = { x: number; y: number; w: number; h: number };
 
 const BOX: Record<BoxId, Box> = {
-    el: { x: 24, y: 24, w: 272, h: 130 },
-    tm: { x: 364, y: 24, w: 272, h: 130 },
-    spec: { x: 744, y: 24, w: 232, h: 130 },
-    vdg: { x: 24, y: 190, w: 700, h: 300 },
-    val: { x: 24, y: 530, w: 200, h: 120 },
-    ev: { x: 244, y: 530, w: 200, h: 120 },
-    exec: { x: 484, y: 530, w: 200, h: 120 },
-    target: { x: 744, y: 530, w: 232, h: 120 },
+    orch: { x: 24, y: 24, w: 952, h: 64 },
+    el: { x: 24, y: 104, w: 270, h: 130 },
+    tm: { x: 310, y: 104, w: 270, h: 130 },
+    spec: { x: 596, y: 104, w: 380, h: 432 },
+    vdg: { x: 24, y: 250, w: 548, h: 286 },
+    val: { x: 24, y: 552, w: 170, h: 120 },
+    ev: { x: 210, y: 552, w: 170, h: 120 },
+    exec: { x: 396, y: 552, w: 170, h: 120 },
+    target: { x: 596, y: 552, w: 380, h: 120 },
 };
 
 const pct = (box: Box) => ({
@@ -66,7 +74,7 @@ const VDG_NODE: Record<
     { box: Box; label: string; sub: string; phi: number; delta: number; epss: number }
 > = {
     v1: {
-        box: { x: 54, y: 230, w: 190, h: 90 },
+        box: { x: 44, y: 296, w: 155, h: 95 },
         label: "AUTH BYPASS",
         sub: "JWT forgery",
         phi: 0.74,
@@ -74,7 +82,7 @@ const VDG_NODE: Record<
         epss: 0.41,
     },
     v2: {
-        box: { x: 279, y: 230, w: 190, h: 90 },
+        box: { x: 211, y: 296, w: 155, h: 95 },
         label: "SQLI · LOGIN",
         sub: "blind UNION",
         phi: 0.83,
@@ -82,7 +90,7 @@ const VDG_NODE: Record<
         epss: 0.71,
     },
     v3: {
-        box: { x: 504, y: 230, w: 190, h: 90 },
+        box: { x: 378, y: 296, w: 155, h: 95 },
         label: "XSS · SEARCH",
         sub: "reflected",
         phi: 0.58,
@@ -90,7 +98,7 @@ const VDG_NODE: Record<
         epss: 0.33,
     },
     v4: {
-        box: { x: 84, y: 378, w: 230, h: 90 },
+        box: { x: 100, y: 410, w: 210, h: 95 },
         label: "PRIV ESC",
         sub: "role parameter",
         phi: 0.61,
@@ -98,7 +106,7 @@ const VDG_NODE: Record<
         epss: 0.22,
     },
     v5: {
-        box: { x: 384, y: 378, w: 230, h: 90 },
+        box: { x: 330, y: 410, w: 210, h: 95 },
         label: "RCE · UPLOAD",
         sub: "file-type bypass",
         phi: 0.69,
@@ -110,9 +118,9 @@ const VDG_NODE: Record<
 // Prerequisite edges inside the VDG. Elbowed so every line meets a node
 // border square-on — no diagonal lines guessing where a box edge is.
 const PREREQ: { from: VdgId; to: VdgId; d: string }[] = [
-    { from: "v1", to: "v4", d: "M 149,320 L 149,349 L 199,349 L 199,378" },
-    { from: "v2", to: "v5", d: "M 374,320 L 374,349 L 499,349 L 499,378" },
-    { from: "v4", to: "v5", d: "M 314,423 L 384,423" },
+    { from: "v1", to: "v4", d: "M 121.5,391 L 121.5,400 L 205,400 L 205,410" },
+    { from: "v2", to: "v5", d: "M 288.5,391 L 288.5,400 L 435,400 L 435,410" },
+    { from: "v4", to: "v5", d: "M 310,457.5 L 330,457.5" },
 ];
 
 /* ------------------------------------------------------------------ */
@@ -120,6 +128,8 @@ const PREREQ: { from: VdgId; to: VdgId; d: string }[] = [
 /* ------------------------------------------------------------------ */
 
 type StructId =
+    | "orch-el"
+    | "orch-tm"
     | "el-tm"
     | "tm-spec"
     | "el-vdg"
@@ -133,15 +143,17 @@ type StructId =
 type Accent = "cyan" | "indigo" | "amber" | "emerald";
 
 const STRUCT: Record<StructId, { d: string; accent: Accent }> = {
-    "el-tm": { d: "M 296,89 L 364,89", accent: "cyan" },
-    "tm-spec": { d: "M 636,89 L 744,89", accent: "indigo" },
-    "el-vdg": { d: "M 160,154 L 160,190", accent: "cyan" },
-    "tm-vdg": { d: "M 500,154 L 500,190", accent: "indigo" },
-    "spec-target": { d: "M 860,154 L 860,530", accent: "amber" },
-    "target-exec": { d: "M 744,590 L 684,590", accent: "amber" },
-    "exec-ev": { d: "M 484,590 L 444,590", accent: "amber" },
-    "ev-val": { d: "M 244,590 L 224,590", accent: "amber" },
-    "val-vdg": { d: "M 124,530 L 124,490", accent: "emerald" },
+    "orch-el": { d: "M 159,88 L 159,104", accent: "cyan" },
+    "orch-tm": { d: "M 445,88 L 445,104", accent: "indigo" },
+    "el-tm": { d: "M 294,169 L 310,169", accent: "cyan" },
+    "tm-spec": { d: "M 580,169 L 596,169", accent: "indigo" },
+    "el-vdg": { d: "M 159,234 L 159,250", accent: "cyan" },
+    "tm-vdg": { d: "M 445,234 L 445,250", accent: "indigo" },
+    "spec-target": { d: "M 786,536 L 786,552", accent: "amber" },
+    "target-exec": { d: "M 596,612 L 566,612", accent: "amber" },
+    "exec-ev": { d: "M 396,612 L 380,612", accent: "amber" },
+    "ev-val": { d: "M 210,612 L 194,612", accent: "amber" },
+    "val-vdg": { d: "M 109,552 L 109,536", accent: "emerald" },
 };
 
 const ACCENT_HEX: Record<Accent, string> = {
@@ -152,44 +164,108 @@ const ACCENT_HEX: Record<Accent, string> = {
 };
 
 /* ------------------------------------------------------------------ */
+/*  Layer 1 — Orchestrator sub-stages                                  */
+/* ------------------------------------------------------------------ */
+
+type OrchStage = "intake" | "recon" | "compact" | null;
+
+const ORCH_STAGES: { id: Exclude<OrchStage, null>; label: string; sub: string; icon: React.ReactNode }[] = [
+    {
+        id: "intake",
+        label: "Scope Intake",
+        sub: "target · RoE · zero-day vs one-day",
+        icon: <ClipboardList className="h-3.5 w-3.5" />,
+    },
+    {
+        id: "recon",
+        label: "Auto-prompter",
+        sub: "unstructured recon, seeds EL",
+        icon: <Wand2 className="h-3.5 w-3.5" />,
+    },
+    {
+        id: "compact",
+        label: "FullCompact Trigger",
+        sub: "@85% context → rebuild TM context",
+        icon: <Layers className="h-3.5 w-3.5" />,
+    },
+];
+
+/* ------------------------------------------------------------------ */
 /*  Specialists / Memory tiers                                         */
 /* ------------------------------------------------------------------ */
 
-type SpecId = "recon" | "sqli" | "xss" | "lateral";
+type SpecId = "recon" | "sqli" | "xss" | "graphql" | "auth" | "lateral";
 const SPECIALISTS: { id: SpecId; label: string; sub: string; icon: React.ReactNode }[] = [
     {
         id: "recon",
         label: "Recon Specialist",
-        sub: "surface mapping",
+        sub: "nmap -p- · WhatWeb · ZAP-map",
         icon: <Search className="h-3.5 w-3.5" />,
     },
     {
         id: "sqli",
         label: "SQLi Specialist",
-        sub: "payload FSM",
+        sub: "baseline → bit-extraction FSM",
         icon: <Code2 className="h-3.5 w-3.5" />,
     },
     {
         id: "xss",
         label: "XSS Specialist",
-        sub: "5-phase mutation",
+        sub: "5-phase canary → mutation",
         icon: <Bug className="h-3.5 w-3.5" />,
     },
     {
+        id: "graphql",
+        label: "GraphQL Specialist",
+        sub: "introspection · bandit fuzz",
+        icon: <Braces className="h-3.5 w-3.5" />,
+    },
+    {
+        id: "auth",
+        label: "Auth/Session Specialist",
+        sub: "SPS · JWT · CSRF lifecycle",
+        icon: <KeyRound className="h-3.5 w-3.5" />,
+    },
+    {
         id: "lateral",
-        label: "Lateral Specialist",
-        sub: "multi-host",
+        label: "Lateral-Movement Specialist",
+        sub: "Scan · Move · Escalate · Exfil",
         icon: <Network className="h-3.5 w-3.5" />,
     },
 ];
 
 type MemId = "strategy" | "skill" | "episodic" | "cost" | "stop";
-const MEMORY: { id: MemId; label: string; icon: React.ReactNode }[] = [
-    { id: "strategy", label: "Strategy Mem", icon: <GitBranch className="h-3.5 w-3.5" /> },
-    { id: "skill", label: "Skill Library", icon: <Library className="h-3.5 w-3.5" /> },
-    { id: "episodic", label: "Episodic Mem", icon: <History className="h-3.5 w-3.5" /> },
-    { id: "cost", label: "Trajectory Log", icon: <Coins className="h-3.5 w-3.5" /> },
-    { id: "stop", label: "Early-Stop", icon: <PauseCircle className="h-3.5 w-3.5" /> },
+const MEMORY: { id: MemId; label: string; sub: string; icon: React.ReactNode }[] = [
+    {
+        id: "strategy",
+        label: "Strategy Memory",
+        sub: "Tier 2 · conditional branching (WAF-adaptive)",
+        icon: <GitBranch className="h-4 w-4" />,
+    },
+    {
+        id: "skill",
+        label: "Skill Library",
+        sub: "oracle-gated crystallization",
+        icon: <Library className="h-4 w-4" />,
+    },
+    {
+        id: "episodic",
+        label: "Episodic Failure Mem",
+        sub: "4th FAISS tier · per-mission",
+        icon: <History className="h-4 w-4" />,
+    },
+    {
+        id: "cost",
+        label: "Usage + Trajectory Log",
+        sub: "tokens · $ · full reproducibility",
+        icon: <Coins className="h-4 w-4" />,
+    },
+    {
+        id: "stop",
+        label: "Early-Stopping",
+        sub: "N=5 idle + empty frontier → halt",
+        icon: <PauseCircle className="h-4 w-4" />,
+    },
 ];
 
 /* ------------------------------------------------------------------ */
@@ -204,7 +280,8 @@ type Phase = {
     el: string[];
     ucb: string[];
     log: string;
-    activeSpecialist: SpecId | null;
+    activeSpecialists: SpecId[];
+    orchStage: OrchStage;
     target: string[];
     nodeStatus: Record<VdgId, NodeStatus>;
     activeBoxes: BoxId[];
@@ -224,8 +301,8 @@ const HIDDEN_ALL: Record<VdgId, NodeStatus> = {
 
 const PHASES: Phase[] = [
     {
-        title: "1 · Intake & Autonomous Recon",
-        desc: "The Orchestrator scopes the mission. An auto-prompter runs unstructured recon; every confirmed fact is written directly into the Environmental Layer — never inferred.",
+        title: "1 · Operator Intake & Autonomous Recon",
+        desc: "The Orchestrator scopes the mission (target, rules of engagement, zero-day vs one-day mode) and runs an unstructured auto-prompter recon pass. Every confirmed fact is written directly into the Environmental Layer — never inferred.",
         el: [
             "host: 10.20.4.17",
             "ports: 80, 443, 8080",
@@ -234,22 +311,23 @@ const PHASES: Phase[] = [
         ],
         ucb: ["awaiting environmental facts…"],
         log: "[EL] +4 facts written by Recon Specialist",
-        activeSpecialist: "recon",
+        activeSpecialists: ["recon"],
+        orchStage: "intake",
         target: [
             "nmap -p- -sV …",
             "service fingerprint: nginx/php8.1",
             "WhatWeb + ObserverWard running",
         ],
         nodeStatus: HIDDEN_ALL,
-        activeBoxes: ["spec", "target", "el"],
-        activeEdges: [{ id: "spec-target" }],
+        activeBoxes: ["orch", "spec", "target", "el"],
+        activeEdges: [{ id: "orch-el" }, { id: "spec-target" }],
         memory: [],
         stats: { t: "0:12", calls: 6, cost: "$0.04", nodes: 0 },
         icon: <Search className="h-5 w-5 text-cyan-400" />,
     },
     {
         title: "2 · VDG Hypothesis Synthesis",
-        desc: "The Team Manager reads the Environmental Layer and grows the Vulnerability Dependency Graph: promise φ, difficulty δ, and EPSS priors are scored, and prerequisite edges are inferred via batched LLM calls.",
+        desc: "The Team Manager reads the Environmental Layer and grows the Vulnerability Dependency Graph: promise φ, difficulty δ, and EPSS priors are scored, and prerequisite edges are inferred via batched LLM calls (2 calls/node, not O(2M) pairwise).",
         el: [
             "host: 10.20.4.17",
             "ports: 80, 443, 8080",
@@ -262,7 +340,8 @@ const PHASES: Phase[] = [
             "φ, δ, epss_prior assessed",
         ],
         log: "[VDG] 3 nodes added · 2 edges inferred (conf ≥ 0.7)",
-        activeSpecialist: null,
+        activeSpecialists: [],
+        orchStage: null,
         target: ["idle"],
         nodeStatus: { v1: "eligible", v2: "eligible", v3: "eligible", v4: "locked", v5: "locked" },
         activeBoxes: ["el", "tm", "vdg"],
@@ -287,7 +366,8 @@ const PHASES: Phase[] = [
             "→ argmax: sqli_login",
         ],
         log: "[ADM] eligible={auth,sqli,xss} → SELECTED sqli_login",
-        activeSpecialist: null,
+        activeSpecialists: [],
+        orchStage: null,
         target: ["idle"],
         nodeStatus: { v1: "eligible", v2: "selected", v3: "eligible", v4: "locked", v5: "locked" },
         activeBoxes: ["tm", "vdg"],
@@ -307,7 +387,8 @@ const PHASES: Phase[] = [
         ],
         ucb: ["Dispatch(sqli_login, verb=ExploitCandidate)", "fresh-context Specialist invoked"],
         log: "[EXEC] declarative task dispatched · verb=ExploitCandidate",
-        activeSpecialist: "sqli",
+        activeSpecialists: ["sqli"],
+        orchStage: null,
         target: [
             "baseline probe sent",
             "SLEEP(5) timing confirmed",
@@ -328,7 +409,7 @@ const PHASES: Phase[] = [
     },
     {
         title: "5 · Evaluation & Oracle Validation",
-        desc: "The Evaluation Agent produces a 4-part critique; the Validation Agent's Diagnose-Adapt-Cap loop forces a mandatory PoC re-run before the oracle confirms exploitation.",
+        desc: "The Evaluation Agent produces a 4-part critique; the Validation Agent's Diagnose-Adapt-Cap loop forces a mandatory PoC re-run before the per-surface oracle confirms exploitation.",
         el: [
             "host: 10.20.4.17",
             "ports: 80, 443, 8080",
@@ -341,7 +422,8 @@ const PHASES: Phase[] = [
             "oracle-confirmed ✓",
         ],
         log: "[ORACLE] sqli_login CONFIRMED · E_ord=5",
-        activeSpecialist: "sqli",
+        activeSpecialists: ["sqli"],
+        orchStage: null,
         target: ["PoC re-run ×1", "oracle: CONFIRMED", "creds harvested → EL"],
         nodeStatus: { v1: "eligible", v2: "exploited", v3: "eligible", v4: "locked", v5: "locked" },
         activeBoxes: ["target", "exec", "ev", "val"],
@@ -352,7 +434,7 @@ const PHASES: Phase[] = [
     },
     {
         title: "6 · Backprop & Skill Crystallization",
-        desc: "E_ord backpropagates into the VDG. The confirmed exploit workflow is promoted into the Skill Library — oracle-gated, with a negative-transfer guard against unseen targets.",
+        desc: "E_ord backpropagates into the VDG. The confirmed exploit workflow is promoted into the Skill Library — oracle-gated, with a negative-transfer guard against unseen framework versions.",
         el: [
             "host: 10.20.4.17",
             "ports: 80, 443, 8080",
@@ -365,7 +447,8 @@ const PHASES: Phase[] = [
             "negative-transfer guard: pass",
         ],
         log: "[MEM] skill promoted: sqli_login → creds_harvest",
-        activeSpecialist: null,
+        activeSpecialists: [],
+        orchStage: null,
         target: ["idle"],
         nodeStatus: { v1: "eligible", v2: "exploited", v3: "eligible", v4: "locked", v5: "locked" },
         activeBoxes: ["val", "vdg"],
@@ -389,7 +472,8 @@ const PHASES: Phase[] = [
             "→ SELECTED auth_bypass",
         ],
         log: "[LOOP] frontier refreshed · early-stop N=0 idle",
-        activeSpecialist: null,
+        activeSpecialists: [],
+        orchStage: null,
         target: ["idle"],
         nodeStatus: { v1: "selected", v2: "exploited", v3: "eligible", v4: "locked", v5: "locked" },
         activeBoxes: ["tm", "vdg"],
@@ -397,6 +481,31 @@ const PHASES: Phase[] = [
         memory: ["stop"],
         stats: { t: "2:15", calls: 33, cost: "$0.44", nodes: 3 },
         icon: <GitBranch className="h-5 w-5 text-indigo-400" />,
+    },
+    {
+        title: "8 · Context Compaction & Cross-Surface Scaling",
+        desc: "At 85% context utilization, FullCompact reconstructs the Team Manager's reasoning context from the EL+AL snapshot. The same VDG and orchestration layer drive GraphQL and multi-host missions — surface-specific Specialists activate, not a separate codepath.",
+        el: [
+            "host: 10.20.4.17",
+            "ports: 80, 443, 8080",
+            "creds: admin:*** (harvested)",
+            "waf: ModSecurity (detected)",
+        ],
+        ucb: [
+            "context @ 87% → FullCompact triggered",
+            "TM context rebuilt from EL+AL state",
+            "GraphQL / Lateral pools idle-ready",
+        ],
+        log: "[ORCH] FullCompact reconstructed context · frontier re-synced",
+        activeSpecialists: [],
+        orchStage: "compact",
+        target: ["idle"],
+        nodeStatus: { v1: "selected", v2: "exploited", v3: "eligible", v4: "locked", v5: "locked" },
+        activeBoxes: ["orch", "tm", "spec"],
+        activeEdges: [{ id: "orch-tm" }, { id: "tm-spec" }],
+        memory: ["cost", "stop"],
+        stats: { t: "2:19", calls: 34, cost: "$0.45", nodes: 3 },
+        icon: <Layers className="h-5 w-5 text-cyan-400" />,
     },
 ];
 
@@ -433,20 +542,52 @@ const STATUS_BG: Record<NodeStatus, string> = {
     exploited: "bg-emerald-950/30",
 };
 
-function StatusIcon({ status }: { status: NodeStatus }) {
+const STATUS_LABEL: Record<NodeStatus, string> = {
+    hidden: "",
+    locked: "LOCKED",
+    eligible: "ELIGIBLE",
+    selected: "SELECTED",
+    in_progress: "IN PROGRESS",
+    exploited: "EXPLOITED",
+};
+
+function StatusIcon({ status, className }: { status: NodeStatus; className?: string }) {
+    const cls = className ?? "h-3 w-3";
     if (status === "locked") {
-        return <Lock className="h-3 w-3 text-zinc-500" />;
+        return <Lock className={`${cls} text-zinc-500`} />;
     }
     if (status === "exploited") {
-        return <Unlock className="h-3 w-3 text-emerald-400" />;
+        return <Unlock className={`${cls} text-emerald-400`} />;
     }
     if (status === "in_progress") {
-        return <Activity className="h-3 w-3 animate-pulse text-amber-400" />;
+        return <Activity className={`${cls} animate-pulse text-amber-400`} />;
     }
     if (status === "selected") {
-        return <Crosshair className="h-3 w-3 text-rose-400" />;
+        return <Crosshair className={`${cls} text-rose-400`} />;
     }
-    return <Activity className="h-3 w-3 text-violet-400" />;
+    return <Activity className={`${cls} text-violet-400`} />;
+}
+
+/* Small colored stat pill used inside VDG node cards (φ / δ / epss) */
+function StatPill({
+    label,
+    value,
+    tone,
+}: {
+    label: string;
+    value: number;
+    tone: "violet" | "amber" | "cyan";
+}) {
+    const toneClass = {
+        violet: "text-violet-300 border-violet-800/60 bg-violet-950/30",
+        amber: "text-amber-300 border-amber-800/60 bg-amber-950/30",
+        cyan: "text-cyan-300 border-cyan-800/60 bg-cyan-950/30",
+    }[tone];
+    return (
+        <span className={`rounded-sm border px-1 py-[1px] text-[8px] leading-none ${toneClass}`}>
+            {label} <b className="font-bold">{value.toFixed(2)}</b>
+        </span>
+    );
 }
 
 /* ------------------------------------------------------------------ */
@@ -516,6 +657,7 @@ function Panel({
     accent,
     icon,
     title,
+    subtitle,
     pulse,
     children,
 }: {
@@ -524,6 +666,7 @@ function Panel({
     accent: Accent;
     icon: React.ReactNode;
     title: string;
+    subtitle?: string;
     pulse?: boolean;
     children: React.ReactNode;
 }) {
@@ -536,19 +679,58 @@ function Panel({
                 }`}
             >
                 <div className="mb-1.5 flex items-center justify-between border-b border-zinc-800 pb-1.5">
-                    <div className="flex items-center gap-2">
+                    <div className="flex min-w-0 items-center gap-2">
                         <span className={active ? a.icon : "text-zinc-600"}>{icon}</span>
                         <span
-                            className={`text-[10.5px] font-bold tracking-wide ${active ? a.text : "text-zinc-500"}`}
+                            className={`truncate text-[10.5px] font-bold tracking-wide ${active ? a.text : "text-zinc-500"}`}
                         >
                             {title}
                         </span>
+                        {subtitle && (
+                            <span className="hidden shrink-0 text-[8.5px] text-zinc-600 sm:inline">
+                                {subtitle}
+                            </span>
+                        )}
                     </div>
                     {pulse && active && <Activity className={`h-3 w-3 animate-pulse ${a.icon}`} />}
                 </div>
                 <div className="min-h-0 flex-1 overflow-hidden">{children}</div>
             </div>
         </div>
+    );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Trajectory log — parses the "[TAG] rest of line" convention into   */
+/*  a colored badge so the log reads at a glance instead of as one     */
+/*  flat monospace string.                                             */
+/* ------------------------------------------------------------------ */
+
+const LOG_TAG_STYLE: Record<string, string> = {
+    EL: "bg-cyan-950/60 text-cyan-300 border-cyan-800/60",
+    VDG: "bg-violet-950/60 text-violet-300 border-violet-800/60",
+    ADM: "bg-indigo-950/60 text-indigo-300 border-indigo-800/60",
+    EXEC: "bg-amber-950/60 text-amber-300 border-amber-800/60",
+    ORACLE: "bg-emerald-950/60 text-emerald-300 border-emerald-800/60",
+    MEM: "bg-emerald-950/60 text-emerald-300 border-emerald-800/60",
+    LOOP: "bg-indigo-950/60 text-indigo-300 border-indigo-800/60",
+    ORCH: "bg-cyan-950/60 text-cyan-300 border-cyan-800/60",
+};
+
+function TrajectoryLog({ line }: { line: string }) {
+    const match = line.match(/^\[([A-Z]+)\]\s*(.*)$/);
+    if (!match) {
+        return <span>{line}</span>;
+    }
+    const [, tag, rest] = match;
+    const style = LOG_TAG_STYLE[tag] ?? "bg-zinc-900 text-zinc-300 border-zinc-700";
+    return (
+        <span className="inline-flex items-center gap-2">
+            <span className={`rounded border px-1.5 py-[1px] text-[9px] font-bold tracking-wide ${style}`}>
+                {tag}
+            </span>
+            <span>{rest}</span>
+        </span>
     );
 }
 
@@ -585,7 +767,7 @@ export default function ArchitectureAnimation() {
     }, [current]);
     const activeBoxSet = useMemo(() => new Set(current.activeBoxes), [current]);
 
-    const isSpecActive = (id: SpecId) => current.activeSpecialist === id;
+    const isSpecActive = (id: SpecId) => current.activeSpecialists.includes(id);
     const isMemActive = (id: MemId) => current.memory.includes(id);
     const isBoxActive = (id: BoxId) => activeBoxSet.has(id);
 
@@ -738,6 +920,47 @@ export default function ArchitectureAnimation() {
 
                     {/* ---- HTML PANELS (percentage-positioned from BOX geometry) ---- */}
 
+                    {/* Layer 1 — Orchestrator */}
+                    <Panel
+                        box={BOX.orch}
+                        active={isBoxActive("orch")}
+                        accent="cyan"
+                        icon={<Compass className="h-3.5 w-3.5" />}
+                        title="LAYER 1 — ORCHESTRATOR (MISSION PLANNER)"
+                        subtitle="Operator: target + scope + mode"
+                    >
+                        <div className="flex h-full items-stretch gap-3">
+                            {ORCH_STAGES.map((stage, i) => {
+                                const on = current.orchStage === stage.id;
+                                return (
+                                    <React.Fragment key={stage.id}>
+                                        {i > 0 && <div className="w-px shrink-0 bg-zinc-800" />}
+                                        <div
+                                            className={`flex flex-1 items-center gap-2 rounded px-2 transition-colors duration-300 ${on ? "bg-cyan-500/10" : ""}`}
+                                        >
+                                            <span className={on ? "text-cyan-400" : "text-zinc-600"}>
+                                                {stage.icon}
+                                            </span>
+                                            <div className="flex min-w-0 flex-col leading-none">
+                                                <span
+                                                    className={`text-[9.5px] font-bold whitespace-nowrap ${on ? "text-cyan-200" : "text-zinc-400"}`}
+                                                >
+                                                    {stage.label}
+                                                </span>
+                                                <span className="mt-0.5 hidden truncate text-[8px] text-zinc-600 md:inline">
+                                                    {stage.sub}
+                                                </span>
+                                            </div>
+                                            {on && (
+                                                <Activity className="ml-auto h-2.5 w-2.5 shrink-0 animate-pulse text-cyan-400" />
+                                            )}
+                                        </div>
+                                    </React.Fragment>
+                                );
+                            })}
+                        </div>
+                    </Panel>
+
                     <Panel
                         box={BOX.el}
                         active={isBoxActive("el")}
@@ -769,37 +992,43 @@ export default function ArchitectureAnimation() {
                         </div>
                     </Panel>
 
+                    {/* Specialist Pool — 2-column grid, all six roles get their own card */}
                     <Panel
                         box={BOX.spec}
                         active={isBoxActive("spec")}
                         accent="amber"
-                        icon={<Network className="h-3.5 w-3.5" />}
-                        title="SPECIALIST POOL"
+                        icon={<Boxes className="h-3.5 w-3.5" />}
+                        title="LAYER 3 — SPECIALIST POOL"
+                        subtitle="fresh context per invocation"
                     >
-                        <div className="flex h-full flex-col justify-between">
+                        <div className="grid h-full grid-cols-2 gap-2">
                             {SPECIALISTS.map((s) => {
                                 const on = isSpecActive(s.id);
                                 return (
                                     <div
                                         key={s.id}
-                                        className={`flex items-center gap-2 rounded px-1 py-0.5 ${on ? "bg-amber-500/10" : ""}`}
+                                        className={`flex flex-col justify-between rounded border px-2 py-1.5 transition-colors duration-300 ${
+                                            on
+                                                ? "border-amber-400/70 bg-amber-500/10"
+                                                : "border-zinc-800/80 bg-zinc-900/30"
+                                        }`}
                                     >
-                                        <span className={on ? "text-amber-400" : "text-zinc-600"}>
-                                            {s.icon}
-                                        </span>
-                                        <div className="flex flex-col leading-none">
+                                        <div className="flex items-center gap-1.5">
+                                            <span className={on ? "text-amber-400" : "text-zinc-600"}>
+                                                {s.icon}
+                                            </span>
                                             <span
-                                                className={`text-[9.5px] font-bold ${on ? "text-amber-200" : "text-zinc-400"}`}
+                                                className={`text-[9px] leading-tight font-bold ${on ? "text-amber-200" : "text-zinc-400"}`}
                                             >
                                                 {s.label}
                                             </span>
-                                            <span className="text-[8px] text-zinc-500">
-                                                {s.sub}
-                                            </span>
+                                            {on && (
+                                                <Activity className="ml-auto h-2.5 w-2.5 shrink-0 animate-pulse text-amber-400" />
+                                            )}
                                         </div>
-                                        {on && (
-                                            <Activity className="ml-auto h-2.5 w-2.5 animate-pulse text-amber-400" />
-                                        )}
+                                        <span className="mt-1 text-[7.5px] leading-tight text-zinc-500">
+                                            {s.sub}
+                                        </span>
                                     </div>
                                 );
                             })}
@@ -838,22 +1067,27 @@ export default function ArchitectureAnimation() {
                                 style={pct(n.box)}
                             >
                                 <div
-                                    className={`flex h-full flex-col justify-between rounded-md border-2 px-2.5 py-2 transition-colors duration-500 ${STATUS_BORDER[status]} ${STATUS_BG[status]}`}
+                                    className={`flex h-full flex-col justify-between rounded-md border-2 px-2 py-1.5 transition-colors duration-500 ${STATUS_BORDER[status]} ${STATUS_BG[status]}`}
                                 >
-                                    <div className="flex items-center justify-between">
+                                    <div className="flex items-center justify-between gap-1">
                                         <span
-                                            className={`text-[10.5px] font-bold ${STATUS_TEXT[status]}`}
+                                            className={`text-[10px] leading-tight font-bold ${STATUS_TEXT[status]}`}
                                         >
                                             {n.label}
                                         </span>
                                         <StatusIcon status={status} />
                                     </div>
-                                    <div className="text-[9px] text-zinc-400">{n.sub}</div>
-                                    <div className="flex gap-2 text-[8.5px] text-zinc-500">
-                                        <span>φ {n.phi}</span>
-                                        <span>δ {n.delta}</span>
-                                        <span>epss {n.epss}</span>
+                                    <div className="text-[8.5px] text-zinc-400">{n.sub}</div>
+                                    <div className="flex flex-wrap items-center gap-1">
+                                        <StatPill label="φ" value={n.phi} tone="violet" />
+                                        <StatPill label="δ" value={n.delta} tone="amber" />
+                                        <StatPill label="epss" value={n.epss} tone="cyan" />
                                     </div>
+                                    <span
+                                        className={`text-[7px] font-bold tracking-wider ${STATUS_TEXT[status]}`}
+                                    >
+                                        {STATUS_LABEL[status]}
+                                    </span>
                                 </div>
                             </div>
                         );
@@ -866,8 +1100,11 @@ export default function ArchitectureAnimation() {
                         icon={<ShieldCheck className="h-3.5 w-3.5" />}
                         title="VALIDATION"
                     >
-                        <div className="flex h-full flex-col justify-center">
+                        <div className="flex h-full flex-col justify-center gap-1">
                             <div className="text-[9px] text-zinc-400">diagnose · adapt · cap</div>
+                            <div className="text-[7.5px] text-zinc-600">
+                                oracle: CVE-Bench · PrediQL · MHBench
+                            </div>
                         </div>
                     </Panel>
 
@@ -878,8 +1115,11 @@ export default function ArchitectureAnimation() {
                         icon={<Eye className="h-3.5 w-3.5" />}
                         title="EVALUATION"
                     >
-                        <div className="flex h-full flex-col justify-center">
-                            <div className="text-[9px] text-zinc-400">4-part critique · E_ord</div>
+                        <div className="flex h-full flex-col justify-center gap-1">
+                            <div className="text-[9px] text-zinc-400">4-part critique</div>
+                            <div className="text-[7.5px] text-zinc-600">
+                                what · expected_vs_actual · next · E_ord
+                            </div>
                         </div>
                     </Panel>
 
@@ -928,50 +1168,67 @@ export default function ArchitectureAnimation() {
                         </div>
                     </div>
 
-                    {/* Memory strip */}
+                    {/* Memory & State Services — dedicated card grid, not a pill strip */}
                     <div
-                        className="absolute inset-x-0 flex justify-between px-6"
-                        style={{ top: `${(672 / VB_H) * 100}%` }}
+                        className="absolute inset-x-6 flex gap-2"
+                        style={{ top: `${(688 / VB_H) * 100}%`, height: `${(140 / VB_H) * 100}%` }}
                     >
-                        {MEMORY.map((m) => (
-                            <div
-                                key={m.id}
-                                className={`flex items-center gap-1.5 rounded-full border px-2.5 py-1 transition-colors duration-500 ${
-                                    isMemActive(m.id)
-                                        ? "border-emerald-400/70 bg-emerald-500/10 text-emerald-200"
-                                        : "border-zinc-800 text-zinc-500"
-                                }`}
-                            >
-                                {m.icon}
-                                <span className="hidden text-[8.5px] font-bold whitespace-nowrap md:inline">
-                                    {m.label}
-                                </span>
-                            </div>
-                        ))}
+                        {MEMORY.map((m) => {
+                            const on = isMemActive(m.id);
+                            return (
+                                <div
+                                    key={m.id}
+                                    className={`flex flex-1 flex-col justify-between rounded-md border p-2 transition-colors duration-500 ${
+                                        on
+                                            ? "border-emerald-400/70 bg-emerald-500/10"
+                                            : "border-zinc-800 bg-zinc-950"
+                                    }`}
+                                >
+                                    <div className="flex items-center gap-1.5">
+                                        <span className={on ? "text-emerald-400" : "text-zinc-600"}>
+                                            {m.icon}
+                                        </span>
+                                        {on && (
+                                            <Activity className="ml-auto h-2.5 w-2.5 animate-pulse text-emerald-400" />
+                                        )}
+                                    </div>
+                                    <div
+                                        className={`mt-1 text-[9.5px] leading-tight font-bold ${on ? "text-emerald-200" : "text-zinc-400"}`}
+                                    >
+                                        {m.label}
+                                    </div>
+                                    <div className="mt-0.5 text-[8px] leading-snug text-zinc-600">
+                                        {m.sub}
+                                    </div>
+                                </div>
+                            );
+                        })}
                     </div>
                 </div>
             </div>
 
             {/* Legend */}
-            <div className="mt-3 flex flex-wrap gap-x-5 gap-y-1.5 text-[9.5px] text-zinc-400">
-                {[
-                    { label: "locked", cls: "border-zinc-700" },
-                    { label: "eligible", cls: "border-violet-400" },
-                    { label: "selected", cls: "border-rose-400" },
-                    { label: "in progress", cls: "border-amber-400" },
-                    { label: "exploited", cls: "border-emerald-400" },
-                ].map((l) => (
-                    <div key={l.label} className="flex items-center gap-1.5">
-                        <span className={`h-2.5 w-2.5 rounded-sm border-2 ${l.cls}`} />
-                        {l.label}
-                    </div>
-                ))}
+            <div className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-2 rounded-md border border-zinc-800 bg-zinc-950 px-4 py-2.5">
+                <span className="mr-1 text-[9px] font-bold tracking-wider text-zinc-500 uppercase">
+                    VDG node status
+                </span>
+                {(["locked", "eligible", "selected", "in_progress", "exploited"] as NodeStatus[]).map(
+                    (status) => (
+                        <div
+                            key={status}
+                            className={`flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[9.5px] ${STATUS_BORDER[status]} ${STATUS_BG[status]} ${STATUS_TEXT[status]}`}
+                        >
+                            <StatusIcon status={status} className="h-3 w-3" />
+                            {STATUS_LABEL[status].toLowerCase()}
+                        </div>
+                    ),
+                )}
             </div>
 
             {/* Trajectory log */}
             <div className="mt-3 overflow-hidden rounded-md border border-zinc-800 bg-black px-4 py-2 text-[10px] text-zinc-300">
                 <span className="mr-2 text-zinc-600">$</span>
-                {current.log}
+                <TrajectoryLog line={current.log} />
                 <span className="ml-1 inline-block h-3 w-1.5 animate-pulse bg-zinc-500 align-middle" />
             </div>
         </div>
