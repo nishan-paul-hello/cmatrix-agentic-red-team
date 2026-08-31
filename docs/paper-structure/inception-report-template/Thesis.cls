@@ -211,7 +211,7 @@
       \includegraphics[width=1.5in, height=1.5in]{logo.pdf}
       \vfill
       %{\large A thesis submitted in partial fulfillment for the degree of\par}
-      {\Large Professional Masters in Information and Cyber Security \par}
+      {\Large Professional Masters in Information and Cyber Security (PMICS)\par}
       
       {\Large \@date \par}
       \bigskip
