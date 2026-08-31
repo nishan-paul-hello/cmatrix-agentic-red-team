@@ -28,7 +28,7 @@ export default async function LandingPage() {
                             <LoginButton
                                 text="Log in"
                                 icon={<User className="h-3.5 w-3.5" />}
-                                className="group h-8 rounded-full bg-white px-3 py-1.5 text-sm font-medium text-black transition-all duration-300 hover:scale-105 hover:bg-white/90 hover:shadow-[0_0_15px_rgba(255,255,255,0.2)]"
+                                className="group h-8 rounded-full bg-white px-3 py-1.5 text-sm font-medium text-black transition-transform duration-300 hover:scale-105 hover:bg-white hover:text-black"
                             />
                         )}
                     </nav>
