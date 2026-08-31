@@ -1,12 +1,13 @@
 import { cookies } from "next/headers";
 import Image from "next/image";
-import Link from "next/link";
-import { ArrowRight, User } from "lucide-react";
+import { User } from "lucide-react";
 
 import ArchitectureAnimation from "@/components/ArchitectureAnimation";
 import { LandingProfileMenu } from "@/components/LandingProfileMenu";
 import GeometricMark from "@/components/ui/GeometricMark";
+import { TerminalCTA } from "@/components/ui/TerminalCTA";
 import { LoginButton } from "@/features/auth/components/LoginButton";
+import { TerminalLoginCTA } from "@/features/auth/components/TerminalLoginCTA";
 
 export default async function LandingPage() {
     const cookieStore = await cookies();
@@ -57,18 +58,15 @@ export default async function LandingPage() {
 
                     <div className="flex flex-col items-center justify-center gap-4 pt-4 sm:flex-row">
                         {isAuthenticated ? (
-                            <Link
+                            <TerminalCTA
                                 href="/dashboard"
-                                className="focus-visible:ring-ring bg-primary text-primary-foreground hover:bg-primary/90 group inline-flex h-12 w-full items-center justify-center gap-2 rounded-md px-8 text-base font-medium transition-colors focus-visible:ring-2 focus-visible:outline-none sm:w-auto"
-                            >
-                                Go to Dashboard
-                                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                            </Link>
+                                originalText="Deploy Autonomous Agents"
+                                className="h-14 w-full px-8 text-base sm:w-auto sm:min-w-[200px]"
+                            />
                         ) : (
-                            <LoginButton
-                                text="Get Started"
-                                showArrow
-                                className="group h-12 w-full gap-2 px-8 text-base sm:w-auto"
+                            <TerminalLoginCTA
+                                originalText="Deploy Autonomous Agents"
+                                className="h-14 w-full px-8 text-base sm:w-auto sm:min-w-[200px]"
                             />
                         )}
                     </div>
