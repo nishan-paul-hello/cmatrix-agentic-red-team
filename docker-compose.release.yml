@@ -5,6 +5,8 @@ services:
     image: ghcr.io/nishan-paul-2022/redgrid-agentic-red-team/app-frontend:latest
     ports:
       - "${FRONTEND_PORT}:${FRONTEND_PORT}"
+    environment:
+      - PORT=${FRONTEND_PORT}
     restart: unless-stopped
     env_file:
       - .env
