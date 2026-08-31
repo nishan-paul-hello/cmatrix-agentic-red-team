@@ -39,7 +39,9 @@ export default async function LandingPage() {
             <main className="relative flex flex-1 flex-col items-center justify-center overflow-hidden p-6 text-center lg:p-12">
                 <div className="z-10 max-w-3xl space-y-8">
                     <div className="text-foreground flex items-center justify-center gap-2 font-mono text-sm font-medium tracking-tight">
-                        <span>&#47;&#47; LLM-orchestrated multi-agent framework for autonomous VAPT</span>
+                        <span>
+                            &#47;&#47; LLM-orchestrated multi-agent framework for autonomous VAPT
+                        </span>
                     </div>
 
                     <h1 className="text-5xl font-extrabold tracking-tight sm:text-6xl lg:text-7xl">
