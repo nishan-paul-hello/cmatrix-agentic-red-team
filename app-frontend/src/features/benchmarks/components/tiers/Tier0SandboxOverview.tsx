@@ -32,7 +32,7 @@ export function Tier0SandboxOverview({
                     green: true,
                 },
             ])}
-            <div className="mb-3 text-sm tracking-widest text-[var(--color-hex-444444)]">
+            <div className="text-muted-foreground mb-3 text-sm tracking-widest">
                 FAILURE CLASS COVERAGE
             </div>
             {FAILURE_CLASSES.map((cls) => {
@@ -40,20 +40,12 @@ export function Tier0SandboxOverview({
                 return (
                     <div key={cls} className="mb-2 flex items-center gap-2">
                         <span
-                            className="text-lg font-bold"
-                            style={{
-                                color: closed ? "var(--color-success)" : "var(--color-hex-333333)",
-                            }}
+                            className={`text-xs font-bold ${closed ? "text-success" : "text-border"}`}
                         >
                             {closed ? "✓" : "✗"}
                         </span>
                         <span
-                            className="text-base"
-                            style={{
-                                color: closed
-                                    ? "var(--color-hex-666666)"
-                                    : "var(--color-hex-333333)",
-                            }}
+                            className={`text-base ${closed ? "text-muted-foreground" : "text-border"}`}
                         >
                             {cls}
                         </span>

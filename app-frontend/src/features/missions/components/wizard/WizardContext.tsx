@@ -1,36 +1,29 @@
 import { createContext, useContext } from "react";
+import { type UseFormReturn } from "react-hook-form";
+import { z } from "zod";
 
-import {
-    type ModeType,
-    type SurfaceType,
-    type TargetType,
-} from "@/features/missions/data/fixtures/wizardMockData";
 import { type TelemetryEventName } from "@/hooks/useTelemetry";
 import { type EventBus } from "@/utils/EventBus";
+
+export const wizardSchema = z.object({
+    target: z.string(),
+    targetType: z.enum(["URL", "HOST", "BENCHMARK ENVIRONMENT"]),
+    benchSuite: z.string(),
+    benchTaskId: z.string(),
+    roe: z.string(),
+    maxRuntime: z.string(),
+    costCeiling: z.string(),
+    toolTimeout: z.string(),
+    surface: z.enum(["WEB APPLICATION", "GRAPHQL", "MULTI-HOST"]),
+    mode: z.enum(["ONE-DAY", "ZERO-DAY"]),
+});
+
+export type WizardFormValues = z.infer<typeof wizardSchema>;
 
 export interface WizardContextType {
     step: number;
     setStep: (s: number) => void;
-    target: string;
-    setTarget: (t: string) => void;
-    targetType: TargetType;
-    setTargetType: (t: TargetType) => void;
-    benchSuite: string;
-    setBenchSuite: (s: string) => void;
-    benchTaskId: string;
-    setBenchTaskId: (s: string) => void;
-    roe: string;
-    setRoe: (r: string) => void;
-    maxRuntime: string;
-    setMaxRuntime: (m: string) => void;
-    costCeiling: string;
-    setCostCeiling: (c: string) => void;
-    toolTimeout: string;
-    setToolTimeout: (t: string) => void;
-    surface: SurfaceType;
-    setSurface: (s: SurfaceType) => void;
-    mode: ModeType;
-    setMode: (m: ModeType) => void;
+    form: UseFormReturn<WizardFormValues>;
     onCancel?: () => void;
     eventBus: EventBus;
     logEvent: (event: TelemetryEventName, data?: Record<string, unknown>) => void;

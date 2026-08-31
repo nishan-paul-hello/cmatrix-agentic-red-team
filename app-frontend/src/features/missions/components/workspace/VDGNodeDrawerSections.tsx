@@ -8,7 +8,7 @@ export function VDGNodeDrawerIntent() {
     const { detail } = useNodeDrawerContext();
     return (
         <Section label="ATTACK INTENT">
-            <p className="text-lg leading-relaxed tracking-tighter text-[var(--color-hex-666666)]">
+            <p className="text-muted-foreground text-xs leading-relaxed tracking-tighter">
                 {detail.intent}
             </p>
         </Section>
@@ -19,7 +19,7 @@ export function VDGNodeDrawerMetrics() {
     const { node } = useNodeDrawerContext();
     return (
         <Section label="SCORES & METRICS">
-            <div className="grid grid-cols-2 gap-0 overflow-hidden rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)]">
+            <div className="border-border grid grid-cols-1 gap-0 overflow-hidden rounded-sm border-[1px] border-solid sm:grid-cols-2">
                 {[
                     {
                         k: "UCB SCORE",
@@ -61,24 +61,15 @@ export function VDGNodeDrawerMetrics() {
                         v: "$0.18",
                         red: false,
                     },
-                ].map((r, i) => (
-                    <div
-                        key={r.k}
-                        className="px-[10px] py-[7px]"
-                        style={{
-                            borderRight: i % 2 === 0 ? "1px solid var(--color-hex-1a1a1a)" : "none",
-                            borderBottom: i < 6 ? "1px solid var(--color-hex-1a1a1a)" : "none",
-                            background:
-                                i % 2 === 0 ? "var(--color-hex-0d0d0d)" : "var(--color-hex-0b0b0b)",
-                        }}
-                    >
-                        <div className="text-sm-tight tracking-wider-2 mb-[2px] text-[var(--color-hex-444444)]">
+                ].map((r) => (
+                    <div key={r.k} className="border-border border-b px-2.5 py-1.5">
+                        <div className="text-muted-foreground mb-0.5 text-xs tracking-widest">
                             {r.k}
                         </div>
                         <div
-                            className="text-2xl font-bold"
+                            className="text-xs font-bold"
                             style={{
-                                color: r.red ? "var(--color-brand)" : "var(--color-hex-a0a0a0)",
+                                color: r.red ? "var(--primary)" : "var(--muted-foreground)",
                             }}
                         >
                             {r.v}
@@ -105,28 +96,22 @@ export function VDGNodeDrawerPrerequisites() {
         <Section label="PREREQUISITES">
             <div className="flex flex-col gap-1.5">
                 {detail.prerequisites.length === 0 ? (
-                    <span className="text-lg tracking-tight text-[var(--color-hex-333333)]">
-                        None
-                    </span>
+                    <span className="text-muted-foreground text-xs tracking-tight">None</span>
                 ) : (
                     detail.prerequisites.map((p) => (
                         <div key={p.id} className="flex items-center gap-2">
                             <span
-                                className="text-lg"
+                                className="text-xs"
                                 style={{
-                                    color: p.done
-                                        ? "var(--color-success)"
-                                        : "var(--color-hex-444444)",
+                                    color: p.done ? "var(--success)" : "var(--muted-foreground)",
                                 }}
                             >
                                 {p.done ? "✓" : "○"}
                             </span>
                             <span
-                                className="text-lg tracking-tight"
+                                className="text-xs tracking-tight"
                                 style={{
-                                    color: p.done
-                                        ? "var(--color-hex-a0a0a0)"
-                                        : "var(--color-hex-444444)",
+                                    color: p.done ? "var(--foreground)" : "var(--muted-foreground)",
                                 }}
                             >
                                 {p.id}
@@ -134,9 +119,7 @@ export function VDGNodeDrawerPrerequisites() {
                             <span
                                 className="ml-auto text-sm tracking-wide"
                                 style={{
-                                    color: p.done
-                                        ? "var(--color-success)"
-                                        : "var(--color-hex-333333)",
+                                    color: p.done ? "var(--success)" : "var(--border)",
                                 }}
                             >
                                 {p.done ? "SATISFIED" : "PENDING"}
@@ -155,14 +138,12 @@ export function VDGNodeDrawerEnables() {
         <Section label="ENABLES">
             <div className="flex flex-col gap-1.5">
                 {detail.enables.length === 0 ? (
-                    <span className="text-lg tracking-tight text-[var(--color-hex-333333)]">
-                        None
-                    </span>
+                    <span className="text-muted-foreground text-xs tracking-tight">None</span>
                 ) : (
                     detail.enables.map((id) => (
                         <div key={id} className="flex items-center gap-2">
-                            <span className="text-base text-[var(--color-brand)]">→</span>
-                            <span className="text-lg tracking-tight text-[var(--color-hex-666666)]">
+                            <span className="text-primary text-base">→</span>
+                            <span className="text-muted-foreground text-xs tracking-tight">
                                 {id}
                             </span>
                         </div>
@@ -177,25 +158,21 @@ export function VDGNodeDrawerFacts() {
     const { detail } = useNodeDrawerContext();
     return (
         <Section label="SOURCE ENVIRONMENT FACTS">
-            <div className="flex flex-col gap-0 overflow-hidden rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)]">
+            <div className="border-border flex flex-col gap-0 overflow-hidden rounded-sm border-[1px] border-solid">
                 {detail.facts.length === 0 ? (
-                    <div className="px-[10px] py-[6px] text-base text-[var(--color-hex-333333)]">
+                    <div className="text-muted-foreground px-2.5 py-1.5 text-base">
                         No facts available
                     </div>
                 ) : (
-                    detail.facts.map((r, i, a) => (
+                    detail.facts.map((r) => (
                         <div
                             key={r.k}
-                            className="flex gap-3 bg-[var(--color-hex-0b0b0b)] px-[10px] py-[6px]"
-                            style={{
-                                borderBottom:
-                                    i < a.length - 1 ? "1px solid var(--color-hex-141414)" : "none",
-                            }}
+                            className="bg-background border-border flex gap-3 border-b px-2.5 py-1.5"
                         >
-                            <span className="text-base-tight tracking-wider-1 min-w-[72px] shrink-0 text-[var(--color-hex-444444)]">
+                            <span className="text-muted-foreground min-w-[72px] shrink-0 text-sm tracking-widest">
                                 {r.k}
                             </span>
-                            <span className="text-base leading-tight tracking-tighter text-[var(--color-hex-666666)]">
+                            <span className="text-muted-foreground text-base leading-tight tracking-tighter">
                                 {r.v}
                             </span>
                         </div>
@@ -214,45 +191,42 @@ export function VDGNodeDrawerLifecycle() {
                     {
                         ts: "06:12:04",
                         event: "CANDIDATE",
-                        color: "var(--color-hex-444444)",
+                        color: "var(--muted-foreground)",
                     },
                     {
                         ts: "06:18:31",
                         event: "ELIGIBLE",
-                        color: "var(--color-brand)",
+                        color: "var(--primary)",
                     },
                     {
                         ts: "06:28:47",
                         event: "IN_PROGRESS",
-                        color: "var(--color-danger)",
+                        color: "var(--destructive)",
                     },
                     {
                         ts: "06:29:03",
                         event: "RETRY 1",
-                        color: "var(--color-warning)",
+                        color: "var(--warning)",
                     },
                     {
                         ts: "06:30:58",
                         event: "IN_PROGRESS",
-                        color: "var(--color-danger)",
+                        color: "var(--destructive)",
                     },
                 ].map((t, i, a) => (
                     <div key={t.ts} className="flex items-start gap-3">
                         <div className="flex shrink-0 flex-col items-center">
                             <div
-                                className="mt-[2px] h-[6px] w-[6px]"
+                                className="mt-0.5 h-1.5 w-1.5 rounded-full"
                                 style={{
-                                    borderRadius: "50%",
                                     border: `1px solid ${t.color}`,
                                     background: i === a.length - 1 ? t.color : "transparent",
                                 }}
                             />
-                            {i < a.length - 1 && (
-                                <div className="h-[18px] w-[1px] bg-[var(--color-hex-1e1e1e)]" />
-                            )}
+                            {i < a.length - 1 && <div className="bg-muted h-4 w-px" />}
                         </div>
                         <div className="flex items-center gap-2">
-                            <span className="text-base-tight tracking-tight-1 text-[var(--color-hex-333333)]">
+                            <span className="text-muted-foreground text-sm tracking-tight">
                                 {t.ts}
                             </span>
                             <span

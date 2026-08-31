@@ -5,22 +5,16 @@ import { Field } from "@/features/settings/components/Field";
 import { SaveBar } from "@/features/settings/components/SaveBar";
 import { SectionHead } from "@/features/settings/components/SectionHead";
 import { ToggleRow } from "@/features/settings/components/ToggleRow";
-import { type SettingsData } from "@/features/settings/hooks/useSettingsData";
 
-export function MissionsSettings({ data }: { data: SettingsData["missions"] }) {
-    const { surface, setSurface, mode, setMode } = data;
+export function MissionsSettings() {
     return (
         <div className="max-w-panel-xl flex-1 overflow-y-auto px-6 py-6">
             <SectionHead label="MISSION DEFAULTS" />
-            <Field label="DEFAULT SURFACE">
-                <Chips
-                    options={["WEB APPLICATION", "GRAPHQL", "MULTI-HOST"]}
-                    value={surface}
-                    onChange={setSurface}
-                />
+            <Field label="DEFAULT SURFACE" name="missions.surface">
+                <Chips options={["WEB APPLICATION", "GRAPHQL", "MULTI-HOST"]} />
             </Field>
-            <Field label="DEFAULT MODE">
-                <Chips options={["ONE-DAY", "ZERO-DAY"]} value={mode} onChange={setMode} />
+            <Field label="DEFAULT MODE" name="missions.mode">
+                <Chips options={["ONE-DAY", "ZERO-DAY"]} />
             </Field>
             <SectionHead label="AUTOMATION" />
             <ToggleRow label="AUTO-START VALIDATION AFTER EXPLOIT" on />

@@ -3,14 +3,5 @@ import { type Specialist } from "@/types/domain-types";
 
 export default function SpecBadge({ status }: { status: Specialist["status"] }) {
     const color = specialistStatusDot(status);
-    return (
-        <span
-            className="text-base-tight tracking-wide"
-            style={{
-                color,
-            }}
-        >
-            {status}
-        </span>
-    );
+    return <span className={`text-sm tracking-wide ${color}`}>{status}</span>;
 }

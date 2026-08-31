@@ -1,3 +1,14 @@
+import { ChevronRight } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
 import { SB, type VFinding } from "@/features/validation/data/fixtures/validationMockData";
 
 export function ValidationTable({
@@ -11,74 +22,65 @@ export function ValidationTable({
 }) {
     return (
         <div className="flex-1 overflow-auto">
-            <table className="text-xl-tight w-full border-collapse">
-                <thead>
-                    <tr className="sticky top-0 bg-[var(--color-hex-0f0f0f)]">
-                        {["FINDING", "TYPE", "EVIDENCE", "RETRY", "STATUS", "ORACLE", ""].map(
-                            (h) => (
-                                <th
-                                    key={h}
-                                    className="tracking-wider-3 px-[16px] py-[6px] text-left text-sm font-semibold whitespace-nowrap text-[var(--color-hex-444444)]"
-                                    style={{
-                                        borderBottom: "1px solid var(--color-hex-1a1a1a)",
-                                    }}
-                                >
-                                    {h}
-                                </th>
-                            ),
-                        )}
-                    </tr>
-                </thead>
-                <tbody>
+            <Table className="text-xs">
+                <TableHeader>
+                    <TableRow className="bg-card hover:bg-card sticky top-0">
+                        {[
+                            "FINDING",
+                            "TYPE",
+                            "EVIDENCE",
+                            "RETRY",
+                            "STATUS",
+                            "ORACLE",
+                            "DETAILS",
+                        ].map((h) => (
+                            <TableHead
+                                key={h}
+                                className="text-muted-foreground border-border border-b px-4 py-1.5 text-left text-sm font-semibold tracking-widest"
+                            >
+                                {h}
+                            </TableHead>
+                        ))}
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
                     {findings.map((f) => {
                         const sb = SB[f.status];
                         const isSelected = selected?.id === f.id;
                         return (
-                            <tr
+                            <TableRow
                                 key={f.id}
-                                className="cursor-pointer"
-                                style={{
-                                    borderBottom: "1px solid var(--color-hex-111111)",
-                                    background: isSelected
-                                        ? "var(--color-hex-0f0f0f)"
-                                        : "transparent",
+                                className={`border-border hover:bg-border focus-visible:bg-border cursor-pointer border-b focus-visible:outline-none ${isSelected ? "bg-border" : "bg-transparent"}`}
+                                tabIndex={0}
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter" || e.key === " ") {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        setSelected(f);
+                                    }
                                 }}
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     setSelected(f);
                                 }}
-                                onMouseEnter={(e) =>
-                                    (e.currentTarget.style.background = "var(--color-hex-0f0f0f)")
-                                }
-                                onMouseLeave={(e) =>
-                                    (e.currentTarget.style.background = isSelected
-                                        ? "var(--color-hex-0f0f0f)"
-                                        : "transparent")
-                                }
                             >
-                                <td className="px-[16px] py-[8px] font-bold tracking-tight text-[var(--color-brand)]">
+                                <TableCell className="text-primary px-4 py-2 font-bold tracking-tight">
                                     {f.id}
-                                </td>
-                                <td className="px-[16px] py-[8px] text-[var(--color-hex-a0a0a0)]">
+                                </TableCell>
+                                <TableCell className="text-muted-foreground px-4 py-2">
                                     {f.type}
-                                </td>
-                                <td className="px-[16px] py-[8px] text-base text-[var(--color-hex-666666)]">
+                                </TableCell>
+                                <TableCell className="text-muted-foreground px-4 py-2 text-base">
                                     {f.evidence}
-                                </td>
-                                <td
-                                    className="px-[16px] py-[8px] text-right"
-                                    style={{
-                                        color:
-                                            f.retry > 0
-                                                ? "var(--color-warning)"
-                                                : "var(--color-hex-444444)",
-                                    }}
+                                </TableCell>
+                                <TableCell
+                                    className={`px-4 py-2 ${f.retry > 0 ? "text-warning" : "text-muted-foreground"}`}
                                 >
                                     {f.retry}
-                                </td>
-                                <td className="px-[16px] py-[8px]">
+                                </TableCell>
+                                <TableCell className="px-4 py-2">
                                     <span
-                                        className="rounded-[2px] px-[6px] py-[1px] text-base font-semibold tracking-wide"
+                                        className="rounded-sm px-1.5 py-px text-base font-semibold tracking-wide"
                                         style={{
                                             color: sb.color,
                                             background: sb.bg,
@@ -87,26 +89,28 @@ export function ValidationTable({
                                     >
                                         {f.status}
                                     </span>
-                                </td>
-                                <td className="px-[16px] py-[8px] text-base text-[var(--color-hex-555555)]">
+                                </TableCell>
+                                <TableCell className="text-muted-foreground px-4 py-2 text-base">
                                     {f.oracle}
-                                </td>
-                                <td className="px-[16px] py-[8px]">
-                                    <button
+                                </TableCell>
+                                <TableCell className="px-4 py-2">
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
                                         onClick={(e) => {
                                             e.stopPropagation();
                                             setSelected(f);
                                         }}
-                                        className="font-inherit text-base-tight cursor-pointer rounded-[2px] border-[1px] border-solid border-[var(--color-hex-292929)] bg-[var(--color-hex-111111)] px-[8px] py-[2px] tracking-normal text-[var(--color-hex-666666)] hover:border-[var(--color-brand)]"
+                                        className="text-muted-foreground hover:bg-muted hover:text-foreground flex h-7 w-7 items-center justify-center p-0 text-xs"
                                     >
-                                        DETAIL
-                                    </button>
-                                </td>
-                            </tr>
+                                        <ChevronRight className="h-4 w-4" />
+                                    </Button>
+                                </TableCell>
+                            </TableRow>
                         );
                     })}
-                </tbody>
-            </table>
+                </TableBody>
+            </Table>
         </div>
     );
 }

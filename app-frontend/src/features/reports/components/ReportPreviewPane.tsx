@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { type Report } from "@/features/reports/data/fixtures/reportsMockData";
 
@@ -13,7 +14,7 @@ export function ReportPreviewPane({
     }[];
 }) {
     return (
-        <div className="flex min-h-[0px] flex-1 flex-col overflow-hidden">
+        <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
             {!sel ? (
                 <div className="flex flex-1 items-center justify-center">
                     <EmptyState message="SELECT A REPORT TO PREVIEW" />
@@ -21,62 +22,50 @@ export function ReportPreviewPane({
             ) : (
                 <>
                     {/* Preview header */}
-                    <div
-                        className="flex flex-shrink-0 items-center justify-between bg-[var(--color-hex-0a0a0a)] px-6 py-3"
-                        style={{
-                            borderBottom: "1px solid var(--color-hex-1e1e1e)",
-                        }}
-                    >
+                    <div className="bg-background border-border flex flex-shrink-0 items-center justify-between border-b px-6 py-3">
                         <div>
-                            <div className="text-xl font-bold tracking-tight text-[var(--color-fg)]">
-                                {sel.id} — {sel.type}
+                            <div className="text-foreground text-xs font-bold tracking-tight">
+                                {sel.id} - {sel.type}
                             </div>
-                            <div className="text-base-tight mt-[2px] tracking-normal text-[var(--color-hex-444444)]">
+                            <div className="text-muted-foreground mt-0.5 text-sm tracking-normal">
                                 {sel.mission} · {sel.generated}
                             </div>
                         </div>
                         <div className="flex gap-2">
                             {["DOWNLOAD PDF", "COPY LINK"].map((a) => (
-                                <button
+                                <Button
                                     key={a}
-                                    className="font-inherit text-base-tight rounded-[2px] border-[1px] border-solid border-[var(--color-hex-292929)] bg-[transparent] px-[12px] py-[5px] tracking-normal text-[var(--color-hex-a0a0a0)]"
-                                    style={{
-                                        cursor: sel.status === "READY" ? "pointer" : "not-allowed",
-                                        opacity: sel.status === "READY" ? 1 : 0.4,
-                                    }}
+                                    variant="outline"
+                                    className="h-auto rounded-sm px-3 py-1 text-sm tracking-normal"
+                                    disabled={sel.status !== "READY"}
                                 >
                                     {a}
-                                </button>
+                                </Button>
                             ))}
                         </div>
                     </div>
                     {sel.status === "GENERATING" ? (
                         <div className="flex flex-1 flex-col items-center justify-center gap-3">
-                            <div
-                                style={{
-                                    borderRadius: "50%",
-                                }}
-                                className="h-[8px] w-[8px] animate-pulse bg-[var(--color-brand)]"
-                            />
-                            <div className="text-base tracking-widest text-[var(--color-hex-444444)]">
-                                GENERATING REPORT…
+                            <div className="bg-primary pulse-dot h-2 w-2 rounded-full" />
+                            <div className="text-muted-foreground text-base tracking-widest">
+                                GENERATING REPORT...
                             </div>
                         </div>
                     ) : (
                         <div className="flex-1 overflow-y-auto">
                             <div className="mx-auto max-w-[720px] px-8 py-6">
                                 {/* Report cover block */}
-                                <div className="mb-[24px] rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)] bg-[var(--color-hex-0d0d0d)] px-[24px] py-[20px]">
-                                    <div className="text-base-tight mb-[6px] tracking-widest text-[var(--color-hex-444444)]">
+                                <div className="border-border bg-background mb-6 rounded-sm border-[1px] border-solid px-6 py-5">
+                                    <div className="text-muted-foreground mb-1.5 text-sm tracking-widest">
                                         RedGrid REPORT
                                     </div>
-                                    <div className="mb-[4px] text-8xl font-bold tracking-normal text-[var(--color-fg)]">
+                                    <div className="text-foreground mb-1 text-xs font-bold tracking-normal">
                                         {sel.type}
                                     </div>
-                                    <div className="mb-[12px] text-base tracking-normal text-[var(--color-brand)]">
+                                    <div className="text-primary mb-3 text-base tracking-normal">
                                         MISSION {sel.mission}
                                     </div>
-                                    <div className="flex gap-6">
+                                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4 md:gap-6">
                                         {(
                                             [
                                                 {
@@ -103,16 +92,11 @@ export function ReportPreviewPane({
                                             }[]
                                         ).map((m) => (
                                             <div key={m.k}>
-                                                <div className="text-sm-tight tracking-wider-2 mb-[2px] text-[var(--color-hex-444444)]">
+                                                <div className="text-muted-foreground mb-0.5 text-xs tracking-widest">
                                                     {m.k}
                                                 </div>
                                                 <div
-                                                    className="text-2xl font-bold"
-                                                    style={{
-                                                        color: m.red
-                                                            ? "var(--color-danger)"
-                                                            : "var(--color-fg)",
-                                                    }}
+                                                    className={`text-xs font-bold ${m.red ? "text-destructive" : "text-foreground"}`}
                                                 >
                                                     {m.v}
                                                 </div>
@@ -121,62 +105,40 @@ export function ReportPreviewPane({
                                     </div>
                                 </div>
                                 {previewSections.map((s, i) => (
-                                    <div key={s.title} className="mb-[24px]">
+                                    <div key={s.title} className="mb-6">
                                         <div className="mb-4 flex items-center gap-3">
-                                            <div className="h-[14px] w-[2px] bg-[var(--color-brand)]" />
-                                            <span className="text-base font-bold tracking-widest text-[var(--color-fg)]">
+                                            <div className="bg-primary h-3.5 w-0.5" />
+                                            <span className="text-foreground text-base font-bold tracking-widest">
                                                 {s.title}
                                             </span>
                                         </div>
                                         {s.content && (
-                                            <p
-                                                className="text-xl-tight leading-loose-2 text-[var(--color-hex-666666)]"
-                                                style={{
-                                                    margin: 0,
-                                                    whiteSpace: "pre-line",
-                                                }}
-                                            >
+                                            <p className="text-muted-foreground mb-3 text-sm leading-relaxed break-words whitespace-pre-line last:mb-0">
                                                 {s.content}
                                             </p>
                                         )}
                                         {s.items && (
-                                            <div className="overflow-hidden rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)]">
-                                                {s.items.map((item, j, a) => (
+                                            <div className="border-border overflow-x-auto rounded-sm border-[1px] border-solid">
+                                                {s.items.map((item) => (
                                                     <div
                                                         key={item.id}
-                                                        className="flex items-center gap-4 px-[14px] py-[9px]"
-                                                        style={{
-                                                            borderBottom:
-                                                                j < a.length - 1
-                                                                    ? "1px solid var(--color-hex-111111)"
-                                                                    : "none",
-                                                            background:
-                                                                j % 2
-                                                                    ? "var(--color-hex-0b0b0b)"
-                                                                    : "transparent",
-                                                        }}
+                                                        className="border-border grid grid-cols-[auto_auto_1fr_auto_auto] items-center gap-4 border-b px-3.5 py-2 text-sm sm:grid-cols-[60px_50px_1fr_auto_auto]"
                                                     >
                                                         <span
-                                                            className="text-base-tight min-w-[60px] font-bold tracking-wide"
-                                                            style={{
-                                                                color:
-                                                                    item.sev === "CRITICAL"
-                                                                        ? "var(--color-danger)"
-                                                                        : "var(--color-brand)",
-                                                            }}
+                                                            className={`min-w-[60px] text-sm font-bold tracking-wide ${item.sev === "CRITICAL" ? "text-destructive" : "text-primary"}`}
                                                         >
                                                             {item.sev}
                                                         </span>
-                                                        <span className="text-lg-tight min-w-[50px] font-bold text-[var(--color-brand)]">
+                                                        <span className="text-primary font-bold">
                                                             {item.id}
                                                         </span>
-                                                        <span className="flex-1 text-lg text-[var(--color-hex-888888)]">
+                                                        <span className="text-muted-foreground truncate">
                                                             {item.name}
                                                         </span>
-                                                        <span className="text-base text-[var(--color-hex-444444)]">
+                                                        <span className="text-muted-foreground">
                                                             {item.target}
                                                         </span>
-                                                        <span className="text-base font-bold text-[var(--color-success)]">
+                                                        <span className="text-success font-bold">
                                                             E_ord {item.eord}
                                                         </span>
                                                     </div>
@@ -184,7 +146,7 @@ export function ReportPreviewPane({
                                             </div>
                                         )}
                                         {i < previewSections.length - 1 && (
-                                            <div className="mt-[20px] h-[1px] bg-[var(--color-hex-141414)]" />
+                                            <div className="bg-card mt-5 h-px" />
                                         )}
                                     </div>
                                 ))}

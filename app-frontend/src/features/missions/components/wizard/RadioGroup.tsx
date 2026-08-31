@@ -1,64 +1,49 @@
+import { RadioGroupItem, RadioGroup as ShadcnRadioGroup } from "@/components/ui/radio-group";
+
 export default function RadioGroup<T extends string>({
     value,
     onChange,
     options,
 }: {
-    value: T;
-    onChange: (v: T) => void;
+    value?: T;
+    onChange?: (v: T) => void;
     options: {
-        value: T;
+        value?: T;
         desc: string;
     }[];
 }) {
     return (
-        <div className="flex flex-col overflow-hidden rounded-[2px] border-[1px] border-solid border-[var(--color-hex-292929)]">
-            {options.map((opt, i) => {
+        <ShadcnRadioGroup
+            value={value}
+            onValueChange={onChange}
+            className="border-border divide-border flex flex-col gap-0 divide-y overflow-hidden rounded-sm border-[1px] border-solid"
+        >
+            {options.map((opt) => {
                 const selected = value === opt.value;
                 return (
-                    <button
+                    <label
                         key={opt.value}
-                        onClick={() => onChange(opt.value)}
-                        className={`font-inherit flex w-full cursor-pointer items-start gap-4 border-l-[3px] px-[16px] py-[12px] text-left ${selected ? "border-l-[var(--color-brand)] bg-[var(--color-hex-120608)]" : "border-l-transparent bg-[var(--color-hex-0d0d0d)] hover:bg-[var(--color-hex-111111)]"}`}
-                        style={{
-                            borderTop: i > 0 ? "1px solid var(--color-hex-1e1e1e)" : "none",
-                        }}
+                        htmlFor={`radio-${opt.value}`}
+                        className={`flex h-auto w-full cursor-pointer items-start gap-4 rounded-none border-l-[3px] px-4 py-3 text-left whitespace-normal transition-colors ${selected ? "bg-muted border-l-primary" : "bg-background hover:bg-card border-l-transparent"}`}
                     >
-                        <div
-                            className="mt-[1px] h-[14px] w-[14px] shrink-0"
-                            style={{
-                                borderRadius: "50%",
-                                border: `1px solid ${selected ? "var(--color-brand)" : "var(--color-hex-333333)"}`,
-                                background: selected ? "var(--color-brand)" : "transparent",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                            }}
-                        >
-                            {selected && (
-                                <div
-                                    className="h-[5px] w-[5px] bg-[var(--color-fg)]"
-                                    style={{
-                                        borderRadius: "50%",
-                                    }}
-                                />
-                            )}
-                        </div>
+                        <RadioGroupItem
+                            value={opt.value}
+                            id={`radio-${opt.value}`}
+                            className="mt-0.5 h-3.5 w-3.5"
+                        />
                         <div>
                             <div
-                                className="tracking-wider-1 mb-[3px] text-xl font-semibold"
-                                style={{
-                                    color: selected ? "var(--color-fg)" : "var(--color-hex-666666)",
-                                }}
+                                className={`mb-0.5 text-xs font-semibold tracking-widest ${selected ? "text-foreground" : "text-muted-foreground"}`}
                             >
                                 {opt.value}
                             </div>
-                            <div className="text-lg-tight tracking-tight-1 leading-snug text-[var(--color-hex-444444)]">
+                            <div className="text-muted-foreground text-xs leading-relaxed">
                                 {opt.desc}
                             </div>
                         </div>
-                    </button>
+                    </label>
                 );
             })}
-        </div>
+        </ShadcnRadioGroup>
     );
 }

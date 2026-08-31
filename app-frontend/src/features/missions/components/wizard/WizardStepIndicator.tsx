@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { useWizardData } from "@/features/missions/hooks/useWizardData";
 
 export function WizardStepIndicator({
@@ -10,12 +11,7 @@ export function WizardStepIndicator({
     const { steps } = useWizardData();
 
     return (
-        <div
-            className="flex-shrink-0 bg-[var(--color-hex-0b0b0b)] px-6 py-4"
-            style={{
-                borderBottom: "1px solid var(--color-hex-1e1e1e)",
-            }}
-        >
+        <div className="bg-background border-border flex-shrink-0 border-b px-6 py-4">
             <div className="flex items-center">
                 {steps.map((s, i) => {
                     const active = s.index === step;
@@ -24,70 +20,32 @@ export function WizardStepIndicator({
                         <div key={s.id} className="flex items-center">
                             {i > 0 && (
                                 <div
-                                    className="h-[1px] w-[40px] shrink-0"
-                                    style={{
-                                        background: done
-                                            ? "var(--color-brand)"
-                                            : "var(--color-hex-292929)",
-                                    }}
+                                    className={`h-px w-5 shrink-0 sm:w-10 ${done ? "bg-primary" : "bg-border"}`}
                                 />
                             )}
                             {done ? (
-                                <button
+                                <Button
+                                    variant="ghost"
                                     onClick={() => setStep(s.index)}
                                     title={`Go back to Step ${s.index}`}
-                                    className="font-inherit cursor-pointer border-none bg-[none] p-[0px]"
-                                    style={{
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        alignItems: "center",
-                                        gap: 6,
-                                    }}
+                                    className="h-auto flex-col items-center gap-1.5 p-0 hover:bg-transparent"
                                 >
-                                    <div
-                                        className="tracking-tight-1 h-[26px] w-[26px] shrink-0 border-[1px] border-solid border-[var(--color-hex-9e1118)] bg-[var(--color-hex-120608)] text-lg font-bold text-[var(--color-hex-9e1118)]"
-                                        style={{
-                                            borderRadius: "50%",
-                                            display: "flex",
-                                            alignItems: "center",
-                                            justifyContent: "center",
-                                        }}
-                                    >
+                                    <div className="border-border bg-muted text-muted-foreground flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-[1px] border-solid text-xs font-bold tracking-tight">
                                         ✓
                                     </div>
-                                    <span className="text-sm-tight tracking-wider-2 whitespace-nowrap text-[var(--color-hex-6f171b)]">
+                                    <span className="text-muted-foreground hidden text-xs tracking-widest whitespace-nowrap sm:block">
                                         {s.label}
                                     </span>
-                                </button>
+                                </Button>
                             ) : (
                                 <div className="flex flex-col items-center gap-1.5">
                                     <div
-                                        className="tracking-tight-1 h-[26px] w-[26px] shrink-0 text-lg font-bold"
-                                        style={{
-                                            borderRadius: "50%",
-                                            display: "flex",
-                                            alignItems: "center",
-                                            justifyContent: "center",
-                                            border: active
-                                                ? "1px solid var(--color-brand)"
-                                                : "1px solid var(--color-hex-292929)",
-                                            background: active
-                                                ? "var(--color-hex-1a0a0b)"
-                                                : "var(--color-hex-111111)",
-                                            color: active
-                                                ? "var(--color-danger)"
-                                                : "var(--color-hex-444444)",
-                                        }}
+                                        className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-[1px] border-solid text-xs font-bold tracking-tight ${active ? "border-primary bg-border text-destructive" : "border-border bg-border text-muted-foreground"}`}
                                     >
                                         {s.index}
                                     </div>
                                     <span
-                                        className="text-sm-tight tracking-wider-2 whitespace-nowrap"
-                                        style={{
-                                            color: active
-                                                ? "var(--color-hex-a0a0a0)"
-                                                : "var(--color-hex-333333)",
-                                        }}
+                                        className={`hidden text-xs tracking-widest whitespace-nowrap sm:block ${active ? "text-muted-foreground" : "text-border"}`}
                                     >
                                         {s.label}
                                     </span>

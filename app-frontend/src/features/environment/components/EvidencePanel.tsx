@@ -1,5 +1,13 @@
 import { useEffect, useState } from "react";
 
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
 import { EnvironmentRepository } from "@/features/environment/data/EnvironmentRepository";
 import { type EvidenceArtifact } from "@/types/domain-types";
 
@@ -8,7 +16,8 @@ export default function EvidencePanel() {
     useEffect(() => {
         void new EnvironmentRepository()
             .fetchAll<EvidenceArtifact>({ collection: "EVIDENCE_ARTIFACTS", limit: 1000 })
-            .then(setData);
+            .then(setData)
+            .catch(console.error);
     }, []);
 
     const [sel, setSel] = useState<string | null>(null);
@@ -17,102 +26,71 @@ export default function EvidencePanel() {
         return null;
     }
     return (
-        <div className="flex min-h-[0px] flex-1 overflow-hidden">
-            <div className="flex min-w-[0px] flex-1 flex-col overflow-y-auto">
-                <div
-                    className="flex flex-shrink-0 items-center gap-2 bg-[var(--color-hex-0a0a0a)] px-4 py-2"
-                    style={{
-                        borderBottom: "1px solid var(--color-hex-141414)",
-                    }}
-                >
-                    <span className="tracking-wider-3 text-sm text-[var(--color-hex-444444)]">
+        <div className="flex min-h-0 flex-1 flex-col overflow-hidden lg:flex-row">
+            <div className="flex min-w-0 flex-1 flex-col overflow-y-auto">
+                <div className="bg-background border-border flex flex-shrink-0 items-center gap-2 border-b px-4 py-2">
+                    <span className="text-muted-foreground text-sm tracking-widest">
                         RAW EVIDENCE ARTIFACTS
                     </span>
-                    <span className="ml-auto text-sm text-[var(--color-hex-555555)]">
+                    <span className="text-muted-foreground ml-auto text-sm">
                         {EVIDENCE_ARTIFACTS.length} ARTIFACTS
                     </span>
                 </div>
-                <table className="text-xl-tight w-full border-collapse">
-                    <thead>
-                        <tr className="sticky top-0 bg-[var(--color-hex-0f0f0f)]">
+                <Table className="w-full border-collapse text-xs">
+                    <TableHeader>
+                        <TableRow className="bg-card sticky top-0">
                             {["ARTIFACT ID", "TYPE", "FINDING", "TIMESTAMP", "SIZE", "NOTE"].map(
                                 (h) => (
-                                    <th
+                                    <TableHead
                                         key={h}
-                                        className="tracking-wider-2 px-[12px] py-[6px] text-left text-sm font-semibold whitespace-nowrap text-[var(--color-hex-444444)]"
-                                        style={{
-                                            borderBottom: "1px solid var(--color-hex-1a1a1a)",
-                                        }}
+                                        className="text-muted-foreground border-border border-b px-3 py-1.5 text-left text-sm font-semibold tracking-widest whitespace-nowrap"
                                     >
                                         {h}
-                                    </th>
+                                    </TableHead>
                                 ),
                             )}
-                        </tr>
-                    </thead>
-                    <tbody>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
                         {EVIDENCE_ARTIFACTS.map((a, i) => (
-                            <tr
+                            <TableRow
                                 key={a.id}
                                 onClick={() => setSel(a.id === sel ? null : a.id)}
-                                className="cursor-pointer"
-                                style={{
-                                    borderBottom: "1px solid var(--color-hex-111111)",
-                                    background: (() => {
-                                        if (sel === a.id) {
-                                            return "var(--color-hex-0f0f0f)";
-                                        }
-                                        if (i % 2) {
-                                            return "var(--color-hex-0b0b0b)";
-                                        }
-                                        return "transparent";
-                                    })(),
-                                }}
-                                onMouseEnter={(e) =>
-                                    (e.currentTarget.style.background = "var(--color-hex-0f0f0f)")
-                                }
-                                onMouseLeave={(e) =>
-                                    (e.currentTarget.style.background = (() => {
-                                        if (sel === a.id) {
-                                            return "var(--color-hex-0f0f0f)";
-                                        }
-                                        if (i % 2) {
-                                            return "var(--color-hex-0b0b0b)";
-                                        }
-                                        return "transparent";
-                                    })())
-                                }
+                                className={`border-border hover:bg-border cursor-pointer border-b transition-colors ${(() => {
+                                    if (sel === a.id) {
+                                        return "bg-border";
+                                    }
+                                    if (i % 2) {
+                                        return "bg-background";
+                                    }
+                                    return "bg-transparent";
+                                })()}`}
                             >
-                                <td className="px-[12px] py-[7px] text-base font-bold text-[var(--color-brand)]">
+                                <TableCell className="text-primary px-3 py-1.5 text-base font-bold">
                                     {a.id}
-                                </td>
-                                <td className="px-[12px] py-[7px] text-base text-[var(--color-hex-666666)]">
+                                </TableCell>
+                                <TableCell className="text-muted-foreground px-3 py-1.5 text-base">
                                     {a.type}
-                                </td>
-                                <td className="px-[12px] py-[7px] text-base font-bold text-[var(--color-brand)]">
+                                </TableCell>
+                                <TableCell className="text-primary px-3 py-1.5 text-base font-bold">
                                     {a.finding}
-                                </td>
-                                <td className="px-[12px] py-[7px] text-base text-[var(--color-hex-444444)]">
+                                </TableCell>
+                                <TableCell className="text-muted-foreground px-3 py-1.5 text-base">
                                     {a.ts}
-                                </td>
-                                <td className="px-[12px] py-[7px] text-right text-base text-[var(--color-hex-444444)]">
+                                </TableCell>
+                                <TableCell className="text-muted-foreground px-3 py-1.5 text-right text-base">
                                     {a.size}
-                                </td>
-                                <td className="px-[12px] py-[7px] text-[var(--color-hex-555555)]">
+                                </TableCell>
+                                <TableCell className="text-muted-foreground px-3 py-1.5">
                                     {a.note}
-                                </td>
-                            </tr>
+                                </TableCell>
+                            </TableRow>
                         ))}
-                    </tbody>
-                </table>
+                    </TableBody>
+                </Table>
             </div>
             {sel && (
-                <div
-                    className="w-panel-sm shrink-0 overflow-y-auto bg-[var(--color-hex-0a0a0a)] px-[14px] py-[16px]"
-                    style={{
-                        borderLeft: "1px solid var(--color-hex-1e1e1e)",
-                    }}
-                >
+                <div className="lg:w-panel-sm bg-background border-border w-full shrink-0 overflow-y-auto border-t px-3.5 py-4 lg:border-t-0 lg:border-l">
                     {(() => {
                         const a = EVIDENCE_ARTIFACTS.find((x) => x.id === sel);
                         if (!a) {
@@ -120,7 +98,7 @@ export default function EvidencePanel() {
                         }
                         return (
                             <>
-                                <div className="mb-[12px] text-sm tracking-widest text-[var(--color-hex-444444)]">
+                                <div className="text-muted-foreground mb-3 text-sm tracking-widest">
                                     ARTIFACT DETAIL
                                 </div>
                                 {[
@@ -145,16 +123,14 @@ export default function EvidencePanel() {
                                         v: a.size,
                                     },
                                 ].map((r) => (
-                                    <div key={r.k} className="mb-[8px]">
-                                        <div className="text-sm-tight tracking-wider-2 mb-[2px] text-[var(--color-hex-444444)]">
+                                    <div key={r.k} className="mb-2">
+                                        <div className="text-muted-foreground mb-0.5 text-xs tracking-widest">
                                             {r.k}
                                         </div>
-                                        <div className="text-lg text-[var(--color-hex-888888)]">
-                                            {r.v}
-                                        </div>
+                                        <div className="text-muted-foreground text-xs">{r.v}</div>
                                     </div>
                                 ))}
-                                <div className="mt-[12px] rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)] bg-[var(--color-hex-111111)] px-[10px] py-[8px] text-base leading-loose text-[var(--color-hex-555555)]">
+                                <div className="border-border bg-card text-muted-foreground mt-3 rounded-sm border-[1px] border-solid px-2.5 py-2 text-base leading-loose">
                                     {a.note}
                                 </div>
                             </>

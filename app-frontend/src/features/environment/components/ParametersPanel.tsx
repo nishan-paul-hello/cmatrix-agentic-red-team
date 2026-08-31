@@ -1,5 +1,13 @@
 import { useEffect, useState } from "react";
 
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
 import { EnvironmentRepository } from "@/features/environment/data/EnvironmentRepository";
 import { type Parameter } from "@/types/domain-types";
 
@@ -8,7 +16,8 @@ export default function ParametersPanel() {
     useEffect(() => {
         void new EnvironmentRepository()
             .fetchAll<Parameter>({ collection: "PARAMS", limit: 1000 })
-            .then(setData);
+            .then(setData)
+            .catch(console.error);
     }, []);
 
     if (PARAMS.length === 0) {
@@ -17,22 +26,17 @@ export default function ParametersPanel() {
 
     return (
         <div className="flex-1 overflow-auto">
-            <div
-                className="flex flex-shrink-0 items-center gap-2 bg-[var(--color-hex-0a0a0a)] px-4 py-2"
-                style={{
-                    borderBottom: "1px solid var(--color-hex-141414)",
-                }}
-            >
-                <span className="tracking-wider-3 text-sm text-[var(--color-hex-444444)]">
+            <div className="bg-background border-border flex flex-shrink-0 items-center gap-2 border-b px-4 py-2">
+                <span className="text-muted-foreground text-sm tracking-widest">
                     DISCOVERED PARAMETERS
                 </span>
-                <span className="ml-auto text-sm tracking-wide text-[var(--color-brand)]">
+                <span className="text-primary ml-auto text-sm tracking-wide">
                     {PARAMS.filter((p) => p.injectable).length} INJECTION ELIGIBLE
                 </span>
             </div>
-            <table className="text-xl-tight w-full border-collapse">
-                <thead>
-                    <tr className="sticky top-0 bg-[var(--color-hex-0f0f0f)]">
+            <Table className="w-full border-collapse text-xs">
+                <TableHeader>
+                    <TableRow className="bg-card sticky top-0">
                         {[
                             "ID",
                             "ENDPOINT",
@@ -42,68 +46,50 @@ export default function ParametersPanel() {
                             "INJECTABLE",
                             "LAST VALUE",
                         ].map((h) => (
-                            <th
+                            <TableHead
                                 key={h}
-                                className="tracking-wider-2 px-[12px] py-[6px] text-left text-sm font-semibold whitespace-nowrap text-[var(--color-hex-444444)]"
-                                style={{
-                                    borderBottom: "1px solid var(--color-hex-1a1a1a)",
-                                }}
+                                className="text-muted-foreground border-border border-b px-3 py-1.5 text-left text-sm font-semibold tracking-widest whitespace-nowrap"
                             >
                                 {h}
-                            </th>
+                            </TableHead>
                         ))}
-                    </tr>
-                </thead>
-                <tbody>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
                     {PARAMS.map((p, i) => (
-                        <tr
+                        <TableRow
                             key={p.id}
-                            style={{
-                                borderBottom: "1px solid var(--color-hex-111111)",
-                                background: i % 2 ? "var(--color-hex-0b0b0b)" : "transparent",
-                            }}
-                            onMouseEnter={(e) =>
-                                (e.currentTarget.style.background = "var(--color-hex-0f0f0f)")
-                            }
-                            onMouseLeave={(e) =>
-                                (e.currentTarget.style.background =
-                                    i % 2 ? "var(--color-hex-0b0b0b)" : "transparent")
-                            }
+                            className={`border-border hover:bg-border border-b transition-colors ${i % 2 ? "bg-background" : "bg-transparent"}`}
                         >
-                            <td className="px-[12px] py-[7px] text-base font-bold text-[var(--color-brand)]">
+                            <TableCell className="text-primary px-3 py-1.5 text-base font-bold">
                                 {p.id}
-                            </td>
-                            <td className="px-[12px] py-[7px] text-base text-[var(--color-hex-555555)]">
+                            </TableCell>
+                            <TableCell className="text-muted-foreground px-3 py-1.5 text-base">
                                 {p.endpoint}
-                            </td>
-                            <td className="px-[12px] py-[7px] font-semibold text-[var(--color-hex-a0a0a0)]">
+                            </TableCell>
+                            <TableCell className="text-muted-foreground px-3 py-1.5 font-semibold">
                                 {p.param}
-                            </td>
-                            <td className="px-[12px] py-[7px] text-base text-[var(--color-hex-666666)]">
+                            </TableCell>
+                            <TableCell className="text-muted-foreground px-3 py-1.5 text-base">
                                 {p.type}
-                            </td>
-                            <td className="px-[12px] py-[7px] text-base text-[var(--color-hex-555555)]">
+                            </TableCell>
+                            <TableCell className="text-muted-foreground px-3 py-1.5 text-base">
                                 {p.source}
-                            </td>
-                            <td className="px-[12px] py-[7px]">
+                            </TableCell>
+                            <TableCell className="px-3 py-1.5">
                                 <span
-                                    className="text-base-tight font-semibold tracking-wide"
-                                    style={{
-                                        color: p.injectable
-                                            ? "var(--color-danger)"
-                                            : "var(--color-hex-333333)",
-                                    }}
+                                    className={`text-sm font-semibold tracking-wide ${p.injectable ? "text-destructive" : "text-border"}`}
                                 >
-                                    {p.injectable ? "YES" : "—"}
+                                    {p.injectable ? "YES" : "\u2014"}
                                 </span>
-                            </td>
-                            <td className="px-[12px] py-[7px] text-base text-[var(--color-hex-444444)]">
+                            </TableCell>
+                            <TableCell className="text-muted-foreground px-3 py-1.5 text-base">
                                 {p.lastVal}
-                            </td>
-                        </tr>
+                            </TableCell>
+                        </TableRow>
                     ))}
-                </tbody>
-            </table>
+                </TableBody>
+            </Table>
         </div>
     );
 }

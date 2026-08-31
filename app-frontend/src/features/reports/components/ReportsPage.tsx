@@ -1,9 +1,11 @@
+"use client";
+
 import { useState } from "react";
 
+import { Button } from "@/components/ui/button";
+import { ReportListSidebar } from "@/features/reports/components/ReportListSidebar";
+import { ReportPreviewPane } from "@/features/reports/components/ReportPreviewPane";
 import { useReportsData } from "@/features/reports/hooks/useReportsData";
-
-import { ReportListSidebar } from "./ReportListSidebar";
-import { ReportPreviewPane } from "./ReportPreviewPane";
 
 export default function ReportsPage() {
     const [page, setPage] = useState(1);
@@ -14,45 +16,30 @@ export default function ReportsPage() {
     const filtered = filter === "ALL" ? reports : reports.filter((r) => r.type === filter);
 
     return (
-        <div className="flex h-full min-h-[0px] flex-col">
-            <div
-                className="flex-shrink-0 px-6 pt-5 pb-4"
-                style={{
-                    borderBottom: "1px solid var(--color-hex-1e1e1e)",
-                }}
-            >
-                <div className="tracking-widest-2 mb-[3px] text-base text-[var(--color-hex-666666)]">
+        <div className="flex h-full min-h-0 flex-col">
+            <div className="border-border flex-shrink-0 border-b px-6 pt-5 pb-4">
+                <div className="text-muted-foreground mb-0.5 text-base tracking-widest">
                     RESEARCH
                 </div>
                 <div className="flex items-baseline justify-between">
-                    <h1 className="text-9xl font-bold tracking-wide text-[var(--color-fg)]">
-                        REPORTS
-                    </h1>
+                    <h1 className="text-foreground text-xs font-bold tracking-wide">REPORTS</h1>
                     <div className="flex gap-2">
                         {types.map((t) => (
-                            <button
+                            <Button
                                 key={t}
+                                variant="outline"
                                 onClick={() => setFilter(t)}
                                 aria-pressed={filter === t}
                                 aria-label={t === "ALL" ? "Show all reports" : `Filter by ${t}`}
-                                className="font-inherit cursor-pointer rounded-[2px] px-[10px] py-[3px] text-sm tracking-wide"
-                                style={{
-                                    background:
-                                        filter === t ? "var(--color-hex-120608)" : "transparent",
-                                    border: `1px solid ${filter === t ? "var(--color-brand)" : "var(--color-hex-1e1e1e)"}`,
-                                    color:
-                                        filter === t
-                                            ? "var(--color-brand)"
-                                            : "var(--color-hex-444444)",
-                                }}
+                                className={`h-auto rounded-sm border border-solid px-2.5 py-0.5 text-sm tracking-wide ${filter === t ? "bg-border border-primary text-primary" : "border-border text-muted-foreground bg-transparent"}`}
                             >
                                 {t}
-                            </button>
+                            </Button>
                         ))}
                     </div>
                 </div>
             </div>
-            <div className="flex min-h-[0px] flex-1 overflow-hidden">
+            <div className="flex min-h-0 flex-1 flex-col overflow-hidden lg:flex-row">
                 {/* List */}
                 <ReportListSidebar
                     filtered={filtered}

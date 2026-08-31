@@ -236,12 +236,12 @@ export const HOSTS = [
     },
 ];
 export const EORD_COLOR: Record<number, string> = {
-    5: "var(--color-danger)",
-    4: "var(--color-brand)",
-    3: "var(--color-warning)",
-    2: "var(--color-hex-666666)",
-    1: "var(--color-hex-444444)",
-    0: "var(--color-hex-333333)",
+    5: "var(--destructive)",
+    4: "var(--primary)",
+    3: "var(--warning)",
+    2: "var(--color-zinc-500)",
+    1: "var(--color-zinc-700)",
+    0: "var(--color-zinc-800)",
 };
 export const STATUS_BADGE: Record<
     string,
@@ -252,19 +252,19 @@ export const STATUS_BADGE: Record<
     }
 > = {
     CONFIRMED: {
-        color: "var(--color-success)",
-        bg: "var(--color-hex-0a1a10)",
-        border: "var(--color-hex-1a4a2044)",
+        color: "var(--success)",
+        bg: "var(--border)",
+        border: "var(--border)",
     },
     DISCOVERED: {
-        color: "var(--color-warning)",
-        bg: "var(--color-hex-1a1200)",
-        border: "var(--color-hex-d2992244)",
+        color: "var(--warning)",
+        bg: "var(--border)",
+        border: "var(--border)",
     },
     INFERRED: {
-        color: "var(--color-hex-666666)",
-        bg: "var(--color-hex-111111)",
-        border: "var(--color-hex-33333344)",
+        color: "var(--color-zinc-500)",
+        bg: "var(--color-zinc-900)",
+        border: "var(--border)",
     },
 };
 export const CREDS = [
@@ -318,16 +318,16 @@ export const CREDS = [
     },
 ];
 export const METHOD_COLOR: Record<string, string> = {
-    GET: "var(--color-success)",
-    POST: "var(--color-warning)",
-    PUT: "var(--color-hex-8b8b8b)",
-    DELETE: "var(--color-danger)",
-    PATCH: "var(--color-warning)",
+    GET: "var(--success)",
+    POST: "var(--warning)",
+    PUT: "var(--border)",
+    DELETE: "var(--destructive)",
+    PATCH: "var(--warning)",
 };
 export const STATUS_COLOR: Record<string, string> = {
-    OPEN: "var(--color-success)",
-    FILTERED: "var(--color-warning)",
-    CLOSED: "var(--color-hex-444444)",
+    OPEN: "var(--success)",
+    FILTERED: "var(--warning)",
+    CLOSED: "var(--color-zinc-700)",
 };
 
 export const AUTH_STATES = [

@@ -1,3 +1,6 @@
+"use client";
+
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import AblationLab from "@/features/research/components/AblationLab";
 import FailureAnalysis from "@/features/research/components/FailureAnalysis";
 import StatisticalEval from "@/features/research/components/StatisticalEval";
@@ -7,45 +10,46 @@ import { useResearchData } from "@/features/research/hooks/useResearchData";
 export default function ResearchLab({ initialTab }: { initialTab?: LabTab }) {
     const { tab, setTab } = useResearchData(initialTab);
     return (
-        <div className="flex h-full min-h-[0px] flex-col">
-            <div
-                className="flex-shrink-0 px-6 pt-5 pb-0"
-                style={{
-                    borderBottom: "1px solid var(--color-hex-1e1e1e)",
-                }}
-            >
-                <div className="tracking-widest-2 mb-[3px] text-base text-[var(--color-hex-666666)]">
+        <Tabs
+            value={tab}
+            onValueChange={(v) => setTab(v as LabTab)}
+            className="flex h-full min-h-0 flex-col"
+        >
+            <div className="border-border flex-shrink-0 border-b px-6 pt-5 pb-0">
+                <div className="text-muted-foreground mb-0.5 text-base tracking-widest">
                     RESEARCH
                 </div>
-                <h1 className="mb-[12px] text-9xl font-bold tracking-wide text-[var(--color-fg)]">
+                <h1 className="text-foreground mb-3 text-xs font-bold tracking-wide">
                     RESEARCH LAB
                 </h1>
-                <div className="flex">
+                <TabsList variant="line" className="flex justify-start overflow-x-auto p-0">
                     {(["ABLATION", "STATISTICAL EVALUATION", "FAILURE ANALYSIS"] as LabTab[]).map(
                         (t) => (
-                            <button
+                            <TabsTrigger
                                 key={t}
-                                onClick={() => setTab(t)}
-                                className="font-inherit tracking-wider-1 cursor-pointer border-none bg-[transparent] px-[16px] py-[5px] text-base whitespace-nowrap"
-                                style={{
-                                    borderBottom:
-                                        t === tab
-                                            ? "2px solid var(--color-brand)"
-                                            : "2px solid transparent",
-                                    color:
-                                        t === tab ? "var(--color-fg)" : "var(--color-hex-444444)",
-                                    marginBottom: -1,
-                                }}
+                                value={t}
+                                className="h-auto rounded-none px-4 py-1 text-base tracking-widest whitespace-nowrap"
                             >
                                 {t}
-                            </button>
+                            </TabsTrigger>
                         ),
                     )}
-                </div>
+                </TabsList>
             </div>
-            {tab === "ABLATION" && <AblationLab />}
-            {tab === "STATISTICAL EVALUATION" && <StatisticalEval />}
-            {tab === "FAILURE ANALYSIS" && <FailureAnalysis />}
-        </div>
+            <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
+                <TabsContent value="ABLATION" className="m-0 flex min-h-0 flex-1 flex-col">
+                    <AblationLab />
+                </TabsContent>
+                <TabsContent
+                    value="STATISTICAL EVALUATION"
+                    className="m-0 flex min-h-0 flex-1 flex-col"
+                >
+                    <StatisticalEval />
+                </TabsContent>
+                <TabsContent value="FAILURE ANALYSIS" className="m-0 flex min-h-0 flex-1 flex-col">
+                    <FailureAnalysis />
+                </TabsContent>
+            </div>
+        </Tabs>
     );
 }

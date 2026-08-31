@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { type SurfaceType } from "@/features/missions/data/fixtures/wizardMockData";
 import { useWizardData } from "@/features/missions/hooks/useWizardData";
 
@@ -5,56 +6,36 @@ export default function SurfaceCards({
     value,
     onChange,
 }: {
-    value: SurfaceType;
-    onChange: (v: SurfaceType) => void;
+    value?: SurfaceType;
+    onChange?: (v: SurfaceType) => void;
 }) {
     const { surfaceOptions } = useWizardData();
 
     return (
-        <div
-            className="flex gap-4"
-            style={{
-                alignItems: "stretch",
-            }}
-        >
+        <div className="flex items-stretch gap-4">
             {surfaceOptions.map((opt) => {
                 const selected = value === opt.value;
                 return (
-                    <button
+                    <Button
                         key={opt.value}
-                        onClick={() => onChange(opt.value)}
-                        className={`font-inherit relative flex flex-1 cursor-pointer flex-col rounded-[2px] border border-solid text-left transition-colors duration-100 ${selected ? "border-[var(--color-brand)] bg-[var(--color-hex-120608)]" : "border-[var(--color-hex-292929)] bg-[var(--color-hex-0d0d0d)] hover:border-[var(--color-hex-444444)] hover:bg-[var(--color-hex-111111)]"}`}
-                        style={{
-                            padding: "18px 16px 16px",
-                        }}
+                        variant="outline"
+                        onClick={() => onChange?.(opt.value)}
+                        className={`h-auto min-h-[160px] flex-1 flex-col items-start justify-start rounded-sm border border-solid px-5 pt-5 pb-4 text-left whitespace-normal transition-colors duration-100 ${selected ? "border-primary bg-transparent" : "border-border bg-background hover:border-muted-foreground hover:bg-card"}`}
                     >
                         {/* Selected indicator */}
                         {selected && (
-                            <div
-                                className="absolute top-[10px] right-[10px] h-[8px] w-[8px] bg-[var(--color-brand)]"
-                                style={{
-                                    borderRadius: "50%",
-                                }}
-                            />
+                            <div className="bg-primary absolute top-2.5 right-2.5 h-2 w-2 rounded-full" />
                         )}
 
                         {/* Icon + name */}
                         <div className="mb-2 flex items-center gap-2">
                             <span
-                                className="text-6xl"
-                                style={{
-                                    color: selected
-                                        ? "var(--color-brand)"
-                                        : "var(--color-hex-444444)",
-                                }}
+                                className={`text-base ${selected ? "text-primary" : "text-muted-foreground"}`}
                             >
                                 {opt.icon}
                             </span>
                             <span
-                                className="tracking-wider-2 text-xl font-bold"
-                                style={{
-                                    color: selected ? "var(--color-fg)" : "var(--color-hex-666666)",
-                                }}
+                                className={`text-xs font-bold tracking-widest ${selected ? "text-primary" : "text-muted-foreground"}`}
                             >
                                 {opt.value}
                             </span>
@@ -62,84 +43,45 @@ export default function SurfaceCards({
 
                         {/* Protocol */}
                         <div
-                            className="tracking-wider-2 mb-[12px] text-base font-semibold"
-                            style={{
-                                color: selected
-                                    ? "var(--color-hex-9e1118)"
-                                    : "var(--color-hex-333333)",
-                            }}
+                            className={`mb-3 text-xs font-semibold tracking-widest uppercase ${selected ? "text-primary" : "text-muted-foreground"}`}
                         >
                             {opt.proto}
                         </div>
 
-                        {/* Divider */}
-                        <div
-                            className="mb-[12px] h-[1px]"
-                            style={{
-                                background: selected
-                                    ? "var(--color-hex-2a0a0c)"
-                                    : "var(--color-hex-1a1a1a)",
-                            }}
-                        />
-
                         {/* Description */}
-                        <div className="text-lg-tight leading-normal-2 tracking-tight-2 mb-[14px] grow text-[var(--color-hex-555555)]">
+                        <div className="text-muted-foreground mb-4 text-xs leading-relaxed tracking-normal">
                             {opt.description}
                         </div>
 
                         {/* Vuln class tags */}
-                        <div className="mb-4 flex flex-wrap gap-1">
+                        <div className="mb-5 flex flex-wrap gap-1">
                             {opt.tags.map((tag: string) => (
                                 <span
                                     key={tag}
-                                    className="text-base-tight rounded-[2px] px-[5px] py-[1px] tracking-normal whitespace-nowrap"
-                                    style={{
-                                        color: selected
-                                            ? "var(--color-brand)"
-                                            : "var(--color-hex-444444)",
-                                        background: selected
-                                            ? "var(--color-hex-1a0608)"
-                                            : "var(--color-hex-111111)",
-                                        border: `1px solid ${selected ? "var(--color-hex-6f171b)" : "var(--color-hex-222222)"}`,
-                                    }}
+                                    className={`rounded-sm border border-solid px-1.5 py-0.5 text-[10px] font-semibold tracking-widest whitespace-nowrap uppercase ${selected ? "border-primary text-primary bg-transparent" : "border-border text-muted-foreground bg-transparent"}`}
                                 >
                                     {tag}
                                 </span>
                             ))}
                         </div>
 
-                        {/* Divider */}
-                        <div
-                            className="mb-[10px] h-[1px]"
-                            style={{
-                                background: selected
-                                    ? "var(--color-hex-2a0a0c)"
-                                    : "var(--color-hex-1a1a1a)",
-                            }}
-                        />
-
                         {/* Specialists */}
-                        <div>
-                            <div className="tracking-wider-3 mb-[6px] text-sm text-[var(--color-hex-444444)]">
+                        <div className="mt-auto">
+                            <div className="text-muted-foreground mb-1 text-[10px] font-semibold tracking-widest uppercase">
                                 SPECIALISTS
                             </div>
                             <div className="flex flex-wrap gap-1">
                                 {opt.specialists.map((s: string) => (
                                     <span
                                         key={s}
-                                        className="text-sm tracking-wide"
-                                        style={{
-                                            color: selected
-                                                ? "var(--color-hex-a0a0a0)"
-                                                : "var(--color-hex-333333)",
-                                        }}
+                                        className={`text-[10px] font-semibold tracking-widest uppercase ${selected ? "text-muted-foreground" : "text-muted-foreground/60"}`}
                                     >
-                                        {s}{" "}
+                                        {s}
                                     </span>
                                 ))}
                             </div>
                         </div>
-                    </button>
+                    </Button>
                 );
             })}
         </div>

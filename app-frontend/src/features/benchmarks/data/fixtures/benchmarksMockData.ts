@@ -585,23 +585,23 @@ export const ALL_BENCH_RUNS: BenchRecord[] = [
 
 /* ── Tier display metadata ── */
 export const TIER_META: Record<BenchTier, { label: string; color: string; axisNote?: string }> = {
-    TIER0_SANDBOX: { label: "TIER 0 — SANDBOX", color: "var(--color-hex-555555)" },
-    TIER0B_HPTSA: { label: "TIER 0b — HPTSA", color: "var(--color-hex-444444)" },
-    TIER1_PENTESTEVAL: { label: "TIER 1 — PENTESTEVAL", color: "var(--color-warning)" },
-    TIER2_CVEBENCH: { label: "TIER 2 — CVE-BENCH", color: "var(--color-brand)" },
-    TIER2B_CROSSBENCH: { label: "TIER 2b — CROSS-BENCH", color: "var(--color-hex-9e1118)" },
+    TIER0_SANDBOX: { label: "TIER 0 — SANDBOX", color: "text-zinc-600" },
+    TIER0B_HPTSA: { label: "TIER 0b — HPTSA", color: "text-zinc-700" },
+    TIER1_PENTESTEVAL: { label: "TIER 1 — PENTESTEVAL", color: "text-warning" },
+    TIER2_CVEBENCH: { label: "TIER 2 — CVE-BENCH", color: "text-primary" },
+    TIER2B_CROSSBENCH: { label: "TIER 2b — CROSS-BENCH", color: "text-border" },
     TIER3_PREDIQL: {
         label: "TIER 3 — PREDIQL",
-        color: "var(--color-success)",
+        color: "text-success",
         axisNote: "GraphQL — reported on a separate axis, not pooled with web pass-rate",
     },
     TIER4_MHBENCH: {
         label: "TIER 4 — MHBENCH",
-        color: "var(--color-success)",
+        color: "text-success",
         axisNote: "Multi-Host — reported on a separate axis, not pooled with web pass-rate",
     },
-    TIER5_BOUNTYBENCH: { label: "TIER 5 — BOUNTYBENCH", color: "var(--color-danger)" },
-    TIER6_LIVECOMP: { label: "TIER 6 — LIVE COMP", color: "var(--color-hex-6f171b)" },
+    TIER5_BOUNTYBENCH: { label: "TIER 5 — BOUNTYBENCH", color: "text-destructive" },
+    TIER6_LIVECOMP: { label: "TIER 6 — LIVE COMP", color: "text-border" },
 };
 
 /* ── Legacy compat: TASK_DATA (used by BenchmarkTasksTab — CVE-Bench specific) ── */

@@ -1,10 +1,18 @@
 import React from "react";
 import { type Metadata, type Viewport } from "next";
 
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/lib/auth-context";
 import { ServicesProvider } from "@/lib/services-context";
 
 import "@/app/globals.css";
+
+import { Geist, JetBrains_Mono } from "next/font/google";
+
+import { cn } from "@/lib/utils";
+
+const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
+const jbMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono" });
 
 export const metadata: Metadata = {
     title: {
@@ -51,16 +59,20 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en" className="dark">
+        <html lang="en" className={cn("dark", "font-sans", geist.variable, jbMono.variable)}>
             {/*
              * suppressHydrationWarning is required here because Next.js server-renders
              * the <body> without the class that the browser may inject for OS-level
              * dark-mode detection, causing a harmless mismatch on first hydration.
              */}
             <body suppressHydrationWarning>
-                <ServicesProvider>
-                    <AuthProvider>{children}</AuthProvider>
-                </ServicesProvider>
+                <div className="bg-background mx-auto min-h-dvh w-full">
+                    <ServicesProvider>
+                        <AuthProvider>
+                            <TooltipProvider>{children}</TooltipProvider>
+                        </AuthProvider>
+                    </ServicesProvider>
+                </div>
             </body>
         </html>
     );

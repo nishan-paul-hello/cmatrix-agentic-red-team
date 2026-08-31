@@ -1,21 +1,16 @@
 import React from "react";
 
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import Divider from "@/features/missions/components/wizard/Divider";
 import FieldBlock from "@/features/missions/components/wizard/FieldBlock";
 import StepHeading from "@/features/missions/components/wizard/StepHeading";
 import { useWizardContext } from "@/features/missions/components/wizard/WizardContext";
 
 export function Step2() {
-    const {
-        roe,
-        setRoe,
-        maxRuntime,
-        setMaxRuntime,
-        costCeiling,
-        setCostCeiling,
-        toolTimeout,
-        setToolTimeout,
-    } = useWizardContext();
+    const { form } = useWizardContext();
+    const costCeiling = form.watch("costCeiling");
+
     const costNum = parseFloat(costCeiling) || 0;
     return (
         <>
@@ -26,131 +21,109 @@ export function Step2() {
                 hint="Define operational constraints. The system will halt immediately if any rule is violated."
                 mb
             >
-                <textarea
-                    value={roe}
-                    onChange={(e) => setRoe(e.target.value)}
+                <Textarea
                     rows={6}
                     spellCheck={false}
-                    className="font-inherit tracking-tighter-1 w-full resize-none rounded-[2px] border-[1px] border-solid border-[var(--color-hex-333333)] bg-[var(--color-hex-111111)] px-[14px] py-[10px] text-xl leading-relaxed text-[var(--color-hex-a0a0a0)] outline-none focus:border-[var(--color-brand)]"
+                    className="bg-card text-muted-foreground focus-visible:border-primary h-auto w-full resize-none rounded-sm px-3.5 py-2.5 text-xs leading-relaxed tracking-tighter shadow-none"
                 />
             </FieldBlock>
 
             <Divider />
 
             {/* Numeric fields */}
-            <div className="text-lg-tight mb-[16px] tracking-widest text-[var(--color-hex-666666)]">
+            <div className="text-muted-foreground mb-4 text-xs font-semibold tracking-widest uppercase">
                 OPERATIONAL LIMITS
             </div>
 
-            <div className="flex flex-col gap-0 overflow-hidden rounded-[2px] border-[1px] border-solid border-[var(--color-hex-292929)]">
+            <div className="border-border flex flex-col gap-0 overflow-hidden rounded-sm border-[1px] border-solid">
                 {/* MAXIMUM RUNTIME */}
-                <div
-                    className="flex items-center justify-between bg-[var(--color-hex-0d0d0d)] px-[16px] py-[14px]"
-                    style={{
-                        borderBottom: "1px solid var(--color-hex-1e1e1e)",
-                    }}
-                >
+                <div className="bg-background border-border flex items-center justify-between border-b px-4 py-3.5">
                     <div>
-                        <div className="tracking-wider-2 mb-[3px] text-lg font-semibold text-[var(--color-hex-a0a0a0)]">
+                        <div className="text-muted-foreground mb-0.5 text-xs font-semibold tracking-widest">
                             MAXIMUM RUNTIME
                         </div>
-                        <div className="text-base tracking-normal text-[var(--color-hex-444444)]">
+                        <div className="text-muted-foreground text-xs tracking-normal">
                             Minutes allowed per vulnerability before the specialist is retired.
                         </div>
                     </div>
                     <div className="ml-6 flex flex-shrink-0 items-center gap-2">
-                        <input
+                        <Input
                             type="number"
-                            value={maxRuntime}
-                            onChange={(e) => setMaxRuntime(e.target.value)}
+
                             min={1}
                             max={120}
-                            className="font-inherit w-[56px] rounded-[2px] border-[1px] border-solid border-[var(--color-hex-333333)] bg-[var(--color-hex-151515)] px-[8px] py-[6px] text-right text-3xl font-semibold tracking-tighter text-[var(--color-fg)] outline-none focus:border-[var(--color-brand)]"
+                            className="bg-muted text-foreground focus-visible:border-primary h-auto w-14 rounded-sm px-2 py-1.5 text-right text-sm font-semibold tracking-tighter shadow-none"
                         />
-                        <span className="text-lg-tight tracking-wide whitespace-nowrap text-[var(--color-hex-444444)]">
+                        <span className="text-muted-foreground text-xs tracking-wide whitespace-nowrap">
                             min / vuln
                         </span>
                     </div>
                 </div>
 
                 {/* COST CEILING */}
-                <div
-                    className="flex items-center justify-between bg-[var(--color-hex-0d0d0d)] px-[16px] py-[14px]"
-                    style={{
-                        borderBottom: "1px solid var(--color-hex-1e1e1e)",
-                    }}
-                >
+                <div className="bg-background border-border flex items-center justify-between border-b px-4 py-3.5">
                     <div>
-                        <div className="tracking-wider-2 mb-[3px] text-lg font-semibold text-[var(--color-hex-a0a0a0)]">
+                        <div className="text-muted-foreground mb-0.5 text-xs font-semibold tracking-widest">
                             COST CEILING
                         </div>
-                        <div className="text-base tracking-normal text-[var(--color-hex-444444)]">
+                        <div className="text-muted-foreground text-xs tracking-normal">
                             Maximum total LLM spend before human escalation is triggered.
                         </div>
                     </div>
                     <div className="ml-6 flex flex-shrink-0 items-center gap-2">
-                        <span className="text-2xl text-[var(--color-hex-666666)]">$</span>
-                        <input
+                        <span className="text-muted-foreground text-xs">$</span>
+                        <Input
                             type="number"
-                            value={costCeiling}
-                            onChange={(e) => setCostCeiling(e.target.value)}
+
                             min={0.5}
                             step={0.5}
-                            className="font-inherit w-[64px] rounded-[2px] border-[1px] border-solid border-[var(--color-hex-333333)] bg-[var(--color-hex-151515)] px-[8px] py-[6px] text-right text-3xl font-semibold tracking-tighter text-[var(--color-fg)] outline-none focus:border-[var(--color-brand)]"
+                            className="bg-muted text-foreground focus-visible:border-primary h-auto w-16 rounded-sm px-2 py-1.5 text-right text-sm font-semibold tracking-tighter shadow-none"
                         />
                     </div>
                 </div>
 
                 {/* TOOL TIMEOUT */}
-                <div className="flex items-center justify-between bg-[var(--color-hex-0d0d0d)] px-[16px] py-[14px]">
+                <div className="bg-background flex items-center justify-between px-4 py-3.5">
                     <div>
-                        <div className="tracking-wider-2 mb-[3px] text-lg font-semibold text-[var(--color-hex-a0a0a0)]">
+                        <div className="text-muted-foreground mb-0.5 text-xs font-semibold tracking-widest">
                             TOOL TIMEOUT
                         </div>
-                        <div className="text-base tracking-normal text-[var(--color-hex-444444)]">
+                        <div className="text-muted-foreground text-xs tracking-normal">
                             Maximum wall-clock seconds a single tool invocation may run.
                         </div>
                     </div>
                     <div className="ml-6 flex flex-shrink-0 items-center gap-2">
-                        <input
+                        <Input
                             type="number"
-                            value={toolTimeout}
-                            onChange={(e) => setToolTimeout(e.target.value)}
+
                             min={10}
                             max={600}
                             step={10}
-                            className="font-inherit w-[56px] rounded-[2px] border-[1px] border-solid border-[var(--color-hex-333333)] bg-[var(--color-hex-151515)] px-[8px] py-[6px] text-right text-3xl font-semibold tracking-tighter text-[var(--color-fg)] outline-none focus:border-[var(--color-brand)]"
+                            className="bg-muted text-foreground focus-visible:border-primary h-auto w-14 rounded-sm px-2 py-1.5 text-right text-sm font-semibold tracking-tighter shadow-none"
                         />
-                        <span className="text-lg-tight tracking-wide text-[var(--color-hex-444444)]">
-                            sec
-                        </span>
+                        <span className="text-muted-foreground text-xs tracking-wide">sec</span>
                     </div>
                 </div>
 
                 {/* F9: MAX RETRIES field */}
-                <div
-                    className="flex items-center justify-between bg-[var(--color-hex-0d0d0d)] px-[16px] py-[14px]"
-                    style={{
-                        borderTop: "1px solid var(--color-hex-1e1e1e)",
-                    }}
-                >
+                <div className="bg-background border-border flex items-center justify-between border-t px-4 py-3.5">
                     <div>
-                        <div className="tracking-wider-2 mb-[3px] text-lg font-semibold text-[var(--color-hex-a0a0a0)]">
+                        <div className="text-muted-foreground mb-0.5 text-xs font-semibold tracking-widest">
                             MAX RETRIES
                         </div>
-                        <div className="text-base tracking-normal text-[var(--color-hex-444444)]">
+                        <div className="text-muted-foreground text-xs tracking-normal">
                             Maximum retry attempts per VDG node before it is deprioritized.
                         </div>
                     </div>
                     <div className="ml-6 flex flex-shrink-0 items-center gap-2">
-                        <input
+                        <Input
                             type="number"
                             defaultValue="3"
                             min={1}
                             max={10}
-                            className="font-inherit w-[56px] rounded-[2px] border-[1px] border-solid border-[var(--color-hex-333333)] bg-[var(--color-hex-151515)] px-[8px] py-[6px] text-right text-3xl font-semibold tracking-tighter text-[var(--color-fg)] outline-none focus:border-[var(--color-brand)]"
+                            className="bg-muted text-foreground focus-visible:border-primary h-auto w-14 rounded-sm px-2 py-1.5 text-right text-sm font-semibold tracking-tighter shadow-none"
                         />
-                        <span className="text-lg-tight tracking-wide text-[var(--color-hex-444444)]">
+                        <span className="text-muted-foreground text-xs tracking-wide">
                             attempts
                         </span>
                     </div>
@@ -159,9 +132,9 @@ export function Step2() {
 
             {/* Warning callout when cost is high */}
             {costNum > 50 && (
-                <div className="mt-4 flex items-start gap-3 rounded-[2px] border-[1px] border-solid border-[var(--color-warning)] bg-[var(--color-hex-120f00)] px-[14px] py-[10px]">
-                    <span className="shrink-0 text-xl text-[var(--color-warning)]">⚠</span>
-                    <span className="text-lg-tight leading-normal tracking-tight text-[var(--color-warning)]">
+                <div className="border-warning bg-muted mt-4 flex items-start gap-3 rounded-sm border-[1px] border-solid px-3.5 py-2.5">
+                    <span className="text-warning shrink-0 text-xs">⚠</span>
+                    <span className="text-warning text-xs leading-normal tracking-tight">
                         Cost ceiling above $50 — human escalation will only trigger at high spend.
                         Ensure this is intentional.
                     </span>

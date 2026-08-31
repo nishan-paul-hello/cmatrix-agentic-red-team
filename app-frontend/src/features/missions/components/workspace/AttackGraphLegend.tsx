@@ -18,23 +18,21 @@ export function AttackGraphLegend({
     >;
 }) {
     return (
-        <div className="absolute right-4 bottom-4 flex flex-col gap-1.5 rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)] bg-[var(--color-hex-0d0d0d)] px-[12px] py-[10px]">
-            <div className="text-sm-tight tracking-wider-3 mb-[4px] text-[var(--color-hex-333333)]">
-                LEGEND
-            </div>
+        <div className="border-border bg-background absolute top-4 left-4 z-10 flex flex-col gap-1.5 rounded-sm border-[1px] border-solid px-3 py-2.5">
+            <div className="text-muted-foreground mb-1 text-xs tracking-widest">LEGEND</div>
             {nodeStatuses.map((st) => {
                 const s = nodeStyles[st];
                 return (
                     <div key={st} className="flex items-center gap-2">
                         <div
-                            className="h-[8px] w-[8px] shrink-0 rounded-[1px]"
+                            className="h-2 w-2 shrink-0 rounded-none"
                             style={{
                                 border: `1px solid ${s.border}`,
                                 background: s.bg,
                             }}
                         />
                         <span
-                            className="text-sm-tight tracking-normal"
+                            className="text-xs tracking-normal"
                             style={{
                                 color: s.labelColor,
                             }}

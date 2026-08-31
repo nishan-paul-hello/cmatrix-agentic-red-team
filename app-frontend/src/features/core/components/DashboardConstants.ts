@@ -14,7 +14,7 @@ export const INITIAL_ACTIVITY: ActivityEntry[] = [
         agent: "RECON-SPEC",
         action: "TOOL_CALL",
         desc: "nmap -sV -p 1-1024 app.targetcorp.com",
-        color: "var(--color-hex-a0a0a0)",
+        color: "var(--color-zinc-400)",
     },
     {
         id: 2,
@@ -22,7 +22,7 @@ export const INITIAL_ACTIVITY: ActivityEntry[] = [
         agent: "TEAM-MGR",
         action: "UCB_SELECT",
         desc: "SQLI-007 selected, UCB=0.824, path=0.612",
-        color: "var(--color-brand)",
+        color: "var(--primary)",
     },
     {
         id: 3,
@@ -30,7 +30,7 @@ export const INITIAL_ACTIVITY: ActivityEntry[] = [
         agent: "EVAL-AGENT",
         action: "E_ORD_UPDATE",
         desc: "AUTH-003 evidence raised to E_ord 4 (CONFIRMED)",
-        color: "var(--color-success)",
+        color: "var(--success)",
     },
     {
         id: 4,
@@ -38,7 +38,7 @@ export const INITIAL_ACTIVITY: ActivityEntry[] = [
         agent: "SQLI-SPEC",
         action: "EXPLOIT_ATTEMPT",
         desc: "Injecting into /api/users?id= parameter",
-        color: "var(--color-hex-a0a0a0)",
+        color: "var(--color-zinc-400)",
     },
     {
         id: 5,
@@ -46,7 +46,7 @@ export const INITIAL_ACTIVITY: ActivityEntry[] = [
         agent: "VALID-AGENT",
         action: "ORACLE_TEST",
         desc: "CVE-BENCH oracle invoked for SQLI-004",
-        color: "var(--color-warning)",
+        color: "var(--warning)",
     },
     {
         id: 6,
@@ -54,7 +54,7 @@ export const INITIAL_ACTIVITY: ActivityEntry[] = [
         agent: "TEAM-MGR",
         action: "EL_SNAPSHOT",
         desc: "Environmental Layer snapshot: 87 facts",
-        color: "var(--color-hex-a0a0a0)",
+        color: "var(--color-zinc-400)",
     },
     {
         id: 7,
@@ -62,7 +62,7 @@ export const INITIAL_ACTIVITY: ActivityEntry[] = [
         agent: "RECON-SPEC",
         action: "CREDENTIAL_FOUND",
         desc: "Credential extracted: admin@targetcorp.com",
-        color: "var(--color-success)",
+        color: "var(--success)",
     },
     {
         id: 8,
@@ -70,7 +70,7 @@ export const INITIAL_ACTIVITY: ActivityEntry[] = [
         agent: "VALID-AGENT",
         action: "VALIDATED",
         desc: "SQLI-004 ORACLE CONFIRMED — severity CRITICAL",
-        color: "var(--color-danger)",
+        color: "var(--destructive)",
     },
     {
         id: 9,
@@ -78,7 +78,7 @@ export const INITIAL_ACTIVITY: ActivityEntry[] = [
         agent: "EXEC-AGENT",
         action: "TOOL_RESULT",
         desc: "sqlmap completed: 3 injectable endpoints found",
-        color: "var(--color-hex-a0a0a0)",
+        color: "var(--color-zinc-400)",
     },
     {
         id: 10,
@@ -86,7 +86,7 @@ export const INITIAL_ACTIVITY: ActivityEntry[] = [
         agent: "TEAM-MGR",
         action: "COMPACTION",
         desc: "Context at 81% — scheduling FULLCOMPACT",
-        color: "var(--color-warning)",
+        color: "var(--warning)",
     },
     {
         id: 11,
@@ -94,7 +94,7 @@ export const INITIAL_ACTIVITY: ActivityEntry[] = [
         agent: "SQLI-SPEC",
         action: "SPAWN",
         desc: "Specialist spawned, FRESH context, node SQLI-007",
-        color: "var(--color-hex-a0a0a0)",
+        color: "var(--color-zinc-400)",
     },
     {
         id: 12,
@@ -102,7 +102,7 @@ export const INITIAL_ACTIVITY: ActivityEntry[] = [
         agent: "TEAM-MGR",
         action: "PATH_SCORE",
         desc: "Path RECON→AUTH→SQLI→DB-ACCESS scored 0.61",
-        color: "var(--color-hex-a0a0a0)",
+        color: "var(--color-zinc-400)",
     },
 ];
 
@@ -112,21 +112,21 @@ export const NEW_EVENTS: Omit<ActivityEntry, "id">[] = [
         agent: "SQLI-SPEC",
         action: "PAYLOAD_SENT",
         desc: "Time-based blind injection payload dispatched",
-        color: "var(--color-hex-a0a0a0)",
+        color: "var(--color-zinc-400)",
     },
     {
         ts: "14:22:14",
         agent: "EVAL-AGENT",
         action: "RESPONSE_PARSE",
         desc: "Response delta 4.2s — timing confirmed",
-        color: "var(--color-success)",
+        color: "var(--success)",
     },
     {
         ts: "14:22:17",
         agent: "TEAM-MGR",
         action: "UCB_UPDATE",
         desc: "SQLI-007 UCB updated to 0.891 post-evidence",
-        color: "var(--color-brand)",
+        color: "var(--primary)",
     },
 ];
 

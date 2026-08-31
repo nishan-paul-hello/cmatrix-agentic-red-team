@@ -1,6 +1,3 @@
-import React from "react";
-import { FocusTrap } from "focus-trap-react";
-
 import {
     NodeDrawerContext,
     type DrawerNode,
@@ -138,65 +135,42 @@ export default function VDGNodeDrawerView({
     node: DrawerNode;
     onClose: () => void;
 }) {
-    const drawerRef = React.useRef<HTMLDivElement>(null);
-    React.useEffect(() => {
-        function handler(e: KeyboardEvent) {
-            if (e.key === "Escape") {
-                onClose();
-            }
-        }
-        document.addEventListener("keydown", handler);
-        return () => {
-            document.removeEventListener("keydown", handler);
-        };
-    }, [onClose]);
-
     const detail = NODE_DETAIL[node.id] ?? DEFAULT_DETAIL;
     const statusColor = (() => {
         if (node.status === "ELIGIBLE") {
-            return "var(--color-danger)";
+            return "var(--destructive)";
         }
         if (node.status === "EXPLOITED") {
-            return "var(--color-brand)";
+            return "var(--primary)";
         }
         if (node.status === "IN_PROGRESS") {
-            return "var(--color-danger)";
+            return "var(--destructive)";
         }
-        return "var(--color-hex-a0a0a0)";
+        return "var(--muted-foreground)";
     })();
     const statusBg = ["ELIGIBLE", "EXPLOITED", "IN_PROGRESS"].includes(node.status)
-        ? "var(--color-hex-1a0608)"
-        : "var(--color-hex-111111)";
+        ? "var(--border)"
+        : "var(--border)";
     const statusBorder = ["ELIGIBLE", "EXPLOITED", "IN_PROGRESS"].includes(node.status)
-        ? "var(--color-hex-6f171b)"
-        : "var(--color-hex-292929)";
+        ? "var(--border)"
+        : "var(--border)";
+
     return (
-        <FocusTrap focusTrapOptions={{ escapeDeactivates: false, clickOutsideDeactivates: false }}>
+        <aside className="border-border bg-background flex h-full w-[var(--width-drawer-md)] shrink-0 flex-col gap-0 border-l p-0 shadow-[-10px_0_30px_rgba(0,0,0,0.5)]">
             <NodeDrawerContext.Provider
                 value={{ node, detail, onClose, statusColor, statusBg, statusBorder }}
             >
-                <div
-                    ref={drawerRef}
-                    role="dialog"
-                    aria-modal="true"
-                    aria-labelledby="vdg-node-drawer-title"
-                    className="flex h-full w-[var(--width-drawer-md)] shrink-0 flex-col bg-[var(--color-hex-0d0d0d)]"
-                    style={{
-                        borderLeft: "1px solid var(--color-hex-292929)",
-                    }}
-                >
-                    <VDGNodeDrawerHeader />
-                    <div className="flex-1 overflow-y-auto">
-                        <VDGNodeDrawerIntent />
-                        <VDGNodeDrawerMetrics />
-                        <VDGNodeDrawerEvidence />
-                        <VDGNodeDrawerPrerequisites />
-                        <VDGNodeDrawerEnables />
-                        <VDGNodeDrawerFacts />
-                        <VDGNodeDrawerLifecycle />
-                    </div>
+                <VDGNodeDrawerHeader />
+                <div className="flex-1 overflow-y-auto">
+                    <VDGNodeDrawerIntent />
+                    <VDGNodeDrawerMetrics />
+                    <VDGNodeDrawerEvidence />
+                    <VDGNodeDrawerPrerequisites />
+                    <VDGNodeDrawerEnables />
+                    <VDGNodeDrawerFacts />
+                    <VDGNodeDrawerLifecycle />
                 </div>
             </NodeDrawerContext.Provider>
-        </FocusTrap>
+        </aside>
     );
 }

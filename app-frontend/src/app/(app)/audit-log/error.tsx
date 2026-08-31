@@ -2,6 +2,8 @@
 
 import { useEffect } from "react";
 
+import { Button } from "@/components/ui/button";
+
 export default function ErrorBoundary({
     error,
     reset,
@@ -14,17 +16,18 @@ export default function ErrorBoundary({
     }, [error]);
 
     return (
-        <div className="flex h-full w-full flex-col items-center justify-center rounded-lg border border-red-900/30 bg-neutral-950 p-8 text-center text-red-500">
-            <h2 className="mb-4 font-mono text-xl text-red-400">Error in Module</h2>
-            <p className="mb-6 text-sm text-red-400/70">
+        <div className="border-destructive/30 text-destructive flex h-full w-full flex-col items-center justify-center rounded-lg border bg-neutral-950 p-8 text-center">
+            <h2 className="text-destructive mb-4 font-mono text-xs">Error in Module</h2>
+            <p className="text-destructive/70 mb-6 text-sm">
                 {error.message || "An unexpected error occurred."}
             </p>
-            <button
+            <Button
+                variant="destructive"
                 onClick={() => reset()}
-                className="rounded bg-red-950 px-4 py-2 font-mono text-sm text-red-300 transition-colors hover:bg-red-900"
+                className="rounded font-mono text-sm transition-colors"
             >
                 Retry
-            </button>
+            </Button>
         </div>
     );
 }

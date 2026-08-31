@@ -1,4 +1,12 @@
 import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
+import {
     TIER_META,
     type BenchRecord,
 } from "@/features/benchmarks/data/fixtures/benchmarksMockData";
@@ -12,90 +20,81 @@ export function BenchmarkTable({
     onSelect: (b: BenchRecord) => void;
 }) {
     return (
-        <div className="flex-1 overflow-y-auto">
-            <table className="w-full border-collapse">
-                <thead>
-                    <tr className="sticky top-0 bg-[var(--color-hex-0f0f0f)]">
+        <div className="flex-1 overflow-auto">
+            <Table>
+                <TableHeader>
+                    <TableRow className="bg-card hover:bg-card sticky top-0">
                         {["ID", "NAME", "TIER", "AVG COST", "AVG TIME", "DATE", "STATUS"].map(
                             (h) => (
-                                <th
+                                <TableHead
                                     key={h}
-                                    className="text-sm-tight tracking-wider-2 px-[14px] py-[5px] text-left font-semibold whitespace-nowrap text-[var(--color-hex-444444)]"
-                                    style={{
-                                        borderBottom: "1px solid var(--color-hex-1a1a1a)",
-                                    }}
+                                    className="text-muted-foreground border-border border-b px-3.5 py-1 text-left text-xs font-semibold tracking-widest"
                                 >
                                     {h}
-                                </th>
+                                </TableHead>
                             ),
                         )}
-                    </tr>
-                </thead>
-                <tbody>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
                     {filtered.map((b) => {
                         const tierMeta = TIER_META[b.tier];
                         return (
-                            <tr
+                            <TableRow
                                 key={b.id}
                                 onClick={() => onSelect(b)}
-                                className="cursor-pointer"
-                                style={{
-                                    borderBottom: "1px solid var(--color-hex-111111)",
-                                    opacity: b.status === BENCHMARK_STATUS.QUEUED ? 0.5 : 1,
+                                className="border-border hover:bg-background focus-visible:bg-background cursor-pointer border-b focus-visible:outline-none"
+                                tabIndex={0}
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter" || e.key === " ") {
+                                        e.preventDefault();
+                                        onSelect(b);
+                                    }
                                 }}
-                                onMouseEnter={(e) =>
-                                    (e.currentTarget.style.background = "var(--color-hex-0d0d0d)")
-                                }
-                                onMouseLeave={(e) =>
-                                    (e.currentTarget.style.background = "transparent")
-                                }
                             >
-                                <td className="px-[14px] py-[9px] text-base font-bold text-[var(--color-brand)]">
+                                <TableCell className="text-primary px-3.5 py-2 text-base font-bold">
                                     {b.id}
-                                </td>
-                                <td className="px-[14px] py-[9px] text-lg text-[var(--color-hex-a0a0a0)]">
+                                </TableCell>
+                                <TableCell className="text-muted-foreground px-3.5 py-2 text-xs">
                                     {b.name}
-                                </td>
-                                <td className="px-[14px] py-[9px]">
+                                </TableCell>
+                                <TableCell className="px-3.5 py-2">
                                     <span
                                         className="text-sm font-semibold tracking-normal"
                                         style={{ color: tierMeta.color }}
                                     >
                                         {tierMeta.label}
                                     </span>
-                                </td>
-                                <td className="px-[14px] py-[9px] text-base text-[var(--color-hex-444444)]">
+                                </TableCell>
+                                <TableCell className="text-muted-foreground px-3.5 py-2 text-base">
                                     {b.avgCost}
-                                </td>
-                                <td className="px-[14px] py-[9px] text-base text-[var(--color-hex-444444)]">
+                                </TableCell>
+                                <TableCell className="text-muted-foreground px-3.5 py-2 text-base">
                                     {b.avgTime}
-                                </td>
-                                <td className="px-[14px] py-[9px] text-base text-[var(--color-hex-444444)]">
+                                </TableCell>
+                                <TableCell className="text-muted-foreground px-3.5 py-2 text-base">
                                     {b.date}
-                                </td>
-                                <td className="px-[14px] py-[9px]">
+                                </TableCell>
+                                <TableCell className="px-3.5 py-2">
                                     <span
-                                        className="text-base-tight font-semibold tracking-wide"
-                                        style={{
-                                            color: (() => {
-                                                if (b.status === BENCHMARK_STATUS.COMPLETE) {
-                                                    return "var(--color-success)";
-                                                }
-                                                if (b.status === BENCHMARK_STATUS.RUNNING) {
-                                                    return "var(--color-danger)";
-                                                }
-                                                return "var(--color-hex-333333)";
-                                            })(),
-                                        }}
+                                        className={`text-sm font-semibold tracking-wide ${(() => {
+                                            if (b.status === BENCHMARK_STATUS.COMPLETE) {
+                                                return "text-success";
+                                            }
+                                            if (b.status === BENCHMARK_STATUS.RUNNING) {
+                                                return "text-destructive";
+                                            }
+                                            return "text-border";
+                                        })()}`}
                                     >
                                         {b.status}
                                     </span>
-                                </td>
-                            </tr>
+                                </TableCell>
+                            </TableRow>
                         );
                     })}
-                </tbody>
-            </table>
+                </TableBody>
+            </Table>
         </div>
     );
 }

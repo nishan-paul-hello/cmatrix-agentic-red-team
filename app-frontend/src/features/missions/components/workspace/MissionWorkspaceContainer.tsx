@@ -1,3 +1,5 @@
+"use client";
+
 import { useCallback, useEffect, useReducer, useRef, useState } from "react";
 
 import MissionWorkspaceView from "@/features/missions/components/workspace/MissionWorkspaceView";
@@ -12,6 +14,7 @@ import {
 } from "@/features/missions/domain/Orchestrator";
 import { useElapsed } from "@/features/missions/hooks/useElapsed";
 import { useTelemetry } from "@/hooks/useTelemetry";
+import { useMission } from "@/lib/mission-context";
 import { useServices } from "@/lib/services-context";
 import { MISSION_STATUS } from "@/types/domain-types";
 import { canTransitionMission } from "@/utils/FSM";
@@ -62,20 +65,26 @@ export default function MissionWorkspaceContainer({
     const [orchestrator, setOrchestrator] = useState<MissionOrchestratorModel | null>(null);
 
     const { missionRepository, specialistRepository } = useServices();
+    const { setActiveMissionId } = useMission();
 
     useEffect(() => {
-        void Promise.all([
-            missionRepository.fetch(missionId),
-            specialistRepository.fetchAll(),
-        ]).then(([mission, specialists]) => {
-            const workers: WorkerSpecialist[] = specialists.map((s) => ({
-                id: s.id,
-                role: s.role,
-                status: s.status,
-                missionId: mission.id,
-            }));
-            setOrchestrator(new MissionOrchestratorModel(mission.id, mission.status, workers));
-        });
+        if (missionId) {
+            setActiveMissionId(missionId);
+        }
+    }, [missionId, setActiveMissionId]);
+
+    useEffect(() => {
+        void Promise.all([missionRepository.fetch(missionId), specialistRepository.fetchAll()])
+            .then(([mission, specialists]) => {
+                const workers: WorkerSpecialist[] = specialists.map((s) => ({
+                    id: s.id,
+                    role: s.role,
+                    status: s.status,
+                    missionId: mission.id,
+                }));
+                setOrchestrator(new MissionOrchestratorModel(mission.id, mission.status, workers));
+            })
+            .catch(console.error);
     }, [missionId, missionRepository, specialistRepository]);
 
     const [state, rawDispatch] = useReducer(workspaceReducer, {
@@ -127,12 +136,14 @@ export default function MissionWorkspaceContainer({
         void Promise.all([
             WorkspaceRepository.getInitialLog(),
             WorkspaceRepository.getStreamEvents(),
-        ]).then(([initialLog, streamEvents]) => {
-            dispatch({ type: "SET_LOG", payload: initialLog });
-            nextId.current = initialLog.length + 1;
-            queue.current = [...streamEvents];
-            setDataLoaded(true);
-        });
+        ])
+            .then(([initialLog, streamEvents]) => {
+                dispatch({ type: "SET_LOG", payload: initialLog });
+                nextId.current = initialLog.length + 1;
+                queue.current = [...streamEvents];
+                setDataLoaded(true);
+            })
+            .catch(console.error);
     }, [dispatch]);
 
     const time = useElapsed(0);

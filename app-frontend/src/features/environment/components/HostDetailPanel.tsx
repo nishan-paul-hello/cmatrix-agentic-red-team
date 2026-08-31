@@ -2,31 +2,19 @@ import { type HostNode } from "@/types/domain-types";
 
 export function HostDetailPanel({ sel }: { sel: HostNode | undefined }) {
     return (
-        <div className="w-panel-sm flex-shrink-0 overflow-y-auto bg-[var(--color-hex-0b0b0b)]">
+        <div className="lg:w-panel-sm bg-background border-border w-full flex-shrink-0 overflow-y-auto border-t lg:border-t-0 lg:border-l">
             {sel ? (
                 <>
-                    <div
-                        className="px-5 pt-5 pb-4"
-                        style={{
-                            borderBottom: "1px solid var(--color-hex-1e1e1e)",
-                        }}
-                    >
-                        <div className="mb-[6px] text-sm tracking-widest text-[var(--color-hex-444444)]">
+                    <div className="border-border border-b px-5 pt-5 pb-4">
+                        <div className="text-muted-foreground mb-1.5 text-sm tracking-widest">
                             HOST DETAIL
                         </div>
-                        <div className="mb-[2px] text-3xl font-bold tracking-normal text-[var(--color-fg)]">
+                        <div className="text-foreground mb-0.5 text-sm font-bold tracking-normal">
                             {sel.ip}
                         </div>
-                        <div className="tracking-wider-1 text-base text-[var(--color-brand)]">
-                            {sel.id}
-                        </div>
+                        <div className="text-primary text-base tracking-widest">{sel.id}</div>
                     </div>
-                    <div
-                        className="flex flex-col gap-3 px-5 py-4"
-                        style={{
-                            borderBottom: "1px solid var(--color-hex-1e1e1e)",
-                        }}
-                    >
+                    <div className="border-border flex flex-col gap-3 border-b px-5 py-4">
                         {[
                             {
                                 k: "HOSTNAME",
@@ -50,34 +38,24 @@ export function HostDetailPanel({ sel }: { sel: HostNode | undefined }) {
                             },
                         ].map((r) => (
                             <div key={r.k}>
-                                <div className="text-sm-tight tracking-wider-3 mb-[1px] text-[var(--color-hex-444444)]">
+                                <div className="text-muted-foreground mb-px text-xs tracking-widest">
                                     {r.k}
                                 </div>
-                                <div className="tracking-tight-1 text-lg text-[var(--color-hex-888888)]">
+                                <div className="text-muted-foreground text-xs tracking-tight">
                                     {r.v}
                                 </div>
                             </div>
                         ))}
                     </div>
-                    <div
-                        className="px-5 py-4"
-                        style={{
-                            borderBottom: "1px solid var(--color-hex-1e1e1e)",
-                        }}
-                    >
-                        <div className="text-sm-tight mb-[8px] tracking-widest text-[var(--color-hex-444444)]">
+                    <div className="border-border border-b px-5 py-4">
+                        <div className="text-muted-foreground mb-2 text-xs tracking-widest">
                             OPEN SERVICES
                         </div>
                         <div className="flex flex-col gap-1.5">
                             {sel.services.map((s: string) => (
                                 <div key={s} className="flex items-center gap-2">
-                                    <div
-                                        className="h-[5px] w-[5px] shrink-0 bg-[var(--color-success)]"
-                                        style={{
-                                            borderRadius: "50%",
-                                        }}
-                                    />
-                                    <span className="text-lg-tight tracking-tight-1 text-[var(--color-hex-666666)]">
+                                    <div className="bg-success h-1 w-1 shrink-0 rounded-full" />
+                                    <span className="text-muted-foreground text-base tracking-tight">
                                         {s}
                                     </span>
                                 </div>
@@ -86,21 +64,21 @@ export function HostDetailPanel({ sel }: { sel: HostNode | undefined }) {
                     </div>
                     {sel.edges.length > 0 && (
                         <div className="px-5 py-4">
-                            <div className="text-sm-tight mb-[8px] tracking-widest text-[var(--color-hex-444444)]">
+                            <div className="text-muted-foreground mb-2 text-xs tracking-widest">
                                 LATERAL EDGES
                             </div>
                             {sel.edges.map((e) => (
                                 <div
                                     key={e.to}
-                                    className="rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)] bg-[var(--color-hex-0d0d0d)] px-[10px] py-[8px]"
+                                    className="border-border bg-background rounded-sm border-[1px] border-solid px-2.5 py-2"
                                 >
-                                    <div className="mb-[3px] text-base tracking-normal text-[var(--color-brand)]">
+                                    <div className="text-primary mb-0.5 text-base tracking-normal">
                                         → {e.to}
                                     </div>
-                                    <div className="text-base-tight tracking-tight-1 mb-[2px] text-[var(--color-hex-555555)]">
+                                    <div className="text-muted-foreground mb-0.5 text-sm tracking-tight">
                                         {e.label}
                                     </div>
-                                    <div className="tracking-tight-1 text-sm text-[var(--color-hex-444444)]">
+                                    <div className="text-muted-foreground text-sm tracking-tight">
                                         {e.detail}
                                     </div>
                                 </div>
@@ -109,7 +87,7 @@ export function HostDetailPanel({ sel }: { sel: HostNode | undefined }) {
                     )}
                 </>
             ) : (
-                <div className="tracking-wider-2 flex h-full items-center justify-center text-lg text-[var(--color-hex-222222)]">
+                <div className="text-muted-foreground flex h-full items-center justify-center text-xs tracking-widest">
                     SELECT A HOST
                 </div>
             )}

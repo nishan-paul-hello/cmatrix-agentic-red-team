@@ -1,26 +1,10 @@
-export default function MetaRow({
-    label,
-    value,
-    highlight,
-}: {
-    label: string;
-    value: string;
-    highlight?: boolean;
-}) {
+export default function MetaRow({ label, value }: { label: string; value: string }) {
     return (
         <div>
-            <div className="tracking-wider-3 mb-[1px] text-sm text-[var(--color-hex-444444)]">
+            <div className="text-muted-foreground mb-px text-xs font-semibold tracking-widest uppercase">
                 {label}
             </div>
-            <div
-                className="tracking-tight-1 text-lg"
-                style={{
-                    color: highlight ? "var(--color-brand)" : "var(--color-hex-666666)",
-                    wordBreak: "break-all",
-                }}
-            >
-                {value}
-            </div>
+            <div className="text-primary min-w-0 flex-1 text-xs font-medium break-all">{value}</div>
         </div>
     );
 }

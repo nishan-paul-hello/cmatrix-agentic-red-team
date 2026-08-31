@@ -1,5 +1,3 @@
-"use client";
-
 import { PanelErrorBoundary } from "@/components/PanelErrorBoundary";
 import ReportsPage from "@/features/reports/components/ReportsPage";
 

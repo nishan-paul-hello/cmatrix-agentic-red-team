@@ -9,7 +9,8 @@ export default function VulnPatterns() {
     useEffect(() => {
         void new MemoryRepository()
             .fetchAll<MemoryNode>({ collection: "PATTERNS", limit: 1000 })
-            .then(setData);
+            .then(setData)
+            .catch(console.error);
     }, []);
 
     const [selId, setSelId] = useState<string | null>(null);
@@ -20,89 +21,42 @@ export default function VulnPatterns() {
 
     const sel = PATTERNS.find((p) => p.id === selId) ?? PATTERNS[0];
     return (
-        <div className="flex min-h-[0px] flex-1 overflow-hidden">
-            <div
-                className="w-panel-md flex-shrink-0 overflow-y-auto"
-                style={{
-                    borderRight: "1px solid var(--color-hex-1e1e1e)",
-                }}
-            >
-                <div
-                    className="text-sm tracking-widest text-[var(--color-hex-444444)]"
-                    style={{
-                        padding: "8px 16px 6px",
-                        borderBottom: "1px solid var(--color-hex-111111)",
-                    }}
-                >
+        <div className="flex min-h-0 flex-1 flex-col overflow-hidden lg:flex-row">
+            <div className="lg:w-panel-md border-border w-full flex-shrink-0 overflow-y-auto border-b lg:border-r lg:border-b-0">
+                <div className="text-muted-foreground border-border border-b px-4 py-2 text-sm tracking-widest">
                     {PATTERNS.length} PATTERNS
                 </div>
                 {PATTERNS.map((p) => (
-                    <div
+                    <button
+                        type="button"
                         key={p.id}
-                        role="button"
-                        tabIndex={0}
                         onClick={() => setSelId(p.id)}
-                        onKeyDown={(e) => {
-                            if (e.key === "Enter" || e.key === " ") {
-                                setSelId(p.id);
-                            }
-                        }}
-                        className="cursor-pointer px-[16px] py-[12px]"
-                        style={{
-                            borderBottom: "1px solid var(--color-hex-111111)",
-                            background: sel.id === p.id ? "var(--color-hex-120608)" : "transparent",
-                            borderLeft:
-                                sel.id === p.id
-                                    ? "2px solid var(--color-brand)"
-                                    : "2px solid transparent",
-                        }}
-                        onMouseEnter={(e) => {
-                            if (sel.id !== p.id) {
-                                e.currentTarget.style.background = "var(--color-hex-0d0d0d)";
-                            }
-                        }}
-                        onMouseLeave={(e) => {
-                            if (sel.id !== p.id) {
-                                e.currentTarget.style.background = "transparent";
-                            }
-                        }}
+                        className={`focus:ring-primary hover:bg-background block w-full cursor-pointer border-[1px] px-4 py-3 text-left transition-colors focus:ring-1 focus:outline-none ${sel.id === p.id ? "bg-background border-primary" : "border-b-border border-transparent bg-transparent"}`}
                     >
                         <div className="mb-1 flex justify-between">
-                            <span className="text-lg font-bold tracking-tight text-[var(--color-brand)]">
+                            <span className="text-primary text-xs font-bold tracking-tight">
                                 {p.id}
                             </span>
-                            <span className="text-sm text-[var(--color-success)]">
-                                ↑{p.score.toFixed(2)}
-                            </span>
+                            <span className="text-success text-sm">↑{p.score.toFixed(2)}</span>
                         </div>
-                        <div className="mb-[2px] text-lg text-[var(--color-hex-a0a0a0)]">
-                            {p.vuln}
-                        </div>
-                        <div className="text-base-tight text-[var(--color-hex-444444)]">
-                            {p.subtype}
-                        </div>
+                        <div className="text-muted-foreground mb-0.5 text-xs">{p.vuln}</div>
+                        <div className="text-muted-foreground text-sm">{p.subtype}</div>
                         <div className="mt-2 flex gap-3">
-                            <span className="text-sm-tight tracking-normal text-[var(--color-hex-333333)]">
-                                ×{p.uses} USES
+                            <span className="text-muted-foreground text-xs tracking-normal">
+                                x{p.uses} USES
                             </span>
-                            <span className="text-sm-tight text-[var(--color-hex-333333)]">
-                                {p.lastSeen}
-                            </span>
+                            <span className="text-muted-foreground text-xs">{p.lastSeen}</span>
                         </div>
-                    </div>
+                    </button>
                 ))}
             </div>
             <div className="flex-1 overflow-y-auto px-6 py-5">
                 <div className="mb-5 flex items-baseline gap-3">
-                    <h2 className="text-5xl font-bold tracking-normal text-[var(--color-fg)]">
-                        {sel.id}
-                    </h2>
-                    <span className="text-base tracking-normal text-[var(--color-brand)]">
-                        {sel.vuln}
-                    </span>
-                    <span className="text-base text-[var(--color-hex-444444)]">{sel.subtype}</span>
+                    <h2 className="text-foreground text-sm font-bold tracking-normal">{sel.id}</h2>
+                    <span className="text-primary text-base tracking-normal">{sel.vuln}</span>
+                    <span className="text-muted-foreground text-base">{sel.subtype}</span>
                 </div>
-                <div className="mb-5 grid grid-cols-3 gap-0 overflow-hidden rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)]">
+                <div className="border-border mb-5 grid grid-cols-1 gap-0 overflow-hidden rounded-sm border-[1px] border-solid sm:grid-cols-2 lg:grid-cols-3">
                     {[
                         {
                             k: "RELEVANCE",
@@ -117,97 +71,68 @@ export default function VulnPatterns() {
                             k: "LAST APPLIED",
                             v: sel.lastSeen,
                         },
-                    ].map((m, i, a) => (
+                    ].map((m) => (
                         <div
                             key={m.k}
-                            className="bg-[var(--color-hex-0d0d0d)] px-[14px] py-[10px]"
-                            style={{
-                                borderRight:
-                                    i < a.length - 1 ? "1px solid var(--color-hex-1a1a1a)" : "none",
-                            }}
+                            className="bg-background border-border border-r px-3.5 py-2.5"
                         >
-                            <div className="text-sm-tight tracking-wider-3 mb-[4px] text-[var(--color-hex-444444)]">
+                            <div className="text-muted-foreground mb-1 text-xs tracking-widest">
                                 {m.k}
                             </div>
                             <div
-                                className="text-7xl font-bold"
-                                style={{
-                                    color: m.red ? "var(--color-brand)" : "var(--color-fg)",
-                                }}
+                                className={`text-base font-bold ${m.red ? "text-primary" : "text-foreground"}`}
                             >
                                 {m.v}
                             </div>
                         </div>
                     ))}
                 </div>
-                <Sub label="TECHNIQUE SEQUENCE">
-                    {sel.techniques.map((t: string, i: number) => (
-                        <div key={t} className="mb-2 flex items-center gap-3">
-                            <div
-                                className="h-[17px] w-[17px] shrink-0 border-[1px] border-solid border-[var(--color-hex-1e1e1e)]"
-                                style={{
-                                    borderRadius: "50%",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                }}
-                            >
-                                <span className="text-sm-tight text-[var(--color-hex-444444)]">
-                                    {i + 1}
-                                </span>
-                            </div>
-                            <span className="text-lg text-[var(--color-hex-888888)]">{t}</span>
-                        </div>
-                    ))}
-                </Sub>
-                <Sub label="DETECTION INDICATORS">
-                    {sel.indicators.map((ind: string) => (
-                        <div key={ind} className="mb-2 flex items-center gap-2">
-                            <div
-                                className="h-[5px] w-[5px] shrink-0 bg-[var(--color-brand)]"
-                                style={{
-                                    borderRadius: "50%",
-                                }}
-                            />
-                            <span className="text-lg text-[var(--color-hex-666666)]">{ind}</span>
-                        </div>
-                    ))}
-                </Sub>
-                <Sub label="PATTERN EVOLUTION" last>
-                    {sel.evolution.map(
-                        (
-                            ev: { ts: string; note?: string },
-                            i: number,
-                            a: { ts: string; note?: string }[],
-                        ) => (
-                            <div key={ev.ts} className="flex items-start gap-3">
-                                <div className="flex shrink-0 flex-col items-center">
-                                    <div
-                                        className="mt-[2px] h-[7px] w-[7px] border-[1px] border-solid border-[var(--color-brand)]"
-                                        style={{
-                                            borderRadius: "50%",
-                                            background:
-                                                i === a.length - 1
-                                                    ? "var(--color-brand)"
-                                                    : "transparent",
-                                        }}
-                                    />
-                                    {i < a.length - 1 && (
-                                        <div className="h-[20px] w-[1px] bg-[var(--color-hex-1e1e1e)]" />
-                                    )}
+                <div className="space-y-5">
+                    <Sub label="TECHNIQUE SEQUENCE">
+                        {sel.techniques.map((t: string, i: number) => (
+                            <div key={t} className="mb-2 flex items-center gap-3">
+                                <div className="border-border flex h-4 w-4 shrink-0 items-center justify-center rounded-full border-[1px] border-solid">
+                                    <span className="text-muted-foreground text-xs">{i + 1}</span>
                                 </div>
-                                <div>
-                                    <span className="mr-[8px] text-sm text-[var(--color-hex-333333)]">
-                                        {ev.ts}
-                                    </span>
-                                    <span className="text-lg-tight leading-normal text-[var(--color-hex-666666)]">
-                                        {ev.note}
-                                    </span>
-                                </div>
+                                <span className="text-muted-foreground text-xs">{t}</span>
                             </div>
-                        ),
-                    )}
-                </Sub>
+                        ))}
+                    </Sub>
+                    <Sub label="DETECTION INDICATORS">
+                        {sel.indicators.map((ind: string) => (
+                            <div key={ind} className="mb-2 flex items-center gap-2">
+                                <div className="bg-primary h-1 w-1 shrink-0 rounded-full" />
+                                <span className="text-muted-foreground text-xs">{ind}</span>
+                            </div>
+                        ))}
+                    </Sub>
+                    <Sub label="PATTERN EVOLUTION">
+                        {sel.evolution.map(
+                            (
+                                ev: { ts: string; note?: string },
+                                i: number,
+                                a: { ts: string; note?: string }[],
+                            ) => (
+                                <div key={ev.ts} className="flex items-start gap-3">
+                                    <div className="flex shrink-0 flex-col items-center">
+                                        <div
+                                            className={`border-primary mt-0.5 h-1.5 w-1.5 rounded-full border-[1px] border-solid ${i === a.length - 1 ? "bg-primary" : "bg-transparent"}`}
+                                        />
+                                        {i < a.length - 1 && <div className="bg-muted h-5 w-px" />}
+                                    </div>
+                                    <div>
+                                        <span className="text-muted-foreground mr-2 text-sm">
+                                            {ev.ts}
+                                        </span>
+                                        <span className="text-muted-foreground text-base leading-normal">
+                                            {ev.note}
+                                        </span>
+                                    </div>
+                                </div>
+                            ),
+                        )}
+                    </Sub>
+                </div>
             </div>
         </div>
     );

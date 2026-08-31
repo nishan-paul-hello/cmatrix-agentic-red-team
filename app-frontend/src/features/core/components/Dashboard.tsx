@@ -1,8 +1,22 @@
-import { useEffect, useRef, useState } from "react";
+"use client";
 
+import { useEffect, useRef, useState } from "react";
+// ─── Component ────────────────────────────────────────────────────────────────
+
+import { useRouter } from "next/navigation";
+
+import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { MetricTile } from "@/components/ui/MetricTile";
+import { KPIStrip } from "@/components/ui/KPIStrip";
 import StatusBadge from "@/components/ui/StatusBadge";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
 import {
     INITIAL_ACTIVITY,
     KPI_ITEMS,
@@ -11,17 +25,42 @@ import {
     type ActivityEntry,
 } from "@/features/core/components/DashboardConstants";
 import { MissionOrchestratorModel } from "@/features/missions/domain/Orchestrator";
+import { useMission } from "@/lib/mission-context";
 import { useServices } from "@/lib/services-context";
 import { type Mission } from "@/types/domain-types";
-
-// ─── Component ────────────────────────────────────────────────────────────────
 
 interface DashboardProps {
     onNewMission?: () => void;
     onOpenMission?: (id: string) => void;
 }
 
+const headerAlignMap: Record<string, string> = {
+    NODES: "text-right",
+    FINDINGS: "text-right",
+    COST: "text-right",
+    WORKERS: "text-center",
+};
+
 export default function Dashboard({ onNewMission, onOpenMission }: DashboardProps) {
+    const router = useRouter();
+    const { setActiveMissionId } = useMission();
+
+    const handleNewMission = () => {
+        if (onNewMission) {
+            onNewMission();
+        } else {
+            router.push("/missions/new");
+        }
+    };
+
+    const handleOpenMission = (id: string) => {
+        if (onOpenMission) {
+            onOpenMission(id);
+        } else {
+            setActiveMissionId(id);
+            router.push(`/missions/${id}`);
+        }
+    };
     const [activity, setActivity] = useState<ActivityEntry[]>(INITIAL_ACTIVITY);
     const [missions, setMissions] = useState<Mission[]>([]);
     const [orchestrators, setOrchestrators] = useState<Record<string, MissionOrchestratorModel>>(
@@ -49,80 +88,82 @@ export default function Dashboard({ onNewMission, onOpenMission }: DashboardProp
         void Promise.all([
             missionRepository.fetchAll({ limit: 1000 }),
             specialistRepository.fetchAll(),
-        ]).then(([missionData, specsData]) => {
-            setMissions(missionData);
-            const orchs: Record<string, MissionOrchestratorModel> = {};
-            missionData.forEach((m) => {
-                const workers = specsData.map((s) => ({
-                    id: s.id,
-                    role: s.role,
-                    status: s.status,
-                    missionId: m.id,
-                }));
-                orchs[m.id] = new MissionOrchestratorModel(m.id, m.status, workers);
-            });
-            setOrchestrators(orchs);
-            setIsLoading(false);
-        });
+        ])
+            .then(([missionData, specsData]) => {
+                setMissions(missionData);
+                const orchs: Record<string, MissionOrchestratorModel> = {};
+                missionData.forEach((m) => {
+                    const workers = specsData.map((s) => ({
+                        id: s.id,
+                        role: s.role,
+                        status: s.status,
+                        missionId: m.id,
+                    }));
+                    orchs[m.id] = new MissionOrchestratorModel(m.id, m.status, workers);
+                });
+                setOrchestrators(orchs);
+                setIsLoading(false);
+            })
+            .catch(console.error);
     }, [missionRepository, specialistRepository]);
 
     return (
         <div className="flex h-full min-h-0 flex-col">
             {/* Page header */}
-            <div className="flex-shrink-0 border-b border-[var(--color-hex-1e1e1e)] px-6 pt-5 pb-4">
+            <div className="border-border flex-shrink-0 border-b px-6 pt-5 pb-4">
                 <div className="page-eyebrow">OPERATIONS</div>
                 <div className="flex items-baseline gap-3">
-                    <h1 className="text-9xl font-bold tracking-wide text-[var(--color-fg)]">
+                    <h1 className="text-foreground text-xs font-bold tracking-wide">
                         COMMAND CENTER
                     </h1>
                 </div>
             </div>
 
             {/* KPI strip */}
-            <div className="grid flex-shrink-0 grid-cols-6 border-b border-[var(--color-hex-1e1e1e)]">
-                {KPI_ITEMS.map((kpi, i) => (
-                    <MetricTile
-                        key={kpi.label}
-                        label={kpi.label}
-                        value={kpi.value}
-                        variant="dashboard"
-                        borderRight={i < 5}
-                        valueColor={kpi.red ? "var(--color-brand)" : "var(--color-fg)"}
-                    />
-                ))}
-            </div>
+            <KPIStrip
+                className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6"
+                items={KPI_ITEMS.map((kpi) => ({
+                    k: kpi.label,
+                    v: kpi.value,
+                    c: kpi.red ? "text-primary" : "var(--foreground)",
+                }))}
+            />
 
             {/* Body: missions table + live feed */}
-            <div className="flex min-h-0 flex-1 overflow-hidden">
+            <div className="flex min-h-0 flex-1 flex-col overflow-hidden lg:flex-row">
                 {/* Active missions table */}
-                <div className="flex flex-1 flex-col overflow-hidden border-r border-[var(--color-hex-1e1e1e)]">
-                    <div className="flex flex-shrink-0 items-center justify-between border-b border-[var(--color-hex-1e1e1e)] px-6 py-3">
-                        <span className="tracking-wider-2 text-xl font-semibold text-[var(--color-hex-a0a0a0)]">
+                <div className="border-border flex flex-1 flex-col overflow-hidden border-b lg:border-r lg:border-b-0">
+                    <div className="border-border flex flex-shrink-0 items-center justify-between border-b px-6 py-3">
+                        <span className="text-muted-foreground text-xs font-semibold tracking-widest">
                             ACTIVE MISSIONS
                         </span>
-                        <button
-                            onClick={onNewMission}
-                            className="tracking-wider-1 cursor-pointer rounded-[2px] border border-[var(--color-hex-6f171b)] bg-transparent px-[8px] py-[2px] text-base text-[var(--color-brand)] transition-colors duration-100 hover:border-[var(--color-brand)] hover:bg-[var(--color-hex-1a0608)]"
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={handleNewMission}
+                            className="border-border text-primary hover:border-primary hover:bg-muted h-auto rounded-sm px-2 py-0.5 text-[10px] font-semibold tracking-widest transition-colors duration-100"
                         >
                             + NEW MISSION
-                        </button>
+                        </Button>
                     </div>
 
                     <div className="flex-1 overflow-auto">
-                        <table className="w-full border-collapse text-xl">
-                            <thead>
-                                <tr className="bg-[var(--color-hex-111111)]">
+                        <Table className="w-full border-collapse text-xs">
+                            <TableHeader>
+                                <TableRow className="bg-card">
                                     {TABLE_HEADERS.map((h) => (
-                                        <th
+                                        <TableHead
                                             key={h}
-                                            className="text-base-tight tracking-wider-3 border-b border-[var(--color-hex-1e1e1e)] px-[16px] py-[6px] text-left font-semibold whitespace-nowrap text-[var(--color-hex-444444)]"
+                                            className={`border-border text-muted-foreground border-b px-4 py-2 text-xs font-semibold tracking-widest whitespace-nowrap ${
+                                                headerAlignMap[h] || "text-left"
+                                            }`}
                                         >
                                             {h}
-                                        </th>
+                                        </TableHead>
                                     ))}
-                                </tr>
-                            </thead>
-                            <tbody>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
                                 {(() => {
                                     if (isLoading) {
                                         return (
@@ -143,72 +184,65 @@ export default function Dashboard({ onNewMission, onOpenMission }: DashboardProp
                                         );
                                     }
                                     return missions.map((m) => (
-                                        <tr
+                                        <TableRow
                                             key={m.id}
-                                            onClick={() => onOpenMission?.(m.id)}
-                                            className="cursor-pointer border-b border-[var(--color-hex-191919)] transition-colors duration-75 hover:bg-[var(--color-hex-131313)]"
+                                            onClick={() => handleOpenMission(m.id)}
+                                            className="border-border hover:bg-muted cursor-pointer border-b transition-colors duration-75"
                                         >
-                                            <td className="px-[16px] py-[8px] font-semibold tracking-tight whitespace-nowrap text-[var(--color-brand)]">
+                                            <TableCell className="text-primary px-4 py-2 font-semibold tracking-tight whitespace-nowrap">
                                                 {m.id}
-                                            </td>
-                                            <td className="cell-truncate max-w-[var(--width-cell-max)] px-[16px] py-[8px] whitespace-nowrap text-[var(--color-hex-a0a0a0)]">
+                                            </TableCell>
+                                            <TableCell className="cell-truncate text-muted-foreground max-w-cell-max px-4 py-2 whitespace-nowrap">
                                                 {m.target}
-                                            </td>
-                                            <td className="px-[16px] py-[8px] text-lg whitespace-nowrap text-[var(--color-hex-666666)]">
+                                            </TableCell>
+                                            <TableCell className="text-muted-foreground px-4 py-2 whitespace-nowrap">
                                                 {m.surface}
-                                            </td>
-                                            <td className="px-[16px] py-[8px] text-lg whitespace-nowrap text-[var(--color-hex-666666)]">
+                                            </TableCell>
+                                            <TableCell className="text-muted-foreground px-4 py-2 whitespace-nowrap">
                                                 {m.mode}
-                                            </td>
-                                            <td className="px-[16px] py-[8px] whitespace-nowrap">
+                                            </TableCell>
+                                            <TableCell className="px-4 py-2 whitespace-nowrap">
                                                 <StatusBadge status={m.status} />
-                                            </td>
-                                            <td className="px-[16px] py-[8px] text-right text-[var(--color-hex-a0a0a0)]">
+                                            </TableCell>
+                                            <TableCell className="text-muted-foreground px-4 py-2 text-right">
                                                 {m.nodes}
-                                            </td>
-                                            <td
-                                                className="px-[16px] py-[8px] text-right"
-                                                style={{
-                                                    color:
-                                                        m.findings > 0
-                                                            ? "var(--color-danger)"
-                                                            : "var(--color-hex-666666)",
-                                                    fontWeight: m.findings > 0 ? 600 : 400,
-                                                }}
+                                            </TableCell>
+                                            <TableCell
+                                                className={`px-4 py-2 text-right ${m.findings > 0 ? "text-destructive font-semibold" : "text-muted-foreground font-normal"}`}
                                             >
                                                 {m.findings}
-                                            </td>
-                                            <td className="px-[16px] py-[8px] text-right text-[var(--color-hex-a0a0a0)]">
+                                            </TableCell>
+                                            <TableCell className="text-muted-foreground px-4 py-2 text-right">
                                                 {m.cost}
-                                            </td>
-                                            <td className="px-[16px] py-[8px] text-center text-[var(--color-hex-a0a0a0)]">
+                                            </TableCell>
+                                            <TableCell className="text-muted-foreground px-4 py-2 text-center">
                                                 {orchestrators[m.id].hasActiveWorkers() ? (
-                                                    <span className="text-base font-semibold tracking-normal text-[var(--color-success)]">
+                                                    <span className="text-success text-xs font-semibold tracking-normal">
                                                         ACTIVE
                                                     </span>
                                                 ) : (
-                                                    <span className="text-base tracking-normal text-[var(--color-hex-666666)]">
+                                                    <span className="text-muted-foreground text-xs tracking-normal">
                                                         IDLE
                                                     </span>
                                                 )}
-                                            </td>
-                                        </tr>
+                                            </TableCell>
+                                        </TableRow>
                                     ));
                                 })()}
-                            </tbody>
-                        </table>
+                            </TableBody>
+                        </Table>
                     </div>
                 </div>
 
                 {/* Live activity feed */}
-                <div className="flex w-[var(--width-drawer-lg)] flex-shrink-0 flex-col overflow-hidden">
-                    <div className="flex flex-shrink-0 items-center gap-2 border-b border-[var(--color-hex-1e1e1e)] px-4 py-3">
+                <div className="lg:w-drawer-lg flex w-full flex-shrink-0 flex-col overflow-hidden">
+                    <div className="border-border flex flex-shrink-0 items-center gap-2 border-b px-4 py-3">
                         <div
-                            className="h-[6px] w-[6px] shrink-0 rounded-full bg-[var(--color-danger)]"
-                            style={{ animation: "pulse 1.4s ease-in-out infinite" }}
+                            className="bg-destructive pulse-dot h-1.5 w-1.5 shrink-0 rounded-full"
+
                             aria-hidden="true"
                         />
-                        <span className="tracking-wider-2 text-xl font-semibold text-[var(--color-hex-a0a0a0)]">
+                        <span className="text-muted-foreground text-xs font-semibold tracking-widest">
                             LIVE ACTIVITY
                         </span>
                     </div>
@@ -219,29 +253,26 @@ export default function Dashboard({ onNewMission, onOpenMission }: DashboardProp
                         aria-label="Live agent activity feed"
                     >
                         {activity.map((entry) => (
-                            <div
-                                key={entry.id}
-                                className="border-b border-[var(--color-hex-111111)] px-4 py-2"
-                            >
+                            <div key={entry.id} className="border-border border-b px-4 py-1.5">
                                 <div className="mb-0.5 flex items-center gap-2">
-                                    <span className="tracking-tight-1 shrink-0 text-base text-[var(--color-hex-444444)]">
+                                    <span className="text-muted-foreground shrink-0 text-xs tracking-tight">
                                         {entry.ts}
                                     </span>
-                                    <span className="text-base font-semibold tracking-normal text-[var(--color-brand)]">
+                                    <span className="text-primary text-xs font-semibold tracking-normal">
                                         {entry.agent}
                                     </span>
                                     <span
-                                        className="text-base tracking-normal text-[var(--color-hex-333333)]"
+                                        className="text-muted-foreground text-xs tracking-normal"
                                         aria-hidden="true"
                                     >
                                         ·
                                     </span>
-                                    <span className="text-base tracking-normal text-[var(--color-hex-555555)]">
+                                    <span className="text-muted-foreground text-xs tracking-normal">
                                         {entry.action}
                                     </span>
                                 </div>
                                 <div
-                                    className="tracking-tighter-2 text-lg leading-tight"
+                                    className="text-2xs leading-tight tracking-tighter"
                                     style={{ color: entry.color }}
                                 >
                                     {entry.desc}

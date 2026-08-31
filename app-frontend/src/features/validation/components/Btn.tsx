@@ -1,3 +1,6 @@
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+
 export default function Btn({
     onClick,
     label,
@@ -8,30 +11,23 @@ export default function Btn({
     red?: boolean;
 }) {
     return (
-        <button
+        <Button
             type="button"
+            variant="outline"
+            size="sm"
             onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
                 onClick();
             }}
-            className="font-inherit tracking-wider-1 cursor-pointer rounded-[2px] bg-[transparent] px-[12px] py-[4px] text-base"
-            style={{
-                color: red ? "var(--color-brand)" : "var(--color-hex-666666)",
-                border: `1px solid ${red ? "var(--color-hex-6f171b)" : "var(--color-hex-292929)"}`,
-            }}
-            onMouseEnter={(e) =>
-                (e.currentTarget.style.borderColor = red
-                    ? "var(--color-brand)"
-                    : "var(--color-hex-444444)")
-            }
-            onMouseLeave={(e) =>
-                (e.currentTarget.style.borderColor = red
-                    ? "var(--color-hex-6f171b)"
-                    : "var(--color-hex-292929)")
-            }
+            className={cn(
+                "text-xs tracking-widest uppercase",
+                red
+                    ? "text-primary border-border hover:border-primary"
+                    : "text-muted-foreground border-border hover:border-border",
+            )}
         >
             {label}
-        </button>
+        </Button>
     );
 }

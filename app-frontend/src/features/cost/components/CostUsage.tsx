@@ -1,7 +1,15 @@
 import React from "react";
 
 import { EmptyState } from "@/components/ui/EmptyState";
-import { MetricTile } from "@/components/ui/MetricTile";
+import { KPIStrip } from "@/components/ui/KPIStrip";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
 import { CostRepository } from "@/features/cost/data/CostRepository";
 import { type CostTimeline, type SpecialistCost } from "@/features/cost/data/fixtures/costMockData";
 
@@ -29,173 +37,126 @@ export default function CostUsage() {
     return (
         <div className="flex-1 overflow-y-auto px-6 py-5">
             {/* KPI row */}
-            <div className="mb-6 grid grid-cols-4 gap-0 overflow-hidden rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)]">
-                {[
+            <KPIStrip
+                className="mb-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
+                items={[
                     {
                         k: "TOTAL COST",
                         v: `$${TOTAL.toFixed(4)}`,
                         sub: `${((TOTAL / CEILING) * 100).toFixed(1)}% of ceiling`,
-                        red: true,
+                        c: "text-primary",
                     },
-                    {
-                        k: "COST CEILING",
-                        v: `$${CEILING.toFixed(2)}`,
-                        sub: "mission limit",
-                    },
-                    {
-                        k: "TOTAL CALLS",
-                        v: "56",
-                        sub: "LLM calls",
-                    },
-                    {
-                        k: "TOTAL TOKENS",
-                        v: "462K",
-                        sub: "input + output",
-                    },
-                ].map((m, i, a) => (
-                    <MetricTile
-                        key={m.k}
-                        label={m.k}
-                        value={m.v}
-                        sub={m.sub}
-                        valueColor={m.red ? "var(--color-brand)" : "var(--color-fg)"}
-                        variant="dashboard"
-                        borderRight={i < a.length - 1}
-                    />
-                ))}
-            </div>
+                    { k: "COST CEILING", v: `$${CEILING.toFixed(2)}`, sub: "mission limit" },
+                    { k: "TOTAL CALLS", v: "56", sub: "LLM calls" },
+                    { k: "TOTAL TOKENS", v: "462K", sub: "input + output" },
+                ]}
+            />
 
             {/* Burn rate bar */}
-            <div className="mb-[24px]">
+            <div className="mb-6">
                 <div className="mb-2 flex justify-between">
-                    <span className="tracking-wider-3 text-sm text-[var(--color-hex-444444)]">
+                    <span className="text-muted-foreground text-sm tracking-widest">
                         COST CEILING UTILIZATION
                     </span>
-                    <span className="text-sm tracking-normal text-[var(--color-success)]">
+                    <span className="text-success text-sm tracking-normal">
                         {((TOTAL / CEILING) * 100).toFixed(1)}%
                     </span>
                 </div>
-                <div className="h-[6px] overflow-hidden rounded-[3px] bg-[var(--color-hex-1a1a1a)]">
+                <div className="bg-card h-1.5 overflow-hidden rounded-xs">
                     <div
-                        className="h-full rounded-[3px] bg-[var(--color-success)]"
+                        className="bg-success h-full rounded-xs"
                         style={{
                             width: `${(TOTAL / CEILING) * 100}%`,
                         }}
                     />
                 </div>
                 <div className="mt-1 flex justify-between">
-                    <span className="text-sm-tight text-[var(--color-hex-333333)]">
-                        ${TOTAL.toFixed(4)} spent
-                    </span>
-                    <span className="text-sm-tight text-[var(--color-hex-333333)]">
+                    <span className="text-muted-foreground text-xs">${TOTAL.toFixed(4)} spent</span>
+                    <span className="text-muted-foreground text-xs">
                         ${CEILING.toFixed(2)} ceiling
                     </span>
                 </div>
             </div>
 
             {/* Cost by specialist */}
-            <div className="mb-[12px] text-sm tracking-widest text-[var(--color-hex-444444)]">
+            <div className="text-muted-foreground mb-3 text-sm tracking-widest">
                 COST BY SPECIALIST
             </div>
-            <div className="mb-[24px] overflow-hidden rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)]">
-                <div
-                    className="flex bg-[var(--color-hex-0f0f0f)]"
-                    style={{
-                        borderBottom: "1px solid var(--color-hex-1a1a1a)",
-                    }}
-                >
-                    {["SPECIALIST", "MODEL", "CALLS", "INPUT", "OUTPUT", "COST", "SHARE"].map(
-                        (h) => (
-                            <div
-                                key={h}
-                                className="text-sm-tight tracking-wider-2 px-[12px] py-[5px] font-semibold text-[var(--color-hex-444444)]"
-                                style={{
-                                    flex: h === "SPECIALIST" || h === "MODEL" ? 2 : 1,
-                                    textAlign:
-                                        h === "COST" || h === "SHARE" || h === "CALLS"
-                                            ? "right"
-                                            : "left",
-                                }}
-                            >
-                                {h}
-                            </div>
-                        ),
-                    )}
-                </div>
-                {SPECIALISTS_COST.length === 0 ? (
-                    <EmptyState message="NO SPECIALIST COST DATA" />
-                ) : (
-                    SPECIALISTS_COST.map((s, i) => (
-                        <div
-                            key={s.id}
-                            className="flex items-center"
-                            style={{
-                                borderBottom:
-                                    i < SPECIALISTS_COST.length - 1
-                                        ? "1px solid var(--color-hex-111111)"
-                                        : "none",
-                                background: i % 2 ? "var(--color-hex-0b0b0b)" : "transparent",
-                            }}
-                        >
-                            <div
-                                className="tracking-tight-1 px-[12px] py-[8px] text-lg font-bold text-[var(--color-brand)]"
-                                style={{
-                                    flex: 2,
-                                }}
-                            >
-                                {s.role}
-                            </div>
-                            <div
-                                className="px-[12px] py-[8px] text-base text-[var(--color-hex-444444)]"
-                                style={{
-                                    flex: 2,
-                                }}
-                            >
-                                {s.model}
-                            </div>
-                            <div className="flex-1 px-[12px] py-[8px] text-right text-base text-[var(--color-hex-666666)]">
-                                {s.calls}
-                            </div>
-                            <div className="flex-1 px-[12px] py-[8px] text-right text-base text-[var(--color-hex-555555)]">
-                                {(s.inputTok / 1000).toFixed(0)}K
-                            </div>
-                            <div className="flex-1 px-[12px] py-[8px] text-right text-base text-[var(--color-hex-555555)]">
-                                {(s.outputTok / 1000).toFixed(0)}K
-                            </div>
-                            <div className="flex-1 px-[12px] py-[8px] text-right text-lg font-bold text-[var(--color-fg)]">
-                                ${s.cost.toFixed(4)}
-                            </div>
-                            <div className="flex-1 px-[12px] py-[8px] text-right">
-                                <div
-                                    style={{
-                                        display: "inline-flex",
-                                        alignItems: "center",
-                                        gap: 6,
-                                    }}
+            <div className="border-border mb-6 overflow-hidden rounded-sm border-[1px] border-solid">
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            {[
+                                "SPECIALIST",
+                                "MODEL",
+                                "CALLS",
+                                "INPUT",
+                                "OUTPUT",
+                                "COST",
+                                "SHARE",
+                            ].map((h) => (
+                                <TableHead
+                                    key={h}
+                                    className={`px-3 py-1 text-xs tracking-widest ${h === "SPECIALIST" || h === "MODEL" ? "w-[20%]" : "w-[10%]"} ${h !== "SPECIALIST" && h !== "MODEL" ? "text-right" : "text-left"}`}
                                 >
-                                    <div className="h-[3px] w-[40px] overflow-hidden rounded-[2px] bg-[var(--color-hex-1a1a1a)]">
-                                        <div
-                                            className="h-full bg-[var(--color-brand)]"
-                                            style={{
-                                                width: `${s.pct}%`,
-                                            }}
-                                        />
-                                    </div>
-                                    <span className="text-base-tight text-[var(--color-hex-555555)]">
-                                        {s.pct}%
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    ))
-                )}
+                                    {h}
+                                </TableHead>
+                            ))}
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {SPECIALISTS_COST.length === 0 ? (
+                            <TableRow>
+                                <TableCell colSpan={7} className="p-0">
+                                    <EmptyState message="NO SPECIALIST COST DATA" />
+                                </TableCell>
+                            </TableRow>
+                        ) : (
+                            SPECIALISTS_COST.map((s) => (
+                                <TableRow key={s.id}>
+                                    <TableCell className="cell-truncate text-primary px-3 py-2 font-bold tracking-tight">
+                                        {s.role}
+                                    </TableCell>
+                                    <TableCell className="cell-truncate text-muted-foreground px-3 py-2">
+                                        {s.model}
+                                    </TableCell>
+                                    <TableCell className="cell-truncate text-muted-foreground px-3 py-2 text-right">
+                                        {s.calls}
+                                    </TableCell>
+                                    <TableCell className="cell-truncate text-muted-foreground px-3 py-2 text-right">
+                                        {(s.inputTok / 1000).toFixed(0)}K
+                                    </TableCell>
+                                    <TableCell className="cell-truncate text-muted-foreground px-3 py-2 text-right">
+                                        {(s.outputTok / 1000).toFixed(0)}K
+                                    </TableCell>
+                                    <TableCell className="cell-truncate text-foreground px-3 py-2 text-right font-bold">
+                                        ${s.cost.toFixed(4)}
+                                    </TableCell>
+                                    <TableCell className="px-3 py-2 text-right">
+                                        <div className="inline-flex w-full items-center justify-end gap-1.5">
+                                            <div className="bg-card h-0.5 w-10 overflow-hidden rounded-sm">
+                                                <div
+                                                    className="bg-primary h-full"
+                                                    style={{
+                                                        width: `${s.pct}%`,
+                                                    }}
+                                                />
+                                            </div>
+                                            <span className="text-muted-foreground w-10 text-right text-sm">
+                                                {s.pct}%
+                                            </span>
+                                        </div>
+                                    </TableCell>
+                                </TableRow>
+                            ))
+                        )}
+                    </TableBody>
+                </Table>
             </div>
 
             {/* Cost timeline */}
-            <div className="mb-[12px] text-sm tracking-widest text-[var(--color-hex-444444)]">
-                SPEND TIMELINE
-            </div>
-            <div className="relative mb-[4px] h-[80px] overflow-hidden rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1a1a1a)] bg-[var(--color-hex-0a0a0a)]">
+            <div className="text-muted-foreground mb-3 text-sm tracking-widest">SPEND TIMELINE</div>
+            <div className="border-border bg-background relative mb-1 h-[80px] overflow-hidden rounded-sm border-[1px] border-solid">
                 {/* Bar chart */}
                 {TIMELINE.length === 0 ? (
                     <div className="flex h-full items-center justify-center">
@@ -210,16 +171,11 @@ export default function CostUsage() {
                                 <div
                                     key={`timeline-${t.ts}-${t.event}`}
                                     title={`${t.ts} · ${t.event} · $${t.cost.toFixed(4)}`}
-                                    className="absolute bottom-0 cursor-default"
+                                    className={`absolute bottom-0 cursor-default rounded-t-xs ${barH > 0 ? "bg-primary" : "bg-border"}`}
                                     style={{
                                         left: `${(i / TIMELINE.length) * 100}%`,
                                         width: `${(1 / TIMELINE.length) * 100 - 1}%`,
                                         height: barH > 0 ? `${barH}px` : "1px",
-                                        background:
-                                            barH > 0
-                                                ? "var(--color-brand)"
-                                                : "var(--color-hex-292929)",
-                                        borderRadius: "1px 1px 0 0",
                                     }}
                                 />
                             );
@@ -227,7 +183,7 @@ export default function CostUsage() {
                     })()
                 )}
             </div>
-            <div className="text-sm-tight flex justify-between text-[var(--color-hex-333333)]">
+            <div className="text-muted-foreground flex justify-between text-xs">
                 {TIMELINE.length > 0 ? (
                     <>
                         <span>{TIMELINE[0].ts}</span>

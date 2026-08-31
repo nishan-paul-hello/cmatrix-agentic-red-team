@@ -2,7 +2,11 @@ import React from "react";
 import { type Virtualizer } from "@tanstack/react-virtual";
 
 import { ExecDrawer } from "@/features/execution/components/ExecDrawer";
-import { ExecutionEntryRow } from "@/features/execution/components/ExecutionEntryRow";
+import {
+    EXECUTION_COLUMNS,
+    ExecutionEntryRow,
+    gridTemplateColumns,
+} from "@/features/execution/components/ExecutionEntryRow";
 import { type ExecEntry } from "@/types/domain-types";
 
 export default function ExecutionConsoleView({
@@ -23,114 +27,94 @@ export default function ExecutionConsoleView({
     handleRowClick: (e: ExecEntry) => void;
 }) {
     return (
-        <div className="flex h-full min-h-[0px]">
-            <div className="flex min-h-[0px] flex-1 flex-col overflow-hidden">
+        <div className="flex h-full min-h-0 flex-col lg:flex-row">
+            <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
                 {/* Header */}
-                <div
-                    className="flex-shrink-0 px-6 pt-5 pb-4"
-                    style={{
-                        borderBottom: "1px solid var(--color-hex-1e1e1e)",
-                    }}
-                >
-                    <div className="tracking-widest-2 mb-[3px] text-base text-[var(--color-hex-666666)]">
+                <div className="border-border flex-shrink-0 border-b px-6 pt-5 pb-4">
+                    <div className="text-muted-foreground mb-0.5 text-base tracking-widest">
                         MISSION / CVE-001
                     </div>
                     <div className="flex items-baseline gap-3">
-                        <h1 className="text-8xl font-bold tracking-wide text-[var(--color-fg)]">
+                        <h1 className="text-foreground text-xs font-bold tracking-wide">
                             EXECUTION AGENT
                         </h1>
-                        <span className="tracking-wider-2 text-base text-[var(--color-hex-444444)]">
+                        <span className="text-muted-foreground text-base tracking-widest">
                             DETERMINISTIC EXECUTION CHANNEL
                         </span>
                     </div>
                 </div>
 
                 {/* Architecture note */}
-                <div
-                    className="flex flex-shrink-0 items-start gap-3 bg-[var(--color-hex-0b0b0b)] px-6 py-2"
-                    style={{
-                        borderBottom: "1px solid var(--color-hex-1e1e1e)",
-                    }}
-                >
-                    <div className="mt-[2px] h-[28px] w-[2px] shrink-0 bg-[var(--color-brand)]" />
-                    <div>
-                        <div className="text-base-tight tracking-wider-1 mb-[2px] text-[var(--color-hex-444444)]">
+                <div className="bg-background border-border flex flex-shrink-0 items-stretch gap-4 border-b px-6 py-3">
+                    <div className="bg-primary w-0.5 shrink-0 rounded-full" />
+                    <div className="flex flex-col justify-center py-0.5">
+                        <div className="text-foreground/80 mb-1.5 text-xs font-bold tracking-widest">
                             REASONING / EXECUTION SEPARATION
                         </div>
-                        <div className="tracking-tight-1 text-base leading-normal text-[var(--color-hex-333333)]">
-                            Specialists reason and plan · Execution agent runs tools
-                            deterministically · No LLM reasoning occurs during tool execution
+                        <div className="text-muted-foreground text-sm leading-relaxed tracking-wide">
+                            Specialists reason and plan &nbsp;·&nbsp; Execution agent runs tools
+                            deterministically &nbsp;·&nbsp; No LLM reasoning occurs during tool
+                            execution
                         </div>
                     </div>
                     <div className="ml-auto flex flex-shrink-0 items-center gap-2">
-                        <div
-                            className="h-[6px] w-[6px] bg-[var(--color-danger)]"
-                            style={{
-                                borderRadius: "50%",
-                                animation: "pulse 1.4s ease infinite",
-                            }}
-                        />
-                        <span className="tracking-wider-1 text-base text-[var(--color-brand)]">
+                        <div className="bg-destructive pulse-dot h-1.5 w-1.5 rounded-full" />
+                        <span className="text-primary text-sm font-bold tracking-widest">
                             1 RUNNING
                         </span>
                     </div>
                 </div>
 
                 {/* Console log */}
-                <div className="flex-1 overflow-y-auto bg-[var(--color-bg)]" ref={parentRef}>
-                    {/* Header row */}
-                    <div
-                        className="sticky top-0 flex gap-0 bg-[var(--color-hex-0d0d0d)]"
-                        style={{
-                            borderBottom: "1px solid var(--color-hex-1a1a1a)",
-                        }}
-                    >
-                        {[
-                            "#",
-                            "TIMESTAMP",
-                            "SPECIALIST",
-                            "TASK",
-                            "TOOL",
-                            "DURATION",
-                            "STATUS",
-                            "OUTPUT",
-                        ].map((h, i) => (
-                            <div
-                                key={h}
-                                className="text-sm-tight tracking-wider-3 shrink-0 px-[12px] py-[5px] font-semibold text-[var(--color-hex-333333)]"
-                                style={{
-                                    width: [48, 80, 108, 160, 72, 64, 72, undefined][i],
-                                    flex: i === 7 ? 1 : undefined,
-                                }}
-                            >
-                                {h}
-                            </div>
-                        ))}
-                    </div>
-
-                    {rowVirtualizer.getVirtualItems().length > 0 && (
-                        <div style={{ height: `${rowVirtualizer.getVirtualItems()[0].start}px` }} />
-                    )}
-                    {rowVirtualizer.getVirtualItems().map((virtualRow) => {
-                        const e = entries[virtualRow.index];
-                        return (
-                            <ExecutionEntryRow key={e.id} e={e} onClick={() => handleRowClick(e)} />
-                        );
-                    })}
-                    {rowVirtualizer.getVirtualItems().length > 0 && (
+                <div
+                    className="bg-background flex-1 overflow-x-auto overflow-y-auto"
+                    ref={parentRef}
+                >
+                    <div className="flex w-full min-w-[1480px] flex-col">
+                        {/* Header row */}
                         <div
-                            style={{
-                                height: `${
-                                    rowVirtualizer.getTotalSize() -
-                                    rowVirtualizer.getVirtualItems()[
-                                        rowVirtualizer.getVirtualItems().length - 1
-                                    ].end
-                                }px`,
-                            }}
-                        />
-                    )}
+                            className="bg-muted/30 border-border sticky top-0 z-10 grid gap-4 border-b py-1 shadow-sm"
+                            style={{ gridTemplateColumns }}
+                        >
+                            {EXECUTION_COLUMNS.map(({ h }) => (
+                                <div
+                                    key={h}
+                                    className="text-muted-foreground truncate px-3 py-1 text-xs font-bold tracking-widest uppercase"
+                                >
+                                    {h}
+                                </div>
+                            ))}
+                        </div>
+
+                        {rowVirtualizer.getVirtualItems().length > 0 && (
+                            <div
+                                style={{ height: `${rowVirtualizer.getVirtualItems()[0].start}px` }}
+                            />
+                        )}
+                        {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+                            const e = entries[virtualRow.index];
+                            return (
+                                <ExecutionEntryRow
+                                    key={e.id}
+                                    e={e}
+                                    onClick={() => handleRowClick(e)}
+                                />
+                            );
+                        })}
+                        {rowVirtualizer.getVirtualItems().length > 0 && (
+                            <div
+                                style={{
+                                    height: `${
+                                        rowVirtualizer.getTotalSize() -
+                                        rowVirtualizer.getVirtualItems()[
+                                            rowVirtualizer.getVirtualItems().length - 1
+                                        ].end
+                                    }px`,
+                                }}
+                            />
+                        )}
+                    </div>
                 </div>
-                <style>{`@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}`}</style>
             </div>
 
             {/* Drawer */}

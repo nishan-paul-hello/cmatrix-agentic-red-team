@@ -105,12 +105,12 @@ export const ALL_ITEMS: PaletteItem[] = [
 ];
 
 export const CAT_STYLE: Record<PaletteItem["category"], CategoryStyle> = {
-    NAV: { color: "var(--color-hex-a0a0a0)", bg: "var(--color-hex-111111)" },
-    MISSION: { color: "var(--color-brand)", bg: "var(--color-hex-120608)" },
-    FINDING: { color: "var(--color-danger)", bg: "var(--color-hex-1a0608)" },
-    SPECIALIST: { color: "var(--color-warning)", bg: "var(--color-hex-110e00)" },
-    ACTION: { color: "var(--color-success)", bg: "var(--color-hex-061a0c)" },
-    SETTING: { color: "var(--color-hex-555555)", bg: "var(--color-hex-111111)" },
+    NAV: { color: "var(--color-zinc-400)", bg: "var(--color-zinc-900)" },
+    MISSION: { color: "var(--primary)", bg: "var(--border)" },
+    FINDING: { color: "var(--destructive)", bg: "var(--border)" },
+    SPECIALIST: { color: "var(--warning)", bg: "var(--border)" },
+    ACTION: { color: "var(--success)", bg: "var(--border)" },
+    SETTING: { color: "var(--color-zinc-600)", bg: "var(--color-zinc-900)" },
 };
 
 export const HELP_KEYS = [

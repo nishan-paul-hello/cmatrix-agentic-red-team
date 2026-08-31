@@ -122,10 +122,11 @@ export default tseslint.config(
             "jsx-a11y/aria-proptypes": "error",
             "jsx-a11y/aria-role": "error",
             "jsx-a11y/aria-unsupported-elements": "error",
-            "jsx-a11y/click-events-have-key-events": "warn",
-            "jsx-a11y/interactive-supports-focus": "warn",
+            "jsx-a11y/click-events-have-key-events": "error",
+            "jsx-a11y/interactive-supports-focus": "error",
             "jsx-a11y/label-has-associated-control": "error",
-            "jsx-a11y/no-noninteractive-element-interactions": "warn",
+            "jsx-a11y/no-noninteractive-element-interactions": "error",
+            "jsx-a11y/no-static-element-interactions": "error",
             "jsx-a11y/role-has-required-aria-props": "error",
             "jsx-a11y/role-supports-aria-props": "error",
 
@@ -134,6 +135,12 @@ export default tseslint.config(
             "import/no-self-import": "error",
             "import/no-cycle": "error",
             "import/no-useless-path-segments": "error",
+            "no-restricted-imports": [
+                "error",
+                {
+                    patterns: ["./*", "../*"],
+                },
+            ],
             "import/first": "error",
             "import/newline-after-import": "error",
             "import/no-default-export": "off",

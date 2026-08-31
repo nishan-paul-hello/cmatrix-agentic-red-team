@@ -3,6 +3,22 @@
 import { useEffect, useState } from "react";
 
 import { EmptyState } from "@/components/ui/EmptyState";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import CostDashboard from "@/features/cost/components/CostDashboard";
 import { CostRepository } from "@/features/cost/data/CostRepository";
 import { PER_SURFACE_ROLLUP, type CostTab } from "@/features/cost/data/fixtures/costMockData";
@@ -60,154 +76,142 @@ export default function CostBrowser() {
         : ["COST & USAGE", "MODEL BREAKDOWN", "CONTEXT STATE"];
 
     return (
-        <div className="flex h-full min-h-[0px] flex-col">
+        <Tabs
+            value={tab}
+            onValueChange={(v) => setTab(v as CostTab)}
+            className="flex h-full min-h-0 flex-col"
+        >
             {/* Page header — always visible, owns SCOPE selector and tab bar */}
-            <div
-                className="flex-shrink-0 px-6 pt-5 pb-0"
-                style={{ borderBottom: "1px solid var(--color-hex-1e1e1e)" }}
-            >
-                <div className="tracking-widest-2 mb-[3px] text-base text-[var(--color-hex-666666)]">
-                    SYSTEM
-                </div>
+            <div className="border-border flex-shrink-0 border-b px-6 pt-5 pb-0">
+                <div className="text-muted-foreground mb-0.5 text-base tracking-widest">SYSTEM</div>
                 <div className="flex items-baseline justify-between">
-                    <h1 className="mb-[12px] text-9xl font-bold tracking-wide text-[var(--color-fg)]">
+                    <h1 className="text-foreground mb-3 text-xs font-bold tracking-wide">
                         COST &amp; USAGE
                     </h1>
-                    <div className="mb-[12px] flex items-center gap-2">
-                        <span className="tracking-wider-3 text-sm text-[var(--color-hex-444444)]">
-                            SCOPE
-                        </span>
-                        <select
+                    <div className="mb-3 flex items-center gap-2">
+                        <span className="text-muted-foreground text-sm tracking-widest">SCOPE</span>
+                        <Select
                             value={selected}
-                            onChange={(e) => handleSelectMission(e.target.value)}
-                            className="font-inherit cursor-pointer rounded-[2px] border-[1px] border-solid border-[var(--color-hex-292929)] bg-[var(--color-hex-111111)] px-[8px] py-[4px] text-lg tracking-tight text-[var(--color-hex-a0a0a0)] outline-none"
+                            onValueChange={(val) => val && handleSelectMission(val)}
                         >
-                            {MISSION_OPTIONS.map((m) => (
-                                <option key={m} value={m}>
-                                    {m}
-                                </option>
-                            ))}
-                        </select>
+                            <SelectTrigger className="bg-card text-muted-foreground w-panel-2xs h-auto rounded-sm px-2 py-1 text-xs tracking-tight focus:ring-0">
+                                <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {MISSION_OPTIONS.map((m) => (
+                                    <SelectItem key={m} value={m}>
+                                        {m}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
                     </div>
                 </div>
-                <div className="flex">
+                <TabsList
+                    variant="line"
+                    className="flex justify-start overflow-x-auto overflow-y-hidden p-0"
+                >
                     {aggTabs.map((t) => (
-                        <button
+                        <TabsTrigger
                             key={t}
-                            onClick={() => setTab(t)}
-                            className="font-inherit tracking-wider-1 cursor-pointer border-none bg-[transparent] px-[16px] py-[5px] text-base whitespace-nowrap"
-                            style={{
-                                borderBottom:
-                                    t === tab
-                                        ? "2px solid var(--color-brand)"
-                                        : "2px solid transparent",
-                                color: t === tab ? "var(--color-fg)" : "var(--color-hex-444444)",
-                                marginBottom: -1,
-                            }}
+                            value={t}
+                            className="h-auto rounded-none px-4 py-1 text-base tracking-widest whitespace-nowrap"
                         >
                             {t}
-                        </button>
+                        </TabsTrigger>
                     ))}
-                </div>
+                </TabsList>
             </div>
 
             {/* Per-surface rollup tab — §12.2 required cross-surface cost view (ALL MISSIONS only) */}
-            {tab === "PER-SURFACE ROLLUP" && isAggregate && (
-                <div className="flex-1 overflow-y-auto px-6 py-5">
-                    <div className="mb-[6px] text-sm tracking-widest text-[var(--color-hex-444444)]">
-                        PER-SURFACE COST-PER-EXPLOIT ROLLUP
-                    </div>
-                    {/* §12.2 note */}
-                    <div className="mb-[16px] text-sm leading-normal tracking-normal text-[var(--color-hex-555555)]">
-                        cost_per_run / pass@1_rate reported per surface, per architecture §12.2.
-                        Compute-normalized at 50 API calls/CVE — orchestration overhead excluded.
-                    </div>
-                    {/* Table */}
-                    <div className="overflow-hidden rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)]">
-                        <div
-                            className="flex bg-[var(--color-hex-0f0f0f)]"
-                            style={{ borderBottom: "1px solid var(--color-hex-1a1a1a)" }}
-                        >
-                            {[
-                                "SURFACE",
-                                "TOTAL COST",
-                                "RUNS",
-                                "pass@1 RATE",
-                                "COST / EXPLOIT",
-                                "AVG TIME",
-                            ].map((h) => (
-                                <div
-                                    key={h}
-                                    className="text-sm-tight tracking-wider-1 flex-1 px-[12px] py-[5px] font-semibold text-[var(--color-hex-444444)]"
-                                    style={{ textAlign: h === "SURFACE" ? "left" : "right" }}
-                                >
-                                    {h}
-                                </div>
-                            ))}
+            <TabsContent value="PER-SURFACE ROLLUP" className="m-0 flex min-h-0 flex-1 flex-col">
+                {isAggregate && (
+                    <div className="flex-1 overflow-y-auto px-6 py-5">
+                        <div className="text-muted-foreground mb-1.5 text-sm tracking-widest">
+                            PER-SURFACE COST-PER-EXPLOIT ROLLUP
                         </div>
-                        {PER_SURFACE_ROLLUP.map((row, i) => (
-                            <div
-                                key={row.surface}
-                                className="flex items-center"
-                                style={{
-                                    borderBottom:
-                                        i < PER_SURFACE_ROLLUP.length - 1
-                                            ? "1px solid var(--color-hex-111111)"
-                                            : "none",
-                                    background: i % 2 ? "var(--color-hex-0b0b0b)" : "transparent",
-                                }}
-                            >
-                                <div className="flex-1 px-[12px] py-[8px] text-base font-bold text-[var(--color-hex-a0a0a0)]">
-                                    {row.surface}
-                                </div>
-                                <div className="flex-1 px-[12px] py-[8px] text-right text-lg text-[var(--color-fg)]">
-                                    {row.totalCost}
-                                </div>
-                                <div className="flex-1 px-[12px] py-[8px] text-right text-lg text-[var(--color-hex-555555)]">
-                                    {row.runs}
-                                </div>
-                                <div
-                                    className="flex-1 px-[12px] py-[8px] text-right text-lg font-bold"
-                                    style={{
-                                        color: (() => {
-                                            if (row.passAt1Rate >= 0.6) {
-                                                return "var(--color-success)";
-                                            }
-                                            if (row.passAt1Rate >= 0.4) {
-                                                return "var(--color-warning)";
-                                            }
-                                            return "var(--color-danger)";
-                                        })(),
-                                    }}
-                                >
-                                    {(row.passAt1Rate * 100).toFixed(1)}%
-                                </div>
-                                <div className="flex-1 px-[12px] py-[8px] text-right text-lg font-bold text-[var(--color-brand)]">
-                                    {row.costPerExploit}
-                                </div>
-                                <div className="flex-1 px-[12px] py-[8px] text-right text-lg text-[var(--color-hex-444444)]">
-                                    {row.avgTimeMin}m
-                                </div>
-                            </div>
-                        ))}
+                        {/* §12.2 note */}
+                        <div className="text-muted-foreground mb-4 text-sm leading-normal tracking-normal">
+                            cost_per_run / pass@1_rate reported per surface, per architecture §12.2.
+                            Compute-normalized at 50 API calls/CVE — orchestration overhead
+                            excluded.
+                        </div>
+                        {/* Table */}
+                        <div className="border-border overflow-hidden rounded-sm border-[1px] border-solid">
+                            <Table>
+                                <TableHeader>
+                                    <TableRow>
+                                        {[
+                                            "SURFACE",
+                                            "TOTAL COST",
+                                            "RUNS",
+                                            "pass@1 RATE",
+                                            "COST / EXPLOIT",
+                                            "AVG TIME",
+                                        ].map((h) => (
+                                            <TableHead
+                                                key={h}
+                                                className={`px-3 py-1 text-xs tracking-widest ${h === "SURFACE" ? "text-left" : "text-right"}`}
+                                            >
+                                                {h}
+                                            </TableHead>
+                                        ))}
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {PER_SURFACE_ROLLUP.map((row) => {
+                                        let rateColor = "text-destructive";
+                                        if (row.passAt1Rate >= 0.6) {
+                                            rateColor = "text-success";
+                                        } else if (row.passAt1Rate >= 0.4) {
+                                            rateColor = "text-warning";
+                                        }
+
+                                        return (
+                                            <TableRow key={row.surface}>
+                                                <TableCell className="text-muted-foreground px-3 py-2 font-bold">
+                                                    {row.surface}
+                                                </TableCell>
+                                                <TableCell className="cell-truncate text-foreground px-3 py-2 text-right">
+                                                    {row.totalCost}
+                                                </TableCell>
+                                                <TableCell className="cell-truncate text-muted-foreground px-3 py-2 text-right">
+                                                    {row.runs}
+                                                </TableCell>
+                                                <TableCell
+                                                    className={`cell-truncate px-3 py-2 text-right font-bold ${rateColor}`}
+                                                >
+                                                    {(row.passAt1Rate * 100).toFixed(1)}%
+                                                </TableCell>
+                                                <TableCell className="cell-truncate text-primary px-3 py-2 text-right font-bold">
+                                                    {row.costPerExploit}
+                                                </TableCell>
+                                                <TableCell className="cell-truncate text-muted-foreground px-3 py-2 text-right">
+                                                    {row.avgTimeMin}m
+                                                </TableCell>
+                                            </TableRow>
+                                        );
+                                    })}
+                                </TableBody>
+                            </Table>
+                        </div>
                     </div>
-                </div>
-            )}
+                )}
+            </TabsContent>
 
             {/* All other tabs — delegate content rendering to CostDashboard.
-                hideHeader=true because we already rendered the page header above.
-                tab/setTab are passed in so CostDashboard uses our state, not its own. */}
+                hideHeader=true because we already rendered the page header above. */}
             {tab !== "PER-SURFACE ROLLUP" && (
-                <div className="min-h-[0px] flex-1 overflow-hidden">
+                <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
                     <CostDashboard
                         key={selected}
                         missionId={isAggregate ? undefined : selected}
                         hideHeader
-                        tab={tab}
-                        setTab={setTab}
+                        value={tab}
+                        onValueChange={(v) => setTab(v as CostTab)}
                     />
                 </div>
             )}
-        </div>
+        </Tabs>
     );
 }

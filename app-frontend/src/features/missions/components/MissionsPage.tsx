@@ -1,7 +1,24 @@
+"use client";
+
+// ─── Props ────────────────────────────────────────────────────────────────────
+import { useRouter } from "next/navigation";
+import { Plus } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import StatusBadge from "@/components/ui/StatusBadge";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useMissionsData } from "@/features/missions/hooks/useMissionsData";
 import { type MissionFilter } from "@/features/missions/utils";
+import { useMission } from "@/lib/mission-context";
 import { MISSION_STATUS } from "@/types/domain-types";
 
 // ─── Types & constants ────────────────────────────────────────────────────────
@@ -27,78 +44,98 @@ const TABLE_HEADERS = [
     "STARTED",
 ] as const;
 
-// ─── Props ────────────────────────────────────────────────────────────────────
-
 interface MissionsPageProps {
     onNewMission?: () => void;
     onOpenMission?: (id: string) => void;
 }
 
-// ─── Component ────────────────────────────────────────────────────────────────
-
 export default function MissionsPage({ onNewMission, onOpenMission }: MissionsPageProps) {
+    const router = useRouter();
+    const { setActiveMissionId } = useMission();
+
+    const handleNewMission = () => {
+        if (onNewMission) {
+            onNewMission();
+        } else {
+            router.push("/missions/new");
+        }
+    };
+
+    const handleOpenMission = (id: string) => {
+        if (onOpenMission) {
+            onOpenMission(id);
+        } else {
+            setActiveMissionId(id);
+            router.push(`/missions/${id}`);
+        }
+    };
     const { filter, setFilter, isLoading, filtered } = useMissionsData();
 
     return (
         <div className="flex h-full min-h-0 flex-col">
             {/* Page header */}
-            <div className="flex-shrink-0 border-b border-[var(--color-hex-1e1e1e)] px-6 pt-5 pb-4">
+            <div className="border-border flex-shrink-0 border-b px-6 pt-5 pb-4">
                 <div className="page-eyebrow">OPERATIONS</div>
                 <div className="flex items-baseline justify-between">
-                    <h1 className="text-9xl font-bold tracking-wide text-[var(--color-fg)]">
-                        MISSIONS
-                    </h1>
-                    <button
-                        onClick={onNewMission}
-                        className="tracking-wider-1 cursor-pointer rounded-[2px] border border-[var(--color-hex-6f171b)] bg-transparent px-[12px] py-[4px] text-base font-semibold text-[var(--color-brand)] transition-colors duration-100 hover:border-[var(--color-brand)] hover:bg-[var(--color-hex-1a0608)]"
+                    <h1 className="text-foreground text-xs font-bold tracking-wide">MISSIONS</h1>
+                    <Button
+                        variant="outline"
+                        onClick={handleNewMission}
+                        className="text-primary hover:border-primary hover:bg-muted flex h-auto items-center gap-2 rounded-sm px-3 py-1 text-base font-semibold tracking-widest transition-colors duration-100"
                     >
-                        NEW MISSION →
-                    </button>
+                        <Plus className="h-4 w-4" />
+                        NEW MISSION
+                    </Button>
                 </div>
             </div>
 
             {/* Filter strip */}
             <div
-                className="flex flex-shrink-0 items-center gap-1 border-b border-[var(--color-hex-1e1e1e)] bg-[var(--color-hex-0b0b0b)] px-6 py-3"
+                className="border-border bg-background flex flex-shrink-0 items-center gap-1 border-b px-6 py-3"
                 role="group"
                 aria-label="Filter missions by status"
             >
                 {FILTERS.map((f) => (
-                    <button
+                    <Button
                         key={f}
+                        variant="outline"
                         onClick={() => setFilter(f)}
                         aria-pressed={filter === f}
                         className={[
-                            "filter-btn transition-colors duration-100",
+                            "filter-btn h-auto transition-colors duration-100",
                             filter === f
-                                ? "border-[var(--color-brand)] bg-[var(--color-hex-120608)] text-[var(--color-danger)]"
-                                : "border-[var(--color-hex-1e1e1e)] bg-transparent text-[var(--color-hex-555555)] hover:text-[var(--color-hex-a0a0a0)]",
+                                ? "border-primary bg-muted text-destructive"
+                                : "text-muted-foreground hover:text-muted-foreground bg-transparent",
                         ].join(" ")}
                     >
                         {f}
-                    </button>
+                    </Button>
                 ))}
-                <span className="text-base-tight ml-auto tracking-wide text-[var(--color-hex-444444)]">
+                <span className="text-muted-foreground ml-auto text-sm tracking-wide">
                     {filtered.length} MISSIONS
                 </span>
             </div>
 
             {/* Missions table */}
             <div className="flex-1 overflow-auto">
-                <table className="w-full border-collapse text-xl">
-                    <thead>
-                        <tr className="sticky top-0 z-10 bg-[var(--color-hex-111111)]">
+                <Table className="w-full border-collapse text-xs">
+                    <TableHeader>
+                        <TableRow className="bg-card z-sticky sticky top-0">
                             {TABLE_HEADERS.map((h) => (
-                                <th
+                                <TableHead
                                     key={h}
-                                    className="text-base-tight tracking-wider-3 border-b border-[var(--color-hex-1e1e1e)] px-[16px] py-[6px] text-left font-semibold whitespace-nowrap text-[var(--color-hex-444444)]"
+                                    className={`border-border text-muted-foreground border-b px-4 py-1.5 text-sm font-semibold tracking-widest whitespace-nowrap ${
+                                        ["NODES", "FINDINGS", "COST"].includes(h)
+                                            ? "text-right"
+                                            : "text-left"
+                                    }`}
                                 >
                                     {h}
-                                </th>
+                                </TableHead>
                             ))}
-                        </tr>
-                    </thead>
-                    <tbody>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
                         {(() => {
                             if (isLoading) {
                                 return (
@@ -111,52 +148,52 @@ export default function MissionsPage({ onNewMission, onOpenMission }: MissionsPa
                                 );
                             }
                             return filtered.map((m) => (
-                                <tr
+                                <TableRow
                                     key={m.id}
-                                    onClick={() => onOpenMission?.(m.id)}
-                                    className="cursor-pointer border-b border-[var(--color-hex-191919)] transition-colors duration-75 hover:bg-[var(--color-hex-131313)]"
+                                    onClick={() => handleOpenMission(m.id)}
+                                    className="border-border hover:bg-muted cursor-pointer border-b transition-colors duration-75"
                                 >
-                                    <td className="px-[16px] py-[8px] font-semibold tracking-tight whitespace-nowrap text-[var(--color-brand)]">
+                                    <TableCell className="text-primary px-4 py-2 font-semibold tracking-tight whitespace-nowrap">
                                         {m.id}
-                                    </td>
-                                    <td className="cell-truncate max-w-[var(--width-cell-max)] px-[16px] py-[8px] whitespace-nowrap text-[var(--color-hex-a0a0a0)]">
-                                        {m.target}
-                                    </td>
-                                    <td className="px-[16px] py-[8px] text-lg whitespace-nowrap text-[var(--color-hex-666666)]">
+                                    </TableCell>
+                                    <TableCell className="cell-truncate text-muted-foreground max-w-cell-max px-4 py-2 whitespace-nowrap">
+                                        <Tooltip>
+                                            <TooltipTrigger render={<span className="truncate" />}>
+                                                {m.target}
+                                            </TooltipTrigger>
+                                            <TooltipContent side="bottom" align="start">
+                                                {m.target}
+                                            </TooltipContent>
+                                        </Tooltip>
+                                    </TableCell>
+                                    <TableCell className="text-muted-foreground px-4 py-2 text-xs whitespace-nowrap">
                                         {m.surface}
-                                    </td>
-                                    <td className="px-[16px] py-[8px] text-lg whitespace-nowrap text-[var(--color-hex-666666)]">
+                                    </TableCell>
+                                    <TableCell className="text-muted-foreground px-4 py-2 text-xs whitespace-nowrap">
                                         {m.mode}
-                                    </td>
-                                    <td className="px-[16px] py-[8px] whitespace-nowrap">
+                                    </TableCell>
+                                    <TableCell className="px-4 py-2 whitespace-nowrap">
                                         <StatusBadge status={m.status} />
-                                    </td>
-                                    <td className="px-[16px] py-[8px] text-right text-[var(--color-hex-a0a0a0)]">
+                                    </TableCell>
+                                    <TableCell className="text-muted-foreground px-4 py-2 text-right">
                                         {m.nodes}
-                                    </td>
-                                    <td
-                                        className="px-[16px] py-[8px] text-right"
-                                        style={{
-                                            color:
-                                                m.findings > 0
-                                                    ? "var(--color-danger)"
-                                                    : "var(--color-hex-666666)",
-                                            fontWeight: m.findings > 0 ? 600 : 400,
-                                        }}
+                                    </TableCell>
+                                    <TableCell
+                                        className={`px-4 py-2 text-right ${m.findings > 0 ? "text-destructive font-[600]" : "text-muted-foreground font-[400]"}`}
                                     >
                                         {m.findings}
-                                    </td>
-                                    <td className="px-[16px] py-[8px] text-right text-[var(--color-hex-a0a0a0)]">
+                                    </TableCell>
+                                    <TableCell className="text-muted-foreground px-4 py-2 text-right">
                                         {m.cost}
-                                    </td>
-                                    <td className="text-lg-tight px-[16px] py-[8px] whitespace-nowrap text-[var(--color-hex-555555)]">
+                                    </TableCell>
+                                    <TableCell className="text-muted-foreground px-4 py-2 text-base whitespace-nowrap">
                                         {m.started}
-                                    </td>
-                                </tr>
+                                    </TableCell>
+                                </TableRow>
                             ));
                         })()}
-                    </tbody>
-                </table>
+                    </TableBody>
+                </Table>
             </div>
         </div>
     );

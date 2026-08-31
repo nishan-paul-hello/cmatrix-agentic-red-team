@@ -1,6 +1,11 @@
-import { type ReactNode } from "react";
+import { useState, type ReactNode } from "react";
+import { Menu } from "lucide-react";
 
+import { Button } from "@/components/ui/button";
 import GeometricMark from "@/components/ui/GeometricMark";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
+import { SidebarContent } from "@/features/core/components/SidebarContent";
+import { cn } from "@/lib/utils";
 import { MISSION_STATUS } from "@/types/domain-types";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -21,72 +26,7 @@ export type NavItem =
     | "audit-log"
     | "settings";
 
-// ─── Static data ──────────────────────────────────────────────────────────────
-
-const NAV_GROUPS = [
-    {
-        label: "OPERATIONS",
-        items: [
-            { id: "dashboard" as NavItem, label: "Dashboard" },
-            { id: "missions" as NavItem, label: "Missions" },
-        ],
-    },
-    {
-        label: "KNOWLEDGE",
-        items: [
-            { id: "memory" as NavItem, label: "Memory" },
-            { id: "skill-library" as NavItem, label: "Skill Library" },
-            { id: "failure-memory" as NavItem, label: "Failure Memory" },
-        ],
-    },
-    {
-        label: "RESEARCH",
-        items: [
-            { id: "trajectory" as NavItem, label: "Trajectory" },
-            { id: "benchmarks" as NavItem, label: "Benchmarks" },
-            { id: "ablations" as NavItem, label: "Ablations" },
-            { id: "statistics" as NavItem, label: "Statistics" },
-            { id: "failure-analysis" as NavItem, label: "Failure Analysis" },
-            { id: "reports" as NavItem, label: "Reports" },
-        ],
-    },
-    {
-        label: "SYSTEM",
-        items: [
-            { id: "cost-usage" as NavItem, label: "Cost & Usage" },
-            { id: "audit-log" as NavItem, label: "Audit Log" },
-            { id: "settings" as NavItem, label: "Settings" },
-        ],
-    },
-] as const;
-
-/** Icon glyphs keyed by NavItem — typed to catch unknown ids at compile time. */
-const NAV_ICONS: Record<NavItem, string> = {
-    dashboard: "▪",
-    missions: "◈",
-    memory: "⊞",
-    "skill-library": "⊟",
-    "failure-memory": "⊠",
-    trajectory: "⤴",
-    benchmarks: "≡",
-    ablations: "∿",
-    statistics: "∑",
-    "failure-analysis": "⊗",
-    reports: "⊕",
-    "cost-usage": "$",
-    "audit-log": "≣",
-    settings: "⚙",
-};
-
 // ─── Sub-components ───────────────────────────────────────────────────────────
-
-function NavIcon({ id }: { id: NavItem }) {
-    return (
-        <span className="inline-block w-[14px] text-lg" aria-hidden="true">
-            {NAV_ICONS[id]}
-        </span>
-    );
-}
 
 function TopbarStat({
     label,
@@ -98,13 +38,12 @@ function TopbarStat({
     valueColor?: string;
 }) {
     return (
-        <div className="flex items-center gap-1.5">
-            <span className="text-base-tight tracking-wider-1 text-[var(--color-hex-444444)]">
+        <div className="flex flex-col justify-center gap-0.5">
+            <span className="text-muted-foreground text-[10px] font-bold tracking-widest">
                 {label}
             </span>
             <span
-                className="text-lg-tight tracking-tight"
-                style={{ color: valueColor ?? "var(--color-hex-a0a0a0)" }}
+                className={`text-sm font-medium tracking-tight ${valueColor ?? "text-foreground"}`}
             >
                 {value}
             </span>
@@ -119,6 +58,7 @@ interface ShellProps {
     onNavChange: (id: NavItem) => void;
     children: ReactNode;
     missionId?: string;
+    onOpenCommandPalette?: () => void;
 }
 
 // ─── Component ────────────────────────────────────────────────────────────────
@@ -128,132 +68,128 @@ export default function Shell({
     onNavChange,
     children,
     missionId = "CVE-001",
+    onOpenCommandPalette,
 }: ShellProps) {
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+
     return (
-        <div className="flex h-screen overflow-hidden bg-[var(--color-bg)] text-[var(--color-fg)]">
-            {/* ── Sidebar ────────────────────────────────────────────────────── */}
-            <aside
-                className="relative flex w-[200px] flex-shrink-0 flex-col overflow-y-auto border-r border-[var(--color-hex-1e1e1e)] bg-[var(--color-hex-0b0b0b)]"
-                aria-label="Main navigation"
-            >
-                {/* Red accent stripe */}
-                <div
-                    className="absolute top-0 bottom-0 left-0 w-[2px] bg-[var(--color-brand)]"
-                    aria-hidden="true"
-                />
-
-                {/* Logo */}
-                <div className="flex items-center gap-2.5 border-b border-[var(--color-hex-1e1e1e)] px-4 py-4">
-                    <GeometricMark size={20} />
-                    <div className="flex flex-col">
-                        <span className="text-2xl font-bold tracking-widest text-[var(--color-fg)]">
-                            RedGrid
-                        </span>
-                    </div>
-                </div>
-
-                {/* Nav groups */}
-                <nav className="flex flex-1 flex-col py-2" aria-label="Sections">
-                    {NAV_GROUPS.map((group, gi) => (
-                        <div key={group.label}>
-                            {gi > 0 && (
-                                <div
-                                    className="mx-4 my-2 h-[1px] bg-[var(--color-hex-1e1e1e)]"
-                                    aria-hidden="true"
-                                />
-                            )}
-                            <div className="tracking-widest-2 px-4 pt-2 pb-1 text-sm font-semibold text-[var(--color-hex-444444)]">
-                                {group.label}
-                            </div>
-                            {group.items.map((item) => {
-                                const active = activeNav === item.id;
-                                return (
-                                    <button
-                                        key={item.id}
-                                        onClick={() => onNavChange(item.id)}
-                                        aria-current={active ? "page" : undefined}
-                                        className={[
-                                            "text-xl-tight tracking-tighter-2 flex w-full cursor-pointer items-center gap-2 px-4 py-1.5 text-left uppercase",
-                                            "border-l-2 transition-colors duration-100",
-                                            active
-                                                ? "border-[var(--color-brand)] bg-[var(--color-hex-1a0a0b)] text-[var(--color-fg)]"
-                                                : "border-transparent text-[var(--color-hex-666666)] hover:text-[var(--color-hex-a0a0a0)]",
-                                        ].join(" ")}
-                                    >
-                                        <NavIcon id={item.id} />
-                                        {item.label}
-                                    </button>
-                                );
-                            })}
-                        </div>
-                    ))}
-                </nav>
-
-                {/* Ctrl+K hint */}
-                <div className="flex items-center gap-2 border-t border-[var(--color-hex-1e1e1e)] px-4 py-3">
-                    <kbd className="rounded-[2px] border border-[var(--color-hex-1e1e1e)] bg-[var(--color-hex-111111)] px-[5px] py-[1px] text-sm text-[var(--color-hex-333333)]">
-                        ⌘K
-                    </kbd>
-                    <span className="text-sm tracking-normal text-[var(--color-hex-333333)]">
-                        COMMAND PALETTE
+        <div className="bg-background text-foreground flex h-dvh flex-col overflow-hidden lg:flex-row">
+            {/* ── Mobile Header ──────────────────────────────────────────────── */}
+            <header className="border-border bg-background flex h-14 flex-shrink-0 items-center justify-between border-b px-4 lg:hidden">
+                <div className="flex items-center gap-2.5">
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        className="text-muted-foreground hover:text-foreground -ml-2 h-8 w-8"
+                        onClick={() => setMobileMenuOpen(true)}
+                        aria-label="Open menu"
+                    >
+                        <Menu className="size-5" />
+                    </Button>
+                    <GeometricMark className="h-5 w-5" />
+                    <span className="text-foreground text-xs font-bold tracking-widest">
+                        RedGrid
                     </span>
                 </div>
+                <div className="flex items-center gap-2">
+                    <div
+                        className="bg-success pulse-dot h-1.5 w-1.5 shrink-0 rounded-full"
+
+                        aria-hidden="true"
+                    />
+                </div>
+            </header>
+
+            {/* ── Mobile Off-Canvas Drawer ───────────────────────────────────── */}
+            <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+                <SheetContent
+                    side="left"
+                    className="bg-background flex w-[200px] max-w-[80vw] flex-col border-r p-0"
+                >
+                    <SidebarContent
+                        activeNav={activeNav}
+                        onNavChange={onNavChange}
+                        setMobileMenuOpen={setMobileMenuOpen}
+                        onOpenCommandPalette={onOpenCommandPalette}
+                    />
+                </SheetContent>
+            </Sheet>
+
+            {/* ── Desktop Sidebar ────────────────────────────────────────────── */}
+            <aside
+                className={cn(
+                    "border-border bg-background relative hidden flex-shrink-0 flex-col border-r transition-all duration-300 lg:flex",
+                    isSidebarCollapsed ? "w-[64px]" : "w-[200px]",
+                )}
+                aria-label="Main navigation"
+            >
+                <SidebarContent
+                    activeNav={activeNav}
+                    onNavChange={onNavChange}
+                    setMobileMenuOpen={setMobileMenuOpen}
+                    isCollapsed={isSidebarCollapsed}
+                    toggleCollapse={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+                    onOpenCommandPalette={onOpenCommandPalette}
+                />
             </aside>
 
             {/* ── Main column ────────────────────────────────────────────────── */}
-            <div className="flex flex-1 flex-col overflow-hidden">
+            <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
                 {/* Top bar */}
                 <header
-                    className="flex h-[36px] flex-shrink-0 items-center justify-between border-b border-[var(--color-hex-1e1e1e)] bg-[var(--color-hex-0d0d0d)] px-4"
+                    className="border-border bg-background flex flex-shrink-0 flex-col justify-between gap-2 overflow-x-auto border-b px-4 py-2 sm:h-14 sm:flex-row sm:items-center sm:gap-4 sm:py-0"
                     aria-label="Mission context bar"
                 >
-                    <span className="tracking-wider-1 text-lg text-[var(--color-hex-a0a0a0)]">
-                        MISSION /{" "}
-                        <span className="font-bold text-[var(--color-brand)]">{missionId}</span>
-                    </span>
+                    <div className="flex shrink-0 items-center">
+                        <span className="text-muted-foreground text-xs tracking-widest whitespace-nowrap">
+                            MISSION / <span className="text-primary font-bold">{missionId}</span>
+                        </span>
+                    </div>
 
-                    <div className="flex items-center gap-5">
-                        {/* System status indicator */}
-                        <div className="flex items-center gap-1.5">
+                    <div className="flex scrollbar-none items-center gap-5 overflow-x-auto pb-1 sm:pb-0">
+                        {/* System status indicator (hidden on mobile, shown in mobile header instead) */}
+                        <div className="hidden shrink-0 items-center gap-1.5 lg:flex">
                             <div
-                                className="h-[6px] w-[6px] shrink-0 rounded-full bg-[var(--color-success)]"
-                                style={{ animation: "pulse 1.4s ease-in-out infinite" }}
+                                className="bg-success pulse-dot h-1.5 w-1.5 shrink-0 rounded-full"
+
                                 aria-hidden="true"
                             />
-                            <span className="text-lg-tight tracking-wider-1 text-[var(--color-success)]">
+                            <span className="text-success text-sm tracking-widest whitespace-nowrap">
                                 SYSTEM ONLINE
                             </span>
                         </div>
 
-                        <TopbarStat
-                            label="STATUS"
-                            value={MISSION_STATUS.RUNNING}
-                            valueColor="var(--color-success)"
-                        />
-                        <TopbarStat label="MODEL" value="SONNET-5" />
-                        <TopbarStat label="COST" value="$1.42" />
-                        <TopbarStat label="TIME" value="00:19:04" />
+                        {/* Divider */}
+                        <div className="bg-border hidden h-8 w-px lg:block" />
+
+                        <div className="flex shrink-0 items-center gap-4 sm:gap-6">
+                            <TopbarStat
+                                label="STATUS"
+                                value={MISSION_STATUS.RUNNING}
+                                valueColor="text-success"
+                            />
+                            <TopbarStat label="TARGET" value="app.targetcorp.com" />
+                            <TopbarStat label="MODE" value="ONE-DAY" />
+                            <TopbarStat label="SURFACE" value="WEB APP" />
+
+                            {/* Inner Divider */}
+                            <div className="bg-border h-6 w-px" />
+
+                            <TopbarStat label="MODEL" value="SONNET-5" />
+                            <TopbarStat label="COST" value="$1.42" />
+                            <TopbarStat label="TIME" value="00:19:04" />
+                        </div>
 
                         {/* User actions */}
-                        <div className="ml-2 flex items-center gap-2 border-l border-[var(--color-hex-1e1e1e)] pl-3">
-                            <button
-                                aria-label="Settings"
-                                className="flex h-[22px] w-[22px] cursor-pointer items-center justify-center rounded-[2px] border border-[var(--color-hex-292929)] bg-[var(--color-hex-191919)] text-lg text-[var(--color-hex-666666)] transition-colors duration-100 hover:text-[var(--color-hex-a0a0a0)]"
-                            >
-                                ⚙
-                            </button>
-                            <button
-                                aria-label="User profile"
-                                className="flex h-[22px] w-[22px] cursor-pointer items-center justify-center rounded-full border border-[var(--color-hex-292929)] bg-[var(--color-hex-1e1e1e)] text-lg text-[var(--color-hex-a0a0a0)] transition-colors duration-100 hover:text-[var(--color-fg)]"
-                            >
-                                R
-                            </button>
+                        <div className="border-border ml-auto flex shrink-0 items-center gap-2 sm:ml-2 sm:border-l sm:pl-3">
+                            {/* Icons removed as per user request */}
                         </div>
                     </div>
                 </header>
 
                 {/* Page content */}
-                <main className="flex-1 overflow-hidden bg-[var(--color-hex-0d0d0d)]">
+                <main className="bg-background relative flex min-h-0 flex-1 flex-col overflow-hidden">
                     {children}
                 </main>
             </div>

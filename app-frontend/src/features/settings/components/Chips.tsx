@@ -1,4 +1,8 @@
+"use client";
+
 import React from "react";
+
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
 export function Chips({
     options,
@@ -6,25 +10,32 @@ export function Chips({
     onChange,
 }: {
     options: string[];
-    value: string;
-    onChange: (v: string) => void;
+    value?: string;
+    onChange?: (v: string) => void;
 }) {
     return (
-        <div className="flex flex-wrap gap-2">
+        <ToggleGroup
+            multiple={false}
+            value={value ? [value] : []}
+            onValueChange={(values) => {
+                const next = values[0];
+                if (next) {
+                    onChange?.(next);
+                }
+            }}
+            variant="outline"
+            size="sm"
+            className="flex flex-wrap gap-2"
+        >
             {options.map((o) => (
-                <button
+                <ToggleGroupItem
                     key={o}
-                    onClick={() => onChange(o)}
-                    className="font-inherit cursor-pointer rounded-[2px] px-[12px] py-[4px] text-base tracking-wide"
-                    style={{
-                        background: value === o ? "var(--color-hex-1a0608)" : "transparent",
-                        border: `1px solid ${value === o ? "var(--color-brand)" : "var(--color-hex-292929)"}`,
-                        color: value === o ? "var(--color-danger)" : "var(--color-hex-555555)",
-                    }}
+                    value={o}
+                    className="data-[state=on]:border-primary data-[state=on]:text-destructive text-xs tracking-wide uppercase"
                 >
                     {o}
-                </button>
+                </ToggleGroupItem>
             ))}
-        </div>
+        </ToggleGroup>
     );
 }

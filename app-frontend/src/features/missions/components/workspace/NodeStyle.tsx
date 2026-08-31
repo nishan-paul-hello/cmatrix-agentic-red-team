@@ -14,55 +14,52 @@ export default function NodeStyle(status: VdgNodeStatus): {
     switch (status) {
         case VDG_NODE_STATUS.EXPLOITED:
             return {
-                border: "var(--color-hex-9e1118)",
-                bg: "var(--color-hex-150608)",
-                labelColor: "var(--color-brand)",
-                typeColor: "var(--color-hex-6f171b)",
+                border: "var(--primary)",
+                bg: "transparent",
+                labelColor: "var(--primary)",
+                typeColor: "var(--primary)",
             };
         case VDG_NODE_STATUS.ELIGIBLE:
             return {
-                border: "var(--color-brand)",
-                bg: "var(--color-hex-120608)",
-                labelColor: "var(--color-danger)",
-                typeColor: "var(--color-hex-9e1118)",
+                border: "var(--primary)",
+                bg: "transparent",
+                labelColor: "var(--destructive)",
+                typeColor: "var(--destructive)",
             };
         case VDG_NODE_STATUS.IN_PROGRESS:
             return {
-                border: "var(--color-danger)",
-                bg: "var(--color-hex-180a0b)",
-                labelColor: "var(--color-danger)",
-                typeColor: "var(--color-hex-9e1118)",
+                border: "var(--destructive)",
+                bg: "transparent",
+                labelColor: "var(--destructive)",
+                typeColor: "var(--destructive)",
             };
         case VDG_NODE_STATUS.INFEASIBLE:
             return {
-                border: "var(--color-hex-1e1e1e)",
-                bg: "var(--color-hex-0a0a0a)",
-                labelColor: "var(--color-hex-2a2a2a)",
-                typeColor: "var(--color-hex-1e1e1e)",
+                border: "var(--muted-dimmest)",
+                bg: "transparent",
+                labelColor: "var(--muted-dimmer)",
+                typeColor: "var(--muted-dimmest)",
             };
         case VDG_NODE_STATUS.BLOCKED:
-            // Muted-dark adjacent to INFEASIBLE — darker red-tinted background to signal
-            // blocked-by-failure-propagation (required for A4 ablation visibility)
             return {
-                border: "var(--color-hex-2a1010)",
-                bg: "var(--color-hex-0d0808)",
-                labelColor: "var(--color-hex-4a1a1a)",
-                typeColor: "var(--color-hex-2a1010)",
+                border: "var(--muted-dimmest)",
+                bg: "var(--muted)",
+                labelColor: "var(--destructive)",
+                typeColor: "var(--muted-dimmest)",
             };
         case VDG_NODE_STATUS.DEPRIORITIZED:
-            // Slightly lighter than INFEASIBLE to visually distinguish "low priority" vs "impossible"
             return {
-                border: "var(--color-hex-252525)",
-                bg: "var(--color-hex-0c0c0c)",
-                labelColor: "var(--color-hex-363636)",
-                typeColor: "var(--color-hex-252525)",
+                border: "var(--muted-dimmest)",
+                bg: "transparent",
+                labelColor: "var(--muted-dim)",
+                typeColor: "var(--muted-dimmer)",
             };
         default:
             return {
-                border: "var(--color-hex-1e1e1e)",
-                bg: "var(--color-hex-0a0a0a)",
-                labelColor: "var(--color-hex-2a2a2a)",
-                typeColor: "var(--color-hex-1e1e1e)",
+                border: "var(--muted-dimmest)",
+                bg: "transparent",
+                labelColor: "var(--muted-dimmer)",
+                typeColor: "var(--muted-dimmest)",
             };
     }
 }

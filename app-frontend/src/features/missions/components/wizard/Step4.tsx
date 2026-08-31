@@ -5,15 +5,22 @@ import StepHeading from "@/features/missions/components/wizard/StepHeading";
 import { useWizardContext } from "@/features/missions/components/wizard/WizardContext";
 
 export function Step4() {
-    const { mode, setMode } = useWizardContext();
+    const { form } = useWizardContext();
+    const mode = form.watch("mode");
+
     return (
         <>
             <StepHeading step={4} label="MISSION MODE" />
-            <div className="text-lg-tight tracking-wider-1 mb-[24px] leading-relaxed text-[var(--color-hex-666666)]">
+            <div className="text-muted-foreground mb-6 text-xs leading-relaxed tracking-normal">
                 Select the knowledge mode under which the system operates. This controls whether a
                 CVE identifier hint is injected into the team manager context at mission start.
             </div>
-            <ModeCards value={mode} onChange={setMode} />
+            <ModeCards
+                value={mode}
+                onChange={(v) =>
+                    form.setValue("mode", v, { shouldValidate: true, shouldDirty: true })
+                }
+            />
         </>
     );
 }

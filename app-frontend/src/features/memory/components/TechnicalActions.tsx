@@ -1,5 +1,14 @@
 import { useEffect, useState } from "react";
 
+import { Button } from "@/components/ui/button";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
 import { MemoryRepository } from "@/features/memory/data/MemoryRepository";
 import { TASK_STATUS, type ActionEntry } from "@/types/domain-types";
 
@@ -8,7 +17,8 @@ export default function TechnicalActions() {
     useEffect(() => {
         void new MemoryRepository()
             .fetchAll<ActionEntry>({ collection: "ACTIONS", limit: 1000 })
-            .then(setData);
+            .then(setData)
+            .catch(console.error);
     }, []);
 
     const [selId, setSelId] = useState<string | null>(null);
@@ -19,17 +29,17 @@ export default function TechnicalActions() {
 
     const sel = ACTIONS.find((a) => a.id === selId) ?? ACTIONS[0];
     const sc: Record<string, string> = {
-        [TASK_STATUS.SUCCESS]: "var(--color-success)",
-        [TASK_STATUS.TIMEOUT]: "var(--color-warning)",
-        [TASK_STATUS.FAILED]: "var(--color-danger)",
-        [TASK_STATUS.RUNNING]: "var(--color-brand)",
+        [TASK_STATUS.SUCCESS]: "text-success",
+        [TASK_STATUS.TIMEOUT]: "text-warning",
+        [TASK_STATUS.FAILED]: "text-destructive",
+        [TASK_STATUS.RUNNING]: "text-primary",
     };
     return (
-        <div className="flex min-h-[0px] flex-1 overflow-hidden">
+        <div className="flex min-h-0 flex-1 flex-col overflow-hidden lg:flex-row">
             <div className="flex-1 overflow-y-auto">
-                <table className="w-full border-collapse text-lg">
-                    <thead>
-                        <tr className="sticky top-0 bg-[var(--color-hex-0f0f0f)]">
+                <Table className="w-full border-collapse text-xs">
+                    <TableHeader>
+                        <TableRow className="bg-card sticky top-0">
                             {[
                                 "ID",
                                 "TIME",
@@ -40,109 +50,76 @@ export default function TechnicalActions() {
                                 "E_ORD",
                                 "STATUS",
                             ].map((h) => (
-                                <th
+                                <TableHead
                                     key={h}
-                                    className="text-sm-tight tracking-wider-2 px-[12px] py-[6px] text-left font-semibold whitespace-nowrap text-[var(--color-hex-444444)]"
-                                    style={{
-                                        borderBottom: "1px solid var(--color-hex-1a1a1a)",
-                                    }}
+                                    className="text-muted-foreground border-border border-b px-3 py-1.5 text-left text-xs font-semibold tracking-widest whitespace-nowrap"
                                 >
                                     {h}
-                                </th>
+                                </TableHead>
                             ))}
-                        </tr>
-                    </thead>
-                    <tbody>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
                         {ACTIONS.map((a: ActionEntry) => (
-                            <tr
+                            <TableRow
                                 key={a.id}
                                 onClick={() => setSelId(a.id)}
-                                className="cursor-pointer"
-                                style={{
-                                    borderBottom: "1px solid var(--color-hex-111111)",
-                                }}
-                                onMouseEnter={(e) =>
-                                    (e.currentTarget.style.background = "var(--color-hex-0d0d0d)")
-                                }
-                                onMouseLeave={(e) =>
-                                    (e.currentTarget.style.background = "transparent")
-                                }
+                                className="border-border hover:bg-background cursor-pointer border-b transition-colors"
                             >
-                                <td className="px-[12px] py-[7px] text-base text-[var(--color-hex-555555)]">
+                                <TableCell className="text-muted-foreground px-3 py-1.5 text-base">
                                     {a.id}
-                                </td>
-                                <td className="px-[12px] py-[7px] text-base text-[var(--color-hex-333333)]">
+                                </TableCell>
+                                <TableCell className="text-muted-foreground px-3 py-1.5 text-base">
                                     {a.ts}
-                                </td>
-                                <td className="tracking-tight-1 px-[12px] py-[7px] text-base font-bold text-[var(--color-brand)]">
+                                </TableCell>
+                                <TableCell className="text-primary px-3 py-1.5 text-base font-bold tracking-tight">
                                     {a.spec}
-                                </td>
-                                <td className="font-inherit px-[12px] py-[7px] text-base text-[var(--color-hex-666666)]">
+                                </TableCell>
+                                <TableCell className="font-inherit text-muted-foreground px-3 py-1.5 text-base">
                                     {a.action}
-                                </td>
-                                <td className="px-[12px] py-[7px] text-base text-[var(--color-hex-444444)]">
+                                </TableCell>
+                                <TableCell className="text-muted-foreground px-3 py-1.5 text-base">
                                     {a.tool}
-                                </td>
-                                <td
-                                    className="max-w-[240px] overflow-hidden px-[12px] py-[7px] text-base whitespace-nowrap text-[var(--color-hex-555555)]"
-                                    style={{
-                                        textOverflow: "ellipsis",
-                                    }}
-                                >
+                                </TableCell>
+                                <TableCell className="text-muted-foreground max-w-panel-sm overflow-hidden px-3 py-1.5 text-base text-ellipsis whitespace-nowrap">
                                     {a.result}
-                                </td>
-                                <td
-                                    className="px-[12px] py-[7px] text-base font-semibold"
-                                    style={{
-                                        color:
-                                            a.eord !== "—"
-                                                ? "var(--color-success)"
-                                                : "var(--color-hex-333333)",
-                                    }}
+                                </TableCell>
+                                <TableCell
+                                    className={`px-3 py-1.5 text-base font-semibold ${a.eord !== "—" ? "text-success" : "text-border"}`}
                                 >
                                     {a.eord}
-                                </td>
-                                <td className="px-[12px] py-[7px]">
+                                </TableCell>
+                                <TableCell className="px-3 py-1.5">
                                     <span
-                                        className="text-base-tight font-semibold tracking-normal"
-                                        style={{
-                                            color: sc[a.status] ?? "var(--color-hex-666666)",
-                                        }}
+                                        className={`text-sm font-semibold tracking-normal ${sc[a.status] ?? "text-muted-foreground"}`}
                                     >
                                         {a.status}
                                     </span>
-                                </td>
-                            </tr>
+                                </TableCell>
+                            </TableRow>
                         ))}
-                    </tbody>
-                </table>
+                    </TableBody>
+                </Table>
             </div>
-            <div
-                className="flex w-[var(--width-drawer-md)] flex-shrink-0 flex-col overflow-y-auto bg-[var(--color-hex-0d0d0d)]"
-                style={{
-                    borderLeft: "1px solid var(--color-hex-292929)",
-                }}
-            >
-                <div
-                    className="flex items-start justify-between px-4 pt-4 pb-3"
-                    style={{
-                        borderBottom: "1px solid var(--color-hex-1e1e1e)",
-                    }}
-                >
+            <div className="bg-background border-border lg:w-drawer-md flex w-full flex-shrink-0 flex-col overflow-y-auto border-t lg:border-t-0 lg:border-l">
+                <div className="border-border flex items-start justify-between border-b px-4 pt-4 pb-3">
                     <div>
-                        <div className="text-2xl font-bold tracking-normal text-[var(--color-fg)]">
+                        <div className="text-foreground text-xs font-bold tracking-normal">
                             {sel.id}
                         </div>
-                        <div className="text-base-tight mt-[2px] text-[var(--color-hex-444444)]">
+                        <div className="text-muted-foreground mt-0.5 text-sm">
                             {sel.spec} · {sel.tool}
                         </div>
                     </div>
-                    <button
+                    <Button
+                        variant="ghost"
+                        size="icon-xs"
                         onClick={() => setSelId(null)}
-                        className="cursor-pointer border-none bg-[transparent] text-4xl text-[var(--color-hex-444444)]"
+                        className="text-muted-foreground hover:text-muted-foreground h-auto p-0.5 text-sm hover:bg-transparent"
+                        aria-label="Close"
                     >
                         ✕
-                    </button>
+                    </Button>
                 </div>
                 <div className="flex flex-col gap-4 px-4 py-4">
                     {(
@@ -181,18 +158,11 @@ export default function TechnicalActions() {
                         }[]
                     ).map((r) => (
                         <div key={r.k}>
-                            <div className="text-sm-tight tracking-wider-3 mb-[3px] text-[var(--color-hex-444444)]">
+                            <div className="text-muted-foreground mb-0.5 text-xs tracking-widest">
                                 {r.k}
                             </div>
                             <div
-                                className="text-lg leading-normal"
-                                style={{
-                                    color:
-                                        r.col ??
-                                        (r.red
-                                            ? "var(--color-success)"
-                                            : "var(--color-hex-888888)"),
-                                }}
+                                className={`text-xs leading-normal ${r.col?.replace("var(--", "text-").replace(")", "") ?? (r.red ? "text-success" : "text-muted-foreground")}`}
                             >
                                 {r.v}
                             </div>

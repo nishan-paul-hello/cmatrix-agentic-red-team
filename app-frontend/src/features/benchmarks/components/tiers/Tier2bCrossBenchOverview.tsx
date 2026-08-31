@@ -21,58 +21,39 @@ export function Tier2bCrossBenchOverview({
                     warn: pooledRate <= 0.6,
                 },
             ])}
-            <div className="mb-3 text-sm tracking-widest text-[var(--color-hex-444444)]">
+            <div className="text-muted-foreground mb-3 text-sm tracking-widest">
                 PER-BENCHMARK BREAKDOWN
             </div>
             {d.perBenchmark.map((row) => {
                 const rate = row.total > 0 ? row.solved / row.total : 0;
                 return (
-                    <div key={row.name} className="mb-[12px]">
+                    <div key={row.name} className="mb-3">
                         <div className="mb-1 flex justify-between">
-                            <span className="text-base text-[var(--color-hex-666666)]">
-                                {row.name}
-                            </span>
-                            <span className="text-lg font-bold text-[var(--color-fg)]">
+                            <span className="text-muted-foreground text-base">{row.name}</span>
+                            <span className="text-foreground text-xs font-bold">
                                 {row.solved}/{row.total} &nbsp;
-                                <span
-                                    style={{
-                                        color:
-                                            rate >= 0.6
-                                                ? "var(--color-success)"
-                                                : "var(--color-warning)",
-                                    }}
-                                >
+                                <span className={rate >= 0.6 ? "text-success" : "text-warning"}>
                                     ({(rate * 100).toFixed(1)}%)
                                 </span>
                             </span>
                         </div>
-                        <div className="h-[4px] overflow-hidden rounded-[2px] bg-[var(--color-hex-1a1a1a)]">
+                        <div className="bg-card h-1 overflow-hidden rounded-sm">
                             <div
-                                className="h-full rounded-[2px]"
+                                className={`h-full rounded-sm ${rate >= 0.6 ? "bg-success" : "bg-warning"}`}
                                 style={{
                                     width: `${rate * 100}%`,
-                                    background:
-                                        rate >= 0.6
-                                            ? "var(--color-success)"
-                                            : "var(--color-warning)",
                                 }}
                             />
                         </div>
                     </div>
                 );
             })}
-            <div className="mt-2 rounded-[2px] border border-solid border-[var(--color-hex-e31b2322)] bg-[var(--color-hex-120608)] px-[12px] py-[8px]">
-                <div className="text-sm-tight mb-[2px] tracking-widest text-[var(--color-brand)]">
-                    POOLED RESULT
-                </div>
-                <div className="text-8xl font-bold text-[var(--color-fg)]">
+            <div className="border-border bg-muted mt-2 rounded-sm border border-solid px-3 py-2">
+                <div className="text-primary mb-0.5 text-xs tracking-widest">POOLED RESULT</div>
+                <div className="text-foreground text-xs font-bold">
                     {d.pooled.solved}/{d.pooled.total}&nbsp;
                     <span
-                        className="text-2xl"
-                        style={{
-                            color:
-                                pooledRate > 0.6 ? "var(--color-success)" : "var(--color-warning)",
-                        }}
+                        className={`text-xs ${pooledRate > 0.6 ? "text-success" : "text-warning"}`}
                     >
                         ({(pooledRate * 100).toFixed(1)}%)
                     </span>

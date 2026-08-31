@@ -24,23 +24,13 @@ export function WizardMissionSummary({
     roe: string;
 }) {
     return (
-        <div
-            className="flex w-[var(--width-drawer-sm)] flex-shrink-0 flex-col overflow-y-auto bg-[var(--color-hex-0b0b0b)]"
-            style={{
-                borderLeft: "1px solid var(--color-hex-1e1e1e)",
-            }}
-        >
-            <div
-                className="px-5 pt-5 pb-4"
-                style={{
-                    borderBottom: "1px solid var(--color-hex-1e1e1e)",
-                }}
-            >
-                <div className="mb-[10px] text-base tracking-widest text-[var(--color-hex-444444)]">
+        <div className="bg-background border-border lg:w-drawer-sm flex w-full flex-shrink-0 flex-col overflow-y-auto border-t lg:border-t-0 lg:border-l">
+            <div className="border-border border-b px-5 pt-5 pb-4">
+                <div className="text-muted-foreground mb-2.5 text-xs font-semibold tracking-widest uppercase">
                     MISSION SUMMARY
                 </div>
                 <div className="flex flex-col gap-3">
-                    <MetaRow label="TARGET" value={target || "—"} highlight />
+                    <MetaRow label="TARGET" value={target || "—"} />
                     <MetaRow label="TARGET TYPE" value={targetType} />
                     <MetaRow label="SURFACE" value={step >= 3 ? surface : "—"} />
                     <MetaRow label="MODE" value={step >= 4 ? mode : "—"} />
@@ -48,7 +38,6 @@ export function WizardMissionSummary({
                     <MetaRow
                         label="COST CEILING"
                         value={costNum ? `$${costNum.toFixed(2)}` : "—"}
-                        highlight={costNum > 0}
                     />
                     <MetaRow label="TOOL TIMEOUT" value={timeoutNum ? `${timeoutNum}s` : "—"} />
                 </div>
@@ -56,33 +45,21 @@ export function WizardMissionSummary({
 
             {/* ROE preview */}
             {step >= 2 && roe && (
-                <div
-                    className="px-5 pt-4 pb-4"
-                    style={{
-                        borderBottom: "1px solid var(--color-hex-1e1e1e)",
-                    }}
-                >
-                    <div className="mb-[8px] text-base tracking-widest text-[var(--color-hex-444444)]">
+                <div className="border-border border-b px-5 pt-4 pb-4">
+                    <div className="text-muted-foreground mb-2 text-xs font-semibold tracking-widest uppercase">
                         ROE PREVIEW
                     </div>
-                    <div
-                        className="tracking-tight-1 overflow-hidden text-base leading-relaxed text-[var(--color-hex-333333)]"
-                        style={{
-                            display: "-webkit-box",
-                            WebkitLineClamp: 6,
-                            WebkitBoxOrient: "vertical" as const,
-                        }}
-                    >
+                    <div className="text-muted-foreground line-clamp-6 overflow-hidden text-xs leading-relaxed tracking-tight">
                         {roe}
                     </div>
                 </div>
             )}
 
             <div className="px-5 pt-4">
-                <div className="mb-[8px] text-base tracking-widest text-[var(--color-hex-444444)]">
+                <div className="text-muted-foreground mb-2 text-xs font-semibold tracking-widest uppercase">
                     VALIDATION
                 </div>
-                <div className="text-base leading-loose tracking-normal text-[var(--color-hex-333333)]">
+                <div className="text-muted-foreground text-xs leading-loose tracking-normal">
                     Oracle validation available for BENCHMARK ENVIRONMENT targets.
                 </div>
             </div>

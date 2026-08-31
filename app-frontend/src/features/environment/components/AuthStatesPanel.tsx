@@ -1,5 +1,13 @@
 import { useEffect, useState } from "react";
 
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
 import { EnvironmentRepository } from "@/features/environment/data/EnvironmentRepository";
 import { type AuthState } from "@/types/domain-types";
 
@@ -8,7 +16,8 @@ export default function AuthStatesPanel() {
     useEffect(() => {
         void new EnvironmentRepository()
             .fetchAll<AuthState>({ collection: "AUTH_STATES", limit: 1000 })
-            .then(setData);
+            .then(setData)
+            .catch(console.error);
     }, []);
 
     if (AUTH_STATES.length === 0) {
@@ -17,22 +26,15 @@ export default function AuthStatesPanel() {
 
     return (
         <div className="flex-1 overflow-auto">
-            <div
-                className="flex flex-shrink-0 items-center gap-2 bg-[var(--color-hex-0a0a0a)] px-4 py-2"
-                style={{
-                    borderBottom: "1px solid var(--color-hex-141414)",
-                }}
-            >
-                <span className="tracking-wider-3 text-sm text-[var(--color-success)]">
-                    CONFIRMED
-                </span>
-                <span className="ml-[8px] text-sm tracking-wide text-[var(--color-hex-555555)]">
+            <div className="bg-background border-border flex flex-shrink-0 items-center gap-2 border-b px-4 py-2">
+                <span className="text-success text-sm tracking-widest">CONFIRMED</span>
+                <span className="text-muted-foreground ml-2 text-sm tracking-wide">
                     Active authentication sessions observed by Specialists
                 </span>
             </div>
-            <table className="text-xl-tight w-full border-collapse">
-                <thead>
-                    <tr className="sticky top-0 bg-[var(--color-hex-0f0f0f)]">
+            <Table className="w-full border-collapse text-xs">
+                <TableHeader>
+                    <TableRow className="bg-card sticky top-0">
                         {[
                             "ID",
                             "SESSION",
@@ -44,89 +46,62 @@ export default function AuthStatesPanel() {
                             "STATUS",
                             "CSRF TOKEN",
                         ].map((h) => (
-                            <th
+                            <TableHead
                                 key={h}
-                                className="tracking-wider-2 px-[12px] py-[6px] text-left text-sm font-semibold whitespace-nowrap text-[var(--color-hex-444444)]"
-                                style={{
-                                    borderBottom: "1px solid var(--color-hex-1a1a1a)",
-                                }}
+                                className="text-muted-foreground border-border border-b px-3 py-1.5 text-left text-sm font-semibold tracking-widest whitespace-nowrap"
                             >
                                 {h}
-                            </th>
+                            </TableHead>
                         ))}
-                    </tr>
-                </thead>
-                <tbody>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
                     {AUTH_STATES.map((a: AuthState) => (
-                        <tr
+                        <TableRow
                             key={a.id}
-                            style={{
-                                borderBottom: "1px solid var(--color-hex-111111)",
-                            }}
-                            onMouseEnter={(e) =>
-                                (e.currentTarget.style.background = "var(--color-hex-0f0f0f)")
-                            }
-                            onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+                            className="border-border hover:bg-border border-b bg-transparent transition-colors"
                         >
-                            <td className="px-[12px] py-[7px] text-base font-bold text-[var(--color-brand)]">
+                            <TableCell className="text-primary px-3 py-1.5 text-base font-bold">
                                 {a.id}
-                            </td>
-                            <td className="px-[12px] py-[7px] text-base text-[var(--color-hex-555555)]">
+                            </TableCell>
+                            <TableCell className="text-muted-foreground px-3 py-1.5 text-base">
                                 {a.session}
-                            </td>
-                            <td className="px-[12px] py-[7px] text-[var(--color-hex-a0a0a0)]">
+                            </TableCell>
+                            <TableCell className="text-muted-foreground px-3 py-1.5">
                                 {a.user}
-                            </td>
-                            <td className="px-[12px] py-[7px]">
+                            </TableCell>
+                            <TableCell className="px-3 py-1.5">
                                 <span
-                                    className="text-base-tight font-semibold tracking-normal"
-                                    style={{
-                                        color:
-                                            a.role === "ADMIN"
-                                                ? "var(--color-danger)"
-                                                : "var(--color-hex-666666)",
-                                    }}
+                                    className={`text-sm font-semibold tracking-normal ${a.role === "ADMIN" ? "text-destructive" : "text-muted-foreground"}`}
                                 >
                                     {a.role}
                                 </span>
-                            </td>
-                            <td className="px-[12px] py-[7px] text-base text-[var(--color-hex-666666)]">
+                            </TableCell>
+                            <TableCell className="text-muted-foreground px-3 py-1.5 text-base">
                                 {a.method}
-                            </td>
-                            <td className="px-[12px] py-[7px] text-base text-[var(--color-hex-444444)]">
+                            </TableCell>
+                            <TableCell className="text-muted-foreground px-3 py-1.5 text-base">
                                 {a.issued}
-                            </td>
-                            <td
-                                className="px-[12px] py-[7px] text-base"
-                                style={{
-                                    color:
-                                        a.status === "EXPIRED"
-                                            ? "var(--color-hex-333333)"
-                                            : "var(--color-hex-444444)",
-                                }}
+                            </TableCell>
+                            <TableCell
+                                className={`px-3 py-1.5 text-base ${a.status === "EXPIRED" ? "text-border" : "text-muted-foreground"}`}
                             >
                                 {a.expiry}
-                            </td>
-                            <td className="px-[12px] py-[7px]">
+                            </TableCell>
+                            <TableCell className="px-3 py-1.5">
                                 <span
-                                    className="text-base-tight font-semibold tracking-wide"
-                                    style={{
-                                        color:
-                                            a.status === "ACTIVE"
-                                                ? "var(--color-success)"
-                                                : "var(--color-hex-444444)",
-                                    }}
+                                    className={`text-sm font-semibold tracking-wide ${a.status === "ACTIVE" ? "text-success" : "text-muted-foreground"}`}
                                 >
                                     {a.status}
                                 </span>
-                            </td>
-                            <td className="tracking-tight-1 px-[12px] py-[7px] text-base text-[var(--color-hex-444444)]">
+                            </TableCell>
+                            <TableCell className="text-muted-foreground px-3 py-1.5 text-base tracking-tight">
                                 {a.csrf}
-                            </td>
-                        </tr>
+                            </TableCell>
+                        </TableRow>
                     ))}
-                </tbody>
-            </table>
+                </TableBody>
+            </Table>
         </div>
     );
 }

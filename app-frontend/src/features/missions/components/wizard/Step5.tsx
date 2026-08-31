@@ -4,8 +4,15 @@ import ReviewStep from "@/features/missions/components/wizard/ReviewStep";
 import { useWizardContext } from "@/features/missions/components/wizard/WizardContext";
 
 export function Step5() {
-    const { target, targetType, surface, mode, maxRuntime, costCeiling, toolTimeout, roe } =
-        useWizardContext();
+    const { form } = useWizardContext();
+    const target = form.watch("target");
+    const targetType = form.watch("targetType");
+    const surface = form.watch("surface");
+    const mode = form.watch("mode");
+    const maxRuntime = form.watch("maxRuntime");
+    const costCeiling = form.watch("costCeiling");
+    const toolTimeout = form.watch("toolTimeout");
+    const roe = form.watch("roe");
     return (
         <ReviewStep
             target={target}

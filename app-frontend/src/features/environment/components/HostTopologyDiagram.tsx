@@ -1,3 +1,6 @@
+import { ArrowDownRight } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
 import { EORD_COLOR, STATUS_BADGE } from "@/features/environment/data/mockData";
 import { type HostNode } from "@/types/domain-types";
 
@@ -11,83 +14,35 @@ export function HostTopologyDiagram({
     setSelected: (id: string | null) => void;
 }) {
     return (
-        <div
-            className="flex flex-1 flex-col overflow-y-auto px-10 py-8"
-            style={{
-                borderRight: "1px solid var(--color-hex-1e1e1e)",
-            }}
-        >
+        <div className="border-border flex flex-1 flex-col overflow-y-auto border-r px-10 py-8">
             <div className="mb-6 flex items-center gap-3">
-                <span className="text-base-tight tracking-wider-2 rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1a4a2044)] bg-[var(--color-hex-0a1a10)] px-[8px] py-[2px] text-[var(--color-success)]">
+                <span className="border-border bg-muted text-success rounded-sm border-[1px] border-solid px-2 py-0.5 text-sm tracking-widest">
                     CONFIRMED TOPOLOGY
                 </span>
-                <span className="tracking-wider-1 text-sm text-[var(--color-hex-444444)]">
+                <span className="text-muted-foreground text-sm tracking-widest">
                     SOURCE: NMAP + CREDENTIAL REUSE · E_ord ≥ 3
                 </span>
             </div>
 
-            <div
-                className="flex flex-col items-start"
-                style={{
-                    gap: 0,
-                }}
-            >
+            <div className="flex flex-col items-start">
                 {hosts.map((host) => {
                     const isSel = selected === host.id;
                     const sb = STATUS_BADGE[host.status];
                     return (
                         <div key={host.id} className="flex flex-col items-start">
                             {/* Host card */}
-                            <button
+                            <Button
+                                variant="outline"
                                 onClick={() => setSelected(isSel ? null : host.id)}
-                                className="font-inherit flex w-[480px] cursor-pointer items-start gap-4 rounded-[2px] px-[18px] py-[14px] text-left"
-                                style={{
-                                    background: isSel
-                                        ? "var(--color-hex-120608)"
-                                        : "var(--color-hex-0d0d0d)",
-                                    border: `1px solid ${isSel ? "var(--color-brand)" : "var(--color-hex-292929)"}`,
-                                    transition: "border-color 0.1s, background 0.1s",
-                                }}
-                                onMouseEnter={(e) => {
-                                    if (!isSel) {
-                                        e.currentTarget.style.borderColor =
-                                            "var(--color-hex-444444)";
-                                        e.currentTarget.style.background =
-                                            "var(--color-hex-111111)";
-                                    }
-                                }}
-                                onMouseLeave={(e) => {
-                                    if (!isSel) {
-                                        e.currentTarget.style.borderColor =
-                                            "var(--color-hex-292929)";
-                                        e.currentTarget.style.background =
-                                            "var(--color-hex-0d0d0d)";
-                                    }
-                                }}
+                                className={`flex h-auto w-full max-w-3xl cursor-pointer items-start justify-start gap-4 rounded-sm border border-solid px-5 py-4 text-left font-normal whitespace-normal transition-colors ${isSel ? "bg-border border-primary" : "bg-background border-border"} hover:bg-border hover:border-muted-foreground`}
                             >
                                 {/* Left: id + status dot */}
-                                <div
-                                    className="flex flex-shrink-0 flex-col items-center gap-1.5"
-                                    style={{
-                                        paddingTop: 2,
-                                    }}
-                                >
+                                <div className="flex flex-shrink-0 flex-col items-center gap-1.5 pt-0.5">
                                     <div
-                                        className="h-[10px] w-[10px] rounded-[2px]"
-                                        style={{
-                                            border: `1px solid ${isSel ? "var(--color-brand)" : "var(--color-hex-333333)"}`,
-                                            background: isSel
-                                                ? "var(--color-brand)"
-                                                : "var(--color-hex-151515)",
-                                        }}
+                                        className={`h-2.5 w-2.5 rounded-sm border ${isSel ? "border-primary bg-primary" : "border-border bg-border"}`}
                                     />
                                     <span
-                                        className="text-sm font-bold tracking-normal"
-                                        style={{
-                                            color: isSel
-                                                ? "var(--color-brand)"
-                                                : "var(--color-hex-444444)",
-                                        }}
+                                        className={`text-sm font-bold tracking-normal ${isSel ? "text-primary" : "text-muted-foreground"}`}
                                     >
                                         {host.id}
                                     </span>
@@ -97,37 +52,23 @@ export function HostTopologyDiagram({
                                 <div className="flex-1">
                                     <div className="mb-1 flex items-center gap-2">
                                         <span
-                                            className="text-xl font-bold tracking-tight"
-                                            style={{
-                                                color: isSel
-                                                    ? "var(--color-fg)"
-                                                    : "var(--color-hex-888888)",
-                                            }}
+                                            className={`text-xs font-bold tracking-tight ${isSel ? "text-foreground" : "text-muted-foreground"}`}
                                         >
                                             {host.ip}
                                         </span>
-                                        <span className="text-base text-[var(--color-hex-555555)]">
-                                            ·
-                                        </span>
-                                        <span
-                                            className="text-lg tracking-tighter"
-                                            style={{
-                                                color: isSel
-                                                    ? "var(--color-hex-a0a0a0)"
-                                                    : "var(--color-hex-555555)",
-                                            }}
-                                        >
+                                        <span className="text-muted-foreground text-base">·</span>
+                                        <span className="text-muted-foreground text-xs tracking-tighter">
                                             {host.hostname}
                                         </span>
                                     </div>
-                                    <div className="tracking-wider-1 mb-[8px] text-base text-[var(--color-hex-444444)]">
+                                    <div className="text-muted-foreground mb-2 text-base tracking-widest">
                                         {host.role}
                                     </div>
                                     <div className="flex flex-wrap gap-1">
                                         {host.services.map((s: string) => (
                                             <span
                                                 key={s}
-                                                className="rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)] bg-[var(--color-hex-111111)] px-[5px] py-[1px] text-sm tracking-tight text-[var(--color-hex-555555)]"
+                                                className="border-border bg-card text-muted-foreground rounded-sm border-[1px] border-solid px-1 py-px text-sm tracking-tight"
                                             >
                                                 {s}
                                             </span>
@@ -138,7 +79,7 @@ export function HostTopologyDiagram({
                                 {/* Right: status + eord */}
                                 <div className="flex flex-shrink-0 flex-col items-end gap-2">
                                     <span
-                                        className="tracking-wider-1 rounded-[2px] px-[6px] py-[1px] text-sm font-semibold"
+                                        className="rounded-sm px-1.5 py-px text-sm font-semibold tracking-widest"
                                         style={{
                                             color: sb.color,
                                             background: sb.bg,
@@ -148,11 +89,11 @@ export function HostTopologyDiagram({
                                         {host.status}
                                     </span>
                                     <div className="flex items-center gap-1">
-                                        <span className="text-sm-tight tracking-normal text-[var(--color-hex-444444)]">
+                                        <span className="text-muted-foreground text-xs tracking-normal">
                                             E_ord
                                         </span>
                                         <span
-                                            className="text-lg font-bold"
+                                            className="text-xs font-bold"
                                             style={{
                                                 color: EORD_COLOR[host.eord],
                                             }}
@@ -160,65 +101,64 @@ export function HostTopologyDiagram({
                                             {host.eord}/5
                                         </span>
                                     </div>
-                                    <span className="text-sm tracking-normal text-[var(--color-hex-333333)]">
+                                    <span className="text-muted-foreground text-sm tracking-normal">
                                         {host.os}
                                     </span>
                                 </div>
-                            </button>
+                            </Button>
 
-                            {host.edges.map((edge) => (
-                                <div key={edge.to} className="ml-[28px] flex items-stretch">
-                                    {/* Vertical line */}
-                                    <div
-                                        className="w-[1px] shrink-0 bg-[var(--color-hex-292929)]"
-                                        style={{
-                                            margin: "0 0 0 4px",
-                                        }}
-                                    />
-                                    {/* Edge label */}
-                                    <div
-                                        className="flex flex-col justify-center"
-                                        style={{
-                                            paddingLeft: 16,
-                                            paddingTop: 6,
-                                            paddingBottom: 6,
-                                        }}
-                                    >
-                                        <div className="flex items-center gap-2">
-                                            <span className="text-sm tracking-normal text-[var(--color-brand)]">
-                                                →
-                                            </span>
-                                            <span className="text-base font-semibold tracking-normal text-[var(--color-hex-555555)]">
-                                                {edge.label.toUpperCase()}
-                                            </span>
-                                            <span className="text-sm tracking-tight text-[var(--color-hex-333333)]">
-                                                {edge.detail}
-                                            </span>
-                                            <span
-                                                className="text-sm-tight tracking-normal"
-                                                style={{
-                                                    color: EORD_COLOR[edge.eord],
-                                                }}
-                                            >
-                                                E_ord {edge.eord}
-                                            </span>
+                            {host.edges.length > 0 && (
+                                <div className="relative flex w-full flex-col py-2">
+                                    {/* Main continuous vertical line from host card center */}
+                                    <div className="bg-border/80 absolute top-0 bottom-0 left-[25px] w-px" />
+
+                                    {host.edges.map((edge) => (
+                                        <div
+                                            key={edge.to}
+                                            className="relative flex items-center py-2.5"
+                                        >
+                                            {/* Branch line from main vertical line to edge label */}
+                                            <div className="bg-border/80 absolute top-1/2 left-[25px] h-[1px] w-6 -translate-y-1/2" />
+
+                                            {/* Edge label as a modern pill */}
+                                            <div className="z-10 ml-12 flex items-center gap-3">
+                                                <div className="border-border bg-card/80 hover:bg-accent/50 flex items-center gap-2.5 rounded-full border px-3.5 py-1.5 shadow-sm backdrop-blur-sm transition-colors">
+                                                    <span className="text-primary flex items-center gap-1.5 text-[11px] font-bold tracking-widest">
+                                                        <ArrowDownRight className="h-3.5 w-3.5" />
+                                                        {edge.label.toUpperCase()}
+                                                    </span>
+                                                    <div className="bg-border h-3.5 w-[1px]" />
+                                                    <span className="text-muted-foreground text-xs font-medium">
+                                                        {edge.detail}
+                                                    </span>
+                                                    <div className="bg-border h-3.5 w-[1px]" />
+                                                    <span
+                                                        className="bg-background/50 border-border/50 rounded border px-2 py-0.5 text-[10px] font-bold"
+                                                        style={{
+                                                            color: EORD_COLOR[edge.eord],
+                                                        }}
+                                                    >
+                                                        E_ord {edge.eord}
+                                                    </span>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
+                                    ))}
                                 </div>
-                            ))}
+                            )}
                         </div>
                     );
                 })}
             </div>
 
             {/* Caption */}
-            <div className="mt-8 flex max-w-[480px] items-start gap-2 rounded-[2px] border-[1px] border-solid border-[var(--color-hex-1e1e1e)] bg-[var(--color-hex-0b0b0b)] px-[14px] py-[10px]">
-                <span className="shrink-0 text-lg text-[var(--color-brand)]">ⓘ</span>
-                <span className="tracking-tight-1 text-base leading-relaxed text-[var(--color-hex-444444)]">
+            <div className="border-border bg-background mt-8 flex max-w-3xl items-start gap-2 rounded-sm border-[1px] border-solid px-4 py-3">
+                <span className="text-primary shrink-0 text-xs">ⓘ</span>
+                <span className="text-muted-foreground text-base leading-relaxed tracking-tight">
                     Topology represents{" "}
-                    <strong className="text-[var(--color-hex-666666)]">confirmed facts</strong> from
-                    the Environmental Layer only. Dashed edges are inferred from network scan data
-                    and have not been directly observed. This diagram is not the VDG attack graph.
+                    <strong className="text-muted-foreground">confirmed facts</strong> from the
+                    Environmental Layer only. Dashed edges are inferred from network scan data and
+                    have not been directly observed. This diagram is not the VDG attack graph.
                 </span>
             </div>
         </div>

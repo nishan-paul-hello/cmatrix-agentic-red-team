@@ -15,14 +15,17 @@ export default function TeamManagerDashboardContainer() {
     const [sched, setSched] = useState<SchedEntry[]>([]);
 
     useEffect(() => {
-        void new TeamDashboardRepository().fetchAll().then((results) => {
-            if (results.length > 0) {
-                const data = results[0];
-                setVdg(data.vdg);
-                setSpecialists(data.specialists);
-                setSched(data.sched);
-            }
-        });
+        void new TeamDashboardRepository()
+            .fetchAll()
+            .then((results) => {
+                if (results.length > 0) {
+                    const data = results[0];
+                    setVdg(data.vdg);
+                    setSpecialists(data.specialists);
+                    setSched(data.sched);
+                }
+            })
+            .catch(console.error);
     }, []);
 
     return (

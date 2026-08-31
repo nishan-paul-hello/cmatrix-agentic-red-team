@@ -1,5 +1,13 @@
 import { useEffect, useState } from "react";
 
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
 import { EnvironmentRepository } from "@/features/environment/data/EnvironmentRepository";
 import { type CveCandidate } from "@/types/domain-types";
 
@@ -8,7 +16,8 @@ export default function CVECandidatesPanel() {
     useEffect(() => {
         void new EnvironmentRepository()
             .fetchAll<CveCandidate>({ collection: "CVE_CANDIDATES", limit: 1000 })
-            .then(setData);
+            .then(setData)
+            .catch(console.error);
     }, []);
 
     if (CVE_CANDIDATES.length === 0) {
@@ -17,22 +26,17 @@ export default function CVECandidatesPanel() {
 
     return (
         <div className="flex-1 overflow-auto">
-            <div
-                className="flex flex-shrink-0 items-center gap-2 bg-[var(--color-hex-0a0a0a)] px-4 py-2"
-                style={{
-                    borderBottom: "1px solid var(--color-hex-141414)",
-                }}
-            >
-                <span className="tracking-wider-3 text-sm text-[var(--color-hex-444444)]">
+            <div className="bg-background border-border flex flex-shrink-0 items-center gap-2 border-b px-4 py-2">
+                <span className="text-muted-foreground text-sm tracking-widest">
                     VDG HYPOTHESIS CANDIDATES
                 </span>
-                <span className="ml-auto text-sm tracking-wide text-[var(--color-warning)]">
+                <span className="text-warning ml-auto text-sm tracking-wide">
                     {CVE_CANDIDATES.filter((c) => c.poc).length} WITH PoC
                 </span>
             </div>
-            <table className="text-xl-tight w-full border-collapse">
-                <thead>
-                    <tr className="sticky top-0 bg-[var(--color-hex-0f0f0f)]">
+            <Table className="w-full border-collapse text-xs">
+                <TableHeader>
+                    <TableRow className="bg-card sticky top-0">
                         {[
                             "CVE ID",
                             "TECHNOLOGY",
@@ -42,92 +46,66 @@ export default function CVECandidatesPanel() {
                             "LINKED VDG NODE",
                             "E_ORD",
                         ].map((h) => (
-                            <th
+                            <TableHead
                                 key={h}
-                                className="tracking-wider-2 px-[12px] py-[6px] text-left text-sm font-semibold whitespace-nowrap text-[var(--color-hex-444444)]"
-                                style={{
-                                    borderBottom: "1px solid var(--color-hex-1a1a1a)",
-                                }}
+                                className="text-muted-foreground border-border border-b px-3 py-1.5 text-left text-sm font-semibold tracking-widest whitespace-nowrap"
                             >
                                 {h}
-                            </th>
+                            </TableHead>
                         ))}
-                    </tr>
-                </thead>
-                <tbody>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
                     {[...CVE_CANDIDATES]
                         .sort((a, b) => b.epss - a.epss)
                         .map((c) => (
-                            <tr
+                            <TableRow
                                 key={c.id}
-                                style={{
-                                    borderBottom: "1px solid var(--color-hex-111111)",
-                                }}
-                                onMouseEnter={(e) =>
-                                    (e.currentTarget.style.background = "var(--color-hex-0f0f0f)")
-                                }
-                                onMouseLeave={(e) =>
-                                    (e.currentTarget.style.background = "transparent")
-                                }
+                                className="border-border hover:bg-border border-b bg-transparent transition-colors"
                             >
-                                <td className="tracking-tight-1 px-[12px] py-[7px] text-base font-bold text-[var(--color-brand)]">
+                                <TableCell className="text-primary px-3 py-1.5 text-base font-bold tracking-tight">
                                     {c.id}
-                                </td>
-                                <td className="px-[12px] py-[7px] text-[var(--color-hex-a0a0a0)]">
+                                </TableCell>
+                                <TableCell className="text-muted-foreground px-3 py-1.5">
                                     {c.tech}
-                                </td>
-                                <td className="px-[12px] py-[7px] text-base text-[var(--color-hex-666666)]">
+                                </TableCell>
+                                <TableCell className="text-muted-foreground px-3 py-1.5 text-base">
                                     {c.class}
-                                </td>
-                                <td className="px-[12px] py-[7px]">
+                                </TableCell>
+                                <TableCell className="px-3 py-1.5">
                                     <span
-                                        className="text-lg font-bold"
-                                        style={{
-                                            color: (() => {
-                                                if (c.epss > 0.5) {
-                                                    return "var(--color-danger)";
-                                                }
-                                                if (c.epss > 0.3) {
-                                                    return "var(--color-warning)";
-                                                }
-                                                return "var(--color-hex-555555)";
-                                            })(),
-                                        }}
+                                        className={`text-xs font-bold ${(() => {
+                                            if (c.epss > 0.5) {
+                                                return "text-destructive";
+                                            }
+                                            if (c.epss > 0.3) {
+                                                return "text-warning";
+                                            }
+                                            return "text-muted-foreground";
+                                        })()}`}
                                     >
                                         {c.epss.toFixed(2)}
                                     </span>
-                                </td>
-                                <td className="px-[12px] py-[7px]">
+                                </TableCell>
+                                <TableCell className="px-3 py-1.5">
                                     <span
-                                        className="text-base-tight tracking-wide"
-                                        style={{
-                                            color: c.poc
-                                                ? "var(--color-success)"
-                                                : "var(--color-hex-333333)",
-                                        }}
+                                        className={`text-sm tracking-wide ${c.poc ? "text-success" : "text-border"}`}
                                     >
                                         {c.poc ? "YES" : "NO"}
                                     </span>
-                                </td>
-                                <td
-                                    className="px-[12px] py-[7px] text-base"
-                                    style={{
-                                        color:
-                                            c.node !== "—"
-                                                ? "var(--color-brand)"
-                                                : "var(--color-hex-333333)",
-                                        fontWeight: c.node !== "—" ? 700 : 400,
-                                    }}
+                                </TableCell>
+                                <TableCell
+                                    className={`px-3 py-1.5 text-base ${c.node !== "\u2014" ? "text-primary font-bold" : "text-border font-normal"}`}
                                 >
                                     {c.node}
-                                </td>
-                                <td className="px-[12px] py-[7px] text-[var(--color-hex-666666)]">
+                                </TableCell>
+                                <TableCell className="text-muted-foreground px-3 py-1.5">
                                     {c.eord}/5
-                                </td>
-                            </tr>
+                                </TableCell>
+                            </TableRow>
                         ))}
-                </tbody>
-            </table>
+                </TableBody>
+            </Table>
         </div>
     );
 }

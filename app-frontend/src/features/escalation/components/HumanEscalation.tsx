@@ -1,6 +1,8 @@
 import { useState } from "react";
 
 import { emitAuditEvent } from "@/features/audit/emitAuditEvent";
+import { EscalationDetailPane } from "@/features/escalation/components/EscalationDetailPane";
+import { EscalationHistorySidebar } from "@/features/escalation/components/EscalationHistorySidebar";
 import {
     ESCALATION_CATEGORIES,
     globalEscalationManager,
@@ -12,9 +14,6 @@ import { useTelemetry } from "@/hooks/useTelemetry";
 import { useAuth } from "@/lib/auth-context";
 import { useServices } from "@/lib/services-context";
 import { type RiskAssessment } from "@/types/domain-types";
-
-import { EscalationDetailPane } from "./EscalationDetailPane";
-import { EscalationHistorySidebar } from "./EscalationHistorySidebar";
 
 export default function HumanEscalation() {
     const [activeReason, setActiveReason] = useState<EscalationReason>("HIGH_RISK_ACTION");
@@ -69,37 +68,26 @@ export default function HumanEscalation() {
         return <EscalationSubmitted />;
     }
     return (
-        <div className="flex h-full min-h-[0px] flex-col">
+        <div className="flex h-full min-h-0 flex-col">
             {/* Header */}
-            <div
-                className="flex-shrink-0 px-6 pt-5 pb-4"
-                style={{
-                    borderBottom: "1px solid var(--color-hex-1e1e1e)",
-                }}
-            >
-                <div className="tracking-widest-2 mb-[3px] text-base text-[var(--color-hex-666666)]">
+            <div className="border-border flex-shrink-0 border-b px-6 pt-5 pb-4">
+                <div className="text-muted-foreground mb-0.5 text-base tracking-widest">
                     MISSION / CVE-001
                 </div>
                 <div className="flex items-baseline gap-4">
-                    <h1 className="text-9xl font-bold tracking-wide text-[var(--color-fg)]">
+                    <h1 className="text-foreground text-xs font-bold tracking-wide">
                         HUMAN ESCALATION
                     </h1>
                     <div className="flex items-center gap-2">
-                        <div
-                            className="h-[7px] w-[7px] bg-[var(--color-danger)]"
-                            style={{
-                                borderRadius: "50%",
-                                animation: "pulse 1.2s ease infinite",
-                            }}
-                        />
-                        <span className="tracking-wider-2 text-base font-bold text-[var(--color-danger)]">
+                        <div className="bg-destructive pulse-dot h-1.5 w-1.5 rounded-full" />
+                        <span className="text-destructive text-base font-bold tracking-widest">
                             AWAITING RESPONSE
                         </span>
                     </div>
                 </div>
             </div>
 
-            <div className="flex min-h-[0px] flex-1 overflow-hidden">
+            <div className="flex min-h-0 flex-1 flex-col overflow-hidden lg:flex-row">
                 {/* Left: escalation detail */}
                 <EscalationDetailPane
                     reason={reason}
@@ -115,28 +103,19 @@ export default function HumanEscalation() {
                 {/* Right: escalation history */}
                 <EscalationHistorySidebar history={history} />
             </div>
-            <style>{`@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}`}</style>
         </div>
     );
 }
 function EscalationSubmitted() {
     return (
-        <div className="flex h-full min-h-[0px] flex-col items-center justify-center gap-5">
-            <div
-                className="h-[40px] w-[40px] border-[2px] border-solid border-[var(--color-success)]"
-                style={{
-                    borderRadius: "50%",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                }}
-            >
-                <span className="text-8xl text-[var(--color-success)]">✓</span>
+        <div className="flex h-full min-h-0 flex-col items-center justify-center gap-5">
+            <div className="border-success flex h-10 w-10 items-center justify-center rounded-full border-[2px] border-solid">
+                <span className="text-success text-xs">✓</span>
             </div>
-            <div className="text-3xl font-bold tracking-normal text-[var(--color-fg)]">
+            <div className="text-foreground text-sm font-bold tracking-normal">
                 RESPONSE SUBMITTED
             </div>
-            <div className="tracking-wider-1 text-base text-[var(--color-hex-444444)]">
+            <div className="text-muted-foreground text-base tracking-widest">
                 AGENT RESUMING — SPECIALISTS REACTIVATED
             </div>
         </div>

@@ -1,5 +1,13 @@
 import { useEffect, useState } from "react";
 
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
 import { EnvironmentRepository } from "@/features/environment/data/EnvironmentRepository";
 import { STATUS_COLOR } from "@/features/environment/data/mockData";
 import { type Service } from "@/types/domain-types";
@@ -9,7 +17,8 @@ export default function ServicesPanel() {
     useEffect(() => {
         void new EnvironmentRepository()
             .fetchAll<Service>({ collection: "SERVICES", limit: 1000 })
-            .then(setData);
+            .then(setData)
+            .catch(console.error);
     }, []);
 
     if (SERVICES.length === 0) {
@@ -18,64 +27,47 @@ export default function ServicesPanel() {
 
     return (
         <>
-            <div
-                className="flex items-center justify-between bg-[var(--color-hex-0b0b0b)] px-6 py-2"
-                style={{
-                    borderBottom: "1px solid var(--color-hex-1e1e1e)",
-                }}
-            >
-                <span className="text-base-tight tracking-wider-2 text-[var(--color-hex-444444)]">
+            <div className="bg-background border-border flex items-center justify-between border-b px-6 py-2">
+                <span className="text-muted-foreground text-sm tracking-widest">
                     {SERVICES.length} SERVICES DETECTED · SOURCE: NMAP 7.94 · DISCOVERED
                 </span>
-                <span className="tracking-wider-1 text-sm text-[var(--color-success)]">
-                    E_ord ≥ 4 — CONFIRMED
-                </span>
+                <span className="text-success text-sm tracking-widest">E_ord ≥ 4 — CONFIRMED</span>
             </div>
-            <table className="text-xl-tight w-full border-collapse">
-                <thead>
-                    <tr className="bg-[var(--color-hex-0f0f0f)]">
+            <Table className="w-full border-collapse text-xs">
+                <TableHeader>
+                    <TableRow className="bg-card">
                         {["HOST", "PORT", "SERVICE", "VERSION", "BANNER", "STATUS"].map((h) => (
-                            <th
+                            <TableHead
                                 key={h}
-                                className="tracking-wider-3 px-[16px] py-[6px] text-left text-sm font-semibold whitespace-nowrap text-[var(--color-hex-444444)]"
-                                style={{
-                                    borderBottom: "1px solid var(--color-hex-1a1a1a)",
-                                }}
+                                className="text-muted-foreground border-border border-b px-4 py-1.5 text-left text-sm font-semibold tracking-widest whitespace-nowrap"
                             >
                                 {h}
-                            </th>
+                            </TableHead>
                         ))}
-                    </tr>
-                </thead>
-                <tbody>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
                     {SERVICES.map((row) => (
-                        <tr
+                        <TableRow
                             key={`${row.host}-${row.port}`}
-                            className="cursor-pointer"
-                            style={{
-                                borderBottom: "1px solid var(--color-hex-111111)",
-                            }}
-                            onMouseEnter={(e) =>
-                                (e.currentTarget.style.background = "var(--color-hex-0f0f0f)")
-                            }
-                            onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+                            className="border-border hover:bg-border cursor-pointer border-b bg-transparent transition-colors"
                         >
-                            <td className="px-[16px] py-[7px] whitespace-nowrap text-[var(--color-hex-666666)]">
+                            <TableCell className="text-muted-foreground px-4 py-1.5 whitespace-nowrap">
                                 {row.host}
-                            </td>
-                            <td className="px-[16px] py-[7px] text-right font-bold text-[var(--color-hex-a0a0a0)]">
+                            </TableCell>
+                            <TableCell className="text-muted-foreground px-4 py-1.5 text-right font-bold">
                                 {row.port}
-                            </td>
-                            <td className="px-[16px] py-[7px] tracking-tight text-[var(--color-hex-a0a0a0)]">
+                            </TableCell>
+                            <TableCell className="text-muted-foreground px-4 py-1.5 tracking-tight">
                                 {row.service}
-                            </td>
-                            <td className="text-lg-tight px-[16px] py-[7px] text-[var(--color-hex-555555)]">
+                            </TableCell>
+                            <TableCell className="text-muted-foreground px-4 py-1.5 text-base">
                                 {row.version}
-                            </td>
-                            <td className="px-[16px] py-[7px] text-base text-[var(--color-hex-444444)]">
+                            </TableCell>
+                            <TableCell className="text-muted-foreground px-4 py-1.5 text-base">
                                 {row.banner}
-                            </td>
-                            <td className="px-[16px] py-[7px] whitespace-nowrap">
+                            </TableCell>
+                            <TableCell className="px-4 py-1.5 whitespace-nowrap">
                                 <span
                                     className="text-base font-semibold tracking-wide"
                                     style={{
@@ -84,11 +76,11 @@ export default function ServicesPanel() {
                                 >
                                     {row.status}
                                 </span>
-                            </td>
-                        </tr>
+                            </TableCell>
+                        </TableRow>
                     ))}
-                </tbody>
-            </table>
+                </TableBody>
+            </Table>
         </>
     );
 }

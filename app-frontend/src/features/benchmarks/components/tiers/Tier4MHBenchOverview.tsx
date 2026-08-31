@@ -9,8 +9,8 @@ export function Tier4MHBenchOverview({
     const d = bench.detail;
     return (
         <>
-            <div className="mb-3 rounded-[2px] border border-solid border-[var(--color-hex-3fb95022)] bg-[var(--color-hex-0a1a10)] px-[12px] py-[8px]">
-                <span className="text-sm tracking-wide text-[var(--color-success)]">
+            <div className="border-border bg-muted mb-3 rounded-sm border border-solid px-3 py-2">
+                <span className="text-success text-sm tracking-wide">
                     ◈ MULTI-HOST AXIS — results are on a separate axis from web pass-rate
                 </span>
             </div>
@@ -23,12 +23,12 @@ export function Tier4MHBenchOverview({
             <PassRateBar
                 label="HOST COMPROMISE RATE"
                 value={d.hostCompromiseSuccess / d.environments}
-                color="var(--color-brand)"
+                color="text-primary"
             />
             <PassRateBar
                 label="CREDENTIAL THEFT RATE"
                 value={d.credentialTheftSuccess / d.environments}
-                color="var(--color-warning)"
+                color="text-warning"
             />
             <MetaRow bench={bench} />
         </>

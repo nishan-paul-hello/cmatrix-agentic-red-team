@@ -1,5 +1,13 @@
 import React from "react";
 
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
 import { STATUS_C } from "@/features/specialists/constants";
 import { type VDGEntry } from "@/features/specialists/data/fixtures/teamDashboardMockData";
 
@@ -11,25 +19,14 @@ export const VDGScoringTable = React.memo(function ({
     setUcbEntry: (v: VDGEntry | null) => void;
 }) {
     return (
-        <div
-            className="flex flex-1 flex-col overflow-hidden"
-            style={{
-                borderRight: "1px solid var(--color-hex-1e1e1e)",
-            }}
-        >
-            <div
-                className="shrink-0 bg-[var(--color-hex-0a0a0a)] text-sm tracking-widest text-[var(--color-hex-444444)]"
-                style={{
-                    padding: "10px 20px 8px",
-                    borderBottom: "1px solid var(--color-hex-111111)",
-                }}
-            >
+        <div className="border-border flex flex-1 flex-col overflow-hidden border-r">
+            <div className="bg-background text-muted-foreground border-border shrink-0 border-b px-4 py-2 text-sm tracking-widest">
                 VDG SCORING — UCB POLICY
             </div>
-            <div className="flex-1 overflow-y-auto">
-                <table className="w-full border-collapse">
-                    <thead>
-                        <tr className="sticky top-0 bg-[var(--color-hex-0f0f0f)]">
+            <div className="flex-1 overflow-auto">
+                <Table>
+                    <TableHeader>
+                        <TableRow className="bg-card hover:bg-card sticky top-0">
                             {[
                                 "NODE",
                                 "TYPE",
@@ -41,115 +38,82 @@ export const VDGScoringTable = React.memo(function ({
                                 "E_ORD",
                                 "COST",
                             ].map((h) => (
-                                <th
+                                <TableHead
                                     key={h}
-                                    className="text-sm-tight tracking-wider-2 px-[12px] py-[5px] font-semibold whitespace-nowrap text-[var(--color-hex-444444)]"
-                                    style={{
-                                        textAlign:
-                                            h === "UCB ↓" ||
-                                            h === "EXPLOIT" ||
-                                            h === "EXPLORE" ||
-                                            h === "VISITS" ||
-                                            h === "E_ORD"
-                                                ? "right"
-                                                : "left",
-                                        borderBottom: "1px solid var(--color-hex-1a1a1a)",
-                                    }}
+                                    className="text-muted-foreground border-border border-b px-3 py-1 text-xs font-semibold tracking-widest"
                                 >
                                     {h}
-                                </th>
+                                </TableHead>
                             ))}
-                        </tr>
-                    </thead>
-                    <tbody>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
                         {vdg
                             .sort((a, b) => b.ucb - a.ucb)
-                            .map((v) => (
-                                <tr
-                                    key={v.id}
-                                    onClick={() => setUcbEntry(v)}
-                                    className="cursor-pointer"
-                                    style={{
-                                        borderBottom: "1px solid var(--color-hex-111111)",
-                                        opacity: v.status === "BLOCKED" ? 0.4 : 1,
-                                    }}
-                                    onMouseEnter={(e) =>
-                                        (e.currentTarget.style.background =
-                                            "var(--color-hex-0d0d0d)")
-                                    }
-                                    onMouseLeave={(e) =>
-                                        (e.currentTarget.style.background = "transparent")
-                                    }
-                                >
-                                    <td className="text-lg-tight tracking-tight-1 px-[12px] py-[7px] font-bold text-[var(--color-brand)]">
-                                        {v.id}
-                                    </td>
-                                    <td className="px-[12px] py-[7px] text-base text-[var(--color-hex-555555)]">
-                                        {v.type}
-                                    </td>
-                                    <td className="px-[12px] py-[7px]">
-                                        <span
-                                            className="text-base-tight font-semibold tracking-normal"
-                                            style={{
-                                                color: STATUS_C[v.status],
-                                            }}
-                                        >
-                                            {v.status}
-                                        </span>
-                                    </td>
-                                    <td className="px-[12px] py-[7px] text-right">
-                                        <span
-                                            className="text-lg font-bold"
-                                            style={{
-                                                color: (() => {
-                                                    if (v.ucb > 0.8) {
-                                                        return "var(--color-danger)";
-                                                    }
-                                                    if (v.ucb > 0.6) {
-                                                        return "var(--color-brand)";
-                                                    }
-                                                    if (v.ucb > 0) {
-                                                        return "var(--color-hex-a0a0a0)";
-                                                    }
-                                                    return "var(--color-hex-333333)";
-                                                })(),
-                                            }}
-                                        >
-                                            {v.ucb > 0 ? v.ucb.toFixed(3) : "—"}
-                                        </span>
-                                    </td>
-                                    <td className="px-[12px] py-[7px] text-right text-base text-[var(--color-hex-555555)]">
-                                        {v.exploit > 0 ? v.exploit.toFixed(3) : "—"}
-                                    </td>
-                                    <td className="px-[12px] py-[7px] text-right text-base text-[var(--color-success)]">
-                                        {v.explore > 0 ? v.explore.toFixed(3) : "—"}
-                                    </td>
-                                    <td className="px-[12px] py-[7px] text-right text-base text-[var(--color-hex-444444)]">
-                                        {v.visits}
-                                    </td>
-                                    <td
-                                        className="px-[12px] py-[7px] text-right text-base"
-                                        style={{
-                                            color: (() => {
-                                                if (v.eord >= 4) {
-                                                    return "var(--color-success)";
-                                                }
-                                                if (v.eord >= 2) {
-                                                    return "var(--color-warning)";
-                                                }
-                                                return "var(--color-hex-444444)";
-                                            })(),
-                                        }}
+                            .map((v) => {
+                                let ucbColor = "text-border";
+                                if (v.ucb > 0.8) {
+                                    ucbColor = "text-destructive";
+                                } else if (v.ucb > 0.6) {
+                                    ucbColor = "text-primary";
+                                } else if (v.ucb > 0) {
+                                    ucbColor = "text-muted-foreground";
+                                }
+
+                                let eordColor = "text-muted-foreground";
+                                if (v.eord >= 4) {
+                                    eordColor = "text-success";
+                                } else if (v.eord >= 2) {
+                                    eordColor = "text-warning";
+                                }
+
+                                return (
+                                    <TableRow
+                                        key={v.id}
+                                        onClick={() => setUcbEntry(v)}
+                                        className="border-border hover:bg-background cursor-pointer border-b"
                                     >
-                                        {v.eord}/5
-                                    </td>
-                                    <td className="px-[12px] py-[7px] text-right text-base text-[var(--color-hex-444444)]">
-                                        {v.cost}
-                                    </td>
-                                </tr>
-                            ))}
-                    </tbody>
-                </table>
+                                        <TableCell className="text-primary px-3 py-1.5 text-base font-bold tracking-tight">
+                                            {v.id}
+                                        </TableCell>
+                                        <TableCell className="text-muted-foreground px-3 py-1.5 text-base">
+                                            {v.type}
+                                        </TableCell>
+                                        <TableCell className="px-3 py-1.5">
+                                            <span
+                                                className="text-sm font-semibold tracking-normal"
+                                                style={{
+                                                    color: STATUS_C[v.status],
+                                                }}
+                                            >
+                                                {v.status}
+                                            </span>
+                                        </TableCell>
+                                        <TableCell className="px-3 py-1.5">
+                                            <span className={`text-xs font-bold ${ucbColor}`}>
+                                                {v.ucb > 0 ? v.ucb.toFixed(3) : "—"}
+                                            </span>
+                                        </TableCell>
+                                        <TableCell className="text-muted-foreground px-3 py-1.5 text-base">
+                                            {v.exploit > 0 ? v.exploit.toFixed(3) : "—"}
+                                        </TableCell>
+                                        <TableCell className="text-success px-3 py-1.5 text-base">
+                                            {v.explore > 0 ? v.explore.toFixed(3) : "—"}
+                                        </TableCell>
+                                        <TableCell className="text-muted-foreground px-3 py-1.5 text-base">
+                                            {v.visits}
+                                        </TableCell>
+                                        <TableCell className={`px-3 py-1.5 text-base ${eordColor}`}>
+                                            {v.eord}/5
+                                        </TableCell>
+                                        <TableCell className="text-muted-foreground px-3 py-1.5 text-base">
+                                            {v.cost}
+                                        </TableCell>
+                                    </TableRow>
+                                );
+                            })}
+                    </TableBody>
+                </Table>
             </div>
         </div>
     );

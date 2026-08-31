@@ -89,25 +89,25 @@ export const SEV_C: Record<
     }
 > = {
     CRITICAL: {
-        color: "var(--color-danger)",
-        bg: "var(--color-hex-1a0608)",
+        color: "var(--destructive)",
+        bg: "var(--border)",
     },
     HIGH: {
-        color: "var(--color-brand)",
-        bg: "var(--color-hex-150608)",
+        color: "var(--primary)",
+        bg: "var(--border)",
     },
     MEDIUM: {
-        color: "var(--color-warning)",
-        bg: "var(--color-hex-1a1200)",
+        color: "var(--warning)",
+        bg: "var(--border)",
     },
     LOW: {
-        color: "var(--color-hex-666666)",
-        bg: "var(--color-hex-111111)",
+        color: "var(--color-zinc-500)",
+        bg: "var(--color-zinc-900)",
     },
 };
 export const STATUS_C: Record<string, string> = {
-    [FINDING_STATUS.ORACLE_CONFIRMED]: "var(--color-danger)",
-    [FINDING_STATUS.VALIDATED]: "var(--color-success)",
-    [FINDING_STATUS.PENDING]: "var(--color-warning)",
-    [FINDING_STATUS.RULED_OUT]: "var(--color-hex-555555)",
+    [FINDING_STATUS.ORACLE_CONFIRMED]: "var(--destructive)",
+    [FINDING_STATUS.VALIDATED]: "var(--success)",
+    [FINDING_STATUS.PENDING]: "var(--warning)",
+    [FINDING_STATUS.RULED_OUT]: "var(--color-zinc-600)",
 };

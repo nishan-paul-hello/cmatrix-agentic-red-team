@@ -16,16 +16,15 @@ export function useReportsData(page: number = 1, limit: number = 50) {
 
     useEffect(() => {
         const repo = new ReportsRepository();
-        void Promise.all([
-            repo.fetchAll({ page, limit }),
-            ReportsRepository.getPreviewSections(),
-        ]).then(([reportsData, previewData]) => {
-            setReports(reportsData);
-            setPreviewSections(previewData);
-            if (reportsData.length > 0) {
-                setSel(reportsData[0]);
-            }
-        });
+        void Promise.all([repo.fetchAll({ page, limit }), ReportsRepository.getPreviewSections()])
+            .then(([reportsData, previewData]) => {
+                setReports(reportsData);
+                setPreviewSections(previewData);
+                if (reportsData.length > 0) {
+                    setSel(reportsData[0]);
+                }
+            })
+            .catch(console.error);
     }, [page, limit]);
 
     return { sel, setSel, reports, previewSections };

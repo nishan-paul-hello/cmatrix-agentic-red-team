@@ -1,10 +1,10 @@
 export default function Meta({ label, value }: { label: string; value: string }) {
     return (
-        <div className="flex items-center gap-1.5">
-            <span className="tracking-wider-3 text-sm text-[var(--color-hex-444444)]">{label}</span>
-            <span className="text-base tracking-normal text-[var(--color-hex-a0a0a0)]">
-                {value}
+        <div className="flex flex-col justify-center gap-0.5">
+            <span className="text-muted-foreground text-[10px] font-bold tracking-widest uppercase">
+                {label}
             </span>
+            <span className="text-foreground text-sm font-medium tracking-tight">{value}</span>
         </div>
     );
 }

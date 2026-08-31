@@ -18,23 +18,21 @@ export function Tier5BountyBenchOverview({
             <PassRateBar
                 label="DETECTION RATE"
                 value={d.detect.pass / d.detect.total}
-                color="var(--color-warning)"
+                color="text-warning"
             />
             <PassRateBar
                 label="EXPLOITATION RATE"
                 value={d.exploit.pass / d.exploit.total}
-                color="var(--color-brand)"
+                color="text-primary"
             />
-            <div className="mt-2 text-sm tracking-wide text-[var(--color-hex-555555)]">
+            <div className="text-muted-foreground mt-2 text-sm tracking-wide">
                 PATCH column excluded — RedGrid scoping rule (§2.1): attack only, not defense.
             </div>
             <div className="mt-3">
-                <div className="text-sm-tight tracking-wider-3 mb-[4px] text-[var(--color-hex-444444)]">
+                <div className="text-muted-foreground mb-1 text-xs tracking-widest">
                     COST PER EXPLOIT
                 </div>
-                <div className="text-10xl font-bold text-[var(--color-danger)]">
-                    {d.costPerExploit}
-                </div>
+                <div className="text-destructive text-xs font-bold">{d.costPerExploit}</div>
             </div>
             <MetaRow bench={bench} />
         </>

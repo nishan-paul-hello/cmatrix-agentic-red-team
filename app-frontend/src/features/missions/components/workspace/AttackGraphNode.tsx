@@ -1,7 +1,15 @@
 import React from "react";
 
-import { NodeStat } from "@/features/missions/components/workspace/NodeStat";
-import { type VDGNode } from "@/features/missions/data/fixtures/attackGraphMockData";
+import { KPIStrip } from "@/components/ui/KPIStrip";
+
+export interface BaseVDGNode {
+    id: string;
+    type: string;
+    status: string;
+    ucb?: number;
+    eord?: number;
+    eordMax?: number;
+}
 
 interface NodeStyleProps {
     border: string;
@@ -12,66 +20,128 @@ interface NodeStyleProps {
     badgeBg: string;
 }
 
-export const AttackGraphNode = React.memo(function AttackGraphNodeBase({
+export function AttackGraphNode<T extends BaseVDGNode>({
     node,
     style,
-    isVis,
-    isHov,
+    isVis = true,
+    isHov = false,
     x,
     y,
     width,
+    variant = "default",
     onMouseEnter,
     onMouseLeave,
     onClick,
 }: {
-    node: VDGNode;
+    node: T;
     style: NodeStyleProps;
-    isVis: boolean;
-    isHov: boolean;
-    x: number;
-    y: number;
-    width: number;
-    onMouseEnter: (id: string) => void;
-    onMouseLeave: (id: null) => void;
-    onClick: (node: VDGNode) => void;
+    isVis?: boolean;
+    isHov?: boolean;
+    x?: number;
+    y?: number;
+    width?: number;
+    variant?: "default" | "overview";
+    onMouseEnter?: (id: string) => void;
+    onMouseLeave?: (id: null) => void;
+    onClick?: (node: T) => void;
 }) {
+    if (variant === "overview") {
+        return (
+            <button
+                type="button"
+                onClick={() => onClick?.(node)}
+                onMouseEnter={() => onMouseEnter?.(node.id)}
+                onMouseLeave={() => onMouseLeave?.(null)}
+                className={`focus-visible:ring-primary relative cursor-pointer rounded-sm px-3 py-2.5 text-left transition-all duration-150 focus-visible:ring-1 focus-visible:outline-none ${isHov ? "z-node-hover" : "z-node-base"} ${isVis ? "opacity-100" : "opacity-12"}`}
+                style={{
+                    width: width ?? 224,
+                    background: style.bg,
+                    border: `1px solid ${isHov && isVis ? "var(--destructive)" : style.border}`,
+                }}
+                title="Click to open Attack Graph"
+            >
+                {node.status === "ELIGIBLE" && isVis && (
+                    <div className="border-border node-ring-pulse pointer-events-none absolute -inset-[3px] rounded-xs border-[1px] border-solid" />
+                )}
+
+                <div className="mb-1.5 flex items-center justify-between">
+                    <span
+                        className="text-xs font-bold tracking-wide"
+                        style={{ color: style.labelColor }}
+                    >
+                        {node.id}
+                    </span>
+                    <span
+                        className="rounded-sm px-1 py-px text-sm font-semibold tracking-widest"
+                        style={{
+                            color: style.badgeColor,
+                            background: style.badgeBg,
+                            border: `1px solid ${style.badgeColor}44`,
+                        }}
+                    >
+                        {node.status}
+                    </span>
+                </div>
+
+                <div
+                    className={`text-[10px] tracking-widest uppercase ${node.ucb !== undefined ? "mb-2" : "mb-0"}`}
+                    style={{
+                        color: style.typeColor,
+                    }}
+                >
+                    {node.type}
+                </div>
+
+                {node.ucb !== undefined && (
+                    <div
+                        className="flex items-center gap-4 pt-[7px]"
+                        style={{
+                            borderTop: `1px solid ${style.border}`,
+                        }}
+                    >
+                        <KPIStrip
+                            variant="inline"
+                            items={[
+                                {
+                                    k: "UCB",
+                                    v: node.ucb.toFixed(3),
+                                    c: style.labelColor,
+                                },
+                                {
+                                    k: "E_ord",
+                                    v: `${node.eord ?? 0}/${node.eordMax ?? 5}`,
+                                    c: style.labelColor,
+                                },
+                                { k: "PATH", v: "0.612", c: style.typeColor },
+                            ]}
+                        />
+                    </div>
+                )}
+            </button>
+        );
+    }
+
     return (
-        <div
-            onMouseEnter={() => onMouseEnter(node.id)}
-            onMouseLeave={() => onMouseLeave(null)}
-            onClick={() => onClick(node)}
-            onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                    onClick(node);
-                }
-            }}
-            role="button"
-            tabIndex={0}
-            className="absolute cursor-pointer rounded-[2px] px-[10px] py-[8px]"
+        <button
+            type="button"
+            onMouseEnter={() => onMouseEnter?.(node.id)}
+            onMouseLeave={() => onMouseLeave?.(null)}
+            onClick={() => onClick?.(node)}
+            className={`absolute flex cursor-pointer flex-col items-center justify-center rounded-sm transition-all duration-150 ${isHov ? "z-node-hover" : "z-node-base"} ${isVis ? "opacity-100" : "opacity-12"}`}
             style={{
-                left: x,
                 top: y,
+                left: x,
                 width,
                 background: style.bg,
-                border: `1px solid ${isHov && isVis ? "var(--color-danger)" : style.border}`,
-                opacity: isVis ? 1 : 0.12,
-                zIndex: isHov ? 10 : 1,
-                transition: "opacity 0.15s, border-color 0.1s",
+                border: `1px solid ${isHov && isVis ? "var(--destructive)" : style.border}`,
             }}
         >
             {node.status === "ELIGIBLE" && isVis && (
-                <div
-                    className="absolute rounded-[3px] border-[1px] border-solid border-[var(--color-hex-e31b2330)]"
-                    style={{
-                        inset: -4,
-                        pointerEvents: "none",
-                        animation: "nodeRing 2.2s ease infinite",
-                    }}
-                />
+                <div className="border-border node-ring-pulse pointer-events-none absolute -inset-[4px] rounded-xs border-[1px] border-solid" />
             )}
-            <div className="mb-1 flex items-center justify-between">
+            <div className="mb-1 flex w-full items-center justify-between px-2 pt-2">
                 <span
-                    className="text-lg-tight font-bold tracking-normal"
+                    className="text-xs font-bold tracking-wide"
                     style={{
                         color: style.labelColor,
                     }}
@@ -79,11 +149,7 @@ export const AttackGraphNode = React.memo(function AttackGraphNodeBase({
                     {node.id}
                 </span>
                 <span
-                    className="text-sm text-[var(--color-danger)]"
-                    style={{
-                        animation:
-                            node.status === "IN_PROGRESS" ? "blink 1s ease infinite" : "none",
-                    }}
+                    className={`text-destructive text-sm ${node.status === "IN_PROGRESS" ? "blink" : ""}`}
                 >
                     {(() => {
                         if (node.status === "EXPLOITED") {
@@ -100,7 +166,7 @@ export const AttackGraphNode = React.memo(function AttackGraphNodeBase({
                 </span>
             </div>
             <div
-                className="text-sm-tight leading-tight-2 tracking-wider-1 mb-[6px]"
+                className="leading-tight-2 mb-1.5 w-full px-2 text-left text-[10px] tracking-widest uppercase"
                 style={{
                     color: style.typeColor,
                 }}
@@ -108,21 +174,30 @@ export const AttackGraphNode = React.memo(function AttackGraphNodeBase({
                 {node.type}
             </div>
             <div
-                className="flex items-center gap-3"
+                className="flex w-full items-center gap-2 px-2 pb-2"
                 style={{
                     borderTop: `1px solid ${style.border}`,
                     paddingTop: 5,
                 }}
             >
-                <NodeStat
-                    label="UCB"
-                    value={node.status === "EXPLOITED" ? "—" : node.ucb.toFixed(3)}
-                    color={style.labelColor}
+                <KPIStrip
+                    variant="inline"
+                    className="gap-2"
+                    items={[
+                        {
+                            k: "UCB",
+                            v:
+                                node.status === "EXPLOITED"
+                                    ? "—"
+                                    : (node.ucb?.toFixed(3) ?? "0.000"),
+                            c: style.labelColor,
+                        },
+                        { k: "E_ord", v: `${node.eord}/5`, c: style.labelColor },
+                    ]}
                 />
-                <NodeStat label="E_ord" value={`${node.eord}/5`} color={style.labelColor} />
                 <div className="ml-auto">
                     <span
-                        className="text-sm-tight rounded-[2px] px-[4px] py-[1px] font-semibold tracking-normal"
+                        className="rounded-sm px-1.5 py-0.5 text-[10px] font-semibold tracking-widest"
                         style={{
                             color: style.badgeColor,
                             background: style.badgeBg,
@@ -141,6 +216,6 @@ export const AttackGraphNode = React.memo(function AttackGraphNodeBase({
                     </span>
                 </div>
             </div>
-        </div>
+        </button>
     );
-});
+}

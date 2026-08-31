@@ -1,3 +1,5 @@
+import { TableCell, TableRow } from "@/components/ui/table";
+
 export interface EmptyStateProps {
     message: string;
     colSpan?: number;
@@ -5,16 +7,15 @@ export interface EmptyStateProps {
 }
 
 export function EmptyState({ message, colSpan = 1, isTable = false }: EmptyStateProps) {
-    const className =
-        "px-6 py-8 text-center text-lg tracking-normal text-[var(--color-hex-666666)]";
+    const className = "px-6 py-8 text-center text-xs tracking-normal text-muted-foreground";
 
     if (isTable) {
         return (
-            <tr>
-                <td colSpan={colSpan} className={className}>
+            <TableRow>
+                <TableCell colSpan={colSpan} className={className}>
                     {message}
-                </td>
-            </tr>
+                </TableCell>
+            </TableRow>
         );
     }
 

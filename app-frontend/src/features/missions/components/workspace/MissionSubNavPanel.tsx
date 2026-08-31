@@ -1,5 +1,6 @@
 import React from "react";
 
+import { Button } from "@/components/ui/button";
 import { type WorkspaceAction } from "@/features/missions/components/workspace/MissionWorkspaceContainer";
 import { type MissionSubNav } from "@/features/missions/data/fixtures/workspaceMockData";
 import { useWorkspaceData } from "@/features/missions/hooks/useWorkspaceData";
@@ -22,49 +23,24 @@ export default function MissionSubNavPanel({
     const { subNav: subNavItems } = useWorkspaceData();
 
     return (
-        <div
-            className="flex w-[168px] flex-shrink-0 flex-col overflow-y-auto bg-[var(--color-hex-0b0b0b)]"
-            style={{
-                borderRight: "1px solid var(--color-hex-1e1e1e)",
-            }}
-        >
-            <div className="flex-1 py-2">
+        <div className="bg-background border-border lg:w-panel-xs flex w-full flex-shrink-0 flex-col border-b lg:overflow-y-auto lg:border-r lg:border-b-0">
+            <div className="flex flex-row overflow-x-auto lg:flex-1 lg:flex-col">
                 {subNavItems.map((item) => {
                     const active = subNav === item.id;
                     return (
-                        <button
+                        <Button
                             key={item.id}
+                            variant="ghost"
                             onClick={() => dispatch({ type: "SET_SUB_NAV", payload: item.id })}
-                            className="font-inherit text-xl-tight tracking-tight-1 flex w-full cursor-pointer items-center px-4 py-2 text-left uppercase"
-                            style={{
-                                background: active ? "var(--color-hex-160809)" : "transparent",
-                                borderLeft: active
-                                    ? "2px solid var(--color-brand)"
-                                    : "2px solid transparent",
-                                color: active ? "var(--color-fg)" : "var(--color-hex-555555)",
-                            }}
-                            onMouseEnter={(e) => {
-                                if (!active) {
-                                    e.currentTarget.style.color = "var(--color-hex-888888)";
-                                }
-                            }}
-                            onMouseLeave={(e) => {
-                                if (!active) {
-                                    e.currentTarget.style.color = "var(--color-hex-555555)";
-                                }
-                            }}
+                            aria-current={active ? "page" : undefined}
+                            className={`border-border h-auto w-max shrink-0 justify-start rounded-none border-l px-4 py-2 text-left text-xs tracking-tight uppercase lg:w-full ${active ? "text-primary" : "text-muted-foreground hover:text-muted-foreground"}`}
                         >
                             {(() => {
                                 if (item.id === "findings") {
                                     return (
                                         <span className="flex items-center gap-1.5">
                                             {item.label}
-                                            <span
-                                                className="rounded-[2px] border-[1px] border-solid border-[var(--color-hex-6f171b)] bg-[var(--color-hex-1a0608)] text-sm tracking-normal text-[var(--color-brand)]"
-                                                style={{
-                                                    padding: "0 4px",
-                                                }}
-                                            >
+                                            <span className="border-border bg-muted text-primary rounded-sm border-[1px] border-solid px-1 text-sm tracking-normal">
                                                 7
                                             </span>
                                         </span>
@@ -74,12 +50,7 @@ export default function MissionSubNavPanel({
                                     return (
                                         <span className="flex items-center gap-1.5">
                                             {item.label}
-                                            <span
-                                                className="rounded-[2px] border-[1px] border-solid border-[var(--color-hex-ff2a3266)] bg-[var(--color-hex-1a0608)] text-sm tracking-normal text-[var(--color-danger)]"
-                                                style={{
-                                                    padding: "0 4px",
-                                                }}
-                                            >
+                                            <span className="border-border bg-muted text-destructive rounded-sm border-[1px] border-solid px-1 text-sm tracking-normal">
                                                 !
                                             </span>
                                         </span>
@@ -87,20 +58,16 @@ export default function MissionSubNavPanel({
                                 }
                                 return item.label;
                             })()}
-                        </button>
+                        </Button>
                     );
                 })}
             </div>
 
             {/* PAUSE / TERMINATE */}
-            <div
-                className="flex flex-col gap-2 p-3"
-                style={{
-                    borderTop: "1px solid var(--color-hex-1e1e1e)",
-                }}
-            >
-                <button
-                    className="font-inherit text-lg-tight tracking-wider-2 w-full cursor-pointer rounded-[2px] bg-[var(--color-hex-111111)] font-semibold"
+            <div className="border-border flex flex-row gap-2 border-t p-3 lg:flex-col">
+                <Button
+                    variant="outline"
+                    className={`bg-card hover:bg-card hover:border-warning h-auto w-full rounded-sm py-[7px] text-base font-semibold tracking-widest ${paused ? "border-warning text-warning" : "border-border text-muted-foreground"}`}
                     onClick={() => {
                         const newPausedState = !paused;
                         dispatch({ type: "SET_PAUSED", payload: newPausedState });
@@ -116,24 +83,16 @@ export default function MissionSubNavPanel({
                                 dispatch({ type: "SET_PAUSED", payload: !newPausedState });
                             });
                     }}
-                    style={{
-                        border: `1px solid ${paused ? "var(--color-warning)" : "var(--color-hex-333333)"}`,
-                        color: paused ? "var(--color-warning)" : "var(--color-warning)",
-                        padding: "7px 0",
-                    }}
-                    onMouseEnter={(e) =>
-                        (e.currentTarget.style.borderColor = "var(--color-warning)")
-                    }
-                    onMouseLeave={(e) =>
-                        (e.currentTarget.style.borderColor = paused
-                            ? "var(--color-warning)"
-                            : "var(--color-hex-333333)")
-                    }
                 >
                     {paused ? "▶ RESUME" : "⏸ PAUSE"}
-                </button>
-                <button
-                    className="font-inherit text-lg-tight tracking-wider-2 w-full rounded-[2px] font-semibold"
+                </Button>
+                <Button
+                    variant="outline"
+                    className={`h-auto w-full rounded-sm py-[7px] text-base font-semibold tracking-widest ${
+                        terminated
+                            ? "bg-border border-border text-muted-foreground cursor-not-allowed"
+                            : "border-primary text-primary hover:bg-border hover:border-primary cursor-pointer bg-transparent"
+                    }`}
                     onClick={() => {
                         dispatch({ type: "SET_PAUSED", payload: true });
                         dispatch({ type: "SET_TERMINATED", payload: true });
@@ -149,30 +108,9 @@ export default function MissionSubNavPanel({
                             });
                     }}
                     disabled={terminated}
-                    style={{
-                        background: terminated
-                            ? "var(--color-hex-0d0808)"
-                            : "var(--color-hex-110808)",
-                        border: `1px solid ${terminated ? "var(--color-hex-333333)" : "var(--color-hex-6f171b)"}`,
-                        color: terminated ? "var(--color-hex-555555)" : "var(--color-brand)",
-                        padding: "7px 0",
-                        cursor: terminated ? "not-allowed" : "pointer",
-                    }}
-                    onMouseEnter={(e) => {
-                        if (!terminated) {
-                            e.currentTarget.style.background = "var(--color-hex-1a0a0b)";
-                            e.currentTarget.style.borderColor = "var(--color-brand)";
-                        }
-                    }}
-                    onMouseLeave={(e) => {
-                        if (!terminated) {
-                            e.currentTarget.style.background = "var(--color-hex-110808)";
-                            e.currentTarget.style.borderColor = "var(--color-hex-6f171b)";
-                        }
-                    }}
                 >
                     {terminated ? "— TERMINATED" : "✕ TERMINATE"}
-                </button>
+                </Button>
             </div>
         </div>
     );

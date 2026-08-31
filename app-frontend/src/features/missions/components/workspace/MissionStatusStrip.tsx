@@ -1,6 +1,6 @@
 import React from "react";
 
-import { MetricTile } from "@/components/ui/MetricTile";
+import { KPIStrip } from "@/components/ui/KPIStrip";
 import Meta from "@/features/missions/components/workspace/Meta";
 import Sep from "@/features/missions/components/workspace/Sep";
 import { MISSION_STATUS } from "@/types/domain-types";
@@ -13,24 +13,12 @@ export default function MissionStatusStrip({
     time: string;
 }) {
     return (
-        <div
-            className="flex-shrink-0 bg-[var(--color-hex-0b0b0b)]"
-            style={{
-                borderBottom: "1px solid var(--color-hex-1e1e1e)",
-            }}
-        >
+        <div className="bg-background border-border flex-shrink-0 border-b">
             {/* Identity row */}
-            <div
-                className="flex items-center gap-6 px-4 py-2"
-                style={{
-                    borderBottom: "1px solid var(--color-hex-151515)",
-                }}
-            >
+            <div className="border-border flex items-center gap-6 overflow-x-auto border-b px-4 py-2">
                 <div className="flex items-center gap-2">
-                    <span className="text-base tracking-widest text-[var(--color-hex-444444)]">
-                        MISSION
-                    </span>
-                    <span className="tracking-wider-2 text-base font-bold text-[var(--color-brand)]">
+                    <span className="text-muted-foreground text-base tracking-widest">MISSION</span>
+                    <span className="text-primary text-base font-bold tracking-widest">
                         {missionId}
                     </span>
                 </div>
@@ -40,53 +28,24 @@ export default function MissionStatusStrip({
                 <Meta label="SURFACE" value="WEB APPLICATION" />
                 <Sep />
                 <div className="ml-auto flex items-center gap-1.5">
-                    <div
-                        className="h-[6px] w-[6px] bg-[var(--color-success)]"
-                        style={{
-                            borderRadius: "50%",
-                            animation: "pulse 1.4s ease infinite",
-                        }}
-                    />
-                    <span className="tracking-wider-2 text-base font-semibold text-[var(--color-success)]">
+                    <div className="bg-success pulse-dot h-1.5 w-1.5 rounded-full" />
+                    <span className="text-success text-base font-semibold tracking-widest">
                         {MISSION_STATUS.RUNNING}
                     </span>
                 </div>
             </div>
             {/* Metrics row */}
-            <div className="flex items-center gap-0">
-                {[
-                    {
-                        label: "VDG NODES",
-                        value: "12",
-                    },
-                    {
-                        label: "EL FACTS",
-                        value: "87",
-                    },
-                    {
-                        label: "FINDINGS",
-                        value: "07",
-                        red: true,
-                    },
-                    {
-                        label: "COST",
-                        value: "$1.42",
-                        red: true,
-                    },
-                    {
-                        label: "TIME",
-                        value: time,
-                    },
-                ].map((m) => (
-                    <MetricTile
-                        key={m.label}
-                        label={m.label}
-                        value={m.value}
-                        valueColor={m.red ? "var(--color-brand)" : "var(--color-hex-a0a0a0)"}
-                        variant="inline"
-                        borderRight
-                    />
-                ))}
+            <div className="flex w-full items-center gap-0 overflow-x-auto">
+                <KPIStrip
+                    className="flex min-w-max flex-1 rounded-none border-0 border-t"
+                    items={[
+                        { k: "VDG NODES", v: "12" },
+                        { k: "EL FACTS", v: "87" },
+                        { k: "FINDINGS", v: "07", c: "var(--primary)" },
+                        { k: "COST", v: "$1.42", c: "var(--primary)" },
+                        { k: "TIME", v: time },
+                    ]}
+                />
             </div>
         </div>
     );

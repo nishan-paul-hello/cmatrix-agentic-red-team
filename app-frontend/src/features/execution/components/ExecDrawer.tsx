@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import { FocusTrap } from "focus-trap-react";
 
+import { Button } from "@/components/ui/button";
+import { getStatusColor } from "@/components/ui/StatusBadge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ExecDrawerElChangesTab } from "@/features/execution/components/exec-drawer-tabs/ExecDrawerElChangesTab";
+import { ExecDrawerParsedTab } from "@/features/execution/components/exec-drawer-tabs/ExecDrawerParsedTab";
+import { ExecDrawerRawTab } from "@/features/execution/components/exec-drawer-tabs/ExecDrawerRawTab";
+import { ExecDrawerSummaryTab } from "@/features/execution/components/exec-drawer-tabs/ExecDrawerSummaryTab";
+import { ExecDrawerTrajectoryTab } from "@/features/execution/components/exec-drawer-tabs/ExecDrawerTrajectoryTab";
 import { type ExecEntry } from "@/types/domain-types";
-import { getStatusColor } from "@/utils/statusColors";
-
-import { ExecDrawerElChangesTab } from "./exec-drawer-tabs/ExecDrawerElChangesTab";
-import { ExecDrawerParsedTab } from "./exec-drawer-tabs/ExecDrawerParsedTab";
-import { ExecDrawerRawTab } from "./exec-drawer-tabs/ExecDrawerRawTab";
-import { ExecDrawerSummaryTab } from "./exec-drawer-tabs/ExecDrawerSummaryTab";
-import { ExecDrawerTrajectoryTab } from "./exec-drawer-tabs/ExecDrawerTrajectoryTab";
 
 export function ExecDrawer({
     entry,
@@ -19,75 +19,53 @@ export function ExecDrawer({
     parsedRows: Record<string, string | number | boolean>[];
     onClose: () => void;
 }) {
-    const drawerRef = React.useRef<HTMLDivElement>(null);
-    React.useEffect(() => {
-        function handler(e: MouseEvent | KeyboardEvent) {
-            if (e.type === "keydown" && (e as KeyboardEvent).key === "Escape") {
-                onClose();
-            }
-            if (
-                e.type === "mousedown" &&
-                drawerRef.current &&
-                !drawerRef.current.contains(e.target as Node)
-            ) {
-                onClose();
-            }
-        }
-        document.addEventListener("mousedown", handler);
-        document.addEventListener("keydown", handler);
-        return () => {
-            document.removeEventListener("mousedown", handler);
-            document.removeEventListener("keydown", handler);
-        };
-    }, [onClose]);
-
     const [tab, setTab] = useState<
         "SUMMARY" | "RAW OUTPUT" | "PARSED OUTPUT" | "EL CHANGES" | "TRAJECTORY"
     >("SUMMARY");
     const sc = getStatusColor(entry.status).color;
     return (
-        <FocusTrap focusTrapOptions={{ escapeDeactivates: false, clickOutsideDeactivates: false }}>
-            <div
-                ref={drawerRef}
-                role="dialog"
-                aria-modal="true"
-                aria-labelledby="exec-drawer-title"
-                className="flex w-[var(--width-drawer-lg)] flex-shrink-0 flex-col overflow-hidden bg-[var(--color-hex-0d0d0d)]"
-                style={{
-                    borderLeft: "1px solid var(--color-hex-292929)",
-                }}
-            >
-                <div
-                    className="flex items-center justify-between px-4 pt-4 pb-3"
-                    style={{
-                        borderBottom: "1px solid var(--color-hex-1e1e1e)",
-                    }}
-                >
-                    <div>
-                        <div
-                            id="exec-drawer-title"
-                            className="text-2xl font-bold tracking-wide text-[var(--color-fg)]"
-                        >
-                            EXECUTION #{entry.id}
-                        </div>
-                        <div className="text-base-tight mt-[2px] tracking-wide text-[var(--color-hex-444444)]">
-                            {entry.specialist} · {entry.command.tool.id}
-                        </div>
-                    </div>
-                    <button
-                        onClick={onClose}
-                        className="font-inherit cursor-pointer border-none bg-[transparent] text-4xl text-[var(--color-hex-444444)]"
+        <div className="bg-background border-border flex h-full w-full shrink-0 flex-col overflow-hidden border-l lg:w-[480px] xl:w-[560px]">
+            <div className="border-border flex items-center justify-between border-b px-4 pt-4 pb-3">
+                <div>
+                    <div
+                        id="exec-drawer-title"
+                        className="text-foreground text-xs font-bold tracking-wide"
                     >
-                        ✕
-                    </button>
+                        EXECUTION #{entry.id}
+                    </div>
+                    <div className="text-muted-foreground mt-0.5 text-sm tracking-wide">
+                        {entry.specialist} · {entry.command.tool.id}
+                    </div>
                 </div>
+                <Button
+                    variant="ghost"
+                    size="icon-sm"
+                    onClick={onClose}
+                    className="text-muted-foreground"
+                    aria-label="Close"
+                >
+                    ✕
+                </Button>
+            </div>
 
+            <Tabs
+                value={tab}
+                onValueChange={(v) =>
+                    setTab(
+                        v as
+                            | "SUMMARY"
+                            | "RAW OUTPUT"
+                            | "PARSED OUTPUT"
+                            | "EL CHANGES"
+                            | "TRAJECTORY",
+                    )
+                }
+                className="flex h-full flex-col overflow-hidden"
+            >
                 {/* Tabs */}
-                <div
-                    className="flex flex-shrink-0"
-                    style={{
-                        borderBottom: "1px solid var(--color-hex-1e1e1e)",
-                    }}
+                <TabsList
+                    variant="line"
+                    className="border-border flex flex-shrink-0 flex-wrap justify-start border-b p-0"
                 >
                     {(
                         [
@@ -98,33 +76,34 @@ export function ExecDrawer({
                             "TRAJECTORY",
                         ] as const
                     ).map((t) => (
-                        <button
+                        <TabsTrigger
                             key={t}
-                            onClick={() => setTab(t)}
-                            className="font-inherit cursor-pointer border-none bg-[transparent] px-[8px] py-[5px] text-sm tracking-normal whitespace-nowrap"
-                            style={{
-                                borderBottom:
-                                    t === tab
-                                        ? "2px solid var(--color-brand)"
-                                        : "2px solid transparent",
-                                color: t === tab ? "var(--color-fg)" : "var(--color-hex-444444)",
-                            }}
+                            value={t}
+                            className="h-auto rounded-none px-2 py-2 text-sm tracking-normal"
                         >
                             {t}
-                        </button>
+                        </TabsTrigger>
                     ))}
-                </div>
+                </TabsList>
 
                 <div className="flex-1 overflow-y-auto px-4 py-4">
-                    {tab === "SUMMARY" && <ExecDrawerSummaryTab entry={entry} statusColor={sc} />}
-                    {tab === "PARSED OUTPUT" && (
+                    <TabsContent value="SUMMARY" className="m-0 h-full p-0">
+                        <ExecDrawerSummaryTab entry={entry} statusColor={sc} />
+                    </TabsContent>
+                    <TabsContent value="PARSED OUTPUT" className="m-0 h-full p-0">
                         <ExecDrawerParsedTab entry={entry} parsedRows={parsedRows} />
-                    )}
-                    {tab === "RAW OUTPUT" && <ExecDrawerRawTab />}
-                    {tab === "EL CHANGES" && <ExecDrawerElChangesTab />}
-                    {tab === "TRAJECTORY" && <ExecDrawerTrajectoryTab entry={entry} />}
+                    </TabsContent>
+                    <TabsContent value="RAW OUTPUT" className="m-0 h-full p-0">
+                        <ExecDrawerRawTab />
+                    </TabsContent>
+                    <TabsContent value="EL CHANGES" className="m-0 h-full p-0">
+                        <ExecDrawerElChangesTab />
+                    </TabsContent>
+                    <TabsContent value="TRAJECTORY" className="m-0 h-full p-0">
+                        <ExecDrawerTrajectoryTab entry={entry} />
+                    </TabsContent>
                 </div>
-            </div>
-        </FocusTrap>
+            </Tabs>
+        </div>
     );
 }

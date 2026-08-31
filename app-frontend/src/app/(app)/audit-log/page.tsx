@@ -1,5 +1,3 @@
-"use client";
-
 import { PanelErrorBoundary } from "@/components/PanelErrorBoundary";
 import AuditLogPage from "@/features/audit/components/AuditLogPage";
 

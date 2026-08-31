@@ -24,13 +24,8 @@ export function ExecDrawerSummaryTab({
                 ] as { k: string; v: string; color?: string }[]
             ).map((r) => (
                 <div key={r.k}>
-                    <div className="text-sm-tight tracking-wider-3 mb-[1px] text-[var(--color-hex-444444)]">
-                        {r.k}
-                    </div>
-                    <div
-                        className="tracking-tight-1 text-lg"
-                        style={{ color: r.color ?? "var(--color-hex-888888)" }}
-                    >
+                    <div className="text-muted-foreground mb-px text-xs tracking-widest">{r.k}</div>
+                    <div className={`text-xs tracking-tight ${r.color ?? "text-muted-foreground"}`}>
                         {r.v}
                     </div>
                 </div>
