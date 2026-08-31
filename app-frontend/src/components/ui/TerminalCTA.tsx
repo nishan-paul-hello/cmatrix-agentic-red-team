@@ -52,7 +52,7 @@ export const TerminalCTA = React.forwardRef<HTMLElement, TerminalCTAProps>(
                     <div className="mr-3 transition-transform duration-500 group-hover:scale-110">
                         <Crosshair className="text-primary h-[1.25em] w-[1.25em] group-hover:animate-[spin_0.5s_linear_infinite]" />
                     </div>
-                    <span className="text-primary font-semibold tracking-[0.15em] transition-all">
+                    <span className="text-primary font-extrabold tracking-[0.15em] transition-all">
                         {text}
                     </span>
                 </span>
