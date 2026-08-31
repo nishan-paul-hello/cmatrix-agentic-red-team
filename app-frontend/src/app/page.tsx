@@ -38,14 +38,8 @@ export default async function LandingPage() {
             {/* Main Content */}
             <main className="relative flex flex-1 flex-col items-center justify-center overflow-hidden p-6 text-center lg:p-12">
                 <div className="z-10 max-w-3xl space-y-8">
-                    <div className="group bg-background relative inline-flex items-center justify-center px-6 py-2.5">
-                        <div className="border-foreground/10 absolute inset-0 border" />
-                        <div className="border-foreground/80 group-hover:border-foreground absolute top-[-1px] left-[-1px] h-2.5 w-2.5 border-t-2 border-l-2 transition-colors" />
-                        <div className="border-foreground/80 group-hover:border-foreground absolute right-[-1px] bottom-[-1px] h-2.5 w-2.5 border-r-2 border-b-2 transition-colors" />
-
-                        <div className="text-foreground relative flex items-center gap-2 font-mono text-sm font-medium tracking-tight">
-                            <span>LLM-orchestrated multi-agent framework for autonomous VAPT</span>
-                        </div>
+                    <div className="text-foreground flex items-center justify-center gap-2 font-mono text-sm font-medium tracking-tight">
+                        <span>&#47;&#47; LLM-orchestrated multi-agent framework for autonomous VAPT</span>
                     </div>
 
                     <h1 className="text-5xl font-extrabold tracking-tight sm:text-6xl lg:text-7xl">
@@ -60,10 +54,10 @@ export default async function LandingPage() {
                         {isAuthenticated ? (
                             <TerminalCTA
                                 href="/dashboard"
-                                className="h-14 w-full px-8 text-base sm:w-auto sm:min-w-[200px]"
+                                className="h-16 w-full px-10 text-lg sm:w-auto sm:min-w-[240px]"
                             />
                         ) : (
-                            <TerminalLoginCTA className="h-14 w-full px-8 text-base sm:w-auto sm:min-w-[200px]" />
+                            <TerminalLoginCTA className="h-16 w-full px-10 text-lg sm:w-auto sm:min-w-[240px]" />
                         )}
                     </div>
                 </div>

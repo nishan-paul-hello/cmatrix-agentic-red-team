@@ -43,14 +43,18 @@ export const TerminalCTA = React.forwardRef<HTMLElement, TerminalCTAProps>(
         }, [isHovering, originalText]);
 
         const content = (
-            <div className="relative flex h-full w-full items-center justify-center px-4 py-4">
-                <span className="relative z-10 flex items-center text-left">
-                    <Crosshair className="text-primary mr-3 h-5 w-5 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-90" />
+            <>
+                <div className="border-foreground/10 absolute inset-0 border" />
+                <div className="border-primary absolute top-[-1px] left-[-1px] h-3 w-3 border-t-2 border-l-2" />
+                <div className="border-primary absolute right-[-1px] bottom-[-1px] h-3 w-3 border-r-2 border-b-2" />
+
+                <span className="relative z-10 flex h-full w-full items-center justify-center text-left">
+                    <Crosshair className="text-primary mr-3 h-[1.25em] w-[1.25em] transition-transform duration-500 group-hover:scale-110 group-hover:rotate-90" />
                     <span className="text-primary font-semibold tracking-[0.15em] transition-all">
                         {text}
                     </span>
                 </span>
-            </div>
+            </>
         );
 
         const commonProps = {
@@ -64,7 +68,7 @@ export const TerminalCTA = React.forwardRef<HTMLElement, TerminalCTAProps>(
                 props.onMouseLeave?.(e as React.MouseEvent<HTMLButtonElement>);
             },
             className: cn(
-                "cursor-pointer relative group bg-transparent font-mono text-sm inline-flex outline-none",
+                "cursor-pointer relative group bg-foreground/10 font-mono text-sm inline-flex outline-none",
                 className,
             ),
         };
