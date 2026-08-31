@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import Image from "next/image";
-import { User } from "lucide-react";
+import { Layers, User } from "lucide-react";
 
 import ArchitectureAnimation from "@/components/ArchitectureAnimation";
 import { LandingProfileMenu } from "@/components/LandingProfileMenu";
@@ -66,7 +66,8 @@ export default async function LandingPage() {
 
                 {/* Workflow Animation */}
                 <div className="mt-24 z-10 w-full max-w-6xl text-left">
-                    <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+                    <h2 className="flex items-center gap-3 text-3xl font-bold tracking-tight sm:text-4xl">
+                        <Layers className="h-8 w-8 text-muted-foreground" />
                         How RedGrid Works
                     </h2>
                 </div>
