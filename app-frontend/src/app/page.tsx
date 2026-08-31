@@ -14,18 +14,20 @@ export default async function LandingPage() {
     return (
         <div className="bg-background text-foreground flex min-h-screen flex-col">
             {/* Header / Navbar */}
-            <header className="border-border bg-background/80 sticky top-0 z-50 flex h-16 items-center justify-between border-b px-6 backdrop-blur-sm lg:px-12">
-                <div className="flex items-center gap-2 text-xl font-bold tracking-tight">
-                    <GeometricMark className="h-6 w-6" />
-                    <span>RedGrid</span>
+            <header className="border-border bg-background/80 sticky top-0 z-50 border-b backdrop-blur-sm">
+                <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6 lg:px-12">
+                    <div className="flex items-center gap-2 text-xl font-bold tracking-tight">
+                        <GeometricMark className="h-6 w-6" />
+                        <span>RedGrid</span>
+                    </div>
+                    <nav>
+                        {isAuthenticated ? (
+                            <LandingProfileMenu />
+                        ) : (
+                            <LoginButton text="Login to Dashboard" className="h-9 px-4 py-2" />
+                        )}
+                    </nav>
                 </div>
-                <nav>
-                    {isAuthenticated ? (
-                        <LandingProfileMenu />
-                    ) : (
-                        <LoginButton text="Login to Dashboard" className="h-9 px-4 py-2" />
-                    )}
-                </nav>
             </header>
 
             {/* Main Content */}
