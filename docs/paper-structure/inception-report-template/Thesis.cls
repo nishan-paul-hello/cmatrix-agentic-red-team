@@ -193,11 +193,13 @@
     \vskip 60\p@
     \begin{center}
       \setlength{\parskip}{0pt}
-      {\Large\textbf{\UNIVNAME}\par}
+      \includegraphics[height=1.5in, keepaspectratio]{logo.pdf}\par
+      \vspace{0.5cm}
+      {\Large\textcolor{blue}{\textbf{\UNIVNAME}}\par}
       \vfill
       {\huge \bf \@title \par}
       \vfill
-      {\Large by \par}
+      {\Large Submitted by \par}
       \smallskip
       {\large \authornames \par}
       \bigskip
@@ -205,13 +207,13 @@
       %{\large Supervised by \par}
       %{\large \facname \par}
       %{\large \deptname \par}
-      \bigskip
-      \bigskip
-      \bigskip 
-      \includegraphics[width=1.5in, height=1.5in]{logo.pdf}
+
       \vfill
-      %{\large A thesis submitted in partial fulfillment for the degree of\par}
-      {\Large Professional Masters in Information and Cyber Security (PMICS)\par}
+      {\large Submitted to the \par}
+      {\large Department of Computer Science and Engineering \par}
+      {\large University of Dhaka, Bangladesh \par}
+      {\large in partial fulfillment of the requirements for the degree of \par}
+      {\large Professional Masters in Information and Cyber Security (PMICS). \par}
       
       {\Large \@date \par}
       \bigskip
