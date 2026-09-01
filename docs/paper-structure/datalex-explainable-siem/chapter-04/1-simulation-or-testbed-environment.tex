@@ -1,4 +1,34 @@
-\section{Simulation Or Testbed Environment}
+\section{Simulation or Testbed Environment}
 \label{sec_simulation_or_testbed_environment}
 
-% Content for this section goes here.
+In order to ensure accurate and replicable performance evaluations, DataLex has been deployed in a controlled testbed environment that simulates real-world cybersecurity operations. This testbed has been designed to assess the efficiency of log ingestion, threat detection, query execution speed, and AI-driven security insights. The testing environment has been configured to reflect the operational demands of enterprise-level SIEM solutions while ensuring fair comparisons across different hardware and software configurations.
+
+\subsection{System Configuration}
+\label{subsec_system_configuration}
+
+The testbed environment was configured with the following key components:
+
+\begin{itemize}
+    \item \textbf{SIEM Stack}: Wazuh for security event monitoring, Elasticsearch for log storage and indexing, Filebeat for log forwarding, and Kibana for visualization.
+    \item \textbf{Intrusion Detection System}: Suricata IDS for network threat detection, configured with custom security rules for high-speed packet analysis.
+    \item \textbf{AI Engine}: LLaMA 3.0 and Retrieval-Augmented Generation (RAG) architecture integrated with FAISS for efficient security log retrieval.
+    \item \textbf{Deployment Model}: Docker-based microservices for rapid scalability and lightweight infrastructure management.
+    \item \textbf{Hardware Variants}: Performance benchmarking conducted on multiple configurations such as a CPU-only baseline for standard event processing and NVIDIA RTX 3090 (24GB VRAM), NVIDIA A100 (40GB VRAM), and NVIDIA H100 (80GB VRAM) for GPU-accelerated AI analysis.
+\end{itemize}
+
+\subsection{Test Scenarios and Methodology}
+\label{subsec_test_scenarios_and_methodology}
+
+The evaluation was conducted under controlled scenarios replicating real-world security threats, focusing on key metrics such as:
+
+\begin{itemize}
+    \item \textbf{Log Ingestion Rate}: Number of security logs processed per second across different hardware configurations.
+    \item \textbf{Query Execution Time}: Speed of retrieving security logs and contextual insights.
+    \item \textbf{Threat Detection Efficiency}: Accuracy and speed of AI-driven analysis compared to traditional SIEM correlation rules.
+    \item \textbf{System Resource Utilization}: CPU, memory, and disk usage across test scenarios.
+    \item \textbf{Incident Response Time}: Time taken to detect, analyze, and respond to a security event.
+\end{itemize}
+
+Each test scenario was executed multiple times, and statistical averaging was applied to ensure accuracy. The system's scalability, resilience, and operational efficiency were also assessed by simulating varying log loads, from moderate to peak traffic conditions.
+
+The following sections present detailed performance comparisons, highlighting the impact of AI acceleration, optimized search retrieval, and microservices-based deployment in DataLex's overall security event processing framework.

@@ -1,4 +1,64 @@
-\section{System Model And Assumptions}
+\section{System Model and Assumptions}
 \label{sec_system_model_and_assumptions}
 
-% Content for this section goes here.
+The system model comprises two main components: the SIEM Service for log aggregation, threat detection, and visualization, and the GPT Service for intelligent analysis and query-based insights. The integration of these components ensures real-time threat intelligence while maintaining security and privacy. The primary services the proposed solution contains:
+
+\begin{itemize}
+    \item \textbf{SIEM Service} -- A traditional security monitoring stack comprising Wazuh, Elasticsearch, Wazuh-dashboard, Filebeat, and Suricata for log collection, analysis, and visualization.
+    \item \textbf{GPT Service} -- A Generative AI-powered analysis module using LLAMA 3.0, FAISS, and LangChain, enabling contextual threat intelligence and explainable AI-driven security recommendations.
+    \item \textbf{Scheduler Service} -- A Python-based automated task manager responsible for fetching security logs, embedding relevant information, and storing vectorized logs in the FAISS database for retrieval.
+\end{itemize}
+
+\subsection{System Components and Their Interactions}
+\label{subsec_system_components_and_interactions}
+
+The SIEM Service is responsible for collecting, normalizing, and analyzing security logs using a combination of log management (Elasticsearch, Filebeat), IDS (Suricata), and SIEM analytics (Wazuh-dashboard, Wazuh). The processed logs are indexed and stored in Elasticsearch, providing a real-time view of security events through the Wazuh-dashboard.
+
+The GPT Service enhances the functionality of SIEM by employing a Retrieval-Augmented Generation (RAG) approach, where a FAISS vector database stores and retrieves relevant logs for contextual AI-driven analysis. The LLAMA 3.0-based AI model processes security queries and generates human-readable threat assessments using the retrieved logs.
+
+The Scheduler Service automates log ingestion from Suricata, extracts meaningful security patterns, converts them into vector embeddings using an AI embedding model, and stores them in FAISS for efficient AI-driven retrieval and analysis.
+
+\subsection{Key Assumptions}
+\label{subsec_key_assumptions}
+
+The design of DataLex is based on several foundational assumptions that distinguish it from traditional SIEM solutions. Unlike legacy platforms that depend on predefined rule sets and complex query languages, DataLex integrates Generative AI and Retrieval-Augmented Generation (RAG) to provide intelligent, contextual, and privacy-preserving threat analysis. The following assumptions guide its architecture:
+
+\begin{itemize}
+    \item \textbf{Threat Data Availability} -- It is assumed that the SIEM system receives a continuous stream of security logs from endpoints, firewalls, network devices, and IDS/IPS solutions (Suricata). This ensures that AI-driven threat detection and contextual retrieval remain effective in identifying potential security threats.
+
+    \item \textbf{High-Performance Computing Resources} -- Since LLAMA 3.0, FAISS-based vector retrieval, and AI-powered analysis require substantial processing power, it is assumed that the system runs on a dedicated server or cloud-based infrastructure optimized for AI workloads. GPU acceleration may be required to maintain real-time performance.
+
+    \item \textbf{Security and Privacy Preservation} -- Unlike cloud-based AI models that expose logs to third-party providers, DataLex operates entirely offline within a controlled on-premises environment. This ensures that sensitive security logs remain private and comply with banking regulations and enterprise security policies.
+
+    \item \textbf{Real-Time Threat Correlation} -- AI-powered threat detection assumes that security logs contain sufficient context (e.g., timestamps, source/destination IPs, event types) to generate accurate and actionable threat insights. DataLex's embedding-based retrieval ensures that relevant historical logs are analyzed alongside real-time data for better detection accuracy.
+
+    \item \textbf{Explainability in AI Decision-Making} -- A core assumption is that AI-generated security recommendations must be interpretable and actionable. DataLex ensures that security teams can validate AI-driven insights before taking action, providing clear reasoning behind each decision to build trust and accountability.
+
+    \item \textbf{Choice of Suricata over Snort} -- Traditional SIEM solutions often integrate Snort as an Intrusion Detection System (IDS). However, we opted for Suricata, which offers:
+    \begin{enumerate}
+        \item[a.] Multi-threaded processing, making it significantly faster and more scalable.
+        \item[b.] Native JSON log output facilitating seamless integration with modern SIEM components.
+        \item[c.] Deep Packet Inspection (DPI) and built-in TLS decryption, enabling advanced threat detection in encrypted traffic.
+        \item[d.] Better handling of high-throughput network environments, reducing performance bottlenecks in enterprise settings.
+    \end{enumerate}
+
+    \item \textbf{Chat-Based Interactive Threat Analysis} -- Unlike traditional SIEMs (e.g., Fortinet, Splunk, IBM QRadar), which require complex query writing (like SPL in Splunk), DataLex provides an AI-driven chat interface. Security analysts can ask questions in natural language, such as:
+
+    \begin{quote}
+    \textit{``Have there been any brute-force attempts on our servers in the last 24 hours?''}\\
+    \textit{``Which users triggered the most security alerts this week?''}
+    \end{quote}
+
+    The system retrieves relevant logs, analyzes patterns, and delivers precise answers, removing the need for specialized query skills. This significantly enhances accessibility for non-technical teams and accelerates incident response.
+
+    \item \textbf{Key Differences Between Traditional SIEMs (Fortinet, Splunk, QRadar) and DataLex}
+    \begin{enumerate}
+        \item[a.] Splunk and QRadar require manual threat hunting using specialized query languages, whereas DataLex provides an intuitive, question-answering AI assistant.
+        \item[b.] Traditional SIEMs rely on fixed rule sets and correlation engines, while DataLex enhances detection with Generative AI and RAG-based contextual log analysis.
+        \item[c.] Fortinet SIEM is tightly integrated with its own ecosystem, whereas DataLex is vendor-agnostic and works with open-source security tools (Wazuh, Suricata, Elasticsearch, FAISS, LLAMA 3.0).
+        \item[d.] Traditional SIEMs focus on log storage and compliance, while DataLex adds an AI-powered knowledge base for proactive and explainable threat analysis.
+        \item[e.] Most SIEMs generate static alerts, but DataLex offers contextual explanations and attack flow insights.
+    \end{enumerate}
+
+    \item \textbf{Automated Threat Knowledge Base} -- DataLex is designed to learn from past security events by continuously updating its vector database (FAISS) with key security insights. This enables historical context-based threat detection, unlike traditional SIEMs that rely solely on preconfigured detection rules. This architecture positions DataLex as a next-generation AI-driven SIEM, combining high-performance log processing, explainable AI insights, and interactive security analysis, making it superior to conventional SIEM solutions.
+\end{itemize}

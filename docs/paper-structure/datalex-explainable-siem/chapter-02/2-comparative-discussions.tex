@@ -1,4 +1,22 @@
-\section{Comparative Discussions}
+\section{Comparative Discussions on Existing Works}
 \label{sec_comparative_discussions}
 
-% Content for this section goes here.
+\reftab{tab:siem-comparison} provides a comparative analysis of existing Security Information and Event Management (SIEM) systems, highlighting the distinctions between traditional, modern, and the proposed solution. This comparison evaluates critical features such as cost, scalability, threat detection, ease of use, integration, and incident response capabilities, showcasing the advancements offered by the proposed approach.
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{p{2.3cm}p{2.7cm}p{2.9cm}p{4cm}}
+\hline
+\textbf{Feature} & \textbf{Traditional SIEMs} & \textbf{Modern SIEMs} & \textbf{Proposed Solution} \\
+\hline
+Cost & High (license fees, maintenance) & Reduced for open-source solutions & Cost-effective with open-source tools (Wazuh) \\
+Scalability & Limited for large-scale environments & Improved with containerization & Dynamic scaling via Docker \\
+Threat Detection & Rule-based, prone to false positives & ML-enhanced, better anomaly detection & Hybrid: Rules + ML for reduced false positives \\
+Ease of Use & Requires expertise for deployment & User-friendly dashboards (e.g., Kibana) & Simplified interface + AI-powered contextual help \\
+Integration & Limited to specific platforms & Better cloud and application integrations & Customized for organizations \\
+Incident Response & Manual or semi-automated & Automation frameworks integrated & AI-driven automation and workflow suggestions \\
+\hline
+\end{tabular}
+\caption{Comparison of Existing SIEM Systems and Proposed Solution}
+\label{tab:siem-comparison}
+\end{table}

@@ -1,4 +1,16 @@
-\section{Summary Of Work}
+\section{Summary of Work}
 \label{sec_summary_of_work}
 
-% Content for this section goes here.
+The DataLex project introduces an advanced, AI-augmented SIEM solution designed to enhance threat detection, response, and explainability in cybersecurity. By integrating traditional SIEM components like Suricata, Wazuh, Elasticsearch, and Kibana with generative AI, specifically LLAMA 3.0 and FAISS-based Retrieval-Augmented Generation (RAG), this system enables interactive security analysis beyond conventional SIEM capabilities. The proposed solution not only strengthens security monitoring but also redefines how security professionals interact with log data. Unlike traditional SIEMs that rely on static dashboards and predefined rules, DataLex enables natural language queries, allowing security analysts to ask AI-driven questions and receive contextualized security insights. This shift enhances usability, making cybersecurity analysis more intuitive and efficient. By maintaining an offline, privacy-focused design, the system ensures sensitive security logs remain within a controlled environment, addressing key concerns around data confidentiality and compliance. Furthermore, the integration of vectorized search (FAISS) and LLM-based analysis (LLAMA 3.0) allows for real-time threat detection and response while preserving explainability and human validation of AI-generated alerts.
+
+This work involved:
+
+\begin{itemize}
+    \item Architecting a hybrid SIEM-GPT framework that leverages Suricata, Wazuh, Elasticsearch, Kibana, and Filebeat for structured log collection, processing, and visualization.
+    \item Implementing an AI-powered security assistant using LLAMA 3.0, FAISS, and Retrieval-Augmented Generation (RAG) to provide interactive security insights based on security log data.
+    \item Building an offline, privacy-preserving system to ensure security logs remain confidential and do not rely on external cloud-based AI services.
+    \item Introducing a chat-based query interface, enabling security teams to ask questions in natural language and receive AI-generated threat intelligence with explainability and validation mechanisms.
+    \item Comparing traditional SIEMs (e.g., Splunk, Fortinet) with DataLex, highlighting the benefits of AI-driven threat analysis, improved user interaction, and enhanced privacy.
+\end{itemize}
+
+This work demonstrates how generative AI and SIEM integration can transform cybersecurity operations, making security monitoring more efficient, proactive, and accessible for both technical and non-technical users. The findings emphasize the potential of AI-powered SIEMs in reducing investigation time, improving threat detection accuracy, and providing a more intuitive security operations workflow.

@@ -1,4 +1,42 @@
 \section{Conceptual Framework}
 \label{sec_conceptual_framework}
 
-% Content for this section goes here.
+Rigorous scientific inquiry demands a structured, multidisciplinary approach. This section details the comprehensive methodology employed in the DataLex project, explaining the experimental design, technical implementation strategies, and evaluation frameworks that guided the research. The research process for DataLex takes a broad, multidisciplinary approach.
+
+The proposed framework depicts the combination of SIEM and GPT services to provide an advanced, offline, and privacy-preserving threat detection solution. The SIEM service includes components like Logstash, Wazuh, Suricata, and the Kibana Dashboard to collect, process, and visualize security data. The GPT service leverages LLAMA 3.0 and other modules to analyze logs, generate responses, and enable user interaction through an LLM Chat UI. The overall system integrates traditional SIEM tools with a novel GPT-based approach, aiming to deliver a comprehensive, privacy-focused, and explainable security monitoring solution.
+
+\subsection{Experimental Design}
+\label{subsec_experimental_design}
+
+This sub-section provides a detailed overview of the experimental design for the proposed system, focusing on the integration of modern SIEM technologies with advanced generative AI techniques.
+
+\begin{itemize}
+    \item \textbf{SIEM Service}: This microservice incorporates core SIEM components, including Wazuh, Logstash, Elasticsearch, and Kibana, along with Suricata, an Intrusion Detection System (IDS). It handles the essential operations of data collection, processing, and visualization.
+    \item \textbf{GPT Service}: Developed using the Retrieval-Augmented Generation (RAG) framework, this microservice employs Python, Flask, LangChain, Ollama, and a vector database (FAISS). It utilizes embedding models and LLAMA 3.0 as the generative AI model to provide intelligent threat analysis and contextual insights. It also provides APIs to manage a knowledge base, enabling the generative AI to improve response accuracy by leveraging stored knowledge.
+    \item \textbf{Scheduler Service}: A Python-based microservice designed to periodically fetch logs from Suricata, vectorize them using an embedding model, and store them in the vector database (FAISS).
+\end{itemize}
+
+\subsection{Technical Implementation}
+\label{subsec_technical_implementation}
+
+The technical implementation of the DataLex system revolves around addressing key challenges in cybersecurity using advanced technologies and tailored solutions such as:
+
+\begin{itemize}
+    \item \textbf{Tuning LLAMA 3.0 for Cybersecurity}: The LLAMA 3.0 generative AI model has been fine-tuned to address specific cybersecurity scenarios, ensuring contextual relevance and precision in threat analysis.
+    \item \textbf{Custom Threat Correlation Algorithms}: Novel algorithms have been designed to enhance the system's ability to correlate diverse security events, improving the accuracy of threat detection.
+    \item \textbf{Interactive Dashboard Design}: An intuitive and user-friendly dashboard interface has been developed to provide real-time insights, actionable recommendations, and enhanced usability for security teams.
+\end{itemize}
+
+\subsection{Evaluation Frameworks}
+\label{subsec_evaluation_frameworks}
+
+The evaluation framework outlines the methodologies and metrics employed to assess the efficiency, scalability, and reliability of the proposed system. It encompasses key aspects such as retrieval performance, dataset preparation, comparative analysis, scalability metrics, explainability, and continuous improvement, ensuring a comprehensive assessment of the system's capabilities and practical applicability.
+
+\begin{itemize}
+    \item \textbf{Retrieval Component}: Metrics such as query latency and response latency serve as indicators of efficiency, with query latency evaluating the time required to retrieve documents and response latency capturing the duration from input query to output response generation.
+    \item \textbf{Dataset Preparation}: The preparation of datasets is critical, ensuring alignment between retrieval and generation datasets with real-world scenarios. Evaluation datasets are sourced or constructed with human-validated queries, documents, and expected outputs to maintain relevance and accuracy.
+    \item \textbf{Comparative Analysis}: A systematic comparison with other open-source models highlights relative performance and identifies advantages and limitations of the proposed approach.
+    \item \textbf{Scalability and Deployment Metrics}: Scalability is assessed by analyzing latency under varying loads, alongside resource utilization metrics, including CPU/GPU usage and memory consumption. Offline compatibility is evaluated to validate the system's functionality in environments lacking internet connectivity.
+    \item \textbf{Explainability and Interpretability}: Explainability is facilitated through attribution analysis tools like SHAP or LIME, enabling validation of document relevance and generation choices. Retrieval traceability ensures that retrieved documents are logged for verification, while attention analysis visualizes how retrieval context influences the generative process.
+    \item \textbf{Feedback and Continuous Learning}: The system incorporates feedback loops to refine retrieval accuracy and response quality iteratively. Continuous monitoring of model drift ensures the timely integration of newer data, enhancing the system's adaptability over time.
+\end{itemize}

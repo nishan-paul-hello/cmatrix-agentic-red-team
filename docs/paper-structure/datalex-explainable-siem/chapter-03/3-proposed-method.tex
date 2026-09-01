@@ -1,4 +1,114 @@
 \section{Proposed Method}
 \label{sec_proposed_method}
 
-% Content for this section goes here.
+DataLex combines traditional SIEM features and AI-based security intelligence to make cybersecurity monitoring more predictive, easier, and more actionable. In this section, we elaborate on the main building blocks that are used in DataLex, including their function, why we wanted to use them, and how we use them together in the application. The high level diagram of the proposed model is depicted below:
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.95\textwidth]{diagram-siem-genai.png}
+    \caption{High level diagram of the proposed model}
+    \label{fig:proposed-model}
+\end{figure}
+
+\subsection{SIEM Components and their purposes}
+\label{subsec_siem_components_and_purposes}
+
+To effectively monitor, detect, and respond to security threats, organizations rely on a comprehensive system that integrates various security components. Security Information and Event Management (SIEM) is that type of solution which plays a central role in collecting, analyzing, and correlating security data.
+
+\subsubsection{SIEM}
+\label{subsubsec_siem}
+
+SIEM (Security Information and Event Management) system aggregates, processes, and analyzes the security logs from different devices (firewalls, servers, endpoints, etc.). It aids security teams in threat detection, incident investigation, and rapid response. Traditional SIEMs, such as Splunk, IBM QRadar, and Fortinet, have become very sophisticated at configuring complex rules and how to do queries manually over security logs.
+
+By supporting deep SIEM integration through AI-powered log retrieval and contextual analysis, DataLex makes security operations more effective and accessible.
+
+\subsubsection{Wazuh -- Open-Source SIEM and Security Monitoring}
+\label{subsubsec_wazuh}
+
+Wazuh is an open source Security Information and Event Management (SIEM) solution that aims to give complete visibility into potential threats and security incidents. It includes log monitoring, host-based intrusion detection, file integrity monitoring, and vulnerability detection, among other features. Wazuh achieves this through the collection and analysis of security logs across multiple systems, including servers, firewalls, and endpoints.
+
+Wazuh helps process and manage security data efficiently, allowing both real-time threat detection and quick incident response. A collective log data storage and analysis solution ensures that security teams have adequate access to relevant information for effective decision-making (using Wazuh to forward the logs directly to Elasticsearch). By focusing on a set list of requirements, it can help create a proactive security environment which helps reduce instances of security breaches.
+
+\subsubsection{Suricata -- Intrusion Detection and Prevention System}
+\label{subsubsec_suricata}
+
+Suricata is a next-generation Intrusion Detection System (IDS) that passively inspects network traffic for malicious behavior. Its multi-threaded processing capabilities make it faster and more efficient than systems such as Snort, which makes Suricata stand out among traditional IDS systems. Suricata also has built-in JSON logging, allowing easy integration with other systems, and Deep Packet Inspection for detection accuracy.
+
+Suricata is a critical utility as it can monitor network traffic in real-time and identify threats without delay. Suricata generates detailed logs when it detects suspicious patterns, helping organizations gain a quick understanding of incidents to respond appropriately. In DataLex, these logs are forwarded to Wazuh and Elasticsearch, creating a strong capability to detect and respond to threats.
+
+\subsubsection{Wazuh Dashboard -- Data Visualization and Dashboard}
+\label{subsubsec_wazuh_dashboard}
+
+The Wazuh Dashboard is a powerful data visualization tool that provides a graphical interface for security teams to visualize and analyze security data stored in Elasticsearch. It allows users to create dynamic dashboards that display real-time threat alerts, network traffic patterns, attack trends, and other security insights. This capability enhances the visibility of security data, making it easier for analysts to identify and investigate potential threats.
+
+The use of the Wazuh Dashboard is essential for improving the effectiveness of security monitoring and response efforts. By providing an intuitive interface for traditional SIEM functionalities, it enables security analysts to conduct log analysis, track ongoing threats, and respond to security incidents efficiently. This improved visibility allows for quicker decision-making, better contextual understanding, and enhances the overall security posture of the organization.
+
+\subsubsection{AI-Driven Threat Intelligence (GPT Service)}
+\label{subsubsec_gpt_service}
+
+The Generative Pre-trained Transformer (GPT) Service in DataLex enhances SIEM capabilities by transforming complex security logs into human-readable threat insights. It features a chat-based interface, allowing security analysts to ask questions about security events and receive automated, context-aware responses. This service utilizes advanced AI algorithms to analyze logs and extract valuable information for security teams.
+
+Implementation of the GPT Service is beneficial because it simplifies the investigation process, enabling security analysts to retrieve relevant insights through straightforward queries. By providing immediate access to threat intelligence, the GPT service improves the efficiency of security operations and enhances the ability to respond to incidents effectively. This integration of AI into the security monitoring process ultimately leads to a more proactive and responsive security environment.
+
+\subsubsection{Retrieval-Augmented Generation (RAG) -- AI-Powered Search}
+\label{subsubsec_rag}
+
+Retrieval-Augmented Generation (RAG) is an advanced approach that combines database searches with AI models to provide accurate, context-aware responses to security queries. By using the FAISS vector database for searching and an AI model like LLAMA 3.0 for analysis, RAG enhances the traditional search capabilities of security systems. This integration allows security analysts to receive detailed answers to their questions about security events.
+
+The use of RAG is important because it addresses common limitations of traditional chatbots, which often lack the ability to provide context in their responses. By ensuring that security queries yield accurate and relevant insights, RAG streamlines the investigation process and reduces the time analysts spend on manual log analysis. This efficiency contributes to a more effective and responsive security operation, enabling teams to focus on higher-level strategic tasks.
+
+\subsubsection{FAISS -- Facebook AI Similarity Search}
+\label{subsubsec_faiss}
+
+Facebook AI Similarity Search (FAISS) is a library by Facebook that is specifically designed for efficient similarity search and clustering of dense vectors. This is especially useful in the case of large-scale data and AI models since it allows quick searches for similar items based on their vector representations. In the context of DataLex:
+
+\textbf{Use of FAISS}: FAISS is used to store and retrieve logs in vector format. An AI model processes the logs and converts them into vector embeddings. These embeddings are essentially a set of vectors that represent the logs in multidimensional space, i.e., they capture the semantic meaning of the data in K-dimensional space. When a user asks a question, FAISS scans the vector data to find the top logs matching the query.
+
+\textbf{Advantage}: FAISS allows contextually relevant log retrieval with minimal delay, which ensures that the AI model retrieves accurate information and improves the insights received by security analysts. This reduces search times and increases response accuracy, thus boosting the performance of the system.
+
+\subsubsection{The LLAMA (Large Language Model Meta AI)}
+\label{subsubsec_llama}
+
+LLAMA (specifically LLAMA 3.0 here) is a state-of-the-art large language model developed by Meta AI. LLAMA is a model that has been trained on large data sets, capable of mimicking the way humans produce written responses, making it an ideal fit for comprehensive queries and conversational natural language processing applications.
+
+\textbf{How LLAMA is applied}: LLAMA 3.0 is applied in DataLex to process the logs' information fetched from FAISS. After fetching the relevant logs, LLAMA produces a human-readable summary or rationale for the query. For example, if a user asks a question about whether there has been a potential brute-force attack on a server, LLAMA can parse through the relevant logs, identify the attack patterns, and output contextually relevant, coherent information along with actionable insights.
+
+\textbf{Benefit}: The ability to generate high-quality natural language responses from LLAMA means that the AI-driven threat intelligence available in DataLex is not only understandable but relevant to the security analyst. It allows non-technical users to interact with the system and gain useful insights.
+
+\subsubsection{DeepSeek Qwen}
+\label{subsubsec_deepseek_qwen}
+
+DeepSeek Qwen is another advanced AI model that is designed to provide efficient and high-quality natural language processing capabilities. Unlike LLAMA, DeepSeek Qwen is optimized for specific tasks, such as information retrieval and in-depth analysis of structured or semi-structured data. This model focuses on extracting insights from logs with high accuracy, providing more targeted recommendations and explanations.
+
+\textbf{How DeepSeek Qwen is used}: Similar to LLAMA, DeepSeek Qwen processes logs retrieved from FAISS, but with a slightly different approach. DeepSeek Qwen might focus on a more specific type of analysis (e.g., looking for patterns in network traffic or identifying indicators of compromise in firewall logs). The insights provided by DeepSeek Qwen could be more specialized or highly detailed compared to the general responses from LLAMA.
+
+\textbf{Benefit}: DeepSeek Qwen is ideal for scenarios where deeper or more technical insights are required. It can handle more nuanced queries and provide highly detailed explanations of specific security threats.
+
+\subsubsection{Choosing Between LLAMA and DeepSeek Qwen}
+\label{subsubsec_choosing_llama_or_deepseek}
+
+One of DataLex's unique selling points is that users can choose from LLAMA 3.0 or DeepSeek Qwen depending on their use case:
+
+\textbf{LLAMA 3.0}: Most useful for general queries related to security, offering generalizable descriptions of many types of incidents. It is especially good for interactive conversations and concise summaries.
+
+\textbf{DeepSeek Qwen}: Best for information that is more specialized, detailed, and technical. For deep exploration, should a security analyst require very specific details about an attack type or technical aspect of the logs, they could instead use DeepSeek Qwen.
+
+\textbf{How the Choice is Made}: When configuring the GPT Service in DataLex, users can choose which model they want to use. They can select between LLAMA and DeepSeek Qwen, depending on the context or preference for the analysis type. Different security needs can thus receive various processing methods and delivery.
+
+\subsubsection{Integration and Workflow}
+\label{subsubsec_integration_and_workflow}
+
+The final result is a cohesive and efficient security monitoring system thanks to the combination of all of the mentioned parts. Suricata is a network-based threat capture tool; Wazuh receives system and security logs from various sources. Filebeat is then responsible for shipping them directly to Elasticsearch for centralized storage, omitting Logstash from the pipeline. The Wazuh Dashboard can be used by security analysts to visualize log data, manually search log data, and review logs when necessary.
+
+This AI-powered analysis takes place via the GPT Service, which gives the user an option of the LLAMA 3.0 or the DeepSeek Qwen models. The Scheduler fetches logs from Elasticsearch periodically, vectorizes them, and saves them in the FAISS vector database. Upon querying the service, FAISS returns the closest logs to the user, followed by insight generation using either LLAMA 3.0 or DeepSeek Qwen based on the user's selection. This automated AI-driven reconnaissance ultimately generates intelligence for security teams to improve threat detection and response.
+
+\subsection{Any Secondary Contribution}
+\label{subsec_secondary_contribution}
+
+In addition to the main innovation of integrating SIEM with AI-driven analysis, this project introduces secondary innovations such as:
+
+\begin{itemize}
+    \item \textbf{Suricata instead of Snort} -- Most traditional SIEMs depend on Snort for their IDS/IPS, but DataLex uses Suricata because it supports multi-threading and can provide better throughput, and has built-in JSON logging so that events can flow smoothly into the SIEM.
+    \item \textbf{Natural Language Security Queries} -- Complex query syntax is required to perform threat analysis in other tools (e.g., Splunk, Fortinet), however, DataLex allows users to perform natural language queries, helping non-technical users uncover threats as they appear.
+    \item \textbf{Offline, Privacy-Preserving AI} -- In our enterprise-grade, cloud-agnostic design, data privacy and regulatory concerns are addressed since DataLex can keep security logs within the organization instead of sending them to a cloud provider (like AWS, GCP, Azure), removing concerns about data leakage.
+\end{itemize}

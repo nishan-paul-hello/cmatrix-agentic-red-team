@@ -1,4 +1,178 @@
 \section{Results Analysis}
 \label{sec_results_analysis}
 
-% Content for this section goes here.
+This section aims to provide a detailed discussion regarding the performance results from the experiments performed on the DataLex system. The analysis centers on the performance, scale, and effectiveness of the system when indexing security logs, performing AI-based threat detection, and integrating with legacy SIEM components. Test results are evaluated by factors such as hardware performance, system resource efficiency, log efficiency, security compliance, and overall stability. These values may be generalized for other hardware configurations (based on CPU-only execution, NVIDIA RTX 3090, A100, H100, etc.), providing a greater indication of the possible optimization, tunability, and overall feasibility of this SIEM-AI integration.
+
+\subsection{Performance Comparisons and Trend}
+\label{subsec_performance_comparisons_and_trend}
+
+By conducting the analysis of key performance indicators in a systematic way, it is possible to measure and present relevant trends and improvements attributable to hardware acceleration. This subsection covers each of these topics in depth, including percentage changes and environmental drivers behind those changes.
+
+\subsubsection{The Inference Time Analysis}
+\label{subsubsec_inference_time_analysis}
+
+Inference time is the time taken for the AI-based threat detection module to take a query as input and produce a contextual response. Given that SIEM environments require real-time or near-real-time response capabilities, lower inference times improve security monitoring efficiency to a great extent.
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{lr}
+\hline
+\textbf{Hardware} & \textbf{Inference Time (seconds)} \\
+\hline
+CPU Only & 24.54 \\
+NVIDIA RTX 3090 & 2.45 \\
+NVIDIA A100 & 0.98 \\
+NVIDIA H100 & 0.61 \\
+\hline
+\end{tabular}
+\caption{Inference Time Across Hardware Configurations}
+\label{tab:inference-time-hardware}
+\end{table}
+
+The inference time comparison across hardware versions (\reffig{fig:inference-time}) indicates that NVIDIA H100 improved inference time from 24.54 seconds to 0.61 seconds compared to CPU-only execution (a 40 times improvement). Inference time significantly drops due to the parallelized (tensor-core-based) computation pipelines and the ability of AI models to further optimize these pipelines while leveraging GPU usage. In contrast, CPU-bound execution has a hard time with sequential processing, which results in much longer wall-clock latency. These numbers suggest that performing AI-powered SIEM applications on high-end GPUs is a standard prerequisite to keep workflows with rapid analysis in an efficient, large-scale cybersecurity infrastructure.
+
+\subsubsection{Insights on Retrieval Latency}
+\label{subsubsec_insights_retrieval_latency}
+
+This latency is measured from the point where the system needs to retrieve relevant security logs and contextual data through the FAISS vector database. Reduced retrieval latency improves the speed of forensic investigations, minimizes incident response time, and allows for faster real-time threat intelligence correlation. \reftab{tab:retrieval-latency-hardware} depicts the measured results regarding retrieval latency:
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{lr}
+\hline
+\textbf{Hardware} & \textbf{Retrieval Latency (seconds)} \\
+\hline
+CPU Only & 0.0500 \\
+NVIDIA RTX 3090 & 0.0333 \\
+NVIDIA A100 & 0.0167 \\
+NVIDIA H100 & 0.0100 \\
+\hline
+\end{tabular}
+\caption{Retrieval Latency for Different Hardware}
+\label{tab:retrieval-latency-hardware}
+\end{table}
+
+Retrieval latencies were measured at 50 milliseconds per query on CPU-only environments (\reffig{fig:retrieval-latency}) and significantly lower at 10 milliseconds using NVIDIA H100 for GPU-accelerated configurations. This is because, apart from the optimizations that FAISS applies through parallelized search algorithms, FAISS also uses GPU-accelerated vector search instead of the traditional CPU-based linear search. Furthermore, most compute-heavy workloads leverage SIMD (Single Instruction Multiple Data) for optimized memory bandwidth on high-end GPUs to reduce latency while accessing vectorized logs.
+
+This trend means that quicker retrieval speeds allow threat intelligence to be correlated with historical data more efficiently.
+
+\subsubsection{Memory Usage Patterns}
+\label{subsubsec_memory_usage_patterns}
+
+SIEM-AI integration significantly reduces the amount of memory used to store the high-frequency log stream before compute-intensive AI processing. High memory consumption can lead to slow systems -- and slow systems lead to slow security event processing.
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{lr}
+\hline
+\textbf{Hardware} & \textbf{Memory Usage (MB)} \\
+\hline
+CPU Only & -32.55 \\
+NVIDIA RTX 3090 & -3.25 \\
+NVIDIA A100 & -1.30 \\
+NVIDIA H100 & -0.81 \\
+\hline
+\end{tabular}
+\caption{Memory Usage for Different Hardware}
+\label{tab:memory-usage-hardware}
+\end{table}
+
+The memory usage traces in \reffig{fig:memory-usage} indicate that CPU-only settings had particularly high memory usage (-32.55 MB) whereas NVIDIA GPUs, especially the H100, were able to limit memory use (-0.81 MB). This substantial performance increase takes place as a result of the memory architectures of GPUs, namely HBM (High Bandwidth Memory) and GDDR6, which enable the storage and retrieval of vectorized data much faster and with significantly greater bandwidth. GPUs do not have the same limitation as CPUs, which require slower RAM modules; they perform memory allocation for themselves using AI accelerators and caching functions.
+
+Overall, this confirms that inference on GPUs provides lower memory overhead, which makes deep learning and AI-powered security monitoring more scalable and sustainable to operate in production systems.
+
+\subsubsection{Throughput Performance Analysis}
+\label{subsubsec_throughput_performance_analysis}
+
+Throughput measures the number of queries the system can handle per minute, serving as an indicator of processing efficiency in large-scale deployments. As depicted in \reffig{fig:throughput}, CPU execution resulted in a throughput of 2.45 queries per minute, whereas the H100 GPU boosted throughput to 36.75 queries per minute, demonstrating a 15x enhancement in system efficiency. The improvement is due to specialized deep-learning cores in modern GPUs, which allow simultaneous computation of multiple AI-driven security queries.
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{lr}
+\hline
+\textbf{Hardware} & \textbf{Throughput (queries/min)} \\
+\hline
+CPU Only & 2.45 \\
+NVIDIA RTX 3090 & 12.25 \\
+NVIDIA A100 & 24.50 \\
+NVIDIA H100 & 36.75 \\
+\hline
+\end{tabular}
+\caption{Throughput for Different Hardware}
+\label{tab:throughput-hardware}
+\end{table}
+
+Additionally, Docker-based microservices in DataLex facilitate efficient resource allocation, further contributing to increased throughput. These results highlight that high-end GPUs enable SIEM-AI systems to scale efficiently, making them capable of handling real-time security analytics at an enterprise level.
+
+\subsubsection{Token Generation Rate Evaluation}
+\label{subsubsec_token_generation_rate_evaluation}
+
+Token generation rate is a critical metric for assessing the AI system's response speed for threat analysis queries. The faster the token generation rate, the quicker the AI-driven insights can be delivered, as shown in \reftab{tab:token-generation-rate-hardware}:
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{lr}
+\hline
+\textbf{Hardware} & \textbf{Token Generation Rate (tokens/sec)} \\
+\hline
+CPU Only & 8.72 \\
+NVIDIA RTX 3090 & 43.60 \\
+NVIDIA A100 & 87.20 \\
+NVIDIA H100 & 130.80 \\
+\hline
+\end{tabular}
+\caption{Token Generation Rate for Different Hardware}
+\label{tab:token-generation-rate-hardware}
+\end{table}
+
+The findings presented in \reffig{fig:token-generation-rate} demonstrate that CPU-based execution achieved a token generation rate of only 8.72 tokens per second, whereas NVIDIA H100 accelerated this to 130.80 tokens per second, reflecting a 15x increase in response generation efficiency. The dramatic improvement can be attributed to hardware-accelerated attention mechanisms in transformer-based models, which allow GPUs to batch process tokens in parallel. CPUs, on the other hand, process sequences sequentially, leading to significant latency. The accelerated token generation rate is crucial for real-time security applications, ensuring that security analysts receive actionable intelligence with minimal delay.
+
+\subsection{Comparative Analysis of Intrusion Detection Systems (Snort vs. Suricata)}
+\label{subsec_comparative_snort_suricata}
+
+Another crucial design decision in DataLex was the choice of Suricata over Snort as the Intrusion Detection and Prevention System (IDPS). While both tools are widely used in cybersecurity, Suricata offers key advantages in terms of performance, scalability, and detection capabilities.
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{p{2.6cm}p{3.7cm}p{4.5cm}}
+\hline
+\textbf{Feature} & \textbf{Snort} & \textbf{Suricata (Used in DataLex)} \\
+\hline
+Processing Architecture & Single-threaded & Multi-threaded for high performance \\
+Log Format & Plaintext logs & JSON-based structured logs for easy SIEM integration \\
+Performance & Slower under heavy traffic & Optimized for high-speed networks \\
+Deep Packet Inspection (DPI) & Supported & Advanced DPI with TLS decryption \\
+Scalability & Requires multiple instances for scaling & Scales efficiently with multi-threading \\
+Signature Support & Snort rule set & Supports Snort, Emerging Threats, and custom rules \\
+Packet Loss Handling & High under heavy load & Handles high-throughput traffic with minimal packet loss \\
+\hline
+\end{tabular}
+\caption{Comparison of Snort and Suricata Features}
+\label{tab:snort-suricata-comparison}
+\end{table}
+
+\subsection{Comparative Analysis of SIEM Implementations}
+\label{subsec_comparative_siem_implementations}
+
+One of the key innovations of DataLex is its Docker-based implementation of SIEM, which makes it a lightweight, scalable, and efficient alternative to traditional monolithic SIEM architectures. In this section, we compare DataLex with industry-standard SIEM solutions such as Splunk and Fortinet, highlighting the advantages of using a containerized approach.
+
+The Docker-based microservices architecture allows DataLex to be deployed rapidly and scaled dynamically across different environments without the complexities associated with traditional SIEMs. Unlike Splunk and Fortinet, which require dedicated infrastructure and substantial operational overhead, DataLex offers containerized efficiency, ensuring smooth system updates, minimal downtime, and better resource allocation.
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{p{2.6cm}p{3cm}p{3cm}p{3.5cm}}
+\hline
+\textbf{Feature} & \textbf{DataLex (Docker-based SIEM)} & \textbf{Splunk Enterprise} & \textbf{Fortinet FortiSIEM} \\
+\hline
+Deployment Model & Lightweight Docker containers & \multicolumn{2}{l}{Monolithic, on-prem or cloud / Appliance-based or on-prem} \\
+Scalability & Highly scalable with microservices & Requires additional servers for scaling & Limited scalability with dedicated appliances \\
+Resource Efficiency & Low overhead, efficient log processing & High resource consumption & Requires dedicated hardware \\
+Cost-effectiveness & Open-source, cost-efficient & High licensing costs & Expensive enterprise model \\
+AI-Powered Analysis & Integrated GenAI \& RAG capabilities & Limited AI automation & Basic AI-driven event correlation \\
+Intrusion Detection & Suricata IDS/IPS & Splunk Stream IDS (optional) & Integrated with FortiGate firewall \\
+Customization & Highly customizable with open-source stack & Customizable but requires specialized expertise & Limited customization options \\
+\hline
+\end{tabular}
+\caption{Comparative Analysis of SIEM Solutions}
+\label{tab:siem-implementations-comparison}
+\end{table}
