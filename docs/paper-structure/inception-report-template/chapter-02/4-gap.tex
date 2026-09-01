@@ -4,20 +4,20 @@
 The literature reviewed in this chapter suggests, tentatively, that autonomous VAPT systems have so far been developed to address one of two capabilities at a time, rather than both simultaneously. Table~\ref{tab:gap-table} summarises this observation.
 
 \begin{table}[htbp]
-\centering
-\small
-\caption{Observed split in the reviewed literature between exploration-oriented and dependency-reasoning-oriented systems (preliminary reading).}
-\label{tab:gap-table}
-\begin{tabular}{@{}p{3.5cm}p{5.5cm}p{5.0cm}@{}}
-\toprule
-\textbf{Area} & \textbf{What the reviewed literature shows} & \textbf{Observed limitation / open area} \\
-\midrule
-Exploration breadth & HPTSA and VulnBot scale to wide, unfamiliar attack surfaces using hierarchical team dispatch & Neither models prerequisite relationships between discovered weaknesses; tasks are dispatched as flat lists \\
-Prerequisite / dependency reasoning & CHECKMATE introduces classical planning with explicit prerequisites; PentestEval shows that ground-truth ADM produces the largest single-stage improvement (+0.14) & Both require weaknesses to be pre-enumerated; applicability to open-ended discovery is unclear from the reviewed papers \\
-Cross-session memory & No system in the reviewed set retains and reuses strategies across multiple missions & An open area that may warrant investigation, though its value relative to the above two concerns is currently unclear \\
-Cross-surface evaluation & Every reviewed system is evaluated against a single attack-surface family & No system evaluates the same architecture across web, GraphQL, and multi-host surfaces simultaneously \\
-\bottomrule
-\end{tabular}
+	\centering
+	\small
+	\caption{Observed split in the reviewed literature between exploration-oriented and dependency-reasoning-oriented systems (preliminary reading).}
+	\label{tab:gap-table}
+	\begin{tabular}{@{}p{3.5cm}p{5.5cm}p{5.0cm}@{}}
+		\toprule
+		\textbf{Area}                       & \textbf{What the reviewed literature shows}                                                                                                                        & \textbf{Observed limitation / open area}                                                                                \\
+		\midrule
+		Exploration breadth                 & HPTSA and VulnBot scale to wide, unfamiliar attack surfaces using hierarchical team dispatch                                                                       & Neither models prerequisite relationships between discovered weaknesses; tasks are dispatched as flat lists             \\
+		Prerequisite / dependency reasoning & CHECKMATE introduces classical planning with explicit prerequisites; PentestEval shows that ground-truth ADM produces the largest single-stage improvement (+0.14) & Both require weaknesses to be pre-enumerated; applicability to open-ended discovery is unclear from the reviewed papers \\
+		Cross-session memory                & No system in the reviewed set retains and reuses strategies across multiple missions                                                                               & An open area that may warrant investigation, though its value relative to the above two concerns is currently unclear   \\
+		Cross-surface evaluation            & Every reviewed system is evaluated against a single attack-surface family                                                                                          & No system evaluates the same architecture across web, GraphQL, and multi-host surfaces simultaneously                   \\
+		\bottomrule
+	\end{tabular}
 \end{table}
 
 On one side, the reviewed literature shows that systems built for broad exploration of an unfamiliar attack surface --- HPTSA, VulnBot, and similar team-dispatch architectures --- do not appear to model prerequisite relationships between candidate weaknesses explicitly. They search widely, but without a formal notion of what must be established before what. On the other side, systems that do reason explicitly about such dependencies, including CHECKMATE's classical-planning layer and PentestEval's ground-truth attack decision-making configuration, are evaluated on scenarios where the relevant weaknesses have already been enumerated in advance. It is not yet apparent from the reviewed papers how well these approaches would scale to open-ended discovery on a wide, previously unseen surface.

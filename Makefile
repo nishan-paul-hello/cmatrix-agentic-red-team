@@ -1,4 +1,4 @@
-.PHONY: help install dev build docker-build up down clean paper ppt clean-paper format format-check lint lint-fix audit typecheck test paper-inception lint-paper-inception
+.PHONY: help install dev build docker-build up down clean paper ppt clean-paper format format-check lint lint-fix audit typecheck test paper-inception lint-paper-inception format-paper-inception
 
 -include .env
 export
@@ -26,6 +26,7 @@ help:
 	@echo "  make paper                  Build the Research Paper PDF"
 	@echo "  make paper-inception        Build the Inception Report PDF"
 	@echo "  make lint-paper-inception   Lint the Inception Report Template with chktex"
+	@echo "  make format-paper-inception Format the Inception Report Template with latexindent"
 	@echo "  make paper-datalex          Build the DataLex Explainable SIEM Report PDF"
 	@echo "  make ppt                    Build the Presentation PPTX"
 	@echo "  make clean-paper            Clean Research Paper artifacts"
@@ -132,6 +133,11 @@ lint-paper-inception:
 	@echo "🔍 Linting Inception Report Template with chktex..."
 	@find $(PAPER_DIR_INCEPTION) -type f \( -name "*.tex" -o -name "*.cls" -o -name "*.bib" \) -exec chktex -q -n 1 -n 6 -n 8 -n 12 -n 13 -n 24 -n 27 -n 36 -n 38 -n 42 {} + 2>/dev/null
 
+format-paper-inception:
+	@echo "✨ Formatting Inception Report Template with latexindent..."
+	@find $(PAPER_DIR_INCEPTION) -name "*.tex" -exec latexindent -w -s {} \;
+	@find $(PAPER_DIR_INCEPTION) -name "*.bak*" -delete
+
 paper-datalex:
 	@echo "🏗️  Building DataLex Explainable SIEM Report..."
 	@mkdir -p $(PAPER_DIR_DATALEX)/build/chapter-00
@@ -162,4 +168,5 @@ clean-paper:
 	@echo "🧹 Cleaning Research Paper artifacts..."
 	rm -rf docs/paper-structure/paper-*/*.pdf docs/paper-structure/paper-*/content/build docs/paper-structure/paper-*/contents/build docs/paper-structure/paper-*/main/build
 	rm -rf docs/paper-structure/inception-report-template/build docs/paper-structure/inception-report-template/*.pdf
+	@find docs/paper-structure/inception-report-template -name "*.bak*" -delete
 	rm -rf docs/paper-structure/datalex-explainable-siem/build docs/paper-structure/datalex-explainable-siem/*.pdf
