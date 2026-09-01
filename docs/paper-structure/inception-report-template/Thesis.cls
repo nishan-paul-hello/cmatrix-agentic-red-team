@@ -239,7 +239,7 @@
 {
   \btypeout{Abstract Page}
   \thispagestyle{empty}
-  \null\vfil
+  \vspace*{1.5cm}
   \begin{center}
     \setlength{\parskip}{0pt}
     {\Large \UNIVNAME \par}
@@ -258,7 +258,6 @@
   \end{center}
 }
 {
-  \vfil\vfil\vfil\null
   \cleardoublepage
 }
 \addtocounter{secnumdepth}{1}
