@@ -1,7 +1,7 @@
 \section{Comparative Analysis}
 \label{sec_comparative_analysis}
 
-Table~\ref{tab:vapt-comparison} summarises the eleven reviewed systems and benchmarks along four dimensions that recurred throughout the literature review: whether the system uses a single agent or a coordinated team, whether it models dependencies between candidate weaknesses explicitly, whether it retains any form of memory across sessions, and which benchmark(s) it was evaluated against.
+Table~\ref{tab:vapt-comparison} summarises the eleven reviewed systems and benchmarks along four dimensions that recurred throughout the literature review: whether the system uses a single agent or a coordinated team, whether it models dependencies between candidate weaknesses explicitly, whether it retains any form of memory across sessions, and which benchmarks it was evaluated against.
 
 \begin{table}[h!]
 \centering
@@ -9,9 +9,9 @@ Table~\ref{tab:vapt-comparison} summarises the eleven reviewed systems and bench
 \caption{Comparison of systems and benchmarks reviewed, across four recurring architectural dimensions.}
 \label{tab:vapt-comparison}
 \begin{tabular}{p{2.8cm}p{2.4cm}p{2.6cm}p{2.0cm}p{2.7cm}}
-\hline
-\textbf{System / Work} & \textbf{Architecture} & \textbf{Dependency Modeling} & \textbf{Cross-Session Memory} & \textbf{Benchmark(s)} \\
-\hline
+\toprule
+\textbf{System / Work} & \textbf{Architecture} & \textbf{Dependency Modeling} & \textbf{Cross-Session Memory} & \textbf{Benchmarks} \\
+\midrule
 Fang et al.\ \citep{fang2024hackwebsites} & Single agent (ReAct) & None & None & Simplified websites \\
 Fang et al.\ \citep{fang2024oneday} & Single agent (ReAct) & None (given CVE desc.) & None & 15 one-day CVEs \\
 HPTSA \citep{zhu2024hptsa} & Hierarchical planner + task agents & None (flat dispatch) & None & 15 zero-day CVEs \\
@@ -23,7 +23,7 @@ PrediQL \citep{liu2025prediql} & LLM-guided fuzzer & Schema-derived & None & 6 G
 CVE-Bench \citep{zhu2025cvebench} & Benchmark (no agent) & N/A & N/A & 40 critical web CVEs \\
 PentestEval \citep{yang2025pentesteval} & Benchmark (modular pipeline) & Explicit (ground-truth injected) & None & 12 real-world scenarios \\
 Wang et al.\ \citep{wang2025surveyagents} & Survey & N/A & N/A & General (survey) \\
-\hline
+\bottomrule
 \end{tabular}
 \end{table}
 

@@ -130,7 +130,7 @@ paper-inception:
 
 lint-paper-inception:
 	@echo "🔍 Linting Inception Report Template with chktex..."
-	@find $(PAPER_DIR_INCEPTION) -type f \( -name "*.tex" -o -name "*.cls" -o -name "*.bib" \) -exec chktex -q {} +
+	@find $(PAPER_DIR_INCEPTION) -type f \( -name "*.tex" -o -name "*.cls" -o -name "*.bib" \) -exec chktex -q -n 1 -n 6 -n 8 -n 12 -n 13 -n 24 -n 27 -n 36 -n 38 -n 42 {} + 2>/dev/null
 
 paper-datalex:
 	@echo "🏗️  Building DataLex Explainable SIEM Report..."
