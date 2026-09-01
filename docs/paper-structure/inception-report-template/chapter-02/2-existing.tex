@@ -1,1 +1,44 @@
 \section{Existing Systems}
+\label{sec_existing_systems}
+
+This section surveys the systems, frameworks, and benchmarks identified during the literature review conducted so far. The review currently covers close to thirty papers; the discussion below groups them by the architectural approach they take, since this grouping turned out to be more informative than a chronological ordering.
+
+\subsection{Single-Agent and ReAct-Style Approaches}
+\label{subsec_single_agent}
+
+The earliest work in this space used a single LLM agent operating in a ReAct-style loop -- observe, reason, act -- against a target. Fang et al. showed that a single GPT-4 agent with tool access could autonomously exploit real-world one-day vulnerabilities when given the CVE description, in a pipeline reported to require under a hundred lines of code, while every other tested model and open-source scanner failed entirely on the same benchmark~\cite{fang2024oneday}. An earlier study by the same group had already shown single agents hacking simplified toy websites~\cite{fang2024hackwebsites}, and Happe and Cito independently reported similar single-agent capability on privilege-escalation tasks~\cite{happe2023pwnd}. PentestGPT extended the single-agent design with an explicit reasoning/generation/parsing split to mitigate context loss over long sessions~\cite{deng2024pentestgpt}, and a later paper by an overlapping set of authors distilled what design choices actually make single-agent systems effective in real-world settings~\cite{deng2025goodagent}.
+
+\subsection{Multi-Agent and Team-Based Orchestration}
+\label{subsec_multi_agent}
+
+A second line of work replaces the single agent with a team of cooperating agents, motivated by the observation that a single flat loop struggles to scale to wide, unfamiliar attack surfaces. HPTSA introduced a hierarchical planner that dispatches task-specific sub-agents and was the first system reported to exploit real-world zero-day vulnerabilities autonomously~\cite{zhu2024zeroday}. MAPTA (also referred to as XBOW in the surveyed material) applies a similar team-based structure specifically to web application testing~\cite{david2024mapta}, while VulnBot~\cite{kong2025vulnbot} and PentestAgent~\cite{shen2024pentestagent} propose comparable multi-agent collaborative frameworks with role specialization (for example, separating reconnaissance, planning, and exploitation into distinct agent roles). Co-RedTeam extends this idea with an orchestration layer aimed at coordinating discovery and exploitation across agents~\cite{he2025coredteam}. These security-specific systems build on general-purpose multi-agent frameworks surveyed alongside them, notably AutoGen~\cite{wu2023autogen} and MetaGPT~\cite{hong2023metagpt}, which establish conversational and role-based multi-agent conventions without being security-specific themselves.
+
+\subsection{Planning-Augmented Agents}
+\label{subsec_planning_augmented}
+
+A smaller set of papers pairs LLM agents with a more classical planning component, aiming to give the agent an explicit model of prerequisites between actions rather than relying purely on the LLM's implicit reasoning. Wang et al. combine LLM agents with classical planning techniques for penetration testing~\cite{wang2025classicalplanning}, and D-CIPHER proposes a planner-plus-heterogeneous-executor architecture for offensive security tasks~\cite{udeshi2025dcipher}. These systems report stronger performance on curated, pre-enumerated scenarios, which is discussed further in Section~\ref{sec_comparative_analysis}.
+
+\subsection{Multi-Host and Network-Scale Red Teaming}
+\label{subsec_multi_host}
+
+Beyond single web targets, two papers extend autonomous testing to multi-host and Active Directory-style network environments. Incalmo provides an autonomous LLM-assisted system for red-teaming multi-host networks, evaluated on a dedicated benchmark suite of forty environments~\cite{singer2025incalmo}. Happe and Cito's later work specifically studies whether LLM agents can perform assumed-breach penetration testing against enterprise Active Directory networks~\cite{happe2025enterprise}, reporting on lateral movement and credential-reuse behaviour that single-host web testing does not exercise.
+
+\subsection{API and GraphQL-Specific Testing}
+\label{subsec_api_graphql}
+
+A separate strand of the literature targets API-level surfaces rather than the rendered web application. RESTler is an older, non-LLM stateful REST API fuzzer that infers producer-consumer dependencies between API requests from the API specification~\cite{atlidakis2019restler}; its dependency-inference technique is referenced by several of the more recent LLM-based papers as a useful building block rather than a competing end-to-end system. PrediQL applies LLMs specifically to GraphQL API testing, targeting introspection-driven schema abuse and similar GraphQL-specific weaknesses~\cite{liu2025prediql}.
+
+\subsection{Adaptive and Computer-Use Web Testing}
+\label{subsec_adaptive_web}
+
+AWE proposes an adaptive agent architecture aimed at dynamic web applications~\cite{jaswal2026awe}, AutoPT frames end-to-end web penetration testing as a state-machine problem and asks explicitly how far current systems are from full automation~\cite{wu2025autopt}, and HackWorld evaluates computer-use agents -- agents that interact with a browser the way a human would, via clicks and screenshots, rather than through raw HTTP calls -- on web application exploitation~\cite{ren2025hackworld}.
+
+\subsection{Memory, Reflection, and Skill Accumulation}
+\label{subsec_memory}
+
+Several non-security agent papers are relevant background for how LLM agents retain and reuse experience across tasks. VOYAGER demonstrates an open-ended embodied agent that accumulates a persistent skill library across episodes~\cite{wang2023voyager}, and Reflexion shows that verbal self-reflection on past failures can improve an agent's subsequent attempts without any weight updates~\cite{shinn2023reflexion}. Neither paper is security-specific, but both are cited in the surveyed VAPT papers as the conceptual basis for cross-session memory mechanisms.
+
+\subsection{Benchmarks and Evaluation Frameworks}
+\label{subsec_benchmarks}
+
+Finally, a distinct set of papers contributes benchmarks rather than agent architectures. CVE-Bench evaluates agents against forty critical real-world web-application CVEs with an oracle-backed pass/fail signal~\cite{zhu2025cvebench}. PentestEval decomposes penetration testing into discrete stages -- weakness gathering, weakness filtering, and attack decision-making -- and measures agent performance stage by stage rather than only end-to-end~\cite{yang2025pentesteval}. CYBENCH offers a broader capture-the-flag-style evaluation of cybersecurity capability across forty tasks~\cite{zhang2025cybench}, and BountyBench evaluates agents against twenty-five real production open-source systems using bug-bounty-style, dollar-denominated impact scoring~\cite{zhang2025bountybench}. Two survey papers were also reviewed for broader context: one surveys LLM-based agents in autonomous cyberattacks generally~\cite{xu2024forewarned}, and the other surveys LLM-based autonomous agents outside the security domain~\cite{wang2024survey}.
