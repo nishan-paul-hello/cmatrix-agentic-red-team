@@ -25,6 +25,7 @@ help:
 	@echo "  make clean                  Clean all build artifacts and caches"
 	@echo "  make paper                  Build the Research Paper PDF"
 	@echo "  make paper-inception        Build the Inception Report PDF"
+	@echo "  make paper-datalex          Build the DataLex Explainable SIEM Report PDF"
 	@echo "  make ppt                    Build the Presentation PPTX"
 	@echo "  make clean-paper            Clean Research Paper artifacts"
 
@@ -79,6 +80,7 @@ PAPER_DIR_03 := docs/paper-structure/paper-03-checkpoint-resumable-autonomy
 PAPER_DIR_04 := docs/paper-structure/paper-04-hitl-orchestrated-reasoning
 PAPER_DIR_05 := docs/paper-structure/paper-05-agentic-vuln-intelligence
 PAPER_DIR_INCEPTION := docs/paper-structure/inception-report-template
+PAPER_DIR_DATALEX := docs/paper-structure/datalex-explainable-siem
 
 paper: paper-01 paper-02 paper-03 paper-04 paper-05
 	@echo "✅ All papers built successfully!"
@@ -125,6 +127,17 @@ paper-inception:
 	@mkdir -p $(PAPER_DIR_INCEPTION)/build/ch07
 	export BIBINPUTS=.:$$BIBINPUTS; $(LATEXMK) -jobname=main -outdir="." -auxdir="build" $(PAPER_DIR_INCEPTION)/main.tex
 
+paper-datalex:
+	@echo "🏗️  Building DataLex Explainable SIEM Report..."
+	@mkdir -p $(PAPER_DIR_DATALEX)/build/chapter-00
+	@mkdir -p $(PAPER_DIR_DATALEX)/build/chapter-01
+	@mkdir -p $(PAPER_DIR_DATALEX)/build/chapter-02
+	@mkdir -p $(PAPER_DIR_DATALEX)/build/chapter-03
+	@mkdir -p $(PAPER_DIR_DATALEX)/build/chapter-04
+	@mkdir -p $(PAPER_DIR_DATALEX)/build/chapter-05
+	@mkdir -p $(PAPER_DIR_DATALEX)/build/chapter-07
+	export BIBINPUTS=.:$$BIBINPUTS; $(LATEXMK) -jobname=main -outdir="." -auxdir="build" $(PAPER_DIR_DATALEX)/main.tex
+
 # Presentation Build
 PPT_DIR := docs/paper-thesis/presentation
 PPT_NAME ?= presentation-draft.pptx
@@ -144,3 +157,4 @@ clean-paper:
 	@echo "🧹 Cleaning Research Paper artifacts..."
 	rm -rf docs/paper-structure/paper-*/*.pdf docs/paper-structure/paper-*/content/build docs/paper-structure/paper-*/contents/build docs/paper-structure/paper-*/main/build
 	rm -rf docs/paper-structure/inception-report-template/build docs/paper-structure/inception-report-template/*.pdf
+	rm -rf docs/paper-structure/datalex-explainable-siem/build docs/paper-structure/datalex-explainable-siem/*.pdf

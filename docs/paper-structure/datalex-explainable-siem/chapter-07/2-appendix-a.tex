@@ -1,0 +1,183 @@
+\chapter{Appendix A: RedGrid Reference Material}
+\label{AppendixA}
+\lhead{Appendix A. \emph{RedGrid Reference Material}}
+
+This appendix provides full specifications for the \redgrid{} system that would exceed the length constraints of the main chapters, including the complete VDG node schema, benchmark suite details, UCB hyperparameter search configuration, and ablation condition pseudocode.
+
+\section{Full VDG Node Schema}
+\label{app:vdg-schema}
+
+\reftab{tab:vdg-node-schema} provides the complete field listing for a \vdg{} node as defined in Chapter~3. Every field is populated by the Team Manager via \code{VDG\_AddNode}; no Specialist writes directly to the \vdg{}.
+
+\begin{longtable}{llp{7cm}}
+  \caption{Complete \vdg{} Node Schema}\label{tab:vdg-node-schema} \\
+  \hline
+  \textbf{Field} & \textbf{Type} & \textbf{Description} \\
+  \hline
+  \endfirsthead
+  \hline
+  \textbf{Field} & \textbf{Type} & \textbf{Description} \\
+  \hline
+  \endhead
+  \hline
+  \endfoot
+  \code{weakness\_id}   & \texttt{str}   & Unique identifier (e.g.\ \texttt{sqli-001}) \\
+  \code{vuln\_class}    & \texttt{enum}  & \texttt{SQLi | XSS | CSRF | SSTI | LFI | AuthBypass | IDOR | RCE | GraphQL\_Injection | LateralMove} \\
+  \code{attack\_intent} & \texttt{str}   & Natural language description of the goal \\
+  \code{prerequisites}  & \texttt{List[str]} & \code{weakness\_id}s that must reach \EXPLOITED{} before this node is eligible \\
+  \code{enables}        & \texttt{List[str]} & \code{weakness\_id}s that become \ELIGIBLE{} once this node is \EXPLOITED{} \\
+  \code{status}         & \texttt{enum}  & \ELIGIBLE{} $|$ \INPROGRESS{} $|$ \EXPLOITED{} $|$ \INFEASIBLE{} $|$ \BLOCKED{} \\
+  \code{w}              & \texttt{float} & Cumulative UCB reward (sum of outcome scores) \\
+  \code{n}              & \texttt{int}   & Times this node has been selected (initialised to 1 to avoid division by zero) \\
+  \code{phi}            & \texttt{float} & Promise score $\phiNode \in [0,1]$: LLM-assessed exploitability likelihood \\
+  \code{delta}          & \texttt{float} & Task difficulty index $\deltaNode \in [0,1]$; 1 = maximally hard \\
+  \code{E\_ord}         & \texttt{int}   & Ordinal evidence score $\Eord \in \{0,1,2,3,4,5\}$ (see \reftab{tab:eord}) \\
+  \code{epss\_prior}    & \texttt{float} & \epss{} score $\in [0,1]$ from NVD/FIRST API; default 0.05 if no CVE match \\
+  \code{context\_load}  & \texttt{float} & Estimated Specialist context cost $C \in [0,1]$ \\
+  \code{estimated\_cost}& \texttt{float} & Estimated token cost for this node's exploitation \\
+  \code{retry\_count}   & \texttt{int}   & Number of Specialist invocations on this node \\
+  \code{max\_retries}   & \texttt{int}   & Default 3; on exhaustion $\rightarrow$ \INFEASIBLE{} \\
+  \code{path\_score}    & \texttt{float} & Score of best feasible path this node participates in \\
+  \code{source\_el\_nodes} & \texttt{List[str]} & \el{} node IDs that seeded this \vdg{} node \\
+  \code{last\_updated}  & \texttt{timestamp} & Timestamp of last field mutation \\
+  \hline
+\end{longtable}
+
+\section{Ordinal Evidence Score ($E_{\mathrm{ord}}$) Reference}
+\label{app:eord}
+
+\reftab{tab:eord} is the full rubric used by the Evaluation Agent to assign $\Eord$ after every Specialist task. The value is parsed deterministically from constrained JSON output — not inferred from free-form text.
+
+\begin{table}[h!]
+  \centering
+  \caption{Ordinal Evidence Score ($\Eord$) Rubric}\label{tab:eord}
+  \begin{tabular}{clp{8cm}}
+    \hline
+    \textbf{$\Eord$} & \textbf{Label} & \textbf{Criteria} \\
+    \hline
+    0 & Unseen               & Node not yet acted on \\
+    1 & Tool ran / nothing   & Tool executed; target responded normally; no anomaly detected \\
+    2 & Weak signal          & Anomalous response (different status code, timing difference) but ambiguous \\
+    3 & Clear indication     & Behavioural evidence consistent with vulnerability (e.g.\ SQL error message, reflected input) but not yet controlled \\
+    4 & Confirmed behaviour  & Controlled behaviour demonstrated (e.g.\ parameterised timing differential, payload executing in non-live context) \\
+    5 & Oracle-confirmed     & Per-surface oracle confirms successful exploitation \\
+    \hline
+  \end{tabular}
+\end{table}
+
+\section{Benchmark Suite Summary}
+\label{app:benchmarks}
+
+\reftab{tab:benchmark-suite} summarises all eight benchmark tiers used in \redgrid{}'s evaluation. No benchmark was constructed for this work; every tier references a published, reusable target set.
+
+\begin{longtable}{clp{3.5cm}lp{4cm}}
+  \caption{Full \redgrid{} Benchmark Suite}\label{tab:benchmark-suite} \\
+  \hline
+  \textbf{Tier} & \textbf{Benchmark} & \textbf{Surface} & \textbf{Size} & \textbf{Role} \\
+  \hline
+  \endfirsthead
+  \hline
+  \textbf{Tier} & \textbf{Benchmark} & \textbf{Surface} & \textbf{Size} & \textbf{Role} \\
+  \hline
+  \endhead
+  \hline
+  \endfoot
+  0  & Fang et al.\ sandbox    & Web           & 15 CVEs  & CI regression floor \\
+  0b & HPTSA 14-CVE suite      & Web (0-day)   & 14 CVEs  & Zero-day mode validation \\
+  1  & \pentesteval{}           & Web           & 12 / 346 & Stage-level diagnosis; UCB tuning \\
+  2  & \cvebench{}              & Web           & 40 CVEs  & \textbf{Primary metric} ($\passatone$, $\passatfive$) \\
+  2b & MAPTA / HackWorld / Cybench & Web       & $\sim$180 & Cross-benchmark generalisation \\
+  3  & \prediql{}               & GraphQL       & 6 APIs   & Schema-coverage vs.\ baselines \\
+  4  & \mhbench{}               & Multi-host    & 40 envs  & Host-compromise / credential-theft rate \\
+  5  & \bountybench{}           & Web (prod.)   & 25 systems & Dollar-value and \cpe{} axes \\
+  6  & PentestGPT set + HTB S8  & Web           & 18 machines & Live-competition validation \\
+  \hline
+\end{longtable}
+
+\section{UCB Hyperparameter Search Grid}
+\label{app:ucb-tuning}
+
+The UCB formula (Chapter~3) has seven tunable parameters. \reftab{tab:ucb-grid} documents the search ranges and defaults. Grid search is performed on Tier~1 (\pentesteval{}) only, holding out the \cvebench{} split.
+
+\begin{table}[h!]
+  \centering
+  \caption{UCB Hyperparameter Search Grid}\label{tab:ucb-grid}
+  \begin{tabular}{llll}
+    \hline
+    \textbf{Parameter} & \textbf{Meaning} & \textbf{Search Range} & \textbf{Default} \\
+    \hline
+    $\Cexpl$     & Exploration constant          & $\{0.5, 1.0, 1.414, 2.0\}$ & 1.414 \\
+    $\alpha$     & Weight for promise $\phiNode$ & $[0.1, 0.5]$ step 0.1      & 0.3   \\
+    $\beta$      & Weight for difficulty $(1-\deltaNode)$ & $[0.1, 0.5]$ step 0.1 & 0.2 \\
+    $\gamma$     & Weight for $\Eord/5$          & $[0.1, 0.5]$ step 0.1      & 0.4   \\
+    $\kappa$     & Context-load penalty          & $[0.05, 0.2]$ step 0.05    & 0.1   \\
+    $\lambda$    & \epss{} prior weight          & $[0.05, 0.3]$ step 0.05    & 0.15  \\
+    $\mu$        & Cost-awareness penalty        & $[0.05, 0.2]$ step 0.05    & 0.1   \\
+    \hline
+  \end{tabular}
+\end{table}
+
+Results must be reported with sensitivity analysis: $\pm 10\%$ perturbation from each optimal value while holding others fixed.
+
+\section{Ablation Condition A1 — Precise Pseudocode}
+\label{app:ablation-a1}
+
+This section provides the exact algorithmic distinction between Ablation A1 conditions (b) and (c), which is critical for interpreting whether the unified \vdg{} adds value over a stacked approach.
+
+\paragraph{Condition (b) — UCB with dependency-constrained eligible set (pre-filter):}
+\begin{verbatim}
+eligible = [v for v in VDG.nodes
+            if v.status == ELIGIBLE
+            and all_prerequisites_satisfied(v)]
+scores   = {v: UCB_score(v, N=len(eligible))
+            for v in eligible}
+selected = max(eligible, key=lambda v: scores[v])
+\end{verbatim}
+
+\paragraph{Condition (c) — Stacked: UCB over all nodes, post-filter by dependency (the key discriminant):}
+\begin{verbatim}
+all_nodes = VDG.all_unattempted_nodes()
+scores    = {v: UCB_score(v, N=len(all_nodes))
+             for v in all_nodes}
+ranked    = sorted(all_nodes,
+                   key=lambda v: scores[v],
+                   reverse=True)
+filtered  = [v for v in ranked
+             if all_prerequisites_satisfied(v)]
+selected  = filtered[0]
+\end{verbatim}
+
+\noindent If condition (d) (full \vdg{} with path scoring) outperforms condition (c), the unified graph structure has value beyond dependency filtering alone. If (d) $\approx$ (c), the contribution downgrades to dependency-aware \ucb{} filtering — still a contribution, but a narrower claim. This gate must be reported honestly.
+
+\section{Prior Work Gap Summary}
+\label{app:prior-work}
+
+\reftab{tab:prior-work-gaps} consolidates the gap analysis from Chapter~2 into a compact reference table.
+
+\begin{longtable}{p{4.5cm}p{4cm}p{4.5cm}}
+  \caption{Prior Work Gaps and \redgrid{} Fixes}\label{tab:prior-work-gaps} \\
+  \hline
+  \textbf{Gap} & \textbf{Papers exhibiting} & \textbf{\redgrid{} fix} \\
+  \hline
+  \endfirsthead
+  \hline
+  \textbf{Gap} & \textbf{Papers exhibiting} & \textbf{\redgrid{} fix} \\
+  \hline
+  \endhead
+  \hline
+  \endfoot
+  Flat dispatch, no prerequisite modelling          & HPTSA, MAPTA, T-Agent           & \vdg{} dependency-constrained frontier \\
+  Dependency planning on pre-curated sets only      & \pentesteval{} SMP, CHECKMATE   & Dynamic \code{VDG\_AddNode} from Specialist discovery \\
+  Node-level scoring misses multi-step chains       & EGATS                           & Path scoring: product of node scores $\times$ impact / cost \\
+  No failure propagation                            & All 29 surveyed papers          & \BLOCKED{} propagation + frontier recomputation \\
+  Exploration failure unaddressed architecturally   & \cvebench{} (diagnostic)        & Full-surface Recon + dependency-constrained frontier \\
+  Session/multi-turn state loss                     & Fang et al., PentestGPT         & Auth/Session Specialist + Session Persistence Service \\
+  Context pollution from rolling history            & PentestGPT, D-CIPHER, VulnBot   & Fresh context per Specialist invocation \\
+  Long-session context inflation                    & PentestGPT Finding 4            & FullCompact: \el{}+\al{}-based reconstruction at 85\% \\
+  Raw LLM confidence overconfident in UCB           & EGATS                           & $\Eord$ ordinal scale (0--5) replaces raw confidence \\
+  Single-attempt validation: false positives        & All single-agent systems         & Diagnosis-Adapt-Cap loop (up to 3 retries) \\
+  Per-mission failure repetition                    & All fresh-context designs        & Episodic Failure Memory (4th FAISS tier) \\
+  No cross-mission skill promotion                  & AWE, PrediQL, VulnBot            & 3-tier memory + oracle-gated skill promotion \\
+  Single benchmark surface evaluated per paper      & All 29 papers                   & Web + GraphQL + multi-host under one orchestrator \\
+  \hline
+\end{longtable}
