@@ -1,4 +1,4 @@
-.PHONY: help install dev build docker-build up down clean paper ppt clean-paper format format-check lint lint-fix audit typecheck test paper-inception
+.PHONY: help install dev build docker-build up down clean paper ppt clean-paper format format-check lint lint-fix audit typecheck test paper-inception lint-paper-inception
 
 -include .env
 export
@@ -25,6 +25,7 @@ help:
 	@echo "  make clean                  Clean all build artifacts and caches"
 	@echo "  make paper                  Build the Research Paper PDF"
 	@echo "  make paper-inception        Build the Inception Report PDF"
+	@echo "  make lint-paper-inception   Lint the Inception Report Template with chktex"
 	@echo "  make paper-datalex          Build the DataLex Explainable SIEM Report PDF"
 	@echo "  make ppt                    Build the Presentation PPTX"
 	@echo "  make clean-paper            Clean Research Paper artifacts"
@@ -126,6 +127,10 @@ paper-inception:
 	@mkdir -p $(PAPER_DIR_INCEPTION)/build/ch06
 	@mkdir -p $(PAPER_DIR_INCEPTION)/build/ch07
 	export BIBINPUTS=.:$$BIBINPUTS; $(LATEXMK) -jobname=main -outdir="." -auxdir="build" $(PAPER_DIR_INCEPTION)/main.tex
+
+lint-paper-inception:
+	@echo "🔍 Linting Inception Report Template with chktex..."
+	@find $(PAPER_DIR_INCEPTION) -type f \( -name "*.tex" -o -name "*.cls" -o -name "*.bib" \) -exec chktex -q {} +
 
 paper-datalex:
 	@echo "🏗️  Building DataLex Explainable SIEM Report..."
