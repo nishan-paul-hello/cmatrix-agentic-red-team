@@ -1,8 +1,35 @@
 \section{Domain Overview}
 \label{sec_domain_overview}
 
-Autonomous penetration testing -- the use of Large Language Model (LLM) agents to independently reconnoitre, identify, and exploit weaknesses in a target system without step-by-step human direction -- has emerged as an active research area only in the last two to three years. The domain sits at the intersection of two older fields: Vulnerability Assessment and Penetration Testing (VAPT), which traditionally relies on human operators following structured methodologies (reconnaissance, weakness identification, exploitation, and reporting), and LLM agent research, which studies how language models can plan, use tools, and act over multiple steps toward a goal. RedGrid is situated in this intersection: it is concerned with how an LLM-driven agent, or a coordinated set of agents, can carry out the VAPT workflow autonomously against realistic, benchmarked targets.
+This chapter reviews the recent literature on LLM-based autonomous penetration testing and identifies, at a preliminary level, the patterns and gaps that motivate the research direction described in Chapter~\ref{chapter_introduction}. The review covers a focused selection of eleven papers, chosen as the most directly relevant to our research question from a broader set of papers read during the preparation of this report. Table~\ref{tab:lit-table} provides an overview of these eleven papers; the sections that follow discuss them in more depth.
 
-A useful way to frame the domain is around the two capabilities an autonomous VAPT agent must exhibit simultaneously. The first is \emph{exploration}: the agent must search a large space of candidate weaknesses across an unfamiliar attack surface without being told in advance which one is exploitable. The second is \emph{reasoning about prerequisites}: many real exploits are not single actions but chains, where one weakness (for example, an information disclosure or a misconfigured endpoint) must be established before a second, more consequential weakness becomes reachable. Recent benchmarking work suggests that these two capabilities are evaluated very differently in the literature, and that most existing systems have been built to strengthen one at the expense of the other -- a pattern that motivates a closer reading of the existing systems and benchmarks surveyed in this chapter.
+Autonomous penetration testing --- the use of LLM agents to independently discover and exploit weaknesses in a target system without step-by-step human direction --- has emerged as an active research area only in the last two to three years. The domain sits at the intersection of two older fields: Vulnerability Assessment and Penetration Testing (VAPT), which traditionally relies on human operators following structured methodologies (reconnaissance, weakness identification, exploitation, and reporting), and LLM agent research, which studies how language models can plan, use tools, and act over multiple steps toward a goal. Our work, RedGrid, is situated in this intersection: it is concerned with how an LLM-driven multi-agent system can carry out the VAPT workflow autonomously against realistic, benchmarked targets.
 
-The chapter that follows first surveys the systems that have been proposed for this problem (Section~\ref{sec_existing_systems}), then draws out the recurring architectural choices across them (Section~\ref{sec_comparative_analysis}), before identifying, at a preliminary level, where the surveyed literature appears to leave a gap (Section~\ref{sec_research_gap}). As this is an early-stage report, the discussion below reflects the literature review conducted so far rather than a finalized research direction; the survey will continue to be refined over the course of the thesis.
+A useful way to frame the domain is around two capabilities that an autonomous VAPT agent must exhibit simultaneously. The first is \emph{exploration}: the agent must search a large space of candidate weaknesses across an unfamiliar attack surface without being told in advance which one is exploitable. The second is \emph{prerequisite reasoning}: many real exploits are not single actions but chains, where one weakness (for example, an information disclosure or a misconfigured endpoint) must be established before a second, more consequential weakness becomes reachable. As the literature reviewed in this chapter shows, most existing systems have been developed to strengthen one of these capabilities at the expense of the other --- a pattern that motivates the closer reading in the sections that follow.
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{The eleven papers selected for review, with their main focus and relevance to this research.}
+\label{tab:lit-table}
+\begin{tabular}{@{}p{0.4cm}p{4.5cm}p{3.8cm}p{4.5cm}@{}}
+\toprule
+\textbf{No.} & \textbf{Paper} & \textbf{Main Focus} & \textbf{Why Relevant} \\
+\midrule
+1 & Fang et al.\ (2024) --- LLM Agents can Autonomously Hack Websites \citep{fang2024hackwebsites} & Single-agent web exploitation & Foundational: first demonstration of autonomous web attacks; establishes sandbox vs.\ real-world gap \\
+2 & Fang et al.\ (2024) --- LLM Agents can Autonomously Exploit One-day Vulnerabilities \citep{fang2024oneday} & Single-agent CVE exploitation & Shows GPT-4 can exploit real CVEs; key result: exploiting $\neq$ discovering \\
+3 & Zhu et al.\ (2024) --- Teams of LLM Agents can Exploit Zero-Day Vulnerabilities \citep{zhu2024hptsa} & Hierarchical multi-agent VAPT & First zero-day autonomous exploitation; introduces hierarchical planner + specialist design \\
+4 & Deng et al.\ (2024) --- PentestGPT \citep{deng2024pentestgpt} & Single-agent with reasoning/parsing split & Identifies context-loss failure mode in long sessions; motivates structured memory and handoff \\
+5 & Kong et al.\ (2025) --- VulnBot \citep{kong2025vulnbot} & Multi-agent, role-specialised & Representative of team-dispatch architecture; shows flat dispatch without dependency modeling \\
+6 & Wang et al.\ (2025) --- CHECKMATE \citep{wang2025checkmate} & LLM agents + classical planning & Explicit prerequisite modeling via PDDL; evaluated on curated scenarios only \\
+7 & Singer et al.\ (2025) --- Incalmo \citep{singer2025incalmo} & Multi-host LLM red teaming & Extends autonomous VAPT to multi-host / Active Directory environments; declarative task API \\
+8 & Liu et al.\ (2025) --- PrediQL \citep{liu2025prediql} & GraphQL API testing with LLMs & Shows schema-based dependency reasoning for a non-web attack surface \\
+9 & Zhu et al.\ (2025) --- CVE-Bench \citep{zhu2025cvebench} & Benchmark for web CVE exploitation & Provides empirical evidence that insufficient exploration is the dominant failure mode \\
+10 & Yang et al.\ (2025) --- PentestEval \citep{yang2025pentesteval} & Stage-level benchmark & Shows attack decision-making (prerequisite reasoning) is the weakest stage in current systems \\
+11 & Wang et al.\ (2025) --- Survey on LLM-based Autonomous Agents \citep{wang2025surveyagents} & General LLM agent survey & Provides the conceptual and architectural vocabulary underlying all domain-specific systems \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The sections that follow first survey the systems and benchmarks from this selection (Section~\ref{sec_existing_systems}), then draw out the recurring architectural patterns across them (Section~\ref{sec_comparative_analysis}), and finally identify, at a preliminary level, where the reviewed literature appears to leave a gap (Section~\ref{sec_research_gap}).
+

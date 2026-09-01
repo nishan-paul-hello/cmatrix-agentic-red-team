@@ -1,29 +1,33 @@
 \section{Comparative Analysis}
 \label{sec_comparative_analysis}
 
-\reftab{tab:vapt-comparison} summarizes a representative subset of the surveyed systems along four dimensions that recurred throughout the literature review: whether the system uses a single agent or a coordinated team, whether it models dependencies between candidate weaknesses explicitly, whether it retains any form of memory across sessions, and which benchmark(s) it was evaluated against. The full survey covers more systems than shown here; the table is restricted to the systems most directly comparable to one another.
+Table~\ref{tab:vapt-comparison} summarises the eleven reviewed systems and benchmarks along four dimensions that recurred throughout the literature review: whether the system uses a single agent or a coordinated team, whether it models dependencies between candidate weaknesses explicitly, whether it retains any form of memory across sessions, and which benchmark(s) it was evaluated against.
 
 \begin{table}[h!]
 \centering
-\begin{tabular}{p{2.4cm}p{2.1cm}p{2.6cm}p{2.1cm}p{3cm}}
+\small
+\caption{Comparison of systems and benchmarks reviewed, across four recurring architectural dimensions.}
+\label{tab:vapt-comparison}
+\begin{tabular}{p{2.8cm}p{2.4cm}p{2.6cm}p{2.0cm}p{2.7cm}}
 \hline
-\textbf{System} & \textbf{Architecture} & \textbf{Dependency Modeling} & \textbf{Cross-Session Memory} & \textbf{Benchmark(s)} \\
+\textbf{System / Work} & \textbf{Architecture} & \textbf{Dependency Modeling} & \textbf{Cross-Session Memory} & \textbf{Benchmark(s)} \\
 \hline
-Fang et al.~\cite{fang2024oneday} & Single agent (ReAct) & None (given CVE description) & None & 15 one-day CVEs \\
-PentestGPT~\cite{deng2024pentestgpt} & Single agent, split reasoning/parsing & Implicit (LLM reasoning only) & None & HTB/VulnHub machines \\
-HPTSA~\cite{zhu2024zeroday} & Hierarchical planner + task agents & None (flat dispatch) & None & 15 zero-day CVEs \\
-MAPTA~\cite{david2024mapta} & Multi-agent team & None (flat dispatch) & None & CTF challenges \\
-VulnBot~\cite{kong2025vulnbot} & Multi-agent, role-specialized & None (flat dispatch) & None & HTB-style scenarios \\
-CHECKMATE~\cite{wang2025classicalplanning} & Agent + classical planner & Explicit, pre-enumerated & None & Curated scenarios \\
-PentestEval SMP~\cite{yang2025pentesteval} & Modular pipeline & Explicit, ground-truth-injected & None & 12 real-world scenarios \\
-Incalmo~\cite{singer2025incalmo} & Multi-host orchestration & Partial (host/credential graph) & None & MHBench (40 environments) \\
-PrediQL~\cite{liu2025prediql} & LLM-guided fuzzer & Schema-derived & None & 6 GraphQL APIs \\
+Fang et al.\ \citep{fang2024hackwebsites} & Single agent (ReAct) & None & None & Simplified websites \\
+Fang et al.\ \citep{fang2024oneday} & Single agent (ReAct) & None (given CVE desc.) & None & 15 one-day CVEs \\
+HPTSA \citep{zhu2024hptsa} & Hierarchical planner + task agents & None (flat dispatch) & None & 15 zero-day CVEs \\
+PentestGPT \citep{deng2024pentestgpt} & Single agent, split reasoning/parsing & Implicit (LLM only) & None & HTB/VulnHub machines \\
+VulnBot \citep{kong2025vulnbot} & Multi-agent, role-specialised & None (flat dispatch) & None & HTB-style scenarios \\
+CHECKMATE \citep{wang2025checkmate} & Agent + classical planner & Explicit, pre-enumerated & None & Curated scenarios \\
+Incalmo \citep{singer2025incalmo} & Multi-host orchestration & Partial (host/credential graph) & None & MHBench (40 envs.) \\
+PrediQL \citep{liu2025prediql} & LLM-guided fuzzer & Schema-derived & None & 6 GraphQL APIs \\
+CVE-Bench \citep{zhu2025cvebench} & Benchmark (no agent) & N/A & N/A & 40 critical web CVEs \\
+PentestEval \citep{yang2025pentesteval} & Benchmark (modular pipeline) & Explicit (ground-truth injected) & None & 12 real-world scenarios \\
+Wang et al.\ \citep{wang2025surveyagents} & Survey & N/A & N/A & General (survey) \\
 \hline
 \end{tabular}
-\caption{Comparison of representative autonomous VAPT systems surveyed}
-\label{tab:vapt-comparison}
 \end{table}
 
-A few patterns are already visible from this comparison, even at this early stage of the review. First, systems that scale well to a wide, unfamiliar attack surface (HPTSA, MAPTA, VulnBot) tend to dispatch tasks flatly, without an explicit model of which weaknesses depend on which others. Second, systems that do model dependencies explicitly (CHECKMATE, PentestEval's SMP configuration) tend to be evaluated on curated scenarios where the relevant weaknesses are already known in advance, rather than on open-ended discovery. Third, cross-session memory -- the ability for an agent to retain and reuse what it learned in a previous session against a similar target -- is largely absent from the systems surveyed so far, with the exception of ideas borrowed from non-security agent work such as VOYAGER~\cite{wang2023voyager} and Reflexion~\cite{shinn2023reflexion}. Finally, every system in the table is evaluated against a single benchmark family (web, GraphQL, or multi-host), and none of the surveyed papers report results across more than one attack-surface category using the same architecture.
+A few patterns are visible from this comparison. First, systems that scale to a wide or unfamiliar attack surface (HPTSA, VulnBot) dispatch tasks flatly, without an explicit model of which weaknesses depend on which others. Second, the one system that does model dependencies explicitly (CHECKMATE) is evaluated on curated scenarios where relevant weaknesses are pre-enumerated, and it is not clear from the reviewed paper how well this approach would extend to open-ended discovery. Third, cross-session memory --- the ability for an agent to retain and reuse what it learned in a previous engagement against a similar target --- is absent from every system in the table. Finally, the two benchmark papers (CVE-Bench and PentestEval) each provide stage-level failure analysis that points in the same direction: existing systems are weakest precisely at the combination of broad exploration and structured prerequisite reasoning that would be needed to handle a wide, previously unseen attack surface.
 
-These observations are preliminary and are discussed further, together with their implications, in the following section.
+These observations are preliminary, and the following section discusses their implications for the research direction this thesis is pursuing.
+

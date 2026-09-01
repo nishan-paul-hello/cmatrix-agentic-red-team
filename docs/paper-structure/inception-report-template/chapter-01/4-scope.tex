@@ -1,23 +1,22 @@
-\section{Scope of the Project}
+\section{Scope of the Research}
 \label{sec:intro_scope}
 
-Based on our reading of the literature so far, we intend to bound this project by one governing rule: we plan to work only with attack surfaces for which a dedicated, reusable, oracle-backed benchmark already exists in the surveyed literature, rather than constructing new benchmarks ourselves. This is a scope we have provisionally settled on; it may narrow further once early implementation work tells us more about what is realistically achievable within the remaining timeline. Table~\ref{tab:in-scope-surfaces} summarizes the attack-surface families we are currently considering in scope and the benchmarks that would bound any claim made about them.
+Based on our reading of the literature so far, we intend to bound this project by one governing rule: we plan to work only with attack surfaces for which a dedicated, reusable, oracle-backed benchmark already exists in the reviewed literature, rather than constructing new benchmarks ourselves. This decision keeps our evaluation grounded and reproducible. It is a scope we have provisionally settled on; it may narrow further once early implementation work gives us more information about what is achievable within the remaining timeline. Table~\ref{tab:in-scope-surfaces} summarises the attack-surface families we are currently considering in scope and the benchmarks that would govern any claim made about them.
 
 \begin{table}[htbp]
 \centering
 \small
-\caption{Attack surfaces we are currently considering in scope, and their candidate governing benchmarks.}
+\caption{Attack surfaces currently considered in scope, and their candidate governing benchmarks (preliminary).}
 \label{tab:in-scope-surfaces}
-\begin{tabular}{@{}p{3.1cm}p{5.6cm}p{5.6cm}@{}}
+\begin{tabular}{@{}p{3.1cm}p{5.8cm}p{4.8cm}@{}}
 \toprule
-\textbf{Attack surface} & \textbf{Benchmark(s)} & \textbf{Representative coverage} \\
+\textbf{Attack surface} & \textbf{Candidate benchmark(s)} & \textbf{Representative vulnerability types} \\
 \midrule
-Web application (HTTP/HTML) & Fang et al.\ 15-vuln sandbox \citep{fang2024oneday}; HPTSA 14-CVE zero-day suite \citep{zhu2024hptsa}; CVE-Bench (40 CVEs) \citep{zhu2025cvebench}; MAPTA/XBOW (104) \citep{david2025mapta}; HackWorld (36) \citep{ren2025hackworld}; PentestEval (346 tasks) \citep{yang2025pentesteval}; Cybench \citep{zhang2025cybench}; PentestGPT/HTB machine sets \citep{deng2024pentestgpt} & SQLi, XSS, CSRF, SSRF, SSTI, LFI, file-upload RCE, IDOR, auth bypass, framework RCEs, JWT forgery \\
-GraphQL APIs & PrediQL 6-API suite \citep{liu2025prediql} & Schema abuse, dependency-chain injection, batched-auth bypass, IDOR, nested-query DoS \\
+Web application (HTTP/HTML) & Fang et al.\ 15-CVE sandbox \citep{fang2024oneday}; HPTSA 14-CVE zero-day suite \citep{zhu2024hptsa}; CVE-Bench (40 CVEs) \citep{zhu2025cvebench}; PentestEval (346 tasks) \citep{yang2025pentesteval} & SQLi, XSS, CSRF, SSRF, SSTI, LFI, file-upload RCE, IDOR, authentication bypass, JWT forgery \\
+GraphQL APIs & PrediQL 6-API suite \citep{liu2025prediql} & Schema abuse, dependency-chain injection, batched-auth bypass, IDOR \\
 Multi-host / Active Directory & Incalmo MHBench (40 environments) \citep{singer2025incalmo} & Lateral movement, credential reuse, privilege escalation \\
-Production system corpus (hard tier) & BountyBench (25 real systems) \citep{zhang2025bountybench} & Economic/adversarial validation layer over the web surface \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\textbf{What we currently intend to leave out.} General REST API exploitation is not something we plan to evaluate directly: RESTler's \citep{atlidakis2019restler} evaluation targets are one-off real-world case studies rather than a standardized, reusable benchmark, so we did not find an equivalent of the other benchmarks above for REST APIs specifically. Some of RESTler's underlying techniques (dependency inference between API calls, response-feedback pruning) may still turn out to be useful internally, e.g. within GraphQL testing, but we do not plan to report REST-specific results. For the same reason -- the absence of a suitable existing benchmark within our survey -- binary exploitation, physical- and network-layer attacks, and social engineering are also outside what we currently intend to attempt.
+\textbf{What we currently intend to leave out.} General REST API exploitation is not something we plan to evaluate directly: no standardised, reusable REST API benchmark equivalent to CVE-Bench or PrediQL was found in the reviewed literature. Some underlying techniques from the REST API testing literature (dependency inference between API calls, response-feedback pruning) may still be useful internally, but we do not plan to report REST-API-specific results. Binary exploitation, physical- and network-layer attacks, and social engineering are also outside what we currently intend to attempt, for the same reason --- the absence of a suitable existing benchmark within the reviewed literature.
