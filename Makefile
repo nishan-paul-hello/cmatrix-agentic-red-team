@@ -1,4 +1,4 @@
-.PHONY: help install dev build docker-build up down clean paper ppt clean-paper format format-check lint lint-fix audit typecheck test paper-inception lint-paper-inception format-paper-inception
+.PHONY: help install dev build docker-build up down clean paper ppt clean-paper format format-check lint lint-fix audit typecheck test paper-inception lint-paper-inception format-paper-inception audit-prose-paper-inception
 
 -include .env
 export
@@ -27,6 +27,7 @@ help:
 	@echo "  make paper-inception        Build the Inception Report PDF"
 	@echo "  make lint-paper-inception   Lint the Inception Report Template with chktex"
 	@echo "  make format-paper-inception Format the Inception Report Template with latexindent"
+	@echo "  make audit-prose-paper-inception Audit the Inception Report prose with Vale"
 	@echo "  make paper-datalex          Build the DataLex Explainable SIEM Report PDF"
 	@echo "  make ppt                    Build the Presentation PPTX"
 	@echo "  make clean-paper            Clean Research Paper artifacts"
@@ -137,6 +138,10 @@ format-paper-inception:
 	@echo "✨ Formatting Inception Report Template with latexindent..."
 	@find $(PAPER_DIR_INCEPTION) -name "*.tex" -exec latexindent -w -s {} \;
 	@find $(PAPER_DIR_INCEPTION) -name "*.bak*" -delete
+
+audit-prose-paper-inception:
+	@echo "📝 Auditing Inception Report Template prose with Vale..."
+	@vale $(PAPER_DIR_INCEPTION)/
 
 paper-datalex:
 	@echo "🏗️  Building DataLex Explainable SIEM Report..."
