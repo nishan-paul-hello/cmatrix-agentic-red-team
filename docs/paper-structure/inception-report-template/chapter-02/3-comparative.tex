@@ -1,7 +1,7 @@
 \section{Comparative Analysis}
 \label{sec_comparative_analysis}
 
-Table~\ref{tab:vapt-comparison} summarises the eleven reviewed systems and benchmarks along four dimensions that recurred throughout the literature review: whether the system uses a single agent or a coordinated team, whether it models dependencies between candidate weaknesses explicitly, whether it retains any form of memory across sessions, and which benchmarks it was evaluated against.
+Table~\ref{tab:vapt-comparison} summarises the eleven reviewed systems and benchmarks along four dimensions that recurred throughout the literature review: whether the system uses a single agent or a coordinated team, whether it models dependencies between candidate weaknesses explicitly, whether it retains any form of memory across sessions, and the benchmarks used in its evaluation.
 
 \begin{table}[h!]
 	\centering
@@ -27,7 +27,7 @@ Table~\ref{tab:vapt-comparison} summarises the eleven reviewed systems and bench
 	\end{tabular}
 \end{table}
 
-A few patterns are visible from this comparison. First, systems that scale to a wide or unfamiliar attack surface (HPTSA, VulnBot) dispatch tasks flatly, without an explicit model of which weaknesses depend on which others. Second, the one system that does model dependencies explicitly (CHECKMATE) is evaluated on curated scenarios where relevant weaknesses are pre-enumerated, and it is not clear from the reviewed paper how well this approach would extend to open-ended discovery. Third, cross-session memory --- the ability for an agent to retain and reuse what it learned in a previous engagement against a similar target --- is absent from every system in the table. Finally, the two benchmark papers (CVE-Bench and PentestEval) each provide stage-level failure analysis that points in the same direction: existing systems are weakest precisely at the combination of broad exploration and structured prerequisite reasoning that would be needed to handle a wide, previously unseen attack surface.
+A few patterns are visible from this comparison. First, systems that scale to a wide or unfamiliar attack surface (HPTSA, VulnBot) dispatch tasks flatly, without an explicit model of which weaknesses depend on which others. Second, the one system that does model dependencies explicitly (CHECKMATE) is assessed on curated scenarios where relevant weaknesses are pre-enumerated, and it's not clear from the reviewed paper how well this approach extends to open-ended discovery. Third, cross-session memory --- the ability for an agent to keep and reuse what it learned in a previous engagement against a similar target --- is absent from every system in the table. Finally, the two benchmark papers (CVE-Bench and PentestEval) each provide stage-level failure analysis that points in the same direction: existing systems are weakest precisely at the combination of broad exploration and structured prerequisite reasoning that handling a wide, unfamiliar attack surface demands.
 
 These observations are preliminary, and the following section discusses their implications for the research direction this thesis is pursuing.
 

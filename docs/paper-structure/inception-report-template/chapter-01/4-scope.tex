@@ -1,7 +1,7 @@
 \section{Scope of the Project}
 \label{sec:intro_scope}
 
-Based on our reading of the literature so far, we intend to bound this project by one governing rule: we plan to work only with attack surfaces for which a dedicated, reusable, oracle-backed benchmark already exists in the reviewed literature, rather than constructing new benchmarks ourselves. This decision keeps our evaluation grounded and reproducible. It is a scope we have provisionally settled on; it may narrow further once early implementation work gives us more information about what is achievable within the remaining timeline. Table~\ref{tab:in-scope-surfaces} summarises the attack-surface families we are currently considering in scope and the benchmarks that would govern any claim made about them.
+Based on the literature review so far, this project bounds itself by one governing rule: work proceeds only with attack surfaces for which a dedicated, reusable, oracle-backed benchmark already exists in the reviewed literature, rather than constructing new benchmarks independently. This decision keeps the evaluation grounded and reproducible. The scope may narrow further once early implementation work provides more information about what is achievable within the remaining timeline. Table~\ref{tab:in-scope-surfaces} summarises the attack-surface families currently considered in scope and the benchmarks that govern any claim made about them.
 
 \begin{table}[htbp]
 	\centering
@@ -19,4 +19,4 @@ Based on our reading of the literature so far, we intend to bound this project b
 	\end{tabular}
 \end{table}
 
-\textbf{What we currently intend to leave out.} General REST API exploitation is not something we plan to evaluate directly: no standardised, reusable REST API benchmark equivalent to CVE-Bench or PrediQL was found in the reviewed literature. Some underlying techniques from the REST API testing literature (dependency inference between API calls, response-feedback pruning) may still be useful internally, but we do not plan to report REST-API-specific results. Binary exploitation, physical- and network-layer attacks, and social engineering are also outside what we currently intend to attempt, for the same reason --- the absence of a suitable existing benchmark within the reviewed literature.
+\textbf{What is currently left out.} General REST API exploitation is not assessed directly: no standardised, reusable REST API benchmark comparable to CVE-Bench or PrediQL appears in the reviewed literature. Some underlying techniques from the REST API testing literature (dependency inference between API calls, response-feedback pruning) may still be useful internally, but REST-API-specific results are not part of the plan. Binary exploitation, physical- and network-layer attacks, and social engineering are also outside the current scope, for the same reason --- the absence of a suitable existing benchmark in the reviewed literature.
