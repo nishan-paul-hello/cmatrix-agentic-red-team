@@ -4,10 +4,8 @@
 
 This appendix provides full specifications for the \redgrid{} system that would exceed the length constraints of the main chapters, including the complete VDG node schema, benchmark suite details, UCB hyperparameter search configuration, and ablation condition pseudocode.
 
-% ============================================================
 \section{Full VDG Node Schema}
 \label{app:vdg-schema}
-% ============================================================
 
 \reftab{tab:vdg-node-schema} provides the complete field listing for a \vdg{} node as defined in Chapter~3. Every field is populated by the Team Manager via \code{VDG\_AddNode}; no Specialist writes directly to the \vdg{}.
 
@@ -45,10 +43,8 @@ This appendix provides full specifications for the \redgrid{} system that would 
   \hline
 \end{longtable}
 
-% ============================================================
 \section{Ordinal Evidence Score ($E_{\mathrm{ord}}$) Reference}
 \label{app:eord}
-% ============================================================
 
 \reftab{tab:eord} is the full rubric used by the Evaluation Agent to assign $\Eord$ after every Specialist task. The value is parsed deterministically from constrained JSON output — not inferred from free-form text.
 
@@ -69,10 +65,8 @@ This appendix provides full specifications for the \redgrid{} system that would 
   \end{tabular}
 \end{table}
 
-% ============================================================
 \section{Benchmark Suite Summary}
 \label{app:benchmarks}
-% ============================================================
 
 \reftab{tab:benchmark-suite} summarises all eight benchmark tiers used in \redgrid{}'s evaluation. No benchmark was constructed for this work; every tier references a published, reusable target set.
 
@@ -100,10 +94,8 @@ This appendix provides full specifications for the \redgrid{} system that would 
   \hline
 \end{longtable}
 
-% ============================================================
 \section{UCB Hyperparameter Search Grid}
 \label{app:ucb-tuning}
-% ============================================================
 
 The UCB formula (Chapter~3) has seven tunable parameters. \reftab{tab:ucb-grid} documents the search ranges and defaults. Grid search is performed on Tier~1 (\pentesteval{}) only, holding out the \cvebench{} split.
 
@@ -127,10 +119,8 @@ The UCB formula (Chapter~3) has seven tunable parameters. \reftab{tab:ucb-grid} 
 
 Results must be reported with sensitivity analysis: $\pm 10\%$ perturbation from each optimal value while holding others fixed.
 
-% ============================================================
 \section{Ablation Condition A1 — Precise Pseudocode}
 \label{app:ablation-a1}
-% ============================================================
 
 This section provides the exact algorithmic distinction between Ablation A1 conditions (b) and (c), which is critical for interpreting whether the unified \vdg{} adds value over a stacked approach.
 
@@ -159,10 +149,8 @@ selected  = filtered[0]
 
 \noindent If condition (d) (full \vdg{} with path scoring) outperforms condition (c), the unified graph structure has value beyond dependency filtering alone. If (d) $\approx$ (c), the contribution downgrades to dependency-aware \ucb{} filtering — still a contribution, but a narrower claim. This gate must be reported honestly.
 
-% ============================================================
 \section{Prior Work Gap Summary}
 \label{app:prior-work}
-% ============================================================
 
 \reftab{tab:prior-work-gaps} consolidates the gap analysis from Chapter~2 into a compact reference table.
 
