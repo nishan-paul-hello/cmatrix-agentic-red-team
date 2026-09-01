@@ -1,9 +1,8 @@
-%% ----------------------------------------------------------------
-%% Abstract Page
-%% ----------------------------------------------------------------
-\addtotoc{Abstract}  % Add the "Abstract" page entry to the Contents
+
+
+\addtotoc{Abstract}
 \begin{abstract}
-\addtocontents{toc}{}  % Add a gap in the Contents, for aesthetics
+\addtocontents{toc}{}
 
 \hspace{1cm} Large Language Model (LLM) agents have repeatedly demonstrated the ability to exploit real-world software vulnerabilities, yet a systematic reading of the recent literature reveals two unresolved and independent failure modes. First, on the hardest realistic web benchmark (CVE-Bench), the best reported agent exploits only 13\% of one-day and 10\% of zero-day vulnerabilities, with \emph{insufficient exploration} identified as the dominant cause of failure across every evaluated system. Second, on a stage-decomposed diagnostic benchmark (PentestEval), \emph{Attack Decision-Making} -- reasoning about which prerequisite weaknesses must be resolved before a candidate attack becomes feasible -- is the single lowest-scoring stage of the pentesting pipeline. No system surveyed in the 29-paper corpus underlying this work addresses both failure modes at once: systems that solve exploration breadth dispatch flat, undifferentiated task lists with no explicit model of prerequisite structure, while systems that reason about dependencies do so only over small, pre-curated, expert-annotated weakness sets that cannot scale to open-ended discovery.
 
@@ -15,5 +14,5 @@
 
 \end{abstract}
 
-\clearpage  % Abstract ended, start a new page
-\setstretch{1.5}  % Reset the line-spacing to 1.5 for body text
+\clearpage
+\setstretch{1.5}

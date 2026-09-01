@@ -1,38 +1,26 @@
-\documentclass[a4paper, 12pt, oneside]{thesis} 
-%%% choose [oneside or twoside] according to your wish %%%   
+\documentclass[a4paper, 12pt, oneside]{thesis}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%     DO NOT CHANGE THE FOLLOWING CONTENT    %%%%
-%%%%%%%%%%%%%%%%   UNTIL YOU FIND THE SYMBOL     %%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%     $$$$$#####$$$$$     %%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\graphicspath{{figures/}} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%  All the graphic arts should be content in  %%%%%%%%%%%%%%%%%%%
-%  the folder named figures/ in the same folder %%%%%%%%%%%%%%%%%%  
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%   EXTRA ADDED %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\usepackage{algorithm2e}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\usepackage{algorithmicx}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\usepackage{longtable}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\usepackage{multirow}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\usepackage[square, numbers, comma, sort&compress]{natbib}%%%%%%%%%%%%%%%%%
-\usepackage{verbatim}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\usepackage{vector}  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\usepackage{tikz} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\usepackage{pgfplots} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\pgfplotsset{compat=1.18} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\hypersetup{urlcolor=blue, colorlinks=true} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{document} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%% ============================================================
-%%  PAGE 1 — Landing Page (Title)
-%% ============================================================
+\graphicspath{{figures/}}
+
+
+\usepackage{algorithm2e}
+\usepackage{algorithmicx}
+\usepackage{longtable}
+\usepackage{multirow}
+
+
+\usepackage[square, numbers, comma, sort&compress]{natbib}
+\usepackage{verbatim}
+\usepackage{vector}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\hypersetup{urlcolor=blue, colorlinks=true}
+
+\begin{document}
+
+
 \include{title}
 
 \setstretch{1.3}
@@ -40,114 +28,84 @@
 \rhead{\thepage}
 \lhead{}
 
-%% ============================================================
-%%  ch00 — FRONT MATTER  (Roman numerals)
-%% ============================================================
 
-%%  Page 2 — Declaration Form
 \include{ch00/declaration}
 
-%%  Page 3 — Quote
+
 \include{ch00/quote}
 
-%%  Abstract
+
 \include{ch00/abstract}
 
-%%  Acknowledgements
+
 \include{ch00/acknowledgement}
 
-%%  Table of Contents
+
 \include{ch00/contents}
 
-%%  List of Figures
+
 \include{ch00/list-of-figures}
 
-%%  List of Tables
+
 \include{ch00/list-of-tables}
 
-%%  List of Algorithms
+
 \include{ch00/list-of-algorithms}
 
-%%  Abbreviations
+
 \include{ch00/abbreviations}
 
-%%  Physical Constants
+
 \include{ch00/physical-constants}
 
-%%  Symbols
+
 \include{ch00/symbols}
 
-%%  Dedication
+
 \include{ch00/dedication}
 
-%% ============================================================
-%%  MAIN MATTER  (Arabic page numbers, fancy headers)
-%% ============================================================
+
 \mainmatter
 \pagestyle{fancy}
 \setstretch{1.5}
 \renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
 \lhead{\fancyplain{}{\rightmark }}
 
-%%%%%%%%%%%%%%         CHANGE AS YOUR NEED BELOW HERE    %%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%      $$$$$#####$$$$$     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%  ch01 — Introduction
 \include{ch01/chapter}
 \cleardoublepage
 
-%%  ch02 — Literature Review and Related Work
+
 \include{ch02/chapter}
 \cleardoublepage
 
-%%  ch03 — Proposed Methodologies
+
 \include{ch03/chapter}
 \cleardoublepage
 
-%%  ch04 — Execution Plan
+
 \include{ch04/chapter}
 \cleardoublepage
 
-%%  ch05 — Experimental Results
+
 \include{ch05/chapter}
 \cleardoublepage
 
-%%  ch06 — Conclusions
+
 \include{ch06/chapter}
 \cleardoublepage
 
 
+\addtocontents{toc}{\vspace{2em}}
+\backmatter
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%   REMOVE THE COMMENT BELOW  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%  TO ADD APPENDICES     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-                                                                                  %%%%%%%%%
-%\addtocontents{toc}{\vspace{2em}} % Add a gap in the Contents, for aesthetics %%%%%%%%%%%%%
-%\appendix % Cue to tell LaTeX that the following 'chapters' are Appendices %%%%%%%%%%%%%%%%%
-                                                                                  %%%%%%%%%%%%
-%\input{ch07/appendix-a}  % Appendix A %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\input{ch07/appendix-b}  % Appendix B %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\input{ch07/appendix-c}  % Appendix C %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-                                                                                  %%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%  DO NOT CHANGE THE FOLLOWING CONTENT %%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\addtocontents{toc}{\vspace{2em}}  % Add a gap in the Contents, for aesthetics%
-\backmatter %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% ---------------------------------------------------------------- %%%%%%%%%%%%%%
-\label{Bibliography}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\lhead{\emph{Bibliography}} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-% Change the left side page header to "Bibliography" %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\bibliographystyle{unsrtnat}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
-% Use the "unsrtnat" BibTeX style for formatting the Bibliography %%%%%%%%%%%%%%%%%%%%%
-\bibliography{bibliography}  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%    The references (bibliography) information are %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%     stored in the file named "bibliography.bib" %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\end{document}  % The End  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% ---------------------------------------------------------------- %%%%%%%%%%%%%%%%%%%%%%%%%
+\label{Bibliography}
+\lhead{\emph{Bibliography}}
+
+\bibliographystyle{unsrtnat}
+
+\bibliography{bibliography}
+
+
+\end{document}

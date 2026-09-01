@@ -1,8 +1,4 @@
-%%
-%% This is file `Thesis.cls', based on 'ECSthesis.cls', by Steve R. Gunn
-%% generated with the docstrip utility.
-%%
-%% Created by Steve R. Gunn, modified by Sunil Patel: www.sunilpatel.co.uk
+
 
 \NeedsTeXFormat{LaTeX2e}[1996/12/01]
 \ProvidesClass{thesis}
@@ -30,12 +26,12 @@
 \addtotoc{Declaration Form}
 \thispagestyle{plain}
 \null\vfil
-%\vskip 60\p@
+
 \begin{center}{\huge\bf Declaration Form\par}\end{center}
-%\vskip 60\p@
+
 {\normalsize #1}
 \vfil\vfil\null
-%\cleardoublepage
+
 }
 
 \newcommand\btypeout[1]{\bhrule\typeout{\space #1}\bhrule}
@@ -48,21 +44,21 @@
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{2.0ex plus0.5ex minus0.2ex}
 \usepackage{vmargin}
-\setmarginsrb           { 1.4in}  % left margin
-                        { 0.6in}  % top margin
-                        { 1.0in}  % right margin
-                        { 0.8in}  % bottom margin
-                        {  20pt}  % head height
-                        {0.25in}  % head sep
-                        {   9pt}  % foot height
-                        { 0.3in}  % foot sep
+\setmarginsrb           { 1.4in}
+                        { 0.6in}
+                        { 1.0in}
+                        { 0.8in}
+                        {  20pt}
+                        {0.25in}
+                        {   9pt}
+                        { 0.3in}
 \raggedbottom
 \setlength{\topskip}{1\topskip \@plus 5\p@}
-\doublehyphendemerits=10000       % No consecutive line hyphens.
-\brokenpenalty=10000              % No broken words across columns/pages.
-\widowpenalty=9999                % Almost no widows at bottom of page.
-\clubpenalty=9999                 % Almost no orphans at top of page.
-\interfootnotelinepenalty=9999    % Almost never break footnotes.
+\doublehyphendemerits=10000
+\brokenpenalty=10000
+\widowpenalty=9999
+\clubpenalty=9999
+\interfootnotelinepenalty=9999
 \usepackage{fancyhdr}
 \lhead[\rm\thepage]{\fancyplain{}{\sl{\rightmark}}}
 \rhead[\fancyplain{}{\sl{\leftmark}}]{\rm\thepage}
@@ -162,16 +158,16 @@
 \DEPARTMENT  {\texorpdfstring{\href{http://www.cse.du.ac.bd}
                 {DEPARTMENT OF COMPUTER SCIENCE AND ENGINEERING}}
                 {DEPARTMENT OF COMPUTER SCIENCE AND ENGINEERING}}
-\group       {\texorpdfstring{\href{link of your research group}   %%%%%%%%%%%%%%%%%   ADD YOUR RESEARCH GROUP LINK
+\group       {\texorpdfstring{\href{link of your research group}
                 {}}
                 {}}
-\GROUP       {\texorpdfstring{\href{link of your research group}   %%%%%%%%%%%%%%%%%   ADD YOUR RESEARCH GROUP LINK
+\GROUP       {\texorpdfstring{\href{link of your research group}
                 {}}
                 {}}
-\faculty     {\texorpdfstring{\href{Supervisor profile link}    %%%%%%%%%%%%%%%   ADD Profile Link for Supervisor
+\faculty     {\texorpdfstring{\href{Supervisor profile link}
                 {Name of the Supervisor}}
                 {Name of the Supervisor}}
-\FACULTY     {\texorpdfstring{\href{Supervisor profile link}    %%%%%%%%%%%%%%%   ADD Profile Link for Supervisor
+\FACULTY     {\texorpdfstring{\href{Supervisor profile link}
 				{Name of the Supervisor}}
 				{Name of the Supervisor}}
 \addresses   {}
@@ -203,10 +199,8 @@
       \smallskip
       {\large \authornames \par}
       \bigskip
-      \bigskip 
-      %{\large Supervised by \par}
-      %{\large \facname \par}
-      %{\large \deptname \par}
+      \bigskip
+
 
       \vfill
       {\large Submitted to the \par}
@@ -214,7 +208,7 @@
       {\large University of Dhaka, Bangladesh \par}
       {\large in partial fulfillment of the requirements for the degree of \par}
       {\large Professional Masters in Information and Cyber Security (PMICS). \par}
-      
+
       {\Large \@date \par}
       \bigskip
     \end{center}
@@ -222,7 +216,7 @@
     \@thanks
     \vfil\null
   \end{titlepage}
-  \setcounter{footnote}{0}%
+  \setcounter{footnote}{0}
   \global\let\thanks\relax
   \global\let\maketitle\relax
   \global\let\@thanks\@empty
@@ -245,16 +239,12 @@
     {\Large \UNIVNAME \par}
     \bigskip
     {\huge{\textit{Abstract}} \par}
-    %\bigskip
-    %{\normalsize \facname \par}
-    %{\normalsize \deptname \par}
-    %\bigskip
-    %{\normalsize Doctor of Philosophy\par}
+
+
     \bigskip
     {\normalsize\bf \@title \par}
-    %\medskip
-    %{\normalsize by \authornames \par}
-    %\bigskip
+
+
   \end{center}
 }
 {
@@ -340,7 +330,7 @@
 }\end{spacing}
 }
 \fi
-%%%%%%%%%%%%%%%%%%%%%%%%%%%  NO NEED %%%%%%%%%%%%%%%%%%%%%%
+
 \iffalse
 \newcommand\listsymbolname{Abbreviations}
 \usepackage{longtable}
@@ -376,7 +366,7 @@
     \cleardoublepage
 }
 \fi
-%%%%%%%%%%%%%%%%%%%%%%%%%%%  ------------ %%%%%%%%%%%%%%%%%%%%%%
+
 \newcommand\acknowledgements[1]{
 \btypeout{Acknowledgements}
 \addtotoc{Acknowledgements}
@@ -412,5 +402,5 @@
   \btypeout{\bibname}
   \@mainmatterfalse}
 \endinput
-%%
-%% End of file `Thesis.cls'.
+
+

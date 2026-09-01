@@ -1,36 +1,5 @@
-%%----------------------------------------------------------------------
-%% vmargin.sty
-%
-% LaTeX package which introduces paper sizes and provides macros for
-% setting document margins.
-% This package supersedes package vpage.
-%
-% This file can be made part of a format by typing \input vmargin.sty
-% before dumping the format.
-%
-% Documentation & history after (last) \endinput.
-%
-% Still works with LaTeX 2.09.
-% Supported = yes.
-%
-%
-% Copyright (C) 1993, 1994, 1995, 1996, 1999 by:
-%
-% Volker Kuhlmann
-% c/o University of Canterbury
-% ELEC Dept
-% Creyke Road
-% Christchurch, New Zealand
-% E-Mail: v.kuhlmann@elec.canterbury.ac.nz
-%
-% This program can be redistributed and/or modified under the terms
-% of the LaTeX Project Public License, distributed from CTAN
-% archives as macros/latex/base/lppl.txt; either
-% version 1 of the License, or (at your option) any later version.
-%
-%%----------------------------------------------------------------------
 
-%\def\filename{Vmargin}
+
 \def\filename{vmargin}
 \def\fileversion{V2.2}
 \def\filedate{1999/06/01}
@@ -50,58 +19,47 @@
 }
 
 
-% new lengths:	\PaperWidth, \PaperHeight
-% new if:	\ifLandscape
-%
 \newdimen\PaperWidth
 \newdimen\PaperHeight
-%
+
 \newif\ifLandscape
 
 
-% \setpapersize
-%
 \def\setpapersize{\@ifnextchar[{\@@setps}{\@@setps[portrait]}}
-\def\@@setps[#1]{%
-  \@ifundefined{po@#1}{\@name@err{#1}}{\@nameuse{po@#1}}%
+\def\@@setps[#1]{
+  \@ifundefined{po@#1}{\@name@err{#1}}{\@nameuse{po@#1}}
   \@@@setps}
-\def\@@@setps#1{%
-  \@ifundefined{paper@#1}{\@name@err{#1}}{}%
+\def\@@@setps#1{
+  \@ifundefined{paper@#1}{\@name@err{#1}}{}
   \csname paper@#1\endcsname}
-	% \usename{paper@#1} inside arg to \@ifundefined does not work
-	% with papersize "custom".
+
+
 \def\po@portrait{\Landscapefalse}
 \def\po@landscape{\Landscapetrue}
 \def\@po@{\ifLandscape\dimen0\PaperWidth
   \PaperWidth\PaperHeight\PaperHeight\dimen0\fi
-  \@ifundefined{paperwidth}{}{\paperwidth\PaperWidth}%
+  \@ifundefined{paperwidth}{}{\paperwidth\PaperWidth}
   \@ifundefined{paperheight}{}{\paperheight\PaperHeight}}
 \@ifundefined{PackageError}{
- \def\@name@err#1{%
+ \def\@name@err#1{
    \typeout{*****> \string\setpapersize: illegal parameter: #1}}
 }{
- \def\@name@err#1{\PackageError{\filename}%
+ \def\@name@err#1{\PackageError{\filename}
  			{Paper size or orientation unknown: #1}{}}
 }
 
 
-% pre-defined paper/envelope sizes
-%
-% A0, A1, A2, ..., A9, B0, B1, ..., B9, C0, C1, ..., C9
-% USletter, USlegal, USexecutive
-% custom
-%
-\def\@defmetricpaper#1#2#3{%
+\def\@defmetricpaper#1#2#3{
   \begingroup
   \count0=0
-  \def\w{\dimen1 }\def\h{\dimen2 }\def\s{\dimen3 }%
+  \def\w{\dimen1 }\def\h{\dimen2 }\def\s{\dimen3 }
   \w#2\h#3
   \def\l{11}
   \loop
     \begingroup
     \def\t{\the\count0}
-    \catcode`\t=11	% letter
-    \expandafter\xdef\csname paper@#1\the\count0\endcsname{%
+    \catcode`\t=11
+    \expandafter\xdef\csname paper@#1\the\count0\endcsname{
       \PaperWidth\the\w\PaperHeight\the\h\noexpand\@po@}
     \endgroup
     \s\w\w.5\h\h\s
@@ -110,30 +68,23 @@
   \repeat
   \endgroup
 }
-%
+
 \@defmetricpaper{A}{840.9mm}{1189.2mm}
 \@defmetricpaper{B}{1000mm}{1414mm}
 \@defmetricpaper{C}{917mm}{1297mm}
-%
-\let\@defmetricpaper=\relax	% delete definition to save memory
-%
+
+\let\@defmetricpaper=\relax
+
 \def\paper@USletter{\PaperWidth 8.5in \PaperHeight 11in \@po@}
 \def\paper@USlegal{\PaperWidth 8.5in \PaperHeight 14in \@po@}
 \def\paper@USexecutive{\PaperWidth 7.25in\PaperHeight 10.5in \@po@}
-%
+
 \def\paper@custom#1#2{\PaperWidth#1\PaperHeight#2\@po@}
 
 
-% margin@offset
-%
-% Compensates for the +1in/+1in top/left corner
-% by either reducing the margins or \hoffset, \voffset by 1in.
-% This macro is only defined here if it is not already defined!
-% (see documentation at the end)
-%
 \newif\if@shiftmargins
-\@shiftmarginsfalse	% this MUST be default (pageframe.sty)
-%
+\@shiftmarginsfalse
+
 \@ifundefined{margin@offset}{
 \def\margin@offset{
   \if@shiftmargins
@@ -144,86 +95,72 @@
 	\hoffset -1in\voffset -1in\relax
   \fi
 }}{}
-%
+
 \def\shiftmargins{\@shiftmarginstrue}
 
 
-% Setting margins
-%
-% \setmargins{leftmargin}{topmargin}{textwidth}{textheight}% 
-%    {headheight}{headsep}{footheight}{footskip}
-%
-\newcommand\setmargins[8]{%
+\newcommand\setmargins[8]{
 	\margin@offset
 	\advance\oddsidemargin	#1
-	\advance\evensidemargin	\PaperWidth	% = paperwidth - left
-	\advance\evensidemargin	-#1		%	- width
+	\advance\evensidemargin	\PaperWidth
+	\advance\evensidemargin	-#1
 	\advance\evensidemargin	-#3
 	\advance\topmargin	#2
 	\textwidth	#3
 	\textheight	#4
 	\headheight	#5
 	\headsep	#6
-	\@ifundefined{footheight}{}{\footheight=#7}%
+	\@ifundefined{footheight}{}{\footheight=#7}
 	\footskip	#8
-	\chk@dimen{#1}{#2}{#3}{#4}%
+	\chk@dimen{#1}{#2}{#3}{#4}
 }
-%
-% \setmarginsrb{leftmargin}{topmargin}{rightmargin}{bottommargin}% 
-%    {headheight}{headsep}{footheight}{footskip}
-%
-\newcommand\setmarginsrb[8]{%
+
+
+\newcommand\setmarginsrb[8]{
 	\margin@offset
-	\textwidth		\PaperWidth	% = paperwidth
-	\advance\textwidth	-#1		%  - left - right
+	\textwidth		\PaperWidth
+	\advance\textwidth	-#1
 	\advance\textwidth	-#3
-	\textheight		\PaperHeight	% = paperheight - top
-	\advance\textheight	-#2		%  - headheight
-	\advance\textheight	-#5		%  - headsep
-	\advance\textheight	-#6		%  - footskip - bottom
+	\textheight		\PaperHeight
+	\advance\textheight	-#2
+	\advance\textheight	-#5
+	\advance\textheight	-#6
 	\advance\textheight	-#8
 	\advance\textheight	-#4
 	\advance\oddsidemargin	#1
-	\advance\evensidemargin	\PaperWidth	% = paperwidth
-	\advance\evensidemargin	-#1		%  - left - width
+	\advance\evensidemargin	\PaperWidth
+	\advance\evensidemargin	-#1
 	\advance\evensidemargin	-\textwidth
 	\advance\topmargin	#2
 	\headheight	#5
 	\headsep	#6
-	\@ifundefined{footheight}{}{\footheight=#7}%
+	\@ifundefined{footheight}{}{\footheight=#7}
 	\footskip	#8
-	\chk@dimen{#1}{#2}{#3}{#4}%
+	\chk@dimen{#1}{#2}{#3}{#4}
 }
-%
-% \setmargnohf{leftmargin}{topmargin}{textwidth}{textheight}
-% headheight, headsep, footheight, footskip set to 0pt
-\newcommand\setmargnohf[4]{%
+
+
+\newcommand\setmargnohf[4]{
 	\setmargins{#1}{#2}{#3}{#4}\z@\z@\z@\z@
 	\pagestyle{empty}}
-%
-% \setmargnohfrb{leftmargin}{topmargin}{rightmargin}{bottommargin}
-% headheight, headsep, footheight, footskip set to 0pt
-\newcommand\setmargnohfrb[4]{%
+
+
+\newcommand\setmargnohfrb[4]{
 	\setmarginsrb{#1}{#2}{#3}{#4}\z@\z@\z@\z@
 	\pagestyle{empty}}
-%
-% \setmarg{leftmargin}{topmargin}{textwidth}{textheight}
-% headheight, headsep, footheight, footskip unchanged
-\newcommand\setmarg[4]{%
-	\setmargins{#1}{#2}{#3}{#4}%
+
+
+\newcommand\setmarg[4]{
+	\setmargins{#1}{#2}{#3}{#4}
 	\headheight\headsep\footheight\footskip}
-%
-% \setmargrb{leftmargin}{topmargin}{rightmargin}{bottommargin}
-% headheight, headsep, footheight, footskip unchanged
-\newcommand\setmargrb[4]{%
-	\setmarginsrb{#1}{#2}{#3}{#4}%
+
+
+\newcommand\setmargrb[4]{
+	\setmarginsrb{#1}{#2}{#3}{#4}
 	\headheight\headsep\footheight\footskip}
-%
-% h-warning if [leftmarg + textwidth > paperwidth] resp.
-%	    if [leftmarg + rightmarg > paperwidth].
-% v-warning if [topmarg + textheight > paperheight] resp.
-%	    if [topmarg + bottommarg > paperheight].
-\def\chk@dimen#1#2#3#4{%
+
+
+\def\chk@dimen#1#2#3#4{
 	\dimen0=	#1
 	\advance\dimen0 by#3
 	\advance\dimen0 -\PaperWidth
@@ -244,17 +181,14 @@
  }
 }{
  \def\chk@dimen@err{
-	\ifnum\dimen0>\z@\PackageError{\filename}{%
+	\ifnum\dimen0>\z@\PackageError{\filename}{
 	  Horizontal dimensions exceed paper width by \the\dimen0}{}\fi
-	\ifnum\dimen1>\z@\PackageError{\filename}{%
+	\ifnum\dimen1>\z@\PackageError{\filename}{
 	  Vertical dimensions exceed paper height by \the\dimen1}{}\fi
  }
 }
 
 
-%
-% DEFAULTS:
-%
 \setpapersize{A4}
 \def\@hf@dflt{}
 \@ifundefined{DeclareOption}{
@@ -264,19 +198,17 @@
  \DeclareOption{landscape}{\Landscapetrue}
  \DeclareOption{nohf}{\def\@hf@dflt{y}}
  \DeclareOption*{\@@@setps{\CurrentOption}}
- \ProcessOptions\relax  % process options in order of declaration!
+ \ProcessOptions\relax
 }
 \if y\@hf@dflt
-  \setmargnohfrb{35mm}{20mm}{25mm}{15mm}%
+  \setmargnohfrb{35mm}{20mm}{25mm}{15mm}
 \else
-  \setmarginsrb{35mm}{20mm}{25mm}{15mm}{12pt}{11mm}{0pt}{11mm}%
+  \setmarginsrb{35mm}{20mm}{25mm}{15mm}{12pt}{11mm}{0pt}{11mm}
 \fi
 
 
 \endinput
 
-%%----------------------------------------------------------------------
-
 Page Size and Margins
 =====================
 
@@ -300,7 +232,7 @@ paper size. Setting the paper size and margins are two independent
 operations, i.e. setting the paper size does not directly affect the
 margins but will affect the next margin setting command.
 
-The size of the paper can be set with 
+The size of the paper can be set with
 
 	\setpapersize{<size>}
 
@@ -338,12 +270,12 @@ it will not work!!
 
 The margins can be set with
 
-	\setmargins{leftmargin}{topmargin}{textwidth}{textheight}%
+	\setmargins{leftmargin}{topmargin}{textwidth}{textheight}
   		   {headheight}{headsep}{footheight}{footskip}
 
 or with
 
-	\setmarginsrb{leftmargin}{topmargin}{rightmargin}{bottommargin}%
+	\setmarginsrb{leftmargin}{topmargin}{rightmargin}{bottommargin}
 		     {headheight}{headsep}{footheight}{footskip}
 
 In the latter case \textwidth and \textheight are calculated using the
@@ -379,7 +311,7 @@ The same settings would result with:
 	\setmargnohfrb{30mm}{20mm}{20mm}{20mm}
 
 For the default settings please see the part after "DEFAULTS:" (last
-part before \endinput). 
+part before \endinput).
 
 The default top and left margins of TeX are +1in. \setmargXXX call
 
@@ -391,9 +323,9 @@ dimensions to \topmargin, \oddsidemargin, \evensidemargin. In some
 cases it might be desired to use \XXXmargin instead of \Xoffset for
 compensation. This can be achieved by telling \margin@offset to
 initialise \Xoffset to 0in and \XXXmargin to -1in. This is done by
-%
+
 	\shiftmargins.
-%
+
 If \margin@offset is already defined at the time vmargin is loaded it
 is NOT redefined! Therefore if \margin@offset is defined before vmargin
 is loaded the above mentioned compensation can be replaced by a
@@ -402,10 +334,10 @@ then expect that \XXXmargin are set to useful values. \Xoffset are not
 touched by \setmargXXX.  \margin@offset should be defined in a separate
 file which is included BEFORE vmargin, i.e. appears in the list of
 document-substyles of the \documentstyle command before vmargin.
-%
+
 Any better way of doing this? (grumble)
 
-Example:  \documentstyle[...,margins,vmargin,...]{...} 
+Example:  \documentstyle[...,margins,vmargin,...]{...}
 	  if \margin@offset is defined in a file called margins.sty.
 
 LaTeX2e:  \documentclass[...]{...}
@@ -520,20 +452,20 @@ new ifs:
   \ifLandscape
 
 new macros:
-  \setpapersize[<orientation>]{<size>}, 
+  \setpapersize[<orientation>]{<size>},
   \setpapersize[<orientation>]{custom}{<width>}{<height>}
 	<orientation> (optional) = landscape or portrait (default)
 	<size> = A4, B5, ...
 	<width>, <height> = actual dimensions of the paper
-  \setmargins{leftmargin}{topmargin}{textwidth}{textheight}%
+  \setmargins{leftmargin}{topmargin}{textwidth}{textheight}
   	     {headheight}{headsep}{footheight}{footskip}
-  \setmarginsrb{leftmargin}{topmargin}{rightmargin}{bottommargin}%
+  \setmarginsrb{leftmargin}{topmargin}{rightmargin}{bottommargin}
   	       {headheight}{headsep}{footheight}{footskip}
   \setmargnohf{leftmargin}{topmargin}{textwidth}{textheight}
   \setmargnohfrb{leftmargin}{topmargin}{rightmargin}{bottommargin}
   \setmarg{leftmargin}{topmargin}{textwidth}{textheight}
   \setmargrb{leftmargin}{topmargin}{rightmargin}{bottommargin}
-%
+
   \margin@offset
   \shiftmargins
 
@@ -548,7 +480,6 @@ LaTeX2e package options:
 If you have any comments (positive or negative) please let me know!
 
 
-
 HISTORY:
 ========
 
@@ -559,7 +490,7 @@ V1.7	  21 May 1994	Changed file header.
 V1.72	  21 May 1994	Fixed bug in \setpapersize{custom}
 V1.8	  28 May 94	Commented \chk@dimen; reduced load on TeX's
 			parameter stack (changed \chk@dimen).
-			Put a conditional around references 
+			Put a conditional around references
 			to \footheight.
 V1.9	  22 Jun 94	Corrected spelling in comment.
 V2.0      28 Jun 94     Added support for LaTeX2e \paperwidth,
@@ -571,6 +502,5 @@ V2.13	  26 Jun 96	Fixed comment for \setmarginsrb.
 V2.2	  31 May 99	Released under LPPL.
 			Changed references to Vmargin to vmargin.
 			LaTeX2e package options introduced.
-%
-%% EOF vmargin.sty
-%%----------------------------------------------------------------------
+
+
