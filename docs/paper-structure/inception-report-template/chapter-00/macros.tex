@@ -1,0 +1,98 @@
+%% ============================================================
+%%  macros.tex — RedGrid Thesis Macro Definitions
+%%  Curated from template + RedGrid-specific notation
+%% ============================================================
+
+%% ----------------------------------------------------------
+%%  Cross-reference helpers
+%% ----------------------------------------------------------
+\newcommand{\refeq}[1]{Equation~(\ref{#1})}
+\newcommand{\refineq}[1]{Inequality~(\ref{#1})}
+\newcommand{\reflem}[1]{Lemma~\ref{#1}}
+\newcommand{\refthe}[1]{Theorem~\ref{#1}}
+\newcommand{\refsec}[1]{Section~\ref{#1}}
+\newcommand{\refchap}[1]{Chapter~\ref{#1}}
+\newcommand{\reffig}[1]{Figure~\ref{#1}}
+\newcommand{\reftab}[1]{Table~\ref{#1}}
+\newcommand{\refalgo}[1]{Algorithm~\ref{#1}}
+\newcommand{\refapp}[1]{Appendix~\ref{#1}}
+\newcommand{\reftwofigs}[2]{Figures~\ref{#1}~and~\ref{#2}}
+\newcommand{\reftwosecs}[2]{Sections~\ref{#1}~and~\ref{#2}}
+\newcommand{\reftwoalgos}[2]{Algorithms~\ref{#1}~and~\ref{#2}}
+
+%% ----------------------------------------------------------
+%%  General math / algorithm notation
+%% ----------------------------------------------------------
+\newcommand{\bigo}[1]{\mathcal{O}(#1)}
+\newcommand{\eat}[1]{}           % silent comment / suppress
+
+%% \ newtheorem declarations are intentionally omitted here;
+%% they are already provided by the thesis document class.
+
+%% ----------------------------------------------------------
+%%  RedGrid system names (consistent formatting)
+%% ----------------------------------------------------------
+\newcommand{\redgrid}{\textsc{RedGrid}}
+\newcommand{\vdg}{\textsc{VDG}}             % Vulnerability Dependency Graph
+\newcommand{\el}{\textsc{EL}}              % Environmental Layer
+\newcommand{\al}{\textsc{AL}}              % Attack Layer (VDG)
+\newcommand{\ucb}{\textsc{UCB}}            % Upper Confidence Bound
+\newcommand{\fsm}{\textsc{FSM}}            % Finite State Machine
+\newcommand{\faiss}{\textsc{FAISS}}        % FAISS vector store
+
+%% ----------------------------------------------------------
+%%  VDG algorithm variables (match Section 7 notation exactly)
+%% ----------------------------------------------------------
+\newcommand{\Eord}{\ensuremath{E_{\mathrm{ord}}}}        % ordinal evidence score
+\newcommand{\UCBscore}{\ensuremath{\mathrm{UCB\_score}}} % UCB selection score
+\newcommand{\phiNode}{\ensuremath{\phi}}                 % promise score
+\newcommand{\deltaNode}{\ensuremath{\delta}}             % task difficulty index
+\newcommand{\epss}{\ensuremath{\mathrm{EPSS}}}          % EPSS prior score
+\newcommand{\Cexpl}{\ensuremath{C_{\mathrm{expl}}}}     % exploration constant
+\newcommand{\pathscore}{\ensuremath{\mathrm{path\_score}}}
+
+%% Shorthand for VDG node status values
+\newcommand{\ELIGIBLE}{\texttt{ELIGIBLE}}
+\newcommand{\EXPLOITED}{\texttt{EXPLOITED}}
+\newcommand{\INFEASIBLE}{\texttt{INFEASIBLE}}
+\newcommand{\BLOCKED}{\texttt{BLOCKED}}
+\newcommand{\INPROGRESS}{\texttt{IN\_PROGRESS}}
+
+%% ----------------------------------------------------------
+%%  Benchmark shorthand
+%% ----------------------------------------------------------
+\newcommand{\cvebench}{\textsc{CVE-Bench}}
+\newcommand{\pentesteval}{\textsc{PentestEval}}
+\newcommand{\mhbench}{\textsc{MHBench}}
+\newcommand{\prediql}{\textsc{PrediQL}}
+\newcommand{\bountybench}{\textsc{BountyBench}}
+\newcommand{\hptsa}{\textsc{HPTSA}}
+
+%% ----------------------------------------------------------
+%%  Metrics
+%% ----------------------------------------------------------
+\newcommand{\passatone}{\ensuremath{\mathrm{pass@1}}}
+\newcommand{\passatfive}{\ensuremath{\mathrm{pass@5}}}
+\newcommand{\admscore}{\ensuremath{\mathrm{ADM\mbox{-}score}}}
+\newcommand{\cpe}{\ensuremath{\mathrm{cost\mbox{-}per\mbox{-}exploit}}}
+
+%% ----------------------------------------------------------
+%%  Inline code / identifiers
+%% ----------------------------------------------------------
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\api}[1]{\texttt{#1()}}        % function call style
+\newcommand{\field}[1]{\texttt{#1}}        % struct field
+
+%% ----------------------------------------------------------
+%%  Contribution labels (for consistent cross-referencing)
+%% ----------------------------------------------------------
+\newcommand{\Cone}{\textbf{C1}}   % Dependency-Aware Exploration
+\newcommand{\Ctwo}{\textbf{C2}}   % Cross-Mission Memory
+\newcommand{\Cthree}{\textbf{C3}} % Cross-Benchmark Evaluation
+
+%% ----------------------------------------------------------
+%%  Table helpers
+%% ----------------------------------------------------------
+\newcommand{\yes}{\checkmark}
+\newcommand{\no}{$\times$}
+\newcommand{\na}{---}

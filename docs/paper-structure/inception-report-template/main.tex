@@ -14,6 +14,8 @@
 \pgfplotsset{compat=1.18}
 \hypersetup{urlcolor=blue, colorlinks=true}
 
+\input{chapter-00/macros}
+
 \begin{document}
 
 \include{title}
@@ -79,6 +81,10 @@
 
 \bibliographystyle{unsrtnat}
 
-\bibliography{bibliography}
+\bibliography{chapter-07/bibliography}
+
+\addtocontents{toc}{\vspace{2em}}
+\appendix
+\include{chapter-07/appendix-a}
 
 \end{document}
