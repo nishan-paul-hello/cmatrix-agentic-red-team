@@ -1,5 +1,3 @@
-
-
 \NeedsTeXFormat{LaTeX2e}[1996/12/01]
 \ProvidesClass{thesis}
               [2007/22/02 v1.0
@@ -201,7 +199,6 @@
       \bigskip
       \bigskip
 
-
       \vfill
       {\large Submitted to the \par}
       {\large Department of Computer Science and Engineering \par}
@@ -240,10 +237,8 @@
     \bigskip
     {\huge{\textit{Abstract}} \par}
 
-
     \bigskip
     {\normalsize\bf \@title \par}
-
 
   \end{center}
 }
@@ -402,5 +397,3 @@
   \btypeout{\bibname}
   \@mainmatterfalse}
 \endinput
-
-

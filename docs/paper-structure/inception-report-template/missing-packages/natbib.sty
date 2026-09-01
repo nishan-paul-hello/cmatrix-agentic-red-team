@@ -1,9 +1,6 @@
-
-
 \NeedsTeXFormat{LaTeX2e}[1994/06/01]
 \ProvidesPackage{natbib}
         [1998/07/14 6.8c (PWD)]
-
 
 \@ifclassloaded{aguplus}{\PackageError{natbib}
   {The aguplus class already includes natbib coding,\MessageBreak
@@ -23,7 +20,6 @@
   {Type <Return> for now, but then later remove\MessageBreak
    the command \protect\usepackage{natbib} from the document}
   \endinput}{}
-
 
 \newcommand\bibstyle@chicago{\bibpunct{(}{)}{;}{a}{,}{,}}
 \newcommand\bibstyle@named{\bibpunct{[}{]}{;}{a}{,}{,}}
@@ -592,5 +588,3 @@ then load babel AFTER natbib}}{}
  \newcommand\NAT@sort@cites[1]{\edef\NAT@cite@list{#1}}\fi
 \InputIfFileExists{natbib.cfg}
        {\typeout{Local config file natbib.cfg used}}{}
-
-

@@ -1,14 +1,11 @@
 \documentclass[a4paper, 12pt, oneside]{thesis}
 
-
 \graphicspath{{figures/}}
-
 
 \usepackage{algorithm2e}
 \usepackage{algorithmicx}
 \usepackage{longtable}
 \usepackage{multirow}
-
 
 \usepackage[square, numbers, comma, sort&compress]{natbib}
 \usepackage{verbatim}
@@ -20,7 +17,6 @@
 
 \begin{document}
 
-
 \include{title}
 
 \setstretch{1.3}
@@ -28,42 +24,29 @@
 \rhead{\thepage}
 \lhead{}
 
-
 \include{ch00/declaration}
-
 
 \include{ch00/quote}
 
-
 \include{ch00/abstract}
-
 
 \include{ch00/acknowledgement}
 
-
 \include{ch00/contents}
-
 
 \include{ch00/list-of-figures}
 
-
 \include{ch00/list-of-tables}
-
 
 \include{ch00/list-of-algorithms}
 
-
 \include{ch00/abbreviations}
-
 
 \include{ch00/physical-constants}
 
-
 \include{ch00/symbols}
 
-
 \include{ch00/dedication}
-
 
 \mainmatter
 \pagestyle{fancy}
@@ -71,34 +54,26 @@
 \renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
 \lhead{\fancyplain{}{\rightmark }}
 
-
 \include{ch01/chapter}
 \cleardoublepage
-
 
 \include{ch02/chapter}
 \cleardoublepage
 
-
 \include{ch03/chapter}
 \cleardoublepage
-
 
 \include{ch04/chapter}
 \cleardoublepage
 
-
 \include{ch05/chapter}
 \cleardoublepage
-
 
 \include{ch06/chapter}
 \cleardoublepage
 
-
 \addtocontents{toc}{\vspace{2em}}
 \backmatter
-
 
 \label{Bibliography}
 \lhead{\emph{Bibliography}}
@@ -106,6 +81,5 @@
 \bibliographystyle{unsrtnat}
 
 \bibliography{bibliography}
-
 
 \end{document}

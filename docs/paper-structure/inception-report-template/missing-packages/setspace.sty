@@ -1,5 +1,3 @@
-
-
 \NeedsTeXFormat {LaTeX2e}[1994/12/01]
 \def \filename {setspace.sty}
 \def \filedate {2000/12/01}
@@ -8,11 +6,9 @@
   Contributed and Supported LaTeX2e package]
 \typeout {Package: `setspace' \fileversion\space <\filedate>}
 
-
 \newcommand{\displayskipstretch}{\baselinestretch}
 \newcommand{\setdisplayskipstretch}[1]{\renewcommand{\displayskipstretch}{#1}}
 \DeclareOption{nodisplayskipstretch}{\setdisplayskipstretch{1.0}}
-
 
 \DeclareOption{singlespacing}{\AtEndOfPackage{\singlespacing}}
 \DeclareOption{onehalfspacing}{\AtEndOfPackage{\onehalfspacing}}
@@ -20,17 +16,14 @@
 
 \ProcessOptions
 
-
 \newcommand{\setstretch}[1]{
   \def\baselinestretch{#1}
   \@currsize
 }
 
-
 \newcommand{\SetSinglespace}[1]{
   \def\setspace@singlespace{#1}
 }
-
 
 \SetSinglespace{1}
 
@@ -61,7 +54,6 @@
   \fi
 }
 
-
 \def\@setsize#1#2#3#4{
 
   \@nomath#1
@@ -76,14 +68,12 @@
   \skip\footins \baselinestretch\skip\footins
   \normalbaselineskip\baselineskip#3#4}
 
-
 \let\latex@xfloat=\@xfloat
 \def\@xfloat #1[#2]{
   \latex@xfloat #1[#2]
   \def\baselinestretch{\setspace@singlespace}
   \normalsize
 }
-
 
 \long\def\@footnotetext#1{
   \insert\footins{
@@ -103,7 +93,6 @@
         \rule\z@\footnotesep\ignorespaces#1\@finalstrut\strutbox}
     \color@endgroup}}
 
-
 \long\def\@mpfootnotetext#1{
   \global\setbox\@mpfootins\vbox{
     \unvbox \@mpfootins
@@ -119,7 +108,6 @@
        \rule\z@\footnotesep\ignorespaces#1\@finalstrut\strutbox}
    \color@endgroup}}
 
-
 \newenvironment{singlespace}{
   \vskip \baselineskip
   \setstretch {\setspace@singlespace}
@@ -128,14 +116,12 @@
   \par
 }
 
-
 \newenvironment{singlespace*}{
   \setstretch {\setspace@singlespace}
   \vskip -\baselineskip
 }{
   \vskip -0.5\baselineskip
 }
-
 
 \newcommand{\restore@spacing}{
     \par
@@ -154,7 +140,6 @@
   \restore@spacing
 }
 
-
 \newenvironment{onehalfspace}{
   \begingroup
     \onehalfspacing
@@ -162,14 +147,12 @@
   \restore@spacing
 }
 
-
 \newenvironment{doublespace}{
   \begingroup
     \doublespacing
 }{
   \restore@spacing
 }
-
 
 \everydisplay\expandafter{
   \the\everydisplay
@@ -180,5 +163,3 @@
 }
 
 \endinput
-
-

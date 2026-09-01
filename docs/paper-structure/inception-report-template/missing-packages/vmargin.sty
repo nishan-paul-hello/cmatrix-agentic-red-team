@@ -1,5 +1,3 @@
-
-
 \def\filename{vmargin}
 \def\fileversion{V2.2}
 \def\filedate{1999/06/01}
@@ -18,12 +16,10 @@
  \typeout{\Vmargin}
 }
 
-
 \newdimen\PaperWidth
 \newdimen\PaperHeight
 
 \newif\ifLandscape
-
 
 \def\setpapersize{\@ifnextchar[{\@@setps}{\@@setps[portrait]}}
 \def\@@setps[#1]{
@@ -32,7 +28,6 @@
 \def\@@@setps#1{
   \@ifundefined{paper@#1}{\@name@err{#1}}{}
   \csname paper@#1\endcsname}
-
 
 \def\po@portrait{\Landscapefalse}
 \def\po@landscape{\Landscapetrue}
@@ -47,7 +42,6 @@
  \def\@name@err#1{\PackageError{\filename}
  			{Paper size or orientation unknown: #1}{}}
 }
-
 
 \def\@defmetricpaper#1#2#3{
   \begingroup
@@ -81,7 +75,6 @@
 
 \def\paper@custom#1#2{\PaperWidth#1\PaperHeight#2\@po@}
 
-
 \newif\if@shiftmargins
 \@shiftmarginsfalse
 
@@ -98,7 +91,6 @@
 
 \def\shiftmargins{\@shiftmarginstrue}
 
-
 \newcommand\setmargins[8]{
 	\margin@offset
 	\advance\oddsidemargin	#1
@@ -114,7 +106,6 @@
 	\footskip	#8
 	\chk@dimen{#1}{#2}{#3}{#4}
 }
-
 
 \newcommand\setmarginsrb[8]{
 	\margin@offset
@@ -139,26 +130,21 @@
 	\chk@dimen{#1}{#2}{#3}{#4}
 }
 
-
 \newcommand\setmargnohf[4]{
 	\setmargins{#1}{#2}{#3}{#4}\z@\z@\z@\z@
 	\pagestyle{empty}}
-
 
 \newcommand\setmargnohfrb[4]{
 	\setmarginsrb{#1}{#2}{#3}{#4}\z@\z@\z@\z@
 	\pagestyle{empty}}
 
-
 \newcommand\setmarg[4]{
 	\setmargins{#1}{#2}{#3}{#4}
 	\headheight\headsep\footheight\footskip}
 
-
 \newcommand\setmargrb[4]{
 	\setmarginsrb{#1}{#2}{#3}{#4}
 	\headheight\headsep\footheight\footskip}
-
 
 \def\chk@dimen#1#2#3#4{
 	\dimen0=	#1
@@ -188,7 +174,6 @@
  }
 }
 
-
 \setpapersize{A4}
 \def\@hf@dflt{}
 \@ifundefined{DeclareOption}{
@@ -206,9 +191,8 @@
   \setmarginsrb{35mm}{20mm}{25mm}{15mm}{12pt}{11mm}{0pt}{11mm}
 \fi
 
-
 \endinput
-
+
 Page Size and Margins
 =====================
 
@@ -343,7 +327,6 @@ Example:  \documentstyle[...,margins,vmargin,...]{...}
 LaTeX2e:  \documentclass[...]{...}
 	  \usepackage{...,margins,vmargin,...}
 
-
 LaTeX2e
 -------
 
@@ -380,7 +363,6 @@ nohf		do not make space for header and footer lines; this also
 All unknown options are treated as a paper size, if necessary
 generating an error that the requested paper size is not defined.
 
-
 Inclusion in TeX formats
 ------------------------
 
@@ -389,7 +371,6 @@ This file may be loaded in initex before dumping the format, by typing
 	\input vmargin.sty
 	\makeatother
 Note: this produces a non-standard format.
-
 
 Hints for using pageframe.sty
 -----------------------------
@@ -425,7 +406,6 @@ of \evensidemargin to be the right margin of your text, on all pages.
 Remember: all these assignments and macro calls have to be in the
 pre-amble of the document.
 
-
 Bugs:
 -----
 
@@ -433,13 +413,11 @@ I have not tested this with older versions of LaTeX2e because I don't
 have any. If there are any problems pleease do let me know and I'll do
 something about it.
 
-
 To do:
 ------
 
 * The way the metric paper sizes are stored takes up a lot of space. A
   metric size could be computed by \setpapersize.
-
 
 SUMMARY:
 ========
@@ -476,9 +454,7 @@ LaTeX2e package options:
   nohf
   all other options are treated as paper sizes
 
-
 If you have any comments (positive or negative) please let me know!
-
 
 HISTORY:
 ========
@@ -502,5 +478,3 @@ V2.13	  26 Jun 96	Fixed comment for \setmarginsrb.
 V2.2	  31 May 99	Released under LPPL.
 			Changed references to Vmargin to vmargin.
 			LaTeX2e package options introduced.
-
-
