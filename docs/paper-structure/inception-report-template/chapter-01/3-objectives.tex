@@ -1,13 +1,12 @@
 \section{Objectives}
 \label{sec:intro_objectives}
 
-This report defines, at implementation level, an autonomous VAPT architecture -- \textbf{RedGrid} -- and its accompanying evaluation methodology. The concrete objectives are:
+Guided by the two gaps identified in Section~\ref{sec:intro_problem}, we have set out the following objectives for this thesis. These are the goals we are working toward over the coming months, not a checklist of work already completed; the exact design of each component is expected to change as our implementation and early experiments give us feedback that the literature alone cannot.
 
 \begin{enumerate}
-    \item To design a \textbf{Vulnerability Dependency Graph (VDG)} that unifies dependency-aware exploration with UCB-guided node selection, path-level impact scoring, and failure propagation, formalized to pseudocode level (Chapter~\ref{chapter_proposedMethod}).
-    \item To design a \textbf{Dual-Layer World Model} that strictly separates confirmed environmental facts from inferred attack hypotheses, with enforced write-ownership, so that discovery quality and planning quality can be ablated independently.
-    \item To design a \textbf{four-layer orchestration architecture} (Orchestrator, Team Manager, Specialists, Execution/Validation) instantiating the structural pattern that every high-performing surveyed system independently converges on.
-    \item To design a \textbf{cross-mission memory system} with security-specific conditional branching (e.g., WAF-adaptive payload switching) and oracle-gated skill promotion, distinguishing genuinely reusable strategies from single-target idiosyncrasies.
-    \item To define a rigorous, fully pre-existing-benchmark-based \textbf{evaluation plan} -- spanning web, GraphQL, and multi-host attack surfaces -- with statistical methodology (McNemar's test, 95\% Wilson confidence intervals, compute normalization) sufficient for systems-and-empirical-evaluation publication.
-    \item To specify the \textbf{ablation studies} required to support each contribution claim, so that no claim in the eventual evaluation is made without a corresponding controlled experiment.
+    \item To investigate whether representing candidate vulnerabilities as a graph with explicit prerequisite relationships, rather than as an unordered list, can meaningfully improve how an autonomous agent chooses what to explore next -- and to design and formalize such a structure, which we are currently calling a \textbf{Vulnerability Dependency Graph (VDG)}, to the point where it can be implemented and tested.
+    \item To explore ways of separating what an agent has \emph{confirmed} about a target from what it is merely \emph{hypothesizing}, so that the quality of discovery and the quality of planning can eventually be evaluated somewhat independently of each other.
+    \item To settle on a multi-layer orchestration structure for the overall agent -- drawing on the structural patterns we observed recurring across the strongest-performing systems in our survey -- and to work out at what level of detail this structure needs to be specified before it is implementable.
+    \item To examine whether letting an agent retain and reuse strategies across multiple missions offers a genuine advantage, or whether it mainly introduces risk (e.g., a strategy that worked against one version of a technology being harmful against another).
+    \item To identify which existing, published benchmarks are suitable for evaluating this kind of system, and to begin drafting an evaluation plan around them rather than constructing new benchmarks of our own.
 \end{enumerate}

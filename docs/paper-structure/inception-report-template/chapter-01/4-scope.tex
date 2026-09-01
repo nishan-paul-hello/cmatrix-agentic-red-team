@@ -1,12 +1,12 @@
 \section{Scope of the Project}
 \label{sec:intro_scope}
 
-RedGrid applies one governing rule throughout: it targets \emph{only} attack surfaces for which a dedicated, reusable, oracle-backed benchmark already exists in the surveyed literature. No new benchmark is constructed for this project. Table~\ref{tab:in-scope-surfaces} summarizes the four in-scope attack-surface families and the benchmarks that bound every claim made about them.
+Based on our reading of the literature so far, we intend to bound this project by one governing rule: we plan to work only with attack surfaces for which a dedicated, reusable, oracle-backed benchmark already exists in the surveyed literature, rather than constructing new benchmarks ourselves. This is a scope we have provisionally settled on; it may narrow further once early implementation work tells us more about what is realistically achievable within the remaining timeline. Table~\ref{tab:in-scope-surfaces} summarizes the attack-surface families we are currently considering in scope and the benchmarks that would bound any claim made about them.
 
 \begin{table}[htbp]
 \centering
 \small
-\caption{In-scope attack surfaces and their governing benchmarks.}
+\caption{Attack surfaces we are currently considering in scope, and their candidate governing benchmarks.}
 \label{tab:in-scope-surfaces}
 \begin{tabular}{@{}p{3.1cm}p{5.6cm}p{5.6cm}@{}}
 \toprule
@@ -20,4 +20,4 @@ Production system corpus (hard tier) & BountyBench (25 real systems) \citep{zhan
 \end{tabular}
 \end{table}
 
-\textbf{Explicitly out of scope.} General REST API exploitation is not evaluated and no REST-specific pass rate is ever reported: RESTler's \citep{atlidakis2019restler} evaluation targets are one-off real-world case studies rather than a standardized, reusable benchmark, so there is no ``RESTBench'' equivalent in the surveyed corpus. RESTler's dependency-inference and response-feedback-pruning techniques are nonetheless methodologically valuable and are reused \emph{internally} by the GraphQL Specialist and by the Team Manager's edge-inference logic (Section~\ref{sec:vdg-algorithm}). Binary exploitation, physical- and network-layer attacks, and social engineering are likewise out of scope for the same reason: no dedicated, oracle-backed benchmark for them exists in the surveyed literature.
+\textbf{What we currently intend to leave out.} General REST API exploitation is not something we plan to evaluate directly: RESTler's \citep{atlidakis2019restler} evaluation targets are one-off real-world case studies rather than a standardized, reusable benchmark, so we did not find an equivalent of the other benchmarks above for REST APIs specifically. Some of RESTler's underlying techniques (dependency inference between API calls, response-feedback pruning) may still turn out to be useful internally, e.g. within GraphQL testing, but we do not plan to report REST-specific results. For the same reason -- the absence of a suitable existing benchmark within our survey -- binary exploitation, physical- and network-layer attacks, and social engineering are also outside what we currently intend to attempt.

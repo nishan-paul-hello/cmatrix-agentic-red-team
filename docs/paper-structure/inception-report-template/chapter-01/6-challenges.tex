@@ -1,17 +1,15 @@
-\section{Challenges}
+\section{Anticipated Challenges}
 \label{sec:intro_challenges}
 \label{sec:threats-validity}
 
-Nine threats to validity are tracked explicitly throughout this report and are treated as first-class design constraints rather than post-hoc caveats (full detail in Section~\ref{sec:threats-validity}):
+Several challenges surfaced repeatedly while we were reading the literature, and we expect them to shape our work over the next six months regardless of which specific design choices we end up making. We are listing them here, early, rather than waiting to discover them the hard way during implementation:
 
 \begin{enumerate}
-    \item \textbf{VDG edge-inference accuracy} is LLM-inferred rather than ground-truth-annotated, and is the single highest-risk item in the entire architecture; a mandatory pilot study against PentestEval's ground-truth dependency annotations must show $\geq 50\%$ precision before the main evaluation may proceed.
-    \item \textbf{Sandbox-to-real-world gap.} \citet{fang2024hackwebsites} found 1 exploitable XSS in 50 real-world candidate sites (2\%) versus 73.3\% in a matched sandbox; RedGrid must report both regimes and must not extrapolate from one to the other.
-    \item \textbf{GraphQL evaluation is statistically narrow} -- PrediQL's 6-API suite is real and standardized but far smaller than CVE-Bench or XBOW, so generalization claims involving GraphQL must state this asymmetry plainly.
-    \item \textbf{Cost-per-exploit is backbone-price-sensitive} and must be reported with an explicit model, version, and date rather than as an absolute claim.
-    \item \textbf{Negative transfer in cross-mission memory} -- a strategy validated against one framework version may be actively harmful against another; this risk is unaddressed in all 29 surveyed papers because none implement cross-mission, strategy-level memory generalization for VAPT.
-    \item \textbf{UCB hyperparameter sensitivity} across seven tunable parameters, requiring an explicit search-range report and a $\pm 10\%$ perturbation sensitivity analysis.
-    \item \textbf{Statistical power on small benchmarks} -- PrediQL's 6 APIs at 5 runs yield only 30 data points, likely underpowering McNemar's test for small effect sizes.
-    \item \textbf{Edge-inference scalability} -- unbatched pairwise edge inference would require $O(2M)$ frontier-model calls per new node, plausibly exceeding the entire per-CVE compute budget; batching is required and its own quality trade-offs must be measured.
-    \item \textbf{Honest framing of ``one architecture, three surfaces''} -- different Specialist pools activate per attack surface, so C3 is reported as a shared orchestrator with surface-specific modules, not as one literally unmodified architecture.
+    \item \textbf{Inferring dependencies without ground truth.} Any prerequisite structure our agent builds on its own will be inferred by an LLM rather than annotated by an expert, and we expect this to be the single riskiest part of whatever we build. Before relying on such a structure for any evaluation, we plan to first run a small pilot study against PentestEval's expert-annotated dependencies to get a sense of how accurate our inference actually is.
+    \item \textbf{Sandbox results may not transfer to the real world.} \citet{fang2024hackwebsites} found only 1 exploitable XSS in 50 real-world candidate sites (2\%), against 73.3\% in a matched sandbox. We intend to keep this gap in mind throughout and to avoid presenting sandbox numbers as if they were real-world numbers.
+    \item \textbf{Some benchmarks are small.} PrediQL's GraphQL suite, for instance, covers only 6 APIs -- real and standardized, but far smaller than benchmarks like CVE-Bench or XBOW. Any conclusion we draw from it will need to be stated as exploratory rather than definitive.
+    \item \textbf{Cost is a moving target.} Whatever cost-per-exploit figures we eventually report will be tied to a specific model and pricing at a specific point in time, and we plan to state that explicitly rather than presenting cost as a fixed property of the approach.
+    \item \textbf{Reused strategies could backfire.} A strategy that worked against one version of a piece of software could plausibly be actively harmful against a different version. We have not found this risk addressed in the 29 papers we surveyed, which is one reason we consider it worth paying attention to from the start.
+    \item \textbf{Tuning could be fragile.} If our approach ends up depending on several tunable parameters, we would want to check how sensitive results are to those choices rather than reporting numbers from a single, possibly lucky, configuration.
+    \item \textbf{Being honest about what generalizes.} If we do end up testing across more than one attack surface, we want to be careful about the difference between "one shared design" and "one literally unmodified system," since we expect surface-specific components to be necessary either way.
 \end{enumerate}
