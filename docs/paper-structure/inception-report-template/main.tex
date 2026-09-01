@@ -1,4 +1,4 @@
-\documentclass[a4paper, 12pt, oneside]{thesis}
+\documentclass[a4paper, 12pt, oneside]{config/thesis}
 
 \graphicspath{{figures/}}
 
@@ -14,7 +14,7 @@
 \pgfplotsset{compat=1.18}
 \hypersetup{urlcolor=blue, colorlinks=true}
 
-\input{chapter-00/macros}
+\input{config/macros}
 
 \begin{document}
 
@@ -94,10 +94,10 @@
 
 \bibliographystyle{unsrtnat}
 
-\bibliography{chapter-07/bibliography}
+\bibliography{chapter-07/1-bibliography}
 
 \addtocontents{toc}{\vspace{2em}}
 \appendix
-\include{chapter-07/appendix-a}
+\include{chapter-07/2-appendix-a}
 
 \end{document}
