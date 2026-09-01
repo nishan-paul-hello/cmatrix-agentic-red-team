@@ -115,6 +115,14 @@ paper-05:
 
 paper-inception:
 	@echo "🏗️  Building Inception Report Template..."
+	@mkdir -p $(PAPER_DIR_INCEPTION)/build/ch00
+	@mkdir -p $(PAPER_DIR_INCEPTION)/build/ch01
+	@mkdir -p $(PAPER_DIR_INCEPTION)/build/ch02
+	@mkdir -p $(PAPER_DIR_INCEPTION)/build/ch03
+	@mkdir -p $(PAPER_DIR_INCEPTION)/build/ch04
+	@mkdir -p $(PAPER_DIR_INCEPTION)/build/ch05
+	@mkdir -p $(PAPER_DIR_INCEPTION)/build/ch06
+	@mkdir -p $(PAPER_DIR_INCEPTION)/build/ch07
 	export BIBINPUTS=.:$$BIBINPUTS; $(LATEXMK) -jobname=main -outdir="." -auxdir="build" $(PAPER_DIR_INCEPTION)/main.tex
 
 # Presentation Build

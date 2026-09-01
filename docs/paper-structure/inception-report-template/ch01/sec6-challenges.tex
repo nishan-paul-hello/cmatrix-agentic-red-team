@@ -1,0 +1,20 @@
+%% ----------------------------------------------------------------
+%% Chapter 1 — Section 1.6: Challenges
+%% ----------------------------------------------------------------
+\section{Challenges}
+\label{sec:intro_challenges}
+\label{sec:threats-validity}
+
+Nine threats to validity are tracked explicitly throughout this report and are treated as first-class design constraints rather than post-hoc caveats (full detail in Section~\ref{sec:threats-validity}):
+
+\begin{enumerate}
+    \item \textbf{VDG edge-inference accuracy} is LLM-inferred rather than ground-truth-annotated, and is the single highest-risk item in the entire architecture; a mandatory pilot study against PentestEval's ground-truth dependency annotations must show $\geq 50\%$ precision before the main evaluation may proceed.
+    \item \textbf{Sandbox-to-real-world gap.} \citet{fang2024hackwebsites} found 1 exploitable XSS in 50 real-world candidate sites (2\%) versus 73.3\% in a matched sandbox; RedGrid must report both regimes and must not extrapolate from one to the other.
+    \item \textbf{GraphQL evaluation is statistically narrow} -- PrediQL's 6-API suite is real and standardized but far smaller than CVE-Bench or XBOW, so generalization claims involving GraphQL must state this asymmetry plainly.
+    \item \textbf{Cost-per-exploit is backbone-price-sensitive} and must be reported with an explicit model, version, and date rather than as an absolute claim.
+    \item \textbf{Negative transfer in cross-mission memory} -- a strategy validated against one framework version may be actively harmful against another; this risk is unaddressed in all 29 surveyed papers because none implement cross-mission, strategy-level memory generalization for VAPT.
+    \item \textbf{UCB hyperparameter sensitivity} across seven tunable parameters, requiring an explicit search-range report and a $\pm 10\%$ perturbation sensitivity analysis.
+    \item \textbf{Statistical power on small benchmarks} -- PrediQL's 6 APIs at 5 runs yield only 30 data points, likely underpowering McNemar's test for small effect sizes.
+    \item \textbf{Edge-inference scalability} -- unbatched pairwise edge inference would require $O(2M)$ frontier-model calls per new node, plausibly exceeding the entire per-CVE compute budget; batching is required and its own quality trade-offs must be measured.
+    \item \textbf{Honest framing of ``one architecture, three surfaces''} -- different Specialist pools activate per attack surface, so C3 is reported as a shared orchestrator with surface-specific modules, not as one literally unmodified architecture.
+\end{enumerate}

@@ -1,0 +1,26 @@
+%% ----------------------------------------------------------------
+%% Chapter 1 — Section 1.4: Scope of the Project
+%% ----------------------------------------------------------------
+\section{Scope of the Project}
+\label{sec:intro_scope}
+
+RedGrid applies one governing rule throughout: it targets \emph{only} attack surfaces for which a dedicated, reusable, oracle-backed benchmark already exists in the surveyed literature. No new benchmark is constructed for this project. Table~\ref{tab:in-scope-surfaces} summarizes the four in-scope attack-surface families and the benchmarks that bound every claim made about them.
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{In-scope attack surfaces and their governing benchmarks.}
+\label{tab:in-scope-surfaces}
+\begin{tabular}{@{}p{3.1cm}p{5.6cm}p{5.6cm}@{}}
+\toprule
+\textbf{Attack surface} & \textbf{Benchmark(s)} & \textbf{Representative coverage} \\
+\midrule
+Web application (HTTP/HTML) & Fang et al.\ 15-vuln sandbox \citep{fang2024oneday}; HPTSA 14-CVE zero-day suite \citep{zhu2024hptsa}; CVE-Bench (40 CVEs) \citep{zhu2025cvebench}; MAPTA/XBOW (104) \citep{david2025mapta}; HackWorld (36) \citep{ren2025hackworld}; PentestEval (346 tasks) \citep{yang2025pentesteval}; Cybench \citep{zhang2025cybench}; PentestGPT/HTB machine sets \citep{deng2024pentestgpt} & SQLi, XSS, CSRF, SSRF, SSTI, LFI, file-upload RCE, IDOR, auth bypass, framework RCEs, JWT forgery \\
+GraphQL APIs & PrediQL 6-API suite \citep{liu2025prediql} & Schema abuse, dependency-chain injection, batched-auth bypass, IDOR, nested-query DoS \\
+Multi-host / Active Directory & Incalmo MHBench (40 environments) \citep{singer2025incalmo} & Lateral movement, credential reuse, privilege escalation \\
+Production system corpus (hard tier) & BountyBench (25 real systems) \citep{zhang2025bountybench} & Economic/adversarial validation layer over the web surface \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Explicitly out of scope.} General REST API exploitation is not evaluated and no REST-specific pass rate is ever reported: RESTler's \citep{atlidakis2019restler} evaluation targets are one-off real-world case studies rather than a standardized, reusable benchmark, so there is no ``RESTBench'' equivalent in the surveyed corpus. RESTler's dependency-inference and response-feedback-pruning techniques are nonetheless methodologically valuable and are reused \emph{internally} by the GraphQL Specialist and by the Team Manager's edge-inference logic (Section~\ref{sec:vdg-algorithm}). Binary exploitation, physical- and network-layer attacks, and social engineering are likewise out of scope for the same reason: no dedicated, oracle-backed benchmark for them exists in the surveyed literature.

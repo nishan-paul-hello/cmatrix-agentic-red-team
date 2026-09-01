@@ -1,0 +1,16 @@
+%% ----------------------------------------------------------------
+%% Chapter 1 — Section 1.3: Objectives
+%% ----------------------------------------------------------------
+\section{Objectives}
+\label{sec:intro_objectives}
+
+This report defines, at implementation level, an autonomous VAPT architecture -- \textbf{RedGrid} -- and its accompanying evaluation methodology. The concrete objectives are:
+
+\begin{enumerate}
+    \item To design a \textbf{Vulnerability Dependency Graph (VDG)} that unifies dependency-aware exploration with UCB-guided node selection, path-level impact scoring, and failure propagation, formalized to pseudocode level (Chapter~\ref{chapter_proposedMethod}).
+    \item To design a \textbf{Dual-Layer World Model} that strictly separates confirmed environmental facts from inferred attack hypotheses, with enforced write-ownership, so that discovery quality and planning quality can be ablated independently.
+    \item To design a \textbf{four-layer orchestration architecture} (Orchestrator, Team Manager, Specialists, Execution/Validation) instantiating the structural pattern that every high-performing surveyed system independently converges on.
+    \item To design a \textbf{cross-mission memory system} with security-specific conditional branching (e.g., WAF-adaptive payload switching) and oracle-gated skill promotion, distinguishing genuinely reusable strategies from single-target idiosyncrasies.
+    \item To define a rigorous, fully pre-existing-benchmark-based \textbf{evaluation plan} -- spanning web, GraphQL, and multi-host attack surfaces -- with statistical methodology (McNemar's test, 95\% Wilson confidence intervals, compute normalization) sufficient for systems-and-empirical-evaluation publication.
+    \item To specify the \textbf{ablation studies} required to support each contribution claim, so that no claim in the eventual evaluation is made without a corresponding controlled experiment.
+\end{enumerate}

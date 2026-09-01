@@ -1,3 +1,10 @@
+%% ----------------------------------------------------------------
+%% Abstract Page
+%% ----------------------------------------------------------------
+\addtotoc{Abstract}  % Add the "Abstract" page entry to the Contents
+\begin{abstract}
+\addtocontents{toc}{}  % Add a gap in the Contents, for aesthetics
+
 \hspace{1cm} Large Language Model (LLM) agents have repeatedly demonstrated the ability to exploit real-world software vulnerabilities, yet a systematic reading of the recent literature reveals two unresolved and independent failure modes. First, on the hardest realistic web benchmark (CVE-Bench), the best reported agent exploits only 13\% of one-day and 10\% of zero-day vulnerabilities, with \emph{insufficient exploration} identified as the dominant cause of failure across every evaluated system. Second, on a stage-decomposed diagnostic benchmark (PentestEval), \emph{Attack Decision-Making} -- reasoning about which prerequisite weaknesses must be resolved before a candidate attack becomes feasible -- is the single lowest-scoring stage of the pentesting pipeline. No system surveyed in the 29-paper corpus underlying this work addresses both failure modes at once: systems that solve exploration breadth dispatch flat, undifferentiated task lists with no explicit model of prerequisite structure, while systems that reason about dependencies do so only over small, pre-curated, expert-annotated weakness sets that cannot scale to open-ended discovery.
 
 \vspace{0.3cm}
@@ -5,3 +12,8 @@
 
 \vspace{0.3cm}
 \hspace{1cm} Following the scoping discipline established in the architecture, RedGrid claims exactly three contributions, each bounded by a precisely specified experimental test: \textbf{C1} -- dependency-aware attack-graph exploration, validated by demonstrating that the unified VDG outperforms a stacked (filter-after-scoring) baseline on CVE-Bench and PentestEval; \textbf{C2} -- cross-mission memory with verified skill promotion, validated by measurable improvement on a seen-technology benchmark subset; and \textbf{C3} -- the first standardized cross-benchmark evaluation of a single autonomous VAPT architecture across web (CVE-Bench), GraphQL (PrediQL), and multi-host (Incalmo MHBench) attack surfaces under one shared orchestration layer with surface-specific Specialist pools and strictly separated per-surface reporting. This report presents the complete system architecture, the formalized VDG algorithm, the seven-tier benchmarking strategy, the required ablation design (with McNemar's test and 95\% Wilson confidence intervals), a mandatory pre-evaluation gate on VDG edge-inference precision, and an honest accounting of the threats to validity -- including the expected gap between sandboxed and real-world pass rates -- that will govern the empirical evaluation to follow.
+
+\end{abstract}
+
+\clearpage  % Abstract ended, start a new page
+\setstretch{1.5}  % Reset the line-spacing to 1.5 for body text
