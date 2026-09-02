@@ -646,151 +646,160 @@ Card C3 (border-top 3px `#2A6B3C`):
 
 ---
 
-### SLIDE 13 — Our Proposed Approach
+### SLIDE 13 — RedGrid — The Core Idea
 
-**Layout:** One large conceptual 3-part visual. Bold, simple, no technical detail.
+**Layout type:** V-TYPE (Visual-Stack — a large 3-box horizontal diagram dominates the slide body)
 
-**Content:**
-- Slide title: `RedGrid — The Core Idea`
-*(No amber sub-label chip here — the transition banner on Slide 12 already covered this for the whole section)*
+**Header:** Title = `RedGrid — The Core Idea` (Playfair Display 700, 44pt). Authority bar. *(No sub-label chip — Slide 12 transition banner covers this section.)*
 
-- Central visual: 3 connected boxes (horizontal flow):
+**Center visual (3 connected boxes, horizontal flow, ~65% of slide height):**
 
-  Box 1 [red]:
-  Icon: magnifying glass over a network
-  Label: `Explore Broadly`
-  "Search the full attack surface — don't commit to one path early."
+Box 1 — `Explore Broadly` (border-top 3px `#8B1A1A`, bg `#EFEBE3`):
+- Source Sans 3 700 small-caps 11pt `#8B1A1A`: `EXPLORE`
+- Source Sans 3 700 19pt `#1A1A2E`: `Explore Broadly`
+- Source Sans 3 400 15pt `#6B6B7A`: "Search the full attack surface. Don't commit to one path early."
 
-  Center arrow labeled: `guided by`
+Connector arrow (right-pointing, 2px `#D4CFC8`, with label):
+- Source Sans 3 400 italic 12pt `#9A9AAA`: `guided by`
 
-  Box 2 [cyan, larger — center]:
-  Icon: a small directed graph (3 nodes, 2 arrows)
-  Label: `Dependency Graph`
-  "Model which vulnerabilities depend on which — pick the smartest next step."
+Box 2 — `Dependency Graph` (border-top 3px `#2E4A7A`, bg `#EFEBE3`, slightly larger — 20px taller than flanking boxes):
+- Source Sans 3 700 small-caps 11pt `#2E4A7A`: `GUIDE`
+- Source Sans 3 700 19pt `#1A1A2E`: `Dependency Graph`
+- Source Sans 3 400 15pt `#6B6B7A`: "Model which vulnerabilities depend on which. Pick the smartest next step."
 
-  Arrow: `feeds into`
+Connector arrow:
+- Source Sans 3 400 italic 12pt `#9A9AAA`: `feeds into`
 
-  Box 3 [amber]:
-  Icon: brain / memory icon
-  Label: `Remember and Reuse`
-  "Carry forward what worked across past missions."
+Box 3 — `Remember and Reuse` (border-top 3px `#A0631A`, bg `#EFEBE3`):
+- Source Sans 3 700 small-caps 11pt `#A0631A`: `LEARN`
+- Source Sans 3 700 19pt `#1A1A2E`: `Remember and Reuse`
+- Source Sans 3 400 15pt `#6B6B7A`: "Carry forward what worked across past missions."
 
-- Below the visual, one bold sentence (Syne 700, 24px, white):
-  "RedGrid asks: does connecting exploration + dependency reasoning + memory make autonomous pen testing meaningfully better?"
+**Below boxes (24px gap):**
+- Primary callout (crimson border, width 80% centered):
+  - Playfair Display 400 italic 20pt `#1A1A2E`: *"RedGrid asks: does connecting exploration + dependency reasoning + memory make autonomous penetration testing meaningfully better?"*
+- Footnote: Source Sans 3 400 italic 13pt `#9A9AAA`: `All three are open research questions — implementation has not started`
 
-- Footnote (secondary, italic): `All three are open research questions`
-
-**Animation:** Three boxes appear simultaneously with fade+scale. Arrow labels draw after. Bold sentence fades in last.
+**No animations.**
 
 **Speaker note:** "Three ideas working together: broad exploration guided by a dependency graph, with memory to avoid repeating past mistakes. Each of these tackles one of the failure modes or gaps we just saw. The question is whether combining all three produces measurable improvement — that's what the experiments will tell us."
 
 ---
 
-### SLIDE 14 — Architecture — A Simple View
+### SLIDE 14 — Architecture — A Rough Sketch
 
-**Layout:** Simple 4-layer visual stack. One plain-English label per layer. No component names.
+**Layout type:** V-TYPE (Visual-Stack — layered architecture diagram + flanking panels)
 
-**Content:**
-- Slide title: `Architecture — A Rough Sketch`
-*(No amber sub-label chip — covered by Slide 12 transition banner)*
+**Header:** Title = `Architecture — A Rough Sketch` (Playfair Display 700, 44pt). Authority bar.
 
-- 4-layer colored stack (think: a layered cake, top to bottom, each band roughly equal height):
+**Main architecture diagram (center of slide, full content width, ~65% slide height):**
+- 4 horizontal band layers, stacked top to bottom, each ~60px tall. Each band has:
+  - Left-side number badge (IBM Plex Mono 700 14pt white on color circle)
+  - Center: Source Sans 3 700 17pt `#1A1A2E` layer label + Source Sans 3 400 15pt `#6B6B7A` plain-English sentence
+  - Right side: 1px `#D4CFC8` hairline vertical separator + small area for the World Model panel text
 
-  Layer 1 [dark red band, top]:
-  Label: `Mission Planner`
-  "Takes in the target. Starts the scan. Stays in control."
+Layer 1 — `Mission Planner` (bg `#F5D5D5`, border-left 4px `#8B1A1A`, badge bg `#8B1A1A`):
+- "Takes in the target. Starts the scan. Stays in control."
 
-  Layer 2 [dark cyan band]:
-  Label: `Decision-Maker`
-  "Decides what to attack next — using the dependency graph."
+Layer 2 — `Decision-Maker` (bg `#E8EDF5`, border-left 4px `#2E4A7A`, badge bg `#2E4A7A`):
+- "Decides what to attack next — using the dependency graph."
 
-  Layer 3 [dark amber band]:
-  Label: `Specialist Agents`
-  "Web, GraphQL, Network — each focused on one attack type."
+Layer 3 — `Specialist Agents` (bg `#F5E9D0`, border-left 4px `#A0631A`, badge bg `#A0631A`):
+- "Web, GraphQL, Network — each focused on one attack type."
 
-  Layer 4 [dark green band, bottom]:
-  Label: `Execute and Validate`
-  "Runs the attack. Checks if it worked."
+Layer 4 — `Execute and Validate` (bg `#D6EDDA`, border-left 4px `#2A6B3C`, badge bg `#2A6B3C`):
+- "Runs the attack. Checks if it worked."
 
-- Left side panel (narrow, dark blue border):
-  Label: `World Model`
-  "What we know (confirmed facts) vs. what we think (attack hypotheses) — kept strictly separate."
+**Left side panel (narrow, 140px wide, full diagram height, bg `#EFEBE3`, border 1.5px `#D4CFC8`):**
+- Centered vertical text (Source Sans 3 700 small-caps 11pt `#6B6B7A`, rotated 90°): `WORLD MODEL`
+- Below (Source Sans 3 400 12pt `#6B6B7A`, horizontal): "Confirmed facts vs. attack hypotheses — kept strictly separate."
 
-- Bottom bar (dashed):
-  Label: `Memory`
-  "Remembers strategies and failures. Reuses what worked."
+**Bottom bar (below layer stack, full width, bg `#EFEBE3`, border 1.5px dashed `#D4CFC8`):**
+- Source Sans 3 700 small-caps 11pt `#6B6B7A`: `MEMORY`
+- Source Sans 3 400 13pt `#6B6B7A`: "Remembers strategies and failures. Reuses what worked."
 
-- NO component-level names (no FullCompact, no FAISS, no E_ord, no Handoff Bridge)
-- Each band: one icon + one plain-English sentence + text label (not color alone to denote layer role)
+- NO component-level names (no FullCompact, no FAISS, no E_ord, no Handoff Bridge). Each layer uses only its plain-English label.
 
-**Animation:** Layers reveal top-to-bottom (250ms stagger). Side panel fades in after. Memory bar slides up last.
+**No animations.**
 
 **Speaker note:** "Four layers: a planner that controls the overall mission, a decision-maker that uses the dependency graph to choose what to try next, specialist agents that each focus on one attack type, and an execution layer that runs the attempt and checks the result. The world model keeps confirmed facts strictly separate from hypotheses. This is a sketch — the design will evolve as we build."
 
 ---
 
-### SLIDE 15 — Methodology — The Basic Loop
+### SLIDE 15 — How RedGrid Will Work
 
-**Layout:** Simple circular 4-step process diagram. Nothing more.
+**Layout type:** V-TYPE (Visual-Stack — process loop diagram occupies ~60% of slide body)
 
-**Content:**
-- Slide title: `How RedGrid Will Work`
-*(No amber sub-label chip — covered by Slide 12 transition banner)*
+**Header:** Title = `How RedGrid Will Work` (Playfair Display 700, 44pt). Authority bar.
 
-- A circular 4-step loop (clockwise, large, centered). Each step uses both a color AND a text label (not color alone):
+**Process loop diagram (centered, large):**
+- A square-ish arrangement of 4 step boxes connected by arrows (not a perfect circle — 4 rectangular boxes in a 2×2 arrangement with arrows flowing clockwise between them).
+- Each step box: rounded rectangle, border-radius 8px, border 2px solid (matching color), fill 12% opacity of that color, padding 14px 16px.
+- Arrow between steps: 2px solid `#D4CFC8`, arrowhead. Flow: 1 → 2 → 3 → 4 → 1.
 
-  Step 1 [red fill, top]: Label: `1 — Recon`
-  "Scan the target. Build a picture of what's there."
+Step 1 (top-left, border/text `#8B1A1A`):
+- Badge: IBM Plex Mono 700 14pt `#8B1A1A` in small circle: `1`
+- Label: Source Sans 3 700 17pt `#1A1A2E`: `Recon`
+- Description: Source Sans 3 400 14pt `#6B6B7A`: "Scan the target. Build a picture of what’s there."
 
-  Step 2 [cyan fill, right]: Label: `2 — Plan`
-  "Decide what to attack next — using the dependency graph."
+Step 2 (top-right, border/text `#2E4A7A`):
+- Badge: `2`
+- Label: `Plan`
+- Description: "Decide what to attack next — using the dependency graph."
 
-  Step 3 [amber fill, bottom]: Label: `3 — Attack`
-  "Send in a specialist agent. Run the attempt."
+Step 3 (bottom-right, border/text `#A0631A`):
+- Badge: `3`
+- Label: `Attack`
+- Description: "Send in a specialist agent. Run the attempt."
 
-  Step 4 [green fill, left]: Label: `4 — Learn`
-  "Did it work? Update the graph. Store the lesson. Repeat."
+Step 4 (bottom-left, border/text `#2A6B3C`):
+- Badge: `4`
+- Label: `Learn`
+- Description: "Did it work? Update the graph. Store the lesson. Repeat."
 
-  Center label (small): `VDG drives the loop`
+Center label (between the 4 boxes, Source Sans 3 400 italic 14pt `#9A9AAA`):
+- `VDG drives the loop`
 
-- Below: 2 plain design principles (icon + one sentence each):
-  - Each attack attempt runs with a clean slate — no leftover noise from previous steps
-  - Facts (what the agent confirmed) are kept separate from guesses (what it thinks might work)
+**Below diagram (two design principles, horizontal row, separated by 1px `#D4CFC8` divider):**
+- Principle 1: Source Sans 3 600 15pt `#1A1A2E`: `Clean Slate per Attempt` + Source Sans 3 400 14pt `#6B6B7A`: "Each attack attempt runs with fresh context — no leftover noise from previous steps."
+- Principle 2: Source Sans 3 600 15pt `#1A1A2E`: `Facts vs. Guesses` + Source Sans 3 400 14pt `#6B6B7A`: "What the agent confirmed is kept strictly separate from what it infers."
 
-**Animation:** Loop steps draw clockwise (300ms each). Center label fades in after. Design principles stagger in below.
+**No animations.**
 
 **Speaker note:** "The basic loop: scan, pick what to attack using the graph, attempt it, learn from the result, repeat. The two design principles — fresh context per attempt and strict separation of facts from hypotheses — are directly motivated by the failure modes PentestGPT and the PentestEval ablation identified."
 
 ---
 
-### SLIDE 16 — Where We Will Test
+### SLIDE 16 — Evaluation — Three Attack Surfaces
 
-**Layout:** Three clean cards — one per attack surface. Simple. No metric targets.
+**Layout type:** C-TYPE (Card Grid — three equal horizontal cards)
 
-**Content:**
-- Slide title: `Evaluation — Three Attack Surfaces`
-*(No amber sub-label chip — covered by Slide 12 transition banner)*
+**Header:** Title = `Evaluation — Three Attack Surfaces` (Playfair Display 700, 44pt). Authority bar.
 
-- Three equal surface cards (horizontal):
+**Three surface cards (horizontal, equal width, 20px gap):**
 
-  Card 1 [web icon, red border]:
-  Surface: `Web Applications`
-  Benchmark: CVE-Bench — 40 real critical CVEs
-  Question: "Can the agent find and exploit web vulnerabilities without a hint?"
+Card 1 (border-top 3px `#8B1A1A`):
+- Background: `#EFEBE3`
+- Label (Source Sans 3 700 small-caps 11pt `#8B1A1A`): `WEB APPLICATIONS`
+- Benchmark line: IBM Plex Mono 400 13pt `#6B6B7A`: `CVE-Bench — 40 real critical CVEs`
+- Question (Source Sans 3 400 16pt `#1A1A2E`): "Can the agent find and exploit web vulnerabilities without a hint?"
 
-  Card 2 [API icon, cyan border]:
-  Surface: `GraphQL APIs`
-  Benchmark: PrediQL — 6 real GraphQL APIs
-  Question: "Can the agent abuse API schemas and find injection points?"
+Card 2 (border-top 3px `#2E4A7A`):
+- Background: `#EFEBE3`
+- Label: `GRAPHQL APIs`
+- Benchmark: `PrediQL — 6 real GraphQL APIs`
+- Question: "Can the agent abuse API schemas and find injection points?"
 
-  Card 3 [network icon, amber border]:
-  Surface: `Multi-Host Networks`
-  Benchmark: MHBench — 40 multi-host environments
-  Question: "Can the agent move laterally across hosts and escalate privileges?"
+Card 3 (border-top 3px `#A0631A`):
+- Background: `#EFEBE3`
+- Label: `MULTI-HOST NETWORKS`
+- Benchmark: `MHBench — 40 multi-host environments`
+- Question: "Can the agent move laterally across hosts and escalate privileges?"
 
-- Bottom guiding principle (amber italic): "We only test on attack surfaces that already have a published, oracle-backed benchmark. No custom benchmarks."
+**Bottom guiding principle (below cards, full width):**
+- Tertiary callout (amber border): Source Sans 3 600 15pt `#7A4F1A`: "We only test on attack surfaces that already have a published, oracle-backed benchmark. No custom benchmarks."
 
-**Animation:** Cards slide up with 150ms stagger. Bottom principle fades in last.
+**No animations.**
 
 **Speaker note:** "Three attack surfaces, three independent benchmark suites, each with automated oracles. We're not building our own benchmark — we're evaluating on the ones that already exist. The oracle-backed setup means results are reproducible and can be directly compared to prior work."
 
@@ -798,72 +807,84 @@ Card C3 (border-top 3px `#2A6B3C`):
 
 ### SLIDE 17 — Project Timeline
 
-**Layout:** Simple horizontal timeline. 4 phases, each with both a color fill AND a text badge for status (not color alone).
+**Layout type:** V-TYPE (Visual-Stack — timeline diagram occupies center, chips below)
 
-**Content:**
-- Slide title: `Project Timeline`
-- Sub-label: `6-month thesis program · Sep 2026 — Mar 2027`
+**Header:** Title = `Project Timeline` (Playfair Display 700, 44pt). Authority bar. Sub-label: Source Sans 3 400 13pt `#6B6B7A`: `6-month thesis program  ·  September 2026 — March 2027`
 
-- Timeline (4 phases, left to right). Each phase has a colored bar AND a text badge:
+**Timeline diagram (full content width, ~50% slide height):**
+- Horizontal rail: 3px solid `#D4CFC8`, spanning full width.
+- 4 phase segments above the rail.
 
-  Phase 1 [GREEN solid bar]: Sep 2026
-  "Literature Review + Architecture Design"
-  Badge (text): `DONE`
+Phase 1 (September 2026):
+- Bar fill: `#2A6B3C` (forest green, solid)
+- Date label: IBM Plex Mono 400 12pt `#6B6B7A`: `Sep 2026`
+- Phase label: Source Sans 3 700 15pt `#1A1A2E`: `Literature Review + Architecture Design`
+- Status badge: bg `#D6EDDA`, border 1px `#2A6B3C`, text Source Sans 3 700 11pt `#2A6B3C`: `DONE`
+- Phase dot: 14px circle, fill `#2A6B3C`
 
-  Phase 2 [AMBER striped bar]: Oct–Nov 2026
-  "Build + Early Testing"
-  Badge (text): `UP NEXT`
+Phase 2 (October – November 2026):
+- Bar fill: `#A0631A` (amber), dashed/striped texture
+- Date label: `Oct – Nov 2026`
+- Phase label: `Build + Early Testing`
+- Status badge: bg `#F2EAD9`, border 1px `#A0631A`, text `#A0631A`: `UP NEXT`
+- Phase dot: 14px circle, fill `#A0631A`
 
-  Phase 3 [DARK outlined bar]: Dec–Jan 2027
-  "Run Experiments"
-  Badge (text): `PLANNED`
+Phase 3 (December 2026 – January 2027):
+- Bar fill: `#EFEBE3` (empty/outlined only), border 1.5px `#D4CFC8` dashed
+- Date label: `Dec 2026 – Jan 2027`
+- Phase label: `Run Experiments`
+- Status badge: bg `#EFEBE3`, border 1px `#D4CFC8`, text Source Sans 3 400 11pt `#9A9AAA`: `PLANNED`
+- Phase dot: 14px circle, fill `#D4CFC8`
 
-  Phase 4 [DARK outlined bar]: Feb–Mar 2027
-  "Write + Submit"
-  Badge (text): `PLANNED`
+Phase 4 (February – March 2027):
+- Same as Phase 3 styling.
+- Phase label: `Write + Submit`
+- Status badge: `PLANNED`
 
-- 3 status chips below timeline (each chip has both a color AND a text label):
-  - Green chip, label `Complete`: Literature review · Inception report
-  - Amber chip, label `Next`: System build · Early tests
-  - Grey chip, label `Planned`: Full experiments · Thesis writing
+**Status chips (below timeline, horizontal row, 20px gap):**
+- Green chip (bg `#D6EDDA`, border `#2A6B3C`, text `#2A6B3C`): `✓  Complete` — sub-text Source Sans 3 400 12pt `#6B6B7A`: `Literature review  ·  Inception report`
+- Amber chip (bg `#F2EAD9`, border `#A0631A`, text `#A0631A`): `►  Next` — sub-text: `System build  ·  Early tests`
+- Grey chip (bg `#EFEBE3`, border `#D4CFC8`, text `#9A9AAA`): `□  Planned` — sub-text: `Full experiments  ·  Thesis writing`
 
-**Animation:** Timeline fills left-to-right. Phase labels drop in. Status chips fade in at bottom.
+**No animations.**
 
 **Speaker note:** "We're at the end of Phase 1. The literature review and architecture design are done — this presentation is the deliverable. Phase 2 starts next: building the prototype and running early tests on PentestEval to see if the dependency inference idea holds up at all before we commit to the full benchmark runs."
 
 ---
 
-### SLIDE 18 — Challenges We Already See
+### SLIDE 18 — Challenges We Are Aware Of
 
-**Layout:** 2x2 grid of simple challenge cards. One title + one plain-English sentence each.
+**Layout type:** C-TYPE (Card Grid — 2×2 grid of challenge cards)
 
-**Content:**
-- Slide title: `Challenges We Are Aware Of`
-- Sub-label: `Surfaced during literature review — not surprises`
+**Header:** Title = `Challenges We Are Aware Of` (Playfair Display 700, 44pt). Authority bar. Sub-label: Source Sans 3 400 13pt `#6B6B7A`: `Surfaced during literature review — not surprises`
 
-- 4 cards (2x2):
+**Four challenge cards (2×2 grid, equal size, ~280px × 180px each, 20px gaps):**
 
-  Card 1 (red border + text label `HIGH`):
-  Icon: question mark over a graph
-  Title: `Inferring Dependencies Is Hard`
-  "Building the prerequisite graph using an LLM — not human annotation — will be noisy. We need to measure how noisy before relying on it."
+Each card:
+- Background: `#EFEBE3`
+- Border-left: 3px solid (per card color)
+- Padding: 16px 18px
+- Risk badge: top-right of card, Source Sans 3 700 10pt, padded 3px 8px, border-radius 3px
+- Card title: Source Sans 3 700 16pt `#1A1A2E`
+- Description: Source Sans 3 400 14pt `#6B6B7A`
 
-  Card 2 (amber border + text label `MEDIUM`):
-  Icon: lab flask vs. real globe
-  Title: `Sandbox vs. Real World`
-  "What works on a controlled benchmark may not hold on a real-world target. We'll test both and report the gap honestly."
+Card 1 (border `#8B1A1A`, risk badge bg `#F5D5D5` text `#7A1A1A`: `HIGH`):
+- Title: `Inferring Dependencies Is Hard`
+- Description: "Building the prerequisite graph using an LLM — not human annotation — will be noisy. We need to measure how noisy before relying on it."
 
-  Card 3 (amber border + text label `MEDIUM`):
-  Icon: memory chip with warning triangle
-  Title: `Memory Could Backfire`
-  "A strategy that worked against software version 1 might be harmful against version 2. This needs a safety mechanism."
+Card 2 (border `#A0631A`, risk badge bg `#F5E9D0` text `#7A4F1A`: `MEDIUM`):
+- Title: `Sandbox vs. Real World`
+- Description: "What works on a controlled benchmark may not hold on a real-world target. We'll test both and report the gap honestly."
 
-  Card 4 (cyan border + text label `MANAGEABLE`):
-  Icon: tuning sliders
-  Title: `Tuning Is Tricky`
-  "The approach has parameters to adjust. Results must not depend on a single lucky configuration."
+Card 3 (border `#A0631A`, risk badge bg `#F5E9D0` text `#7A4F1A`: `MEDIUM`):
+- Title: `Memory Could Backfire`
+- Description: "A strategy that worked against software version 1 might be harmful against version 2. This needs a safety mechanism."
 
-**Animation:** Cards appear 2x2 with 150ms stagger. Icons animate first, then text.
+Card 4 (border `#2E4A7A`, risk badge bg `#E8EDF5` text `#2E4A7A`: `MANAGEABLE`):
+- Title: `Tuning Is Tricky`
+- Description: "The approach has parameters to adjust. Results must not depend on a single lucky configuration."
+
+**No animations.**
 
 **Speaker note:** "These four challenges came directly out of the literature — we didn't discover them in implementation because we haven't started yet. Finding them early is the point of an inception review. Challenge 1 is the most fundamental: if LLM-inferred dependency edges are too noisy, the whole VDG approach loses its foundation. We'll gate the main experiments on an early precision check."
 
@@ -871,12 +892,14 @@ Card C3 (border-top 3px `#2A6B3C`):
 
 ### SLIDE 19 — Where We Are
 
-**Layout:** Two-column status. Committee question callout. Bold closing statement.
+**Layout type:** E-TYPE (Even Two-Column — 50% / 50%) with a full-width closing statement row
 
-**Content:**
-- Slide title: `Where We Are`
+**Header:** Title = `Where We Are` (Playfair Display 700, 44pt). Authority bar.
 
-- Left column — Done (green checkmarks):
+**Left column (50%) — Done:**
+- Column header: Source Sans 3 700 small-caps 13pt `#2A6B3C`, letter-spacing 0.10em: `COMPLETED`
+- 1px bottom rule `#D4CFC8`, then 12px spacer
+- Six items, each: `✓` in `#2A6B3C` Source Sans 3 700 + Source Sans 3 400 16pt `#1A1A2E` text:
   - Read and synthesised 11 papers on autonomous VAPT
   - Identified 2 quantified failure modes
   - Formalized the research gap
@@ -884,20 +907,24 @@ Card C3 (border-top 3px `#2A6B3C`):
   - Sketched the architecture approach
   - Submitted inception report
 
-- Right column — What's coming (forward arrows, amber):
+**Right column (50%) — What's coming:**
+- Column header: Source Sans 3 700 small-caps 13pt `#A0631A`: `COMING NEXT`
+- Five items, each: `►` in `#A0631A` + Source Sans 3 400 16pt `#1A1A2E` text:
   - Build the prototype
   - Early experiments to test the ideas
   - Full benchmark evaluation (web, GraphQL, multi-host)
   - Refine based on what we find
   - Write the thesis
 
-- **Committee question callout** (styled as a small, secondary-text card, positioned above the closing line — label `QUESTION FOR THE COMMITTEE` in muted caps, followed by normal-weight sentence):
-  "Does the VDG + dependency-aware exploration direction look worth building out, or should we narrow scope before implementation starts?"
+**Committee question callout (positioned above closing statement, full width):**
+- Neutral callout (grey border, `#EFEBE3` fill):
+  - Label (Source Sans 3 700 small-caps 10pt `#9A9AAA`): `QUESTION FOR THE COMMITTEE`
+  - Text (Source Sans 3 400 15pt `#1A1A2E`): "Does the VDG + dependency-aware exploration direction look worth building out, or should we narrow scope before implementation starts?"
 
-- Bottom centered (Syne 700, 26px, white):
-  "The gap is identified. The direction is set. Now — we go build it."
+**Bottom closing statement (centered, full width, 24px margin above):**
+- Playfair Display 700 26pt `#1A1A2E`: `The gap is identified. The direction is set. Now — we go build it.`
 
-**Animation:** Left items appear with checkmark-draw animation. Right items stagger in. Committee callout fades in before the closing statement. Closing statement fades in last.
+**No animations.**
 
 **Speaker note:** "Six things done, five to go. The committee question is genuine — we're at the last decision point before six months of implementation. If the VDG direction looks too risky or too narrow, now is the time to hear that."
 
@@ -905,31 +932,42 @@ Card C3 (border-top 3px `#2A6B3C`):
 
 ### SLIDE 20 — Thank You
 
-**Layout:** Full-bleed. Centered. Minimal.
+**Layout type:** Q-TYPE (Closing Slide — special rules apply)
 
-**Content:**
-- Background: Dark charcoal + subtle hex/circuit trace (8% opacity)
-- Center top: `RedGrid` (large gradient text, red to cyan)
-- Center: `Thank You` (large, white, Syne 800)
-- Sub-line (cyan): `Questions welcome`
-- Thin separator (gradient red to cyan)
-- Below separator — two small columns:
+**Background:** `#F7F4EF` warm off-white. The same single 8px crimson left-edge bar as Slide 01. No other decoration.
 
-  Key Numbers:
-    11 papers surveyed
-    3 contribution directions
-    3 attack surfaces tested
-    40 critical CVEs (primary benchmark)
+**Content (top to bottom, center-aligned within the right 90% of slide):**
 
-  Key Terms (plain English):
-    VDG — the dependency graph we plan to build
-    UCB — how the agent decides what to try next
-    ADM — the weakest stage in all current systems
-    RedGrid — our system (not yet built)
+1. **Center-top zone (~30% from top):**
+   - `RedGrid` — Playfair Display 700 52pt `#8B1A1A` (crimson)
+   - 2px hairline `#D4CFC8`, spanning 300px centered, 12px below project name
+   - `Thank You` — Playfair Display 700 56pt `#1A1A2E` (deep ink navy)
+   - `Questions welcome` — Source Sans 3 400 italic 20pt `#2E4A7A` (slate blue)
 
-- Bottom-left: `[Author Names] · [University] · Sep 2026`
+2. **Below separator (two columns, equal width, 40px gap, ~60% from top):**
 
-**Animation:** "Thank You" fades in with soft scale-up. Numbers count up. Terms stagger in.
+   **Left column — Key Numbers:**
+   - Column header: Source Sans 3 700 small-caps 11pt `#9A9AAA`: `KEY NUMBERS`
+   - Four items, each: IBM Plex Mono 600 18pt `#8B1A1A` number + Source Sans 3 400 14pt `#6B6B7A` label:
+     - `11` — papers surveyed
+     - `3` — contribution directions
+     - `3` — attack surfaces for evaluation
+     - `40` — critical CVEs in primary benchmark
+
+   **Right column — Key Terms:**
+   - Column header: Source Sans 3 700 small-caps 11pt `#9A9AAA`: `KEY TERMS`
+   - Four items, each: IBM Plex Mono 600 14pt `#2E4A7A` term + Source Sans 3 400 13pt `#6B6B7A` definition:
+     - `VDG` — the dependency graph we plan to build
+     - `UCB` — how the agent decides what to try next
+     - `ADM` — the weakest stage in all current systems
+     - `RedGrid` — our system (not yet built)
+
+3. **Bottom-left (inside footer zone):**
+   - Source Sans 3 400 13pt `#9A9AAA`: `[Author Names]  ·  [University Name]  ·  September 2026`
+
+- No university logo on this slide. No RedGrid watermark. No progress bar.
+
+**No animations.**
 
 **Speaker note:** "Thank you. We're happy to go deeper on any of the literature findings, on the gap analysis, or on the architecture direction. Any feedback on whether the scope is appropriately set for six months of thesis work is very welcome."
 
@@ -937,16 +975,19 @@ Card C3 (border-top 3px `#2A6B3C`):
 
 ## Global Slide Requirements
 
-1. **Slide numbers:** Bottom-right corner, format `XX / 20`, secondary text color.
-2. **Progress bar:** 2px top-of-slide bar (red to cyan gradient), filled proportionally. Animates on transition.
-3. **Navigation:** Left/right arrow keys; swipe on touch devices.
-4. **Speaker mode:** Speaker notes visible only in presenter view.
-5. **Speaker notes:** Every slide must include a 1–2 sentence speaker note — a natural spoken-language version of what the presenter says while that slide is on screen, not a restatement of the on-slide text. Any explanatory content removed from a slide body per the density-reduction rule should be relocated into that slide's speaker note.
-6. **Watermark:** Small `RedGrid` wordmark bottom-left on all slides except title and Q&A.
-7. **Crowding rule:** Split into two slides rather than shrinking font if content feels tight.
-8. **Accessibility:** All text must maintain WCAG AA contrast against dark background.
-9. **Status encoding:** Any element whose meaning is conveyed by color (node status, pass/fail cell shading, phase status, risk level, etc.) must also carry a text label or icon — never color alone. This applies specifically to: the VDG diagram (Slide 10), the process loop steps (Slide 15), the comparison table cell shading (Slides 4 and 8), the timeline phase bars (Slide 17), and the challenge card borders (Slide 18).
-10. **Export format:** HTML (reveal.js or equivalent) with PDF export option. Fonts must be embedded locally in the export, not link-loaded from a CDN, to ensure offline presentation reliability.
+1. **Slide numbers:** Bottom-right corner, format `02 / 20` (IBM Plex Mono 13pt, `#9A9AAA`). No slide number on Slide 01 (title) or Slide 20 (Q&A).
+2. **Progress indicator:** A 3px horizontal bar at the very bottom edge of every content slide (Slides 02–19), color `#8B1A1A` (crimson), filled proportionally to slide position (e.g., Slide 05 = 25%). Static — not animated.
+3. **Navigation:** Left/right arrow keys; swipe on touch devices (for HTML export).
+4. **Speaker mode:** Speaker notes visible only in presenter view. Never visible on the projected display.
+5. **Speaker notes:** Every slide must include a 1–2 sentence speaker note — a natural spoken-language version of what the presenter says while that slide is on screen, not a restatement of the on-slide text. Any explanatory content removed from a slide body should be relocated into that slide's speaker note.
+6. **RedGrid watermark:** Bottom-left footer on Slides 02–19 only. `RedGrid` in Playfair Display 700 11pt `#8B1A1A`. NOT on Slide 01 (title uses the full logo) or Slide 20 (closing).
+7. **Crowding rule:** If content feels tight at specified font sizes, split into two slides rather than shrinking fonts or reducing spacing. Maintain all typographic sizes specified.
+8. **Accessibility:** All text must maintain WCAG AA contrast ratio (4.5:1 minimum) against the `#F7F4EF` warm off-white background. Check all accent colors — in particular `#8B1A1A` on `#F7F4EF` (verified pass) and `#2E4A7A` on `#F7F4EF` (verified pass).
+9. **Status encoding:** Any element whose meaning is conveyed by color must also carry a text label or icon — never color alone. This applies to: VDG node status (Slide 10), process loop steps (Slide 15), comparison table cell shading (Slides 04 and 08), timeline phase bars (Slide 17), challenge card risk badges (Slide 18).
+10. **Export format:** PPTX (primary) with one-click PDF export. All fonts must be embedded in the PPTX file — not linked from CDN. For HTML export: use `@font-face` with local font files, `transition: none` for all slides.
+11. **Slide background:** `#F7F4EF` for ALL slides (including title and closing). No dark slides, no gradient backgrounds, no texture fills except where explicitly specified as a structural element (the 8px crimson left edge bar on Slide 01 and 20).
+12. **Whitespace discipline:** Each slide must have at least 15% of its visible area as empty/background space. Do not fill every pixel. Whitespace is structure.
+
 
 ---
 
