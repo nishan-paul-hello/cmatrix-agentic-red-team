@@ -222,18 +222,29 @@ Embed all fonts locally in the PPTX/export package. Do NOT link to Google Fonts 
 
 ### SLIDE 01 — Title Slide
 
-**Layout:** Full-bleed dark background. Subtle hexagonal/circuit-trace pattern in dark red at 5% opacity. Centered layout.
+**Layout type:** T-TYPE (Title Slide — special rules apply)
 
-**Content:**
-- Small label top-left: `MSc Thesis · Inception Stage · Sep 2026` (secondary text, monospace)
-- Main title (Syne 800, large): `RedGrid`
-- Subtitle (Inter 500, 22px, cyan): `Dependency-Constrained UCB Exploration for Autonomous Penetration Testing`
-- Thin horizontal line separator (2px, gradient red to cyan)
-- Author names placeholder: `[Author Names]`
-- `[University Name] · Department of Computer Science`
-- Bottom-right badge (dark-red chip): `Early Stage — Inception Report`
+**Background:** `#F7F4EF` warm off-white. NO pattern, NO texture, NO hexagons. The slide breathes through whitespace alone.
 
-**Animation:** Title "RedGrid" appears with glitch-text effect (character scramble then settle, 800ms). Subtitle fades in. Rest staggers.
+**Visual structure:**
+- A single bold 3px vertical crimson (`#8B1A1A`) left edge bar, running full slide height on the left — 8px wide, flush to slide edge. This is the only graphic "decoration" on this slide.
+- Content is horizontally centered in the right 90% of the slide area.
+
+**Content (top to bottom, center-aligned):**
+1. **Top-left corner:** University logo (height 52px, monochrome navy `#1A1A2E`), placed 40px from top, 40px from left (adjacent to vertical bar). Below logo: `[University Name]` in Source Sans 3 400 12pt `#6B6B7A`, and `Department of Computer Science` in Source Sans 3 400 11pt `#9A9AAA`.
+2. **Upper-center zone (vertically centered ~40% from top):**
+   - Metadata label: `MSc Thesis  ·  Inception Stage  ·  September 2026` — Source Sans 3, small-caps, 11pt, `#9A9AAA`, letter-spacing 0.12em
+   - Project name: `RedGrid` — Playfair Display 700, 72pt, `#8B1A1A` (crimson). This is the single largest element on the slide.
+   - Below project name: A 2px hairline `#D4CFC8`, spanning 360px centered.
+   - Subtitle: `Dependency-Constrained UCB Exploration for Autonomous Penetration Testing` — Source Sans 3 400, 22pt, `#2E4A7A` (slate blue). Line-wraps onto 2 lines max.
+3. **Mid-center zone (~65% from top):**
+   - `Presented by` label: Source Sans 3 600 small-caps 11pt `#9A9AAA`, letter-spacing 0.10em
+   - `[Author Names]` — Source Sans 3 600 18pt `#1A1A2E`
+   - Supervisor line: `Supervisor: [Supervisor Name]` — Source Sans 3 400 14pt `#6B6B7A`
+4. **Bottom-right corner (inside footer zone):**
+   - Badge chip: `Early Stage — Inception Report` — Source Sans 3 600 11pt, background `#F2EAD9`, border 1px `#A0631A`, text `#7A4F1A`, padding 5px 12px, border-radius 3px.
+
+**No animations.**
 
 **Speaker note:** "Good morning — today we present the inception stage of RedGrid, our 6-month thesis on autonomous penetration testing agents."
 
@@ -241,23 +252,26 @@ Embed all fonts locally in the PPTX/export package. Do NOT link to Google Fonts 
 
 ### SLIDE 02 — Motivation Hook
 
-**Layout:** Full-bleed. Left 60%: bold text statement. Right 40%: dramatic visual.
+**Layout type:** L-TYPE (Left-Heavy Two-Column — Left 60% / Right 40%)
 
-**Content:**
-- Left:
-  - Small label: `WHY THIS MATTERS`
-  - Headline (Syne, 36px): "Attackers move fast. Defenders move slow. Automated testers don't move at all."
-  - Body: "Security vulnerabilities are found daily in web apps, APIs, and networks. Human pen testers are scarce and expensive. Automated scanners use fixed rule-sets — they can't reason, adapt, or chain exploits."
-  - Callout box (amber border): "The question: Can an LLM agent carry out penetration testing autonomously — without step-by-step human direction?"
+**Header:** Title = `Why This Matters` (Playfair Display 700, 44pt). Authority bar below title (3px crimson, 55% width).
 
-- **Agenda strip** (small, horizontal, 3 labeled beats — positioned below the callout box, subtle styling: secondary text, thin divider lines between beats):
-  - Beat 1 (red dot): `Deep dive — Problem + What the literature says (Slides 3–11)`
-  - Beat 2 (amber dot): `High-level sketch — Architecture + Plan (Slides 12–16)`
-  - Beat 3 (grey dot): `Where we're headed — Timeline + Status (Slides 17–19)`
+**Left column (60%):**
+- Metadata label (small-caps Source Sans 3 11pt `#9A9AAA`): `WHY THIS MATTERS`
+- Headline (Playfair Display 400 italic, 28pt, `#1A1A2E`, line-height 1.3): *"Attackers move fast. Defenders move slow. Automated testers don't move at all."*
+- Body (Source Sans 3 400 19pt, `#1A1A2E`, line-height 1.55): "Security vulnerabilities are found daily in web apps, APIs, and networks. Human pen testers are scarce and expensive. Automated scanners use fixed rule-sets — they cannot reason, adapt, or chain exploits."
+- **Callout box (tertiary — amber border):** `The question:` (Source Sans 3 700) `Can an LLM agent carry out penetration testing autonomously — without step-by-step human direction?`
+- **Agenda strip** (positioned below callout box, separated by 20px gap + 1px `#D4CFC8` hairline above it):
+  - Label (small-caps 10pt `#9A9AAA`): `TALK STRUCTURE`
+  - Three beats on one row, separated by thin `#D4CFC8` vertical dividers:
+    - `◆ Slides 3–11` — Source Sans 3 600 14pt `#8B1A1A` + sub-text Source Sans 3 400 12pt `#6B6B7A`: `Problem & Literature (Deep dive)`
+    - `◆ Slides 12–16` — Source Sans 3 600 14pt `#A0631A` + sub-text `Architecture & Plan (Sketch)`
+    - `◆ Slides 17–19` — Source Sans 3 600 14pt `#6B6B7A` + sub-text `Timeline & Status`
 
-- Right: Stylized illustration — target with concentric circles, red cursor arrow, shield icons scattered. Clean, dark background.
+**Right column (40%):**
+- A clean, flat illustration: concentric target rings in ink navy `#1A1A2E` on `#EFEBE3` background panel, with a single crimson arrow pointing at the center from upper-right. No gradients, no glow. Minimalist, hand-drawn-feeling geometry. Below the illustration: a Source Sans 3 400 italic 12pt `#6B6B7A` caption: *"Attack surface exploration — the core challenge."*
 
-**Animation:** Text lines stagger in. Callout box pulses gently. Agenda strip fades in last, below the callout.
+**No animations.**
 
 **Speaker note:** "Before we dive in — a quick map of this talk. We'll spend most of our time on the problem and the literature, because that's where our work is deepest right now. The architecture and evaluation slides are intentional sketches — we're at inception stage. Questions on direction are very welcome at the end."
 
@@ -265,48 +279,71 @@ Embed all fonts locally in the PPTX/export package. Do NOT link to Google Fonts 
 
 ### SLIDE 03 — Literature Scope
 
-**Layout:** Clean grid of 11 paper cards, 4-column layout.
+**Layout type:** C-TYPE (Card Grid — 3 rows × 4 columns, with last row having 3 cards + 1 summary block)
 
-**Content:**
-- Slide title: `The Literature We Surveyed`
-- Sub-label: `11 papers · Focused reading · Sep 2026`
-- 11 paper cards with: short-name in cyan, one-line descriptor in white, type icon, benchmark badge.
+**Header:** Title = `The Literature We Surveyed` (Playfair Display 700, 44pt). Authority bar. Sub-label (Source Sans 3 400 13pt `#6B6B7A`): `11 papers  ·  Focused reading  ·  September 2026`
 
-Paper list:
-1. Fang et al. 2024a — Foundational: GPT-4 hacks websites
-2. Fang et al. 2024b — GPT-4 exploits one-day CVEs (87%)
-3. HPTSA (Zhu 2024) — Hierarchical multi-agent, zero-day CVEs
-4. PentestGPT (Deng 2024) — Context-loss failure mode identified
-5. VulnBot (Kong 2025) — Role-specialised multi-agent dispatch
-6. CHECKMATE (Wang 2025) — Classical planning + LLM agents
-7. Incalmo (Singer 2025) — Multi-host / Active Directory red team
-8. PrediQL (Liu 2025) — GraphQL schema-aware LLM fuzzer
-9. CVE-Bench (Zhu 2025) — 40 critical web CVEs, oracle-backed
-10. PentestEval (Yang 2025) — Stage-level pipeline breakdown
-11. Wang et al. 2025 — General LLM agent survey
+**Card design for each paper (11 cards total):**
+- Card background: `#EFEBE3`
+- Card border: 1px `#D4CFC8`
+- Card border-radius: 4px
+- Card size: approximately 340px × 100px
+- Card padding: 12px 14px
+- **Top line:** Paper short-name in IBM Plex Mono 600 13pt `#2E4A7A` (slate blue)
+- **Second line:** Author + year in Source Sans 3 400 11pt `#9A9AAA`
+- **Third line:** One-sentence descriptor in Source Sans 3 400 13pt `#1A1A2E`
+- **Bottom-right tag:** Type badge — `Agent System` or `Benchmark` — Source Sans 3 600 10pt. Agent System badge: `#E8EDF5` bg, `#2E4A7A` text. Benchmark badge: `#F2EAD9` bg, `#7A4F1A` text.
+- No hover effects. Cards are static.
 
-**Animation:** Cards appear as wave (60ms stagger). On hover: card lifts with cyan border glow.
+**Paper list (all 11 cards):**
+1. `Fang 2024a` — Fang et al., 2024 — "GPT-4 successfully exploits real web vulnerabilities" — [Agent System]
+2. `Fang 2024b` — Fang et al., 2024 — "GPT-4 exploits one-day CVEs at 87% with description" — [Agent System]
+3. `HPTSA` — Zhu et al., 2024 — "Hierarchical multi-agent system for zero-day CVEs" — [Agent System]
+4. `PentestGPT` — Deng et al., 2024 — "Context loss is the dominant failure in long sessions" — [Agent System]
+5. `VulnBot` — Kong et al., 2025 — "Role-specialised multi-agent dispatch architecture" — [Agent System]
+6. `CHECKMATE` — Wang et al., 2025 — "Classical planning integrated with LLM agent execution" — [Agent System]
+7. `Incalmo` — Singer et al., 2025 — "Multi-host orchestration across Active Directory" — [Agent System]
+8. `PrediQL` — Liu et al., 2025 — "Schema-aware LLM fuzzer for GraphQL APIs" — [Agent System]
+9. `CVE-Bench` — Zhu et al., 2025 — "40 critical web CVEs with oracle-backed evaluation" — [Benchmark]
+10. `PentestEval` — Yang et al., 2025 — "Stage-level breakdown of pipeline failure modes" — [Benchmark]
+11. `Wang 2025` — Wang et al., 2025 — "General survey of LLM-based agent architectures" — [Agent System]
+
+**12th block (summary card, same size as paper cards, rightmost in last row):**
+- Background: `#EDE9E1`, border-left 3px `#8B1A1A`
+- Text: Source Sans 3 600 13pt `#1A1A2E`: `9 agent systems  +  2 benchmarks`
+- Sub-text: Source Sans 3 400 12pt `#6B6B7A`: `Benchmarks highlighted — primary failure-mode data source`
+
+**No animations.**
 
 **Speaker note:** "We focused on 11 papers: nine are LLM agent systems, two are benchmark papers. The benchmark papers — CVE-Bench and PentestEval — are the most important ones for us, because they give us the quantitative failure-mode data we'll look at next."
+
 
 ---
 
 ### SLIDE 04 — Dominant Survey Finding
 
-**Layout:** Bold statement slide. Large headline, comparison table below.
+**Layout type:** S-TYPE (Full Statement — pull-quote top, two-column comparison table below)
 
-**Content:**
-- Small label: `WHAT THE LITERATURE AGREES ON`
-- Main statement (Syne 800, 42px, centered): "Architecture, not model scale, is the dominant variable."
-- 2-column comparison table (full width, no supporting sentence on-slide — move that to speaker note):
-  - Column headers: `Unstructured ReAct + GPT-4` (red-tinted) | `Structured Pipeline + GPT-4o-mini` (cyan-tinted)
-  - Row 1: Depth-first tunnel vision | Broad, structured exploration
-  - Row 2: Context loss in long sessions | Scoped per-invocation context
-  - Row 3: No failure recovery | Retry / adapt / escalate loops
-  - Row 4: Implicit planning | Explicit dependency modeling
-  - Cell styling: "None"/negative cells = red-tinted. Positive cells = cyan-tinted. Each cell also carries a short text label (not color alone).
+**Header:** Title = `What the Literature Agrees On` (Playfair Display 700, 44pt). Authority bar.
 
-**Animation:** Quote types in word-by-word. Table rows stagger in from left.
+**Pull-quote block (top 35% of content area):**
+- Callout box (primary — crimson left border, `#EDE9E1` fill, width 80% centered):
+- Main statement in Playfair Display 400 italic, 30pt, `#1A1A2E`: *"Architecture, not model scale, is the dominant variable."*
+- Source annotation below: Source Sans 3 400 13pt italic `#6B6B7A`: `Consistent finding across: VulnBot, PentestGPT, CHECKMATE, Incalmo, HPTSA, Fang 2024`
+
+**Comparison table (bottom 55% of content area, full width):**
+- 2-column layout — use Table Design System rules
+- Left column header: `Unstructured ReAct + GPT-4` — Source Sans 3 600, header bg `#F5D5D5`, header text `#5A1A1A`
+- Right column header: `Structured Pipeline + GPT-4o-mini` — header bg `#D6EDDA`, header text `#1A4A28`
+- Header bottom border: 2px `#8B1A1A`
+- Row 1: `✗ Depth-first tunnel vision` (left, negative cell) | `✓ Broad, structured exploration` (right, positive cell)
+- Row 2: `✗ Context loss in long sessions` | `✓ Scoped per-invocation context`
+- Row 3: `✗ No failure recovery` | `✓ Retry / adapt / escalate loops`
+- Row 4: `✗ Implicit planning only` | `✓ Explicit dependency modeling`
+- All negative cells: bg `#F5D5D5`, text `#5A1A1A`, icon `✗`. All positive cells: bg `#D6EDDA`, text `#1A4A28`, icon `✓`.
+- Caption: Source Sans 3 400 13pt italic `#6B6B7A`: `Synthesised from 6 independently-reaching papers — September 2026 review`
+
+**No animations.**
 
 **Speaker note:** "Six papers independently reach this conclusion — AWE, AutoPT, VulnBot, PentestGPT, D-CIPHER, and Incalmo. The consistent finding: if you give a cheap model a well-designed architecture, it outperforms an expensive model with no structure. That shapes the entire direction of RedGrid."
 
@@ -314,28 +351,33 @@ Paper list:
 
 ### SLIDE 05 — Failure Mode 1: Insufficient Exploration
 
-**Layout:** Two-column. Left: headline + key insight box. Right: animated bar chart.
+**Layout type:** E-TYPE (Even Two-Column — 50% / 50%)
 
-**Content:**
-- Slide title: `Failure Mode 1 — Insufficient Exploration`
-- Left (50%):
-  - Context label (amber): `CVE-Bench · 40 Critical Web CVEs (CVSS 9.0+)`
-  - Headline: "Even the best agent exploits only 13% (one-day) / 10% (zero-day)."
-  - Key insight box (left-bordered red): "The dominant failure is not reasoning quality — it's breadth of search. Agents commit early to a narrow attack path and never come back."
-  - Two bullets max (reduce from 3): `37.5%–80% exploration failure rates across all tested agents` · `Not a smarter-model problem — it's a search problem`
-  *(Move the third bullet — "CVE-Bench Table 5 documents this" — to the speaker note)*
+**Header:** Title = `Failure Mode 1 — Insufficient Exploration` (Playfair Display 700, 40pt). Authority bar.
 
-- Right (50%): Horizontal bar chart — exploration failure rates:
-  - T-Agent (0-day): 80.0% — label shown on bar
-  - AutoGPT (0-day): 72.5% — label shown on bar
-  - Cy-Agent (0-day): 67.5% — label shown on bar
-  - T-Agent (1-day): 55.0% — label shown on bar
-  - AutoGPT (1-day): 45.0% — label shown on bar
-  - Cy-Agent (1-day): 37.5% — label shown on bar
-  - Red bars. Background line at 50% with text label `"50% threshold"` (not color alone).
-  - Caption: `Source: CVE-Bench (Zhu et al. 2025), Table 5`
+**Left column (50%):**
+- Context label (Source Sans 3 600 small-caps 11pt `#A0631A`, letter-spacing 0.10em): `CVE-BENCH  ·  40 CRITICAL WEB CVEs  ·  CVSS 9.0+`
+- Headline (Source Sans 3 700 22pt `#1A1A2E`): "Even the best agent exploits only 13% (one-day) or 10% (zero-day)."
+- **Primary callout (crimson border):** Source Sans 3 400 18pt `#1A1A2E`: "The dominant failure is not reasoning quality — it's breadth of search. Agents commit early to a narrow attack path and never revisit."
+- Two bullets (Source Sans 3 400 18pt `#1A1A2E`, bold lead-in style):
+  - **Range:** `37.5% – 80%` exploration failure rates across all agents tested
+  - **Root cause:** Not a smarter-model problem — it's a search problem
 
-**Animation:** Bars grow left-to-right (600ms ease-out), numbers count up.
+**Right column (50%):**
+- Horizontal bar chart — follow Chart Design System rules
+- Title (Source Sans 3 600 14pt `#6B6B7A`): `Exploration Failure Rate by Agent`
+- Bars (crimson `#8B1A1A`, horizontal, left-to-right, sorted descending):
+  - `T-Agent (0-day)` — 80.0%
+  - `AutoGPT (0-day)` — 72.5%
+  - `Cy-Agent (0-day)` — 67.5%
+  - `T-Agent (1-day)` — 55.0%
+  - `AutoGPT (1-day)` — 45.0%
+  - `Cy-Agent (1-day)` — 37.5%
+- Data labels: IBM Plex Mono 14pt, right of bar end
+- Reference line: dashed 1px `#A0631A` at 50% mark, labeled `50% threshold` in Source Sans 3 12pt `#A0631A`
+- Chart caption: Source Sans 3 400 13pt italic `#6B6B7A`: `Source: CVE-Bench (Zhu et al., 2025), Table 5`
+
+**No animations.**
 
 **Speaker note:** "These numbers come from CVE-Bench Table 5's failure-mode breakdown — a detailed audit of why each agent failed on each CVE. In the zero-day setting, T-Agent fails to explore sufficiently 80% of the time. This isn't random variance — it's consistent across all three agents tested. Agents commit to a narrow path and stay there."
 
@@ -343,24 +385,31 @@ Paper list:
 
 ### SLIDE 06 — Failure Mode 2: Dependency-Reasoning Gap
 
-**Layout:** Two-column. Left: waterfall chart. Right: headline + callout box only.
+**Layout type:** E-TYPE (Even Two-Column — 50% / 50%, chart LEFT, text RIGHT)
 
-**Content:**
-- Slide title: `Failure Mode 2 — The Dependency-Reasoning Gap`
-- Left (50%): Waterfall step-up bar chart — PentestEval GT injection ablation:
-  - SMP Baseline: 0.31 — bar label: `Baseline`
-  - + GT Weakness Gathering (WG): 0.50 (+0.19) — bar label: `+0.19`
-  - + GT Weakness Filtering (WF): 0.53 (+0.03) — bar label: `+0.03`
-  - + GT Attack Decision-Making (ADM): 0.67 (+0.14) — bar label: `+0.14 ★` — highlighted amber — text annotation: `Largest single-stage gain`
-  - Caption: `Source: PentestEval (Yang et al. 2025)`
+**Header:** Title = `Failure Mode 2 — The Dependency-Reasoning Gap` (Playfair Display 700, 38pt). Authority bar.
 
-- Right (50%):
-  - Context label (amber): `PentestEval · 12 Real-World Scenarios · 346 Tasks`
-  - Headline: "Attack Decision-Making (ADM) is the single weakest stage — Spearman rho = 0.25."
-  - Callout box (cyan border): "Ground-truth ADM injection adds +0.14 on top of already-perfect weakness discovery. No existing system closes this gap."
-  *(Remove the "explanation of ADM" paragraph and the "realistic ceiling" note — move both to the speaker note)*
+**Left column (50%) — Waterfall chart:**
+- Chart title: Source Sans 3 600 14pt `#6B6B7A`: `PentestEval GT Injection Ablation — Task Score`
+- Follow Waterfall Chart rules from Chart Design System:
+  - `SMP Baseline` — 0.31 — crimson bar, label `Baseline (0.31)`
+  - `+ GT Weakness Gathering` — 0.50 — green increment bar, label `+0.19`
+  - `+ GT Weakness Filtering` — 0.53 — green increment bar, label `+0.03`
+  - `+ GT Attack Decision-Making` — 0.67 — **amber** (`#A0631A`) bar, label `+0.14 ★`, annotation: `Largest single-stage gain`
+- Dashed connector lines between bars: 1px `#D4CFC8`
+- Y-axis range: 0.20 to 0.75, tick every 0.10
+- Chart caption: Source Sans 3 400 13pt italic `#6B6B7A`: `Source: PentestEval (Yang et al., 2025)`
 
-**Animation:** Waterfall bars cascade (300ms each). The +0.14 bar glows amber on entry.
+**Right column (50%):**
+- Context label (Source Sans 3 600 small-caps 11pt `#A0631A`): `PENTESTEVAL  ·  12 REAL-WORLD SCENARIOS  ·  346 TASKS`
+- Headline (Source Sans 3 700 21pt `#1A1A2E`): "Attack Decision-Making (ADM) is the single weakest stage — Spearman ρ = 0.25."
+- **Secondary callout (slate blue border):** Source Sans 3 400 18pt `#1A1A2E`: "Ground-truth ADM injection adds +0.14 on top of already-perfect weakness discovery. No existing system closes this gap."
+- Spacer (24px)
+- Summary stat block: Two numbers side-by-side:
+  - IBM Plex Mono 600 32pt `#8B1A1A`: `0.25` — sub-label Source Sans 3 400 13pt `#6B6B7A`: `ADM Spearman ρ`
+  - IBM Plex Mono 600 32pt `#2A6B3C`: `+0.14` — sub-label `GT ADM gain`
+
+**No animations.**
 
 **Speaker note:** "ADM — Attack Decision-Making — is the stage where an agent decides which weakness to pursue next, taking into account what earlier steps have already found. PentestEval measures this with a Spearman correlation against expert judgment, and ADM scores 0.25 — the lowest of the six pipeline stages. The +0.14 gain from ground-truth ADM is notable because it's measured on top of an already-perfect weakness gathering and filtering pipeline — the other stages have already been fixed. Any dependency structure a system builds itself from LLM inference will be noisier than ground truth, so a realistic ceiling sits below 0.67."
 
@@ -368,24 +417,36 @@ Paper list:
 
 ### SLIDE 07 — The Two-Sided Gap
 
-**Layout:** Full-width split diagram.
+**Layout type:** S-TYPE (Full Statement — diagram fills center, text anchors top and bottom)
 
-**Content:**
-- Slide title: `The Gap No System Has Closed`
-- Horizontal split diagram (70% of slide height):
-  - Left — Wide Exploration: HPTSA, VulnBot, T-Agent, AutoGPT
-    - Check: Finds many candidate weaknesses
-    - Cross: No prerequisite/dependency model
-    - Cross: Flat task dispatch
-  - Center — "UNEXPLORED TERRITORY — The compound gap" (dim amber highlight)
-  - Right — Dependency Reasoning: CHECKMATE, PentestEval SMP
-    - Check: Explicit prerequisite modeling
-    - Cross: Requires pre-enumerated weakness sets
-    - Cross: Does not scale to open-ended discovery
+**Header:** Title = `The Gap No System Has Closed` (Playfair Display 700, 44pt). Authority bar.
 
-- Bottom (amber): "No system combines open-ended exploration WITH dynamic dependency-aware planning. RedGrid investigates this combination."
+**Center diagram (70% of slide body height, full width):**
+- Three panels side by side, separated by thin `#D4CFC8` vertical hairlines:
 
-**Animation:** Left slides from left, right from right, center fades in last with pulse. Bottom sentence types character-by-character.
+  **Left panel — "Wide Exploration"** (background `#EFEBE3`, left-border 3px `#8B1A1A`):
+  - Panel title: Source Sans 3 700 16pt `#1A1A2E`: `Wide Exploration`
+  - Sub-label: Source Sans 3 400 12pt `#6B6B7A`: `HPTSA  ·  VulnBot  ·  T-Agent  ·  AutoGPT`
+  - `✓ Finds many candidate weaknesses` — Source Sans 3 400 15pt `#2A6B3C`
+  - `✗ No prerequisite / dependency model` — Source Sans 3 400 15pt `#7A1A1A`
+  - `✗ Flat task dispatch` — Source Sans 3 400 15pt `#7A1A1A`
+
+  **Center panel — "The Compound Gap"** (background `#F2EAD9`, border 1.5px `#A0631A`):
+  - Center panel label: Source Sans 3 700 small-caps 12pt `#A0631A`: `UNEXPLORED TERRITORY`
+  - Below: Playfair Display 400 italic 18pt `#7A4F1A`: *"The compound gap"*
+  - A simple question-mark glyph in Playfair Display 700 48pt `#D4CFC8` — large, centered, watermark-style
+
+  **Right panel — "Dependency Reasoning"** (background `#EFEBE3`, right-border 3px `#2E4A7A`):
+  - Panel title: Source Sans 3 700 16pt `#1A1A2E`: `Dependency Reasoning`
+  - Sub-label: Source Sans 3 400 12pt `#6B6B7A`: `CHECKMATE  ·  PentestEval SMP`
+  - `✓ Explicit prerequisite modeling` — Source Sans 3 400 15pt `#2A6B3C`
+  - `✗ Requires pre-enumerated weakness sets` — Source Sans 3 400 15pt `#7A1A1A`
+  - `✗ Does not scale to open-ended discovery` — Source Sans 3 400 15pt `#7A1A1A`
+
+**Bottom statement (below diagram, 20px margin):**
+- Tertiary callout (amber border, full width): Source Sans 3 600 17pt `#7A4F1A`: "No system combines open-ended exploration WITH dynamic dependency-aware planning. RedGrid investigates this combination."
+
+**No animations.**
 
 **Speaker note:** "Every system we found that explores broadly doesn't model vulnerability dependencies. Every system that models dependencies can't do open-ended exploration. That divide is the compound gap — and it's what the next three slides build up to formally."
 
@@ -393,28 +454,30 @@ Paper list:
 
 ### SLIDE 08 — Comparative Analysis Table
 
-**Layout:** Full-width clean data table.
+**Layout type:** D-TYPE (Data-Focus — full-width table, no columns)
 
-**Content:**
-- Slide title: `Prior System Comparison`
-- Sub-label: `Four dimensions that matter most`
-- Table (5 columns): System | Architecture | Dependency Modeling | Cross-Session Memory | Benchmark
+**Header:** Title = `Prior System Comparison` (Playfair Display 700, 44pt). Authority bar. Sub-label: Source Sans 3 400 13pt `#6B6B7A`: `Four dimensions that matter most  ·  Preliminary 11-paper review`
 
-Rows:
-- Fang et al. 2024 | Single agent (ReAct) | None | None | 15 CVEs
-- HPTSA | Hierarchical planner+tasks | Flat dispatch | None | 14 zero-day CVEs
-- PentestGPT | Split reasoning/parsing | Implicit (LLM only) | None | HTB/VulnHub
-- VulnBot | Multi-agent, role-specialised | Flat dispatch | None | HTB-style
-- CHECKMATE | Agent + classical planner | Explicit, pre-enumerated | None | Curated only
-- Incalmo | Multi-host orchestration | Partial (host/cred) | None | MHBench (40)
-- PrediQL | LLM-guided fuzzer | Schema-derived | None | 6 GraphQL APIs
-- RedGrid (proposed) | 4-layer multi-agent | Dynamic VDG | 3-tier memory | Web+GraphQL+Multi-host
+**Table (follows Table Design System rules exactly):**
+- 5 columns: `System` | `Architecture` | `Dependency Modeling` | `Cross-Session Memory` | `Benchmark`
+- Column widths: 18% | 25% | 22% | 18% | 17%
+- Header: bg `#E8E4DC`, text Source Sans 3 600 13pt small-caps `#1A1A2E`, bottom border 2px `#8B1A1A`
 
-- Cell styling: None = red-tinted with text label `None`. Explicit/Dynamic/3-tier = green-tinted with text label. Partial/Implicit = amber-tinted with text label. (Use both color AND text label — never color alone.)
-- RedGrid row: subtle cyan background + bold text on the row header.
-- Caption: `Preliminary reading — 11-paper focused review`
+Rows (with cell styling per Table Design System):
+- `Fang et al. 2024` | `Single agent (ReAct)` | `✗ None` (negative) | `✗ None` (negative) | `15 CVEs`
+- `HPTSA` | `Hierarchical planner + tasks` | `✗ Flat dispatch` (negative) | `✗ None` (negative) | `14 zero-day CVEs`
+- `PentestGPT` | `Split reasoning / parsing` | `~ Implicit (LLM only)` (partial) | `✗ None` (negative) | `HTB / VulnHub`
+- `VulnBot` | `Multi-agent, role-specialised` | `✗ Flat dispatch` (negative) | `✗ None` (negative) | `HTB-style`
+- `CHECKMATE` | `Agent + classical planner` | `✓ Explicit, pre-enumerated` (positive) | `✗ None` (negative) | `Curated only`
+- `Incalmo` | `Multi-host orchestration` | `~ Partial (host/cred)` (partial) | `✗ None` (negative) | `MHBench (40)`
+- `PrediQL` | `LLM-guided fuzzer` | `~ Schema-derived` (partial) | `✗ None` (negative) | `6 GraphQL APIs`
+- `RedGrid` *(proposed)* | `4-layer multi-agent` | `✓ Dynamic VDG` (positive) | `✓ 3-tier memory` (positive) | `Web + GraphQL + Multi-host`
 
-**Animation:** Header fades, rows stagger top-to-bottom. RedGrid row enters with glow.
+**RedGrid row styling:** Full row background `#E8EDF5`, text `#1A2E5A` Source Sans 3 700, left border 3px `#2E4A7A`. All cells use status colors and icons as per Table Design System.
+
+**Caption:** Source Sans 3 400 13pt italic `#6B6B7A`: `Preliminary reading — 11-paper focused review, September 2026`
+
+**No animations.**
 
 **Speaker note:** "Eight systems. Four dimensions. The rightmost three columns — dependency modeling, memory, and benchmark coverage — are all None across the board, except for RedGrid's proposed row. That's the gap table: one dimension at a time, none of the reviewed systems covers all three."
 
@@ -422,25 +485,40 @@ Rows:
 
 ### SLIDE 09 — Research Gap Statement
 
-**Layout:** Statement slide. Bold typography. Left-accent bar.
+**Layout type:** S-TYPE (Full Statement — large callout top, three evidence columns below)
 
-**Content:**
-- Slide title: `Research Gap`
-- Left-bordered callout (4px red border, Syne 700, 26px):
-  "The reviewed literature does not contain a system that combines:
-  (1) broad, open-ended exploration of an unfamiliar attack surface
-  (2) with an explicit, dynamically constructed dependency model
-  (3) evaluated across more than one benchmarked attack-surface family."
+**Header:** Title = `Research Gap` (Playfair Display 700, 44pt). Authority bar.
 
-- Three equal columns below:
-  - Exploration gap: "CVE-Bench: insufficient exploration = dominant failure (37–80%)"
-  - Planning gap: "PentestEval: ADM is weakest stage, Spearman rho = 0.25"
-  - Coverage gap: "Every prior system evaluated on ONE surface only"
+**Main callout (top 45% of content area):**
+- Primary callout (crimson border, `#EDE9E1` fill, width 85% centered, padding 24px 28px):
+  - Label (Source Sans 3 600 small-caps 11pt `#8B1A1A`): `THE IDENTIFIED GAP`
+  - Text (Playfair Display 400 italic 22pt `#1A1A2E`, line-height 1.5):
+    *"The reviewed literature does not contain a system that combines:*
+    *(1) broad, open-ended exploration of an unfamiliar attack surface,*
+    *(2) with an explicit, dynamically constructed dependency model,*
+    *(3) evaluated across more than one benchmarked attack-surface family."*
 
-- Bottom italic (amber): "This is the gap RedGrid is designed to investigate."
-*(Remove the "Working hypothesis" footnote — the section-level disclaimer on Slide 12 covers this more appropriately)*
+**Three evidence columns (bottom 45% of content area, equal width, 1px `#D4CFC8` dividers between columns):**
 
-**Animation:** Quote box draws in with left-to-right clip-path reveal. Columns stagger. Amber line types last.
+Column 1 — `Exploration Gap` (Source Sans 3 700 15pt `#1A1A2E`):
+- IBM Plex Mono 600 24pt `#8B1A1A`: `37 – 80%`
+- Source Sans 3 400 14pt `#6B6B7A`: `Exploration failure rate`
+- Source Sans 3 400 14pt `#1A1A2E`: `CVE-Bench: insufficient exploration is the dominant failure mode`
+
+Column 2 — `Planning Gap` (Source Sans 3 700 15pt `#1A1A2E`):
+- IBM Plex Mono 600 24pt `#8B1A1A`: `0.25`
+- Source Sans 3 400 14pt `#6B6B7A`: `ADM Spearman ρ`
+- Source Sans 3 400 14pt `#1A1A2E`: `PentestEval: ADM is the weakest stage across all pipelines`
+
+Column 3 — `Coverage Gap` (Source Sans 3 700 15pt `#1A1A2E`):
+- IBM Plex Mono 600 24pt `#8B1A1A`: `1`
+- Source Sans 3 400 14pt `#6B6B7A`: `Attack surface per system`
+- Source Sans 3 400 14pt `#1A1A2E`: `Every prior system evaluated on exactly one surface only`
+
+**Bottom closing line (below the three columns, 24px margin):**
+- Source Sans 3 600 italic 16pt `#A0631A`: `"This is the gap RedGrid is designed to investigate."`
+
+**No animations.**
 
 **Speaker note:** "This is the compound gap: no system in the literature we reviewed combines open-ended exploration with an explicit, dynamically built dependency structure, evaluated across more than one attack surface. That combination is what we're investigating. We want to be clear — this is a working direction from the literature, not a proven result."
 
@@ -448,31 +526,33 @@ Rows:
 
 ### SLIDE 10 — Introducing RedGrid
 
-**Layout:** Split — left: name + tagline + thesis direction. Right: conceptual VDG diagram.
+**Layout type:** L-TYPE (Left-Heavy Two-Column — Left 55% text / Right 45% diagram)
 
-**Content:**
-- Slide title: `Introducing RedGrid`
-- Left (50%):
-  - Project name: `RedGrid` (Syne 800, 52px, gradient red to cyan)
-  - Tagline: `Dependency-Constrained UCB Exploration for Autonomous Penetration Testing`
-  - Three thesis directions:
-    - VDG: Model vulnerabilities as a graph with prerequisite edges, not a flat list
-    - UCB: Guide exploration with Upper Confidence Bound over dependency-constrained frontier
-    - Memory: Retain and reuse strategies across missions
-  *(Remove the amber "Early stage" chip — already covered by the section-level framing on Slide 12)*
+**Header:** Title = `Introducing RedGrid` (Playfair Display 700, 44pt). Authority bar.
 
-- Right (50%): Conceptual VDG mini-diagram:
-  - DAG nodes: SQLi → Auth Bypass → RCE; XSS → Auth Bypass
-  - Node status must be shown via both color AND text label (not color alone):
-    - SQLi: green fill + text label `ELIGIBLE`
-    - Auth Bypass: amber fill + text label `NEXT`
-    - RCE: dim fill + text label `BLOCKED`
-    - XSS: green fill + text label `ELIGIBLE`
-  - UCB score labels on each node
-  - Label: `Vulnerability Dependency Graph (VDG) — conceptual`
-  - Cursor arrow pointing to highest UCB node, with label `Selected`
+**Left column (55%):**
+- Project name: `RedGrid` — Playfair Display 700 52pt `#8B1A1A` (crimson). On a new line directly below the authority bar area.
+- Tagline: Source Sans 3 400 18pt `#2E4A7A` (slate blue): `Dependency-Constrained UCB Exploration for Autonomous Penetration Testing`
+- Spacer (20px)
+- Three thesis directions (styled as icon + bold-lead bullets, Source Sans 3 400 18pt):
+  - **VDG:** Model vulnerabilities as a graph with prerequisite edges, not a flat list
+  - **UCB:** Guide exploration with Upper Confidence Bound over the dependency-constrained frontier
+  - **Memory:** Retain and reuse strategies across missions
 
-**Animation:** Graph draws node by node, edges animate as growing lines. Score labels count up.
+**Right column (45%) — Conceptual VDG diagram:**
+- Diagram background: `#EFEBE3` panel, border-radius 6px, border 1px `#D4CFC8`
+- DAG layout (nodes positioned as a directed acyclic graph):
+  - Node `SQLi` — position: upper-left. Fill `#D6EDDA`, border `#2A6B3C` 1.5px. IBM Plex Mono 13pt. Text label inside: `SQLi  ·  ELIGIBLE`. UCB score below node: IBM Plex Mono 11pt `#6B6B7A`: `UCB = 3.42`
+  - Node `XSS` — position: lower-left. Fill `#D6EDDA`, border `#2A6B3C` 1.5px. Text: `XSS  ·  ELIGIBLE`. UCB: `UCB = 2.81`
+  - Node `Auth Bypass` — position: center. Fill `#F5E9D0`, border `#A0631A` 1.5px. Text: `Auth Bypass  ·  NEXT ►`. UCB: `UCB = 4.17 ★` (amber star = selected)
+  - Node `RCE` — position: right. Fill `#EFEBE3`, border `#D4CFC8` 1.5px. Text: `RCE  ·  BLOCKED`. UCB: `—`
+  - Arrow `SQLi → Auth Bypass`: 1.5px `#6B6B7A` solid
+  - Arrow `XSS → Auth Bypass`: 1.5px `#6B6B7A` solid
+  - Arrow `Auth Bypass → RCE`: 1.5px `#D4CFC8` dashed (blocked edge)
+  - A small crimson cursor-arrow icon pointing at Auth Bypass node, labeled Source Sans 3 600 11pt `#8B1A1A`: `Selected`
+- Diagram caption below panel: Source Sans 3 400 italic 12pt `#6B6B7A`: `Vulnerability Dependency Graph (VDG) — conceptual sketch`
+
+**No animations.**
 
 **Speaker note:** "This is the core idea. Instead of treating candidate vulnerabilities as a flat list, RedGrid represents them as a graph — where some attacks can only happen after others succeed. The agent uses this structure to guide where it explores next. This is a conceptual sketch of the VDG — the actual implementation is what the next phase of the thesis builds."
 
@@ -480,22 +560,46 @@ Rows:
 
 ### SLIDE 11 — Research Objectives
 
-**Layout:** Clean numbered list. Two-column grid.
+**Layout type:** C-TYPE (Card Grid — single-column numbered list of 5 objective cards, arranged vertically, full-width)
 
-**Content:**
-- Slide title: `Research Objectives`
-- Sub-label: `5 working goals`
-*(Remove "under active investigation" from sub-label — redundant with the section framing on Slide 12)*
+**Header:** Title = `Research Objectives` (Playfair Display 700, 44pt). Authority bar. Sub-label: Source Sans 3 400 13pt `#6B6B7A`: `Five working goals at inception stage`
 
-1. VDG Formalization — Investigate whether a prerequisite-edge graph improves agent exploration over a flat priority list
-2. Dual-Layer World Model — Separate confirmed facts from inferred hypotheses for independent ablation
-3. Multi-Layer Orchestration — Design a four-layer agent hierarchy matching strongest surveyed systems
-4. Cross-Mission Memory — Determine whether strategy reuse offers measurable benefit vs. negative-transfer risk
-5. Benchmark-Grounded Evaluation — Evaluate on oracle-backed benchmarks across 3+ attack surfaces
+**Five objective cards (stacked vertically, equal height ~90px each, full content width, 12px gap between cards):**
 
-- Bottom note: "These reflect the research direction at inception stage. Scope will evolve with implementation."
+Each card:
+- Background: `#EFEBE3`
+- Border-left: 3px solid (color varies per card, see below)
+- Border-radius: 3px
+- Padding: 14px 20px
+- Layout inside card: Number badge LEFT + Card title CENTER-LEFT + Description RIGHT
 
-**Animation:** Cards stagger in (120ms delay). Icon first, then label, then description.
+**Number badge:** IBM Plex Mono 700 22pt in a 40px circle. Color matches card border.
+**Card title:** Source Sans 3 700 17pt `#1A1A2E`
+**Description:** Source Sans 3 400 15pt `#6B6B7A`
+
+Card 1 — border/badge `#8B1A1A` (crimson):
+- Title: `VDG Formalization`
+- Description: Investigate whether a prerequisite-edge graph improves agent exploration over a flat priority list
+
+Card 2 — border/badge `#2E4A7A` (slate blue):
+- Title: `Dual-Layer World Model`
+- Description: Separate confirmed facts from inferred hypotheses for independent ablation
+
+Card 3 — border/badge `#A0631A` (amber):
+- Title: `Multi-Layer Orchestration`
+- Description: Design a four-layer agent hierarchy matching the strongest surveyed systems
+
+Card 4 — border/badge `#2A6B3C` (green):
+- Title: `Cross-Mission Memory`
+- Description: Determine whether strategy reuse offers measurable benefit vs. negative-transfer risk
+
+Card 5 — border/badge `#6B6B7A` (slate grey):
+- Title: `Benchmark-Grounded Evaluation`
+- Description: Evaluate on oracle-backed benchmarks across 3+ attack surfaces
+
+**Bottom note (below last card, 16px gap):** Source Sans 3 400 italic 14pt `#9A9AAA`: `These reflect the research direction at inception stage. Scope will evolve with implementation.`
+
+**No animations.**
 
 **Speaker note:** "Five objectives, each tied directly to the gaps we just saw. The first two are directly about the compound gap — building the VDG structure and keeping facts separate from guesses. The last one is about evaluation rigor — we'll only test on benchmarks that already exist, not build our own."
 
@@ -504,35 +608,39 @@ Rows:
 
 ### SLIDE 12 — Expected Contributions
 
-**Layout:** Three equal cards, full-width horizontal. Clean and simple — no technical jargon.
+**Layout type:** C-TYPE (Card Grid — Three equal horizontal cards)
 
-**SECTION TRANSITION NOTE FOR AGENT:** This slide marks the boundary between the deep section (Chapters 1–2) and the high-level sketch section (architecture, methodology, evaluation). Place a single, clearly styled transition banner at the top of this slide — e.g. a thin full-width bar reading: `The following slides are high-level sketches — implementation has not started.` Style it in amber at small font size (14px), positioned just below the slide title. This is the **one and only** location for this disclaimer. Do not repeat it on Slides 13–19.
+**SECTION TRANSITION NOTE FOR AGENT:** This slide marks the boundary between the deep section (Chapters 1–2) and the high-level sketch section. A clearly styled transition banner appears at the top, immediately below the title and authority bar — this is the **one and only** location for this disclaimer. Do not repeat it on Slides 13–19.
 
-**Content:**
-- Slide title: `Expected Contributions`
-- Transition banner (amber, small, full-width, below title): `The following slides are high-level sketches — implementation has not started.`
+**Header:** Title = `Expected Contributions` (Playfair Display 700, 44pt). Authority bar.
 
-- Card C1 (red accent border):
-  - Label: `C1 — Primary`
-  - Icon: graph with prerequisite arrows
-  - Title: `Smarter Exploration`
-  - 1-line: "Can modeling vulnerabilities as a graph — with explicit prerequisites — help an agent explore more intelligently?"
+**Transition banner (immediately below authority bar):**
+- Full slide width, background `#F2EAD9`, border-left 3px `#A0631A`, border-top 1px `#D4CFC8`, padding 8px 20px
+- Source Sans 3 600 13pt `#7A4F1A`: `The following slides are high-level sketches — implementation has not started.`
 
-- Card C2 (cyan accent border):
-  - Label: `C2 — Supporting`
-  - Icon: memory/brain chip
-  - Title: `Learning Across Missions`
-  - 1-line: "Can an agent carry forward what it learned in past engagements to perform better on similar targets?"
+**Three contribution cards (horizontal, equal width, 20px gap, below banner):**
 
-- Card C3 (green accent border):
-  - Label: `C3 — Methodological`
-  - Icon: three overlapping target circles (web, API, network)
-  - Title: `Consistent Evaluation`
-  - 1-line: "Can a single architecture be tested fairly across web, GraphQL, and multi-host surfaces using standardized oracles?"
+Card C1 (border-top 3px `#8B1A1A`):
+- Background: `#EFEBE3`
+- Label (Source Sans 3 700 small-caps 11pt `#8B1A1A`): `C1 — PRIMARY`
+- Title (Source Sans 3 700 19pt `#1A1A2E`): `Smarter Exploration`
+- Question (Source Sans 3 400 16pt `#1A1A2E`): "Can modeling vulnerabilities as a graph — with explicit prerequisites — help an agent explore more intelligently?"
 
-- Bottom note (italic, secondary text): "These are research questions. Answers come from experiments — not this report."
+Card C2 (border-top 3px `#2E4A7A`):
+- Background: `#EFEBE3`
+- Label: `C2 — SUPPORTING`
+- Title: `Learning Across Missions`
+- Question: "Can an agent carry forward what it learned in past engagements to perform better on similar targets?"
 
-**Animation:** Cards slide up with 150ms stagger. Transition banner appears first (fade-in). Bottom note fades in last.
+Card C3 (border-top 3px `#2A6B3C`):
+- Background: `#EFEBE3`
+- Label: `C3 — METHODOLOGICAL`
+- Title: `Consistent Evaluation`
+- Question: "Can a single architecture be tested fairly across web, GraphQL, and multi-host surfaces using standardized oracles?"
+
+**Bottom note (below cards, centered):** Source Sans 3 400 italic 15pt `#9A9AAA`: `These are research questions. Answers come from experiments — not this report.`
+
+**No animations.**
 
 **Speaker note:** "These three directions are what we're investigating — not what we've proven. C1 is the primary contribution: does the dependency graph help? C2 and C3 are supporting. From here on the slides sketch the plan rather than report completed work."
 
