@@ -4,8 +4,10 @@
 
 Generate a **10-minute MSc thesis inception-stage presentation** (20 slides total) for the project **RedGrid: Dependency-Constrained UCB Exploration for Autonomous Penetration Testing**. The presentation is the first submission in a 6-month thesis program. The report is complete for Chapters 0, 1, and 2 only (Introduction + Literature Review). Methodology, evaluation, and results are not yet done. The presentation must:
 
-- **Deeply cover Chapters 1 and 2** (slides 1–12: problem, background, literature, gap analysis)
-- **Give high-level visual overviews** of remaining chapters (slides 13–18: architecture, methodology sketch, evaluation plan, timeline, conclusion)
+- **Deeply cover Chapters 1 and 2** (slides 1–11: problem, background, literature, gap analysis)
+- **Transition slide** (slide 12: expected contributions — marks the shift from deep to sketch)
+- **Give high-level visual overviews** of remaining chapters (slides 13–19: architecture, methodology sketch, evaluation plan, timeline, challenges, summary)
+- **Closing** (slide 20: thank you / Q&A)
 - Be honest about early-stage work while sounding polished, confident, and research-grade
 - Feel **professional, catchy, and visually alive** — not a wall of text
 - Be suitable for a **10-minute slot** (~30–40 sec per slide for early slides, 45–60 sec for architecture slides)
@@ -59,7 +61,7 @@ Generate a **10-minute MSc thesis inception-stage presentation** (20 slides tota
 
 ## Slide-by-Slide Specification
 
-> **Chapter mapping:** Chapter 0 (abstract, front-matter, and framing) maps to **Slide 2 (Motivation Hook)** — the "why this matters" framing slide covers the same ground as the abstract. Chapter 1 (Introduction) maps to **Slides 2–12**. Chapter 2 (Literature Review) maps to **Slides 3–9**. The architecture, methodology, evaluation, and timeline sections (Slides 13–18) are high-level sketches only — those chapters are not yet written.
+> **Chapter mapping:** Chapter 0 (abstract, front-matter, and framing) maps to **Slide 2 (Motivation Hook)** — the "why this matters" framing slide covers the same ground as the abstract. Chapter 1 (Introduction) maps to **Slides 2–12** — it provides the framing and motivation across the full first half of the deck. Chapter 2 (Literature Review) maps to **Slides 3–9** — these slides sit *inside* the Chapter 1 range because the introduction and literature review are interleaved in the report: the intro motivates, the lit review provides evidence, and together they build to the gap statement on Slide 9. Slides 3–9 are simultaneously Ch.1 material (introduction narrative) and Ch.2 material (evidence from surveyed papers). The architecture, methodology, evaluation, and timeline sections (Slides 13–19) are high-level sketches only — those chapters are not yet written.
 
 ---
 
@@ -95,8 +97,8 @@ Generate a **10-minute MSc thesis inception-stage presentation** (20 slides tota
 
 - **Agenda strip** (small, horizontal, 3 labeled beats — positioned below the callout box, subtle styling: secondary text, thin divider lines between beats):
   - Beat 1 (red dot): `Deep dive — Problem + What the literature says (Slides 3–11)`
-  - Beat 2 (amber dot): `High-level sketch — Architecture + Plan (Slides 12–18)`
-  - Beat 3 (grey dot): `Where we're headed — Next 6 months (Slides 17–19)`
+  - Beat 2 (amber dot): `High-level sketch — Architecture + Plan (Slides 12–16)`
+  - Beat 3 (grey dot): `Where we're headed — Timeline + Status (Slides 17–19)`
 
 - Right: Stylized illustration — target with concentric circles, red cursor arrow, shield icons scattered. Clean, dark background.
 
@@ -349,7 +351,7 @@ Rows:
 
 **Layout:** Three equal cards, full-width horizontal. Clean and simple — no technical jargon.
 
-**SECTION TRANSITION NOTE FOR AGENT:** This slide marks the boundary between the deep section (Chapters 1–2) and the high-level sketch section (architecture, methodology, evaluation). Place a single, clearly styled transition banner at the top of this slide — e.g. a thin full-width bar reading: `The following slides are high-level sketches — implementation has not started.` Style it in amber at small font size (14px), positioned just below the slide title. This is the **one and only** location for this disclaimer. Do not repeat it on Slides 13–18.
+**SECTION TRANSITION NOTE FOR AGENT:** This slide marks the boundary between the deep section (Chapters 1–2) and the high-level sketch section (architecture, methodology, evaluation). Place a single, clearly styled transition banner at the top of this slide — e.g. a thin full-width bar reading: `The following slides are high-level sketches — implementation has not started.` Style it in amber at small font size (14px), positioned just below the slide title. This is the **one and only** location for this disclaimer. Do not repeat it on Slides 13–19.
 
 **Content:**
 - Slide title: `Expected Contributions`
@@ -718,8 +720,10 @@ Use these exact numbers. Do not fabricate or round differently.
 ## Tone and Voice Guidelines
 
 - **Confident but honest:** Implementation has not started. Say so clearly. The direction is evidence-backed but results are not in hand.
-- **Surface-level for slides 12–20:** No pseudocode, no formula details, no ablation terminology, no layer-by-layer component names. Plain English only.
+- **Surface-level for slides 13–19:** No pseudocode, no formula details, no ablation terminology, no layer-by-layer component names. Plain English only.
 - **Deep for slides 1–11:** Chapter 1 and Chapter 2 content (problem, literature, gap analysis) should be precise, data-driven, and well-evidenced with exact numbers.
+- **Slide 12 is the transition:** It carries the section-boundary banner and frames the contribution directions as open questions — it bridges deep and sketch, and should be styled accordingly.
+- **Slide 20 is the closing:** Thank you and Q&A — no new content, just reference material for the Q&A period.
 - **Engaging:** Short sentences. Active voice. Data-driven. No padding.
 - **Visual-first:** Every number should be a chart, not a sentence.
 - **Time-aware:** 10-minute slot. Audiences follow without reading dense text.
