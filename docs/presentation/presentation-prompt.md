@@ -310,295 +310,307 @@ Rows:
 
 ---
 
-### SLIDE 12 — Expected Contributions (3 Claims)
 
-**Layout:** Three equal cards, full-width horizontal.
+### SLIDE 12 — Expected Contributions
+
+**Layout:** Three equal cards, full-width horizontal. Clean and simple — no technical jargon.
 
 **Content:**
 - Slide title: `Expected Contributions`
-- Sub-label (amber): `Working hypotheses — not yet results`
+- Sub-label (amber chip): `Directions under investigation — not yet results`
 
 - Card C1 (red accent border):
-  - C1 — Primary: Dependency-Aware Attack Graph Exploration
-  - "Combining UCB exploration with a dynamically grown prerequisite graph improves attack-path success over flat dispatch and pre-enumerated dependency planning."
-  - Gate (amber chip): "Ablation (d) > (c) on CVE-Bench + PentestEval"
-  - Target metrics: "CVE-Bench zero-day pass@1 >= 25% · PentestEval ADM >= 0.50"
+  - Label: `C1 — Primary`
+  - Icon: graph with prerequisite arrows
+  - Title: `Smarter Exploration`
+  - 1-line: "Can modeling vulnerabilities as a graph — with explicit prerequisites — help an agent explore more intelligently?"
 
 - Card C2 (cyan accent border):
-  - C2 — Supporting: Cross-Mission Memory + Skill Promotion
-  - "3-tier memory with security-specific conditional branching strategies and oracle-gated skill promotion improves performance on seen-technology targets."
-  - Gate: "Ablation A2 shows measurable improvement on seen-technology subset"
+  - Label: `C2 — Supporting`
+  - Icon: memory/brain chip
+  - Title: `Learning Across Missions`
+  - 1-line: "Can an agent carry forward what it learned in past engagements to perform better on similar targets?"
 
 - Card C3 (green accent border):
-  - C3 — Methodological: Cross-Benchmark Evaluation
-  - "First rigorous evaluation of a single VAPT architecture across CVE-Bench (web), PrediQL (GraphQL), and MHBench (multi-host) with standardized oracles."
-  - Gate: "Holds by construction — requires completing all benchmark tiers"
+  - Label: `C3 — Methodological`
+  - Icon: three overlapping target circles (web, API, network)
+  - Title: `Consistent Evaluation`
+  - 1-line: "Can a single architecture be tested fairly across web, GraphQL, and multi-host surfaces using standardized oracles?"
 
-- Note (secondary): "At this stage: direction, not result. Implementation begins next."
+- Honest note at bottom (italic, secondary text): "These are research questions. Answers come from experiments — not from this report."
 
-**Animation:** Cards slide up (150ms stagger). Validation chips pop in last.
+**Animation:** Cards slide up with 150ms stagger. Bottom note fades in last.
 
 ---
 
-### SLIDE 13 — System Architecture Overview
+### SLIDE 13 — Our Proposed Approach
 
-**Layout:** Full-slide architecture diagram. Minimal text. Diagram-first.
+**Layout:** One large conceptual 3-part visual. Bold, simple, no technical detail.
 
 **Content:**
-- Slide title: `RedGrid Architecture — Overview`
-- Sub-label: `4-layer hierarchy · Under development`
+- Slide title: `RedGrid — The Core Idea`
+- Sub-label (amber chip): `Conceptual sketch — implementation begins next`
 
-- 4-layer horizontal stack diagram (80% of slide height):
+- Central visual: 3 connected boxes (horizontal flow):
 
-  LAYER 1 — Orchestrator (Mission Planner) [dark red band]
-    Components: Scope Intake · Auto-prompter · FullCompact Trigger (at 85% context)
+  Box 1 [red]:
+  Icon: magnifying glass over a network
+  Label: `Explore Broadly`
+  "Search the full attack surface — don't commit to one path early."
 
-  LAYER 2 — Team Manager [dark cyan band]
-    Components: VDG/Attack Decision-Making · Declarative Dispatch · Handoff Bridge
+  Center arrow labeled: `guided by`
 
-  [Left vertical panel: Dual-Layer World Model]
-    EL (Environmental Layer — confirmed facts only) <-> VDG/AL (Attack Layer — scored hypotheses only)
+  Box 2 [cyan, larger — center]:
+  Icon: a small directed graph (3 nodes, 2 arrows)
+  Label: `Dependency Graph`
+  "Model which vulnerabilities depend on which — pick the smartest next step."
 
-  LAYER 3 — Specialist Agents [dark amber band]
-    Specialists: Recon · SQLi · XSS · GraphQL · Auth/Session · Lateral-Movement
+  Arrow: `feeds into`
 
-  LAYER 4 — Execution and Validation [dark green band]
-    Components: Execution Agent · Evaluation Agent · Validation Agent (Diagnosis-Adapt-Cap loop)
+  Box 3 [amber]:
+  Icon: brain / memory icon
+  Label: `Remember and Reuse`
+  "Carry forward what worked across past missions."
 
-  [Bottom dashed bar: Cross-cutting Memory Services]
-    Skill Library · 3-Tier FAISS Memory (Vuln-Pattern / Strategy / Technical-Action) · Episodic Failure Memory
+- Below the visual, one bold sentence (Syne 700, 24px, white):
+  "RedGrid asks: does connecting exploration + dependency reasoning + memory make autonomous pen testing meaningfully better?"
 
-- Bidirectional arrows between layers. Small icons for each specialist.
-- Bottom note: "Full formalized pseudocode specified in architecture document"
+- Footnote (secondary, italic): `All three are open research questions`
 
-**Animation:** Layers reveal top-to-bottom (250ms each, 200ms stagger). Arrows appear after. Memory bar fades in last.
+**Animation:** Three boxes appear simultaneously with fade+scale. Arrow labels draw after. Bold sentence fades in last.
 
 ---
 
-### SLIDE 14 — The VDG Algorithm (Core Idea)
+### SLIDE 14 — Architecture — A Simple View
 
-**Layout:** Left: pseudocode formula. Right: animated graph example.
+**Layout:** Simple 4-layer visual stack. One plain-English label per layer. No component names.
 
 **Content:**
-- Slide title: `The VDG Algorithm — Core Idea`
-- Sub-label: `Dependency-Constrained UCB Selection`
+- Slide title: `Architecture — A Rough Sketch`
+- Sub-label (amber chip): `High-level only — details being designed`
 
-- Left column (50%) — Code block (JetBrains Mono):
-```
-UCB_score(v) =
-    (w_v / n_v)           <- exploitation
-  + C * sqrt(ln N / n_v)  <- exploration bonus
-  + alpha * phi_v         <- LLM promise score
-  + gamma * (E_ord / 5)   <- ordinal evidence
-  - kappa * context_load  <- cost penalty
-  + lambda * epss_prior   <- CVE prior
+- 4-layer colored stack (think: a layered cake, top to bottom, each band roughly equal height):
 
-Selection rule:
-eligible = {v | status==ELIGIBLE
-             AND all prerequisites EXPLOITED}
-selected = argmax UCB_score(eligible)
-```
-  Legend: "phi = LLM-assessed exploitability · E_ord = calibrated evidence scale 0–5"
+  Layer 1 [dark red band, top]:
+  Label: `Mission Planner`
+  "Takes in the target. Starts the scan. Stays in control."
 
-- Right column (50%) — 5-node VDG example:
-  - Node A: SQLi — UCB=2.31 — ELIGIBLE — Selected (pulsing glow ring)
-  - Node B: XSS — UCB=1.87 — ELIGIBLE
-  - Node C: AuthBypass — UCB=2.10 — BLOCKED (prereq: A)
-  - Node D: SSRF — UCB=0.94 — ELIGIBLE
-  - Node E: RCE — UCB=3.40 — BLOCKED (prereq: C)
-  Nodes as colored circles. ELIGIBLE = green outline. BLOCKED = dim red dashed outline.
+  Layer 2 [dark cyan band]:
+  Label: `Decision-Maker`
+  "Decides what to attack next — using the dependency graph."
 
-- Bottom callout (amber border): "Unlike flat UCB, only ELIGIBLE nodes are considered — nodes blocked by unmet prerequisites are invisible to selection until their dependencies are satisfied."
+  Layer 3 [dark amber band]:
+  Label: `Specialist Agents`
+  "Web, GraphQL, Network — each focused on one attack type."
 
-**Animation:** Formula line by line. Nodes draw one by one. Selected node gets glow pulse.
+  Layer 4 [dark green band, bottom]:
+  Label: `Execute and Validate`
+  "Runs the attack. Checks if it worked."
+
+- Left side panel (narrow, dark blue border):
+  Label: `World Model`
+  "What we know (confirmed facts) vs. what we think (attack hypotheses) — kept strictly separate."
+
+- Bottom bar (dashed):
+  Label: `Memory`
+  "Remembers strategies and failures. Reuses what worked."
+
+- NO component-level names (no FullCompact, no FAISS, no E_ord, no Handoff Bridge)
+- Each band: one icon + one plain-English sentence only
+- Honest callout (amber border, bottom): "This is a design direction, not a built system. Implementation begins next."
+
+**Animation:** Layers reveal top-to-bottom (250ms stagger). Side panel fades in after. Memory bar slides up last.
 
 ---
 
-### SLIDE 15 — Methodology Overview (Sketch)
+### SLIDE 15 — Methodology — The Basic Loop
 
-**Layout:** Visual pipeline/flowchart. Honest about incompleteness.
+**Layout:** Simple circular 4-step process diagram. Nothing more.
 
 **Content:**
-- Slide title: `Methodology — High-Level Overview`
-- Sub-label chip (amber): "Planned — implementation not yet started"
+- Slide title: `How RedGrid Will Work`
+- Sub-label (amber chip): `Planned — not yet implemented`
 
-- Horizontal flowchart (8 rounded boxes, left to right):
-  1. Scope Intake — Target, rules of engagement, mode, surface family
-  2. Recon — nmap -p-, WhatWeb, ZAP passive, ffuf; seeds Environmental Layer (EL)
-  3. VDG Seed — Team Manager infers initial nodes from EL; assigns UCB scores
-  4. UCB Selection — Picks highest-scoring eligible node (prerequisites satisfied)
-  5. Specialist Dispatch — Fresh-context specialist runs deterministic FSM; writes to EL
-  6. Evaluate and Validate — E_ord scoring; oracle check; Diagnosis-Adapt-Cap loop
-  7. VDG Update — Update UCB reward, propagate status, check termination
-  8. Repeat or Terminate — Dual-termination condition check
+- A circular 4-step loop (clockwise, large, centered):
 
-  Box styling: solid outline = design complete, dashed = design in progress.
+  Step 1 [red, top]: `Recon`
+  "Scan the target. Build a picture of what's there."
 
-- Two key design decisions (cards below):
-  - Fresh context per Specialist: Prevents context pollution (validated by PentestGPT, D-CIPHER, VulnBot)
-  - Dual-Layer World Model: EL (confirmed facts) strictly separated from VDG (attack hypotheses)
+  Step 2 [cyan, right]: `Plan`
+  "Decide what to attack next — using the dependency graph."
 
-**Animation:** Boxes appear left-to-right (200ms stagger). Arrows draw sequentially.
+  Step 3 [amber, bottom]: `Attack`
+  "Send in a specialist agent. Run the attempt."
+
+  Step 4 [green, left]: `Learn`
+  "Did it work? Update the graph. Store the lesson. Repeat."
+
+  Center label (small): `VDG drives the loop`
+
+- Below: 2 plain design principles (icon + one sentence each):
+  - Each attack attempt runs with a clean slate — no leftover noise from previous steps
+  - Facts (what the agent confirmed) are kept separate from guesses (what it thinks might work)
+
+**Animation:** Loop steps draw clockwise (300ms each). Center label fades in after. Design principles stagger in below.
 
 ---
 
-### SLIDE 16 — Evaluation Plan
+### SLIDE 16 — Where We Will Test
 
-**Layout:** Three attack surface cards + methodological principles.
+**Layout:** Three clean cards — one per attack surface. Simple. No metric targets.
 
 **Content:**
-- Slide title: `Evaluation Plan — Benchmark Suite`
-- Sub-label chip (amber): "Planned — no results yet"
+- Slide title: `Evaluation — Three Attack Surfaces`
+- Sub-label (amber chip): `Planned — no results yet`
 
-- Three equal cards:
+- Three equal surface cards (horizontal):
 
-  Web Application:
-    Primary: CVE-Bench (40 critical CVEs, CVSS 9.0+)
-    Also: HPTSA 14-CVE zero-day suite · PentestEval 346 tasks · BountyBench (25 real production systems)
-    Oracle: 8-attack-type (DoS, File Access, DB Modification, SSRF, etc.)
-    Target: zero-day pass@1 >= 25% · one-day pass@1 >= 50%
-    Vuln types: SQLi · XSS · CSRF · SSRF · SSTI · LFI · RCE · IDOR
+  Card 1 [web icon, red border]:
+  Surface: `Web Applications`
+  Benchmark: CVE-Bench — 40 real critical CVEs
+  Question: "Can the agent find and exploit web vulnerabilities without a hint?"
 
-  GraphQL APIs:
-    Primary: PrediQL (6 APIs)
-    Baselines: ZAP · Burp Suite · EvoMaster · GraphQLer
-    Target: Schema coverage % · Vulnerability count vs. baselines
-    Vuln types: Schema abuse · Dependency-chain injection · IDOR · Auth bypass
+  Card 2 [API icon, cyan border]:
+  Surface: `GraphQL APIs`
+  Benchmark: PrediQL — 6 real GraphQL APIs
+  Question: "Can the agent abuse API schemas and find injection points?"
 
-  Multi-Host / Active Directory:
-    Primary: Incalmo MHBench (40 environments)
-    Baseline: Incalmo (37/40 floor)
-    Target: Host-compromise success rate
-    Vuln types: Lateral movement · Credential reuse · Privilege escalation
+  Card 3 [network icon, amber border]:
+  Surface: `Multi-Host Networks`
+  Benchmark: MHBench — 40 multi-host environments
+  Question: "Can the agent move laterally across hosts and escalate privileges?"
 
-- Methodological principles:
-  - All baselines re-run under same model + compute budget (not copied from papers)
-  - McNemar's test · 95% Wilson CI · 10 runs on primary metric (CVE-Bench)
-  - Cost-per-exploit reported alongside every pass rate
+- Bottom guiding principle (amber italic): "We only test on attack surfaces that already have a published, oracle-backed benchmark. No custom benchmarks."
 
-**Animation:** Surface cards slide up. Target metrics count up. Bullets stagger.
+**Animation:** Cards slide up with 150ms stagger. Bottom principle fades in last.
 
 ---
 
-### SLIDE 17 — Project Timeline and Status
+### SLIDE 17 — Project Timeline
 
-**Layout:** Gantt-style horizontal timeline.
+**Layout:** Simple horizontal timeline. 4 phases, color-coded by status.
 
 **Content:**
 - Slide title: `Project Timeline`
-- Sub-label: `6-month thesis program · Started Sep 2026`
+- Sub-label: `6-month thesis program · Sep 2026 — Mar 2027`
 
-- Horizontal timeline (Sep 2026 to Mar 2027):
-  Sep 2026 [GREEN SOLID]: Literature Review (DONE) + Architecture Design (DONE)
-  Oct–Nov 2026 [AMBER STRIPED]: VDG Implementation + Pilot Study (PentestEval GT edge inference)
-  Dec–Jan 2027 [DARK OUTLINED]: Evaluation Runs (CVE-Bench + PentestEval + PrediQL + MHBench)
-  Feb–Mar 2027 [DARK OUTLINED]: Thesis Writing + Final Submission
+- Timeline (4 phases, left to right):
 
-- Milestone flags:
-  M1 (Oct 2026): Pilot study result — edge inference precision gate (>= 50% required)
-  M2 (Dec 2026): CVE-Bench preliminary run
-  M3 (Mar 2027): Final evaluation complete
+  Phase 1 [GREEN solid bar]: Sep 2026
+  "Literature Review + Architecture Design"
+  Badge: DONE
 
-- Status chips:
-  Complete (green): Literature review · Architecture specification · Inception report
-  Next (amber): VDG prototype · Pilot study
-  Planned (grey): Benchmark runs · Ablations · Thesis writing
+  Phase 2 [AMBER striped bar]: Oct–Nov 2026
+  "Build + Early Testing"
+  Badge: UP NEXT
 
-**Animation:** Timeline fills left-to-right. Milestone flags pop in. Status chips fade in at bottom.
+  Phase 3 [DARK outlined bar]: Dec–Jan 2027
+  "Run Experiments"
+  Badge: PLANNED
 
----
+  Phase 4 [DARK outlined bar]: Feb–Mar 2027
+  "Write + Submit"
+  Badge: PLANNED
 
-### SLIDE 18 — Known Challenges and Risks
+- 3 status chips below timeline:
+  - Green: Complete — Literature review · Inception report
+  - Amber: Next — System build · Early tests
+  - Grey: Planned — Full experiments · Thesis writing
 
-**Layout:** 2x2 grid of risk cards.
-
-**Content:**
-- Slide title: `Known Challenges`
-- Sub-label: `Surfaced during literature review — addressed proactively`
-
-- Risk 1 (red border, HIGH RISK): Edge Inference Without Ground Truth
-  "VDG prerequisite edges are LLM-inferred. Noise weakens the dependency contribution."
-  Mitigation: "Mandatory pilot study on PentestEval GT dependencies. Precision >= 50% gate before C1 claim."
-
-- Risk 2 (amber border, MEDIUM RISK): Sandbox vs. Real World Gap
-  "Fang et al.: 1 exploitable XSS in 50 real sites (2%) vs. 73.3% in sandbox. WAFs inflate numbers."
-  Mitigation: "Report sandbox and real-world (BountyBench, HTB Season 8) separately."
-
-- Risk 3 (amber border, MEDIUM RISK): Negative Transfer in Memory
-  "A strategy for Framework A v1 could be harmful against v2. No surveyed paper addresses this."
-  Mitigation: "Negative transfer guard in skill promotion. Ablation A2 split: seen vs. unseen technology."
-
-- Risk 4 (cyan border, MANAGEABLE): UCB Hyperparameter Sensitivity
-  "7 tunable parameters. Narrow optimal range may not generalize."
-  Mitigation: "Grid search on Tier 1 (PentestEval). Report +/-10% perturbation sensitivity."
-
-**Animation:** Cards appear 2x2 with 150ms stagger. Risk level badge pops in with color flash.
+**Animation:** Timeline fills left-to-right. Phase labels drop in. Status chips fade in at bottom.
 
 ---
 
-### SLIDE 19 — Summary
+### SLIDE 18 — Challenges We Already See
 
-**Layout:** Two-column recap. Bold closing statement.
+**Layout:** 2x2 grid of simple challenge cards. One title + one plain-English sentence each. No mitigation detail.
 
 **Content:**
-- Slide title: `What We Have Accomplished (Inception Stage)`
+- Slide title: `Challenges We Are Aware Of`
+- Sub-label: `Honest about the hard parts from day one`
 
-- Left (What's Done):
-  - Systematic review of 11 papers
-  - Two failure modes identified with quantitative evidence
-  - Research gap formalized
-  - Three contribution hypotheses (C1, C2, C3) with validation gates
-  - Architecture specified at implementation level
-  - Full evaluation plan: 7-tier benchmark suite, ablation design
-  - Inception report submitted
+- 4 cards (2x2):
 
-- Right (What's Next):
-  - VDG prototype implementation
-  - Pilot study — edge inference precision on PentestEval GT
-  - Full CVE-Bench + PentestEval evaluation runs
-  - GraphQL and multi-host evaluation
-  - Ablation studies (A1–A8)
-  - Thesis writing and final submission
+  Card 1 (red border):
+  Icon: question mark over a graph
+  Title: `Inferring Dependencies Is Hard`
+  "Building the prerequisite graph using an LLM — not human annotation — will be noisy. We need to measure how noisy before relying on it."
+
+  Card 2 (amber border):
+  Icon: lab flask vs. real globe
+  Title: `Sandbox vs. Real World`
+  "What works on a controlled benchmark may not hold on a real-world target. We'll test both and report the gap honestly."
+
+  Card 3 (amber border):
+  Icon: memory chip with warning triangle
+  Title: `Memory Could Backfire`
+  "A strategy that worked against software version 1 might be harmful against version 2. This needs a safety mechanism."
+
+  Card 4 (cyan border):
+  Icon: tuning sliders
+  Title: `Tuning Is Tricky`
+  "The approach has parameters to adjust. Results must not depend on a single lucky configuration."
+
+**Animation:** Cards appear 2x2 with 150ms stagger. Icons animate first, then text.
+
+---
+
+### SLIDE 19 — Where We Are
+
+**Layout:** Two-column status. Bold closing statement.
+
+**Content:**
+- Slide title: `Where We Are`
+
+- Left column — Done (green checkmarks):
+  - Read and synthesised 11 papers on autonomous VAPT
+  - Identified 2 quantified failure modes
+  - Formalized the research gap
+  - Proposed 3 research directions (not results)
+  - Sketched the architecture approach
+  - Submitted inception report
+
+- Right column — What's coming (forward arrows, amber):
+  - Build the prototype
+  - Early experiments to test the ideas
+  - Full benchmark evaluation (web, GraphQL, multi-host)
+  - Refine based on what we find
+  - Write the thesis
 
 - Bottom centered (Syne 700, 26px, white):
-  "The gap is identified. The direction is set. RedGrid investigates whether dependency-aware exploration can make autonomous penetration testing meaningfully better."
+  "The gap is identified. The direction is set. Now — we go build it."
 
-**Animation:** Checklist items appear with checkmark-draw SVG animation. Closing statement fades in last.
+**Animation:** Left items appear with checkmark-draw animation. Right items stagger in. Closing statement fades in last.
 
 ---
 
-### SLIDE 20 — Thank You / Q and A
+### SLIDE 20 — Thank You
 
 **Layout:** Full-bleed. Centered. Minimal.
 
 **Content:**
-- Background: Dark charcoal + subtle hex/circuit trace pattern (8% opacity)
+- Background: Dark charcoal + subtle hex/circuit trace (8% opacity)
 - Center top: `RedGrid` (large gradient text, red to cyan)
-- Center: `Thank You` (large, white)
+- Center: `Thank You` (large, white, Syne 800)
 - Sub-line (cyan): `Questions welcome`
 - Thin separator (gradient red to cyan)
-- Two columns for Q&A reference:
+- Below separator — two small columns:
 
   Key Numbers:
     11 papers surveyed
-    3 contribution hypotheses
-    4 architecture layers
-    3 benchmarked attack surfaces
+    3 contribution directions
+    3 attack surfaces tested
     40 critical CVEs (primary benchmark)
-    7 UCB hyperparameters
 
-  Key Terms:
-    VDG — Vulnerability Dependency Graph
-    UCB — Upper Confidence Bound (exploration strategy)
-    EL — Environmental Layer (confirmed facts only)
-    ADM — Attack Decision-Making (PentestEval stage)
-    E_ord — Ordinal evidence confidence score (0–5)
-    FullCompact — Context reconstruction from EL+AL at 85% utilization
+  Key Terms (plain English):
+    VDG — the dependency graph we plan to build
+    UCB — how the agent decides what to try next
+    ADM — the weakest stage in all current systems
+    RedGrid — our system (not yet built)
 
 - Bottom-left: `[Author Names] · [University] · Sep 2026`
-- Bottom-right: `Target venue: USENIX Security / IEEE S&P`
 
-**Animation:** "Thank You" scale-up (0.95 to 1.0). Numbers count up. Terms stagger in.
+**Animation:** "Thank You" fades in with soft scale-up. Numbers count up. Terms stagger in.
 
 ---
 
@@ -647,12 +659,13 @@ Use these exact numbers. Do not fabricate or round differently.
 
 ## Tone and Voice Guidelines
 
-- **Confident but honest:** Implementation has not started. Say so clearly. But the direction is well-reasoned and evidence-backed.
-- **Research-grade:** Use precise vocabulary from the papers. Never over-claim.
-- **Engaging:** Short sentences. Active voice. Data-driven. No filler.
-- **Visual-first:** Every number should ideally be a chart, not a sentence.
-- **Time-aware:** 10-minute slot. Audiences should follow without reading dense text.
+- **Confident but honest:** Implementation has not started. Say so clearly. The direction is evidence-backed but results are not in hand.
+- **Surface-level for slides 12–20:** No pseudocode, no formula details, no ablation terminology, no layer-by-layer component names. Plain English only.
+- **Deep for slides 1–11:** Chapter 1 and Chapter 2 content (problem, literature, gap analysis) should be precise, data-driven, and well-evidenced with exact numbers.
+- **Engaging:** Short sentences. Active voice. Data-driven. No padding.
+- **Visual-first:** Every number should be a chart, not a sentence.
+- **Time-aware:** 10-minute slot. Audiences follow without reading dense text.
 
 ---
 
-*End of master prompt. Provide this entire file to your slide generation AI agent. The agent should generate all 20 slides as specified, including all animations, color codes, typography, layout details, and reference data.*
+*End of master prompt. Provide this entire file to your slide generation AI agent.*
