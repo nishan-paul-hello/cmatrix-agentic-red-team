@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>RedGrid — Slide 01 — Title</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{
+    width:100%;height:100%;
+    background:#E0DDD8;
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Source Sans 3',system-ui,sans-serif;
+  }
+  .slide{
+    width:1280px;height:720px;
+    background:#F7F4EF;
+    position:relative;
+    overflow:hidden;
+    box-shadow:0 8px 48px rgba(0,0,0,.18);
+  }
+  /* Left crimson bar */
+  .left-bar{
+    position:absolute;left:0;top:0;bottom:0;
+    width:8px;
+    background:#8B1A1A;
+  }
+  /* Top-left logo area */
+  .logo-zone{
+    position:absolute;top:40px;left:48px;
+    display:flex;flex-direction:column;gap:4px;
+  }
+  .logo-box{
+    width:52px;height:52px;
+    border:1.5px solid #D4CFC8;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .logo-box span{
+    font-family:'Source Sans 3',sans-serif;
+    font-size:11px;color:#9A9AAA;
+  }
+  .uni-name{
+    font-family:'Source Sans 3',sans-serif;
+    font-size:12px;color:#6B6B7A;font-weight:400;
+    margin-top:6px;
+  }
+  .dept-name{
+    font-family:'Source Sans 3',sans-serif;
+    font-size:11px;color:#9A9AAA;font-weight:400;
+  }
+  /* Main content centered */
+  .content{
+    position:absolute;
+    left:8px;right:0;top:0;bottom:0;
+    display:flex;flex-direction:column;
+    align-items:center;justify-content:center;
+    text-align:center;
+    padding:60px 80px;
+  }
+  .meta-label{
+    font-family:'Source Sans 3',sans-serif;
+    font-size:11px;
+    font-weight:400;
+    color:#9A9AAA;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    margin-bottom:28px;
+  }
+  .project-name{
+    font-family:'Playfair Display',Georgia,serif;
+    font-weight:700;
+    font-size:72px;
+    color:#8B1A1A;
+    line-height:1.1;
+    letter-spacing:-0.01em;
+  }
+  .hairline{
+    width:360px;
+    height:2px;
+    background:#D4CFC8;
+    margin:20px auto;
+  }
+  .subtitle{
+    font-family:'Source Sans 3',sans-serif;
+    font-size:22px;
+    font-weight:400;
+    color:#2E4A7A;
+    max-width:680px;
+    line-height:1.45;
+  }
+  .presenter-zone{
+    margin-top:40px;
+    display:flex;flex-direction:column;align-items:center;gap:6px;
+  }
+  .presented-by{
+    font-family:'Source Sans 3',sans-serif;
+    font-size:11px;font-weight:600;
+    color:#9A9AAA;letter-spacing:0.10em;
+    text-transform:uppercase;
+  }
+  .author-name{
+    font-family:'Source Sans 3',sans-serif;
+    font-size:18px;font-weight:600;color:#1A1A2E;
+  }
+  .supervisor{
+    font-family:'Source Sans 3',sans-serif;
+    font-size:14px;font-weight:400;color:#6B6B7A;
+  }
+  /* Bottom-right badge */
+  .stage-badge{
+    position:absolute;
+    bottom:36px;right:80px;
+    font-family:'Source Sans 3',sans-serif;
+    font-size:11px;font-weight:600;
+    color:#7A4F1A;
+    background:#F2EAD9;
+    border:1px solid #A0631A;
+    padding:5px 12px;
+    border-radius:3px;
+    letter-spacing:0.04em;
+  }
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="left-bar"></div>
+
+  <!-- Top-left logo + institution -->
+  <div class="logo-zone">
+    <div class="logo-box"><span>[LOGO]</span></div>
+    <div class="uni-name">[University Name]</div>
+    <div class="dept-name">Department of Computer Science</div>
+  </div>
+
+  <!-- Main centered content -->
+  <div class="content">
+    <div class="meta-label">MSc Thesis &nbsp;·&nbsp; Inception Stage &nbsp;·&nbsp; September 2026</div>
+    <div class="project-name">RedGrid</div>
+    <div class="hairline"></div>
+    <div class="subtitle">Dependency-Constrained UCB Exploration for Autonomous Penetration Testing</div>
+    <div class="presenter-zone">
+      <div class="presented-by">Presented by</div>
+      <div class="author-name">[Author Names]</div>
+      <div class="supervisor">Supervisor: [Supervisor Name]</div>
+    </div>
+  </div>
+
+  <!-- Stage badge -->
+  <div class="stage-badge">Early Stage — Inception Report</div>
+</div>
+</body>
+</html>
