@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>RedGrid — Slide 18 — Challenges</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{width:100%;height:100%;background:#E0DDD8;display:flex;align-items:center;justify-content:center;font-family:'Source Sans 3',system-ui,sans-serif;}
+  .slide{width:1280px;height:720px;background:#F7F4EF;position:relative;overflow:hidden;box-shadow:0 8px 48px rgba(0,0,0,.18);}
+
+  .top-right-mark{position:absolute;top:24px;right:80px;font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:18px;color:#8B1A1A;}
+
+  .header{position:absolute;top:44px;left:80px;right:160px;}
+  .slide-title{font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:44px;color:#1A1A2E;line-height:1.15;}
+  .authority-bar{height:3px;background:#8B1A1A;width:55%;margin-top:8px;}
+  .sub-label{font-family:'Source Sans 3',sans-serif;font-size:13px;font-weight:400;color:#6B6B7A;margin-top:6px;}
+
+  /* Body */
+  .body{position:absolute;top:136px;left:80px;right:80px;bottom:50px;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:20px;}
+
+  /* Cards */
+  .challenge-card{
+    background:#EFEBE3;
+    padding:16px 18px;
+    display:flex;flex-direction:column;
+    position:relative;
+  }
+  .c1{border-left:3px solid #8B1A1A;}
+  .c2{border-left:3px solid #A0631A;}
+  .c3{border-left:3px solid #A0631A;}
+  .c4{border-left:3px solid #2E4A7A;}
+
+  .risk-badge{
+    position:absolute;top:16px;right:18px;
+    font-family:'Source Sans 3',sans-serif;font-weight:700;font-size:10px;
+    padding:3px 8px;border-radius:3px;
+    letter-spacing:0.05em;
+  }
+  .risk-high{background:#F5D5D5;color:#7A1A1A;}
+  .risk-med{background:#F5E9D0;color:#7A4F1A;}
+  .risk-low{background:#E8EDF5;color:#2E4A7A;}
+
+  .card-title{font-family:'Source Sans 3',sans-serif;font-weight:700;font-size:18px;color:#1A1A2E;margin-bottom:8px;max-width:85%;line-height:1.2;}
+  .card-desc{font-family:'Source Sans 3',sans-serif;font-weight:400;font-size:16px;color:#6B6B7A;line-height:1.45;flex:1;}
+
+  /* Footer */
+  .footer-line{position:absolute;bottom:36px;left:0;right:0;height:1px;background:#D4CFC8;}
+  .footer-mark{position:absolute;bottom:10px;left:80px;font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:11px;color:#8B1A1A;}
+  .footer-num{position:absolute;right:80px;bottom:10px;font-family:'IBM Plex Mono',monospace;font-size:13px;color:#9A9AAA;}
+  .progress{position:absolute;bottom:0;left:0;height:3px;background:#8B1A1A;width:85%;}
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="top-right-mark">RedGrid</div>
+
+  <div class="header">
+    <div class="slide-title">Challenges We Are Aware Of</div>
+    <div class="authority-bar"></div>
+    <div class="sub-label">Surfaced during literature review — not surprises</div>
+  </div>
+
+  <div class="body">
+    <div class="challenge-card c1">
+      <div class="risk-badge risk-high">HIGH</div>
+      <div class="card-title">Inferring Dependencies Is Hard</div>
+      <div class="card-desc">"Building the prerequisite graph using an LLM — not human annotation — will be noisy. We need to measure how noisy before relying on it."</div>
+    </div>
+    
+    <div class="challenge-card c2">
+      <div class="risk-badge risk-med">MEDIUM</div>
+      <div class="card-title">Sandbox vs. Real World</div>
+      <div class="card-desc">"What works on a controlled benchmark may not hold on a real-world target. We'll test both and report the gap honestly."</div>
+    </div>
+    
+    <div class="challenge-card c3">
+      <div class="risk-badge risk-med">MEDIUM</div>
+      <div class="card-title">Memory Could Backfire</div>
+      <div class="card-desc">"A strategy that worked against software version 1 might be harmful against version 2. This needs a safety mechanism."</div>
+    </div>
+    
+    <div class="challenge-card c4">
+      <div class="risk-badge risk-low">MANAGEABLE</div>
+      <div class="card-title">Tuning Is Tricky</div>
+      <div class="card-desc">"The approach has parameters to adjust. Results must not depend on a single lucky configuration."</div>
+    </div>
+  </div>
+
+  <div class="footer-line"></div>
+  <div class="footer-mark">RedGrid</div>
+  <div class="footer-num">18 / 20</div>
+  <div class="progress"></div>
+</div>
+</body>
+</html>

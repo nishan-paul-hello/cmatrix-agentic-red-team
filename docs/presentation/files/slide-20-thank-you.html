@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>RedGrid — Slide 20 — Thank You</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{width:100%;height:100%;background:#E0DDD8;display:flex;align-items:center;justify-content:center;font-family:'Source Sans 3',system-ui,sans-serif;}
+  .slide{width:1280px;height:720px;background:#F7F4EF;position:relative;overflow:hidden;box-shadow:0 8px 48px rgba(0,0,0,.18);}
+
+  /* Left crimson bar (same as title slide) */
+  .left-bar{
+    position:absolute;left:0;top:0;bottom:0;
+    width:8px;
+    background:#8B1A1A;
+  }
+
+  /* Body */
+  .content{position:absolute;top:0;left:8px;right:0;bottom:0;display:flex;flex-direction:column;align-items:center;}
+
+  /* Top Section */
+  .top-section{
+    margin-top:160px;display:flex;flex-direction:column;align-items:center;
+  }
+  .proj-name{font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:52px;color:#8B1A1A;}
+  .hairline{width:300px;height:2px;background:#D4CFC8;margin:12px 0;}
+  .ty-title{font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:56px;color:#1A1A2E;}
+  .ty-sub{font-family:'Source Sans 3',sans-serif;font-weight:400;font-style:italic;font-size:20px;color:#2E4A7A;margin-top:4px;}
+
+  /* Bottom Data Section */
+  .data-cols{
+    display:flex;gap:40px;margin-top:70px;width:700px;
+  }
+  .col{flex:1;}
+  
+  .col-title{
+    font-family:'Source Sans 3',sans-serif;font-weight:700;font-size:11px;
+    color:#9A9AAA;letter-spacing:0.12em;text-transform:uppercase;
+    margin-bottom:16px;border-bottom:1px solid #D4CFC8;padding-bottom:8px;
+  }
+  
+  .list{display:flex;flex-direction:column;gap:12px;}
+  .list-item{display:flex;align-items:flex-start;gap:12px;}
+  
+  /* Left Col (Numbers) */
+  .num-val{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:18px;color:#8B1A1A;width:30px;}
+  .num-label{font-family:'Source Sans 3',sans-serif;font-weight:400;font-size:15px;color:#6B6B7A;padding-top:2px;}
+  
+  /* Right Col (Terms) */
+  .term-val{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:15px;color:#2E4A7A;width:65px;}
+  .term-label{font-family:'Source Sans 3',sans-serif;font-weight:400;font-size:14px;color:#6B6B7A;padding-top:2px;line-height:1.4;}
+
+  /* Footer */
+  .footer{position:absolute;bottom:36px;left:80px;font-family:'Source Sans 3',sans-serif;font-weight:400;font-size:13px;color:#9A9AAA;}
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="left-bar"></div>
+
+  <div class="content">
+    <div class="top-section">
+      <div class="proj-name">RedGrid</div>
+      <div class="hairline"></div>
+      <div class="ty-title">Thank You</div>
+      <div class="ty-sub">Questions welcome</div>
+    </div>
+    
+    <div class="data-cols">
+      <div class="col">
+        <div class="col-title">KEY NUMBERS</div>
+        <div class="list">
+          <div class="list-item">
+            <div class="num-val">11</div>
+            <div class="num-label">papers surveyed</div>
+          </div>
+          <div class="list-item">
+            <div class="num-val">3</div>
+            <div class="num-label">contribution directions</div>
+          </div>
+          <div class="list-item">
+            <div class="num-val">3</div>
+            <div class="num-label">attack surfaces for evaluation</div>
+          </div>
+          <div class="list-item">
+            <div class="num-val">40</div>
+            <div class="num-label">critical CVEs in primary benchmark</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col">
+        <div class="col-title">KEY TERMS</div>
+        <div class="list">
+          <div class="list-item">
+            <div class="term-val">VDG</div>
+            <div class="term-label">the dependency graph we plan to build</div>
+          </div>
+          <div class="list-item">
+            <div class="term-val">UCB</div>
+            <div class="term-label">how the agent decides what to try next</div>
+          </div>
+          <div class="list-item">
+            <div class="term-val">ADM</div>
+            <div class="term-label">the weakest stage in all current systems</div>
+          </div>
+          <div class="list-item">
+            <div class="term-val">RedGrid</div>
+            <div class="term-label">our system (not yet built)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    [Author Names] &nbsp;·&nbsp; [University Name] &nbsp;·&nbsp; September 2026
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>RedGrid — Slide 19 — Where We Are</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{width:100%;height:100%;background:#E0DDD8;display:flex;align-items:center;justify-content:center;font-family:'Source Sans 3',system-ui,sans-serif;}
+  .slide{width:1280px;height:720px;background:#F7F4EF;position:relative;overflow:hidden;box-shadow:0 8px 48px rgba(0,0,0,.18);}
+
+  .top-right-mark{position:absolute;top:24px;right:80px;font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:18px;color:#8B1A1A;}
+
+  .header{position:absolute;top:44px;left:80px;right:160px;}
+  .slide-title{font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:44px;color:#1A1A2E;line-height:1.15;}
+  .authority-bar{height:3px;background:#8B1A1A;width:55%;margin-top:8px;}
+
+  /* Body */
+  .body{position:absolute;top:136px;left:80px;right:80px;bottom:50px;display:flex;flex-direction:column;}
+
+  /* 2 Cols */
+  .cols{display:flex;gap:40px;flex:1;}
+  .col{flex:1;display:flex;flex-direction:column;gap:12px;}
+  
+  .col-head{font-family:'Source Sans 3',sans-serif;font-weight:700;font-size:13px;letter-spacing:0.10em;text-transform:uppercase;padding-bottom:12px;border-bottom:1px solid #D4CFC8;}
+  .col-done .col-head{color:#2A6B3C;}
+  .col-next .col-head{color:#A0631A;}
+
+  .list{list-style:none;display:flex;flex-direction:column;gap:16px;margin-top:10px;}
+  .list-item{display:flex;gap:12px;font-family:'Source Sans 3',sans-serif;font-weight:400;font-size:17px;color:#1A1A2E;line-height:1.4;}
+  .icon-done{color:#2A6B3C;font-weight:700;font-size:18px;}
+  .icon-next{color:#A0631A;font-weight:700;font-size:18px;}
+
+  /* Question Callout */
+  .q-callout{
+    border-left:3px solid #9A9AAA;background:#EFEBE3;
+    padding:16px 20px;border-radius:3px;
+    margin-bottom:24px;
+  }
+  .q-label{font-family:'Source Sans 3',sans-serif;font-weight:700;font-size:10px;color:#9A9AAA;letter-spacing:0.05em;margin-bottom:6px;}
+  .q-text{font-family:'Source Sans 3',sans-serif;font-weight:400;font-size:16px;color:#1A1A2E;}
+
+  /* Closing Statement */
+  .closing-statement{
+    text-align:center;
+    font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:28px;color:#1A1A2E;
+  }
+
+  /* Footer */
+  .footer-line{position:absolute;bottom:36px;left:0;right:0;height:1px;background:#D4CFC8;}
+  .footer-mark{position:absolute;bottom:10px;left:80px;font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:11px;color:#8B1A1A;}
+  .footer-num{position:absolute;right:80px;bottom:10px;font-family:'IBM Plex Mono',monospace;font-size:13px;color:#9A9AAA;}
+  .progress{position:absolute;bottom:0;left:0;height:3px;background:#8B1A1A;width:95%;}
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="top-right-mark">RedGrid</div>
+
+  <div class="header">
+    <div class="slide-title">Where We Are</div>
+    <div class="authority-bar"></div>
+  </div>
+
+  <div class="body">
+    <div class="cols">
+      <!-- Left Col -->
+      <div class="col col-done">
+        <div class="col-head">COMPLETED</div>
+        <ul class="list">
+          <li class="list-item"><span class="icon-done">✓</span> <span>Read and synthesised 11 papers on autonomous VAPT</span></li>
+          <li class="list-item"><span class="icon-done">✓</span> <span>Identified 2 quantified failure modes</span></li>
+          <li class="list-item"><span class="icon-done">✓</span> <span>Formalized the research gap</span></li>
+          <li class="list-item"><span class="icon-done">✓</span> <span>Proposed 3 research directions (not results)</span></li>
+          <li class="list-item"><span class="icon-done">✓</span> <span>Sketched the architecture approach</span></li>
+          <li class="list-item"><span class="icon-done">✓</span> <span>Submitted inception report</span></li>
+        </ul>
+      </div>
+      
+      <!-- Right Col -->
+      <div class="col col-next">
+        <div class="col-head">COMING NEXT</div>
+        <ul class="list">
+          <li class="list-item"><span class="icon-next">►</span> <span>Build the prototype</span></li>
+          <li class="list-item"><span class="icon-next">►</span> <span>Early experiments to test the ideas</span></li>
+          <li class="list-item"><span class="icon-next">►</span> <span>Full benchmark evaluation (web, GraphQL, multi-host)</span></li>
+          <li class="list-item"><span class="icon-next">►</span> <span>Refine based on what we find</span></li>
+          <li class="list-item"><span class="icon-next">►</span> <span>Write the thesis</span></li>
+        </ul>
+      </div>
+    </div>
+    
+    <div>
+      <div class="q-callout">
+        <div class="q-label">QUESTION FOR THE COMMITTEE</div>
+        <div class="q-text">Does the VDG + dependency-aware exploration direction look worth building out, or should we narrow scope before implementation starts?</div>
+      </div>
+      <div class="closing-statement">The gap is identified. The direction is set. Now — we go build it.</div>
+    </div>
+  </div>
+
+  <div class="footer-line"></div>
+  <div class="footer-mark">RedGrid</div>
+  <div class="footer-num">19 / 20</div>
+  <div class="progress"></div>
+</div>
+</body>
+</html>
