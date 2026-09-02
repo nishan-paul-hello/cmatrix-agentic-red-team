@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>RedGrid — Slide 14 — The VDG Algorithm</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0D1117; --surface:#161B22; --red:#FF3B3B; --cyan:#00D4FF;
+    --amber:#FFB347; --text:#F0F6FC; --text2:#8B949E; --border:#30363D; --green:#3FB950;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{background:#05070A;width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;}
+  .stage{width:1280px;height:720px;position:relative;overflow:hidden;background:var(--bg);box-shadow:0 40px 120px rgba(0,0,0,.6);}
+  .progress{position:absolute;top:0;left:0;height:2px;width:70%;background:linear-gradient(90deg,var(--red),var(--cyan));}
+  .pagenum{position:absolute;bottom:18px;right:64px;color:var(--text2);font-family:'JetBrains Mono',monospace;font-size:13px;}
+  .watermark{position:absolute;bottom:18px;left:64px;color:var(--text2);font-family:'JetBrains Mono',monospace;font-size:13px;opacity:.6;}
+
+  .head{padding:36px 56px 0;}
+  .title{font-family:'Syne',sans-serif;font-weight:800;font-size:28px;color:var(--text);}
+  .sub{font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--text2);margin-top:4px;}
+
+  .grid{display:flex;padding:22px 56px 0;gap:32px;height:440px;}
+  .left{flex:1;}
+  .right{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+
+  .code{
+    background:var(--surface);border:1px solid var(--border);border-radius:8px;
+    padding:18px 20px;font-family:'JetBrains Mono',monospace;font-size:13.5px;line-height:1.9;color:var(--text);
+  }
+  .code .ln{opacity:0;animation:codeIn 300ms ease forwards;white-space:pre;}
+  .code .c1{color:var(--cyan);}
+  .code .c2{color:var(--amber);}
+  .code .cm{color:var(--text2);}
+  .legend{margin-top:12px;font-size:11.5px;color:var(--text2);font-family:'JetBrains Mono',monospace;}
+
+  .callout{margin-top:16px;border-left:4px solid var(--amber);background:rgba(255,179,71,0.06);
+    padding:12px 16px;font-size:13px;color:var(--text);line-height:1.5;border-radius:2px;max-width:1100px;
+    opacity:0;animation:fadeIn 400ms 2200ms ease forwards;}
+
+  @keyframes codeIn{to{opacity:1;}}
+  @keyframes fadeIn{to{opacity:1;}}
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="progress"></div>
+  <div class="head">
+    <div class="title">The VDG Algorithm — Core Idea</div>
+    <div class="sub">Dependency-Constrained UCB Selection</div>
+  </div>
+
+  <div class="grid">
+    <div class="left">
+      <div class="code" id="code">
+<span class="ln" style="animation-delay:0ms;"><span class="c1">UCB_score(v)</span> =</span>
+<span class="ln" style="animation-delay:120ms;">    (w_v / n_v)           <span class="cm">&lt;- exploitation</span></span>
+<span class="ln" style="animation-delay:240ms;">  + C * sqrt(ln N / n_v)  <span class="cm">&lt;- exploration bonus</span></span>
+<span class="ln" style="animation-delay:360ms;">  + alpha * phi_v         <span class="cm">&lt;- LLM promise score</span></span>
+<span class="ln" style="animation-delay:480ms;">  + gamma * (E_ord / 5)   <span class="cm">&lt;- ordinal evidence</span></span>
+<span class="ln" style="animation-delay:600ms;">  - kappa * context_load  <span class="cm">&lt;- cost penalty</span></span>
+<span class="ln" style="animation-delay:720ms;">  + lambda * epss_prior   <span class="cm">&lt;- CVE prior</span></span>
+<span class="ln" style="animation-delay:900ms;">&nbsp;</span>
+<span class="ln" style="animation-delay:1000ms;"><span class="c2">Selection rule:</span></span>
+<span class="ln" style="animation-delay:1150ms;">eligible = {v | status==ELIGIBLE</span>
+<span class="ln" style="animation-delay:1300ms;">             AND all prerequisites EXPLOITED}</span>
+<span class="ln" style="animation-delay:1450ms;">selected = argmax UCB_score(eligible)</span>
+      </div>
+      <div class="legend">phi = LLM-assessed exploitability · E_ord = calibrated evidence scale 0–5</div>
+    </div>
+
+    <div class="right">
+      <svg viewBox="0 0 420 340" width="100%" style="max-width:400px;">
+        <defs>
+          <marker id="a2" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#8B949E"/></marker>
+        </defs>
+        <line x1="90" y1="70" x2="210" y2="150" stroke="#8B949E" stroke-width="1.5" marker-end="url(#a2)" stroke-dasharray="4 4" opacity="0.6"/>
+        <line x1="90" y1="230" x2="130" y2="140" stroke="#8B949E" stroke-width="1.5" opacity="0.3"/>
+        <line x1="210" y1="150" x2="330" y2="90" stroke="#8B949E" stroke-width="1.5" marker-end="url(#a2)" stroke-dasharray="4 4" opacity="0.6"/>
+
+        <!-- Node A SQLi selected, pulsing -->
+        <g>
+          <circle cx="70" cy="70" r="30" fill="none" stroke="#FF3B3B" stroke-width="2" opacity="0.6">
+            <animate attributeName="r" values="30;40;30" dur="1.8s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values="0.6;0;0.6" dur="1.8s" repeatCount="indefinite"/>
+          </circle>
+          <circle cx="70" cy="70" r="30" fill="#161B22" stroke="#3FB950" stroke-width="2.5"/>
+          <text x="70" y="65" text-anchor="middle" fill="#F0F6FC" font-family="Inter" font-size="11" font-weight="600">SQLi</text>
+          <text x="70" y="78" text-anchor="middle" fill="#3FB950" font-family="JetBrains Mono" font-size="9">UCB 2.31</text>
+        </g>
+
+        <!-- Node B XSS -->
+        <circle cx="90" cy="230" r="28" fill="#161B22" stroke="#3FB950" stroke-width="2"/>
+        <text x="90" y="226" text-anchor="middle" fill="#F0F6FC" font-family="Inter" font-size="11" font-weight="600">XSS</text>
+        <text x="90" y="238" text-anchor="middle" fill="#3FB950" font-family="JetBrains Mono" font-size="9">UCB 1.87</text>
+
+        <!-- Node C AuthBypass blocked -->
+        <circle cx="210" cy="150" r="30" fill="#161B22" stroke="#F85149" stroke-width="2" stroke-dasharray="4 4" opacity="0.75"/>
+        <text x="210" y="145" text-anchor="middle" fill="#8B949E" font-family="Inter" font-size="10.5" font-weight="600">Auth</text>
+        <text x="210" y="157" text-anchor="middle" fill="#8B949E" font-family="Inter" font-size="10.5" font-weight="600">Bypass</text>
+        <text x="210" y="169" text-anchor="middle" fill="#F85149" font-family="JetBrains Mono" font-size="8.5">UCB 2.10 · prereq A</text>
+
+        <!-- Node D SSRF -->
+        <circle cx="330" cy="230" r="26" fill="#161B22" stroke="#3FB950" stroke-width="2"/>
+        <text x="330" y="226" text-anchor="middle" fill="#F0F6FC" font-family="Inter" font-size="10.5" font-weight="600">SSRF</text>
+        <text x="330" y="238" text-anchor="middle" fill="#3FB950" font-family="JetBrains Mono" font-size="9">UCB 0.94</text>
+
+        <!-- Node E RCE blocked -->
+        <circle cx="330" cy="90" r="28" fill="#161B22" stroke="#F85149" stroke-width="2" stroke-dasharray="4 4" opacity="0.75"/>
+        <text x="330" y="86" text-anchor="middle" fill="#8B949E" font-family="Inter" font-size="11" font-weight="600">RCE</text>
+        <text x="330" y="98" text-anchor="middle" fill="#F85149" font-family="JetBrains Mono" font-size="8.5">UCB 3.40 · prereq C</text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="callout" style="margin-left:56px;">Unlike flat UCB, only ELIGIBLE nodes are considered — nodes blocked by unmet prerequisites are invisible to selection until their dependencies are satisfied.</div>
+
+  <div class="pagenum">14 / 20</div>
+  <div class="watermark">RedGrid</div>
+</div>
+</body>
+</html>

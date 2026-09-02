@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>RedGrid — Slide 13 — Architecture Overview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0D1117; --surface:#161B22; --red:#FF3B3B; --cyan:#00D4FF;
+    --amber:#FFB347; --text:#F0F6FC; --text2:#8B949E; --border:#30363D; --green:#3FB950;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{background:#05070A;width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;}
+  .stage{width:1280px;height:720px;position:relative;overflow:hidden;background:var(--bg);box-shadow:0 40px 120px rgba(0,0,0,.6);}
+  .progress{position:absolute;top:0;left:0;height:2px;width:65%;background:linear-gradient(90deg,var(--red),var(--cyan));}
+  .pagenum{position:absolute;bottom:14px;right:64px;color:var(--text2);font-family:'JetBrains Mono',monospace;font-size:13px;}
+  .watermark{position:absolute;bottom:14px;left:64px;color:var(--text2);font-family:'JetBrains Mono',monospace;font-size:13px;opacity:.6;}
+
+  .head{padding:32px 56px 0;}
+  .title{font-family:'Syne',sans-serif;font-weight:800;font-size:27px;color:var(--text);}
+  .sub{font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--amber);margin-top:4px;}
+
+  .diagram{display:flex;padding:18px 56px 0;gap:14px;height:498px;}
+  .stack{flex:1;display:flex;flex-direction:column;gap:9px;}
+  .panel{
+    flex:0 0 110px;
+    border-radius:8px;
+    display:flex;
+    align-items:center;
+    padding:0 20px;
+    gap:16px;
+    opacity:0;transform:translateY(-16px);
+    animation:layerIn 380ms ease forwards;
+    border:1px solid var(--border);
+  }
+  .panel.l1{background:rgba(255,59,59,0.10); border-color:rgba(255,59,59,0.35);}
+  .panel.l2{background:rgba(0,212,255,0.10); border-color:rgba(0,212,255,0.35);}
+  .panel.l3{background:rgba(255,179,71,0.10); border-color:rgba(255,179,71,0.35);}
+  .panel.l4{background:rgba(63,185,80,0.10); border-color:rgba(63,185,80,0.35);}
+  .lname{flex:0 0 190px;}
+  .lname .num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text2);}
+  .lname .title2{font-family:'Syne',sans-serif;font-weight:700;font-size:15px;color:var(--text);margin-top:2px;}
+  .comps{display:flex;gap:8px;flex-wrap:wrap;}
+  .comp{background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--text);
+    font-size:11.5px;padding:5px 10px;border-radius:5px;}
+
+  .side{flex:0 0 190px;display:flex;flex-direction:column;justify-content:center;
+    background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px;
+    opacity:0;animation:fadeIn 400ms 1300ms ease forwards;}
+  .side .t{font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--text);margin-bottom:8px;}
+  .side .layer{font-size:11px;color:var(--cyan);font-family:'JetBrains Mono',monospace;}
+  .side .arrow{text-align:center;color:var(--text2);font-size:14px;margin:4px 0;}
+  .side .layer2{font-size:11px;color:var(--amber);font-family:'JetBrains Mono',monospace;}
+
+  .membar{
+    margin-top:6px;
+    height:52px;
+    background:var(--surface);
+    border:1px dashed var(--border);
+    border-radius:6px;
+    display:flex;
+    align-items:center;
+    padding:0 20px;
+    gap:14px;
+    opacity:0;
+    animation:fadeIn 400ms 1600ms ease forwards;
+  }
+  .membar .mlabel{font-size:11px;color:var(--text2);font-family:'JetBrains Mono',monospace;flex:0 0 200px;}
+  .membar .mcomp{background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--text);font-size:11px;padding:4px 9px;border-radius:5px;}
+
+  .note{margin:10px 56px 0;font-size:11.5px;color:var(--text2);}
+
+  @keyframes layerIn{to{opacity:1;transform:translateY(0);}}
+  @keyframes fadeIn{to{opacity:1;}}
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="progress"></div>
+  <div class="head">
+    <div class="title">RedGrid Architecture — Overview</div>
+    <div class="sub">4-layer hierarchy · Under development</div>
+  </div>
+
+  <div class="diagram">
+    <div class="stack">
+      <div class="panel l1" style="animation-delay:200ms;">
+        <div class="lname"><div class="num">LAYER 1</div><div class="title2">Orchestrator (Mission Planner)</div></div>
+        <div class="comps"><div class="comp">Scope Intake</div><div class="comp">Auto-prompter</div><div class="comp">FullCompact Trigger (85% context)</div></div>
+      </div>
+      <div class="panel l2" style="animation-delay:450ms;">
+        <div class="lname"><div class="num">LAYER 2</div><div class="title2">Team Manager</div></div>
+        <div class="comps"><div class="comp">VDG / Attack Decision-Making</div><div class="comp">Declarative Dispatch</div><div class="comp">Handoff Bridge</div></div>
+      </div>
+      <div class="panel l3" style="animation-delay:700ms;">
+        <div class="lname"><div class="num">LAYER 3</div><div class="title2">Specialist Agents</div></div>
+        <div class="comps"><div class="comp">Recon</div><div class="comp">SQLi</div><div class="comp">XSS</div><div class="comp">GraphQL</div><div class="comp">Auth/Session</div><div class="comp">Lateral-Movement</div></div>
+      </div>
+      <div class="panel l4" style="animation-delay:950ms;">
+        <div class="lname"><div class="num">LAYER 4</div><div class="title2">Execution and Validation</div></div>
+        <div class="comps"><div class="comp">Execution Agent</div><div class="comp">Evaluation Agent</div><div class="comp">Validation Agent (Diagnosis-Adapt-Cap)</div></div>
+      </div>
+      <div class="membar">
+        <div class="mlabel">CROSS-CUTTING MEMORY SERVICES</div>
+        <div class="mcomp">Skill Library</div>
+        <div class="mcomp">3-Tier FAISS Memory (Vuln-Pattern / Strategy / Technical-Action)</div>
+        <div class="mcomp">Episodic Failure Memory</div>
+      </div>
+    </div>
+    <div class="side">
+      <div class="t">Dual-Layer World Model</div>
+      <div class="layer">EL — Environmental Layer<br/>(confirmed facts only)</div>
+      <div class="arrow">↕</div>
+      <div class="layer2">VDG / AL — Attack Layer<br/>(scored hypotheses only)</div>
+    </div>
+  </div>
+
+  <div class="note">Full formalized pseudocode specified in architecture document</div>
+
+  <div class="pagenum">13 / 20</div>
+  <div class="watermark">RedGrid</div>
+</div>
+</body>
+</html>

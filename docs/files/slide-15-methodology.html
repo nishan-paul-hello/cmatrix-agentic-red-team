@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>RedGrid — Slide 15 — Methodology Overview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0D1117; --surface:#161B22; --red:#FF3B3B; --cyan:#00D4FF;
+    --amber:#FFB347; --text:#F0F6FC; --text2:#8B949E; --border:#30363D;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{background:#05070A;width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;}
+  .stage{width:1280px;height:720px;position:relative;overflow:hidden;background:var(--bg);box-shadow:0 40px 120px rgba(0,0,0,.6);}
+  .progress{position:absolute;top:0;left:0;height:2px;width:75%;background:linear-gradient(90deg,var(--red),var(--cyan));}
+  .pagenum{position:absolute;bottom:18px;right:64px;color:var(--text2);font-family:'JetBrains Mono',monospace;font-size:13px;}
+  .watermark{position:absolute;bottom:18px;left:64px;color:var(--text2);font-family:'JetBrains Mono',monospace;font-size:13px;opacity:.6;}
+
+  .head{padding:34px 56px 0; display:flex; align-items:center; gap:14px;}
+  .title{font-family:'Syne',sans-serif;font-weight:800;font-size:27px;color:var(--text);}
+  .chip{background:rgba(255,179,71,0.1);border:1px solid rgba(255,179,71,0.4);color:var(--amber);
+    font-family:'JetBrains Mono',monospace;font-size:11.5px;padding:5px 12px;border-radius:12px;}
+
+  .flow{display:flex;padding:26px 40px 0;gap:6px;align-items:stretch;}
+  .fbox{
+    flex:1;background:var(--surface);border-radius:8px;padding:12px 10px;font-size:11px;color:var(--text);
+    display:flex;flex-direction:column;gap:5px;
+    opacity:0;transform:translateY(14px);animation:boxIn 350ms ease forwards;
+    position:relative;
+  }
+  .fbox.solid{border:1px solid var(--cyan);}
+  .fbox.dashed{border:1px dashed var(--amber);}
+  .fbox .n{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text2);}
+  .fbox .t{font-family:'Syne',sans-serif;font-weight:700;font-size:12px;color:var(--text);}
+  .fbox .d{font-size:10.5px;color:var(--text2);line-height:1.35;}
+  .arrow{align-self:center;color:var(--text2);font-size:16px;opacity:0;animation:fadeIn 200ms ease forwards;}
+
+  .legend{padding:10px 56px 0;font-size:11px;color:var(--text2);display:flex;gap:20px;}
+  .legend span{display:flex;align-items:center;gap:6px;}
+  .sw{width:12px;height:12px;border-radius:2px;display:inline-block;}
+  .sw.solid{border:1.5px solid var(--cyan);}
+  .sw.dashed{border:1.5px dashed var(--amber);}
+
+  .decisions{display:flex;gap:16px;padding:20px 56px 0;}
+  .dcard{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 16px;
+    opacity:0;animation:fadeUp 400ms ease forwards;}
+  .dcard .dt{font-family:'Syne',sans-serif;font-weight:700;font-size:13.5px;color:var(--cyan);}
+  .dcard .dd{margin-top:6px;font-size:12px;color:var(--text2);line-height:1.45;}
+
+  @keyframes boxIn{to{opacity:1;transform:translateY(0);}}
+  @keyframes fadeIn{to{opacity:1;}}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="progress"></div>
+  <div class="head">
+    <div class="title">Methodology — High-Level Overview</div>
+    <div class="chip">Planned — implementation not yet started</div>
+  </div>
+
+  <div class="flow" id="flow">
+    <div class="fbox solid"><div class="n">1</div><div class="t">Scope Intake</div><div class="d">Target, rules of engagement, mode, surface family</div></div>
+    <div class="arrow">→</div>
+    <div class="fbox solid"><div class="n">2</div><div class="t">Recon</div><div class="d">nmap -p-, WhatWeb, ZAP passive, ffuf; seeds EL</div></div>
+    <div class="arrow">→</div>
+    <div class="fbox solid"><div class="n">3</div><div class="t">VDG Seed</div><div class="d">Team Manager infers initial nodes from EL; assigns UCB scores</div></div>
+    <div class="arrow">→</div>
+    <div class="fbox solid"><div class="n">4</div><div class="t">UCB Selection</div><div class="d">Picks highest-scoring eligible node (prereqs satisfied)</div></div>
+    <div class="arrow">→</div>
+    <div class="fbox dashed"><div class="n">5</div><div class="t">Specialist Dispatch</div><div class="d">Fresh-context specialist runs deterministic FSM; writes to EL</div></div>
+    <div class="arrow">→</div>
+    <div class="fbox dashed"><div class="n">6</div><div class="t">Evaluate &amp; Validate</div><div class="d">E_ord scoring; oracle check; Diagnosis-Adapt-Cap loop</div></div>
+    <div class="arrow">→</div>
+    <div class="fbox dashed"><div class="n">7</div><div class="t">VDG Update</div><div class="d">Update UCB reward, propagate status, check termination</div></div>
+    <div class="arrow">→</div>
+    <div class="fbox dashed"><div class="n">8</div><div class="t">Repeat / Terminate</div><div class="d">Dual-termination condition check</div></div>
+  </div>
+
+  <div class="legend">
+    <span><span class="sw solid"></span>design complete</span>
+    <span><span class="sw dashed"></span>design in progress</span>
+  </div>
+
+  <div class="decisions" id="dcards">
+    <div class="dcard"><div class="dt">Fresh context per Specialist</div><div class="dd">Prevents context pollution (validated by PentestGPT, D-CIPHER, VulnBot)</div></div>
+    <div class="dcard"><div class="dt">Dual-Layer World Model</div><div class="dd">EL (confirmed facts) strictly separated from VDG (attack hypotheses)</div></div>
+  </div>
+
+  <div class="pagenum">15 / 20</div>
+  <div class="watermark">RedGrid</div>
+</div>
+<script>
+  document.querySelectorAll('#flow .fbox').forEach((b,i)=>{ b.style.animationDelay=(i*200)+"ms"; });
+  document.querySelectorAll('#flow .arrow').forEach((a,i)=>{ a.style.animationDelay=(200+i*200+100)+"ms"; });
+  document.querySelectorAll('#dcards .dcard').forEach((d,i)=>{ d.style.animationDelay=(1900+i*150)+"ms"; });
+</script>
+</body>
+</html>

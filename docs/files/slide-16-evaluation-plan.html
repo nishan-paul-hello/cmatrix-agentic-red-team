@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>RedGrid — Slide 16 — Evaluation Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0D1117; --surface:#161B22; --red:#FF3B3B; --cyan:#00D4FF;
+    --amber:#FFB347; --text:#F0F6FC; --text2:#8B949E; --border:#30363D;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{background:#05070A;width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;}
+  .stage{width:1280px;height:720px;position:relative;overflow:hidden;background:var(--bg);box-shadow:0 40px 120px rgba(0,0,0,.6);}
+  .progress{position:absolute;top:0;left:0;height:2px;width:80%;background:linear-gradient(90deg,var(--red),var(--cyan));}
+  .pagenum{position:absolute;bottom:14px;right:64px;color:var(--text2);font-family:'JetBrains Mono',monospace;font-size:13px;}
+  .watermark{position:absolute;bottom:14px;left:64px;color:var(--text2);font-family:'JetBrains Mono',monospace;font-size:13px;opacity:.6;}
+
+  .head{padding:30px 56px 0; display:flex; align-items:center; gap:14px;}
+  .title{font-family:'Syne',sans-serif;font-weight:800;font-size:26px;color:var(--text);}
+  .chip{background:rgba(255,179,71,0.1);border:1px solid rgba(255,179,71,0.4);color:var(--amber);
+    font-family:'JetBrains Mono',monospace;font-size:11.5px;padding:5px 12px;border-radius:12px;}
+
+  .cards{display:flex;gap:14px;padding:18px 56px 0;}
+  .card{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 16px;
+    opacity:0;transform:translateY(16px);animation:cardIn 400ms ease forwards;}
+  .card .ctitle{font-family:'Syne',sans-serif;font-weight:700;font-size:14.5px;color:var(--cyan);}
+  .card .row{margin-top:8px;font-size:11.5px;line-height:1.4;}
+  .card .row b{color:var(--text);font-weight:600;}
+  .card .row span{color:var(--text2);}
+  .card .target{margin-top:8px;background:rgba(255,179,71,0.08);border:1px solid rgba(255,179,71,0.3);
+    padding:6px 9px;border-radius:5px;font-size:11px;color:var(--amber);font-family:'JetBrains Mono',monospace;}
+  .card .vulns{margin-top:8px;font-size:10.5px;color:var(--text2);}
+
+  .principles{margin:20px 56px 0;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 18px;
+    opacity:0;animation:fadeIn 400ms 1500ms ease forwards;}
+  .principles .pt{font-family:'Syne',sans-serif;font-weight:700;font-size:12.5px;color:var(--text);margin-bottom:8px;}
+  .principles li{list-style:none;font-size:12px;color:var(--text2);margin-top:5px;padding-left:16px;position:relative;line-height:1.4;}
+  .principles li::before{content:"▸";color:var(--cyan);position:absolute;left:0;}
+
+  @keyframes cardIn{to{opacity:1;transform:translateY(0);}}
+  @keyframes fadeIn{to{opacity:1;}}
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="progress"></div>
+  <div class="head">
+    <div class="title">Evaluation Plan — Benchmark Suite</div>
+    <div class="chip">Planned — no results yet</div>
+  </div>
+
+  <div class="cards" id="cards">
+    <div class="card">
+      <div class="ctitle">Web Application</div>
+      <div class="row"><b>Primary:</b> <span>CVE-Bench (40 critical CVEs, CVSS 9.0+)</span></div>
+      <div class="row"><b>Also:</b> <span>HPTSA 14-CVE zero-day suite · PentestEval 346 tasks · BountyBench (25 real production systems)</span></div>
+      <div class="row"><b>Oracle:</b> <span>8-attack-type (DoS, File Access, DB Modification, SSRF, etc.)</span></div>
+      <div class="target">zero-day pass@1 ≥ 25% · one-day pass@1 ≥ 50%</div>
+      <div class="vulns">SQLi · XSS · CSRF · SSRF · SSTI · LFI · RCE · IDOR</div>
+    </div>
+    <div class="card">
+      <div class="ctitle">GraphQL APIs</div>
+      <div class="row"><b>Primary:</b> <span>PrediQL (6 APIs)</span></div>
+      <div class="row"><b>Baselines:</b> <span>ZAP · Burp Suite · EvoMaster · GraphQLer</span></div>
+      <div class="target">Schema coverage % · Vulnerability count vs. baselines</div>
+      <div class="vulns">Schema abuse · Dependency-chain injection · IDOR · Auth bypass</div>
+    </div>
+    <div class="card">
+      <div class="ctitle">Multi-Host / Active Directory</div>
+      <div class="row"><b>Primary:</b> <span>Incalmo MHBench (40 environments)</span></div>
+      <div class="row"><b>Baseline:</b> <span>Incalmo (37/40 floor)</span></div>
+      <div class="target">Host-compromise success rate</div>
+      <div class="vulns">Lateral movement · Credential reuse · Privilege escalation</div>
+    </div>
+  </div>
+
+  <div class="principles">
+    <div class="pt">Methodological Principles</div>
+    <ul>
+      <li>All baselines re-run under same model + compute budget (not copied from papers)</li>
+      <li>McNemar's test · 95% Wilson CI · 10 runs on primary metric (CVE-Bench)</li>
+      <li>Cost-per-exploit reported alongside every pass rate</li>
+    </ul>
+  </div>
+
+  <div class="pagenum">16 / 20</div>
+  <div class="watermark">RedGrid</div>
+</div>
+<script>
+  document.querySelectorAll('#cards .card').forEach((c,i)=>{ c.style.animationDelay=(i*160)+"ms"; });
+</script>
+</body>
+</html>

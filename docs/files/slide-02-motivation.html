@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>RedGrid — Slide 02 — Motivation Hook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0D1117; --surface:#161B22; --red:#FF3B3B; --cyan:#00D4FF;
+    --amber:#FFB347; --text:#F0F6FC; --text2:#8B949E; --border:#30363D;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{background:#05070A;width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;}
+  .stage{width:1280px;height:720px;position:relative;overflow:hidden;background:var(--bg);box-shadow:0 40px 120px rgba(0,0,0,.6);}
+  .progress{position:absolute;top:0;left:0;height:2px;width:10%;background:linear-gradient(90deg,var(--red),var(--cyan));}
+  .pagenum{position:absolute;bottom:24px;right:64px;color:var(--text2);font-family:'JetBrains Mono',monospace;font-size:13px;}
+  .watermark{position:absolute;bottom:24px;left:64px;color:var(--text2);font-family:'JetBrains Mono',monospace;font-size:13px;opacity:.6;}
+
+  .grid{display:flex;height:100%;padding:72px 64px 64px;gap:48px;}
+  .left{flex:0 0 60%;display:flex;flex-direction:column;justify-content:center;}
+  .right{flex:0 0 40%;display:flex;align-items:center;justify-content:center;}
+
+  .label{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--amber);letter-spacing:0.04em;
+    opacity:0;animation:fadeUp 400ms 100ms ease forwards;}
+  .headline{font-family:'Syne',sans-serif;font-weight:700;font-size:36px;line-height:1.25;color:var(--text);margin-top:16px;
+    opacity:0;animation:fadeUp 400ms 300ms ease forwards;}
+  .body{margin-top:22px;font-size:18px;line-height:1.6;color:var(--text2);max-width:560px;
+    opacity:0;animation:fadeUp 400ms 500ms ease forwards;}
+  .callout{
+    margin-top:28px;
+    border-left:4px solid var(--amber);
+    background:rgba(255,179,71,0.06);
+    padding:18px 22px;
+    font-size:18px;
+    color:var(--text);
+    max-width:560px;
+    border-radius:2px;
+    opacity:0;
+    animation:fadeUp 400ms 700ms ease forwards, pulse 2200ms 1300ms ease-in-out infinite;
+  }
+  @keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+  @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(255,179,71,0);}50%{box-shadow:0 0 24px 0 rgba(255,179,71,0.15);}}
+
+  svg{width:100%;max-width:420px;}
+  .ring{fill:none;stroke:var(--red);opacity:0;animation:ringIn 600ms ease forwards;}
+  .ring1{animation-delay:900ms;}
+  .ring2{animation-delay:1050ms;}
+  .ring3{animation-delay:1200ms;}
+  @keyframes ringIn{from{opacity:0;transform:scale(0.7);}to{opacity:1;transform:scale(1);}}
+  .cursor{opacity:0;animation:fadeUp 400ms 1500ms ease forwards;}
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="progress"></div>
+  <div class="grid">
+    <div class="left">
+      <div class="label">WHY THIS MATTERS</div>
+      <div class="headline">Attackers move fast. Defenders move slow. Automated testers don't move at all.</div>
+      <p class="body">Security vulnerabilities are found daily in web apps, APIs, and networks. Human pen testers are scarce and expensive. Automated scanners use fixed rule-sets — they can't reason, adapt, or chain exploits.</p>
+      <div class="callout">The question: Can an LLM agent carry out penetration testing autonomously — without step-by-step human direction?</div>
+    </div>
+    <div class="right">
+      <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" style="transform-origin:center;">
+        <circle class="ring ring1" cx="200" cy="200" r="160" stroke-width="2" opacity="0.5"/>
+        <circle class="ring ring2" cx="200" cy="200" r="110" stroke-width="2" opacity="0.7"/>
+        <circle class="ring ring3" cx="200" cy="200" r="60" stroke-width="3"/>
+        <circle cx="200" cy="200" r="6" fill="#FF3B3B" class="cursor"/>
+        <!-- crosshair cursor -->
+        <g class="cursor" stroke="#FF3B3B" stroke-width="2">
+          <line x1="200" y1="150" x2="200" y2="170"/>
+          <line x1="200" y1="230" x2="200" y2="250"/>
+          <line x1="150" y1="200" x2="170" y2="200"/>
+          <line x1="230" y1="200" x2="250" y2="200"/>
+        </g>
+        <!-- scattered shield icons -->
+        <g fill="none" stroke="#00D4FF" stroke-width="1.6" opacity="0.55" class="cursor">
+          <path d="M60 90 L75 84 L90 90 L90 108 Q75 122 60 108 Z"/>
+          <path d="M300 70 L315 64 L330 70 L330 88 Q315 102 300 88 Z"/>
+          <path d="M320 300 L335 294 L350 300 L350 318 Q335 332 320 318 Z"/>
+          <path d="M50 300 L65 294 L80 300 L80 318 Q65 332 50 318 Z"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+  <div class="pagenum">02 / 20</div>
+  <div class="watermark">RedGrid</div>
+</div>
+</body>
+</html>

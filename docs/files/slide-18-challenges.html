@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>RedGrid — Slide 18 — Known Challenges</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0D1117; --surface:#161B22; --red:#FF3B3B; --cyan:#00D4FF;
+    --amber:#FFB347; --text:#F0F6FC; --text2:#8B949E; --border:#30363D;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{background:#05070A;width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;}
+  .stage{width:1280px;height:720px;position:relative;overflow:hidden;background:var(--bg);box-shadow:0 40px 120px rgba(0,0,0,.6);}
+  .progress{position:absolute;top:0;left:0;height:2px;width:90%;background:linear-gradient(90deg,var(--red),var(--cyan));}
+  .pagenum{position:absolute;bottom:18px;right:64px;color:var(--text2);font-family:'JetBrains Mono',monospace;font-size:13px;}
+  .watermark{position:absolute;bottom:18px;left:64px;color:var(--text2);font-family:'JetBrains Mono',monospace;font-size:13px;opacity:.6;}
+
+  .head{padding:36px 56px 0;}
+  .title{font-family:'Syne',sans-serif;font-weight:800;font-size:29px;color:var(--text);}
+  .sub{font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--text2);margin-top:6px;}
+
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:20px 56px 0;}
+  .card{background:var(--surface);border-radius:8px;padding:16px 18px;
+    opacity:0;transform:translateY(16px);animation:cardIn 400ms ease forwards;
+    border-left:3px solid var(--border);}
+  .card.high{border-left-color:var(--red);}
+  .card.medium{border-left-color:var(--amber);}
+  .card.manageable{border-left-color:var(--cyan);}
+
+  .rowhead{display:flex;align-items:center;justify-content:space-between;}
+  .rtitle{font-family:'Syne',sans-serif;font-weight:700;font-size:14.5px;color:var(--text);}
+  .badge{font-family:'JetBrains Mono',monospace;font-size:10px;padding:3px 9px;border-radius:10px;
+    opacity:0;animation:badgePop 300ms ease forwards;}
+  .badge.high{background:rgba(255,59,59,0.15);color:var(--red);}
+  .badge.medium{background:rgba(255,179,71,0.15);color:var(--amber);}
+  .badge.manageable{background:rgba(0,212,255,0.15);color:var(--cyan);}
+
+  .desc{margin-top:8px;font-size:12.5px;color:var(--text2);line-height:1.45;}
+  .mit{margin-top:8px;font-size:11.5px;color:var(--text);background:rgba(255,255,255,0.03);padding:8px 10px;border-radius:5px;line-height:1.4;}
+  .mit b{color:var(--cyan);font-weight:600;}
+
+  @keyframes cardIn{to{opacity:1;transform:translateY(0);}}
+  @keyframes badgePop{from{opacity:0;transform:scale(0.7);}to{opacity:1;transform:scale(1);}}
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="progress"></div>
+  <div class="head">
+    <div class="title">Known Challenges</div>
+    <div class="sub">Surfaced during literature review — addressed proactively</div>
+  </div>
+
+  <div class="grid" id="grid">
+    <div class="card high" style="animation-delay:150ms;">
+      <div class="rowhead"><div class="rtitle">Edge Inference Without Ground Truth</div><div class="badge high" style="animation-delay:350ms;">HIGH RISK</div></div>
+      <div class="desc">VDG prerequisite edges are LLM-inferred. Noise weakens the dependency contribution.</div>
+      <div class="mit"><b>Mitigation:</b> Mandatory pilot study on PentestEval GT dependencies. Precision ≥ 50% gate before C1 claim.</div>
+    </div>
+    <div class="card medium" style="animation-delay:300ms;">
+      <div class="rowhead"><div class="rtitle">Sandbox vs. Real World Gap</div><div class="badge medium" style="animation-delay:500ms;">MEDIUM RISK</div></div>
+      <div class="desc">Fang et al.: 1 exploitable XSS in 50 real sites (2%) vs. 73.3% in sandbox. WAFs inflate numbers.</div>
+      <div class="mit"><b>Mitigation:</b> Report sandbox and real-world (BountyBench, HTB Season 8) separately.</div>
+    </div>
+    <div class="card medium" style="animation-delay:450ms;">
+      <div class="rowhead"><div class="rtitle">Negative Transfer in Memory</div><div class="badge medium" style="animation-delay:650ms;">MEDIUM RISK</div></div>
+      <div class="desc">A strategy for Framework A v1 could be harmful against v2. No surveyed paper addresses this.</div>
+      <div class="mit"><b>Mitigation:</b> Negative transfer guard in skill promotion. Ablation A2 split: seen vs. unseen technology.</div>
+    </div>
+    <div class="card manageable" style="animation-delay:600ms;">
+      <div class="rowhead"><div class="rtitle">UCB Hyperparameter Sensitivity</div><div class="badge manageable" style="animation-delay:800ms;">MANAGEABLE</div></div>
+      <div class="desc">7 tunable parameters. Narrow optimal range may not generalize.</div>
+      <div class="mit"><b>Mitigation:</b> Grid search on Tier 1 (PentestEval). Report ±10% perturbation sensitivity.</div>
+    </div>
+  </div>
+
+  <div class="pagenum">18 / 20</div>
+  <div class="watermark">RedGrid</div>
+</div>
+</body>
+</html>

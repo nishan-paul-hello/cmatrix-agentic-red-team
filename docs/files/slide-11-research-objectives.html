@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>RedGrid — Slide 11 — Research Objectives</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0D1117; --surface:#161B22; --red:#FF3B3B; --cyan:#00D4FF;
+    --amber:#FFB347; --text:#F0F6FC; --text2:#8B949E; --border:#30363D;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{background:#05070A;width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;}
+  .stage{width:1280px;height:720px;position:relative;overflow:hidden;background:var(--bg);box-shadow:0 40px 120px rgba(0,0,0,.6);}
+  .progress{position:absolute;top:0;left:0;height:2px;width:55%;background:linear-gradient(90deg,var(--red),var(--cyan));}
+  .pagenum{position:absolute;bottom:18px;right:64px;color:var(--text2);font-family:'JetBrains Mono',monospace;font-size:13px;}
+  .watermark{position:absolute;bottom:18px;left:64px;color:var(--text2);font-family:'JetBrains Mono',monospace;font-size:13px;opacity:.6;}
+
+  .head{padding:42px 64px 0;}
+  .title{font-family:'Syne',sans-serif;font-weight:800;font-size:30px;color:var(--text);}
+  .sub{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--amber);margin-top:6px;}
+
+  .cards{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:24px 64px 0;}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:18px 20px;display:flex;gap:14px;
+    opacity:0;transform:translateY(14px);animation:cardIn 400ms ease forwards;}
+  .card:nth-child(5){grid-column:1 / span 2; max-width:calc(50% - 8px);}
+  .num{font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:var(--cyan);flex:0 0 34px;}
+  .ctitle{font-family:'Syne',sans-serif;font-weight:700;font-size:15px;color:var(--text);}
+  .cdesc{margin-top:6px;font-size:13px;color:var(--text2);line-height:1.45;}
+
+  .note{margin:20px 64px 0;font-size:12.5px;color:var(--text2);font-style:italic;text-align:center;
+    opacity:0;animation:fadeIn 400ms 1500ms ease forwards;}
+
+  @keyframes cardIn{to{opacity:1;transform:translateY(0);}}
+  @keyframes fadeIn{to{opacity:1;}}
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="progress"></div>
+  <div class="head">
+    <div class="title">Research Objectives</div>
+    <div class="sub">5 working goals — under active investigation</div>
+  </div>
+
+  <div class="cards" id="cards">
+    <div class="card"><div class="num">01</div><div><div class="ctitle">VDG Formalization</div><div class="cdesc">Investigate whether a prerequisite-edge graph improves agent exploration over a flat priority list</div></div></div>
+    <div class="card"><div class="num">02</div><div><div class="ctitle">Dual-Layer World Model</div><div class="cdesc">Separate confirmed facts from inferred hypotheses for independent ablation</div></div></div>
+    <div class="card"><div class="num">03</div><div><div class="ctitle">Multi-Layer Orchestration</div><div class="cdesc">Design a four-layer agent hierarchy matching strongest surveyed systems</div></div></div>
+    <div class="card"><div class="num">04</div><div><div class="ctitle">Cross-Mission Memory</div><div class="cdesc">Determine whether strategy reuse offers measurable benefit vs. negative-transfer risk</div></div></div>
+    <div class="card"><div class="num">05</div><div><div class="ctitle">Benchmark-Grounded Evaluation</div><div class="cdesc">Evaluate on oracle-backed benchmarks across 3+ attack surfaces</div></div></div>
+  </div>
+
+  <div class="note">These reflect the research direction at inception stage. Scope will evolve with implementation.</div>
+
+  <div class="pagenum">11 / 20</div>
+  <div class="watermark">RedGrid</div>
+</div>
+<script>
+  document.querySelectorAll('#cards .card').forEach((c,i)=>{ c.style.animationDelay=(i*120)+"ms"; });
+</script>
+</body>
+</html>

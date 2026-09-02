@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>RedGrid — Slide 03 — Literature Scope</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0D1117; --surface:#161B22; --red:#FF3B3B; --cyan:#00D4FF;
+    --amber:#FFB347; --text:#F0F6FC; --text2:#8B949E; --border:#30363D;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{background:#05070A;width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;}
+  .stage{width:1280px;height:720px;position:relative;overflow:hidden;background:var(--bg);box-shadow:0 40px 120px rgba(0,0,0,.6);}
+  .progress{position:absolute;top:0;left:0;height:2px;width:15%;background:linear-gradient(90deg,var(--red),var(--cyan));}
+  .pagenum{position:absolute;bottom:24px;right:64px;color:var(--text2);font-family:'JetBrains Mono',monospace;font-size:13px;}
+  .watermark{position:absolute;bottom:24px;left:64px;color:var(--text2);font-family:'JetBrains Mono',monospace;font-size:13px;opacity:.6;}
+
+  .head{padding:56px 64px 8px;}
+  .title{font-family:'Syne',sans-serif;font-weight:800;font-size:34px;color:var(--text);}
+  .sublabel{margin-top:8px;font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--text2);}
+
+  .cards{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:14px;
+    padding:26px 64px 0;
+  }
+  .card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:14px 16px;
+    opacity:0;
+    transform:translateY(14px);
+    animation:cardIn 400ms ease forwards;
+    transition:transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+  }
+  .card:hover{ transform:translateY(-3px); border-color:var(--cyan); box-shadow:0 0 18px rgba(0,212,255,0.18); }
+  .shortname{font-family:'JetBrains Mono',monospace;color:var(--cyan);font-size:14px;font-weight:500;}
+  .desc{margin-top:6px;font-size:13.5px;line-height:1.4;color:var(--text);}
+  .row{display:flex;align-items:center;justify-content:space-between;margin-top:10px;}
+  .icon{width:16px;height:16px;opacity:0.7;}
+  .badge{
+    font-family:'JetBrains Mono',monospace;
+    font-size:10.5px;
+    color:var(--amber);
+    background:rgba(255,179,71,0.1);
+    border:1px solid rgba(255,179,71,0.35);
+    padding:2px 7px;
+    border-radius:10px;
+  }
+  @keyframes cardIn{to{opacity:1;transform:translateY(0);}}
+  /* stagger delays generated inline per card */
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="progress"></div>
+  <div class="head">
+    <div class="title">The Literature We Surveyed</div>
+    <div class="sublabel">11 papers · Focused reading · Sep 2026</div>
+  </div>
+
+  <div class="cards" id="cards">
+    <div class="card"><div class="shortname">Fang et al. 2024a</div><div class="desc">Foundational: GPT-4 hacks websites</div><div class="row"><span class="badge">15 CVEs</span><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#8B949E" stroke-width="1.6"><circle cx="12" cy="12" r="9"/></svg></div></div>
+    <div class="card"><div class="shortname">Fang et al. 2024b</div><div class="desc">GPT-4 exploits one-day CVEs (87%)</div><div class="row"><span class="badge">87%</span><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#8B949E" stroke-width="1.6"><circle cx="12" cy="12" r="9"/></svg></div></div>
+    <div class="card"><div class="shortname">HPTSA (Zhu 2024)</div><div class="desc">Hierarchical multi-agent, zero-day CVEs</div><div class="row"><span class="badge">14 CVEs</span><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#8B949E" stroke-width="1.6"><rect x="4" y="4" width="16" height="16" rx="3"/></svg></div></div>
+    <div class="card"><div class="shortname">PentestGPT (Deng 2024)</div><div class="desc">Context-loss failure mode identified</div><div class="row"><span class="badge">HTB/VulnHub</span><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#8B949E" stroke-width="1.6"><rect x="4" y="4" width="16" height="16" rx="3"/></svg></div></div>
+    <div class="card"><div class="shortname">VulnBot (Kong 2025)</div><div class="desc">Role-specialised multi-agent dispatch</div><div class="row"><span class="badge">HTB-style</span><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#8B949E" stroke-width="1.6"><rect x="4" y="4" width="16" height="16" rx="3"/></svg></div></div>
+    <div class="card"><div class="shortname">CHECKMATE (Wang 2025)</div><div class="desc">Classical planning + LLM agents</div><div class="row"><span class="badge">Curated</span><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#8B949E" stroke-width="1.6"><path d="M12 3l9 9-9 9-9-9z"/></svg></div></div>
+    <div class="card"><div class="shortname">Incalmo (Singer 2025)</div><div class="desc">Multi-host / Active Directory red team</div><div class="row"><span class="badge">MHBench 40</span><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#8B949E" stroke-width="1.6"><path d="M12 3l9 9-9 9-9-9z"/></svg></div></div>
+    <div class="card"><div class="shortname">PrediQL (Liu 2025)</div><div class="desc">GraphQL schema-aware LLM fuzzer</div><div class="row"><span class="badge">6 APIs</span><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#8B949E" stroke-width="1.6"><rect x="4" y="4" width="16" height="16" rx="3"/></svg></div></div>
+    <div class="card"><div class="shortname">CVE-Bench (Zhu 2025)</div><div class="desc">40 critical web CVEs, oracle-backed</div><div class="row"><span class="badge">Benchmark</span><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#8B949E" stroke-width="1.6"><circle cx="12" cy="12" r="9"/></svg></div></div>
+    <div class="card"><div class="shortname">PentestEval (Yang 2025)</div><div class="desc">Stage-level pipeline breakdown</div><div class="row"><span class="badge">346 tasks</span><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#8B949E" stroke-width="1.6"><circle cx="12" cy="12" r="9"/></svg></div></div>
+    <div class="card"><div class="shortname">Wang et al. 2025</div><div class="desc">General LLM agent survey</div><div class="row"><span class="badge">Survey</span><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#8B949E" stroke-width="1.6"><path d="M4 6h16M4 12h16M4 18h10"/></svg></div></div>
+  </div>
+
+  <div class="pagenum">03 / 20</div>
+  <div class="watermark">RedGrid</div>
+</div>
+
+<script>
+  document.querySelectorAll('#cards .card').forEach((c,i)=>{
+    c.style.animationDelay = (i*60)+"ms";
+  });
+</script>
+</body>
+</html>
