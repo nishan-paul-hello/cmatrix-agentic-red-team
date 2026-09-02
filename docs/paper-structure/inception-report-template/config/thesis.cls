@@ -162,7 +162,7 @@
     \vskip 60\p@
     \begin{center}
       \setlength{\parskip}{0pt}
-      \includegraphics[height=1.5in, keepaspectratio]{logo.pdf}\par
+      \includegraphics[height=1.5in, keepaspectratio]{config/logo.pdf}\par
       \vspace{0.5cm}
       {\Large\textcolor{blue}{\textbf{\MakeUppercase{\univname}}}\par}
       \vfill
