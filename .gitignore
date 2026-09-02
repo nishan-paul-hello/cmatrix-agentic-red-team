@@ -45,9 +45,6 @@ next-env.d.ts
 *.pem
 indent.log
 
-# Vale
-styles/
-
 # Project Specific
 .docker_pkg_hash
 
