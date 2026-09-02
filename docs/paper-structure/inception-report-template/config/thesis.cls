@@ -130,43 +130,19 @@
 \newcommand*{\authors}[1]{\def\authornames{#1}}
 \newcommand*{\addresses}[1]{\def\addressnames{#1}}
 \newcommand*{\university}[1]{\def\univname{#1}}
-\newcommand*{\UNIVERSITY}[1]{\def\UNIVNAME{#1}}
 \newcommand*{\department}[1]{\def\deptname{#1}}
-\newcommand*{\DEPARTMENT}[1]{\def\DEPTNAME{#1}}
 \newcommand*{\group}[1]{\def\groupname{#1}}
-\newcommand*{\GROUP}[1]{\def\GROUPNAME{#1}}
 \newcommand*{\faculty}[1]{\def\facname{#1}}
-\newcommand*{\FACULTY}[1]{\def\FACNAME{#1}}
 \newcommand*{\subject}[1]{\def\subjectname{#1}}
 \newcommand*{\keywords}[1]{\def\keywordnames{#1}}
-\supervisor  {}
+\supervisor  {Dr. Md. Abdur Razzaque}
 \examiner    {}
-\degree      {}
+\degree      {Professional Masters in Information and Cyber Security (PMICS)}
 \authors     {}
-\university  {\texorpdfstring{\href{http://www.du.ac.bd}
-                {University of Dhaka}}
-                {University of Dhaka}}
-\UNIVERSITY  {\texorpdfstring{\href{http://www.du.ac.bd}
-                {UNIVERSITY OF DHAKA}}
-                {UNIVERSITY OF DHAKA}}
-\department  {\texorpdfstring{\href{http://www.cse.du.ac.bd}
-                {Department of Computer Science and Engineering}}
-                {Department of Computer Science and Engineering}}
-\DEPARTMENT  {\texorpdfstring{\href{http://www.cse.du.ac.bd}
-                {DEPARTMENT OF COMPUTER SCIENCE AND ENGINEERING}}
-                {DEPARTMENT OF COMPUTER SCIENCE AND ENGINEERING}}
-\group       {\texorpdfstring{\href{link of your research group}
-                {}}
-                {}}
-\GROUP       {\texorpdfstring{\href{link of your research group}
-                {}}
-                {}}
-\faculty     {\texorpdfstring{\href{Supervisor profile link}
-                {Name of the Supervisor}}
-                {Name of the Supervisor}}
-\FACULTY     {\texorpdfstring{\href{Supervisor profile link}
-				{Name of the Supervisor}}
-				{Name of the Supervisor}}
+\university  {University of Dhaka}
+\department  {Department of Computer Science and Engineering}
+\group       {6}
+\faculty     {\supname}
 \addresses   {}
 \subject     {}
 \keywords    {}
@@ -188,7 +164,7 @@
       \setlength{\parskip}{0pt}
       \includegraphics[height=1.5in, keepaspectratio]{logo.pdf}\par
       \vspace{0.5cm}
-      {\Large\textcolor{blue}{\textbf{\UNIVNAME}}\par}
+      {\Large\textcolor{blue}{\textbf{\MakeUppercase{\univname}}}\par}
       \vfill
       {\huge \bf \@title \par}
       \vfill
@@ -200,10 +176,10 @@
 
       \vfill
       {\large Submitted to the \par}
-      {\large Department of Computer Science and Engineering \par}
-      {\large University of Dhaka, Bangladesh \par}
+      {\large \deptname \par}
+      {\large \univname, Bangladesh \par}
       {\large in partial fulfillment of the requirements for the degree of \par}
-      {\large Professional Masters in Information and Cyber Security (PMICS). \par}
+      {\large \degreename. \par}
 
       {\Large \@date \par}
       \bigskip
@@ -232,7 +208,7 @@
   \vspace*{1.5cm}
   \begin{center}
     \setlength{\parskip}{0pt}
-    {\Large \UNIVNAME \par}
+    {\Large \MakeUppercase{\univname} \par}
     \bigskip
     {\huge{\textit{Abstract}} \par}
 
