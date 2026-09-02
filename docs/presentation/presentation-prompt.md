@@ -36,6 +36,7 @@ Generate a **10-minute MSc thesis inception-stage presentation** (20 slides tota
   - Body text / bullets: 18–20px
   - Captions / footnotes: 13–15px in `#8B949E`
   - Code blocks: 14–15px in JetBrains Mono
+- **Fallback:** If Google Fonts cannot be loaded (no network access), fall back to system sans-serif for Syne/Inter roles and system monospace for JetBrains Mono. The export step should embed fonts locally rather than link-loading them from a CDN, where the export format supports it.
 
 ### Layout and Spacing
 - **Aspect ratio:** 16:9 (widescreen)
@@ -57,6 +58,8 @@ Generate a **10-minute MSc thesis inception-stage presentation** (20 slides tota
 ---
 
 ## Slide-by-Slide Specification
+
+> **Chapter mapping:** Chapter 0 (abstract, front-matter, and framing) maps to **Slide 2 (Motivation Hook)** — the "why this matters" framing slide covers the same ground as the abstract. Chapter 1 (Introduction) maps to **Slides 2–12**. Chapter 2 (Literature Review) maps to **Slides 3–9**. The architecture, methodology, evaluation, and timeline sections (Slides 13–18) are high-level sketches only — those chapters are not yet written.
 
 ---
 
@@ -89,9 +92,17 @@ Generate a **10-minute MSc thesis inception-stage presentation** (20 slides tota
   - Headline (Syne, 36px): "Attackers move fast. Defenders move slow. Automated testers don't move at all."
   - Body: "Security vulnerabilities are found daily in web apps, APIs, and networks. Human pen testers are scarce and expensive. Automated scanners use fixed rule-sets — they can't reason, adapt, or chain exploits."
   - Callout box (amber border): "The question: Can an LLM agent carry out penetration testing autonomously — without step-by-step human direction?"
+
+- **Agenda strip** (small, horizontal, 3 labeled beats — positioned below the callout box, subtle styling: secondary text, thin divider lines between beats):
+  - Beat 1 (red dot): `Deep dive — Problem + What the literature says (Slides 3–11)`
+  - Beat 2 (amber dot): `High-level sketch — Architecture + Plan (Slides 12–18)`
+  - Beat 3 (grey dot): `Where we're headed — Next 6 months (Slides 17–19)`
+
 - Right: Stylized illustration — target with concentric circles, red cursor arrow, shield icons scattered. Clean, dark background.
 
-**Animation:** Text lines stagger in. Callout box pulses gently after appearance.
+**Animation:** Text lines stagger in. Callout box pulses gently. Agenda strip fades in last, below the callout.
+
+**Speaker note:** "Before we dive in — a quick map of this talk. We'll spend most of our time on the problem and the literature, because that's where our work is deepest right now. The architecture and evaluation slides are intentional sketches — we're at inception stage. Questions on direction are very welcome at the end."
 
 ---
 
@@ -119,6 +130,8 @@ Paper list:
 
 **Animation:** Cards appear as wave (60ms stagger). On hover: card lifts with cyan border glow.
 
+**Speaker note:** "We focused on 11 papers: nine are LLM agent systems, two are benchmark papers. The benchmark papers — CVE-Bench and PentestEval — are the most important ones for us, because they give us the quantitative failure-mode data we'll look at next."
+
 ---
 
 ### SLIDE 04 — Dominant Survey Finding
@@ -128,21 +141,23 @@ Paper list:
 **Content:**
 - Small label: `WHAT THE LITERATURE AGREES ON`
 - Main statement (Syne 800, 42px, centered): "Architecture, not model scale, is the dominant variable."
-- Supporting sentence: "Six independent papers confirm: a well-structured pipeline with a cheap model beats an unstructured ReAct loop with a frontier model. — AWE, AutoPT, VulnBot, PentestGPT, D-CIPHER, Incalmo"
-- 2-column comparison table:
-  - Unstructured ReAct + GPT-4 (red-tinted) vs. Structured Pipeline + GPT-4o-mini (cyan-tinted)
+- 2-column comparison table (full width, no supporting sentence on-slide — move that to speaker note):
+  - Column headers: `Unstructured ReAct + GPT-4` (red-tinted) | `Structured Pipeline + GPT-4o-mini` (cyan-tinted)
   - Row 1: Depth-first tunnel vision | Broad, structured exploration
   - Row 2: Context loss in long sessions | Scoped per-invocation context
   - Row 3: No failure recovery | Retry / adapt / escalate loops
   - Row 4: Implicit planning | Explicit dependency modeling
+  - Cell styling: "None"/negative cells = red-tinted. Positive cells = cyan-tinted. Each cell also carries a short text label (not color alone).
 
 **Animation:** Quote types in word-by-word. Table rows stagger in from left.
+
+**Speaker note:** "Six papers independently reach this conclusion — AWE, AutoPT, VulnBot, PentestGPT, D-CIPHER, and Incalmo. The consistent finding: if you give a cheap model a well-designed architecture, it outperforms an expensive model with no structure. That shapes the entire direction of RedGrid."
 
 ---
 
 ### SLIDE 05 — Failure Mode 1: Insufficient Exploration
 
-**Layout:** Two-column. Left: text explanation. Right: animated bar chart.
+**Layout:** Two-column. Left: headline + key insight box. Right: animated bar chart.
 
 **Content:**
 - Slide title: `Failure Mode 1 — Insufficient Exploration`
@@ -150,43 +165,47 @@ Paper list:
   - Context label (amber): `CVE-Bench · 40 Critical Web CVEs (CVSS 9.0+)`
   - Headline: "Even the best agent exploits only 13% (one-day) / 10% (zero-day)."
   - Key insight box (left-bordered red): "The dominant failure is not reasoning quality — it's breadth of search. Agents commit early to a narrow attack path and never come back."
-  - 3 icon bullets: 37.5%–80% failure rates · Not a smarter model problem · CVE-Bench Table 5 documents this
+  - Two bullets max (reduce from 3): `37.5%–80% exploration failure rates across all tested agents` · `Not a smarter-model problem — it's a search problem`
+  *(Move the third bullet — "CVE-Bench Table 5 documents this" — to the speaker note)*
 
 - Right (50%): Horizontal bar chart — exploration failure rates:
-  - T-Agent (0-day): 80.0%
-  - AutoGPT (0-day): 72.5%
-  - Cy-Agent (0-day): 67.5%
-  - T-Agent (1-day): 55.0%
-  - AutoGPT (1-day): 45.0%
-  - Cy-Agent (1-day): 37.5%
-  - Red bars. Background line at 50% as "danger threshold".
+  - T-Agent (0-day): 80.0% — label shown on bar
+  - AutoGPT (0-day): 72.5% — label shown on bar
+  - Cy-Agent (0-day): 67.5% — label shown on bar
+  - T-Agent (1-day): 55.0% — label shown on bar
+  - AutoGPT (1-day): 45.0% — label shown on bar
+  - Cy-Agent (1-day): 37.5% — label shown on bar
+  - Red bars. Background line at 50% with text label `"50% threshold"` (not color alone).
   - Caption: `Source: CVE-Bench (Zhu et al. 2025), Table 5`
 
 **Animation:** Bars grow left-to-right (600ms ease-out), numbers count up.
+
+**Speaker note:** "These numbers come from CVE-Bench Table 5's failure-mode breakdown — a detailed audit of why each agent failed on each CVE. In the zero-day setting, T-Agent fails to explore sufficiently 80% of the time. This isn't random variance — it's consistent across all three agents tested. Agents commit to a narrow path and stay there."
 
 ---
 
 ### SLIDE 06 — Failure Mode 2: Dependency-Reasoning Gap
 
-**Layout:** Two-column. Left: waterfall chart. Right: explanation.
+**Layout:** Two-column. Left: waterfall chart. Right: headline + callout box only.
 
 **Content:**
 - Slide title: `Failure Mode 2 — The Dependency-Reasoning Gap`
 - Left (50%): Waterfall step-up bar chart — PentestEval GT injection ablation:
-  - SMP Baseline: 0.31
-  - + GT Weakness Gathering (WG): 0.50 (+0.19)
-  - + GT Weakness Filtering (WF): 0.53 (+0.03)
-  - + GT Attack Decision-Making (ADM): 0.67 (+0.14 — amber, starred "Largest single-stage gain")
+  - SMP Baseline: 0.31 — bar label: `Baseline`
+  - + GT Weakness Gathering (WG): 0.50 (+0.19) — bar label: `+0.19`
+  - + GT Weakness Filtering (WF): 0.53 (+0.03) — bar label: `+0.03`
+  - + GT Attack Decision-Making (ADM): 0.67 (+0.14) — bar label: `+0.14 ★` — highlighted amber — text annotation: `Largest single-stage gain`
   - Caption: `Source: PentestEval (Yang et al. 2025)`
 
 - Right (50%):
   - Context label (amber): `PentestEval · 12 Real-World Scenarios · 346 Tasks`
   - Headline: "Attack Decision-Making (ADM) is the single weakest stage — Spearman rho = 0.25."
-  - Explanation of ADM.
-  - Callout box (cyan border): "Ground-truth ADM injection adds +0.14 on top of already-perfect weakness discovery — the largest marginal gain available. No existing system closes it."
-  - Note: "Any system-grown dependency structure has a realistic ceiling below 0.67"
+  - Callout box (cyan border): "Ground-truth ADM injection adds +0.14 on top of already-perfect weakness discovery. No existing system closes this gap."
+  *(Remove the "explanation of ADM" paragraph and the "realistic ceiling" note — move both to the speaker note)*
 
 **Animation:** Waterfall bars cascade (300ms each). The +0.14 bar glows amber on entry.
+
+**Speaker note:** "ADM — Attack Decision-Making — is the stage where an agent decides which weakness to pursue next, taking into account what earlier steps have already found. PentestEval measures this with a Spearman correlation against expert judgment, and ADM scores 0.25 — the lowest of the six pipeline stages. The +0.14 gain from ground-truth ADM is notable because it's measured on top of an already-perfect weakness gathering and filtering pipeline — the other stages have already been fixed. Any dependency structure a system builds itself from LLM inference will be noisier than ground truth, so a realistic ceiling sits below 0.67."
 
 ---
 
@@ -211,6 +230,8 @@ Paper list:
 
 **Animation:** Left slides from left, right from right, center fades in last with pulse. Bottom sentence types character-by-character.
 
+**Speaker note:** "Every system we found that explores broadly doesn't model vulnerability dependencies. Every system that models dependencies can't do open-ended exploration. That divide is the compound gap — and it's what the next three slides build up to formally."
+
 ---
 
 ### SLIDE 08 — Comparative Analysis Table
@@ -232,11 +253,13 @@ Rows:
 - PrediQL | LLM-guided fuzzer | Schema-derived | None | 6 GraphQL APIs
 - RedGrid (proposed) | 4-layer multi-agent | Dynamic VDG | 3-tier memory | Web+GraphQL+Multi-host
 
-- Cell styling: None = red-tinted. Explicit/Dynamic/3-tier = green-tinted. Partial/Implicit = amber-tinted.
-- RedGrid row: subtle cyan background.
+- Cell styling: None = red-tinted with text label `None`. Explicit/Dynamic/3-tier = green-tinted with text label. Partial/Implicit = amber-tinted with text label. (Use both color AND text label — never color alone.)
+- RedGrid row: subtle cyan background + bold text on the row header.
 - Caption: `Preliminary reading — 11-paper focused review`
 
 **Animation:** Header fades, rows stagger top-to-bottom. RedGrid row enters with glow.
+
+**Speaker note:** "Eight systems. Four dimensions. The rightmost three columns — dependency modeling, memory, and benchmark coverage — are all None across the board, except for RedGrid's proposed row. That's the gap table: one dimension at a time, none of the reviewed systems covers all three."
 
 ---
 
@@ -258,9 +281,11 @@ Rows:
   - Coverage gap: "Every prior system evaluated on ONE surface only"
 
 - Bottom italic (amber): "This is the gap RedGrid is designed to investigate."
-- Footnote: "Working hypothesis at early thesis stage — not a finalized claim"
+*(Remove the "Working hypothesis" footnote — the section-level disclaimer on Slide 12 covers this more appropriately)*
 
 **Animation:** Quote box draws in with left-to-right clip-path reveal. Columns stagger. Amber line types last.
+
+**Speaker note:** "This is the compound gap: no system in the literature we reviewed combines open-ended exploration with an explicit, dynamically built dependency structure, evaluated across more than one attack surface. That combination is what we're investigating. We want to be clear — this is a working direction from the literature, not a proven result."
 
 ---
 
@@ -277,16 +302,22 @@ Rows:
     - VDG: Model vulnerabilities as a graph with prerequisite edges, not a flat list
     - UCB: Guide exploration with Upper Confidence Bound over dependency-constrained frontier
     - Memory: Retain and reuse strategies across missions
-  - Honest note chip (amber): "Early stage — direction under active investigation"
+  *(Remove the amber "Early stage" chip — already covered by the section-level framing on Slide 12)*
 
 - Right (50%): Conceptual VDG mini-diagram:
   - DAG nodes: SQLi → Auth Bypass → RCE; XSS → Auth Bypass
-  - Colors: SQLi=green (ELIGIBLE), Auth Bypass=amber (IN_PROGRESS), RCE=dim (BLOCKED)
+  - Node status must be shown via both color AND text label (not color alone):
+    - SQLi: green fill + text label `ELIGIBLE`
+    - Auth Bypass: amber fill + text label `NEXT`
+    - RCE: dim fill + text label `BLOCKED`
+    - XSS: green fill + text label `ELIGIBLE`
   - UCB score labels on each node
   - Label: `Vulnerability Dependency Graph (VDG) — conceptual`
-  - Cursor arrow pointing to highest UCB node
+  - Cursor arrow pointing to highest UCB node, with label `Selected`
 
 **Animation:** Graph draws node by node, edges animate as growing lines. Score labels count up.
+
+**Speaker note:** "This is the core idea. Instead of treating candidate vulnerabilities as a flat list, RedGrid represents them as a graph — where some attacks can only happen after others succeed. The agent uses this structure to guide where it explores next. This is a conceptual sketch of the VDG — the actual implementation is what the next phase of the thesis builds."
 
 ---
 
@@ -296,7 +327,8 @@ Rows:
 
 **Content:**
 - Slide title: `Research Objectives`
-- Sub-label: `5 working goals — under active investigation`
+- Sub-label: `5 working goals`
+*(Remove "under active investigation" from sub-label — redundant with the section framing on Slide 12)*
 
 1. VDG Formalization — Investigate whether a prerequisite-edge graph improves agent exploration over a flat priority list
 2. Dual-Layer World Model — Separate confirmed facts from inferred hypotheses for independent ablation
@@ -308,6 +340,8 @@ Rows:
 
 **Animation:** Cards stagger in (120ms delay). Icon first, then label, then description.
 
+**Speaker note:** "Five objectives, each tied directly to the gaps we just saw. The first two are directly about the compound gap — building the VDG structure and keeping facts separate from guesses. The last one is about evaluation rigor — we'll only test on benchmarks that already exist, not build our own."
+
 ---
 
 
@@ -315,9 +349,11 @@ Rows:
 
 **Layout:** Three equal cards, full-width horizontal. Clean and simple — no technical jargon.
 
+**SECTION TRANSITION NOTE FOR AGENT:** This slide marks the boundary between the deep section (Chapters 1–2) and the high-level sketch section (architecture, methodology, evaluation). Place a single, clearly styled transition banner at the top of this slide — e.g. a thin full-width bar reading: `The following slides are high-level sketches — implementation has not started.` Style it in amber at small font size (14px), positioned just below the slide title. This is the **one and only** location for this disclaimer. Do not repeat it on Slides 13–18.
+
 **Content:**
 - Slide title: `Expected Contributions`
-- Sub-label (amber chip): `Directions under investigation — not yet results`
+- Transition banner (amber, small, full-width, below title): `The following slides are high-level sketches — implementation has not started.`
 
 - Card C1 (red accent border):
   - Label: `C1 — Primary`
@@ -337,9 +373,11 @@ Rows:
   - Title: `Consistent Evaluation`
   - 1-line: "Can a single architecture be tested fairly across web, GraphQL, and multi-host surfaces using standardized oracles?"
 
-- Honest note at bottom (italic, secondary text): "These are research questions. Answers come from experiments — not from this report."
+- Bottom note (italic, secondary text): "These are research questions. Answers come from experiments — not this report."
 
-**Animation:** Cards slide up with 150ms stagger. Bottom note fades in last.
+**Animation:** Cards slide up with 150ms stagger. Transition banner appears first (fade-in). Bottom note fades in last.
+
+**Speaker note:** "These three directions are what we're investigating — not what we've proven. C1 is the primary contribution: does the dependency graph help? C2 and C3 are supporting. From here on the slides sketch the plan rather than report completed work."
 
 ---
 
@@ -349,7 +387,7 @@ Rows:
 
 **Content:**
 - Slide title: `RedGrid — The Core Idea`
-- Sub-label (amber chip): `Conceptual sketch — implementation begins next`
+*(No amber sub-label chip here — the transition banner on Slide 12 already covered this for the whole section)*
 
 - Central visual: 3 connected boxes (horizontal flow):
 
@@ -379,6 +417,8 @@ Rows:
 
 **Animation:** Three boxes appear simultaneously with fade+scale. Arrow labels draw after. Bold sentence fades in last.
 
+**Speaker note:** "Three ideas working together: broad exploration guided by a dependency graph, with memory to avoid repeating past mistakes. Each of these tackles one of the failure modes or gaps we just saw. The question is whether combining all three produces measurable improvement — that's what the experiments will tell us."
+
 ---
 
 ### SLIDE 14 — Architecture — A Simple View
@@ -387,7 +427,7 @@ Rows:
 
 **Content:**
 - Slide title: `Architecture — A Rough Sketch`
-- Sub-label (amber chip): `High-level only — details being designed`
+*(No amber sub-label chip — covered by Slide 12 transition banner)*
 
 - 4-layer colored stack (think: a layered cake, top to bottom, each band roughly equal height):
 
@@ -416,10 +456,11 @@ Rows:
   "Remembers strategies and failures. Reuses what worked."
 
 - NO component-level names (no FullCompact, no FAISS, no E_ord, no Handoff Bridge)
-- Each band: one icon + one plain-English sentence only
-- Honest callout (amber border, bottom): "This is a design direction, not a built system. Implementation begins next."
+- Each band: one icon + one plain-English sentence + text label (not color alone to denote layer role)
 
 **Animation:** Layers reveal top-to-bottom (250ms stagger). Side panel fades in after. Memory bar slides up last.
+
+**Speaker note:** "Four layers: a planner that controls the overall mission, a decision-maker that uses the dependency graph to choose what to try next, specialist agents that each focus on one attack type, and an execution layer that runs the attempt and checks the result. The world model keeps confirmed facts strictly separate from hypotheses. This is a sketch — the design will evolve as we build."
 
 ---
 
@@ -429,20 +470,20 @@ Rows:
 
 **Content:**
 - Slide title: `How RedGrid Will Work`
-- Sub-label (amber chip): `Planned — not yet implemented`
+*(No amber sub-label chip — covered by Slide 12 transition banner)*
 
-- A circular 4-step loop (clockwise, large, centered):
+- A circular 4-step loop (clockwise, large, centered). Each step uses both a color AND a text label (not color alone):
 
-  Step 1 [red, top]: `Recon`
+  Step 1 [red fill, top]: Label: `1 — Recon`
   "Scan the target. Build a picture of what's there."
 
-  Step 2 [cyan, right]: `Plan`
+  Step 2 [cyan fill, right]: Label: `2 — Plan`
   "Decide what to attack next — using the dependency graph."
 
-  Step 3 [amber, bottom]: `Attack`
+  Step 3 [amber fill, bottom]: Label: `3 — Attack`
   "Send in a specialist agent. Run the attempt."
 
-  Step 4 [green, left]: `Learn`
+  Step 4 [green fill, left]: Label: `4 — Learn`
   "Did it work? Update the graph. Store the lesson. Repeat."
 
   Center label (small): `VDG drives the loop`
@@ -453,6 +494,8 @@ Rows:
 
 **Animation:** Loop steps draw clockwise (300ms each). Center label fades in after. Design principles stagger in below.
 
+**Speaker note:** "The basic loop: scan, pick what to attack using the graph, attempt it, learn from the result, repeat. The two design principles — fresh context per attempt and strict separation of facts from hypotheses — are directly motivated by the failure modes PentestGPT and the PentestEval ablation identified."
+
 ---
 
 ### SLIDE 16 — Where We Will Test
@@ -461,7 +504,7 @@ Rows:
 
 **Content:**
 - Slide title: `Evaluation — Three Attack Surfaces`
-- Sub-label (amber chip): `Planned — no results yet`
+*(No amber sub-label chip — covered by Slide 12 transition banner)*
 
 - Three equal surface cards (horizontal):
 
@@ -484,80 +527,86 @@ Rows:
 
 **Animation:** Cards slide up with 150ms stagger. Bottom principle fades in last.
 
+**Speaker note:** "Three attack surfaces, three independent benchmark suites, each with automated oracles. We're not building our own benchmark — we're evaluating on the ones that already exist. The oracle-backed setup means results are reproducible and can be directly compared to prior work."
+
 ---
 
 ### SLIDE 17 — Project Timeline
 
-**Layout:** Simple horizontal timeline. 4 phases, color-coded by status.
+**Layout:** Simple horizontal timeline. 4 phases, each with both a color fill AND a text badge for status (not color alone).
 
 **Content:**
 - Slide title: `Project Timeline`
 - Sub-label: `6-month thesis program · Sep 2026 — Mar 2027`
 
-- Timeline (4 phases, left to right):
+- Timeline (4 phases, left to right). Each phase has a colored bar AND a text badge:
 
   Phase 1 [GREEN solid bar]: Sep 2026
   "Literature Review + Architecture Design"
-  Badge: DONE
+  Badge (text): `DONE`
 
   Phase 2 [AMBER striped bar]: Oct–Nov 2026
   "Build + Early Testing"
-  Badge: UP NEXT
+  Badge (text): `UP NEXT`
 
   Phase 3 [DARK outlined bar]: Dec–Jan 2027
   "Run Experiments"
-  Badge: PLANNED
+  Badge (text): `PLANNED`
 
   Phase 4 [DARK outlined bar]: Feb–Mar 2027
   "Write + Submit"
-  Badge: PLANNED
+  Badge (text): `PLANNED`
 
-- 3 status chips below timeline:
-  - Green: Complete — Literature review · Inception report
-  - Amber: Next — System build · Early tests
-  - Grey: Planned — Full experiments · Thesis writing
+- 3 status chips below timeline (each chip has both a color AND a text label):
+  - Green chip, label `Complete`: Literature review · Inception report
+  - Amber chip, label `Next`: System build · Early tests
+  - Grey chip, label `Planned`: Full experiments · Thesis writing
 
 **Animation:** Timeline fills left-to-right. Phase labels drop in. Status chips fade in at bottom.
+
+**Speaker note:** "We're at the end of Phase 1. The literature review and architecture design are done — this presentation is the deliverable. Phase 2 starts next: building the prototype and running early tests on PentestEval to see if the dependency inference idea holds up at all before we commit to the full benchmark runs."
 
 ---
 
 ### SLIDE 18 — Challenges We Already See
 
-**Layout:** 2x2 grid of simple challenge cards. One title + one plain-English sentence each. No mitigation detail.
+**Layout:** 2x2 grid of simple challenge cards. One title + one plain-English sentence each.
 
 **Content:**
 - Slide title: `Challenges We Are Aware Of`
-- Sub-label: `Honest about the hard parts from day one`
+- Sub-label: `Surfaced during literature review — not surprises`
 
 - 4 cards (2x2):
 
-  Card 1 (red border):
+  Card 1 (red border + text label `HIGH`):
   Icon: question mark over a graph
   Title: `Inferring Dependencies Is Hard`
   "Building the prerequisite graph using an LLM — not human annotation — will be noisy. We need to measure how noisy before relying on it."
 
-  Card 2 (amber border):
+  Card 2 (amber border + text label `MEDIUM`):
   Icon: lab flask vs. real globe
   Title: `Sandbox vs. Real World`
   "What works on a controlled benchmark may not hold on a real-world target. We'll test both and report the gap honestly."
 
-  Card 3 (amber border):
+  Card 3 (amber border + text label `MEDIUM`):
   Icon: memory chip with warning triangle
   Title: `Memory Could Backfire`
   "A strategy that worked against software version 1 might be harmful against version 2. This needs a safety mechanism."
 
-  Card 4 (cyan border):
+  Card 4 (cyan border + text label `MANAGEABLE`):
   Icon: tuning sliders
   Title: `Tuning Is Tricky`
   "The approach has parameters to adjust. Results must not depend on a single lucky configuration."
 
 **Animation:** Cards appear 2x2 with 150ms stagger. Icons animate first, then text.
 
+**Speaker note:** "These four challenges came directly out of the literature — we didn't discover them in implementation because we haven't started yet. Finding them early is the point of an inception review. Challenge 1 is the most fundamental: if LLM-inferred dependency edges are too noisy, the whole VDG approach loses its foundation. We'll gate the main experiments on an early precision check."
+
 ---
 
 ### SLIDE 19 — Where We Are
 
-**Layout:** Two-column status. Bold closing statement.
+**Layout:** Two-column status. Committee question callout. Bold closing statement.
 
 **Content:**
 - Slide title: `Where We Are`
@@ -577,10 +626,15 @@ Rows:
   - Refine based on what we find
   - Write the thesis
 
+- **Committee question callout** (styled as a small, secondary-text card, positioned above the closing line — label `QUESTION FOR THE COMMITTEE` in muted caps, followed by normal-weight sentence):
+  "Does the VDG + dependency-aware exploration direction look worth building out, or should we narrow scope before implementation starts?"
+
 - Bottom centered (Syne 700, 26px, white):
   "The gap is identified. The direction is set. Now — we go build it."
 
-**Animation:** Left items appear with checkmark-draw animation. Right items stagger in. Closing statement fades in last.
+**Animation:** Left items appear with checkmark-draw animation. Right items stagger in. Committee callout fades in before the closing statement. Closing statement fades in last.
+
+**Speaker note:** "Six things done, five to go. The committee question is genuine — we're at the last decision point before six months of implementation. If the VDG direction looks too risky or too narrow, now is the time to hear that."
 
 ---
 
@@ -612,6 +666,8 @@ Rows:
 
 **Animation:** "Thank You" fades in with soft scale-up. Numbers count up. Terms stagger in.
 
+**Speaker note:** "Thank you. We're happy to go deeper on any of the literature findings, on the gap analysis, or on the architecture direction. Any feedback on whether the scope is appropriately set for six months of thesis work is very welcome."
+
 ---
 
 ## Global Slide Requirements
@@ -620,10 +676,12 @@ Rows:
 2. **Progress bar:** 2px top-of-slide bar (red to cyan gradient), filled proportionally. Animates on transition.
 3. **Navigation:** Left/right arrow keys; swipe on touch devices.
 4. **Speaker mode:** Speaker notes visible only in presenter view.
-5. **Watermark:** Small `RedGrid` wordmark bottom-left on all slides except title and Q&A.
-6. **Crowding rule:** Split into two slides rather than shrinking font if content feels tight.
-7. **Accessibility:** All text must maintain WCAG AA contrast against dark background.
-8. **Export format:** HTML (reveal.js or equivalent) with PDF export option.
+5. **Speaker notes:** Every slide must include a 1–2 sentence speaker note — a natural spoken-language version of what the presenter says while that slide is on screen, not a restatement of the on-slide text. Any explanatory content removed from a slide body per the density-reduction rule should be relocated into that slide's speaker note.
+6. **Watermark:** Small `RedGrid` wordmark bottom-left on all slides except title and Q&A.
+7. **Crowding rule:** Split into two slides rather than shrinking font if content feels tight.
+8. **Accessibility:** All text must maintain WCAG AA contrast against dark background.
+9. **Status encoding:** Any element whose meaning is conveyed by color (node status, pass/fail cell shading, phase status, risk level, etc.) must also carry a text label or icon — never color alone. This applies specifically to: the VDG diagram (Slide 10), the process loop steps (Slide 15), the comparison table cell shading (Slides 4 and 8), the timeline phase bars (Slide 17), and the challenge card borders (Slide 18).
+10. **Export format:** HTML (reveal.js or equivalent) with PDF export option. Fonts must be embedded locally in the export, not link-loaded from a CDN, to ensure offline presentation reliability.
 
 ---
 
