@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>RedGrid — Slide 10 — Introducing RedGrid</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{width:100%;height:100%;background:#E0DDD8;display:flex;align-items:center;justify-content:center;font-family:'Source Sans 3',system-ui,sans-serif;}
+  .slide{width:1280px;height:720px;background:#F7F4EF;position:relative;overflow:hidden;box-shadow:0 8px 48px rgba(0,0,0,.18);}
+
+  .top-right-mark{position:absolute;top:24px;right:80px;font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:18px;color:#8B1A1A;}
+
+  .header{position:absolute;top:44px;left:80px;right:160px;}
+  .slide-title{font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:44px;color:#1A1A2E;line-height:1.15;}
+  .authority-bar{height:3px;background:#8B1A1A;width:55%;margin-top:8px;}
+
+  /* Body */
+  .body{position:absolute;top:130px;left:80px;right:80px;bottom:60px;display:flex;gap:40px;}
+
+  /* Left col */
+  .left-col{flex:0 0 53%;display:flex;flex-direction:column;}
+  .proj-name{font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:52px;color:#8B1A1A;line-height:1;margin-bottom:8px;}
+  .tagline{font-family:'Source Sans 3',sans-serif;font-size:18px;font-weight:400;color:#2E4A7A;line-height:1.4;}
+  .spacer{height:30px;}
+  .bullet-list{list-style:none;display:flex;flex-direction:column;gap:16px;}
+  .bullet-item{font-family:'Source Sans 3',sans-serif;font-weight:400;font-size:18px;color:#1A1A2E;position:relative;line-height:1.45;padding-left:24px;}
+  .bullet-item::before{content:"•";position:absolute;left:4px;color:#8B1A1A;}
+  .bullet-item b{font-weight:700;}
+
+  /* Right col (diagram) */
+  .right-col{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;}
+  .diagram-panel{
+    width:100%;height:380px;
+    background:#EFEBE3;border:1px solid #D4CFC8;border-radius:6px;
+    position:relative;
+  }
+  
+  /* Diagram nodes */
+  .node{
+    position:absolute;
+    border-radius:6px;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:8px 14px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.05);
+  }
+  .node-text{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;}
+  .node-ucb{font-family:'IBM Plex Mono',monospace;font-size:11px;color:#6B6B7A;position:absolute;bottom:-20px;white-space:nowrap;}
+
+  /* Specific nodes */
+  .n-sqli{top:50px;left:40px;background:#D6EDDA;border:1.5px solid #2A6B3C;width:150px;}
+  .n-sqli .node-text{color:#1A4A28;}
+  
+  .n-xss{bottom:70px;left:40px;background:#D6EDDA;border:1.5px solid #2A6B3C;width:150px;}
+  .n-xss .node-text{color:#1A4A28;}
+  
+  .n-auth{top:50%;left:50%;transform:translate(-50%,-50%);background:#F5E9D0;border:1.5px solid #A0631A;width:170px;z-index:2;}
+  .n-auth .node-text{color:#5A3A0A;}
+  .n-auth .node-ucb{color:#7A4F1A;font-weight:600;}
+  
+  .n-rce{top:50%;right:30px;transform:translateY(-50%);background:#EFEBE3;border:1.5px solid #D4CFC8;width:150px;}
+  .n-rce .node-text{color:#6B6B7A;}
+
+  /* Edges (SVG overlay) */
+  .edges-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;}
+  
+  /* Cursor */
+  .cursor-group{position:absolute;top:205px;left:270px;z-index:3;display:flex;align-items:center;gap:6px;}
+  .cursor-arrow{width:20px;height:20px;transform:rotate(-30deg);}
+  .cursor-label{font-family:'Source Sans 3',sans-serif;font-size:11px;font-weight:600;color:#8B1A1A;}
+
+  .diagram-caption{font-family:'Source Sans 3',sans-serif;font-size:12px;font-style:italic;color:#6B6B7A;margin-top:12px;text-align:center;}
+
+  /* Footer */
+  .footer-line{position:absolute;bottom:36px;left:0;right:0;height:1px;background:#D4CFC8;}
+  .footer-mark{position:absolute;bottom:10px;left:80px;font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:11px;color:#8B1A1A;}
+  .footer-num{position:absolute;right:80px;bottom:10px;font-family:'IBM Plex Mono',monospace;font-size:13px;color:#9A9AAA;}
+  .progress{position:absolute;bottom:0;left:0;height:3px;background:#8B1A1A;width:45%;}
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="top-right-mark">RedGrid</div>
+
+  <div class="header">
+    <div class="slide-title">Introducing RedGrid</div>
+    <div class="authority-bar"></div>
+  </div>
+
+  <div class="body">
+    <div class="left-col">
+      <div class="proj-name">RedGrid</div>
+      <div class="tagline">Dependency-Constrained UCB Exploration for Autonomous Penetration Testing</div>
+      <div class="spacer"></div>
+      <ul class="bullet-list">
+        <li class="bullet-item"><b>VDG:</b> Model vulnerabilities as a graph with prerequisite edges, not a flat list.</li>
+        <li class="bullet-item"><b>UCB:</b> Guide exploration with Upper Confidence Bound over the dependency-constrained frontier.</li>
+        <li class="bullet-item"><b>Memory:</b> Retain and reuse strategies across missions.</li>
+      </ul>
+    </div>
+
+    <div class="right-col">
+      <div class="diagram-panel">
+        <svg class="edges-svg" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="arrow-solid" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#6B6B7A" />
+            </marker>
+            <marker id="arrow-dashed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#D4CFC8" />
+            </marker>
+          </defs>
+          <!-- SQLi to Auth Bypass -->
+          <line x1="190" y1="80" x2="255" y2="170" stroke="#6B6B7A" stroke-width="1.5" marker-end="url(#arrow-solid)" />
+          <!-- XSS to Auth Bypass -->
+          <line x1="190" y1="290" x2="255" y2="210" stroke="#6B6B7A" stroke-width="1.5" marker-end="url(#arrow-solid)" />
+          <!-- Auth Bypass to RCE -->
+          <line x1="340" y1="190" x2="390" y2="190" stroke="#D4CFC8" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#arrow-dashed)" />
+        </svg>
+
+        <div class="node n-sqli">
+          <div class="node-text">SQLi · ELIGIBLE</div>
+          <div class="node-ucb">UCB = 3.42</div>
+        </div>
+
+        <div class="node n-xss">
+          <div class="node-text">XSS · ELIGIBLE</div>
+          <div class="node-ucb">UCB = 2.81</div>
+        </div>
+
+        <div class="node n-auth">
+          <div class="node-text">Auth Bypass · NEXT ►</div>
+          <div class="node-ucb">UCB = 4.17 ★</div>
+        </div>
+
+        <div class="node n-rce">
+          <div class="node-text">RCE · BLOCKED</div>
+          <div class="node-ucb">—</div>
+        </div>
+
+        <div class="cursor-group">
+          <svg class="cursor-arrow" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 22L8.2 13L2 12L22 2L12 22L11 15.8L4 22Z" fill="#8B1A1A" stroke="white" stroke-width="1.5"/>
+          </svg>
+          <div class="cursor-label">Selected</div>
+        </div>
+      </div>
+      <div class="diagram-caption">Vulnerability Dependency Graph (VDG) — conceptual sketch</div>
+    </div>
+  </div>
+
+  <div class="footer-line"></div>
+  <div class="footer-mark">RedGrid</div>
+  <div class="footer-num">10 / 20</div>
+  <div class="progress"></div>
+</div>
+</body>
+</html>

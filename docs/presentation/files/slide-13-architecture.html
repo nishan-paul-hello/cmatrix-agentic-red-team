@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>RedGrid — Slide 13 — RedGrid — The Core Idea</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{width:100%;height:100%;background:#E0DDD8;display:flex;align-items:center;justify-content:center;font-family:'Source Sans 3',system-ui,sans-serif;}
+  .slide{width:1280px;height:720px;background:#F7F4EF;position:relative;overflow:hidden;box-shadow:0 8px 48px rgba(0,0,0,.18);}
+
+  .top-right-mark{position:absolute;top:24px;right:80px;font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:18px;color:#8B1A1A;}
+
+  .header{position:absolute;top:44px;left:80px;right:160px;}
+  .slide-title{font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:44px;color:#1A1A2E;line-height:1.15;}
+  .authority-bar{height:3px;background:#8B1A1A;width:55%;margin-top:8px;}
+
+  /* Body */
+  .body{position:absolute;top:120px;left:80px;right:80px;bottom:60px;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+
+  /* Diagram area (3 horizontal connected boxes) */
+  .diagram-row{
+    display:flex;align-items:center;justify-content:center;
+    width:100%;gap:16px;
+    height:65%;
+  }
+  
+  .flow-box{
+    flex:1;background:#EFEBE3;
+    padding:24px 20px;
+    display:flex;flex-direction:column;align-items:center;text-align:center;
+  }
+  .box1{border-top:3px solid #8B1A1A;}
+  .box2{border-top:3px solid #2E4A7A;padding:34px 20px; /* taller */}
+  .box3{border-top:3px solid #A0631A;}
+  
+  .box-label{font-family:'Source Sans 3',sans-serif;font-weight:700;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:8px;}
+  .box1 .box-label{color:#8B1A1A;}
+  .box2 .box-label{color:#2E4A7A;}
+  .box3 .box-label{color:#A0631A;}
+
+  .box-title{font-family:'Source Sans 3',sans-serif;font-weight:700;font-size:19px;color:#1A1A2E;margin-bottom:12px;line-height:1.2;}
+  .box-desc{font-family:'Source Sans 3',sans-serif;font-weight:400;font-size:15px;color:#6B6B7A;line-height:1.45;}
+
+  /* Connectors */
+  .connector{
+    display:flex;flex-direction:column;align-items:center;
+    width:80px;position:relative;
+  }
+  .conn-line{width:100%;height:2px;background:#D4CFC8;position:relative;}
+  .conn-line::after{
+    content:"";position:absolute;right:0;top:-4px;
+    border-top:5px solid transparent;border-bottom:5px solid transparent;border-left:8px solid #D4CFC8;
+  }
+  .conn-text{font-family:'Source Sans 3',sans-serif;font-weight:400;font-style:italic;font-size:12px;color:#9A9AAA;margin-top:6px;text-align:center;}
+
+  /* Bottom Statement */
+  .bottom-statement{
+    width:80%;margin-top:24px;
+    border-left:3px solid #8B1A1A;background:#EDE9E1;padding:20px 24px;border-radius:3px;
+    text-align:center;
+  }
+  .stmt-text{
+    font-family:'Playfair Display',Georgia,serif;font-weight:400;font-style:italic;
+    font-size:20px;color:#1A1A2E;line-height:1.4;
+  }
+  .footnote{
+    font-family:'Source Sans 3',sans-serif;font-size:13px;font-style:italic;color:#9A9AAA;
+    margin-top:16px;text-align:center;
+  }
+
+  /* Footer */
+  .footer-line{position:absolute;bottom:36px;left:0;right:0;height:1px;background:#D4CFC8;}
+  .footer-mark{position:absolute;bottom:10px;left:80px;font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:11px;color:#8B1A1A;}
+  .footer-num{position:absolute;right:80px;bottom:10px;font-family:'IBM Plex Mono',monospace;font-size:13px;color:#9A9AAA;}
+  .progress{position:absolute;bottom:0;left:0;height:3px;background:#8B1A1A;width:60%;}
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="top-right-mark">RedGrid</div>
+
+  <div class="header">
+    <div class="slide-title">RedGrid — The Core Idea</div>
+    <div class="authority-bar"></div>
+  </div>
+
+  <div class="body">
+    <div class="diagram-row">
+      <div class="flow-box box1">
+        <div class="box-label">EXPLORE</div>
+        <div class="box-title">Explore Broadly</div>
+        <div class="box-desc">Search the full attack surface. Don't commit to one path early.</div>
+      </div>
+      
+      <div class="connector">
+        <div class="conn-line"></div>
+        <div class="conn-text">guided by</div>
+      </div>
+      
+      <div class="flow-box box2">
+        <div class="box-label">GUIDE</div>
+        <div class="box-title">Dependency Graph</div>
+        <div class="box-desc">Model which vulnerabilities depend on which. Pick the smartest next step.</div>
+      </div>
+      
+      <div class="connector">
+        <div class="conn-line"></div>
+        <div class="conn-text">feeds into</div>
+      </div>
+      
+      <div class="flow-box box3">
+        <div class="box-label">LEARN</div>
+        <div class="box-title">Remember and Reuse</div>
+        <div class="box-desc">Carry forward what worked across past missions.</div>
+      </div>
+    </div>
+    
+    <div class="bottom-statement">
+      <div class="stmt-text">"RedGrid asks: does connecting exploration + dependency reasoning + memory make autonomous penetration testing meaningfully better?"</div>
+    </div>
+    
+    <div class="footnote">All three are open research questions — implementation has not started</div>
+  </div>
+
+  <div class="footer-line"></div>
+  <div class="footer-mark">RedGrid</div>
+  <div class="footer-num">13 / 20</div>
+  <div class="progress"></div>
+</div>
+</body>
+</html>
