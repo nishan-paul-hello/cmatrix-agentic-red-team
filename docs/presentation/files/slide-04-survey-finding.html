@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>RedGrid — Slide 04 — Dominant Survey Finding</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{width:100%;height:100%;background:#E0DDD8;display:flex;align-items:center;justify-content:center;font-family:'Source Sans 3',system-ui,sans-serif;}
+  .slide{width:1280px;height:720px;background:#F7F4EF;position:relative;overflow:hidden;box-shadow:0 8px 48px rgba(0,0,0,.18);}
+
+  .top-right-mark{position:absolute;top:24px;right:80px;font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:18px;color:#8B1A1A;}
+
+  .header{position:absolute;top:44px;left:80px;right:160px;}
+  .slide-title{font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:44px;color:#1A1A2E;line-height:1.15;}
+  .authority-bar{height:3px;background:#8B1A1A;width:55%;margin-top:8px;}
+
+  /* Body */
+  .body{position:absolute;top:130px;left:80px;right:80px;bottom:60px;display:flex;flex-direction:column;gap:30px;}
+
+  /* Pull-quote block */
+  .pull-quote-wrapper{display:flex;justify-content:center;width:100%;}
+  .primary-callout{
+    width:80%;
+    border-left:3px solid #8B1A1A;
+    background:#EDE9E1;
+    padding:20px 24px;
+    border-radius:3px;
+    text-align:center;
+  }
+  .pull-quote{
+    font-family:'Playfair Display',Georgia,serif;font-weight:400;font-style:italic;
+    font-size:30px;color:#1A1A2E;line-height:1.4;
+  }
+  .quote-source{
+    font-family:'Source Sans 3',sans-serif;font-size:13px;font-style:italic;color:#6B6B7A;
+    margin-top:10px;
+  }
+
+  /* Comparison table */
+  .table-wrapper{flex:1;width:100%;display:flex;flex-direction:column;}
+  table{width:100%;border-collapse:collapse;}
+  th, td{text-align:left;padding:10px 14px;}
+  th{font-family:'Source Sans 3',sans-serif;font-weight:600;font-size:15px;border-bottom:2px solid #8B1A1A;}
+  th.left-col{background:#F5D5D5;color:#5A1A1A;width:50%;}
+  th.right-col{background:#D6EDDA;color:#1A4A28;width:50%;}
+  td{font-family:'Source Sans 3',sans-serif;font-weight:400;font-size:16px;}
+  tr.negative td{background:#F5D5D5;color:#5A1A1A;}
+  tr.positive td{background:#D6EDDA;color:#1A4A28;}
+  
+  /* we need to style cells individually since it's a 2-col layout with side-by-side neg/pos */
+  .cell-neg{background:#F5D5D5;color:#5A1A1A;border-right:2px solid #F7F4EF;}
+  .cell-pos{background:#D6EDDA;color:#1A4A28;}
+  .icon{font-weight:700;margin-right:6px;}
+  
+  .table-caption{
+    font-family:'Source Sans 3',sans-serif;font-size:13px;font-style:italic;color:#6B6B7A;
+    margin-top:12px;
+  }
+
+  /* Footer */
+  .footer-line{position:absolute;bottom:36px;left:0;right:0;height:1px;background:#D4CFC8;}
+  .footer-mark{position:absolute;bottom:10px;left:80px;font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:11px;color:#8B1A1A;}
+  .footer-num{position:absolute;right:80px;bottom:10px;font-family:'IBM Plex Mono',monospace;font-size:13px;color:#9A9AAA;}
+  .progress{position:absolute;bottom:0;left:0;height:3px;background:#8B1A1A;width:15%;}
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="top-right-mark">RedGrid</div>
+
+  <div class="header">
+    <div class="slide-title">What the Literature Agrees On</div>
+    <div class="authority-bar"></div>
+  </div>
+
+  <div class="body">
+    <div class="pull-quote-wrapper">
+      <div class="primary-callout">
+        <div class="pull-quote">"Architecture, not model scale, is the dominant variable."</div>
+        <div class="quote-source">Consistent finding across: VulnBot, PentestGPT, CHECKMATE, Incalmo, HPTSA, Fang 2024</div>
+      </div>
+    </div>
+    
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th class="left-col">Unstructured ReAct + GPT-4</th>
+            <th class="right-col">Structured Pipeline + GPT-4o-mini</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="cell-neg"><span class="icon">✗</span> Depth-first tunnel vision</td>
+            <td class="cell-pos"><span class="icon">✓</span> Broad, structured exploration</td>
+          </tr>
+          <tr>
+            <td class="cell-neg"><span class="icon">✗</span> Context loss in long sessions</td>
+            <td class="cell-pos"><span class="icon">✓</span> Scoped per-invocation context</td>
+          </tr>
+          <tr>
+            <td class="cell-neg"><span class="icon">✗</span> No failure recovery</td>
+            <td class="cell-pos"><span class="icon">✓</span> Retry / adapt / escalate loops</td>
+          </tr>
+          <tr>
+            <td class="cell-neg"><span class="icon">✗</span> Implicit planning only</td>
+            <td class="cell-pos"><span class="icon">✓</span> Explicit dependency modeling</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="table-caption">Synthesised from 6 independently-reaching papers — September 2026 review</div>
+    </div>
+  </div>
+
+  <div class="footer-line"></div>
+  <div class="footer-mark">RedGrid</div>
+  <div class="footer-num">04 / 20</div>
+  <div class="progress"></div>
+</div>
+</body>
+</html>

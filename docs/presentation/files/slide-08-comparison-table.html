@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>RedGrid — Slide 08 — Comparative Analysis Table</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{width:100%;height:100%;background:#E0DDD8;display:flex;align-items:center;justify-content:center;font-family:'Source Sans 3',system-ui,sans-serif;}
+  .slide{width:1280px;height:720px;background:#F7F4EF;position:relative;overflow:hidden;box-shadow:0 8px 48px rgba(0,0,0,.18);}
+
+  .top-right-mark{position:absolute;top:24px;right:80px;font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:18px;color:#8B1A1A;}
+
+  .header{position:absolute;top:44px;left:80px;right:160px;}
+  .slide-title{font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:44px;color:#1A1A2E;line-height:1.15;}
+  .authority-bar{height:3px;background:#8B1A1A;width:55%;margin-top:8px;}
+  .sub-label{font-family:'Source Sans 3',sans-serif;font-size:13px;font-weight:400;color:#6B6B7A;margin-top:6px;}
+
+  /* Body */
+  .body{position:absolute;top:136px;left:80px;right:80px;bottom:40px;display:flex;flex-direction:column;}
+
+  /* Table */
+  table{width:100%;border-collapse:collapse;border:1.5px solid #D4CFC8;background:#F7F4EF;}
+  th, td{text-align:left;padding:10px 14px;}
+  th{
+    background:#E8E4DC;
+    font-family:'Source Sans 3',sans-serif;font-weight:600;font-size:13px;color:#1A1A2E;
+    text-transform:uppercase;letter-spacing:0.08em;
+    border-bottom:2px solid #8B1A1A;
+  }
+  
+  /* Zebra striping */
+  tbody tr:nth-child(odd){background:#F7F4EF;}
+  tbody tr:nth-child(even){background:#F3F0EA;}
+  
+  td{font-family:'Source Sans 3',sans-serif;font-weight:400;font-size:16px;color:#1A1A2E;}
+  
+  /* Col widths */
+  th:nth-child(1), td:nth-child(1){width:18%;}
+  th:nth-child(2), td:nth-child(2){width:25%;}
+  th:nth-child(3), td:nth-child(3){width:22%;}
+  th:nth-child(4), td:nth-child(4){width:18%;}
+  th:nth-child(5), td:nth-child(5){width:17%;}
+
+  /* Status cell styling */
+  .cell-neg{background:#F5D5D5;color:#5A1A1A;font-weight:600;}
+  .cell-pos{background:#D6EDDA;color:#1A4A28;font-weight:600;}
+  .cell-part{background:#F5E9D0;color:#5A3A0A;font-weight:600;}
+  .icon{margin-right:6px;}
+  
+  /* RedGrid proposed row */
+  tr.row-proposed{background:#E8EDF5 !important;}
+  tr.row-proposed td{color:#1A2E5A;font-weight:700;}
+  tr.row-proposed td:first-child{border-left:3px solid #2E4A7A;}
+  tr.row-proposed td.cell-pos{background:#D6EDDA;color:#1A4A28;}
+
+  .table-caption{font-family:'Source Sans 3',sans-serif;font-size:13px;font-style:italic;color:#6B6B7A;margin-top:8px;}
+
+  /* Footer */
+  .footer-line{position:absolute;bottom:36px;left:0;right:0;height:1px;background:#D4CFC8;}
+  .footer-mark{position:absolute;bottom:10px;left:80px;font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:11px;color:#8B1A1A;}
+  .footer-num{position:absolute;right:80px;bottom:10px;font-family:'IBM Plex Mono',monospace;font-size:13px;color:#9A9AAA;}
+  .progress{position:absolute;bottom:0;left:0;height:3px;background:#8B1A1A;width:35%;}
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="top-right-mark">RedGrid</div>
+
+  <div class="header">
+    <div class="slide-title">Prior System Comparison</div>
+    <div class="authority-bar"></div>
+    <div class="sub-label">Four dimensions that matter most &nbsp;·&nbsp; Preliminary 11-paper review</div>
+  </div>
+
+  <div class="body">
+    <table>
+      <thead>
+        <tr>
+          <th>System</th>
+          <th>Architecture</th>
+          <th>Dependency Modeling</th>
+          <th>Cross-Session Memory</th>
+          <th>Benchmark</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Fang et al. 2024</td>
+          <td>Single agent (ReAct)</td>
+          <td class="cell-neg"><span class="icon">✗</span> None</td>
+          <td class="cell-neg"><span class="icon">✗</span> None</td>
+          <td>15 CVEs</td>
+        </tr>
+        <tr>
+          <td>HPTSA</td>
+          <td>Hierarchical planner + tasks</td>
+          <td class="cell-neg"><span class="icon">✗</span> Flat dispatch</td>
+          <td class="cell-neg"><span class="icon">✗</span> None</td>
+          <td>14 zero-day CVEs</td>
+        </tr>
+        <tr>
+          <td>PentestGPT</td>
+          <td>Split reasoning / parsing</td>
+          <td class="cell-part"><span class="icon">~</span> Implicit (LLM only)</td>
+          <td class="cell-neg"><span class="icon">✗</span> None</td>
+          <td>HTB / VulnHub</td>
+        </tr>
+        <tr>
+          <td>VulnBot</td>
+          <td>Multi-agent, role-specialised</td>
+          <td class="cell-neg"><span class="icon">✗</span> Flat dispatch</td>
+          <td class="cell-neg"><span class="icon">✗</span> None</td>
+          <td>HTB-style</td>
+        </tr>
+        <tr>
+          <td>CHECKMATE</td>
+          <td>Agent + classical planner</td>
+          <td class="cell-pos"><span class="icon">✓</span> Explicit, pre-enumerated</td>
+          <td class="cell-neg"><span class="icon">✗</span> None</td>
+          <td>Curated only</td>
+        </tr>
+        <tr>
+          <td>Incalmo</td>
+          <td>Multi-host orchestration</td>
+          <td class="cell-part"><span class="icon">~</span> Partial (host/cred)</td>
+          <td class="cell-neg"><span class="icon">✗</span> None</td>
+          <td>MHBench (40)</td>
+        </tr>
+        <tr>
+          <td>PrediQL</td>
+          <td>LLM-guided fuzzer</td>
+          <td class="cell-part"><span class="icon">~</span> Schema-derived</td>
+          <td class="cell-neg"><span class="icon">✗</span> None</td>
+          <td>6 GraphQL APIs</td>
+        </tr>
+        <tr class="row-proposed">
+          <td>RedGrid <em>(proposed)</em></td>
+          <td>4-layer multi-agent</td>
+          <td class="cell-pos"><span class="icon">✓</span> Dynamic VDG</td>
+          <td class="cell-pos"><span class="icon">✓</span> 3-tier memory</td>
+          <td>Web + GraphQL + Multi-host</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="table-caption">Preliminary reading — 11-paper focused review, September 2026</div>
+  </div>
+
+  <div class="footer-line"></div>
+  <div class="footer-mark">RedGrid</div>
+  <div class="footer-num">08 / 20</div>
+  <div class="progress"></div>
+</div>
+</body>
+</html>

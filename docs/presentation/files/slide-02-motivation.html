@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>RedGrid — Slide 02 — Motivation Hook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{width:100%;height:100%;background:#E0DDD8;display:flex;align-items:center;justify-content:center;font-family:'Source Sans 3',system-ui,sans-serif;}
+  .slide{width:1280px;height:720px;background:#F7F4EF;position:relative;overflow:hidden;box-shadow:0 8px 48px rgba(0,0,0,.18);}
+
+  /* Header zone */
+  .header{position:absolute;top:60px;left:80px;right:80px;}
+  .slide-title{font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:44px;color:#1A1A2E;line-height:1.2;}
+  .authority-bar{height:3px;background:#8B1A1A;width:55%;margin-top:10px;}
+
+  /* Top-right wordmark */
+  .top-right-mark{position:absolute;top:24px;right:80px;font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:18px;color:#8B1A1A;}
+
+  /* Body */
+  .body{position:absolute;top:148px;left:80px;right:80px;bottom:72px;display:flex;gap:40px;}
+
+  /* Left col 60% */
+  .left-col{flex:0 0 58%;display:flex;flex-direction:column;gap:18px;}
+  .meta-label{font-family:'Source Sans 3',sans-serif;font-size:11px;font-weight:600;color:#9A9AAA;letter-spacing:0.12em;text-transform:uppercase;}
+  .pull-quote{font-family:'Playfair Display',Georgia,serif;font-weight:400;font-style:italic;font-size:26px;color:#1A1A2E;line-height:1.35;}
+  .body-text{font-family:'Source Sans 3',sans-serif;font-size:17px;font-weight:400;color:#1A1A2E;line-height:1.55;}
+  .callout-amber{border-left:3px solid #A0631A;background:#F2EAD9;padding:14px 18px;border-radius:3px;}
+  .callout-amber .label{font-family:'Source Sans 3',sans-serif;font-size:15px;font-weight:700;color:#7A4F1A;margin-bottom:4px;}
+  .callout-amber .text{font-family:'Source Sans 3',sans-serif;font-size:15px;font-weight:400;color:#1A1A2E;line-height:1.5;}
+  .agenda-divider{height:1px;background:#D4CFC8;margin-top:4px;}
+  .agenda-strip{margin-top:8px;}
+  .agenda-label{font-family:'Source Sans 3',sans-serif;font-size:10px;font-weight:400;color:#9A9AAA;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:8px;}
+  .agenda-beats{display:flex;gap:0;align-items:stretch;}
+  .beat{flex:1;padding:8px 12px;border-right:1px solid #D4CFC8;}
+  .beat:last-child{border-right:none;}
+  .beat-num{font-family:'Source Sans 3',sans-serif;font-size:13px;font-weight:600;}
+  .beat-desc{font-family:'Source Sans 3',sans-serif;font-size:11px;font-weight:400;color:#6B6B7A;margin-top:2px;}
+
+  /* Right col 40% */
+  .right-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+  .illustration-panel{width:100%;flex:1;background:#EFEBE3;border-radius:4px;border:1px solid #D4CFC8;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;max-height:320px;}
+  .illustration-caption{font-family:'Source Sans 3',sans-serif;font-size:12px;font-style:italic;color:#6B6B7A;margin-top:10px;text-align:center;}
+
+  /* SVG target illustration */
+  .target-svg{width:200px;height:200px;}
+
+  /* Footer */
+  .footer{position:absolute;bottom:0;left:0;right:0;height:36px;display:flex;align-items:center;padding:0 80px;}
+  .footer-mark{font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:11px;color:#8B1A1A;}
+  .footer-line{position:absolute;bottom:36px;left:0;right:0;height:1px;background:#D4CFC8;}
+  .footer-num{position:absolute;right:80px;bottom:10px;font-family:'IBM Plex Mono',monospace;font-size:13px;color:#9A9AAA;}
+  /* Progress bar */
+  .progress{position:absolute;bottom:0;left:0;height:3px;background:#8B1A1A;width:5%;}
+</style>
+</head>
+<body>
+<div class="slide">
+  <!-- Top-right RedGrid wordmark -->
+  <div class="top-right-mark">RedGrid</div>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="slide-title">Why This Matters</div>
+    <div class="authority-bar"></div>
+  </div>
+
+  <!-- Body -->
+  <div class="body">
+    <!-- Left column -->
+    <div class="left-col">
+      <div class="meta-label">WHY THIS MATTERS</div>
+      <div class="pull-quote">"Attackers move fast. Defenders move slow. Automated testers don't move at all."</div>
+      <div class="body-text">Security vulnerabilities are found daily in web apps, APIs, and networks. Human pen testers are scarce and expensive. Automated scanners use fixed rule-sets — they cannot reason, adapt, or chain exploits.</div>
+      <div class="callout-amber">
+        <div class="label">The question:</div>
+        <div class="text">Can an LLM agent carry out penetration testing autonomously — without step-by-step human direction?</div>
+      </div>
+      <div class="agenda-divider"></div>
+      <div class="agenda-strip">
+        <div class="agenda-label">Talk Structure</div>
+        <div class="agenda-beats">
+          <div class="beat">
+            <div class="beat-num" style="color:#8B1A1A;">◆ Slides 3–11</div>
+            <div class="beat-desc">Problem &amp; Literature (Deep dive)</div>
+          </div>
+          <div class="beat">
+            <div class="beat-num" style="color:#A0631A;">◆ Slides 12–16</div>
+            <div class="beat-desc">Architecture &amp; Plan (Sketch)</div>
+          </div>
+          <div class="beat">
+            <div class="beat-num" style="color:#6B6B7A;">◆ Slides 17–19</div>
+            <div class="beat-desc">Timeline &amp; Status</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right column — target illustration -->
+    <div class="right-col">
+      <div class="illustration-panel">
+        <svg class="target-svg" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Concentric rings -->
+          <circle cx="100" cy="100" r="90" stroke="#1A1A2E" stroke-width="1.5" fill="none" opacity="0.15"/>
+          <circle cx="100" cy="100" r="72" stroke="#1A1A2E" stroke-width="1.5" fill="none" opacity="0.2"/>
+          <circle cx="100" cy="100" r="54" stroke="#1A1A2E" stroke-width="1.5" fill="none" opacity="0.28"/>
+          <circle cx="100" cy="100" r="36" stroke="#1A1A2E" stroke-width="1.5" fill="none" opacity="0.38"/>
+          <circle cx="100" cy="100" r="18" stroke="#1A1A2E" stroke-width="2" fill="#EFEBE3" opacity="0.8"/>
+          <!-- Crosshairs -->
+          <line x1="100" y1="8" x2="100" y2="42" stroke="#1A1A2E" stroke-width="1" opacity="0.25"/>
+          <line x1="100" y1="158" x2="100" y2="192" stroke="#1A1A2E" stroke-width="1" opacity="0.25"/>
+          <line x1="8" y1="100" x2="42" y2="100" stroke="#1A1A2E" stroke-width="1" opacity="0.25"/>
+          <line x1="158" y1="100" x2="192" y2="100" stroke="#1A1A2E" stroke-width="1" opacity="0.25"/>
+          <!-- Crimson arrow from upper-right -->
+          <line x1="165" y1="40" x2="112" y2="92" stroke="#8B1A1A" stroke-width="2.5" stroke-linecap="round"/>
+          <polygon points="112,92 105,80 124,84" fill="#8B1A1A"/>
+        </svg>
+      </div>
+      <div class="illustration-caption">Attack surface exploration — the core challenge.</div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer-line"></div>
+  <div class="footer">
+    <div class="footer-mark">RedGrid</div>
+  </div>
+  <div class="footer-num">02 / 20</div>
+  <div class="progress"></div>
+</div>
+</body>
+</html>
