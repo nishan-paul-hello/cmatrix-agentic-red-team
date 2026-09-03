@@ -11,7 +11,7 @@
   html,body{width:100%;height:100%;background:#E0DDD8;display:flex;align-items:center;justify-content:center;font-family:'Source Sans 3',system-ui,sans-serif;}
   .slide{width:1280px;height:720px;background:#F7F4EF;position:relative;overflow:hidden;box-shadow:0 8px 48px rgba(0,0,0,.18);}
 
-  .top-right-mark{position:absolute;top:24px;right:80px;font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:18px;color:#8B1A1A;}
+
 
   .header{position:absolute;top:44px;left:80px;right:160px;}
   .slide-title{font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:44px;color:#1A1A2E;line-height:1.15;}
@@ -32,33 +32,34 @@
   }
   .pull-quote{
     font-family:'Playfair Display',Georgia,serif;font-weight:400;font-style:italic;
-    font-size:30px;color:#1A1A2E;line-height:1.4;
+    font-size:32px;color:#1A1A2E;line-height:1.4;
   }
   .quote-source{
-    font-family:'Source Sans 3',sans-serif;font-size:13px;font-style:italic;color:#6B6B7A;
-    margin-top:10px;
+    display:flex;align-items:center;justify-content:center;gap:10px;margin-top:20px;flex-wrap:wrap;
   }
+  .source-label{font-family:'Source Sans 3',sans-serif;font-size:13px;font-weight:700;color:#9A9AAA;letter-spacing:0.1em;text-transform:uppercase;}
+  .paper-tag{background:#FFFFFF;border:1px solid #D4CFC8;border-radius:24px;padding:6px 14px;font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;color:#1A1A2E;box-shadow:0 2px 6px rgba(0,0,0,0.05);}
 
   /* Comparison table */
   .table-wrapper{flex:1;width:100%;display:flex;flex-direction:column;}
   table{width:100%;border-collapse:collapse;}
-  th, td{text-align:left;padding:10px 14px;}
-  th{font-family:'Source Sans 3',sans-serif;font-weight:600;font-size:15px;border-bottom:2px solid #8B1A1A;}
+  th, td{text-align:left;padding:16px 20px;}
+  th{font-family:'Source Sans 3',sans-serif;font-weight:700;font-size:22px;border-bottom:3px solid #8B1A1A;}
   th.left-col{background:#F5D5D5;color:#5A1A1A;width:50%;}
   th.right-col{background:#D6EDDA;color:#1A4A28;width:50%;}
-  td{font-family:'Source Sans 3',sans-serif;font-weight:400;font-size:16px;}
-  tr.negative td{background:#F5D5D5;color:#5A1A1A;}
-  tr.positive td{background:#D6EDDA;color:#1A4A28;}
+  td{font-family:'Source Sans 3',sans-serif;font-weight:600;font-size:21px;}
   
   /* we need to style cells individually since it's a 2-col layout with side-by-side neg/pos */
-  .cell-neg{background:#F5D5D5;color:#5A1A1A;border-right:2px solid #F7F4EF;}
-  .cell-pos{background:#D6EDDA;color:#1A4A28;}
-  .icon{font-weight:700;margin-right:6px;}
+  .cell-neg{background:#F5D5D5;color:#5A1A1A;border-right:4px solid #F7F4EF;border-bottom:4px solid #F7F4EF;}
+  .cell-pos{background:#D6EDDA;color:#1A4A28;border-bottom:4px solid #F7F4EF;}
+  .icon{font-weight:700;margin-right:12px;font-size:24px;}
   
   .table-caption{
-    font-family:'Source Sans 3',sans-serif;font-size:13px;font-style:italic;color:#6B6B7A;
-    margin-top:12px;
+    font-family:'Source Sans 3',sans-serif;font-size:14px;font-weight:700;color:#8B1A1A;
+    margin-top:16px; display:flex; align-items:center; gap:12px;
+    text-transform:uppercase; letter-spacing:0.08em;
   }
+  .table-caption::before { content:''; display:block; width:30px; height:3px; background:#8B1A1A; }
 
   /* Footer */
   .footer-line{position:absolute;bottom:36px;left:0;right:0;height:1px;background:#D4CFC8;}
@@ -69,7 +70,7 @@
 </head>
 <body>
 <div class="slide">
-  <div class="top-right-mark">RedGrid</div>
+
 
   <div class="header">
     <div class="slide-title">What the Literature Agrees On</div>
@@ -80,7 +81,15 @@
     <div class="pull-quote-wrapper">
       <div class="primary-callout">
         <div class="pull-quote">"Architecture, not model scale, is the dominant variable."</div>
-        <div class="quote-source">Consistent finding across: VulnBot, PentestGPT, CHECKMATE, Incalmo, HPTSA, Fang 2024</div>
+        <div class="quote-source">
+          <span class="source-label">Consistent Across:</span>
+          <span class="paper-tag">VulnBot</span>
+          <span class="paper-tag">PentestGPT</span>
+          <span class="paper-tag">CHECKMATE</span>
+          <span class="paper-tag">Incalmo</span>
+          <span class="paper-tag">HPTSA</span>
+          <span class="paper-tag">Fang 2024</span>
+        </div>
       </div>
     </div>
     
@@ -111,7 +120,7 @@
           </tr>
         </tbody>
       </table>
-      <div class="table-caption">Synthesised from 6 independently-reaching papers — September 2026 review</div>
+      <div class="table-caption">Synthesised from 6 independent papers — Sept 2026 Review</div>
     </div>
   </div>
 
