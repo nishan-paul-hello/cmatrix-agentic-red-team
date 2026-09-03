@@ -87,12 +87,12 @@
     font-size:22px;
     font-weight:400;
     color:#2E4A7A;
-    max-width:680px;
+    max-width:1100px;
     line-height:1.45;
   }
   .presenter-zone{
     margin-top:40px;
-    display:flex;flex-direction:column;align-items:center;gap:6px;
+    display:flex;flex-direction:column;align-items:center;gap:32px;
   }
   .presented-by{
     font-family:'Source Sans 3',sans-serif;
@@ -100,26 +100,73 @@
     color:#9A9AAA;letter-spacing:0.10em;
     text-transform:uppercase;
   }
-  .author-name{
-    font-family:'Source Sans 3',sans-serif;
-    font-size:18px;font-weight:600;color:#1A1A2E;
+  .authors-table {
+    border-collapse: collapse;
+    margin: 12px auto 0 auto;
+    font-family: 'Source Sans 3', sans-serif;
   }
-  .supervisor{
-    font-family:'Source Sans 3',sans-serif;
-    font-size:14px;font-weight:400;color:#6B6B7A;
+  .authors-table th {
+    text-align: center;
+    padding: 4px 16px;
+    color: #9A9AAA;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    border-bottom: 2px solid #D4CFC8;
   }
-  /* Bottom-right badge */
-  .stage-badge{
-    position:absolute;
-    bottom:36px;right:80px;
-    font-family:'Source Sans 3',sans-serif;
-    font-size:11px;font-weight:600;
-    color:#7A4F1A;
-    background:#F2EAD9;
-    border:1px solid #A0631A;
-    padding:5px 12px;
-    border-radius:3px;
-    letter-spacing:0.04em;
+  .authors-table td {
+    padding: 8px 16px;
+    color: #1A1A2E;
+    font-size: 16px;
+    text-align: center;
+    border-bottom: 1px solid #D4CFC8;
+  }
+  .authors-table tr:last-child td {
+    border-bottom: none;
+  }
+  .authors-table .author-name {
+    font-weight: 700;
+    color: #8B1A1A;
+  }
+  .supervisor-card {
+    background: #EFEBE3;
+    border-top: 3px solid #2E4A7A;
+    padding: 16px 32px;
+    border-radius: 4px;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  }
+  .supervisor-label {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    color: #2E4A7A;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .supervisor-name {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: #1A1A2E;
+  }
+  .supervisor-title {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 14px;
+    color: #6B6B7A;
+    margin-top: 4px;
+    text-align: center;
+  }
+  .supervisor-dept {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 13px;
+    color: #6B6B7A;
+    margin-top: 2px;
+    text-align: center;
   }
 </style>
 </head>
@@ -130,26 +177,48 @@
   <!-- Top-left logo + institution -->
   <div class="logo-zone">
     <div class="logo-box" style="border:none; width:auto; justify-content:flex-start;"><img src="logo-university.svg" style="height:52px; display:block;" alt="University Logo" /></div>
-    <div class="uni-name">University of Dhaka, Bangladesh</div>
-    <div class="dept-name">Department of Computer Science and Engineering<br>Professional Masters in Information and Cyber Security (PMICS)</div>
   </div>
 
   <!-- Main centered content -->
   <div class="content">
-    <div class="meta-label">MSc Thesis &nbsp;·&nbsp; Inception Stage &nbsp;·&nbsp; September 2026</div>
+    <div class="meta-label">Professional Masters in Information and Cyber Security (PMICS)<br>PROJECT ON CYBER SECURITY<br>Inception Stage &nbsp;·&nbsp; September 2026</div>
     <div class="project-name">RedGrid</div>
     <div class="hairline"></div>
     <div class="subtitle">Dependency-Constrained UCB Exploration for Autonomous Penetration Testing</div>
     <div class="presenter-zone">
-      <div class="presented-by">Presented by</div>
-      <div class="author-name" style="margin-bottom:4px;">Nishan Paul (Class Roll: 50028, Reg: H-55)</div>
-      <div class="author-name" style="margin-bottom:8px;">Md Rakibur Rahman (Class Roll: 50040, Reg: H-49)</div>
-      <div class="supervisor">Supervisor: Dr. Md. Abdur Razzaque, Professor and Chair</div>
+      <div>
+        <div class="presented-by">Presented by</div>
+        <table class="authors-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Class Roll</th>
+              <th>Reg No</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="author-name">Nishan Paul</td>
+              <td>50028</td>
+              <td>H-55</td>
+            </tr>
+            <tr>
+              <td class="author-name">Md Rakibur Rahman</td>
+              <td>50040</td>
+              <td>H-49</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="supervisor-card">
+        <div class="supervisor-label">Supervisor</div>
+        <div class="supervisor-name">Dr. Md. Abdur Razzaque</div>
+        <div class="supervisor-title">Professor and Chair</div>
+        <div class="supervisor-dept">Department of Computer Science and Engineering<br>University of Dhaka</div>
+      </div>
     </div>
   </div>
-
-  <!-- Stage badge -->
-  <div class="stage-badge">Early Stage — Inception Report</div>
 </div>
 </body>
 </html>
