@@ -11,51 +11,87 @@
   html,body{width:100%;height:100%;background:#E0DDD8;display:flex;align-items:center;justify-content:center;font-family:'Source Sans 3',system-ui,sans-serif;}
   .slide{width:1280px;height:720px;background:#F7F4EF;position:relative;overflow:hidden;box-shadow:0 8px 48px rgba(0,0,0,.18);}
 
-  .top-right-mark{position:absolute;top:24px;right:80px;font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:18px;color:#8B1A1A;}
+
 
   .header{position:absolute;top:44px;left:80px;right:160px;}
   .slide-title{font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:44px;color:#1A1A2E;line-height:1.15;}
   .authority-bar{height:3px;background:#8B1A1A;width:55%;margin-top:8px;}
 
   /* Body */
-  .body{position:absolute;top:120px;left:80px;right:80px;bottom:60px;display:flex;flex-direction:column;gap:20px;}
+  .body{position:absolute;top:130px;left:80px;right:80px;bottom:60px;display:flex;flex-direction:column;gap:36px;}
 
-  /* Center diagram */
-  .diagram-container{
-    height:70%;
-    width:100%;
+  /* Cards Container */
+  .cards-container{
+    flex:1;
     display:flex;
+    justify-content:space-between;
+    position:relative;
+    gap:140px;
   }
-  .panel{flex:1;padding:24px 30px;display:flex;flex-direction:column;gap:12px;position:relative;}
   
-  /* Dividers between panels */
-  .divider{width:1px;background:#D4CFC8;margin:10px 0;}
+  .card{
+    flex:1;
+    background:#FFFFFF;
+    border-radius:12px;
+    box-shadow:0 12px 32px rgba(0,0,0,0.06);
+    padding:40px;
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+    border:1px solid #E0DDD8;
+  }
+  
+  .card-left{ border-top:6px solid #8B1A1A; }
+  .card-right{ border-top:6px solid #2E4A7A; }
 
-  /* Left Panel */
-  .panel-left{background:#EFEBE3;border-left:3px solid #8B1A1A;}
-  .panel-title{font-family:'Source Sans 3',sans-serif;font-weight:700;font-size:16px;color:#1A1A2E;}
-  .panel-sub{font-family:'Source Sans 3',sans-serif;font-weight:400;font-size:12px;color:#6B6B7A;margin-top:-8px;}
+  .card-header { display:flex; flex-direction:column; gap:16px; border-bottom:1.5px solid #E0DDD8; padding-bottom:20px; }
+  .card-title{font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:32px;color:#1A1A2E;line-height:1.2;}
   
-  .list-item{display:flex;align-items:flex-start;gap:8px;font-family:'Source Sans 3',sans-serif;font-weight:400;font-size:15px;line-height:1.4;margin-top:4px;}
+  /* Paper tags */
+  .tags-row { display:flex; gap:8px; flex-wrap:wrap; }
+  .tag { background:#F2EAD9; color:#A0631A; font-family:'IBM Plex Mono',monospace; font-size:12px; font-weight:600; padding:4px 12px; border-radius:16px; letter-spacing:0.02em;}
+
+  /* Lists */
+  .list-item{display:flex;align-items:flex-start;gap:12px;font-family:'Source Sans 3',sans-serif;font-weight:600;font-size:20px;line-height:1.4;margin-top:8px;}
   .pos-item{color:#2A6B3C;}
-  .neg-item{color:#7A1A1A;}
-  .icon{font-weight:700;}
+  .neg-item{color:#8B1A1A;}
+  .icon{font-weight:700;font-size:24px;margin-top:-2px;}
+  .text-dark { color:#1A1A2E; font-weight:400; }
 
-  /* Center Panel */
-  .panel-center{background:#F2EAD9;border:1.5px solid #A0631A;align-items:center;justify-content:center;text-align:center;overflow:hidden;}
-  .center-label{font-family:'Source Sans 3',sans-serif;font-weight:700;font-size:12px;color:#A0631A;letter-spacing:0.10em;text-transform:uppercase;position:relative;z-index:2;}
-  .center-text{font-family:'Playfair Display',Georgia,serif;font-weight:400;font-style:italic;font-size:18px;color:#7A4F1A;margin-top:8px;position:relative;z-index:2;}
-  .question-mark{font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:160px;color:#D4CFC8;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);opacity:0.6;z-index:1;line-height:1;}
-
-  /* Right Panel */
-  .panel-right{background:#EFEBE3;border-right:3px solid #2E4A7A;}
+  /* Center Gap Badge */
+  .center-badge{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%, -50%);
+    width:220px;
+    height:220px;
+    border-radius:50%;
+    background:radial-gradient(circle at center, #2E1A1A, #1A1A2E);
+    border:8px solid #F7F4EF;
+    box-shadow:0 16px 48px rgba(0,0,0,0.2);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:20px;
+    z-index:10;
+  }
+  .badge-top{font-family:'Source Sans 3',sans-serif;font-weight:700;font-size:12px;color:#D4CFC8;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:8px;}
+  .badge-main{font-family:'Playfair Display',Georgia,serif;font-weight:400;font-style:italic;font-size:26px;color:#FFFFFF;line-height:1.2;}
 
   /* Bottom Statement */
   .bottom-statement{
-    border-left:3px solid #A0631A;background:#F2EAD9;padding:16px 20px;border-radius:3px;
-    font-family:'Source Sans 3',sans-serif;font-weight:600;font-size:17px;color:#7A4F1A;
+    background:#EDE9E1;
+    border-left:4px solid #8B1A1A;
+    padding:20px 24px;
+    border-radius:4px;
+    font-family:'Source Sans 3',sans-serif;font-weight:600;font-size:22px;color:#1A1A2E;
     text-align:center;
+    box-shadow:0 4px 12px rgba(0,0,0,0.03);
   }
+  .highlight { color:#8B1A1A; font-weight:700; }
 
   /* Footer */
   .footer-line{position:absolute;bottom:36px;left:0;right:0;height:1px;background:#D4CFC8;}
@@ -66,47 +102,50 @@
 </head>
 <body>
 <div class="slide">
-  <div class="top-right-mark">RedGrid</div>
-
   <div class="header">
     <div class="slide-title">The Gap No System Has Closed</div>
     <div class="authority-bar"></div>
   </div>
 
   <div class="body">
-    <div class="diagram-container">
-      <!-- Left Panel -->
-      <div class="panel panel-left">
-        <div class="panel-title">Wide Exploration</div>
-        <div class="panel-sub">HPTSA  ·  VulnBot  ·  T-Agent  ·  AutoGPT</div>
-        <div class="list-item pos-item"><span class="icon">✓</span> Finds many candidate weaknesses</div>
-        <div class="list-item neg-item"><span class="icon">✗</span> No prerequisite / dependency model</div>
-        <div class="list-item neg-item"><span class="icon">✗</span> Flat task dispatch</div>
+    <div class="cards-container">
+      
+      <!-- Left Card -->
+      <div class="card card-left">
+        <div class="card-header">
+          <div class="card-title">Wide Exploration</div>
+          <div class="tags-row">
+            <div class="tag">HPTSA</div><div class="tag">VulnBot</div><div class="tag">T-Agent</div><div class="tag">AutoGPT</div>
+          </div>
+        </div>
+        <div class="list-item"><span class="icon pos-item">✓</span> <span class="text-dark">Finds many candidate weaknesses</span></div>
+        <div class="list-item"><span class="icon neg-item">✗</span> <span class="text-dark">No prerequisite / dependency model</span></div>
+        <div class="list-item"><span class="icon neg-item">✗</span> <span class="text-dark">Flat task dispatch</span></div>
       </div>
       
-      <div class="divider"></div>
-      
-      <!-- Center Panel -->
-      <div class="panel panel-center">
-        <div class="question-mark">?</div>
-        <div class="center-label">UNEXPLORED TERRITORY</div>
-        <div class="center-text">"The compound gap"</div>
+      <!-- Center Badge -->
+      <div class="center-badge">
+        <div class="badge-top">Unexplored<br>Territory</div>
+        <div class="badge-main">The<br>Compound Gap</div>
       </div>
       
-      <div class="divider"></div>
-      
-      <!-- Right Panel -->
-      <div class="panel panel-right">
-        <div class="panel-title">Dependency Reasoning</div>
-        <div class="panel-sub">CHECKMATE  ·  PentestEval SMP</div>
-        <div class="list-item pos-item"><span class="icon">✓</span> Explicit prerequisite modeling</div>
-        <div class="list-item neg-item"><span class="icon">✗</span> Requires pre-enumerated weakness sets</div>
-        <div class="list-item neg-item"><span class="icon">✗</span> Does not scale to open-ended discovery</div>
+      <!-- Right Card -->
+      <div class="card card-right">
+        <div class="card-header">
+          <div class="card-title">Dependency Reasoning</div>
+          <div class="tags-row">
+            <div class="tag">CHECKMATE</div><div class="tag">PentestEval SMP</div>
+          </div>
+        </div>
+        <div class="list-item"><span class="icon pos-item">✓</span> <span class="text-dark">Explicit prerequisite modeling</span></div>
+        <div class="list-item"><span class="icon neg-item">✗</span> <span class="text-dark">Requires pre-enumerated weakness sets</span></div>
+        <div class="list-item"><span class="icon neg-item">✗</span> <span class="text-dark">Does not scale to open-ended discovery</span></div>
       </div>
+      
     </div>
     
     <div class="bottom-statement">
-      No system combines open-ended exploration WITH dynamic dependency-aware planning. RedGrid investigates this combination.
+      No system combines open-ended exploration <span class="highlight">WITH</span> dynamic dependency-aware planning.<br>RedGrid investigates this exact combination.
     </div>
   </div>
 
