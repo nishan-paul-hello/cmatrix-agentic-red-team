@@ -22,7 +22,7 @@
   .authority-bar{height:3px;background:#A0631A;width:60px;margin-top:16px;margin-bottom:60px;}
 
   .pane-label {
-    font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; margin-bottom: 24px; text-transform: uppercase;
+    font-family: 'IBM Plex Mono', monospace; font-size: 15px; font-weight: 700; letter-spacing: 0.05em; margin-bottom: 24px; text-transform: uppercase;
   }
   .left-pane .pane-label { color: rgba(255,255,255,0.4); }
 
@@ -31,10 +31,17 @@
     display: flex; gap: 16px; align-items: flex-start;
     font-family: 'Source Sans 3', sans-serif; font-size: 17px; font-weight: 400; color: rgba(255,255,255,0.85); line-height: 1.4;
   }
-  .done-list i { font-style: normal; color: #2A6B3C; font-weight: 700; font-size: 17px; }
+  .done-list i {
+    display: inline-block;
+    width: 8px; height: 8px;
+    background-color: #388E3C;
+    border-radius: 50%;
+    margin-top: 7px;
+    flex-shrink: 0;
+  }
 
   .closing-statement {
-    margin-top: auto;
+    margin-top: auto; margin-bottom: 24px;
     font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; font-style: italic; color: #A0631A; line-height: 1.4;
     border-left: 2px solid #A0631A; padding-left: 16px;
   }
@@ -97,12 +104,12 @@
     
     <div class="pane-label">FOUNDATION SECURED</div>
     <ul class="done-list">
-      <li><i>✓</i> Read and synthesised 11 papers on autonomous VAPT</li>
-      <li><i>✓</i> Identified 2 quantified failure modes</li>
-      <li><i>✓</i> Formalized the research gap</li>
-      <li><i>✓</i> Proposed 3 research directions</li>
-      <li><i>✓</i> Sketched the architecture approach</li>
-      <li><i>✓</i> Submitted inception report</li>
+      <li><i></i> Synthesized 11 key VAPT papers</li>
+      <li><i></i> Identified 2 quantified failure modes</li>
+      <li><i></i> Formalized the research gap</li>
+      <li><i></i> Proposed 3 research directions</li>
+      <li><i></i> Sketched the architecture approach</li>
+      <li><i></i> Submitted inception report</li>
     </ul>
 
     <div class="closing-statement">
@@ -122,7 +129,7 @@
     </div>
     
     <div class="q-callout">
-      <div class="q-label">QUESTION FOR THE COMMITTEE</div>
+      <div class="q-label">DISCUSSION POINT</div>
       <div class="q-text">Given the ambitious scope of VDG + dependency-aware exploration, should we pursue the full architecture, or constrain the scope to a specific subsystem before implementation?</div>
     </div>
 
