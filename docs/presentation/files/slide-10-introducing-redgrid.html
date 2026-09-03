@@ -15,6 +15,7 @@
 
   .header{position:absolute;top:44px;left:80px;right:160px;}
   .slide-title{font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:44px;color:#1A1A2E;line-height:1.15;}
+  .slide-title span{color:#8B1A1A;}
   .authority-bar{height:3px;background:#8B1A1A;width:55%;margin-top:8px;}
 
   /* Body */
@@ -85,9 +86,9 @@
   .edges-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;}
   
   /* Cursor */
-  .cursor-group{position:absolute;top:260px;left:320px;z-index:3;display:flex;align-items:center;gap:6px;}
-  .cursor-arrow{width:22px;height:22px;transform:rotate(-30deg);}
-  .cursor-label{font-family:'Source Sans 3',sans-serif;font-size:13px;font-weight:700;color:#8B1A1A;background:#FFFFFF;padding:2px 6px;border-radius:4px;box-shadow:0 2px 8px rgba(0,0,0,0.1);}
+  .cursor-group{position:absolute;top:50%;left:50%;transform:translate(-30px, 45px);z-index:3;display:flex;flex-direction:column;align-items:center;gap:4px;}
+  .cursor-arrow{width:22px;height:22px;transform:rotate(-45deg);}
+  .cursor-label{font-family:'Source Sans 3',sans-serif;font-size:13px;font-weight:700;color:#8B1A1A;background:#FFFFFF;padding:4px 14px;border-radius:20px;border:1px solid #E8E4DE;box-shadow:0 4px 12px rgba(0,0,0,0.1);white-space:nowrap;}
 
   .diagram-caption{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;color:#8B1A1A;margin-top:20px;text-align:center;text-transform:uppercase;letter-spacing:0.05em;}
 
@@ -101,13 +102,12 @@
 <body>
 <div class="slide">
   <div class="header">
-    <div class="slide-title">Introducing RedGrid</div>
+    <div class="slide-title">Introducing <span>RedGrid</span></div>
     <div class="authority-bar"></div>
   </div>
 
   <div class="body">
     <div class="left-col">
-      <div class="proj-name">RedGrid</div>
       <div class="tagline">Dependency-Constrained UCB Exploration for Autonomous Penetration Testing</div>
       <div class="spacer"></div>
       <div class="feature-list">
@@ -130,19 +130,19 @@
       <div class="diagram-panel">
         <svg class="edges-svg" xmlns="http://www.w3.org/2000/svg">
           <defs>
-            <marker id="arrow-solid" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <marker id="arrow-solid" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
               <path d="M 0 0 L 10 5 L 0 10 z" fill="#4A4A5E" />
             </marker>
-            <marker id="arrow-dashed" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <marker id="arrow-dashed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
               <path d="M 0 0 L 10 5 L 0 10 z" fill="#8B1A1A" />
             </marker>
           </defs>
           <!-- SQLi to Auth Bypass -->
-          <line x1="200" y1="80" x2="250" y2="190" stroke="#4A4A5E" stroke-width="2.5" marker-end="url(#arrow-solid)" />
+          <line x1="200" y1="80" x2="215" y2="185" stroke="#4A4A5E" stroke-width="2.5" marker-end="url(#arrow-solid)" />
           <!-- XSS to Auth Bypass -->
-          <line x1="200" y1="360" x2="250" y2="250" stroke="#4A4A5E" stroke-width="2.5" marker-end="url(#arrow-solid)" />
+          <line x1="200" y1="360" x2="215" y2="275" stroke="#4A4A5E" stroke-width="2.5" marker-end="url(#arrow-solid)" />
           <!-- Auth Bypass to RCE -->
-          <line x1="390" y1="230" x2="425" y2="230" stroke="#8B1A1A" stroke-width="2.5" stroke-dasharray="6 4" marker-end="url(#arrow-dashed)" />
+          <line x1="385" y1="230" x2="415" y2="230" stroke="#8B1A1A" stroke-width="2.5" stroke-dasharray="6 4" marker-end="url(#arrow-dashed)" />
         </svg>
 
         <div class="node n-sqli">
