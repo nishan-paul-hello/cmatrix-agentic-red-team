@@ -11,7 +11,6 @@
   html,body{width:100%;height:100%;background:#E0DDD8;display:flex;align-items:center;justify-content:center;font-family:'Source Sans 3',system-ui,sans-serif;}
   .slide{width:1280px;height:720px;background:#F7F4EF;position:relative;overflow:hidden;box-shadow:0 8px 48px rgba(0,0,0,.18);}
 
-  .top-right-mark{position:absolute;top:24px;right:80px;font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:18px;color:#8B1A1A;}
 
   .header{position:absolute;top:44px;left:80px;right:160px;}
   .slide-title{font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:44px;color:#1A1A2E;line-height:1.15;}
@@ -28,47 +27,54 @@
   }
   
   .flow-box{
-    flex:1;background:#EFEBE3;
-    padding:24px 20px;
+    flex:1;background:#FFFFFF;
+    padding:24px 20px; border-radius:6px; border:1px solid #E8E4DE; box-shadow:0 8px 32px rgba(0,0,0,0.06);
     display:flex;flex-direction:column;align-items:center;text-align:center;
   }
-  .box1{border-top:3px solid #8B1A1A;}
-  .box2{border-top:3px solid #2E4A7A;padding:34px 20px; /* taller */}
-  .box3{border-top:3px solid #A0631A;}
+  .box1{border-top:4px solid #8B1A1A; background:#F7EDED;}
+  .box2{border-top:4px solid #2A6B3C; background:#EDF5EE; padding:34px 20px;}
+  .box3{border-top:4px solid #2E4A7A; background:#EDF2F7;}
   
-  .box-label{font-family:'Source Sans 3',sans-serif;font-weight:700;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:8px;}
+  .box-label{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:12px;}
   .box1 .box-label{color:#8B1A1A;}
-  .box2 .box-label{color:#2E4A7A;}
-  .box3 .box-label{color:#A0631A;}
+  .box2 .box-label{color:#2A6B3C;}
+  .box3 .box-label{color:#2E4A7A;}
 
-  .box-title{font-family:'Source Sans 3',sans-serif;font-weight:700;font-size:19px;color:#1A1A2E;margin-bottom:12px;line-height:1.2;}
-  .box-desc{font-family:'Source Sans 3',sans-serif;font-weight:400;font-size:15px;color:#6B6B7A;line-height:1.45;}
+  .box-title{font-family:'Source Sans 3',sans-serif;font-weight:700;font-size:22px;color:#1A1A2E;margin-bottom:12px;line-height:1.2;}
+  .box-desc{font-family:'Source Sans 3',sans-serif;font-weight:600;font-size:15px;color:#4A4A5E;line-height:1.5;}
 
   /* Connectors */
   .connector{
-    display:flex;flex-direction:column;align-items:center;
-    width:80px;position:relative;
+    display:flex;flex-direction:column;align-items:center; justify-content:center;
+    width:90px;position:relative; gap:8px;
   }
-  .conn-line{width:100%;height:2px;background:#D4CFC8;position:relative;}
+  .conn-line{width:100%;height:3px;background:linear-gradient(90deg, #D4CFC8 0%, #2E4A7A 100%);position:relative;}
   .conn-line::after{
     content:"";position:absolute;right:0;top:-4px;
-    border-top:5px solid transparent;border-bottom:5px solid transparent;border-left:8px solid #D4CFC8;
+    border-top:5px solid transparent;border-bottom:5px solid transparent;border-left:8px solid #2E4A7A;
   }
-  .conn-text{font-family:'Source Sans 3',sans-serif;font-weight:400;font-style:italic;font-size:12px;color:#9A9AAA;margin-top:6px;text-align:center;}
+  .conn-text{
+    font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:10px;color:#2E4A7A;
+    text-transform:uppercase;letter-spacing:0.05em;
+    background:#F5F7FA; padding:2px 8px; border-radius:12px; border: 1px solid rgba(46,74,122,0.15);
+  }
 
   /* Bottom Statement */
   .bottom-statement{
-    width:80%;margin-top:24px;
-    border-left:3px solid #8B1A1A;background:#EDE9E1;padding:20px 24px;border-radius:3px;
-    text-align:center;
+    width:85%;margin-top:48px;
+    position:relative; text-align:center; padding: 20px;
+  }
+  .bottom-statement::before {
+    content: '“';
+    font-family:'Playfair Display',Georgia,serif;
+    font-size:180px; color:rgba(139,26,26,0.06);
+    position:absolute; top:-60px; left:50%; transform:translateX(-50%);
+    z-index:0; line-height:1; pointer-events:none;
   }
   .stmt-text{
-    font-family:'Playfair Display',Georgia,serif;font-weight:400;font-style:italic;
-    font-size:20px;color:#1A1A2E;line-height:1.4;
-  }
-  .footnote{
-    font-family:'Source Sans 3',sans-serif;font-size:13px;font-style:italic;color:#9A9AAA;
-    margin-top:16px;text-align:center;
+    font-family:'Playfair Display',Georgia,serif;font-weight:700;font-style:italic;
+    font-size:28px;color:#1A1A2E;line-height:1.4;
+    position:relative; z-index:1;
   }
 
   /* Footer */
@@ -80,7 +86,6 @@
 </head>
 <body>
 <div class="slide">
-  <div class="top-right-mark">RedGrid</div>
 
   <div class="header">
     <div class="slide-title">RedGrid — The Core Idea</div>
@@ -122,7 +127,6 @@
       <div class="stmt-text">"RedGrid asks: does connecting exploration + dependency reasoning + memory make autonomous penetration testing meaningfully better?"</div>
     </div>
     
-    <div class="footnote">All three are open research questions — implementation has not started</div>
   </div>
 
   <div class="footer-line"></div>
