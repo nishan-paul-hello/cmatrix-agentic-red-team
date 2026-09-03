@@ -19,49 +19,53 @@
     box-shadow:0 8px 48px rgba(0,0,0,.18);
   }
   
-  .header{
-    position:absolute;top:56px;left:56px;
-  }
-  .slide-title{
-    font-family:'Playfair Display',serif;
-    font-size:36px;font-weight:700;color:#1A1A2E;
-    position:relative;display:inline-block;
-  }
-  .authority-bar{
-    position:absolute;left:0;bottom:-6px;
-    width:40px;height:4px;background:#E53935;
-  }
+  .header{position:absolute;top:44px;left:80px;right:160px;}
+  .slide-title{font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:44px;color:#1A1A2E;line-height:1.15;}
+  .authority-bar{height:3px;background:#8B1A1A;width:55%;margin-top:8px;}
   
+  /* 2-column layout for a classic academic feel */
   .body{
-    position:absolute;top:140px;left:56px;right:56px;bottom:40px;
-    display:grid;grid-template-columns:1fr 1fr;gap:40px;
+    position:absolute;top:136px;left:80px;right:80px;
+    display:grid;grid-template-columns:1fr 1fr;gap:60px;
+    align-items: start;
   }
   
-  .ref-section {
-    display: flex; flex-direction: column; gap: 16px;
-  }
-  .ref-heading {
-    font-family:'IBM Plex Mono', monospace;
-    font-size:16px;font-weight:700;color:#8B1A1A;
-    text-transform:uppercase; letter-spacing:0.05em;
-    border-bottom:1px solid #D4CFC8; padding-bottom:8px;
-    margin-bottom:8px;
+  .ref-col {
+    display: flex; flex-direction: column; gap: 10px;
   }
   
+  /* Professional, typographic UI */
   .ref-item {
-    font-size: 14px; line-height: 1.5; color:#3A3A4A;
-    padding-left: 20px; position: relative;
+    font-size: 15px;
+    line-height: 1.5;
+    color: #3A3A4A;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(212,207,200,0.6);
+    position: relative;
+    padding-left: 14px;
   }
   .ref-item::before {
-    content: "•"; position: absolute; left: 0; color: #8B1A1A; font-weight: bold;
+    content: "■";
+    position: absolute;
+    left: 0;
+    top: 5px;
+    font-size: 8px;
+    color: #8B1A1A;
   }
-  .ref-authors { font-weight: 600; color: #1A1A2E; }
-  .ref-title { font-style: italic; }
-  .ref-year { color: #6B6B7A; }
+  .ref-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+  
+  .ref-authors { font-weight: 700; color: #1A1A2E; }
+  .ref-year { color: #8B1A1A; font-weight: 600; font-family: 'IBM Plex Mono', monospace; font-size: 13px;}
+  .ref-title { font-style: italic; color: #1A1A2E; }
+  .ref-source { color: #6B6B7A; }
+  
   .ref-badge {
-    display: inline-block; padding: 2px 6px; background: rgba(139,26,26,0.1);
-    color: #8B1A1A; font-family: 'IBM Plex Mono', monospace; font-size: 11px;
-    border-radius: 4px; margin-left: 6px; font-weight: 600;
+    display: inline-block; padding: 2px 6px; background: rgba(139,26,26,0.06);
+    color: #8B1A1A; font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 700;
+    border-radius: 4px; text-transform: uppercase; letter-spacing: 0.05em; margin-left: 8px; vertical-align: middle;
   }
   
   /* Footer */
@@ -74,109 +78,119 @@
 <div class="slide">
 
   <div class="header">
-    <div class="slide-title">References<div class="authority-bar"></div></div>
+    <div class="slide-title">Key References</div>
+    <div class="authority-bar"></div>
   </div>
 
   <div class="body">
-    <!-- Left Column: Agent Systems -->
-    <div class="ref-section">
-      <div class="ref-heading">Agent Systems Analyzed</div>
-      
+    <!-- Column 1 (Items 1-6) -->
+    <div class="ref-col">
       <div class="ref-item">
         <span class="ref-authors">Fang, R., Bindu, R., Gupta, A., Zhan, Q., & Kang, D.</span> 
-        <span class="ref-year">(2024)</span>. 
+        <span class="ref-year">(2024).</span> 
         <span class="ref-title">LLM agents can autonomously hack websites.</span> 
-        arXiv:2402.06664.
+        <span class="ref-source">arXiv:2402.06664.</span>
         <span class="ref-badge">AutoHack</span>
       </div>
       
       <div class="ref-item">
         <span class="ref-authors">Fang, R., Bindu, R., Gupta, A., & Kang, D.</span> 
-        <span class="ref-year">(2024)</span>. 
+        <span class="ref-year">(2024).</span> 
         <span class="ref-title">LLM agents can autonomously exploit one-day vulnerabilities.</span> 
-        arXiv:2404.08144.
+        <span class="ref-source">arXiv:2404.08144.</span>
         <span class="ref-badge">OneDay</span>
       </div>
       
       <div class="ref-item">
-        <span class="ref-authors">Zhu, Y., Kellermann, A., Gupta, A., Li, P., Fang, R., Bindu, R., & Kang, D.</span> 
-        <span class="ref-year">(2024)</span>. 
+        <span class="ref-authors">Zhu, Y., Kellermann, A., Gupta, A., Li, P., Fang, R., et al.</span> 
+        <span class="ref-year">(2024).</span> 
         <span class="ref-title">Teams of LLM agents can exploit zero-day vulnerabilities.</span> 
-        arXiv:2406.01637.
+        <span class="ref-source">arXiv:2406.01637.</span>
         <span class="ref-badge">HPTSA</span>
       </div>
       
       <div class="ref-item">
         <span class="ref-authors">Deng, G., et al.</span> 
-        <span class="ref-year">(2024)</span>. 
+        <span class="ref-year">(2024).</span> 
         <span class="ref-title">PentestGPT: Evaluating and Harnessing Large Language Models for Automated Penetration Testing.</span>
         <span class="ref-badge">PentestGPT</span>
       </div>
-      
+
       <div class="ref-item">
         <span class="ref-authors">Kong, L., et al.</span> 
-        <span class="ref-year">(2025)</span>. 
+        <span class="ref-year">(2025).</span> 
         <span class="ref-title">VulnBot: Autonomous penetration testing for a multi-agent system.</span>
         <span class="ref-badge">VulnBot</span>
       </div>
       
       <div class="ref-item">
         <span class="ref-authors">Wang, J., et al.</span> 
-        <span class="ref-year">(2025)</span>. 
+        <span class="ref-year">(2025).</span> 
         <span class="ref-title">Automated penetration testing with LLM agents and classical planning.</span>
         <span class="ref-badge">CHECKMATE</span>
       </div>
       
       <div class="ref-item">
         <span class="ref-authors">Singer, J., et al.</span> 
-        <span class="ref-year">(2025)</span>. 
+        <span class="ref-year">(2025).</span> 
         <span class="ref-title">Incalmo: An autonomous LLM-assisted system for red teaming.</span>
         <span class="ref-badge">Incalmo</span>
       </div>
-      
+    </div>
+    
+    <!-- Column 2 (Items 8-14) -->
+    <div class="ref-col">
       <div class="ref-item">
         <span class="ref-authors">Liu, Z., et al.</span> 
-        <span class="ref-year">(2025)</span>. 
+        <span class="ref-year">(2025).</span> 
         <span class="ref-title">PrediQL: Automated testing of GraphQL APIs with LLMs.</span>
         <span class="ref-badge">PrediQL</span>
       </div>
-    </div>
-    
-    <!-- Right Column: Benchmarks & Others -->
-    <div class="ref-section">
-      <div class="ref-heading">Benchmarks & Datasets</div>
-      
+
       <div class="ref-item">
         <span class="ref-authors">Zhu, Y., Kellermann, A., Bowman, D., et al.</span> 
-        <span class="ref-year">(2025)</span>. 
+        <span class="ref-year">(2025).</span> 
         <span class="ref-title">CVE-Bench: A Benchmark for AI Agents' Ability to Exploit Real-World Web Application Vulnerabilities.</span>
         <span class="ref-badge">CVE-Bench</span>
       </div>
       
       <div class="ref-item">
         <span class="ref-authors">Yang, K., et al.</span> 
-        <span class="ref-year">(2025)</span>. 
+        <span class="ref-year">(2025).</span> 
         <span class="ref-title">PentestEval: Benchmarking LLM-based penetration testing.</span>
         <span class="ref-badge">PentestEval</span>
       </div>
       
-      <div class="ref-heading" style="margin-top: 24px;">Surveys & Methodology</div>
-      
       <div class="ref-item">
         <span class="ref-authors">Wang, L., Ma, C., Feng, X., et al.</span> 
-        <span class="ref-year">(2025)</span>. 
+        <span class="ref-year">(2025).</span> 
         <span class="ref-title">A Survey on Large Language Model based Autonomous Agents.</span>
         <span class="ref-badge">AgentSurvey</span>
       </div>
       
       <div class="ref-item">
-        <span class="ref-authors">Auer, P., Cesa-Bianchi, N., & Fischer, P.</span> 
-        <span class="ref-year">(2002)</span>. 
-        <span class="ref-title">Finite-time Analysis of the Multiarmed Bandit Problem.</span> 
-        Machine Learning, 47(2-3), 235-256.
-        <span class="ref-badge">UCB Base</span>
+        <span class="ref-authors">Sheyner, O., et al.</span> 
+        <span class="ref-year">(2002).</span> 
+        <span class="ref-title">Automated generation and analysis of attack graphs.</span> 
+        <span class="ref-source">IEEE S&P.</span>
+        <span class="ref-badge">VDG</span>
       </div>
       
+      <div class="ref-item">
+        <span class="ref-authors">Auer, P., Cesa-Bianchi, N., & Fischer, P.</span> 
+        <span class="ref-year">(2002).</span> 
+        <span class="ref-title">Finite-time Analysis of the Multiarmed Bandit Problem.</span> 
+        <span class="ref-source">Machine Learning, 47(2-3).</span>
+        <span class="ref-badge">UCB</span>
+      </div>
+      
+      <div class="ref-item">
+        <span class="ref-authors">Shinn, N., et al.</span> 
+        <span class="ref-year">(2023).</span> 
+        <span class="ref-title">Reflexion: Language agents with verbal reinforcement learning.</span> 
+        <span class="ref-source">NeurIPS.</span>
+        <span class="ref-badge">ADM</span>
+      </div>
     </div>
   </div>
 
