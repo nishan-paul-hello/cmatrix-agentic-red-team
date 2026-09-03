@@ -48,13 +48,17 @@
   .c5 .badge-circle{background:#6B6B7A;}
 
   .obj-title{flex:0 0 260px;font-family:'Source Sans 3',sans-serif;font-weight:700;font-size:19px;color:#1A1A2E;letter-spacing:0.02em;}
-  .obj-desc{flex:1;font-family:'Source Sans 3',sans-serif;font-weight:600;font-size:16px;color:#2E2E3A;line-height:1.4;}
+  .obj-desc{flex:1;font-family:'Source Sans 3',sans-serif;font-weight:600;font-size:16px;color:#2E2E3A;line-height:1.5;}
+  .highlight{background:#F0ECE1;color:#8B1A1A;padding:2px 6px;border-radius:4px;font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:600;}
 
   .bottom-note{
-    align-self:center;font-family:'Source Sans 3',sans-serif;font-weight:600;
-    font-size:14px;color:#FFFFFF;background:#1A1A2E;
-    padding:10px 24px;border-radius:20px;
-    margin-top:12px;box-shadow:0 4px 12px rgba(0,0,0,0.15);
+    align-self:center; display:flex; align-items:center; gap:12px;
+    font-family:'Source Sans 3',sans-serif;font-weight:600;font-size:16px;color:#6B6B7A;
+    margin-top:16px; justify-content:center;
+  }
+  .bn-badge {
+    background:#8B1A1A; color:#FFF; font-family:'IBM Plex Mono',monospace;
+    font-size:13px; font-weight:700; padding:4px 10px; border-radius:4px; text-transform:uppercase; letter-spacing:0.05em;
   }
 
   /* Footer */
@@ -77,30 +81,30 @@
     <div class="obj-card c1">
       <div class="badge-circle">1</div>
       <div class="obj-title">VDG Formalization</div>
-      <div class="obj-desc">Investigate whether a prerequisite-edge graph improves agent exploration over a flat priority list</div>
+      <div class="obj-desc">Investigate whether a <span class="highlight">prerequisite-edge graph</span> improves agent exploration over a flat priority list</div>
     </div>
     <div class="obj-card c2">
       <div class="badge-circle">2</div>
       <div class="obj-title">Dual-Layer World Model</div>
-      <div class="obj-desc">Separate confirmed facts from inferred hypotheses for independent ablation</div>
+      <div class="obj-desc">Separate <span class="highlight">confirmed facts</span> from <span class="highlight">inferred hypotheses</span> for independent ablation</div>
     </div>
     <div class="obj-card c3">
       <div class="badge-circle">3</div>
       <div class="obj-title">Multi-Layer Orchestration</div>
-      <div class="obj-desc">Design a four-layer agent hierarchy matching the strongest surveyed systems</div>
+      <div class="obj-desc">Design a <span class="highlight">four-layer agent hierarchy</span> matching the strongest surveyed systems</div>
     </div>
     <div class="obj-card c4">
       <div class="badge-circle">4</div>
       <div class="obj-title">Cross-Mission Memory</div>
-      <div class="obj-desc">Determine whether strategy reuse offers measurable benefit vs. negative-transfer risk</div>
+      <div class="obj-desc">Determine whether <span class="highlight">strategy reuse</span> offers measurable benefit vs. <span class="highlight">negative-transfer risk</span></div>
     </div>
     <div class="obj-card c5">
       <div class="badge-circle">5</div>
       <div class="obj-title">Benchmark-Grounded Evaluation</div>
-      <div class="obj-desc">Evaluate on oracle-backed benchmarks across 3+ attack surfaces</div>
+      <div class="obj-desc">Evaluate on <span class="highlight">oracle-backed benchmarks</span> across 3+ attack surfaces</div>
     </div>
     
-    <div class="bottom-note">These reflect the research direction at inception stage. Scope will evolve with implementation.</div>
+    <div class="bottom-note"><span class="bn-badge">Note</span> These reflect the research direction at inception stage. Scope will evolve with implementation.</div>
   </div>
 
   <div class="footer-line"></div>
