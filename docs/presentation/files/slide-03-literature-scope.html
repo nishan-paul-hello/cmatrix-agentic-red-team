@@ -11,150 +11,144 @@
   html,body{width:100%;height:100%;background:#E0DDD8;display:flex;align-items:center;justify-content:center;font-family:'Source Sans 3',system-ui,sans-serif;}
   .slide{width:1280px;height:720px;background:#F7F4EF;position:relative;overflow:hidden;box-shadow:0 8px 48px rgba(0,0,0,.18);}
 
-  .top-right-mark{position:absolute;top:24px;right:80px;font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:18px;color:#8B1A1A;}
+  .left-bar{position:absolute;left:0;top:0;bottom:0;width:8px;background:#8B1A1A;}
 
-  .header{position:absolute;top:44px;left:80px;right:160px;}
-  .slide-title{font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:40px;color:#1A1A2E;line-height:1.15;}
-  .authority-bar{height:3px;background:#8B1A1A;width:55%;margin-top:8px;}
-  .sub-label{font-family:'Source Sans 3',sans-serif;font-size:13px;font-weight:400;color:#6B6B7A;margin-top:6px;}
+  .header{position:absolute;top:36px;left:80px;right:80px;display:flex;align-items:flex-end;justify-content:space-between;}
+  .slide-title{font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:38px;color:#1A1A2E;line-height:1.1;position:relative;}
+  .authority-bar{position:absolute;bottom:-10px;left:0;width:55%;height:3px;background:#8B1A1A;}
+  .count-pill{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:700;color:#8B1A1A;border:2px solid #8B1A1A;padding:5px 14px;border-radius:3px;white-space:nowrap;margin-bottom:4px;letter-spacing:0.06em;}
 
-  /* Card grid */
-  .card-grid{
-    position:absolute;top:140px;left:80px;right:80px;bottom:60px;
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    grid-template-rows:repeat(3,1fr);
-    gap: 16px;
-  }
-  .paper-card{
-    background:#FFFFFF;
-    border:1px solid #D4CFC8;
-    border-radius:6px;
-    padding:14px 16px;
-    display:flex;flex-direction:column;
-    position:relative;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-  }
-  .card-shortname{font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:700;color:#2E4A7A;padding-right:70px;}
-  .card-author{font-family:'Source Sans 3',sans-serif;font-size:11px;font-weight:600;color:#6B6B7A;margin-top:2px;margin-bottom:6px;}
-  .card-desc{font-family:'Source Sans 3',sans-serif;font-size:13px;font-weight:400;color:#1A1A2E;line-height:1.45;flex:1;}
-  .badge{
-    position:absolute;top:14px;right:14px;
-    font-family:'Source Sans 3',sans-serif;font-size:9px;font-weight:700;
-    padding:4px 8px;border-radius:12px;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-  .badge-agent{background:#2E4A7A;color:#FFFFFF;}
-  .badge-bench{background:#A0631A;color:#FFFFFF;}
+  .body{position:absolute;top:110px;left:80px;right:80px;bottom:52px;display:flex;gap:0;}
 
-  /* Summary card */
-  .summary-card{
-    background:#8B1A1A;
-    border-radius:6px;
-    padding:14px 16px;
-    display:flex;flex-direction:column;justify-content:center;gap:6px;
-    box-shadow: 0 4px 12px rgba(139,26,26,0.15);
-  }
-  .summary-main{font-family:'Source Sans 3',sans-serif;font-size:15px;font-weight:700;color:#FFFFFF;}
-  .summary-sub{font-family:'Source Sans 3',sans-serif;font-size:12px;font-weight:400;color:#F5D5D5;line-height:1.4;}
+  /* Agent column */
+  .agent-col{flex:0 0 62%;border-right:1px solid #D4CFC8;padding-right:40px;display:flex;flex-direction:column;}
+  .bench-col{flex:1;padding-left:40px;display:flex;flex-direction:column;}
 
-  /* Footer */
+  .col-header{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:2px solid #1A1A2E;margin-bottom:0;}
+  .col-icon{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Source Sans 3',sans-serif;font-size:13px;font-weight:700;color:#FFFFFF;flex-shrink:0;}
+  .col-icon.navy{background:#2E4A7A;}
+  .col-icon.amber{background:#A0631A;}
+  .col-label{font-family:'Source Sans 3',sans-serif;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;}
+  .col-label.navy{color:#2E4A7A;}
+  .col-label.amber{color:#A0631A;}
+  .col-count{margin-left:auto;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;color:#9A9AAA;letter-spacing:0.06em;}
+
+  .paper-list{display:flex;flex-direction:column;flex:1;}
+  .paper-item{display:flex;align-items:stretch;border-bottom:1px solid #E8E4DE;}
+  .paper-item:last-child{border-bottom:none;}
+  .item-num{flex:0 0 32px;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;color:#D4CFC8;padding:9px 0;display:flex;align-items:center;}
+  .item-meta{flex:0 0 148px;padding:9px 12px 9px 0;display:flex;flex-direction:column;justify-content:center;}
+  .item-name{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:700;color:#2E4A7A;}
+  .item-author{font-family:'Source Sans 3',sans-serif;font-size:11px;font-weight:400;color:#9A9AAA;margin-top:1px;}
+  .item-desc{flex:1;padding:9px 0;font-family:'Source Sans 3',sans-serif;font-size:14px;font-weight:400;color:#1A1A2E;line-height:1.4;display:flex;align-items:center;}
+
+  .bench-item{border-bottom:1px solid #E8E4DE;padding:18px 0;}
+  .bench-item:last-child{border-bottom:none;}
+  .bench-name{font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:700;color:#A0631A;}
+  .bench-author{font-family:'Source Sans 3',sans-serif;font-size:11px;color:#9A9AAA;margin-top:2px;}
+  .bench-desc{font-family:'Source Sans 3',sans-serif;font-size:14px;color:#1A1A2E;line-height:1.4;margin-top:8px;}
+
+  .takeaway{margin-top:auto;background:#1A1A2E;border-radius:6px;padding:20px 22px;box-shadow:0 6px 20px rgba(26,26,46,0.18);display:flex;flex-direction:column;gap:6px;}
+  .takeaway-eyebrow{font-family:'Source Sans 3',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.14em;color:#8B1A1A;}
+  .takeaway-stat{font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:700;color:#FFFFFF;}
+  .takeaway-desc{font-family:'Source Sans 3',sans-serif;font-size:13px;color:#9A9AAA;line-height:1.4;}
+
   .footer-line{position:absolute;bottom:36px;left:0;right:0;height:1px;background:#D4CFC8;}
-  .footer-mark{position:absolute;bottom:10px;left:80px;font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:11px;color:#8B1A1A;}
   .footer-num{position:absolute;right:80px;bottom:10px;font-family:'IBM Plex Mono',monospace;font-size:13px;color:#9A9AAA;}
   .progress{position:absolute;bottom:0;left:0;height:3px;background:#8B1A1A;width:10%;}
 </style>
 </head>
 <body>
 <div class="slide">
-  <div class="top-right-mark">RedGrid</div>
+  <div class="left-bar"></div>
 
   <div class="header">
-    <div class="slide-title">The Literature We Surveyed</div>
-    <div class="authority-bar"></div>
-    <div class="sub-label">11 papers &nbsp;·&nbsp; Focused reading &nbsp;·&nbsp; September 2026</div>
+    <div class="slide-title">Literature We Surveyed<div class="authority-bar"></div></div>
+    <div class="count-pill">11 Papers &nbsp;·&nbsp; Focused Reading</div>
   </div>
 
-  <div class="card-grid">
-    <!-- Row 1 -->
-    <div class="paper-card">
-      <div class="card-shortname">Fang 2024a</div>
-      <div class="card-author">Fang et al., 2024</div>
-      <div class="card-desc">GPT-4 successfully exploits real web vulnerabilities</div>
-      <div class="badge badge-agent">Agent System</div>
+  <div class="body">
+    <div class="agent-col">
+      <div class="col-header">
+        <div class="col-icon navy">A</div>
+        <div class="col-label navy">Agent Systems &amp; Surveys</div>
+        <div class="col-count">9 PAPERS</div>
+      </div>
+      <div class="paper-list">
+        <div class="paper-item">
+          <div class="item-num">01</div>
+          <div class="item-meta"><div class="item-name">Fang 2024a</div><div class="item-author">Fang et al., 2024</div></div>
+          <div class="item-desc">GPT-4 successfully exploits real web vulnerabilities</div>
+        </div>
+        <div class="paper-item">
+          <div class="item-num">02</div>
+          <div class="item-meta"><div class="item-name">Fang 2024b</div><div class="item-author">Fang et al., 2024</div></div>
+          <div class="item-desc">GPT-4 exploits one-day CVEs at 87% success with description</div>
+        </div>
+        <div class="paper-item">
+          <div class="item-num">03</div>
+          <div class="item-meta"><div class="item-name">HPTSA</div><div class="item-author">Zhu et al., 2024</div></div>
+          <div class="item-desc">Hierarchical multi-agent system for zero-day CVEs</div>
+        </div>
+        <div class="paper-item">
+          <div class="item-num">04</div>
+          <div class="item-meta"><div class="item-name">PentestGPT</div><div class="item-author">Deng et al., 2024</div></div>
+          <div class="item-desc">Context loss is the dominant failure in long sessions</div>
+        </div>
+        <div class="paper-item">
+          <div class="item-num">05</div>
+          <div class="item-meta"><div class="item-name">VulnBot</div><div class="item-author">Kong et al., 2025</div></div>
+          <div class="item-desc">Role-specialised multi-agent dispatch architecture</div>
+        </div>
+        <div class="paper-item">
+          <div class="item-num">06</div>
+          <div class="item-meta"><div class="item-name">CHECKMATE</div><div class="item-author">Wang et al., 2025</div></div>
+          <div class="item-desc">Classical planning integrated with LLM agent execution</div>
+        </div>
+        <div class="paper-item">
+          <div class="item-num">07</div>
+          <div class="item-meta"><div class="item-name">Incalmo</div><div class="item-author">Singer et al., 2025</div></div>
+          <div class="item-desc">Multi-host orchestration across Active Directory</div>
+        </div>
+        <div class="paper-item">
+          <div class="item-num">08</div>
+          <div class="item-meta"><div class="item-name">PrediQL</div><div class="item-author">Liu et al., 2025</div></div>
+          <div class="item-desc">Schema-aware LLM fuzzer for GraphQL APIs</div>
+        </div>
+        <div class="paper-item">
+          <div class="item-num">09</div>
+          <div class="item-meta"><div class="item-name">Wang 2025</div><div class="item-author">Wang et al., 2025</div></div>
+          <div class="item-desc">General survey of LLM-based agent architectures</div>
+        </div>
+      </div>
     </div>
-    <div class="paper-card">
-      <div class="card-shortname">Fang 2024b</div>
-      <div class="card-author">Fang et al., 2024</div>
-      <div class="card-desc">GPT-4 exploits one-day CVEs at 87% with description</div>
-      <div class="badge badge-agent">Agent System</div>
-    </div>
-    <div class="paper-card">
-      <div class="card-shortname">HPTSA</div>
-      <div class="card-author">Zhu et al., 2024</div>
-      <div class="card-desc">Hierarchical multi-agent system for zero-day CVEs</div>
-      <div class="badge badge-agent">Agent System</div>
-    </div>
-    <div class="paper-card">
-      <div class="card-shortname">PentestGPT</div>
-      <div class="card-author">Deng et al., 2024</div>
-      <div class="card-desc">Context loss is the dominant failure in long sessions</div>
-      <div class="badge badge-agent">Agent System</div>
-    </div>
-    <!-- Row 2 -->
-    <div class="paper-card">
-      <div class="card-shortname">VulnBot</div>
-      <div class="card-author">Kong et al., 2025</div>
-      <div class="card-desc">Role-specialised multi-agent dispatch architecture</div>
-      <div class="badge badge-agent">Agent System</div>
-    </div>
-    <div class="paper-card">
-      <div class="card-shortname">CHECKMATE</div>
-      <div class="card-author">Wang et al., 2025</div>
-      <div class="card-desc">Classical planning integrated with LLM agent execution</div>
-      <div class="badge badge-agent">Agent System</div>
-    </div>
-    <div class="paper-card">
-      <div class="card-shortname">Incalmo</div>
-      <div class="card-author">Singer et al., 2025</div>
-      <div class="card-desc">Multi-host orchestration across Active Directory</div>
-      <div class="badge badge-agent">Agent System</div>
-    </div>
-    <div class="paper-card">
-      <div class="card-shortname">PrediQL</div>
-      <div class="card-author">Liu et al., 2025</div>
-      <div class="card-desc">Schema-aware LLM fuzzer for GraphQL APIs</div>
-      <div class="badge badge-agent">Agent System</div>
-    </div>
-    <!-- Row 3 -->
-    <div class="paper-card">
-      <div class="card-shortname">CVE-Bench</div>
-      <div class="card-author">Zhu et al., 2025</div>
-      <div class="card-desc">40 critical web CVEs with oracle-backed evaluation</div>
-      <div class="badge badge-bench">Benchmark</div>
-    </div>
-    <div class="paper-card">
-      <div class="card-shortname">PentestEval</div>
-      <div class="card-author">Yang et al., 2025</div>
-      <div class="card-desc">Stage-level breakdown of pipeline failure modes</div>
-      <div class="badge badge-bench">Benchmark</div>
-    </div>
-    <div class="paper-card">
-      <div class="card-shortname">Wang 2025</div>
-      <div class="card-author">Wang et al., 2025</div>
-      <div class="card-desc">General survey of LLM-based agent architectures</div>
-      <div class="badge badge-agent">Agent System</div>
-    </div>
-    <!-- Summary card -->
-    <div class="summary-card">
-      <div class="summary-main">9 agent systems + 2 benchmarks</div>
-      <div class="summary-sub">Benchmarks highlighted — primary failure-mode data source</div>
+
+    <div class="bench-col">
+      <div class="col-header">
+        <div class="col-icon amber">B</div>
+        <div class="col-label amber">Benchmarks</div>
+        <div class="col-count">2 PAPERS</div>
+      </div>
+      <div class="bench-item">
+        <div class="bench-name">CVE-Bench</div>
+        <div class="bench-author">Zhu et al., 2025</div>
+        <div class="bench-desc">40 critical web CVEs with oracle-backed evaluation</div>
+      </div>
+      <div class="bench-item">
+        <div class="bench-name">PentestEval</div>
+        <div class="bench-author">Yang et al., 2025</div>
+        <div class="bench-desc">Stage-level breakdown of pipeline failure modes</div>
+      </div>
+
+      <div class="takeaway">
+        <div class="takeaway-eyebrow">Key Takeaway</div>
+        <div class="takeaway-stat">9 Agent Systems · 2 Benchmarks</div>
+        <div class="takeaway-desc">Benchmarks serve as the primary source for failure-mode analysis and motivate the research gap.</div>
+      </div>
     </div>
   </div>
 
   <div class="footer-line"></div>
-
   <div class="footer-num">03 / 20</div>
   <div class="progress"></div>
 </div>
