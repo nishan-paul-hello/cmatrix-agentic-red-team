@@ -16,35 +16,76 @@
   .header{position:absolute;top:44px;left:80px;right:160px;}
   .slide-title{font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:44px;color:#1A1A2E;line-height:1.15;}
   .authority-bar{height:3px;background:#8B1A1A;width:55%;margin-top:8px;}
-  .sub-label{font-family:'Source Sans 3',sans-serif;font-size:13px;font-weight:400;color:#6B6B7A;margin-top:6px;}
+  .sub-label{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#4A4A5E;margin-top:12px;}
 
   /* Body */
-  .body{position:absolute;top:136px;left:80px;right:80px;bottom:50px;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:20px;}
-
-  /* Cards */
-  .challenge-card{
-    background:#EFEBE3;
-    padding:16px 18px;
-    display:flex;flex-direction:column;
-    position:relative;
+  .body {
+    position:absolute; top:150px; left:80px; right:80px; bottom:50px;
+    display: flex; align-items: flex-end; justify-content: space-between; gap: 16px;
   }
-  .c1{border-left:3px solid #8B1A1A;}
-  .c2{border-left:3px solid #A0631A;}
-  .c3{border-left:3px solid #A0631A;}
-  .c4{border-left:3px solid #2E4A7A;}
 
-  .risk-badge{
-    position:absolute;top:16px;right:18px;
-    font-family:'Source Sans 3',sans-serif;font-weight:700;font-size:10px;
-    padding:3px 8px;border-radius:3px;
-    letter-spacing:0.05em;
+  .challenge-card {
+    border-radius: 8px; position: relative; overflow: hidden;
+    display: flex; flex-direction: column; padding: 32px;
   }
-  .risk-high{background:#F5D5D5;color:#7A1A1A;}
-  .risk-med{background:#F5E9D0;color:#7A4F1A;}
-  .risk-low{background:#E8EDF5;color:#2E4A7A;}
 
-  .card-title{font-family:'Source Sans 3',sans-serif;font-weight:700;font-size:18px;color:#1A1A2E;margin-bottom:8px;max-width:85%;line-height:1.2;}
-  .card-desc{font-family:'Source Sans 3',sans-serif;font-weight:400;font-size:16px;color:#6B6B7A;line-height:1.45;flex:1;}
+
+
+  .card-content { position: relative; z-index: 1; display: flex; flex-direction: column; height: 100%; }
+
+  .risk-badge {
+    align-self: flex-start; font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 700;
+    padding: 6px 12px; border-radius: 4px; letter-spacing: 0.05em; margin-bottom: 16px; text-transform: uppercase;
+  }
+
+  .card-title {
+    font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; line-height: 1.1; margin-bottom: 16px;
+  }
+
+  .card-desc {
+    font-family: 'Source Sans 3', sans-serif; font-size: 15px; font-weight: 500; line-height: 1.45; margin-top: auto;
+    position: relative; z-index: 2; padding-left: 16px;
+  }
+  .card-desc::before {
+    content: '“';
+    position: absolute;
+    top: -28px;
+    left: -12px;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 80px;
+    font-style: italic;
+    font-weight: 700;
+    line-height: 1;
+    color: currentColor;
+    opacity: 0.15;
+    z-index: -1;
+  }
+
+  /* Specific Cards */
+  .c1 { 
+    flex: 1; height: 100%; 
+    background: #8B1A1A; color: #F7F4EF;
+  }
+  .c1 .risk-badge { background: rgba(255,255,255,0.15); color: #F7F4EF; }
+
+  .c2 { 
+    flex: 1; height: 85%; 
+    background: #2E4A7A; color: #F7F4EF;
+  }
+  .c2 .risk-badge { background: rgba(255,255,255,0.15); color: #F7F4EF; }
+
+  .c3 { 
+    flex: 1; height: 70%; 
+    background: #A0631A; color: #F7F4EF;
+  }
+  .c3 .risk-badge { background: rgba(255,255,255,0.2); color: #F7F4EF; }
+
+  .c4 { 
+    flex: 1; height: 55%; 
+    background: #1A1A2E; color: #F7F4EF; border: 1px solid #1A1A2E;
+  }
+  .c4 .risk-badge { background: rgba(255,255,255,0.15); color: #F7F4EF; font-size: 9px; padding: 4px 8px; }
+  .c4 .card-desc { color: #EFEBE3; }
 
   /* Footer */
   .footer-line{position:absolute;bottom:36px;left:0;right:0;height:1px;background:#D4CFC8;}
@@ -60,32 +101,40 @@
   <div class="header">
     <div class="slide-title">Challenges We Are Aware Of</div>
     <div class="authority-bar"></div>
-    <div class="sub-label">Surfaced during literature review — not surprises</div>
+    <div class="sub-label">ANTICIPATED BOTTLENECKS AND PROACTIVE MITIGATION</div>
   </div>
 
   <div class="body">
     <div class="challenge-card c1">
-      <div class="risk-badge risk-high">HIGH</div>
-      <div class="card-title">Inferring Dependencies Is Hard</div>
-      <div class="card-desc">"Building the prerequisite graph using an LLM — not human annotation — will be noisy. We need to measure how noisy before relying on it."</div>
+      <div class="card-content">
+        <div class="risk-badge">CRITICAL RISK</div>
+        <div class="card-title">Inferring Dependencies Is Hard</div>
+        <div class="card-desc">Building the prerequisite graph using an LLM instead of human annotation will be noisy. We must measure this gap.</div>
+      </div>
     </div>
     
     <div class="challenge-card c2">
-      <div class="risk-badge risk-med">MEDIUM</div>
-      <div class="card-title">Sandbox vs. Real World</div>
-      <div class="card-desc">"What works on a controlled benchmark may not hold on a real-world target. We'll test both and report the gap honestly."</div>
+      <div class="card-content">
+        <div class="risk-badge">HIGH RISK</div>
+        <div class="card-title">Sandbox vs. Real World</div>
+        <div class="card-desc">What works perfectly on a controlled benchmark may fail on a real-world target. We will test both environments.</div>
+      </div>
     </div>
     
     <div class="challenge-card c3">
-      <div class="risk-badge risk-med">MEDIUM</div>
-      <div class="card-title">Memory Could Backfire</div>
-      <div class="card-desc">"A strategy that worked against software version 1 might be harmful against version 2. This needs a safety mechanism."</div>
+      <div class="card-content">
+        <div class="risk-badge">MEDIUM RISK</div>
+        <div class="card-title">Memory Could Backfire</div>
+        <div class="card-desc">A strategy that succeeds against software version 1 might backfire against version 2. A safety mechanism is key.</div>
+      </div>
     </div>
     
     <div class="challenge-card c4">
-      <div class="risk-badge risk-low">MANAGEABLE</div>
-      <div class="card-title">Tuning Is Tricky</div>
-      <div class="card-desc">"The approach has parameters to adjust. Results must not depend on a single lucky configuration."</div>
+      <div class="card-content">
+        <div class="risk-badge">LOW RISK</div>
+        <div class="card-title">Tuning Is Tricky</div>
+        <div class="card-desc">The system has parameters to adjust. Final results must be robust, and not depend on one perfect setup.</div>
+      </div>
     </div>
   </div>
 
