@@ -11,7 +11,7 @@
   html,body{width:100%;height:100%;background:#E0DDD8;display:flex;align-items:center;justify-content:center;font-family:'Source Sans 3',system-ui,sans-serif;}
   .slide{width:1280px;height:720px;background:#F7F4EF;position:relative;overflow:hidden;box-shadow:0 8px 48px rgba(0,0,0,.18);}
 
-  .top-right-mark{position:absolute;top:24px;right:80px;font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:18px;color:#8B1A1A;}
+
 
   .header{position:absolute;top:44px;left:80px;right:160px;}
   .slide-title{font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:38px;color:#1A1A2E;line-height:1.15;}
@@ -22,7 +22,7 @@
 
   /* Left col (chart) */
   .left-col{flex:1;display:flex;flex-direction:column;}
-  .chart-title{font-family:'Source Sans 3',sans-serif;font-weight:600;font-size:14px;color:#6B6B7A;margin-bottom:16px;}
+  .chart-title{font-family:'Source Sans 3',sans-serif;font-weight:700;font-size:18px;color:#8B1A1A;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:24px;border-bottom:2px solid #D4CFC8;padding-bottom:12px;}
   .chart-container{position:relative;width:100%;height:320px;display:flex;justify-content:space-between;align-items:flex-end;border-bottom:1.5px solid #D4CFC8;padding-bottom:1px;padding-left:40px;}
   
   /* Y-axis */
@@ -31,7 +31,7 @@
   .y-axis::after{content:"";position:absolute;left:35px;right:-1000px;top:0;height:100%;background:repeating-linear-gradient(to bottom, transparent, transparent calc(20% - 1px), #D4CFC8 20%);opacity:0.2;pointer-events:none;}
 
   /* Waterfall Columns */
-  .wf-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;position:relative;}
+  .wf-col{flex:1;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;position:relative;}
   .wf-bar{width:65%;display:flex;align-items:center;justify-content:center;position:relative;z-index:2;}
   .wf-label{font-family:'Source Sans 3',sans-serif;font-size:11px;color:#6B6B7A;text-align:center;position:absolute;bottom:-36px;left:-10px;right:-10px;line-height:1.2;}
   .wf-val{font-family:'IBM Plex Mono',monospace;font-size:13px;color:#1A1A2E;position:absolute;top:-22px;white-space:nowrap;}
@@ -82,8 +82,6 @@
 </head>
 <body>
 <div class="slide">
-  <div class="top-right-mark">RedGrid</div>
-
   <div class="header">
     <div class="slide-title">Failure Mode 2 — The Dependency-Reasoning Gap</div>
     <div class="authority-bar"></div>
