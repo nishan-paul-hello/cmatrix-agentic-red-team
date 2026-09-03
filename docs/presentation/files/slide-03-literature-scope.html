@@ -28,9 +28,11 @@
   .col-icon{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Source Sans 3',sans-serif;font-size:13px;font-weight:700;color:#FFFFFF;flex-shrink:0;}
   .col-icon.navy{background:#2E4A7A;}
   .col-icon.amber{background:#A0631A;}
+  .col-icon.green{background:#4A7A5E;}
   .col-label{font-family:'Source Sans 3',sans-serif;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;}
   .col-label.navy{color:#2E4A7A;}
   .col-label.amber{color:#A0631A;}
+  .col-label.green{color:#4A7A5E;}
   .col-count{margin-left:auto;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;color:#9A9AAA;letter-spacing:0.06em;}
 
   .paper-list{display:flex;flex-direction:column;flex:1;}
@@ -80,8 +82,8 @@
     <div class="agent-col">
       <div class="col-header">
         <div class="col-icon navy">A</div>
-        <div class="col-label navy">Agent Systems &amp; Surveys</div>
-        <div class="col-count">9 PAPERS</div>
+        <div class="col-label navy">Agent Systems</div>
+        <div class="col-count">8 PAPERS</div>
       </div>
       <div class="paper-list">
         <div class="paper-item">
@@ -124,11 +126,6 @@
           <div class="item-meta"><div class="item-name">PrediQL</div><div class="item-author">Liu et al., 2025</div></div>
           <div class="item-desc">Schema-aware LLM fuzzer for GraphQL APIs</div>
         </div>
-        <div class="paper-item">
-          <div class="item-num">09</div>
-          <div class="item-meta"><div class="item-name">Wang 2025</div><div class="item-author">Wang et al., 2025</div></div>
-          <div class="item-desc">General survey of LLM-based agent architectures</div>
-        </div>
       </div>
     </div>
 
@@ -155,9 +152,23 @@
         <div class="bench-desc">Stage-level breakdown of pipeline failure modes</div>
       </div>
 
-      <div class="takeaway">
+      <div class="col-header" style="margin-top:24px;">
+        <div class="col-icon green">S</div>
+        <div class="col-label green">Surveys</div>
+        <div class="col-count">1 PAPER</div>
+      </div>
+      <div class="bench-item">
+        <div class="item-num" style="padding:18px 0;">01</div>
+        <div class="bench-meta">
+          <div class="bench-name" style="color:#4A7A5E;">Wang 2025</div>
+          <div class="bench-author">Wang et al., 2025</div>
+        </div>
+        <div class="bench-desc">General survey of LLM-based agent architectures</div>
+      </div>
+
+      <div class="takeaway" style="margin-top:24px;">
         <div class="takeaway-eyebrow">Key Takeaway</div>
-        <div class="takeaway-stat">9 Agent Systems · 2 Benchmarks</div>
+        <div class="takeaway-stat" style="font-size:18px;">8 Agent Systems · 2 Benchmarks · 1 Survey</div>
         <div class="takeaway-desc">Benchmarks serve as the primary source for failure-mode analysis and motivate the research gap.</div>
       </div>
     </div>
