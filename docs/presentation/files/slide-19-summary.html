@@ -11,100 +11,127 @@
   html,body{width:100%;height:100%;background:#E0DDD8;display:flex;align-items:center;justify-content:center;font-family:'Source Sans 3',system-ui,sans-serif;}
   .slide{width:1280px;height:720px;background:#F7F4EF;position:relative;overflow:hidden;box-shadow:0 8px 48px rgba(0,0,0,.18);}
 
+  /* Left Pane */
+  .left-pane {
+    position: absolute; top: 0; left: 0; bottom: 37px; width: 440px;
+    background: #1A1A2E; color: #F7F4EF;
+    padding: 50px 40px 50px 80px;
+    display: flex; flex-direction: column;
+  }
+  .slide-title{font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:44px;color:#F7F4EF;line-height:1.15;}
+  .authority-bar{height:3px;background:#A0631A;width:60px;margin-top:16px;margin-bottom:60px;}
 
+  .pane-label {
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; margin-bottom: 24px; text-transform: uppercase;
+  }
+  .left-pane .pane-label { color: rgba(255,255,255,0.4); }
 
-  .header{position:absolute;top:44px;left:80px;right:160px;}
-  .slide-title{font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:44px;color:#1A1A2E;line-height:1.15;}
-  .authority-bar{height:3px;background:#8B1A1A;width:55%;margin-top:8px;}
+  .done-list { list-style: none; display: flex; flex-direction: column; gap: 20px; }
+  .done-list li {
+    display: flex; gap: 16px; align-items: flex-start;
+    font-family: 'Source Sans 3', sans-serif; font-size: 17px; font-weight: 400; color: rgba(255,255,255,0.85); line-height: 1.4;
+  }
+  .done-list i { font-style: normal; color: #2A6B3C; font-weight: 700; font-size: 17px; }
 
-  /* Body */
-  .body{position:absolute;top:136px;left:80px;right:80px;bottom:50px;display:flex;flex-direction:column;}
+  .closing-statement {
+    margin-top: auto;
+    font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; font-style: italic; color: #A0631A; line-height: 1.4;
+    border-left: 2px solid #A0631A; padding-left: 16px;
+  }
 
-  /* 2 Cols */
-  .cols{display:flex;gap:40px;flex:1;}
-  .col{flex:1;display:flex;flex-direction:column;gap:12px;}
-  
-  .col-head{font-family:'Source Sans 3',sans-serif;font-weight:700;font-size:13px;letter-spacing:0.10em;text-transform:uppercase;padding-bottom:12px;border-bottom:1px solid #D4CFC8;}
-  .col-done .col-head{color:#2A6B3C;}
-  .col-next .col-head{color:#A0631A;}
+  /* Right Pane */
+  .right-pane {
+    position: absolute; top: 0; left: 440px; right: 0; bottom: 0;
+    padding: 60px 80px 50px 60px;
+    display: flex; flex-direction: column;
+  }
+  .right-pane .pane-label { color: #A0631A; margin-bottom: 16px; }
 
-  .list{list-style:none;display:flex;flex-direction:column;gap:16px;margin-top:10px;}
-  .list-item{display:flex;gap:12px;font-family:'Source Sans 3',sans-serif;font-weight:400;font-size:17px;color:#1A1A2E;line-height:1.4;}
-  .icon-done{color:#2A6B3C;font-weight:700;font-size:18px;}
-  .icon-next{color:#A0631A;font-weight:700;font-size:18px;}
+  .next-items { display: flex; flex-direction: column; gap: 0; }
+  .next-item {
+    display: flex; align-items: center; gap: 24px;
+    border-bottom: 1px solid rgba(26,26,46,0.1); padding: 20px 0;
+  }
+  .next-item:first-child { border-top: 1px solid rgba(26,26,46,0.1); }
+  .next-item .num {
+    font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; color: #8B1A1A;
+    width: 40px; text-align: right;
+  }
+  .next-item .text {
+    font-family: 'Source Sans 3', sans-serif; font-size: 22px; font-weight: 600; color: #1A1A2E;
+  }
 
   /* Question Callout */
-  .q-callout{
-    border-left:3px solid #9A9AAA;background:#EFEBE3;
-    padding:16px 20px;border-radius:3px;
-    margin-bottom:24px;
+  .q-callout {
+    margin-top: auto;
+    margin-bottom: 16px;
+    background: #EFEBE3;
+    border-left: 4px solid #8B1A1A;
+    padding: 24px 32px;
+    position: relative;
+    overflow: hidden;
   }
-  .q-label{font-family:'Source Sans 3',sans-serif;font-weight:700;font-size:10px;color:#9A9AAA;letter-spacing:0.05em;margin-bottom:6px;}
-  .q-text{font-family:'Source Sans 3',sans-serif;font-weight:400;font-size:16px;color:#1A1A2E;}
 
-  /* Closing Statement */
-  .closing-statement{
-    text-align:center;
-    font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:28px;color:#1A1A2E;
+  .q-label {
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 700; color: #8B1A1A; letter-spacing: 0.1em; margin-bottom: 12px;
+  }
+  .q-text {
+    font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: #1A1A2E; line-height: 1.4; position: relative; z-index: 2;
   }
 
   /* Footer */
   .footer-line{position:absolute;bottom:36px;left:0;right:0;height:1px;background:#D4CFC8;}
-  .footer-mark{position:absolute;bottom:10px;left:80px;font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:11px;color:#8B1A1A;}
   .footer-num{position:absolute;right:80px;bottom:10px;font-family:'IBM Plex Mono',monospace;font-size:13px;color:#9A9AAA;}
-  .progress{position:absolute;bottom:0;left:0;height:3px;background:#8B1A1A;width:95%;}
+  
+  /* Global progress */
+  .progress{position:absolute;bottom:0;left:0;height:3px;background:#8B1A1A;width:95%;z-index: 10;}
 </style>
 </head>
 <body>
 <div class="slide">
 
-
-  <div class="header">
+  <!-- The Dark Left Anchor -->
+  <div class="left-pane">
     <div class="slide-title">Where We Are</div>
     <div class="authority-bar"></div>
+    
+    <div class="pane-label">FOUNDATION SECURED</div>
+    <ul class="done-list">
+      <li><i>✓</i> Read and synthesised 11 papers on autonomous VAPT</li>
+      <li><i>✓</i> Identified 2 quantified failure modes</li>
+      <li><i>✓</i> Formalized the research gap</li>
+      <li><i>✓</i> Proposed 3 research directions</li>
+      <li><i>✓</i> Sketched the architecture approach</li>
+      <li><i>✓</i> Submitted inception report</li>
+    </ul>
+
+    <div class="closing-statement">
+      The architectural blueprint is ready. Awaiting greenlight for implementation.
+    </div>
   </div>
 
-  <div class="body">
-    <div class="cols">
-      <!-- Left Col -->
-      <div class="col col-done">
-        <div class="col-head">COMPLETED</div>
-        <ul class="list">
-          <li class="list-item"><span class="icon-done">✓</span> <span>Read and synthesised 11 papers on autonomous VAPT</span></li>
-          <li class="list-item"><span class="icon-done">✓</span> <span>Identified 2 quantified failure modes</span></li>
-          <li class="list-item"><span class="icon-done">✓</span> <span>Formalized the research gap</span></li>
-          <li class="list-item"><span class="icon-done">✓</span> <span>Proposed 3 research directions (not results)</span></li>
-          <li class="list-item"><span class="icon-done">✓</span> <span>Sketched the architecture approach</span></li>
-          <li class="list-item"><span class="icon-done">✓</span> <span>Submitted inception report</span></li>
-        </ul>
-      </div>
-      
-      <!-- Right Col -->
-      <div class="col col-next">
-        <div class="col-head">COMING NEXT</div>
-        <ul class="list">
-          <li class="list-item"><span class="icon-next">►</span> <span>Build the prototype</span></li>
-          <li class="list-item"><span class="icon-next">►</span> <span>Early experiments to test the ideas</span></li>
-          <li class="list-item"><span class="icon-next">►</span> <span>Full benchmark evaluation (web, GraphQL, multi-host)</span></li>
-          <li class="list-item"><span class="icon-next">►</span> <span>Refine based on what we find</span></li>
-          <li class="list-item"><span class="icon-next">►</span> <span>Write the thesis</span></li>
-        </ul>
-      </div>
+  <!-- The Bright Right Canvas -->
+  <div class="right-pane">
+    <div class="pane-label">COMING NEXT</div>
+    <div class="next-items">
+      <div class="next-item"><span class="num">01</span><span class="text">Build the prototype</span></div>
+      <div class="next-item"><span class="num">02</span><span class="text">Early experiments to test the ideas</span></div>
+      <div class="next-item"><span class="num">03</span><span class="text">Full benchmark evaluation (web, GraphQL, multi-host)</span></div>
+      <div class="next-item"><span class="num">04</span><span class="text">Refine based on what we find</span></div>
+      <div class="next-item"><span class="num">05</span><span class="text">Write the thesis</span></div>
     </div>
     
-    <div>
-      <div class="q-callout">
-        <div class="q-label">QUESTION FOR THE COMMITTEE</div>
-        <div class="q-text">Does the VDG + dependency-aware exploration direction look worth building out, or should we narrow scope before implementation starts?</div>
-      </div>
-      <div class="closing-statement">The gap is identified. The direction is set. Now — we go build it.</div>
+    <div class="q-callout">
+      <div class="q-label">QUESTION FOR THE COMMITTEE</div>
+      <div class="q-text">Given the ambitious scope of VDG + dependency-aware exploration, should we pursue the full architecture, or constrain the scope to a specific subsystem before implementation?</div>
     </div>
-  </div>
 
+    </div>
+  
   <div class="footer-line"></div>
-
   <div class="footer-num">19 / 20</div>
   <div class="progress"></div>
+
 </div>
 </body>
 </html>
