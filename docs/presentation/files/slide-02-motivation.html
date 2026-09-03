@@ -41,11 +41,11 @@
 
   /* Right col 40% */
   .right-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;}
-  .illustration-panel{width:100%;flex:1;background:#EFEBE3;border-radius:4px;border:1px solid #D4CFC8;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;max-height:320px;}
-  .illustration-caption{font-family:'Source Sans 3',sans-serif;font-size:12px;font-style:italic;color:#6B6B7A;margin-top:10px;text-align:center;}
-
-  /* SVG target illustration */
-  .target-svg{width:200px;height:200px;}
+  .illustration-panel{width:100%;flex:1;background:#FDFCFB;border-radius:4px;border:1px solid #D4CFC8;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;max-height:360px;}
+  .illustration-caption{font-family:'Source Sans 3',sans-serif;font-size:13px;font-weight:700;color:#9A9AAA;margin-top:16px;text-align:center;letter-spacing:0.1em;text-transform:uppercase;}
+ 
+  /* SVG graph illustration */
+  .graph-svg{width:100%;height:100%;display:block;}
 
   /* Footer */
   .footer{position:absolute;bottom:0;left:0;right:0;height:36px;display:flex;align-items:center;padding:0 80px;}
@@ -83,24 +83,84 @@
     <!-- Right column — target illustration -->
     <div class="right-col">
       <div class="illustration-panel">
-        <svg class="target-svg" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- Concentric rings -->
-          <circle cx="100" cy="100" r="90" stroke="#1A1A2E" stroke-width="1.5" fill="none" opacity="0.15"/>
-          <circle cx="100" cy="100" r="72" stroke="#1A1A2E" stroke-width="1.5" fill="none" opacity="0.2"/>
-          <circle cx="100" cy="100" r="54" stroke="#1A1A2E" stroke-width="1.5" fill="none" opacity="0.28"/>
-          <circle cx="100" cy="100" r="36" stroke="#1A1A2E" stroke-width="1.5" fill="none" opacity="0.38"/>
-          <circle cx="100" cy="100" r="18" stroke="#1A1A2E" stroke-width="2" fill="#EFEBE3" opacity="0.8"/>
-          <!-- Crosshairs -->
-          <line x1="100" y1="8" x2="100" y2="42" stroke="#1A1A2E" stroke-width="1" opacity="0.25"/>
-          <line x1="100" y1="158" x2="100" y2="192" stroke="#1A1A2E" stroke-width="1" opacity="0.25"/>
-          <line x1="8" y1="100" x2="42" y2="100" stroke="#1A1A2E" stroke-width="1" opacity="0.25"/>
-          <line x1="158" y1="100" x2="192" y2="100" stroke="#1A1A2E" stroke-width="1" opacity="0.25"/>
-          <!-- Crimson arrow from upper-right -->
-          <line x1="165" y1="40" x2="112" y2="92" stroke="#8B1A1A" stroke-width="2.5" stroke-linecap="round"/>
-          <polygon points="112,92 105,80 124,84" fill="#8B1A1A"/>
+        <svg class="graph-svg" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+              <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#D4CFC8" stroke-width="0.5" opacity="0.4"/>
+            </pattern>
+          </defs>
+          <rect width="400" height="300" fill="url(#grid)" />
+
+          <!-- Unexplored Edges -->
+          <g stroke="#D4CFC8" stroke-width="1.5">
+            <line x1="60" y1="150" x2="140" y2="80"/>
+            <line x1="60" y1="150" x2="140" y2="220"/>
+            <line x1="140" y1="80" x2="220" y2="50"/>
+            <line x1="140" y1="80" x2="220" y2="110"/>
+            <line x1="140" y1="150" x2="220" y2="180"/>
+            <line x1="140" y1="220" x2="220" y2="180"/>
+            <line x1="140" y1="220" x2="220" y2="250"/>
+            <line x1="220" y1="50" x2="300" y2="80"/>
+            <line x1="220" y1="110" x2="300" y2="80"/>
+            <line x1="220" y1="180" x2="300" y2="150"/>
+            <line x1="220" y1="180" x2="300" y2="220"/>
+            <line x1="220" y1="250" x2="300" y2="220"/>
+            <line x1="300" y1="80" x2="340" y2="150"/>
+            <line x1="300" y1="220" x2="340" y2="150"/>
+          </g>
+
+          <!-- Explored/Agent Path -->
+          <path d="M 60 150 L 140 150 L 220 110 L 300 150 L 340 150" stroke="#8B1A1A" stroke-width="2.5" fill="none" />
+
+          <!-- Unexplored Nodes -->
+          <g fill="#FDFCFB" stroke="#B8B1A8" stroke-width="1.5">
+            <circle cx="140" cy="80" r="7"/>
+            <circle cx="140" cy="220" r="7"/>
+            <circle cx="220" cy="50" r="7"/>
+            <circle cx="220" cy="180" r="7"/>
+            <circle cx="220" cy="250" r="7"/>
+            <circle cx="300" cy="80" r="7"/>
+            <circle cx="300" cy="220" r="7"/>
+          </g>
+
+          <!-- Explored Nodes -->
+          <g fill="#FDFCFB" stroke="#8B1A1A" stroke-width="2">
+            <circle cx="140" cy="150" r="7" />
+            <circle cx="220" cy="110" r="7" />
+            <circle cx="300" cy="150" r="7" />
+          </g>
+
+          <!-- Root Node (Entry point) -->
+          <rect x="36" y="137" width="48" height="26" rx="4" fill="#1A1A2E"/>
+          <text x="60" y="154" font-family="'Source Sans 3', sans-serif" font-size="11" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.05em">START</text>
+
+          <!-- Target Node (Vulnerability) -->
+          <circle cx="350" cy="150" r="12" stroke="#8B1A1A" stroke-width="2" fill="#F2EAD9"/>
+          <circle cx="350" cy="150" r="5" fill="#8B1A1A"/>
+
+          <!-- Crosshairs on Target -->
+          <line x1="350" y1="128" x2="350" y2="134" stroke="#8B1A1A" stroke-width="1.5"/>
+          <line x1="350" y1="166" x2="350" y2="172" stroke="#8B1A1A" stroke-width="1.5"/>
+          <line x1="328" y1="150" x2="334" y2="150" stroke="#8B1A1A" stroke-width="1.5"/>
+          <line x1="366" y1="150" x2="372" y2="150" stroke="#8B1A1A" stroke-width="1.5"/>
+
+          <!-- Human-readable labels -->
+          <g font-family="'Source Sans 3', sans-serif" font-size="11" fill="#9A9AAA" letter-spacing="0.05em">
+            <text x="140" y="65" text-anchor="middle">STATE 1</text>
+            <text x="140" y="135" text-anchor="middle" fill="#8B1A1A" font-weight="700">STATE 2</text>
+            <text x="140" y="240" text-anchor="middle">STATE 3</text>
+            <text x="220" y="35" text-anchor="middle">STATE 4</text>
+            <text x="220" y="95" text-anchor="middle" fill="#8B1A1A" font-weight="700">STATE 5</text>
+            <text x="350" y="120" text-anchor="middle" fill="#8B1A1A" font-weight="700">TARGET</text>
+          </g>
+          
+          <!-- Agent label pinned to the active node -->
+          <rect x="265" y="164" width="70" height="20" rx="3" fill="#8B1A1A" />
+          <polygon points="295,164 305,164 300,158" fill="#8B1A1A" />
+          <text x="300" y="178" font-family="'Source Sans 3', sans-serif" font-size="10" font-weight="700" fill="#FFFFFF" text-anchor="middle">LLM AGENT</text>
         </svg>
       </div>
-      <div class="illustration-caption">Attack surface exploration — the core challenge.</div>
+      <div class="illustration-caption">ATTACK SURFACE EXPLORATION</div>
     </div>
   </div>
 
