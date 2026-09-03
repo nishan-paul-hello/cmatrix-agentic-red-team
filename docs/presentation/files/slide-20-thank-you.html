@@ -62,36 +62,54 @@
     display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;
   }
   .stat-card {
-    background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06);
+    background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
+    border: 1px solid rgba(255,255,255,0.08); border-top: 2px solid rgba(255,255,255,0.2);
     border-radius: 12px; padding: 16px 20px;
-    display: flex; flex-direction: column; align-items: center; text-align: center;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+    display: flex; flex-direction: column; box-shadow: 0 4px 24px rgba(0,0,0,0.15);
   }
+  .stat-card.alert { border-top: 2px solid #E53935; }
+  
+  .sc-head {
+    display: flex; justify-content: space-between; align-items: center; width: 100%;
+    border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 10px; margin-bottom: 12px;
+  }
+  .sc-icon {
+    width: 32px; height: 32px; border-radius: 8px; background: rgba(255,255,255,0.05);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .stat-card.alert .sc-icon { background: rgba(229,57,53,0.1); }
+  
   .stat-card .s-num {
-    font-family: 'Playfair Display', serif; font-size: 56px; font-weight: 700; color: #F7F4EF;
-    line-height: 1; margin-bottom: 8px;
+    font-family: 'Playfair Display', serif; font-size: 40px; font-weight: 700; color: #F7F4EF; line-height: 1;
   }
   .stat-card .s-lbl {
-    font-family: 'Source Sans 3', sans-serif; font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.5);
-    text-transform: uppercase; letter-spacing: 0.1em; line-height: 1.4;
+    font-family: 'Source Sans 3', sans-serif; font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.55);
+    text-transform: uppercase; letter-spacing: 0.05em; line-height: 1.4; align-self: flex-end; text-align: right;
   }
 
   /* Terms Row */
   .dash-terms {
     display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
   }
+
+  /* Term Card */
   .term-card {
-    background: linear-gradient(145deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
-    border: 1px solid rgba(255,255,255,0.08); border-top: 3px solid #A0631A;
-    border-radius: 8px; padding: 16px 20px;
-    display: flex; flex-direction: column;
+    background: linear-gradient(135deg, rgba(160,99,26,0.08), rgba(0,0,0,0.2));
+    border: 1px solid rgba(160,99,26,0.15); border-left: 3px solid #A0631A;
+    border-radius: 8px; padding: 16px;
+    display: flex; gap: 16px; align-items: flex-start;
   }
+  .tc-icon {
+    width: 40px; height: 40px; border-radius: 50%; background: rgba(160,99,26,0.15);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .tc-content { display: flex; flex-direction: column; }
   .term-card .t-key {
     font-family: 'IBM Plex Mono', monospace; font-size: 20px; font-weight: 700; color: #A0631A;
-    margin-bottom: 8px; letter-spacing: 0.05em;
+    margin-bottom: 4px; letter-spacing: 0.05em;
   }
   .term-card .t-def {
-    font-family: 'Source Sans 3', sans-serif; font-size: 17px; font-weight: 400; color: rgba(255,255,255,0.75);
+    font-family: 'Source Sans 3', sans-serif; font-size: 17px; font-weight: 400; color: rgba(255,255,255,0.8);
     line-height: 1.4;
   }
 
@@ -131,36 +149,57 @@
       <!-- Top Row: Infographic Statistics -->
       <div class="dash-stats">
         <div class="stat-card">
-          <div class="s-num">11</div>
-          <div class="s-lbl">Papers<br>Surveyed</div>
+          <div class="sc-head">
+            <div class="sc-icon"><svg viewBox="0 0 24 24" width="18" height="18" stroke="#F7F4EF" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg></div>
+            <div class="s-num">11</div>
+          </div>
+          <div class="s-lbl">Papers Surveyed</div>
         </div>
         <div class="stat-card">
-          <div class="s-num">3</div>
-          <div class="s-lbl">Contribution<br>Directions</div>
+          <div class="sc-head">
+            <div class="sc-icon"><svg viewBox="0 0 24 24" width="18" height="18" stroke="#F7F4EF" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="12"></line><path d="M12 12l-6-6m0 0h5m-5 0v5"></path><path d="M12 12l6-6m0 0h-5m5 0v5"></path></svg></div>
+            <div class="s-num">3</div>
+          </div>
+          <div class="s-lbl">Contribution Directions</div>
         </div>
         <div class="stat-card">
-          <div class="s-num">3</div>
-          <div class="s-lbl">Attack Surfaces<br>For Evaluation</div>
+          <div class="sc-head">
+            <div class="sc-icon"><svg viewBox="0 0 24 24" width="18" height="18" stroke="#F7F4EF" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg></div>
+            <div class="s-num">3</div>
+          </div>
+          <div class="s-lbl">Attack Surfaces For Evaluation</div>
         </div>
         <div class="stat-card">
-          <div class="s-num">40</div>
-          <div class="s-lbl">Critical CVEs In<br>Primary Benchmark</div>
+          <div class="sc-head">
+            <div class="sc-icon"><svg viewBox="0 0 24 24" width="18" height="18" stroke="#F7F4EF" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></div>
+            <div class="s-num">40</div>
+          </div>
+          <div class="s-lbl">CVEs In Primary Benchmark</div>
         </div>
       </div>
 
       <!-- Bottom Row: Term Glossary -->
       <div class="dash-terms">
         <div class="term-card">
-          <div class="t-key">VDG</div>
-          <div class="t-def">The dependency graph we plan to build</div>
+          <div class="tc-icon"><svg viewBox="0 0 24 24" width="22" height="22" stroke="#A0631A" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg></div>
+          <div class="tc-content">
+            <div class="t-key">VDG</div>
+            <div class="t-def">Vulnerability Dependency Graph: The graph we plan to build</div>
+          </div>
         </div>
         <div class="term-card">
-          <div class="t-key">UCB</div>
-          <div class="t-def">How the agent decides what to try next</div>
+          <div class="tc-icon"><svg viewBox="0 0 24 24" width="22" height="22" stroke="#A0631A" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg></div>
+          <div class="tc-content">
+            <div class="t-key">UCB</div>
+            <div class="t-def">Upper Confidence Bound: How the agent decides what to try next</div>
+          </div>
         </div>
         <div class="term-card">
-          <div class="t-key">ADM</div>
-          <div class="t-def">The weakest stage in all current systems</div>
+          <div class="tc-icon"><svg viewBox="0 0 24 24" width="22" height="22" stroke="#A0631A" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><line x1="12" y1="2" x2="12" y2="6"></line><line x1="12" y1="18" x2="12" y2="22"></line><line x1="2" y1="12" x2="6" y2="12"></line><line x1="18" y1="12" x2="22" y2="12"></line></svg></div>
+          <div class="tc-content">
+            <div class="t-key">ADM</div>
+            <div class="t-def">Attack Decision-Making: The core challenge we address</div>
+          </div>
         </div>
       </div>
     </div>
