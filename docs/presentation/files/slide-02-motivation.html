@@ -23,13 +23,13 @@
   .body{position:absolute;top:148px;left:80px;right:80px;bottom:72px;display:flex;gap:40px;}
 
   /* Left col 60% */
-  .left-col{flex:0 0 58%;display:flex;flex-direction:column;gap:18px;}
-  .meta-label{font-family:'Source Sans 3',sans-serif;font-size:11px;font-weight:600;color:#9A9AAA;letter-spacing:0.12em;text-transform:uppercase;}
-  .pull-quote{font-family:'Playfair Display',Georgia,serif;font-weight:400;font-style:italic;font-size:26px;color:#1A1A2E;line-height:1.35;}
-  .body-text{font-family:'Source Sans 3',sans-serif;font-size:17px;font-weight:400;color:#1A1A2E;line-height:1.55;}
-  .callout-amber{border-left:3px solid #A0631A;background:#F2EAD9;padding:14px 18px;border-radius:3px;}
-  .callout-amber .label{font-family:'Source Sans 3',sans-serif;font-size:15px;font-weight:700;color:#7A4F1A;margin-bottom:4px;}
-  .callout-amber .text{font-family:'Source Sans 3',sans-serif;font-size:15px;font-weight:400;color:#1A1A2E;line-height:1.5;}
+  .left-col{flex:0 0 58%;display:flex;flex-direction:column;gap:24px;justify-content:center;}
+  .meta-label{font-family:'Source Sans 3',sans-serif;font-size:13px;font-weight:700;color:#9A9AAA;letter-spacing:0.15em;text-transform:uppercase;}
+  .pull-quote{font-family:'Playfair Display',Georgia,serif;font-weight:400;font-style:italic;font-size:32px;color:#1A1A2E;line-height:1.4;}
+  .body-text{font-family:'Source Sans 3',sans-serif;font-size:20px;font-weight:400;color:#1A1A2E;line-height:1.6;}
+  .callout-amber{border-left:4px solid #A0631A;background:#F2EAD9;padding:24px 28px;border-radius:4px;}
+  .callout-amber .label{font-family:'Source Sans 3',sans-serif;font-size:18px;font-weight:700;color:#7A4F1A;margin-bottom:8px;}
+  .callout-amber .text{font-family:'Source Sans 3',sans-serif;font-size:21px;font-weight:400;color:#1A1A2E;line-height:1.5;}
   .agenda-divider{height:1px;background:#D4CFC8;margin-top:4px;}
   .agenda-strip{margin-top:8px;}
   .agenda-label{font-family:'Source Sans 3',sans-serif;font-size:10px;font-weight:400;color:#9A9AAA;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:8px;}
@@ -71,30 +71,12 @@
   <div class="body">
     <!-- Left column -->
     <div class="left-col">
-      <div class="meta-label">WHY THIS MATTERS</div>
+      <div class="meta-label">Project Motivation</div>
       <div class="pull-quote">"Attackers move fast. Defenders move slow. Automated testers don't move at all."</div>
       <div class="body-text">Security vulnerabilities are found daily in web apps, APIs, and networks. Human pen testers are scarce and expensive. Automated scanners use fixed rule-sets — they cannot reason, adapt, or chain exploits.</div>
       <div class="callout-amber">
         <div class="label">The question:</div>
         <div class="text">Can an LLM agent carry out penetration testing autonomously — without step-by-step human direction?</div>
-      </div>
-      <div class="agenda-divider"></div>
-      <div class="agenda-strip">
-        <div class="agenda-label">Talk Structure</div>
-        <div class="agenda-beats">
-          <div class="beat">
-            <div class="beat-num" style="color:#8B1A1A;">◆ Slides 3–11</div>
-            <div class="beat-desc">Problem &amp; Literature (Deep dive)</div>
-          </div>
-          <div class="beat">
-            <div class="beat-num" style="color:#A0631A;">◆ Slides 12–16</div>
-            <div class="beat-desc">Architecture &amp; Plan (Sketch)</div>
-          </div>
-          <div class="beat">
-            <div class="beat-num" style="color:#6B6B7A;">◆ Slides 17–19</div>
-            <div class="beat-desc">Timeline &amp; Status</div>
-          </div>
-        </div>
       </div>
     </div>
 
