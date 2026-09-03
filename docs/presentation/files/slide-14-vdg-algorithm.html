@@ -11,7 +11,7 @@
   html,body{width:100%;height:100%;background:#E0DDD8;display:flex;align-items:center;justify-content:center;font-family:'Source Sans 3',system-ui,sans-serif;}
   .slide{width:1280px;height:720px;background:#F7F4EF;position:relative;overflow:hidden;box-shadow:0 8px 48px rgba(0,0,0,.18);}
 
-  .top-right-mark{position:absolute;top:24px;right:80px;font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:18px;color:#8B1A1A;}
+
 
   .header{position:absolute;top:44px;left:80px;right:160px;}
   .slide-title{font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:44px;color:#1A1A2E;line-height:1.15;}
@@ -32,42 +32,49 @@
   
   /* Left panel (World Model) */
   .world-model-panel{
-    width:140px;height:100%;
-    background:#EFEBE3;border:1.5px solid #D4CFC8;
-    display:flex;align-items:center;
-    padding:16px;
-    position:relative;
+    width:240px; height:100%;
+    background:#1A1A2E; border-radius:12px;
+    box-shadow:0 12px 32px rgba(26,26,46,0.15);
+    display:flex; flex-direction:column; justify-content:center;
+    padding:32px 40px; position:relative; overflow:hidden;
+  }
+  .world-model-panel::after {
+    content:''; position:absolute; inset:0;
+    background-image: radial-gradient(rgba(255,255,255,0.15) 1.5px, transparent 1.5px);
+    background-size: 16px 16px; opacity:0.3; pointer-events:none;
   }
   .wm-label{
-    position:absolute;left:-40px;top:50%;transform:translateY(-50%) rotate(-90deg);
-    font-family:'Source Sans 3',sans-serif;font-weight:700;font-size:11px;
-    color:#6B6B7A;letter-spacing:0.12em;text-transform:uppercase;
+    font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:13px;
+    color:#F2CA7C; letter-spacing:0.15em;text-transform:uppercase;
+    margin-bottom:16px; position:relative; z-index:1;
   }
   .wm-text{
-    font-family:'Source Sans 3',sans-serif;font-weight:400;font-size:12px;
-    color:#6B6B7A;line-height:1.4;margin-left:24px;
+    font-family:'Source Sans 3',sans-serif;font-weight:400;font-size:15px;
+    color:#E8E4DE;line-height:1.5; position:relative; z-index:1;
   }
 
   /* Center stack */
   .layer-stack{
-    flex:1;display:flex;flex-direction:column;gap:8px;
-    margin-left:20px;
+    flex:1; display:flex; flex-direction:column; gap:0;
+    margin-left:60px; position:relative; padding: 12px 0;
+  }
+  .layer-stack::before {
+    content:''; position:absolute; left:16px; top:30px; bottom:30px;
+    width:2px; background: linear-gradient(180deg, #8B1A1A 0%, #2E4A7A 33%, #A0631A 66%, #2A6B3C 100%);
+    z-index:0;
   }
   
   .layer{
-    flex:1;display:flex;align-items:center;
-    padding:0 24px;border-radius:3px;position:relative;
+    flex:1; display:flex; align-items:center;
+    padding:16px 0; position:relative; z-index:1;
+    background:transparent; border:none; box-shadow:none;
   }
-  .layer1{background:#F5D5D5;border-left:4px solid #8B1A1A;}
-  .layer2{background:#E8EDF5;border-left:4px solid #2E4A7A;}
-  .layer3{background:#F5E9D0;border-left:4px solid #A0631A;}
-  .layer4{background:#D6EDDA;border-left:4px solid #2A6B3C;}
   
   .badge{
-    width:32px;height:32px;border-radius:50%;
-    display:flex;align-items:center;justify-content:center;
-    font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:14px;color:#FFF;
-    margin-right:20px;
+    width:34px; height:34px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'IBM Plex Mono',monospace; font-weight:700; font-size:14px; color:#FFF;
+    margin-right:32px; flex-shrink:0; box-shadow: 0 0 0 6px #F7F4EF;
   }
   .layer1 .badge{background:#8B1A1A;}
   .layer2 .badge{background:#2E4A7A;}
@@ -75,32 +82,27 @@
   .layer4 .badge{background:#2A6B3C;}
 
   .layer-title{
-    width:200px;
-    font-family:'Source Sans 3',sans-serif;font-weight:700;font-size:17px;color:#1A1A2E;
+    width:240px; font-family:'Source Sans 3',sans-serif; font-weight:700; font-size:22px; color:#1A1A2E;
   }
   .layer-desc{
-    flex:1;
-    font-family:'Source Sans 3',sans-serif;font-weight:400;font-size:15px;color:#6B6B7A;
+    flex:1; font-family:'Source Sans 3',sans-serif; font-weight:400; font-size:16px; color:#4A4A5E;
   }
-  .layer-divider{
-    position:absolute;right:140px;top:10px;bottom:10px;
-    width:1px;background:#D4CFC8;
-  }
+  .layer-divider{ display:none; }
   
   /* Bottom bar (Memory) */
   .memory-bar{
-    width:100%;
-    background:#EFEBE3;border:1.5px dashed #D4CFC8;border-radius:3px;
-    padding:16px 24px;
-    display:flex;align-items:center;gap:30px;
+    align-self: center; display:inline-flex; align-items:center; gap:24px;
+    background: #FFFFFF; border-radius: 40px; box-shadow: 0 8px 24px rgba(0,0,0,0.04);
+    padding: 16px 40px; border: 1px solid #E8E4DE;
+    margin-top: 24px;
   }
   .mem-label{
-    font-family:'Source Sans 3',sans-serif;font-weight:700;font-size:11px;
-    color:#6B6B7A;letter-spacing:0.12em;text-transform:uppercase;
+    font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:13px;
+    color:#1A1A2E; letter-spacing:0.15em;text-transform:uppercase;
   }
   .mem-text{
-    font-family:'Source Sans 3',sans-serif;font-weight:400;font-size:13px;
-    color:#6B6B7A;
+    font-family:'Playfair Display',Georgia,serif;font-weight:400;font-style:italic; font-size:20px;
+    color:#4A4A5E;
   }
 
   /* Footer */
@@ -112,7 +114,6 @@
 </head>
 <body>
 <div class="slide">
-  <div class="top-right-mark">RedGrid</div>
 
   <div class="header">
     <div class="slide-title">Architecture — A Rough Sketch</div>
