@@ -11,7 +11,7 @@
   html,body{width:100%;height:100%;background:#E0DDD8;display:flex;align-items:center;justify-content:center;font-family:'Source Sans 3',system-ui,sans-serif;}
   .slide{width:1280px;height:720px;background:#F7F4EF;position:relative;overflow:hidden;box-shadow:0 8px 48px rgba(0,0,0,.18);}
 
-  .top-right-mark{position:absolute;top:24px;right:80px;font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:18px;color:#8B1A1A;}
+
 
   .header{position:absolute;top:44px;left:80px;right:160px;}
   .slide-title{font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:44px;color:#1A1A2E;line-height:1.15;}
@@ -20,29 +20,39 @@
   /* Body */
   .body{position:absolute;top:136px;left:80px;right:80px;bottom:50px;display:flex;flex-direction:column;gap:30px;}
 
-  /* Cards */
-  .card-container{display:flex;gap:20px;flex:1;}
-  .surface-card{
-    flex:1;background:#EFEBE3;padding:24px;
-    display:flex;flex-direction:column;gap:12px;
+  /* Columns */
+  .card-container{display:flex; gap:60px; flex:1; justify-content:center; margin-top: 40px;}
+  .surface-col{
+    flex:1; display:flex; flex-direction:column; position:relative; padding-top:40px;
   }
-  .c1{border-top:3px solid #8B1A1A;}
-  .c2{border-top:3px solid #2E4A7A;}
-  .c3{border-top:3px solid #A0631A;}
+  
+  .s-label-row{display:flex; align-items:baseline; gap:10px; margin-bottom:12px; position:relative; z-index:1;}
+  .s-num{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:16px;}
+  .c1 .s-num{color:#8B1A1A;}
+  .c2 .s-num{color:#2E4A7A;}
+  .c3 .s-num{color:#A0631A;}
 
-  .card-label{font-family:'Source Sans 3',sans-serif;font-weight:700;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;}
-  .c1 .card-label{color:#8B1A1A;}
-  .c2 .card-label{color:#2E4A7A;}
-  .c3 .card-label{color:#A0631A;}
+  .s-label{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:16px;letter-spacing:0.1em;text-transform:uppercase;}
+  .c1 .s-label{color:#8B1A1A;}
+  .c2 .s-label{color:#2E4A7A;}
+  .c3 .s-label{color:#A0631A;}
 
-  .benchmark{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:400;color:#6B6B7A;padding-bottom:12px;border-bottom:1px solid #D4CFC8;}
-  .card-q{font-family:'Source Sans 3',sans-serif;font-weight:400;font-size:16px;color:#1A1A2E;line-height:1.45;margin-top:4px;}
+  .s-bench{font-family:'Source Sans 3',sans-serif;font-weight:700;font-size:24px;color:#1A1A2E; line-height:1.2; margin-bottom:8px; position:relative; z-index:1;}
+  .s-sub{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:14px; margin-bottom:32px; display:inline-flex; align-items:center; gap:6px; padding:4px 12px; border-radius:0; position:relative; z-index:1;}
+  .c1 .s-sub{color:#8B1A1A; background:rgba(139,26,26,0.08);}
+  .c2 .s-sub{color:#2E4A7A; background:rgba(46,74,122,0.08);}
+  .c3 .s-sub{color:#A0631A; background:rgba(160,99,26,0.08);}
+  
+  .s-q{font-family:'Playfair Display',Georgia,serif;font-weight:400;font-style:italic;font-size:24px;color:#4A4A5E;line-height:1.4; border-left:3px solid; padding-left:24px; position:relative; z-index:1;}
+  .c1 .s-q{border-color:#8B1A1A;}
+  .c2 .s-q{border-color:#2E4A7A;}
+  .c3 .s-q{border-color:#A0631A;}
 
   /* Bottom Principle */
   .bottom-principle{
-    border-left:3px solid #A0631A;background:#F2EAD9;padding:16px 20px;border-radius:3px;
-    font-family:'Source Sans 3',sans-serif;font-weight:600;font-size:15px;color:#7A4F1A;
-    text-align:center;
+    align-self: center; margin-top: 40px;
+    font-family:'IBM Plex Mono',monospace; font-weight:700; font-size:14px; color:#1A1A2E;
+    text-align:center; text-transform:uppercase; letter-spacing: 0.1em;
   }
 
   /* Footer */
@@ -54,7 +64,6 @@
 </head>
 <body>
 <div class="slide">
-  <div class="top-right-mark">RedGrid</div>
 
   <div class="header">
     <div class="slide-title">Evaluation — Three Attack Surfaces</div>
@@ -63,25 +72,61 @@
 
   <div class="body">
     <div class="card-container">
-      <div class="surface-card c1">
-        <div class="card-label">WEB APPLICATIONS</div>
-        <div class="benchmark">CVE-Bench — 40 real critical CVEs</div>
-        <div class="card-q">"Can the agent find and exploit web vulnerabilities without a hint?"</div>
+      <div class="surface-col c1">
+        <div class="s-label-row">
+          <span class="s-num">01.</span>
+          <span class="s-label">WEB APPLICATIONS</span>
+        </div>
+        <div class="s-bench">CVE-Bench</div>
+        <div><span class="s-sub">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
+          40 real critical CVEs
+        </span></div>
+        <div class="s-q">"Can the agent find and exploit web vulnerabilities without a hint?"</div>
       </div>
-      <div class="surface-card c2">
-        <div class="card-label">GRAPHQL APIs</div>
-        <div class="benchmark">PrediQL — 6 real GraphQL APIs</div>
-        <div class="card-q">"Can the agent abuse API schemas and find injection points?"</div>
+      
+      <div class="surface-col c2">
+        <div class="s-label-row">
+          <span class="s-num">02.</span>
+          <span class="s-label">GRAPHQL APIs</span>
+        </div>
+        <div class="s-bench">PrediQL</div>
+        <div><span class="s-sub">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="18" cy="18" r="3"></circle>
+            <circle cx="6" cy="6" r="3"></circle>
+            <circle cx="18" cy="6" r="3"></circle>
+            <path d="M8.5 8.5l7 7"></path>
+            <path d="M18 9v6"></path>
+          </svg>
+          6 real GraphQL APIs
+        </span></div>
+        <div class="s-q">"Can the agent abuse API schemas and find injection points?"</div>
       </div>
-      <div class="surface-card c3">
-        <div class="card-label">MULTI-HOST NETWORKS</div>
-        <div class="benchmark">MHBench — 40 multi-host environments</div>
-        <div class="card-q">"Can the agent move laterally across hosts and escalate privileges?"</div>
+      
+      <div class="surface-col c3">
+        <div class="s-label-row">
+          <span class="s-num">03.</span>
+          <span class="s-label">MULTI-HOST NETWORKS</span>
+        </div>
+        <div class="s-bench">MHBench</div>
+        <div><span class="s-sub">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
+            <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
+            <line x1="6" y1="6" x2="6.01" y2="6"></line>
+            <line x1="6" y1="18" x2="6.01" y2="18"></line>
+          </svg>
+          40 multi-host environments
+        </span></div>
+        <div class="s-q">"Can the agent move laterally across hosts and escalate privileges?"</div>
       </div>
     </div>
     
     <div class="bottom-principle">
-      We only test on attack surfaces that already have a published, oracle-backed benchmark. No custom benchmarks.
+      <span>We only test on attack surfaces that already have a published, oracle-backed benchmark.<br/>No custom benchmarks.</span>
     </div>
   </div>
 
