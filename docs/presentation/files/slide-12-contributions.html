@@ -11,7 +11,7 @@
   html,body{width:100%;height:100%;background:#E0DDD8;display:flex;align-items:center;justify-content:center;font-family:'Source Sans 3',system-ui,sans-serif;}
   .slide{width:1280px;height:720px;background:#F7F4EF;position:relative;overflow:hidden;box-shadow:0 8px 48px rgba(0,0,0,.18);}
 
-  .top-right-mark{position:absolute;top:24px;right:80px;font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:18px;color:#8B1A1A;}
+
 
   .header{position:absolute;top:44px;left:80px;right:160px;}
   .slide-title{font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:44px;color:#1A1A2E;line-height:1.15;}
@@ -19,34 +19,44 @@
 
   /* Transition Banner */
   .transition-banner{
-    margin-top:16px;
-    background:#F2EAD9;border-left:3px solid #A0631A;border-top:1px solid #D4CFC8;
-    padding:8px 20px;
-    font-family:'Source Sans 3',sans-serif;font-weight:600;font-size:13px;color:#7A4F1A;
+    margin-top:20px; width:fit-content;
+    background:#FFFFFF; border:1px solid #E8E4DE; border-left:4px solid #A0631A;
+    padding:10px 24px; border-radius:6px; box-shadow:0 4px 16px rgba(0,0,0,0.05);
+    font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:13px;color:#A0631A;
+    letter-spacing:0.02em; text-transform:uppercase;
   }
 
   /* Body */
-  .body{position:absolute;top:170px;left:80px;right:80px;bottom:50px;display:flex;flex-direction:column;gap:30px;}
+  .body{position:absolute;top:180px;left:80px;right:80px;bottom:46px;display:flex;flex-direction:column;gap:24px;}
 
   /* Cards */
-  .card-container{display:flex;gap:20px;flex:1;}
+  .card-container{display:flex;gap:24px;flex:1;}
   .contrib-card{
-    flex:1;background:#EFEBE3;padding:24px;
-    display:flex;flex-direction:column;gap:12px;
+    flex:1;background:#1A1A2E;padding:36px;
+    border-radius:8px; box-shadow:0 12px 32px rgba(0,0,0,0.15);
+    display:flex;flex-direction:column;gap:16px;
   }
-  .cc1{border-top:3px solid #8B1A1A;}
-  .cc2{border-top:3px solid #2E4A7A;}
-  .cc3{border-top:3px solid #2A6B3C;}
+  .cc1{border-top:4px solid #E54B4B;}
+  .cc2{border-top:4px solid #4A90E2;}
+  .cc3{border-top:4px solid #4CAF50;}
 
-  .card-label{font-family:'Source Sans 3',sans-serif;font-weight:700;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;}
-  .cc1 .card-label{color:#8B1A1A;}
-  .cc2 .card-label{color:#2E4A7A;}
-  .cc3 .card-label{color:#2A6B3C;}
+  .card-label{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;}
+  .cc1 .card-label{color:#E54B4B;}
+  .cc2 .card-label{color:#4A90E2;}
+  .cc3 .card-label{color:#4CAF50;}
 
-  .card-title{font-family:'Source Sans 3',sans-serif;font-weight:700;font-size:19px;color:#1A1A2E;line-height:1.2;}
-  .card-q{font-family:'Source Sans 3',sans-serif;font-weight:400;font-size:16px;color:#1A1A2E;line-height:1.45;flex:1;}
+  .card-title{font-family:'Source Sans 3',sans-serif;font-weight:700;font-size:24px;color:#FFFFFF;line-height:1.2; padding-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.1);}
+  .card-q{font-family:'Playfair Display',Georgia,serif;font-weight:400;font-style:italic;font-size:24px;color:#E0DDD8;line-height:1.4;flex:1; margin-top:12px;}
 
-  .bottom-note{text-align:center;font-family:'Source Sans 3',sans-serif;font-weight:400;font-style:italic;font-size:15px;color:#9A9AAA;}
+  .bottom-note{
+    align-self:center; display:flex; align-items:center; gap:12px;
+    font-family:'Source Sans 3',sans-serif;font-weight:600;font-size:15px;color:#6B6B7A;
+    justify-content:center;
+  }
+  .bn-badge {
+    background:#1A1A2E; color:#FFF; font-family:'IBM Plex Mono',monospace;
+    font-size:12px; font-weight:700; padding:4px 10px; border-radius:4px; text-transform:uppercase; letter-spacing:0.05em;
+  }
 
   /* Footer */
   .footer-line{position:absolute;bottom:36px;left:0;right:0;height:1px;background:#D4CFC8;}
@@ -57,7 +67,7 @@
 </head>
 <body>
 <div class="slide">
-  <div class="top-right-mark">RedGrid</div>
+
 
   <div class="header">
     <div class="slide-title">Expected Contributions</div>
@@ -84,7 +94,7 @@
       </div>
     </div>
     
-    <div class="bottom-note">These are research questions. Answers come from experiments — not this report.</div>
+    <div class="bottom-note"><span class="bn-badge">Disclaimer</span> These are research questions. Answers come from experiments — not this report.</div>
   </div>
 
   <div class="footer-line"></div>
