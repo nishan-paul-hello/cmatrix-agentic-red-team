@@ -11,14 +11,14 @@
   html,body{width:100%;height:100%;background:#E0DDD8;display:flex;align-items:center;justify-content:center;font-family:'Source Sans 3',system-ui,sans-serif;}
   .slide{width:1280px;height:720px;background:#F7F4EF;position:relative;overflow:hidden;box-shadow:0 8px 48px rgba(0,0,0,.18);}
 
-  .left-bar{position:absolute;left:0;top:0;bottom:0;width:8px;background:#8B1A1A;}
+
 
   .header{position:absolute;top:36px;left:80px;right:80px;display:flex;align-items:flex-end;justify-content:space-between;}
   .slide-title{font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:38px;color:#1A1A2E;line-height:1.1;position:relative;}
   .authority-bar{position:absolute;bottom:-10px;left:0;width:55%;height:3px;background:#8B1A1A;}
   .count-pill{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:700;color:#8B1A1A;border:2px solid #8B1A1A;padding:5px 14px;border-radius:3px;white-space:nowrap;margin-bottom:4px;letter-spacing:0.06em;}
 
-  .body{position:absolute;top:110px;left:80px;right:80px;bottom:52px;display:flex;gap:0;}
+  .body{position:absolute;top:98px;left:80px;right:80px;bottom:52px;display:flex;gap:0;}
 
   /* Agent column */
   .agent-col{flex:0 0 62%;border-right:1px solid #D4CFC8;padding-right:40px;display:flex;flex-direction:column;}
@@ -36,22 +36,32 @@
   .paper-list{display:flex;flex-direction:column;flex:1;}
   .paper-item{display:flex;align-items:stretch;border-bottom:1px solid #E8E4DE;}
   .paper-item:last-child{border-bottom:none;}
-  .item-num{flex:0 0 32px;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;color:#D4CFC8;padding:9px 0;display:flex;align-items:center;}
-  .item-meta{flex:0 0 148px;padding:9px 12px 9px 0;display:flex;flex-direction:column;justify-content:center;}
-  .item-name{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:700;color:#2E4A7A;}
-  .item-author{font-family:'Source Sans 3',sans-serif;font-size:11px;font-weight:400;color:#9A9AAA;margin-top:1px;}
-  .item-desc{flex:1;padding:9px 0;font-family:'Source Sans 3',sans-serif;font-size:14px;font-weight:400;color:#1A1A2E;line-height:1.4;display:flex;align-items:center;}
+  .item-num{flex:0 0 32px;font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:700;color:#A8A39C;padding:6px 0;display:flex;align-items:center;}
+  .item-meta{flex:0 0 190px;padding:6px 12px 6px 0;display:flex;flex-direction:column;justify-content:center;}
+  .item-name{font-family:'IBM Plex Mono',monospace;font-size:18px;font-weight:700;color:#2E4A7A;}
+  .item-author{font-family:'Source Sans 3',sans-serif;font-size:14px;font-weight:600;color:#7A7A8A;margin-top:3px;}
+  .item-desc{flex:1;padding:6px 0;font-family:'Source Sans 3',sans-serif;font-size:17px;font-weight:500;color:#1A1A2E;line-height:1.4;display:flex;align-items:center;}
 
-  .bench-item{border-bottom:1px solid #E8E4DE;padding:18px 0;}
+  .bench-item{border-bottom:1px solid #E8E4DE;display:flex;align-items:stretch;}
   .bench-item:last-child{border-bottom:none;}
-  .bench-name{font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:700;color:#A0631A;}
-  .bench-author{font-family:'Source Sans 3',sans-serif;font-size:11px;color:#9A9AAA;margin-top:2px;}
-  .bench-desc{font-family:'Source Sans 3',sans-serif;font-size:14px;color:#1A1A2E;line-height:1.4;margin-top:8px;}
+  .bench-meta{flex:0 0 190px;padding:18px 12px 18px 0;display:flex;flex-direction:column;justify-content:center;}
+  .bench-name{font-family:'IBM Plex Mono',monospace;font-size:19px;font-weight:700;color:#A0631A;}
+  .bench-author{font-family:'Source Sans 3',sans-serif;font-size:14px;font-weight:600;color:#7A7A8A;margin-top:3px;}
+  .bench-desc{flex:1;padding:18px 0;font-family:'Source Sans 3',sans-serif;font-size:17px;font-weight:500;color:#1A1A2E;line-height:1.4;display:flex;align-items:center;}
 
-  .takeaway{margin-top:auto;background:#1A1A2E;border-radius:6px;padding:20px 22px;box-shadow:0 6px 20px rgba(26,26,46,0.18);display:flex;flex-direction:column;gap:6px;}
-  .takeaway-eyebrow{font-family:'Source Sans 3',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.14em;color:#8B1A1A;}
-  .takeaway-stat{font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:700;color:#FFFFFF;}
-  .takeaway-desc{font-family:'Source Sans 3',sans-serif;font-size:13px;color:#9A9AAA;line-height:1.4;}
+  .takeaway{
+    margin-top:auto;
+    background:#FFFFFF;
+    border:1px solid #D4CFC8;
+    border-top:4px solid #8B1A1A;
+    border-radius:6px;
+    padding:20px 24px;
+    box-shadow:0 12px 32px rgba(0,0,0,0.06);
+    display:flex;flex-direction:column;gap:6px;
+  }
+  .takeaway-eyebrow{font-family:'Source Sans 3',sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.15em;color:#8B1A1A;}
+  .takeaway-stat{font-family:'Playfair Display',Georgia,serif;font-size:21px;font-weight:700;color:#1A1A2E;white-space:nowrap;letter-spacing:-0.02em;}
+  .takeaway-desc{font-family:'Source Sans 3',sans-serif;font-size:15px;font-weight:500;color:#6B6B7A;line-height:1.45;}
 
   .footer-line{position:absolute;bottom:36px;left:0;right:0;height:1px;background:#D4CFC8;}
   .footer-num{position:absolute;right:80px;bottom:10px;font-family:'IBM Plex Mono',monospace;font-size:13px;color:#9A9AAA;}
@@ -60,7 +70,6 @@
 </head>
 <body>
 <div class="slide">
-  <div class="left-bar"></div>
 
   <div class="header">
     <div class="slide-title">Literature We Surveyed<div class="authority-bar"></div></div>
@@ -130,13 +139,19 @@
         <div class="col-count">2 PAPERS</div>
       </div>
       <div class="bench-item">
-        <div class="bench-name">CVE-Bench</div>
-        <div class="bench-author">Zhu et al., 2025</div>
+        <div class="item-num" style="padding:18px 0;">01</div>
+        <div class="bench-meta">
+          <div class="bench-name">CVE-Bench</div>
+          <div class="bench-author">Zhu et al., 2025</div>
+        </div>
         <div class="bench-desc">40 critical web CVEs with oracle-backed evaluation</div>
       </div>
       <div class="bench-item">
-        <div class="bench-name">PentestEval</div>
-        <div class="bench-author">Yang et al., 2025</div>
+        <div class="item-num" style="padding:18px 0;">02</div>
+        <div class="bench-meta">
+          <div class="bench-name">PentestEval</div>
+          <div class="bench-author">Yang et al., 2025</div>
+        </div>
         <div class="bench-desc">Stage-level breakdown of pipeline failure modes</div>
       </div>
 
