@@ -49,54 +49,55 @@
   }
 
   .divider {
-    width: 100%; height: 1px; background: rgba(255,255,255,0.08); margin-bottom: 30px;
+    width: 100%; height: 1px; background: rgba(255,255,255,0.08); margin-bottom: 20px;
   }
 
-  /* Dashboard */
-  .dashboard {
-    display: flex; flex-direction: column; gap: 40px;
+  /* Final Premium Dashboard */
+  .final-dashboard {
+    display: flex; flex-direction: column; gap: 20px; width: 100%;
   }
 
   /* Stats Row */
-  .stats-row {
-    display: flex; justify-content: space-between;
+  .dash-stats {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;
   }
-  .stat-box {
-    flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center; position: relative;
+  .stat-card {
+    background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 12px; padding: 16px 20px;
+    display: flex; flex-direction: column; align-items: center; text-align: center;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.2);
   }
-  .stat-box:not(:last-child)::after {
-    content: ''; position: absolute; right: 0; top: 15%; bottom: 15%; width: 1px; background: rgba(255,255,255,0.08);
+  .stat-card .s-num {
+    font-family: 'Playfair Display', serif; font-size: 56px; font-weight: 700; color: #F7F4EF;
+    line-height: 1; margin-bottom: 8px;
   }
-  .stat-num {
-    font-family: 'Playfair Display', serif; font-size: 72px; font-weight: 700; color: #F7F4EF; line-height: 1;
-    margin-bottom: 12px;
-  }
-  .stat-num.accent { color: #8B1A1A; }
-  .stat-label {
-    font-family: 'Source Sans 3', sans-serif; font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.5);
-    line-height: 1.4; text-transform: uppercase; letter-spacing: 0.1em; max-width: 180px;
+  .stat-card .s-lbl {
+    font-family: 'Source Sans 3', sans-serif; font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.5);
+    text-transform: uppercase; letter-spacing: 0.1em; line-height: 1.4;
   }
 
   /* Terms Row */
-  .terms-row {
-    display: flex; justify-content: space-between; gap: 24px;
+  .dash-terms {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
   }
-  .term-box {
-    flex: 1; background: rgba(255,255,255,0.03); padding: 24px; border-radius: 4px;
-    border-left: 3px solid #A0631A; backdrop-filter: blur(4px);
+  .term-card {
+    background: linear-gradient(145deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
+    border: 1px solid rgba(255,255,255,0.08); border-top: 3px solid #A0631A;
+    border-radius: 8px; padding: 16px 20px;
+    display: flex; flex-direction: column;
   }
-  .term-key {
-    font-family: 'IBM Plex Mono', monospace; font-size: 16px; font-weight: 700; color: #A0631A;
+  .term-card .t-key {
+    font-family: 'IBM Plex Mono', monospace; font-size: 20px; font-weight: 700; color: #A0631A;
     margin-bottom: 8px; letter-spacing: 0.05em;
   }
-  .term-def {
-    font-family: 'Source Sans 3', sans-serif; font-size: 14px; font-weight: 400; color: rgba(255,255,255,0.7);
-    line-height: 1.45;
+  .term-card .t-def {
+    font-family: 'Source Sans 3', sans-serif; font-size: 17px; font-weight: 400; color: rgba(255,255,255,0.75);
+    line-height: 1.4;
   }
 
   /* Authors Colophon */
   .authors-block {
-    margin-top: auto;
+    margin-top: auto; margin-bottom: -20px;
     display: flex; flex-direction: column; gap: 6px;
     border-left: 3px solid #8B1A1A; padding-left: 16px;
   }
@@ -126,40 +127,40 @@
 
     <div class="divider"></div>
 
-    <div class="dashboard">
+    <div class="final-dashboard">
       <!-- Top Row: Infographic Statistics -->
-      <div class="stats-row">
-        <div class="stat-box">
-          <div class="stat-num">11</div>
-          <div class="stat-label">Papers<br>Surveyed</div>
+      <div class="dash-stats">
+        <div class="stat-card">
+          <div class="s-num">11</div>
+          <div class="s-lbl">Papers<br>Surveyed</div>
         </div>
-        <div class="stat-box">
-          <div class="stat-num">3</div>
-          <div class="stat-label">Contribution<br>Directions</div>
+        <div class="stat-card">
+          <div class="s-num">3</div>
+          <div class="s-lbl">Contribution<br>Directions</div>
         </div>
-        <div class="stat-box">
-          <div class="stat-num">3</div>
-          <div class="stat-label">Attack Surfaces<br>For Evaluation</div>
+        <div class="stat-card">
+          <div class="s-num">3</div>
+          <div class="s-lbl">Attack Surfaces<br>For Evaluation</div>
         </div>
-        <div class="stat-box">
-          <div class="stat-num">40</div>
-          <div class="stat-label">Critical CVEs<br>In Primary Benchmark</div>
+        <div class="stat-card">
+          <div class="s-num">40</div>
+          <div class="s-lbl">Critical CVEs In<br>Primary Benchmark</div>
         </div>
       </div>
 
-      <!-- Bottom Row: Glowing Term Glossary -->
-      <div class="terms-row">
-        <div class="term-box">
-          <div class="term-key">VDG</div>
-          <div class="term-def">The dependency graph we plan to build</div>
+      <!-- Bottom Row: Term Glossary -->
+      <div class="dash-terms">
+        <div class="term-card">
+          <div class="t-key">VDG</div>
+          <div class="t-def">The dependency graph we plan to build</div>
         </div>
-        <div class="term-box">
-          <div class="term-key">UCB</div>
-          <div class="term-def">How the agent decides what to try next</div>
+        <div class="term-card">
+          <div class="t-key">UCB</div>
+          <div class="t-def">How the agent decides what to try next</div>
         </div>
-        <div class="term-box">
-          <div class="term-key">ADM</div>
-          <div class="term-def">The weakest stage in all current systems</div>
+        <div class="term-card">
+          <div class="t-key">ADM</div>
+          <div class="t-def">The weakest stage in all current systems</div>
         </div>
       </div>
     </div>
@@ -167,8 +168,9 @@
     <!-- Authors Colophon -->
     <div class="authors-block">
       <div class="author-names">Nishan Paul and Md Rakibur Rahman</div>
-      <div class="author-meta">University of Dhaka, Bangladesh</div>
+      <div class="author-meta">University of Dhaka</div>
       <div class="author-meta" style="margin-top: 2px;">Professional Masters in Information and Cyber Security (PMICS)</div>
+      <div class="author-meta" style="margin-top: 2px;">CSE 810: Project on Cyber Security</div>
     </div>
   </div>
 </div>
