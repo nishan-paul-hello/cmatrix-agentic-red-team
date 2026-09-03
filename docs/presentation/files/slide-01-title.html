@@ -59,14 +59,39 @@
     text-align:center;
     padding:60px 80px;
   }
-  .meta-label{
-    font-family:'Source Sans 3',sans-serif;
-    font-size:11px;
-    font-weight:400;
-    color:#9A9AAA;
-    letter-spacing:0.12em;
-    text-transform:uppercase;
-    margin-bottom:28px;
+  .meta-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 28px;
+  }
+  .meta-program {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #6B6B7A;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .meta-course {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    color: #2E4A7A;
+    letter-spacing: 0.1em;
+  }
+  .meta-stage {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    color: #7A4F1A;
+    background: #F2EAD9;
+    padding: 5px 12px;
+    border-radius: 4px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 8px;
   }
   .project-name{
     font-family:'Playfair Display',Georgia,serif;
@@ -84,10 +109,10 @@
   }
   .subtitle{
     font-family:'Source Sans 3',sans-serif;
-    font-size:22px;
+    font-size:26px;
     font-weight:400;
     color:#2E4A7A;
-    max-width:1100px;
+    max-width:1200px;
     line-height:1.45;
   }
   .presenter-zone{
@@ -156,16 +181,28 @@
   }
   .supervisor-title {
     font-family: 'Source Sans 3', sans-serif;
-    font-size: 14px;
-    color: #6B6B7A;
+    font-size: 15px;
+    font-weight: 600;
+    color: #2E4A7A;
     margin-top: 4px;
     text-align: center;
   }
   .supervisor-dept {
     font-family: 'Source Sans 3', sans-serif;
-    font-size: 13px;
-    color: #6B6B7A;
-    margin-top: 2px;
+    font-size: 14px;
+    font-weight: 400;
+    color: #1A1A2E;
+    margin-top: 6px;
+    text-align: center;
+  }
+  .supervisor-uni {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #2E4A7A;
+    margin-top: 4px;
     text-align: center;
   }
 </style>
@@ -181,7 +218,11 @@
 
   <!-- Main centered content -->
   <div class="content">
-    <div class="meta-label">Professional Masters in Information and Cyber Security (PMICS)<br>PROJECT ON CYBER SECURITY<br>Inception Stage &nbsp;·&nbsp; September 2026</div>
+    <div class="meta-group">
+      <div class="meta-program">Professional Masters in Information and Cyber Security (PMICS)</div>
+      <div class="meta-course">PROJECT ON CYBER SECURITY</div>
+      <div class="meta-stage">Inception Stage &nbsp;·&nbsp; September 2026</div>
+    </div>
     <div class="project-name">RedGrid</div>
     <div class="hairline"></div>
     <div class="subtitle">Dependency-Constrained UCB Exploration for Autonomous Penetration Testing</div>
@@ -215,7 +256,8 @@
         <div class="supervisor-label">Supervisor</div>
         <div class="supervisor-name">Dr. Md. Abdur Razzaque</div>
         <div class="supervisor-title">Professor and Chair</div>
-        <div class="supervisor-dept">Department of Computer Science and Engineering<br>University of Dhaka</div>
+        <div class="supervisor-dept">Department of Computer Science and Engineering</div>
+        <div class="supervisor-uni">University of Dhaka</div>
       </div>
     </div>
   </div>
