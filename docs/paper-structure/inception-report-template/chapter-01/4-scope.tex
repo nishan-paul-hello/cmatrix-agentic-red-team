@@ -1,22 +1,24 @@
 \section{Scope of the Project}
 \label{sec:intro_scope}
 
-Based on the literature review so far, this project bounds itself by one governing rule: work proceeds only with attack surfaces for which a dedicated, reusable, oracle-backed benchmark already exists in the reviewed literature, rather than constructing new benchmarks independently. This decision keeps the evaluation grounded and reproducible. The scope may narrow further once early implementation work provides more information about what is achievable within the remaining timeline. Table~\ref{tab:in-scope-surfaces} summarises the attack-surface families currently considered in scope and the benchmarks that govern any claim made about them.
+Based on the literature reviewed in Chapter~\ref{chapter_backStudy}, this project bounds itself by one governing rule: work proceeds only with attack surfaces for which a dedicated, reusable, oracle-backed benchmark already exists in the reviewed literature, rather than constructing new benchmarks independently. This constraint keeps the evaluation grounded and reproducible, and it ensures that any performance claim this thesis makes can be independently verified against a fixed, published test suite. The scope may narrow further once early implementation provides more information about what is achievable within the remaining timeline. Table~\ref{tab:in-scope-surfaces} summarises the three attack-surface families currently considered in scope, the primary benchmarks that govern each, and the vulnerability types each family contributes to the evaluation.
 
 \begin{table}[htbp]
 	\centering
 	\small
-	\caption{Attack surfaces currently considered in scope, and their candidate governing benchmarks (preliminary).}
+	\caption{Attack surfaces in scope, their primary governing benchmarks, and representative vulnerability types.}
 	\label{tab:in-scope-surfaces}
-	\begin{tabular}{@{}p{3.1cm}p{5.8cm}p{4.8cm}@{}}
+	\begin{tabular}{@{}p{2.8cm}p{5.2cm}p{5.3cm}@{}}
 		\toprule
-		\textbf{Attack surface}       & \textbf{Candidate benchmarks}                                                                                                                                                                        & \textbf{Representative vulnerability types}                                                 \\
+		\textbf{Attack surface}       & \textbf{Primary governing benchmark(s)}                                                                                             & \textbf{Representative vulnerability types}                                                         \\
 		\midrule
-		Web application (HTTP/HTML)   & Fang et al.\ 15-CVE sandbox \citep{fang2024oneday}; HPTSA 14-CVE zero-day suite \citep{zhu2024hptsa}; CVE-Bench (40 CVEs) \citep{zhu2025cvebench}; PentestEval (346 tasks) \citep{yang2025pentesteval} & SQLi, XSS, CSRF, SSRF, SSTI, LFI, file-upload RCE, IDOR, authentication bypass, JWT forgery \\
-		GraphQL APIs                  & PrediQL 6-API suite \citep{liu2025prediql}                                                                                                                                                             & Schema abuse, dependency-chain injection, batched-auth bypass, IDOR                         \\
-		Multi-host / Active Directory & Incalmo MHBench (40 environments) \citep{singer2025incalmo}                                                                                                                                            & Lateral movement, credential reuse, privilege escalation                                    \\
+		Web application (HTTP/HTML)   & CVE-Bench --- 40 critical-severity CVEs, oracle-backed pass/fail \citep{zhu2025cvebench}; PentestEval --- 346 tasks across 12 real-world scenarios, stage-level scoring \citep{yang2025pentesteval} & SQLi, XSS, CSRF, SSRF, SSTI, LFI, file-upload RCE, IDOR, authentication bypass, privilege escalation \\
+		GraphQL APIs                  & PrediQL --- 6 real GraphQL APIs, dependency-aware oracle \citep{liu2025prediql}                                                     & Schema abuse, dependency-chain injection, batched-auth bypass, IDOR                                 \\
+		Multi-host / Active Directory & Incalmo MHBench --- 40 networked environments, declarative task oracle \citep{singer2025incalmo}                                   & Lateral movement, credential reuse, privilege escalation across host chains                         \\
 		\bottomrule
 	\end{tabular}
 \end{table}
 
-\textbf{What is currently left out.} General REST API exploitation is not assessed directly: no standardised, reusable REST API benchmark comparable to CVE-Bench or PrediQL appears in the reviewed literature. Some underlying techniques from the REST API testing literature (dependency inference between API calls, response-feedback pruning) may still be useful internally, but REST-API-specific results are not part of the plan. Binary exploitation, physical- and network-layer attacks, and social engineering are also outside the current scope, for the same reason --- the absence of a suitable existing benchmark in the reviewed literature.
+Results from the single-agent and hierarchical-team baselines in \citet{fang2024oneday} and \citet{zhu2024hptsa} --- 87\% and 42\% pass@5 respectively on their own curated suites --- serve as comparative reference points rather than primary evaluation targets: RedGrid is not re-evaluated on those closed suites, but their reported numbers contextualise what the state of the art was before the benchmarks listed in Table~\ref{tab:in-scope-surfaces} existed.
+
+\textbf{What is currently left out.} General REST API exploitation is not assessed directly: no standardised, reusable REST API benchmark comparable to CVE-Bench or PrediQL appears in the reviewed literature. Techniques from the REST API testing literature --- dependency inference between API calls, response-feedback pruning --- may inform internal design choices, but REST-API-specific performance claims are not part of the evaluation plan. Binary exploitation, physical- and network-layer attacks, and social engineering are also outside the current scope for the same reason: no oracle-backed benchmark for these surfaces appears in the reviewed literature, and the governing rule of this project requires one. Should a suitable benchmark emerge during the thesis period, the scope section will be revised accordingly.
