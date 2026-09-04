@@ -168,10 +168,10 @@
       \vfill
       {\huge \bf \@title \par}
       \vfill
-      {\Large Submitted by \par}
-      \smallskip
-      {\large \authornames \par}
-      \bigskip
+      \vspace{1.0cm}
+      {{\large \textit{Submitted by} \par}}
+      \medskip
+      {{\normalsize \authornames \par}}
       \bigskip
 
       \vfill
