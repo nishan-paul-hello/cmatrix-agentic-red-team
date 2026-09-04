@@ -10,19 +10,19 @@ Table~\ref{tab:vapt-comparison} summarises the eleven reviewed systems and bench
 	\label{tab:vapt-comparison}
 	\begin{tabular}{p{2.7cm}p{2.8cm}p{2.8cm}p{1.8cm}p{2.4cm}}
 		\toprule
-		\textbf{System / Work}                    & \textbf{Architecture}                          & \textbf{Dependency Modeling}              & \textbf{Cross-Session Memory} & \textbf{Benchmark}          \\
+		\textbf{System / Work}                    & \textbf{Architecture}                            & \textbf{Dependency Modeling}                 & \textbf{Cross-Session Memory} & \textbf{Benchmark}      \\
 		\midrule
-		Fang et al.\ \citep{fang2024hackwebsites} & Single agent (ReAct)                           & None                                      & None                          & Simplified websites         \\
-		Fang et al.\ \citep{fang2024oneday}       & Single agent (ReAct)                           & None (CVE desc.\ provided externally)     & None                          & 15 one-day CVEs             \\
-		HPTSA \citep{zhu2024hptsa}                & 3-tier: planner + subagent-creator + task agents & None (flat vuln.\ dispatch)             & None                          & 14 zero-day CVEs            \\
-		PentestGPT \citep{deng2024pentestgpt}     & Single agent, 3-module split (human-assisted)  & Implicit (LLM reasoning only)             & None                          & HTB / VulnHub machines      \\
-		VulnBot \citep{kong2025vulnbot}           & Multi-agent, PTG phase-sequenced               & PTG phases; no vuln-level prerequisite model & None                       & HTB-style scenarios         \\
-		CHECKMATE \citep{wang2025checkmate}       & Agent + classical PDDL planner                 & Explicit, pre-enumerated by operator      & None                          & Curated scenarios           \\
-		Incalmo \citep{singer2025incalmo}         & Multi-host FSM orchestration                   & Partial (host / credential graph)         & None                          & MHBench (40 envs.)          \\
-		PrediQL \citep{liu2025prediql}            & LLM-guided schema fuzzer                       & Schema-derived (GraphQL field graph)      & None                          & 6 GraphQL APIs              \\
-		CVE-Bench \citep{zhu2025cvebench}         & Benchmark (evaluates agents)                   & N/A                                       & N/A                           & 40 critical web CVEs        \\
-		PentestEval \citep{yang2025pentesteval}   & Benchmark (modular pipeline + GT ablation)     & None (SMP); GT-injected in ablation only  & None                          & 12 real-world scenarios     \\
-		Wang et al.\ \citep{wang2025surveyagents} & Survey                                         & N/A                                       & N/A                           & General (survey)            \\
+		Fang et al.\ \citep{fang2024hackwebsites} & Single agent (ReAct)                             & None                                         & None                          & Simplified websites     \\
+		Fang et al.\ \citep{fang2024oneday}       & Single agent (ReAct)                             & None (CVE desc.\ provided externally)        & None                          & 15 one-day CVEs         \\
+		HPTSA \citep{zhu2024hptsa}                & 3-tier: planner + subagent-creator + task agents & None (flat vuln.\ dispatch)                  & None                          & 14 zero-day CVEs        \\
+		PentestGPT \citep{deng2024pentestgpt}     & Single agent, 3-module split (human-assisted)    & Implicit (LLM reasoning only)                & None                          & HTB / VulnHub machines  \\
+		VulnBot \citep{kong2025vulnbot}           & Multi-agent, PTG phase-sequenced                 & PTG phases; no vuln-level prerequisite model & None                          & HTB-style scenarios     \\
+		CHECKMATE \citep{wang2025checkmate}       & Agent + classical PDDL planner                   & Explicit, pre-enumerated by operator         & None                          & Curated scenarios       \\
+		Incalmo \citep{singer2025incalmo}         & Multi-host FSM orchestration                     & Partial (host / credential graph)            & None                          & MHBench (40 envs.)      \\
+		PrediQL \citep{liu2025prediql}            & LLM-guided schema fuzzer                         & Schema-derived (GraphQL field graph)         & None                          & 6 GraphQL APIs          \\
+		CVE-Bench \citep{zhu2025cvebench}         & Benchmark (evaluates agents)                     & N/A                                          & N/A                           & 40 critical web CVEs    \\
+		PentestEval \citep{yang2025pentesteval}   & Benchmark (modular pipeline + GT ablation)       & None (SMP); GT-injected in ablation only     & None                          & 12 real-world scenarios \\
+		Wang et al.\ \citep{wang2025surveyagents} & Survey                                           & N/A                                          & N/A                           & General (survey)        \\
 		\bottomrule
 	\end{tabular}
 \end{table}
@@ -38,5 +38,3 @@ Four patterns emerge from this comparison, and a fifth is notable for being abse
 \textbf{Pattern 4 --- Both benchmark studies converge on the same compound failure.} CVE-Bench's failure-mode analysis identifies \emph{insufficient exploration} as the dominant failure (37.5\%--80.0\% of unsuccessful attempts, depending on agent and setting). PentestEval's stage-level breakdown identifies \emph{attack decision-making} --- reasoning about which discovered weakness to pursue next, in what order --- as the weakest planning stage (average Spearman correlation 0.25 across nine LLMs). The two studies approach the same system from opposite ends and identify the two sides of the same underlying gap.
 
 \textbf{Pattern 5 (notable absence) --- No cross-surface evaluation.} Every autonomous system in the table undergoes evaluation against a single attack-surface family: web CVEs, GraphQL APIs, or multi-host networks, but never more than one. This means that architectural decisions cannot be distinguished from surface-specific tuning effects in any existing study.
-
-The following section discusses what these patterns imply for the research direction of this thesis.

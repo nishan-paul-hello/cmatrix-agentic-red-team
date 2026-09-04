@@ -10,11 +10,11 @@ Based on the literature reviewed in Chapter~\ref{chapter_backStudy}, this projec
 	\label{tab:in-scope-surfaces}
 	\begin{tabular}{@{}p{2.8cm}p{5.2cm}p{5.3cm}@{}}
 		\toprule
-		\textbf{Attack surface}       & \textbf{Primary governing benchmark(s)}                                                                                             & \textbf{Representative vulnerability types}                                                         \\
+		\textbf{Attack surface}       & \textbf{Primary governing benchmark(s)}                                                                                                                                                             & \textbf{Representative vulnerability types}                                                          \\
 		\midrule
 		Web application (HTTP/HTML)   & CVE-Bench --- 40 critical-severity CVEs, oracle-backed pass/fail \citep{zhu2025cvebench}; PentestEval --- 346 tasks across 12 real-world scenarios, stage-level scoring \citep{yang2025pentesteval} & SQLi, XSS, CSRF, SSRF, SSTI, LFI, file-upload RCE, IDOR, authentication bypass, privilege escalation \\
-		GraphQL APIs                  & PrediQL --- 6 real GraphQL APIs, dependency-aware oracle \citep{liu2025prediql}                                                     & Schema abuse, dependency-chain injection, batched-auth bypass, IDOR                                 \\
-		Multi-host / Active Directory & Incalmo MHBench --- 40 networked environments, declarative task oracle \citep{singer2025incalmo}                                   & Lateral movement, credential reuse, privilege escalation across host chains                         \\
+		GraphQL APIs                  & PrediQL --- 6 real GraphQL APIs, dependency-aware oracle \citep{liu2025prediql}                                                                                                                     & Schema abuse, dependency-chain injection, batched-auth bypass, IDOR                                  \\
+		Multi-host / Active Directory & Incalmo MHBench --- 40 networked environments, declarative task oracle \citep{singer2025incalmo}                                                                                                    & Lateral movement, credential reuse, privilege escalation across host chains                          \\
 		\bottomrule
 	\end{tabular}
 \end{table}
