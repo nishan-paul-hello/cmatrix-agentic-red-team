@@ -1,33 +1,42 @@
 \section{Comparative Analysis}
 \label{sec_comparative_analysis}
 
-Table~\ref{tab:vapt-comparison} summarises the eleven reviewed systems and benchmarks along four dimensions that recurred throughout the literature review: whether the system uses a single agent or a coordinated team, whether it models dependencies between candidate weaknesses explicitly, whether it retains any form of memory across sessions, and the benchmarks used in its evaluation.
+Table~\ref{tab:vapt-comparison} summarises the eleven reviewed systems and benchmarks along four dimensions that recurred throughout the literature review: agent architecture, dependency modeling approach, cross-session memory, and evaluation benchmark. The patterns visible in this table, and a fifth pattern not captured by it, are discussed in the analysis that follows.
 
 \begin{table}[h!]
 	\centering
 	\small
 	\caption{Comparison of systems and benchmarks reviewed, across four recurring architectural dimensions.}
 	\label{tab:vapt-comparison}
-	\begin{tabular}{p{2.8cm}p{2.4cm}p{2.6cm}p{2.0cm}p{2.7cm}}
+	\begin{tabular}{p{2.7cm}p{2.8cm}p{2.8cm}p{1.8cm}p{2.4cm}}
 		\toprule
-		\textbf{System / Work}                    & \textbf{Architecture}                 & \textbf{Dependency Modeling}     & \textbf{Cross-Session Memory} & \textbf{Benchmarks}     \\
+		\textbf{System / Work}                    & \textbf{Architecture}                          & \textbf{Dependency Modeling}              & \textbf{Cross-Session Memory} & \textbf{Benchmark}          \\
 		\midrule
-		Fang et al.\ \citep{fang2024hackwebsites} & Single agent (ReAct)                  & None                             & None                          & Simplified websites     \\
-		Fang et al.\ \citep{fang2024oneday}       & Single agent (ReAct)                  & None (given CVE desc.)           & None                          & 15 one-day CVEs         \\
-		HPTSA \citep{zhu2024hptsa}                & Hierarchical planner + task agents    & None (flat dispatch)             & None                          & 15 zero-day CVEs        \\
-		PentestGPT \citep{deng2024pentestgpt}     & Single agent, split reasoning/parsing & Implicit (LLM only)              & None                          & HTB/VulnHub machines    \\
-		VulnBot \citep{kong2025vulnbot}           & Multi-agent, role-specialised         & None (flat dispatch)             & None                          & HTB-style scenarios     \\
-		CHECKMATE \citep{wang2025checkmate}       & Agent + classical planner             & Explicit, pre-enumerated         & None                          & Curated scenarios       \\
-		Incalmo \citep{singer2025incalmo}         & Multi-host orchestration              & Partial (host/credential graph)  & None                          & MHBench (40 envs.)      \\
-		PrediQL \citep{liu2025prediql}            & LLM-guided fuzzer                     & Schema-derived                   & None                          & 6 GraphQL APIs          \\
-		CVE-Bench \citep{zhu2025cvebench}         & Benchmark (no agent)                  & N/A                              & N/A                           & 40 critical web CVEs    \\
-		PentestEval \citep{yang2025pentesteval}   & Benchmark (modular pipeline)          & Explicit (ground-truth injected) & None                          & 12 real-world scenarios \\
-		Wang et al.\ \citep{wang2025surveyagents} & Survey                                & N/A                              & N/A                           & General (survey)        \\
+		Fang et al.\ \citep{fang2024hackwebsites} & Single agent (ReAct)                           & None                                      & None                          & Simplified websites         \\
+		Fang et al.\ \citep{fang2024oneday}       & Single agent (ReAct)                           & None (CVE desc.\ provided externally)     & None                          & 15 one-day CVEs             \\
+		HPTSA \citep{zhu2024hptsa}                & 3-tier: planner + subagent-creator + task agents & None (flat vuln.\ dispatch)             & None                          & 14 zero-day CVEs            \\
+		PentestGPT \citep{deng2024pentestgpt}     & Single agent, 3-module split (human-assisted)  & Implicit (LLM reasoning only)             & None                          & HTB / VulnHub machines      \\
+		VulnBot \citep{kong2025vulnbot}           & Multi-agent, PTG phase-sequenced               & PTG phases; no vuln-level prerequisite model & None                       & HTB-style scenarios         \\
+		CHECKMATE \citep{wang2025checkmate}       & Agent + classical PDDL planner                 & Explicit, pre-enumerated by operator      & None                          & Curated scenarios           \\
+		Incalmo \citep{singer2025incalmo}         & Multi-host FSM orchestration                   & Partial (host / credential graph)         & None                          & MHBench (40 envs.)          \\
+		PrediQL \citep{liu2025prediql}            & LLM-guided schema fuzzer                       & Schema-derived (GraphQL field graph)      & None                          & 6 GraphQL APIs              \\
+		CVE-Bench \citep{zhu2025cvebench}         & Benchmark (evaluates agents)                   & N/A                                       & N/A                           & 40 critical web CVEs        \\
+		PentestEval \citep{yang2025pentesteval}   & Benchmark (modular pipeline + GT ablation)     & None (SMP); GT-injected in ablation only  & None                          & 12 real-world scenarios     \\
+		Wang et al.\ \citep{wang2025surveyagents} & Survey                                         & N/A                                       & N/A                           & General (survey)            \\
 		\bottomrule
 	\end{tabular}
 \end{table}
 
-A few patterns are visible from this comparison. First, systems that scale to a wide or unfamiliar attack surface (HPTSA, VulnBot) dispatch tasks flatly, without an explicit model of which weaknesses depend on which others. Second, the one system that does model dependencies explicitly (CHECKMATE) undergoes evaluation on curated scenarios where relevant weaknesses are pre-enumerated, and it's not clear from the reviewed paper how well this approach extends to open-ended discovery. Third, cross-session memory --- the ability for an agent to keep and reuse what it learned in a previous engagement against a similar target --- is absent from every system in the table. Finally, the two benchmark papers (CVE-Bench and PentestEval) each provide stage-level failure analysis that points in the same direction: existing systems are weakest precisely at the combination of broad exploration and structured prerequisite reasoning that handling a wide, unfamiliar attack surface demands.
+Four patterns emerge from this comparison, and a fifth is notable for being absent.
 
-These observations are preliminary, and the following section discusses their implications for the research direction this thesis pursues.
+\textbf{Pattern 1 --- Exploration-capable systems lack dependency modeling.} Systems that scale to wide or unfamiliar attack surfaces --- HPTSA and VulnBot --- dispatch vulnerability candidates without an explicit model of which weaknesses must precede others. HPTSA dispatches subagents in parallel with no prerequisite ordering; VulnBot sequences tasks by pentesting phase via its PTG but does not model dependency relationships between individual candidate vulnerabilities within a phase.
 
+\textbf{Pattern 2 --- Dependency-modeling systems require pre-supplied weakness sets.} Two systems model dependencies explicitly: CHECKMATE, using PDDL-style planning operators, and PrediQL, using the GraphQL schema as a dependency graph. Both operate on externally provided structure. CHECKMATE requires the operator to enumerate relevant weaknesses before the planning phase begins; it is not designed for open-ended discovery on an unknown surface. PrediQL derives its dependency graph from the GraphQL schema, which is provided by the API itself. Neither system constructs a dependency model dynamically from its own discovery output.
+
+\textbf{Pattern 3 --- Cross-session memory is universally absent.} Every autonomous system in the table retains no information across separate missions. Each engagement begins from scratch regardless of what the agent discovered in prior engagements against the same or similar targets. This gap is not addressed in any reviewed paper.
+
+\textbf{Pattern 4 --- Both benchmark studies converge on the same compound failure.} CVE-Bench's failure-mode analysis identifies \emph{insufficient exploration} as the dominant failure (37.5\%--80.0\% of unsuccessful attempts, depending on agent and setting). PentestEval's stage-level breakdown identifies \emph{attack decision-making} --- reasoning about which discovered weakness to pursue next, in what order --- as the weakest planning stage (average Spearman correlation 0.25 across nine LLMs). The two studies approach the same system from opposite ends and identify the two sides of the same underlying gap.
+
+\textbf{Pattern 5 (notable absence) --- No cross-surface evaluation.} Every autonomous system in the table undergoes evaluation against a single attack-surface family: web CVEs, GraphQL APIs, or multi-host networks, but never more than one. This means that architectural decisions cannot be distinguished from surface-specific tuning effects in any existing study.
+
+The following section discusses what these patterns imply for the research direction of this thesis.
