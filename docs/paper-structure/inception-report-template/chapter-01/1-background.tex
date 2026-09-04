@@ -3,7 +3,7 @@
 
 \subsection{Cybersecurity and Vulnerability Assessment}
 
-Modern organisations depend on networked software systems for nearly every operational function, and the security of those systems has become a central concern. A security vulnerability is a flaw in software, configuration, or design that an attacker can exploit to gain unauthorised access, execute arbitrary code, disrupt service, or exfiltrate data. Vulnerabilities are catalogued in the Common Vulnerabilities and Exposures (CVE) database after disclosure; the interval between disclosure and remediation deployment frequently extends to months in production environments, leaving systems exposed to any attacker who can reconstruct an exploit from the published description.
+Modern organisations depend on networked software systems for nearly every operational function, and the integrity of those systems is a direct operational concern. A security vulnerability is a flaw in software, configuration, or design that an attacker can exploit to gain unauthorised access, execute arbitrary code, disrupt service, or exfiltrate data. Vulnerabilities are catalogued in the Common Vulnerabilities and Exposures (CVE) database after disclosure; the interval between disclosure and remediation deployment frequently extends to months in production environments, leaving systems exposed to any attacker who can reconstruct an exploit from the published description.
 
 \textbf{Vulnerability Assessment and Penetration Testing (VAPT)} is the practice of proactively identifying and demonstrating these weaknesses before an adversary does. A penetration test is an authorised, systematic attempt to discover and exploit weaknesses in a target system, typically following a structured workflow: initial reconnaissance to understand the target's attack surface, identification of candidate weaknesses, exploitation of confirmed vulnerabilities, and reporting of findings with remediation guidance. VAPT is widely recognised as an essential security practice, and demand for it has grown considerably as organisations increase their exposure through cloud services, APIs, and web applications.
 
@@ -15,7 +15,7 @@ These limitations have driven a recent and rapid research interest in applying L
 
 \subsection{Large Language Models and AI Agents}
 
-Large Language Models (LLMs) are deep learning models trained on large corpora of text that have demonstrated a remarkable ability to follow instructions, reason through multi-step problems, write and execute code, and interact with external tools.
+Large Language Models (LLMs) are deep learning models trained on large corpora of text. They can follow complex instructions, reason through multi-step problems, write and execute code, and interact with external tools.
 
 An \textbf{LLM agent} extends a base language model with the ability to take actions in an environment: calling tools (such as a web browser, a terminal, or an API), observing the results, and iterating toward a goal. The simplest agents follow a \emph{Reason + Act} (ReAct) loop --- reason about the current state, decide on an action, observe the outcome, and repeat. More sophisticated designs introduce hierarchical planning, role-specialised sub-agents, persistent memory, and structured validation.
 
@@ -25,7 +25,7 @@ The emergence of capable LLM agents has opened a genuinely new question for cybe
 
 \subsection{The Emergence of Autonomous VAPT Research}
 
-A growing body of research --- developed between 2023 and 2025 --- has answered parts of this question affirmatively, and in doing so has produced the quantitative baseline against which this thesis positions itself.
+Research published between 2023 and 2025 has answered parts of this question affirmatively, and that work provides the quantitative baseline against which this thesis positions itself.
 
 Early work by \citet{fang2024hackwebsites} showed that a single GPT-4 agent with browser access could autonomously exploit simplified web vulnerabilities, establishing that the basic capability exists. A later study by the same group collected a benchmark of 15 real-world one-day vulnerabilities and found that GPT-4, when given a CVE description, achieved a pass@5 success rate of 87\% --- while every other tested model (GPT-3.5, eight open-source models) and every open-source scanner achieved 0\% \citep{fang2024oneday}. Crucially, without the CVE description, GPT-4's pass@5 rate collapsed to 7\%, establishing an important early distinction: exploiting a vulnerability whose location and nature the agent already knows differs fundamentally from discovering an unknown vulnerability independently. This discovery gap is the central challenge that subsequent systems attempt to close.
 
