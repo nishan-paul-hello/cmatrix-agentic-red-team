@@ -1,4 +1,4 @@
-.PHONY: help install dev build docker-build up down clean paper ppt clean-paper format format-check lint lint-fix audit typecheck test
+.PHONY: help install dev build docker-build up down clean paper clean-paper format format-check lint lint-fix audit typecheck test
 
 -include .env
 export
@@ -24,7 +24,6 @@ help:
 	@echo "  make down                   Stop Docker containers"
 	@echo "  make clean                  Clean all build artifacts and caches"
 	@echo "  make paper                  Build the Research Paper PDF"
-	@echo "  make ppt                    Build the Presentation PPTX"
 	@echo "  make clean-paper            Clean Research Paper artifacts"
 
 install:
@@ -110,16 +109,6 @@ paper-05:
 	export BIBINPUTS=.:../sections:$$BIBINPUTS; $(LATEXMK) -jobname=main -outdir="." -auxdir="build" $(PAPER_DIR_05)/main/main.tex
 	mv $(PAPER_DIR_05)/main/main.pdf $(PAPER_DIR_05)/paper.pdf
 	rm -rf $(PAPER_DIR_05)/main/build
-
-# Presentation Build
-PPT_DIR := docs/paper-thesis/presentation
-PPT_NAME ?= presentation-draft.pptx
-SAFE_PPT_NAME := $(notdir $(PPT_NAME))
-
-ppt:
-	@echo "🏗️  Building Presentation: $(SAFE_PPT_NAME)..."
-	@cd $(PPT_DIR) && python3 src/build.py "output/$(SAFE_PPT_NAME)"
-	@rm -rf $(PPT_DIR)/src/__pycache__
 
 clean: clean-paper
 	@echo "🧹 Cleaning app artifacts..."
