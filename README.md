@@ -108,42 +108,7 @@ make up
 
 ---
 
-## 📜 Theoretical Architecture Overview
-
-Although not yet implemented in backend logic, this UI is fundamentally designed to support the following core architectural pillars of the RedGrid system:
-
-1. **Dual-Layer World Model**: A state paradigm that separates confirmed environmental facts (`Environmental Layer`) from UCB-scored attack hypotheses (`Attack Layer`).
-2. **Vulnerability Dependency Graph (VDG)**: A scored DAG mapping out prerequisite/enables edges, enabling path-level impact scoring instead of greedy node selection.
-3. **Four-Layer Orchestration**: A scalable hierarchy (Orchestrator → Team Manager → Specialists → Execution/Validation) that resolves context-window inflation.
-4. **Validation Agent Loop**: A bounded Diagnosis-Adapt-Cap loop intended to confirm findings using real-world testing oracles before asserting success.
-
-## 📜 Research Works
-
-RedGrid includes a professional, independent LaTeX build system for documenting research findings. We have five specialized research papers covering different aspects of agentic security.
-
-### 📚 Available Research Papers
-
-| Index | Paper Topic | Build Command | Output Path |
-| :--- | :--- | :--- | :--- |
-| 01 | **LLM Orchestrated Multi-Agent Framework for Autonomous VAPT** | `make paper-01` | `docs/paper-research/paper-structure/paper-01-llm-orch-vapt/paper.pdf` |
-| 02 | **Red Teaming** | `make paper-02` | `docs/paper-research/paper-structure/paper-02-governed-agentic-red-teaming/paper.pdf` |
-| 03 | **HITL Safety** | `make paper-03` | `docs/paper-research/paper-structure/paper-03-checkpoint-resumable-autonomy/paper.pdf` |
-| 04 | **Agent Reasoning** | `make paper-04` | `docs/paper-research/paper-structure/paper-04-hitl-orchestrated-reasoning/paper.pdf` |
-| 05 | **Vulnerability Intelligence** | `make paper-05` | `docs/paper-research/paper-structure/paper-05-agentic-vuln-intelligence/paper.pdf` |
-
-### 🏗️ Building the Papers
-
-To build a specific paper, use its corresponding command listed above. To build **all** papers at once, run:
-
-```bash
-make paper
-```
-
-*(Compiled PDFs will be output to `docs/paper-research/paper-structure/`)*
-
----
-
-### 🔗 External Resources
+## 🔗 External Resources
 
 - **Hermes Agent**
     > *An open-source, autonomous AI agent designed to run persistently and improve over time.*

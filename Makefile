@@ -1,4 +1,4 @@
-.PHONY: help install dev build docker-build up down clean paper paper-01 clean-paper format format-check lint lint-fix audit typecheck test
+.PHONY: help install dev build docker-build up down clean format format-check lint lint-fix audit typecheck test
 
 -include .env
 export
@@ -23,8 +23,6 @@ help:
 	@echo "  make up                     Start Docker containers"
 	@echo "  make down                   Stop Docker containers"
 	@echo "  make clean                  Clean all build artifacts and caches"
-	@echo "  make paper                  Build the Research Paper PDF"
-	@echo "  make clean-paper            Clean Research Paper artifacts"
 
 install:
 	@echo "📦 Installing dependencies..."
@@ -70,23 +68,7 @@ down:
 	@echo "🐳 Stopping Docker containers..."
 	docker compose down
 
-# Paper Build Directories
-PAPER_DIR_01 := docs/paper-structure/paper-01-llm-orch-vapt
-
-paper: paper-01
-	@echo "✅ Paper built successfully!"
-
-paper-01:
-	@echo "🏗️  Building Research Paper: 01-model-orchestration..."
-	export BIBINPUTS=.:../sections:$$BIBINPUTS; $(LATEXMK) -jobname=main -outdir="." -auxdir="build" $(PAPER_DIR_01)/main/main.tex
-	mv $(PAPER_DIR_01)/main/main.pdf $(PAPER_DIR_01)/paper.pdf
-	rm -rf $(PAPER_DIR_01)/main/build
-
-clean: clean-paper
+clean:
 	@echo "🧹 Cleaning app artifacts..."
 	rm -rf app-frontend/node_modules app-frontend/dist
 	@echo "✅ Cleanup complete!"
-
-clean-paper:
-	@echo "🧹 Cleaning Research Paper artifacts..."
-	rm -rf docs/paper-structure/paper-*/*.pdf docs/paper-structure/paper-*/content/build docs/paper-structure/paper-*/contents/build docs/paper-structure/paper-*/main/build
