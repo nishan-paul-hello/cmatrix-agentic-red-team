@@ -1,4 +1,4 @@
-.PHONY: help install dev build docker-build up down clean paper clean-paper format format-check lint lint-fix audit typecheck test
+.PHONY: help install dev build docker-build up down clean paper paper-01 clean-paper format format-check lint lint-fix audit typecheck test
 
 -include .env
 export
@@ -72,43 +72,15 @@ down:
 
 # Paper Build Directories
 PAPER_DIR_01 := docs/paper-structure/paper-01-llm-orch-vapt
-PAPER_DIR_02 := docs/paper-structure/paper-02-governed-agentic-red-teaming
-PAPER_DIR_03 := docs/paper-structure/paper-03-checkpoint-resumable-autonomy
-PAPER_DIR_04 := docs/paper-structure/paper-04-hitl-orchestrated-reasoning
-PAPER_DIR_05 := docs/paper-structure/paper-05-agentic-vuln-intelligence
 
-paper: paper-01 paper-02 paper-03 paper-04 paper-05
-	@echo "✅ All papers built successfully!"
+paper: paper-01
+	@echo "✅ Paper built successfully!"
 
 paper-01:
 	@echo "🏗️  Building Research Paper: 01-model-orchestration..."
 	export BIBINPUTS=.:../sections:$$BIBINPUTS; $(LATEXMK) -jobname=main -outdir="." -auxdir="build" $(PAPER_DIR_01)/main/main.tex
 	mv $(PAPER_DIR_01)/main/main.pdf $(PAPER_DIR_01)/paper.pdf
 	rm -rf $(PAPER_DIR_01)/main/build
-
-paper-02:
-	@echo "🏗️  Building Research Paper: 02-red-teaming..."
-	export BIBINPUTS=.:../sections:$$BIBINPUTS; $(LATEXMK) -jobname=main -outdir="." -auxdir="build" $(PAPER_DIR_02)/main/main.tex
-	mv $(PAPER_DIR_02)/main/main.pdf $(PAPER_DIR_02)/paper.pdf
-	rm -rf $(PAPER_DIR_02)/main/build
-
-paper-03:
-	@echo "🏗️  Building Research Paper: 03-hitl-safety..."
-	export BIBINPUTS=.:../sections:$$BIBINPUTS; $(LATEXMK) -jobname=main -outdir="." -auxdir="build" $(PAPER_DIR_03)/main/main.tex
-	mv $(PAPER_DIR_03)/main/main.pdf $(PAPER_DIR_03)/paper.pdf
-	rm -rf $(PAPER_DIR_03)/main/build
-
-paper-04:
-	@echo "🏗️  Building Research Paper: 04-agent-reasoning..."
-	export BIBINPUTS=.:../sections:$$BIBINPUTS; $(LATEXMK) -jobname=main -outdir="." -auxdir="build" $(PAPER_DIR_04)/main/main.tex
-	mv $(PAPER_DIR_04)/main/main.pdf $(PAPER_DIR_04)/paper.pdf
-	rm -rf $(PAPER_DIR_04)/main/build
-
-paper-05:
-	@echo "🏗️  Building Research Paper: 05-vulnerability-intelligence..."
-	export BIBINPUTS=.:../sections:$$BIBINPUTS; $(LATEXMK) -jobname=main -outdir="." -auxdir="build" $(PAPER_DIR_05)/main/main.tex
-	mv $(PAPER_DIR_05)/main/main.pdf $(PAPER_DIR_05)/paper.pdf
-	rm -rf $(PAPER_DIR_05)/main/build
 
 clean: clean-paper
 	@echo "🧹 Cleaning app artifacts..."
