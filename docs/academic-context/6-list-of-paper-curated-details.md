@@ -1,4 +1,4 @@
-# Curated Research Papers — 29 Papers (Final Selection, Reindexed by Architecture Relevance)
+# Curated Research Papers — 29 Papers
 
 > **Scope:** Papers directly relevant to our work — LLM-based agentic pentesting,
 > multi-agent red-team orchestration, autonomous vulnerability exploitation, offensive security
@@ -155,7 +155,7 @@
 
 ---
 
-## `T2 — Direct Evidence / Gap Justification (Papers 15–22)`
+## `T2 — Papers Providing Direct Evidence and Gap Justification (Papers 15–22)`
 
 ### 15. BountyBench: Dollar Impact of AI Agent Attackers and Defenders on Real-World Cybersecurity Systems
 - **Website:** [🌐 Link](https://arxiv.org/abs/2505.15216)
@@ -240,7 +240,7 @@
 
 ---
 
-## `T4 — Architectural Inspiration, Non-Security Domain (Paper 23)`
+## `T4 — Architectural Inspiration from Non-Security Domain Research (Paper 23)`
 
 ### 23. Reflexion: Language Agents with Verbal RL
 - **Website:** [🌐 Link](https://arxiv.org/abs/2303.11366)
@@ -252,7 +252,7 @@
 
 ---
 
-## `T3 — Benchmark Surfaces + Early Empirical Anchors (Papers 24–26)`
+## `T3 — Benchmark Surfaces and Early Empirical Anchors (Papers 24–26)`
 
 ### 24. Cybench: A Framework for Evaluating Cybersecurity Capabilities and Risks of Language Models
 - **Website:** [🌐 Link](https://arxiv.org/abs/2408.08926)
@@ -286,7 +286,7 @@
 
 ---
 
-## `T5 — Survey / General Context (Papers 27–29)`
+## `T5 — Survey Papers and General Background Context (Papers 27–29)`
 
 ### 27. Forewarned is Forearmed: A Survey on LLM-based Agents in Autonomous Cyberattacks
 - **Website:** [🌐 Link](https://arxiv.org/abs/2505.12786)
